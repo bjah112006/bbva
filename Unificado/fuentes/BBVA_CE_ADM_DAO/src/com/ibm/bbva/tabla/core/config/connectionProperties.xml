@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>DATA ACCESS PROPERTIES</comment>
+	<entry key="config.db.connection.workmode">SERVER</entry>
+	<entry key="config.db.connection.defaultDatasource">jdbc/BBVA</entry>
+</properties>
