@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_6.xsd" version="6">
+	<display-name>BBVA_CE_WEB_WAS</display-name>
+	<module id="Module_1397662233772">
+		<web>
+			<web-uri>BBVA_CE_GUI.war</web-uri>
+			<context-root>BBVA_CE_GUI</context-root>
+		</web>
+	</module>
+	<module id="Module_1397662327069">
+		<ejb>BBVA_CE_EJB.jar</ejb>
+	</module>
+	<module id="Module_1397664925353">
+		<ejb>ClientFactory.jar</ejb>
+	</module>
+	<module id="Module_1397666266924">
+		<web>
+			<web-uri>BBVA_CE_WS.war</web-uri>
+			<context-root>BBVA_CE_WS</context-root>
+		</web>
+	</module>
+	<module id="Module_1419193931978">
+		<web>
+			<web-uri>BBVA_CE_CARGA.war</web-uri>
+			<context-root>BBVA_CE_CARGA</context-root>
+		</web>
+	</module>
+</application>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="BBVA_CE_WEB_WAS">
+        <wb-resource deploy-path="/" source-path="/" tag="defaultRootSource"/>
+        <dependent-module archiveName="BBVA_CE_GUI.war" deploy-path="/" handle="module:/resource/BBVA_CE_GUI/BBVA_CE_GUI">
+            <dependent-object>Module_1397662233772</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_CE_EJB.jar" deploy-path="/" handle="module:/resource/BBVA_CE_EJB/BBVA_CE_EJB">
+            <dependent-object>Module_1397662327069</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_CE_EJBClient.jar" deploy-path="/" handle="module:/resource/BBVA_CE_EJBClient/BBVA_CE_EJBClient">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_CE_JPA.jar" deploy-path="/" handle="module:/resource/BBVA_CE_JPA/BBVA_CE_JPA">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_CE_RESTClient.jar" deploy-path="/" handle="module:/resource/BBVA_CE_RESTClient/BBVA_CE_RESTClient">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_CE_ADM_DAO.jar" deploy-path="/" handle="module:/resource/BBVA_CE_ADM_DAO/BBVA_CE_ADM_DAO">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="ClientFactory.jar" deploy-path="/" handle="module:/resource/ClientFactory/ClientFactory">
+            <dependent-object>Module_1397664925353</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="ClientFactoryClient.jar" deploy-path="/" handle="module:/resource/ClientFactoryClient/ClientFactoryClient">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_CE_WS.war" deploy-path="/" handle="module:/resource/BBVA_CE_WS/BBVA_CE_WS">
+            <dependent-object>Module_1397666266924</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_CE_CARGA.war" deploy-path="/" handle="module:/resource/BBVA_CE_CARGA/BBVA_CE_CARGA">
+            <dependent-object>Module_1419193931978</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>
