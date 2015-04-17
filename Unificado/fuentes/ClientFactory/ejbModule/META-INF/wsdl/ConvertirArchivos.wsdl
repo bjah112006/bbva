@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:impl="http://convert.bbva.ibm.com" xmlns:intf="http://convert.bbva.ibm.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://convert.bbva.ibm.com">
+ <wsdl:types>
+  <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://convert.bbva.ibm.com">
+   <element name="convertirPDFResponse">
+    <complexType>
+     <sequence>
+      <element name="convertirPDFReturn" type="xsd:base64Binary"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="convertirTIF">
+    <complexType>
+     <sequence>
+      <element name="bytesPDF" type="xsd:base64Binary"/>
+      <element name="nombreOut" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="convertirTIFResponse">
+    <complexType>
+     <sequence>
+      <element name="convertirTIFReturn" type="xsd:base64Binary"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="convertirPDF">
+    <complexType>
+     <sequence>
+      <element name="bytesPDF" type="xsd:base64Binary"/>
+      <element name="nombreOut" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="convertirPDFResponse">
+     <wsdl:part element="impl:convertirPDFResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="convertirTIFResponse">
+     <wsdl:part element="impl:convertirTIFResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="convertirPDFRequest">
+     <wsdl:part element="impl:convertirPDF" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="convertirTIFRequest">
+     <wsdl:part element="impl:convertirTIF" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:portType name="ConvertirArchivos">
+     <wsdl:operation name="convertirPDF">
+       <wsdl:input message="impl:convertirPDFRequest" name="convertirPDFRequest"/>
+
+       <wsdl:output message="impl:convertirPDFResponse" name="convertirPDFResponse"/>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="convertirTIF">
+       <wsdl:input message="impl:convertirTIFRequest" name="convertirTIFRequest"/>
+
+       <wsdl:output message="impl:convertirTIFResponse" name="convertirTIFResponse"/>
+
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+   <wsdl:binding name="ConvertirArchivosSoapBinding" type="impl:ConvertirArchivos">
+ <wsaw:UsingAddressing xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" wsdl:required="false"/>
+
+     <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+     <wsdl:operation name="convertirPDF">
+       <wsdlsoap:operation soapAction="convertirPDF"/>
+
+       <wsdl:input name="convertirPDFRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="convertirPDFResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="convertirTIF">
+       <wsdlsoap:operation soapAction="convertirTIF"/>
+
+       <wsdl:input name="convertirTIFRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="convertirTIFResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+  </wsdl:binding>
+
+   <wsdl:service name="ConvertirArchivosService">
+     <wsdl:port binding="impl:ConvertirArchivosSoapBinding" name="ConvertirArchivos">
+       <wsdlsoap:address location="http://localhost:9083/BBVA_ConvertFiles/services/ConvertirArchivos"/>
+
+    </wsdl:port>
+
+  </wsdl:service>
+
+</wsdl:definitions>

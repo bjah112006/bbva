@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SIR: Sistema Integración Reniec -->
+<xs:schema attributeFormDefault="unqualified"
+	elementFormDefault="unqualified"
+	targetNamespace="http://pe.grupobbva.com/SIR/service/message"
+	xmlns:tns      ="http://pe.grupobbva.com/SIR/service/message" 
+	xmlns:xs       ="http://www.w3.org/2001/XMLSchema"
+	xmlns:Hdr	   ="http://pe.grupobbva.com/SIR/ents/header"
+	xmlns:Ope1     ="http://pe.grupobbva.com/SIR/ents/body/consultaPorNombres"
+	xmlns:Ope2     ="http://pe.grupobbva.com/SIR/ents/body/consultaPorDNI">
+	
+	<xs:import schemaLocation="HeaderFormat.xsd"
+		namespace="http://pe.grupobbva.com/SIR/ents/header"></xs:import>
+
+	<xs:import schemaLocation="ConsultaPorNombresFormat.xsd"
+		namespace="http://pe.grupobbva.com/SIR/ents/body/consultaPorNombres"></xs:import>
+
+	<xs:import schemaLocation="ConsultaPorDNIFormat.xsd"
+		namespace="http://pe.grupobbva.com/SIR/ents/body/consultaPorDNI"></xs:import>
+	    
+    <xs:element name="consultaPorNombresRequest" type="tns:consultaPorNombresRequest" />
+    <xs:element name="consultaPorNombresResponse" type="tns:consultaPorNombresResponse" />
+    <xs:element name="consultaPorDNIRequest" type="tns:consultaPorDNIRequest" />
+    <xs:element name="consultaPorDNIResponse" type="tns:consultaPorDNIResponse" />	    
+	    
+	<xs:complexType name="consultaPorNombresRequest">
+		<xs:sequence>
+			<xs:element name="refRequestHeader" type="Hdr:RequestHeader" />		
+			<xs:element name="refConsultaPorNombresRequest" type="Ope1:ConsultaPorNombresRequest" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="consultaPorNombresResponse">
+		<xs:sequence>
+			<xs:element name="refResponseHeader" type="Hdr:ResponseHeader" />		
+			<xs:element name="refConsultaPorNombresResponse" type="Ope1:ConsultaPorNombresResponse" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="consultaPorDNIRequest">
+		<xs:sequence>
+			<xs:element name="refRequestHeader" type="Hdr:RequestHeader" />		
+			<xs:element name="refConsultaPorDNIRequest" type="Ope2:ConsultaPorDNIRequest" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="consultaPorDNIResponse">
+		<xs:sequence>
+			<xs:element name="refResponseHeader" type="Hdr:ResponseHeader" />		
+			<xs:element name="refConsultaPorDNIResponse" type="Ope2:ConsultaPorDNIResponse" />
+		</xs:sequence>
+	</xs:complexType>
+		
+</xs:schema>

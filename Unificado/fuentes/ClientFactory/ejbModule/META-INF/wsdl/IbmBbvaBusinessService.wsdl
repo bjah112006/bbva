@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions name="IbmBbvaBusinessService" targetNamespace="http://business.service.bbva.ibm.com/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://business.service.bbva.ibm.com/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <types>
+    <xsd:schema>
+      <xsd:import namespace="http://business.service.bbva.ibm.com/" schemaLocation="IbmBbvaBusinessService_schema1.xsd"/>
+    </xsd:schema>
+  </types>
+  <message name="obtenerUsuario">
+    <part element="tns:obtenerUsuario" name="parameters">
+    </part>
+  </message>
+  <message name="actualizaEmpleadoExpediente">
+    <part element="tns:actualizaEmpleadoExpediente" name="parameters">
+    </part>
+  </message>
+  <message name="delegacionOficinaBDResponse">
+    <part element="tns:delegacionOficinaBDResponse" name="parameters">
+    </part>
+  </message>
+  <message name="pautasClasificacionBDResponse">
+    <part element="tns:pautasClasificacionBDResponse" name="parameters">
+    </part>
+  </message>
+  <message name="retraerTareasResponse">
+    <part element="tns:retraerTareasResponse" name="parameters">
+    </part>
+  </message>
+  <message name="consultarDocumentoExpedienteResponse">
+    <part element="tns:consultarDocumentoExpedienteResponse" name="parameters">
+    </part>
+  </message>
+  <message name="delegacionOficinaMemoriaResponse">
+    <part element="tns:delegacionOficinaMemoriaResponse" name="parameters">
+    </part>
+  </message>
+  <message name="pautasClasificacionMemoriaResponse">
+    <part element="tns:pautasClasificacionMemoriaResponse" name="parameters">
+    </part>
+  </message>
+  <message name="distribucionCargaResponse">
+    <part element="tns:distribucionCargaResponse" name="parameters">
+    </part>
+  </message>
+  <message name="delegacionRiesgosResponse">
+    <part element="tns:delegacionRiesgosResponse" name="parameters">
+    </part>
+  </message>
+  <message name="lineaMaximaMemoria">
+    <part element="tns:lineaMaximaMemoria" name="parameters">
+    </part>
+  </message>
+  <message name="actualizarDocumentoExpTC">
+    <part element="tns:actualizarDocumentoExpTC" name="parameters">
+    </part>
+  </message>
+  <message name="lineaMaximaBDResponse">
+    <part element="tns:lineaMaximaBDResponse" name="parameters">
+    </part>
+  </message>
+  <message name="pautasClasificacionBD">
+    <part element="tns:pautasClasificacionBD" name="parameters">
+    </part>
+  </message>
+  <message name="delegacionOficinaBD">
+    <part element="tns:delegacionOficinaBD" name="parameters">
+    </part>
+  </message>
+  <message name="actualizaEmpleadoExpedienteResponse">
+    <part element="tns:actualizaEmpleadoExpedienteResponse" name="parameters">
+    </part>
+  </message>
+  <message name="consultarDocumentoExpediente">
+    <part element="tns:consultarDocumentoExpediente" name="parameters">
+    </part>
+  </message>
+  <message name="delegacionOficinaMemoria">
+    <part element="tns:delegacionOficinaMemoria" name="parameters">
+    </part>
+  </message>
+  <message name="pautasClasificacionMemoria">
+    <part element="tns:pautasClasificacionMemoria" name="parameters">
+    </part>
+  </message>
+  <message name="obtenerUsuarioResponse">
+    <part element="tns:obtenerUsuarioResponse" name="parameters">
+    </part>
+  </message>
+  <message name="distribucionCarga">
+    <part element="tns:distribucionCarga" name="parameters">
+    </part>
+  </message>
+  <message name="retraerTareas">
+    <part element="tns:retraerTareas" name="parameters">
+    </part>
+  </message>
+  <message name="delegacionRiesgos">
+    <part element="tns:delegacionRiesgos" name="parameters">
+    </part>
+  </message>
+  <message name="lineaMaximaMemoriaResponse">
+    <part element="tns:lineaMaximaMemoriaResponse" name="parameters">
+    </part>
+  </message>
+  <message name="lineaMaximaBD">
+    <part element="tns:lineaMaximaBD" name="parameters">
+    </part>
+  </message>
+  <message name="actualizarDocumentoExpTCResponse">
+    <part element="tns:actualizarDocumentoExpTCResponse" name="parameters">
+    </part>
+  </message>
+  <portType name="IbmBbvaBusinessDelegate">
+    <operation name="delegacionRiesgos">
+      <input message="tns:delegacionRiesgos" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/delegacionRiesgosRequest">
+    </input>
+      <output message="tns:delegacionRiesgosResponse" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/delegacionRiesgosResponse">
+    </output>
+    </operation>
+    <operation name="delegacionOficinaBD">
+      <input message="tns:delegacionOficinaBD" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/delegacionOficinaBDRequest">
+    </input>
+      <output message="tns:delegacionOficinaBDResponse" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/delegacionOficinaBDResponse">
+    </output>
+    </operation>
+    <operation name="delegacionOficinaMemoria">
+      <input message="tns:delegacionOficinaMemoria" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/delegacionOficinaMemoriaRequest">
+    </input>
+      <output message="tns:delegacionOficinaMemoriaResponse" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/delegacionOficinaMemoriaResponse">
+    </output>
+    </operation>
+    <operation name="consultarDocumentoExpediente">
+      <input message="tns:consultarDocumentoExpediente" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/consultarDocumentoExpedienteRequest">
+    </input>
+      <output message="tns:consultarDocumentoExpedienteResponse" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/consultarDocumentoExpedienteResponse">
+    </output>
+    </operation>
+    <operation name="actualizarDocumentoExpTC">
+      <input message="tns:actualizarDocumentoExpTC" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/actualizarDocumentoExpTCRequest">
+    </input>
+      <output message="tns:actualizarDocumentoExpTCResponse" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/actualizarDocumentoExpTCResponse">
+    </output>
+    </operation>
+    <operation name="distribucionCarga">
+      <input message="tns:distribucionCarga" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/distribucionCargaRequest">
+    </input>
+      <output message="tns:distribucionCargaResponse" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/distribucionCargaResponse">
+    </output>
+    </operation>
+    <operation name="pautasClasificacionBD">
+      <input message="tns:pautasClasificacionBD" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/pautasClasificacionBDRequest">
+    </input>
+      <output message="tns:pautasClasificacionBDResponse" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/pautasClasificacionBDResponse">
+    </output>
+    </operation>
+    <operation name="pautasClasificacionMemoria">
+      <input message="tns:pautasClasificacionMemoria" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/pautasClasificacionMemoriaRequest">
+    </input>
+      <output message="tns:pautasClasificacionMemoriaResponse" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/pautasClasificacionMemoriaResponse">
+    </output>
+    </operation>
+    <operation name="lineaMaximaBD">
+      <input message="tns:lineaMaximaBD" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/lineaMaximaBDRequest">
+    </input>
+      <output message="tns:lineaMaximaBDResponse" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/lineaMaximaBDResponse">
+    </output>
+    </operation>
+    <operation name="lineaMaximaMemoria">
+      <input message="tns:lineaMaximaMemoria" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/lineaMaximaMemoriaRequest">
+    </input>
+      <output message="tns:lineaMaximaMemoriaResponse" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/lineaMaximaMemoriaResponse">
+    </output>
+    </operation>
+    <operation name="retraerTareas">
+      <input message="tns:retraerTareas" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/retraerTareasRequest">
+    </input>
+      <output message="tns:retraerTareasResponse" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/retraerTareasResponse">
+    </output>
+    </operation>
+    <operation name="obtenerUsuario">
+      <input message="tns:obtenerUsuario" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/obtenerUsuarioRequest">
+    </input>
+      <output message="tns:obtenerUsuarioResponse" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/obtenerUsuarioResponse">
+    </output>
+    </operation>
+    <operation name="actualizaEmpleadoExpediente">
+      <input message="tns:actualizaEmpleadoExpediente" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/actualizaEmpleadoExpedienteRequest">
+    </input>
+      <output message="tns:actualizaEmpleadoExpedienteResponse" wsam:Action="http://business.service.bbva.ibm.com/IbmBbvaBusinessDelegate/actualizaEmpleadoExpedienteResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="IbmBbvaBusinessPortBinding" type="tns:IbmBbvaBusinessDelegate">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="delegacionRiesgos">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="delegacionOficinaBD">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="delegacionOficinaMemoria">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="consultarDocumentoExpediente">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="actualizarDocumentoExpTC">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="distribucionCarga">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="pautasClasificacionBD">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="pautasClasificacionMemoria">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="lineaMaximaBD">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="lineaMaximaMemoria">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="retraerTareas">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="obtenerUsuario">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="actualizaEmpleadoExpediente">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="IbmBbvaBusinessService">
+    <port binding="tns:IbmBbvaBusinessPortBinding" name="IbmBbvaBusinessPort">
+      <soap:address location="http://localhost:9080/BBVA_CE_WS/IbmBbvaBusinessService"/>
+    </port>
+  </service>
+</definitions>

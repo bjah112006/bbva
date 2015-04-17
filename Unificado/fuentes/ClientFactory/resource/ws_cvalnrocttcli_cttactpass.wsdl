@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions name="ws_cvalnrocttcli_cttactpass" targetNamespace="http://cttactpass.hi.bbva.com.pe/cvalnrocttcli/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://cttactpass.hi.bbva.com.pe/cvalnrocttcli/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://cttactpass.hi.bbva.com.pe/cvalnrocttcli/" xmlns:mrm="http://cttactpass.hi.bbva.com.pe/cvalnrocttcli/">
+      <xsd:include schemaLocation="pe/com/bbva/hi/cttactpass/cvalnrocttcli/integrationRequest.xsd"/>
+      <xsd:include schemaLocation="pe/com/bbva/hi/cttactpass/cvalnrocttcli/integrationResponse.xsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="validacionNumeroContradoCliente_in">
+    <wsdl:part element="tns:integrationRequest" name="integrationRequest"/>
+  </wsdl:message>
+  <wsdl:message name="validacionNumeroContradoCliente_out">
+    <wsdl:part element="tns:integrationResponse" name="integrationResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="MS_CTTACTPASSPortType">
+    <wsdl:operation name="validacionNumeroContradoCliente">
+      <wsdl:input message="tns:validacionNumeroContradoCliente_in" name="validacionNumeroContradoCliente_Input"/>
+      <wsdl:output message="tns:validacionNumeroContradoCliente_out" name="validacionNumeroContradoCliente_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MS_CTTACTPASSSOAP_HTTP_Binding" type="tns:MS_CTTACTPASSPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="validacionNumeroContradoCliente">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="validacionNumeroContradoCliente_Input">
+        <soap:body parts="integrationRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="validacionNumeroContradoCliente_Output">
+        <soap:body parts="integrationResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MS_CTTACTPASSSOAP_HTTP_Service">
+    <wsdl:port binding="tns:MS_CTTACTPASSSOAP_HTTP_Binding" name="MS_CTTACTPASSSOAP_HTTP_Port">
+      <soap:address location="http://localhost:7800/cttactpass/cvalnrocttcli"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

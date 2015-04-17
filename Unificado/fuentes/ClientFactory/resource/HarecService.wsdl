@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="HarecService" 
+targetNamespace="http://grupobbva.com.pe/HarecService/" 
+xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+xmlns:tns="http://grupobbva.com.pe/HarecService/" 
+xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <generatedMXSD location="HarecService_InlineSchema1.mxsd"/>
+        <binding hasEncoding="false" imported="true" name="HarecServiceSOAP" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema elementFormDefault="qualified" targetNamespace="http://grupobbva.com.pe/HarecService/">
+      <xsd:include schemaLocation="xsd/HarecService_InlineSchema1.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ObtenerDatosXPersonaRequest">
+    <wsdl:part element="tns:ObtenerDatosXPersona" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerDatosXPersonaResponse">
+    <wsdl:part element="tns:ObtenerDatosXPersonaResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerDireccionesXPersonaRequest">
+  	<wsdl:part element="tns:ObtenerDireccionesXPersona" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerDireccionesXPersonaResponse">
+  	<wsdl:part element="tns:ObtenerDireccionesXPersonaResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerContratosXPersonaRequest">
+  	<wsdl:part element="tns:ObtenerContratosXPersona" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerContratosXPersonaResponse">
+  	<wsdl:part element="tns:ObtenerContratosXPersonaResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerMovimientosXContratoCPRequest">
+  	<wsdl:part element="tns:ObtenerMovimientosXContratoCP" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerMovimientosXContratoCPResponse">
+  	<wsdl:part element="tns:ObtenerMovimientosXContratoCPResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerDatosXContratoRequest">
+  	<wsdl:part element="tns:ObtenerDatosXContrato" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerDatosXContratoResponse">
+  	<wsdl:part element="tns:ObtenerDatosXContratoResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="RegistrarMovimientoCPRequest">
+  	<wsdl:part element="tns:RegistrarMovimientoCP" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="NewOperationResponse">
+  	<wsdl:part element="tns:NewOperationResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="RegistrarMovimientoCPResponse1">
+  	<wsdl:part element="tns:RegistrarMovimientoCPResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="RegistrarMovimientoMPRequest">
+  	<wsdl:part element="tns:RegistrarMovimientoMP" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="RegistrarMovimientoMPResponse1">
+  	<wsdl:part element="tns:RegistrarMovimientoMPResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerEstadosDeCuentaXContratoMPRequest">
+  	<wsdl:part element="tns:ObtenerEstadosDeCuentaXContratoMP" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerEstadosDeCuentaXContratoMPResponse1">
+  	<wsdl:part element="tns:ObtenerEstadosDeCuentaXContratoMPResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerMovimientosProcesadosXContratoMPRequest">
+  	<wsdl:part element="tns:ObtenerMovimientosProcesadosXContratoMP" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerMovimientosProcesadosXContratoMPResponse1">
+  	<wsdl:part element="tns:ObtenerMovimientosProcesadosXContratoMPResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerMovimientosPorProcesarXContratoMPRequest">
+  	<wsdl:part element="tns:ObtenerMovimientosPorProcesarXContratoMP" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ObtenerMovimientosPorProcesarXContratoMPResponse1">
+  	<wsdl:part element="tns:ObtenerMovimientosPorProcesarXContratoMPResponse" name="parameters"/>
+  </wsdl:message>
+  
+  <wsdl:portType name="HarecService">
+  	<jaxws:bindings xmlns:jaxws="http://java.sun.com/xml/ns/jaxws">
+	    <jaxws:enableWrapperStyle>false</jaxws:enableWrapperStyle>
+	</jaxws:bindings>
+    <wsdl:operation name="ObtenerDatosXPersona">
+      <wsdl:input message="tns:ObtenerDatosXPersonaRequest"/>
+      <wsdl:output message="tns:ObtenerDatosXPersonaResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerDireccionesXPersona">
+    	<wsdl:input message="tns:ObtenerDireccionesXPersonaRequest"/>
+    	<wsdl:output message="tns:ObtenerDireccionesXPersonaResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerContratosXPersona">
+    	<wsdl:input message="tns:ObtenerContratosXPersonaRequest"/>
+    	<wsdl:output message="tns:ObtenerContratosXPersonaResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerMovimientosXContratoCP">
+    	<wsdl:input message="tns:ObtenerMovimientosXContratoCPRequest"/>
+    	<wsdl:output message="tns:ObtenerMovimientosXContratoCPResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerDatosXContrato">
+    	<wsdl:input message="tns:ObtenerDatosXContratoRequest"/>
+    	<wsdl:output message="tns:ObtenerDatosXContratoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="RegistrarMovimientoCP">
+    	<wsdl:input message="tns:RegistrarMovimientoCPRequest"/>
+    	<wsdl:output message="tns:RegistrarMovimientoCPResponse1"/>
+    </wsdl:operation>
+    <wsdl:operation name="RegistrarMovimientoMP">
+    	<wsdl:input message="tns:RegistrarMovimientoMPRequest"/>
+    	<wsdl:output message="tns:RegistrarMovimientoMPResponse1"/>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerEstadosDeCuentaXContratoMP">
+    	<wsdl:input message="tns:ObtenerEstadosDeCuentaXContratoMPRequest"/>
+    	<wsdl:output message="tns:ObtenerEstadosDeCuentaXContratoMPResponse1"/>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerMovimientosProcesadosXContratoMP">
+    	<wsdl:input message="tns:ObtenerMovimientosProcesadosXContratoMPRequest"/>
+    	<wsdl:output message="tns:ObtenerMovimientosProcesadosXContratoMPResponse1"/>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerMovimientosPorProcesarXContratoMP">
+    	<wsdl:input message="tns:ObtenerMovimientosPorProcesarXContratoMPRequest"/>
+    	<wsdl:output message="tns:ObtenerMovimientosPorProcesarXContratoMPResponse1"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="HarecServiceSOAP" type="tns:HarecService">
+
+  	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+  	<wsdl:operation name="ObtenerDatosXPersona">
+
+  		<soap:operation soapAction="http://grupobbva.com.pe/HarecService/ObtenerDatosXPersona"/>
+  		<wsdl:input>
+
+  			<soap:body use="literal"/>
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal"/>
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="ObtenerDireccionesXPersona">
+
+  		<soap:operation soapAction="http://grupobbva.com.pe/HarecService/ObtenerDireccionesXPersona"/>
+  		<wsdl:input>
+
+  			<soap:body use="literal"/>
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal"/>
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="ObtenerContratosXPersona">
+
+  		<soap:operation soapAction="http://grupobbva.com.pe/HarecService/ObtenerContratosXPersona"/>
+  		<wsdl:input>
+
+  			<soap:body use="literal"/>
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal"/>
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="ObtenerMovimientosXContratoCP">
+
+  		<soap:operation soapAction="http://grupobbva.com.pe/HarecService/ObtenerMovimientosXContratoCP"/>
+  		<wsdl:input>
+
+  			<soap:body use="literal"/>
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal"/>
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="ObtenerDatosXContrato">
+
+  		<soap:operation soapAction="http://grupobbva.com.pe/HarecService/ObtenerDatosXContrato"/>
+  		<wsdl:input>
+
+  			<soap:body use="literal"/>
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal"/>
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="RegistrarMovimientoCP">
+
+  		<soap:operation soapAction="http://grupobbva.com.pe/HarecService/RegistrarMovimientoCP"/>
+  		<wsdl:input>
+
+  			<soap:body use="literal"/>
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal"/>
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="RegistrarMovimientoMP">
+
+  		<soap:operation soapAction="http://grupobbva.com.pe/HarecService/RegistrarMovimientoMP"/>
+  		<wsdl:input>
+
+  			<soap:body use="literal"/>
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal"/>
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="ObtenerEstadosDeCuentaXContratoMP">
+
+  		<soap:operation soapAction="http://grupobbva.com.pe/HarecService/ObtenerEstadosDeCuentaXContratoMP"/>
+  		<wsdl:input>
+
+  			<soap:body use="literal"/>
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal"/>
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="ObtenerMovimientosProcesadosXContratoMP">
+  		<soap:operation soapAction="http://grupobbva.com.pe/HarecService/ObtenerMovimientosProcesadosXContratoMP"/>
+  		<wsdl:input>
+  			<soap:body use="literal"/>
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal"/>
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="ObtenerMovimientosPorProcesarXContratoMP">
+  		<soap:operation soapAction="http://grupobbva.com.pe/HarecService/ObtenerMovimientosPorProcesarXContratoMP"/>
+  		<wsdl:input>
+  			<soap:body use="literal"/>
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal"/>
+  		</wsdl:output>
+  	</wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="HarecService">
+    <wsdl:port binding="tns:HarecServiceSOAP" name="HarecServiceSOAP">
+      <soap:address location="http://118.180.36.26:7815/PosicionPersonaWS/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

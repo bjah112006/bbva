@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bons0="http://BBVA_TarjetaCreditoBP_MOD/businessobjects" targetNamespace="http://BBVA_TarjetaCreditoBP_MOD/businessobjects">
+	<xsd:include schemaLocation="Producto.xsd"/>
+	<xsd:include schemaLocation="Cliente.xsd"/>
+	<xsd:complexType name="ExpedienteTC">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="Accion" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="Codigo" type="xsd:string">
+			</xsd:element>
+
+
+
+			<xsd:element minOccurs="0" name="DevueltoPor" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="Estado" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="LineaCredito" type="xsd:double">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="ModificacionScoring" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="Moneda" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="ScoringAprobado" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="Segmento" type="xsd:string">
+			</xsd:element>
+
+			<xsd:element minOccurs="0" name="TipoOferta" type="xsd:string">
+			</xsd:element>
+
+
+			<xsd:element minOccurs="0" name="VerificacionDomiciliaria" type="xsd:string">
+			</xsd:element>
+
+
+
+
+
+
+
+			<xsd:element minOccurs="0" name="Cliente" type="bons0:Cliente">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="Producto" type="bons0:Producto">
+			</xsd:element>
+
+			<xsd:element minOccurs="0" name="CodigoRVGL" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="CodigoPreEvaluador" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="CodigoEmpleadoResponsable" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="IdOficina" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="IdTerritorio" type="xsd:string">
+			</xsd:element>
+
+			<xsd:element minOccurs="0" name="CodigoUsuarioActual" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="IdPerfilUsuarioActual" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="NombreUsuarioAnterior" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="PerfilUsuarioAnterior" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="CodigoUsuarioAnterior" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="NumeroContrato" type="xsd:string">
+			</xsd:element>
+
+			<xsd:element minOccurs="0" name="EnvioContent" type="xsd:string">
+			</xsd:element>
+
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

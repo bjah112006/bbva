@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://BBVA_TarjetaCreditoBP_MOD/businessobjects">
+	<xsd:complexType name="Producto">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="Producto" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="SubProducto" type="xsd:string">
+			</xsd:element>
+
+
+			<xsd:element minOccurs="0" name="IdProducto" type="xsd:string">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

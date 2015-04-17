@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema targetNamespace="http://cttactpass.hi.bbva.com.pe/cvalnrocttcli/" xmlns:Q3="http://cttactpass.hi.bbva.com.pe/cabecera/" xmlns:tns="http://cttactpass.hi.bbva.com.pe/cvalnrocttcli/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">			
+    <xsd:import namespace="http://cttactpass.hi.bbva.com.pe/cabecera/" schemaLocation="../cabecera/ResponseHeader.xsd">
+    </xsd:import>
+    
+    <xsd:complexType name="integrationResponse">
+    	<xsd:sequence>
+    		<xsd:element maxOccurs="1" minOccurs="0" name="responseHeader" type="Q3:ResponseHeader"/>
+	
+			<xsd:element maxOccurs="1" minOccurs="0" name="codigoRetorno" type="xsd:string"/>
+			
+    	</xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:element name="integrationResponse" type="tns:integrationResponse">
+  </xsd:element>
+</xsd:schema>

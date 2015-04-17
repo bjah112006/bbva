@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="WS_PersonaReniec" 
+	targetNamespace="http://pe.grupobbva.com/SIR/service/message"
+	xmlns:tns      ="http://pe.grupobbva.com/SIR/service/message"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+	
+  <wsdl:types>
+		<xsd:schema targetNamespace="http://pe.grupobbva.com/SIR/service/message">
+			<xsd:include schemaLocation="xsd/MessageFormat.xsd" />
+		</xsd:schema>
+  </wsdl:types>
+  
+  <wsdl:message name="consultaPorNombresRequestMsg">
+    	<wsdl:part element="tns:consultaPorNombresRequest" name="consultaPorNombresRequest"/>
+  </wsdl:message>
+
+  <wsdl:message name="consultaPorNombresResponseMsg">
+    	<wsdl:part element="tns:consultaPorNombresResponse" name="consultaPorNombresResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="consultaPorDNIRequestMsg">
+    	<wsdl:part element="tns:consultaPorDNIRequest" name="consultaPorDNIRequest"/>
+  </wsdl:message>
+
+  <wsdl:message name="consultaPorDNIResponseMsg">
+    	<wsdl:part element="tns:consultaPorDNIResponse" name="consultaPorDNIResponse"/>
+  </wsdl:message>
+    
+  <wsdl:portType name="WS_PersonaReniec">
+		<wsdl:operation name="consultaPorNombres">
+			<wsdl:input message="tns:consultaPorNombresRequestMsg" ></wsdl:input>
+			<wsdl:output message="tns:consultaPorNombresResponseMsg" ></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="consultaPorDNI">
+			<wsdl:input message="tns:consultaPorDNIRequestMsg" ></wsdl:input>
+			<wsdl:output message="tns:consultaPorDNIResponseMsg" ></wsdl:output>
+		</wsdl:operation>		
+ </wsdl:portType>
+ 
+ 	<wsdl:binding name="WS_PersonaReniec_HttpBinding" type="tns:WS_PersonaReniec">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="consultaPorNombres">
+			<soap:operation soapAction="http://pe.grupobbva.com/SIR/service/message"/>			
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="consultaPorDNI">
+			<soap:operation soapAction="http://pe.grupobbva.com/SIR/service/message"/>
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="WS_PersonaReniec">
+		<wsdl:port name="WS_PersonaReniec" binding="tns:WS_PersonaReniec_HttpBinding">
+			<soap:address
+				location="http://localhost:8080/SIR/externo/reniec/Servicio" />
+		</wsdl:port>
+	</wsdl:service>
+  
+</wsdl:definitions>

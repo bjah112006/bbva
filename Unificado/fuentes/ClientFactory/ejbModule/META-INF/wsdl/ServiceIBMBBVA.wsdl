@@ -1,0 +1,754 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:impl="http://service.bbva.ibm.com" xmlns:intf="http://service.bbva.ibm.com" xmlns:tns2="http://vo.bbva.ibm.com" xmlns:tns3="http://vo.core.as.ibm.com" xmlns:tns4="http://bean.cm.bbva.ibm.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://service.bbva.ibm.com">
+ <wsdl:types>
+  <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://service.bbva.ibm.com">
+   <import namespace="http://bean.cm.bbva.ibm.com"/>
+   <import namespace="http://vo.bbva.ibm.com"/>
+   <element name="actualizarDocumentoResponse">
+    <complexType>
+     <sequence>
+      <element name="actualizarDocumentoReturn" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="obtenerUsuario">
+    <complexType>
+     <sequence>
+      <element name="idTerritorio" nillable="true" type="xsd:int"/>
+      <element name="idProducto" nillable="true" type="xsd:int"/>
+      <element name="idPerfil" nillable="true" type="xsd:int"/>
+      <element name="idExpediente" nillable="true" type="xsd:long"/>
+      <element name="idTarea" nillable="true" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="obtenerUsuarioResponse">
+    <complexType>
+     <sequence>
+      <element name="obtenerUsuarioReturn" nillable="true" type="tns2:EmpleadoPerfilVO"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="actualizarEstadoDocumento">
+    <complexType>
+     <sequence>
+      <element name="idCM" nillable="true" type="xsd:string"/>
+      <element name="flag" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="actualizarEstadoDocumentoResponse">
+    <complexType>
+     <sequence/>
+    </complexType>
+   </element>
+   <element name="findDocumento">
+    <complexType>
+     <sequence>
+      <element name="tipoDocumento" nillable="true" type="xsd:string"/>
+      <element name="expediente" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findDocumentoResponse">
+    <complexType>
+     <sequence>
+      <element name="findDocumentoReturn" nillable="true" type="tns4:Documento"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="obtenerProcessUserResponsable">
+    <complexType>
+     <sequence>
+      <element name="idPerfil" nillable="true" type="xsd:int"/>
+      <element name="idOficina" nillable="true" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="obtenerProcessUserResponsableResponse">
+    <complexType>
+     <sequence>
+      <element name="obtenerProcessUserResponsableReturn" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="usuarioOficinaDesplazada">
+    <complexType>
+     <sequence>
+      <element name="codigoUsuario" nillable="true" type="xsd:string"/>
+      <element name="idOficina" nillable="true" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="usuarioOficinaDesplazadaResponse">
+    <complexType>
+     <sequence>
+      <element name="usuarioOficinaDesplazadaReturn" nillable="true" type="tns2:EmpleadoPerfilVO"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="eliminarDocumento">
+    <complexType>
+     <sequence>
+      <element name="tipoDocumento" nillable="true" type="xsd:string"/>
+      <element name="expediente" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="eliminarDocumentoResponse">
+    <complexType>
+     <sequence>
+      <element name="eliminarDocumentoReturn" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="balanceoCargaWS">
+    <complexType>
+     <sequence>
+      <element name="idTerritorio" nillable="true" type="xsd:int"/>
+      <element name="idProducto" nillable="true" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="balanceoCargaWSResponse">
+    <complexType>
+     <sequence>
+      <element name="balanceoCargaWSReturn" nillable="true" type="tns2:EmpleadoVO"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="errorEnvioFTP">
+    <complexType>
+     <sequence>
+      <element name="idExpediente" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="errorEnvioFTPResponse">
+    <complexType>
+     <sequence/>
+    </complexType>
+   </element>
+   <element name="convertirPDF">
+    <complexType>
+     <sequence>
+      <element name="fileInput" type="xsd:base64Binary"/>
+      <element name="nombreOut" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="convertirPDFResponse">
+    <complexType>
+     <sequence>
+      <element name="convertirPDFReturn" type="xsd:base64Binary"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="crearDocumento">
+    <complexType>
+     <sequence>
+      <element name="tipoDocumento" nillable="true" type="xsd:string"/>
+      <element name="expediente" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="crearDocumentoResponse">
+    <complexType>
+     <sequence>
+      <element name="crearDocumentoReturn" nillable="true" type="tns2:DocumentoContentVO"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="delegacionRiesgosWS">
+    <complexType>
+     <sequence>
+      <element name="idTipoCategoria" nillable="true" type="xsd:int"/>
+      <element name="idExpediente" nillable="true" type="xsd:long"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="delegacionRiesgosWSResponse">
+    <complexType>
+     <sequence>
+      <element name="delegacionRiesgosWSReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="delegacionOficinaWS">
+    <complexType>
+     <sequence>
+      <element name="idNivel" nillable="true" type="xsd:int"/>
+      <element name="idExpediente" nillable="true" type="xsd:long"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="delegacionOficinaWSResponse">
+    <complexType>
+     <sequence>
+      <element name="delegacionOficinaWSReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="actualizaEstadoExpediente">
+    <complexType>
+     <sequence>
+      <element name="idEstado" nillable="true" type="xsd:int"/>
+      <element name="idExpediente" nillable="true" type="xsd:long"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="actualizaEstadoExpedienteResponse">
+    <complexType>
+     <sequence>
+      <element name="actualizaEstadoExpedienteReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="actualizarDocumento">
+    <complexType>
+     <sequence>
+      <element name="tipoDocumentoOld" nillable="true" type="xsd:string"/>
+      <element name="tipoDocumentoNew" nillable="true" type="xsd:string"/>
+      <element name="expediente" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+  <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://vo.bbva.ibm.com">
+   <import namespace="http://vo.core.as.ibm.com"/>
+   <complexType name="EmpleadoPerfilVO">
+    <complexContent>
+     <extension base="tns3:AbstractVO">
+      <sequence>
+       <element name="empleadoVO" nillable="true" type="tns2:EmpleadoVO"/>
+       <element name="descripcionPerfil" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="EmpleadoVO">
+    <complexContent>
+     <extension base="tns3:AbstractVO">
+      <sequence>
+       <element name="correo" nillable="true" type="xsd:string"/>
+       <element name="id" nillable="true" type="xsd:long"/>
+       <element name="codigo" nillable="true" type="xsd:string"/>
+       <element name="nombres" nillable="true" type="xsd:string"/>
+       <element name="apepat" nillable="true" type="xsd:string"/>
+       <element name="apemat" nillable="true" type="xsd:string"/>
+       <element name="idPerfilFk" nillable="true" type="xsd:int"/>
+       <element name="fecing" nillable="true" type="xsd:dateTime"/>
+       <element name="fecegr" nillable="true" type="xsd:dateTime"/>
+       <element name="idOficinaFk" nillable="true" type="xsd:int"/>
+       <element name="nombresCompletos" nillable="true" type="xsd:string"/>
+       <element name="idNivelFk" nillable="true" type="xsd:int"/>
+       <element name="idTipoCategoriaFk" nillable="true" type="xsd:int"/>
+       <element name="flagActivo" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="DocumentoContentVO">
+    <complexContent>
+     <extension base="tns3:AbstractVO">
+      <sequence>
+       <element name="tipoDoi" nillable="true" type="xsd:string"/>
+       <element name="id" nillable="true" type="xsd:string"/>
+       <element name="tipoDocumento" nillable="true" type="xsd:string"/>
+       <element name="mandatorio" nillable="true" type="xsd:string"/>
+       <element name="fechaExpiracion" nillable="true" type="xsd:string"/>
+       <element name="nroDocumento" nillable="true" type="xsd:string"/>
+       <element name="codCliente" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+  </schema>
+  <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://vo.core.as.ibm.com">
+   <complexType name="AbstractVO">
+    <sequence/>
+   </complexType>
+  </schema>
+  <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://bean.cm.bbva.ibm.com">
+   <complexType name="Documento">
+    <sequence>
+     <element name="id" nillable="true" type="xsd:int"/>
+     <element name="tipo" nillable="true" type="xsd:string"/>
+     <element name="mandatorio" nillable="true" type="xsd:boolean"/>
+     <element name="contenido" type="xsd:base64Binary"/>
+     <element name="fechaExpiracion" nillable="true" type="xsd:dateTime"/>
+     <element name="tipoDoi" nillable="true" type="xsd:string"/>
+     <element name="numDoi" nillable="true" type="xsd:string"/>
+     <element name="codCliente" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="delegacionOficinaWSResponse">
+     <wsdl:part element="impl:delegacionOficinaWSResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="delegacionRiesgosWSResponse">
+     <wsdl:part element="impl:delegacionRiesgosWSResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="crearDocumentoRequest">
+     <wsdl:part element="impl:crearDocumento" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="delegacionOficinaWSRequest">
+     <wsdl:part element="impl:delegacionOficinaWS" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="actualizaEstadoExpedienteRequest">
+     <wsdl:part element="impl:actualizaEstadoExpediente" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="actualizarEstadoDocumentoResponse">
+     <wsdl:part element="impl:actualizarEstadoDocumentoResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="eliminarDocumentoRequest">
+     <wsdl:part element="impl:eliminarDocumento" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="convertirPDFRequest">
+     <wsdl:part element="impl:convertirPDF" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="obtenerUsuarioResponse">
+     <wsdl:part element="impl:obtenerUsuarioResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="obtenerUsuarioRequest">
+     <wsdl:part element="impl:obtenerUsuario" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="usuarioOficinaDesplazadaResponse">
+     <wsdl:part element="impl:usuarioOficinaDesplazadaResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="eliminarDocumentoResponse">
+     <wsdl:part element="impl:eliminarDocumentoResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="crearDocumentoResponse">
+     <wsdl:part element="impl:crearDocumentoResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="actualizarDocumentoRequest">
+     <wsdl:part element="impl:actualizarDocumento" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="delegacionRiesgosWSRequest">
+     <wsdl:part element="impl:delegacionRiesgosWS" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="actualizarDocumentoResponse">
+     <wsdl:part element="impl:actualizarDocumentoResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="obtenerProcessUserResponsableResponse">
+     <wsdl:part element="impl:obtenerProcessUserResponsableResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="findDocumentoResponse">
+     <wsdl:part element="impl:findDocumentoResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="usuarioOficinaDesplazadaRequest">
+     <wsdl:part element="impl:usuarioOficinaDesplazada" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="balanceoCargaWSRequest">
+     <wsdl:part element="impl:balanceoCargaWS" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="balanceoCargaWSResponse">
+     <wsdl:part element="impl:balanceoCargaWSResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="errorEnvioFTPRequest">
+     <wsdl:part element="impl:errorEnvioFTP" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="errorEnvioFTPResponse">
+     <wsdl:part element="impl:errorEnvioFTPResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="convertirPDFResponse">
+     <wsdl:part element="impl:convertirPDFResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="obtenerProcessUserResponsableRequest">
+     <wsdl:part element="impl:obtenerProcessUserResponsable" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="findDocumentoRequest">
+     <wsdl:part element="impl:findDocumento" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="actualizarEstadoDocumentoRequest">
+     <wsdl:part element="impl:actualizarEstadoDocumento" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="actualizaEstadoExpedienteResponse">
+     <wsdl:part element="impl:actualizaEstadoExpedienteResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:portType name="ServiceIBMBBVA">
+     <wsdl:operation name="actualizarDocumento">
+       <wsdl:input message="impl:actualizarDocumentoRequest" name="actualizarDocumentoRequest"/>
+
+       <wsdl:output message="impl:actualizarDocumentoResponse" name="actualizarDocumentoResponse"/>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="obtenerUsuario">
+       <wsdl:input message="impl:obtenerUsuarioRequest" name="obtenerUsuarioRequest"/>
+
+       <wsdl:output message="impl:obtenerUsuarioResponse" name="obtenerUsuarioResponse"/>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="actualizarEstadoDocumento">
+       <wsdl:input message="impl:actualizarEstadoDocumentoRequest" name="actualizarEstadoDocumentoRequest"/>
+
+       <wsdl:output message="impl:actualizarEstadoDocumentoResponse" name="actualizarEstadoDocumentoResponse"/>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="findDocumento">
+       <wsdl:input message="impl:findDocumentoRequest" name="findDocumentoRequest"/>
+
+       <wsdl:output message="impl:findDocumentoResponse" name="findDocumentoResponse"/>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="obtenerProcessUserResponsable">
+       <wsdl:input message="impl:obtenerProcessUserResponsableRequest" name="obtenerProcessUserResponsableRequest"/>
+
+       <wsdl:output message="impl:obtenerProcessUserResponsableResponse" name="obtenerProcessUserResponsableResponse"/>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="usuarioOficinaDesplazada">
+       <wsdl:input message="impl:usuarioOficinaDesplazadaRequest" name="usuarioOficinaDesplazadaRequest"/>
+
+       <wsdl:output message="impl:usuarioOficinaDesplazadaResponse" name="usuarioOficinaDesplazadaResponse"/>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="eliminarDocumento">
+       <wsdl:input message="impl:eliminarDocumentoRequest" name="eliminarDocumentoRequest"/>
+
+       <wsdl:output message="impl:eliminarDocumentoResponse" name="eliminarDocumentoResponse"/>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="balanceoCargaWS">
+       <wsdl:input message="impl:balanceoCargaWSRequest" name="balanceoCargaWSRequest"/>
+
+       <wsdl:output message="impl:balanceoCargaWSResponse" name="balanceoCargaWSResponse"/>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="errorEnvioFTP">
+       <wsdl:input message="impl:errorEnvioFTPRequest" name="errorEnvioFTPRequest"/>
+
+       <wsdl:output message="impl:errorEnvioFTPResponse" name="errorEnvioFTPResponse"/>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="convertirPDF">
+       <wsdl:input message="impl:convertirPDFRequest" name="convertirPDFRequest"/>
+
+       <wsdl:output message="impl:convertirPDFResponse" name="convertirPDFResponse"/>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="crearDocumento">
+       <wsdl:input message="impl:crearDocumentoRequest" name="crearDocumentoRequest"/>
+
+       <wsdl:output message="impl:crearDocumentoResponse" name="crearDocumentoResponse"/>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="delegacionRiesgosWS">
+       <wsdl:input message="impl:delegacionRiesgosWSRequest" name="delegacionRiesgosWSRequest"/>
+
+       <wsdl:output message="impl:delegacionRiesgosWSResponse" name="delegacionRiesgosWSResponse"/>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="delegacionOficinaWS">
+       <wsdl:input message="impl:delegacionOficinaWSRequest" name="delegacionOficinaWSRequest"/>
+
+       <wsdl:output message="impl:delegacionOficinaWSResponse" name="delegacionOficinaWSResponse"/>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="actualizaEstadoExpediente">
+       <wsdl:input message="impl:actualizaEstadoExpedienteRequest" name="actualizaEstadoExpedienteRequest"/>
+
+       <wsdl:output message="impl:actualizaEstadoExpedienteResponse" name="actualizaEstadoExpedienteResponse"/>
+
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+   <wsdl:binding name="ServiceIBMBBVASoapBinding" type="impl:ServiceIBMBBVA">
+ <wsaw:UsingAddressing xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" wsdl:required="false"/>
+
+     <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+     <wsdl:operation name="actualizarDocumento">
+       <wsdlsoap:operation soapAction="actualizarDocumento"/>
+
+       <wsdl:input name="actualizarDocumentoRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="actualizarDocumentoResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="obtenerUsuario">
+       <wsdlsoap:operation soapAction="obtenerUsuario"/>
+
+       <wsdl:input name="obtenerUsuarioRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="obtenerUsuarioResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="actualizarEstadoDocumento">
+       <wsdlsoap:operation soapAction="actualizarEstadoDocumento"/>
+
+       <wsdl:input name="actualizarEstadoDocumentoRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="actualizarEstadoDocumentoResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="findDocumento">
+       <wsdlsoap:operation soapAction="findDocumento"/>
+
+       <wsdl:input name="findDocumentoRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="findDocumentoResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="obtenerProcessUserResponsable">
+       <wsdlsoap:operation soapAction="obtenerProcessUserResponsable"/>
+
+       <wsdl:input name="obtenerProcessUserResponsableRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="obtenerProcessUserResponsableResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="usuarioOficinaDesplazada">
+       <wsdlsoap:operation soapAction="usuarioOficinaDesplazada"/>
+
+       <wsdl:input name="usuarioOficinaDesplazadaRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="usuarioOficinaDesplazadaResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="eliminarDocumento">
+       <wsdlsoap:operation soapAction="eliminarDocumento"/>
+
+       <wsdl:input name="eliminarDocumentoRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="eliminarDocumentoResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="balanceoCargaWS">
+       <wsdlsoap:operation soapAction="balanceoCargaWS"/>
+
+       <wsdl:input name="balanceoCargaWSRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="balanceoCargaWSResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="errorEnvioFTP">
+       <wsdlsoap:operation soapAction="errorEnvioFTP"/>
+
+       <wsdl:input name="errorEnvioFTPRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="errorEnvioFTPResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="convertirPDF">
+       <wsdlsoap:operation soapAction="convertirPDF"/>
+
+       <wsdl:input name="convertirPDFRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="convertirPDFResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="crearDocumento">
+       <wsdlsoap:operation soapAction="crearDocumento"/>
+
+       <wsdl:input name="crearDocumentoRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="crearDocumentoResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="delegacionRiesgosWS">
+       <wsdlsoap:operation soapAction="delegacionRiesgosWS"/>
+
+       <wsdl:input name="delegacionRiesgosWSRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="delegacionRiesgosWSResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="delegacionOficinaWS">
+       <wsdlsoap:operation soapAction="delegacionOficinaWS"/>
+
+       <wsdl:input name="delegacionOficinaWSRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="delegacionOficinaWSResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="actualizaEstadoExpediente">
+       <wsdlsoap:operation soapAction="actualizaEstadoExpediente"/>
+
+       <wsdl:input name="actualizaEstadoExpedienteRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="actualizaEstadoExpedienteResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+  </wsdl:binding>
+
+   <wsdl:service name="ServiceIBMBBVAService">
+     <wsdl:port binding="impl:ServiceIBMBBVASoapBinding" name="ServiceIBMBBVA">
+       <wsdlsoap:address location="http://9.6.99.46:9080/BBVA_Service/services/ServiceIBMBBVA"/>
+
+    </wsdl:port>
+
+  </wsdl:service>
+
+</wsdl:definitions>
