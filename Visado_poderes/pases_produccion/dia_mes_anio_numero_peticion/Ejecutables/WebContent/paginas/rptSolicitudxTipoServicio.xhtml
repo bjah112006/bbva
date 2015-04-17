@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dtd XHTML 1.0 transitional//EN" "http://www.w3.org/tr/xhtml1/Dtd/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:param name="root" value="#{request.contextPath}/" />
+
+<ui:composition template="../WEB-INF/plantilla/layout.xhtml">
+	<ui:define name="contenido">
+		<SCRIPT type="text/javascript">
+			function validaNumero(e, ent, obj, fn) {
+				//Se captura la tecla presionada             
+				var tecla = (document.all) ? e.keyCode : e.which;
+				var patron;
+				var te;
+				var result;
+				//Tecla de retroceso (para poder borrar)       
+				if (tecla == 8) {
+					return true;
+				}
+				if (ent == '0') {
+					if (fn == '1') {
+						if (obj.value == '') {
+							return true;
+						}
+						var puntos = obj.value.split('.');
+						if (puntos.length > 2) {
+							obj.value = '';
+							obj.focus();
+						}
+					}
+					if (tecla == 46) {
+						if (obj.value.indexOf('.') != -1) {
+							return false;
+						}
+						return true;
+					}
+				} else {
+					if (fn == '1') {
+						if (obj.value.indexOf('.') != -1) {
+							obj.value = '';
+							obj.focus();
+						}
+					}
+				}
+				//Dejar la línea de patron que se necesite y borrar el resto             
+				//patron =/[A-Za-z]/; // Solo acepta letras             
+				patron = /\d/; // Solo acepta números             
+				//patron = /\w/; // Acepta números y letras             
+				//patron = /\D/; // No acepta números             
+				//
+				te = String.fromCharCode(tecla);
+				if (fn == '1') {
+					te = obj.value;
+				}
+				result = patron.test(te);
+				if (result == false) {
+					if (fn == '1') {
+						if (obj.value == '') {
+							return true;
+						}
+						obj.value = '';
+						obj.focus();
+					}
+				}
+				return result;
+			}
+
+			//Funcion que se encarga de la invocacion del nuevo applet de escaneo (NAE) 05.02.2013
+			function invocarEscaner(urlApplet) {
+				var winId1;
+				//alert("urlApplet==> "+urlApplet);
+				//var rutaAppletFinal = document.getElementById("formSolicitudRegistro:linkEscaner").value;
+				winId1 = window
+						.open(
+								urlApplet,
+								'NAE',
+								"status=yes,menubar=no,scrollbars=yes,resizable=yes,toolbar=no,screenX=0,screenY=0,left=0,top=0,width=100,height=100");
+				return false;
+			}
+
+			/*
+			function actualizarDocumentos (documentos) {
+				//$("#"+this.form.name+"\\:idDocDigitalizada\\:idDocumentos").val(codigoDoc);
+				actDocumentos();
+			}
+			 */
+		</SCRIPT>
+
+		<h:form id="frm">
+			
+			<h2>Reporte de Solicitudes por Tipo de Servicio</h2>
+		
+			<p:outputPanel id="oplFrm">
+				<p:growl life="10000" globalOnly="false" showDetail="true" id="growl" />
+
+				<p:spacer height="5" />
+				
+				<p:panel>
+					<table id="tablaBusSol" border="0" bordercolor="#00BFFF">
+						<tbody>
+							<tr bordercolor="white">
+								<td><h:outputText styleClass="outputText" id="txtCod"
+										value="Código Sol.:" /></td>
+								<td><p:inputText id="codSol"
+										value="#{reportesMB.codSolicitud}"
+										onkeypress="return validaNumero(event,'0',this,'0');"
+										onblur="validaNumero(event,'0',this,'1');" maxlength="7"
+										size="15" /></td>
+	
+								<td><h:outputText styleClass="outputText" id="txtTipoSol"
+										value="Tipo de Servicio:" /></td>
+								<td><p:selectCheckboxMenu id="scmTSolicitud"
+										label="--Todos--"
+										value="#{reportesMB.lstTipoSolicitudSelected}"
+										panelStyle="width:220px;" style="width:167px;">
+										<!-- CAMBIO HVB 25/07/2014 SE UTILIZA EL LISTADO EN VEZ DEL MAP PLANTEADO -->
+								      <f:selectItems value="#{seguimientoMB.combosMB.tiposSolicitud}" var="tipo" itemValue="#{tipo.codTipSolic}"
+								      itemLabel="#{tipo.desTipServicio}"/>  
+										
+									</p:selectCheckboxMenu></td>
+	
+								<td><h:outputText styleClass="outputText" id="txtTipoOpe"
+										value="Tipo de Operación:" /></td>
+								<td><p:selectOneMenu value="#{reportesMB.idOpeBan}"
+										id="somTipoOpe" style="width:167px;">
+										<f:selectItem itemLabel="--Todos--" itemValue="" />
+										<f:selectItems value="#{reportesMB.combosMB.lstOpeBancaria}"
+											var="tipoOpe" itemValue="#{tipoOpe.codOperBan}"
+											itemLabel="#{tipoOpe.desOperBan}" />
+									</p:selectOneMenu></td>
+							</tr>
+	
+							<tr bordercolor="white">
+								<td><h:outputText styleClass="outputText" id="txtImporte"
+										value="Rango Global:" /></td>
+								<td><p:selectOneMenu value="#{reportesMB.idImporte}"
+										id="somImporte" style="width:155px;">
+										<f:selectItem itemLabel="--Todos--" itemValue="" />
+										<f:selectItems value="#{reportesMB.infoDeployMB.lstRangosImporte}"
+											var="imp" itemValue="#{imp.codigoRango}"
+											itemLabel="#{imp.descripcion}" />
+									</p:selectOneMenu></td>
+	
+								<td><h:outputText styleClass="outputText" id="impIni"
+										value="Importe Op. Inicio:" /></td>
+								<td><p:inputText id="impOpIni"
+										value="#{reportesMB.importeIni}" maxlength="16" size="15" /></td>
+	
+								<td><h:outputText styleClass="outputText" id="impFin"
+										value="Importe Op. Fin:" /></td>
+								<td><p:inputText id="impOpFin"
+										value="#{reportesMB.importeFin}" maxlength="16" size="15" /></td>
+							</tr>
+	
+							<tr bordercolor="white">
+								<td><h:outputText styleClass="outputText" id="txtEstudio"
+										value="Estudio:" /></td>
+								<td><p:selectCheckboxMenu id="scmEstudio" label="--Todos--"
+										value="#{reportesMB.lstEstudioSelected}"
+										panelStyle="width:250px;" style="width:160px;">
+										<!-- CAMBIO HVB 25/07/2014 HVB
+											  	   SE CAMBIO EL ELEMENTO MAP POR EL LISTADO -->
+											  <f:selectItems value="#{reportesMB.combosMB.lstEstudio}" var="estudio" itemValue="#{estudio.codEstudio}"
+								      			itemLabel="#{estudio.desEstudio}"/>  
+										
+									</p:selectCheckboxMenu></td>
+	
+								<td><h:outputText styleClass="outputText"
+										id="txtFechaInicio" value="Fecha de Inicio:" /></td>
+								<td><p:calendar id="calFecIni" pattern="dd/MM/yyyy"
+										value="#{reportesMB.fechaInicio}" showOn="button"
+										maxlength="10" size="20" locale="es"/></td>
+	
+								<td><h:outputText styleClass="outputText" id="txtFechaFin"
+										value="Fecha de Fin:" /></td>
+								<td><p:calendar id="calFecFin" pattern="dd/MM/yyyy"
+										value="#{reportesMB.fechaFin}" showOn="button" maxlength="10"
+										size="20" locale="es"/></td>
+	
+								<td><h:outputText styleClass="outputText" id="txtMon"
+										value="Moneda:" /></td>
+								<td><p:selectOneMenu value="#{reportesMB.idMoneda}"
+										id="somMoneda" style="width:155px;">
+										<f:selectItem itemLabel="--Todos--" itemValue="" />
+										<!-- CAMBIO 23/07/2014 SE REEMPLAZA COMBOMB POR INFODEPLOYMB -->
+										<f:selectItems value="#{reportesMB.infoDeployMB.lstMoneda}"
+											var="mon" itemValue="#{mon.codMoneda}"
+											itemLabel="#{mon.desMoneda}" />
+									</p:selectOneMenu></td>
+							</tr>
+	
+							<tr bordercolor="white">
+								<td><p:commandButton value="Buscar"
+										actionListener="#{reportesMB.buscarSolicitudesxTipoServicio}"
+										update=":frm:oplFrm" />
+								</td>
+								<td><p:commandButton value="Exportar"
+										disabled="#{reportesMB.noHabilitarExportar}"
+										actionListener="#{reportesMB.descargarArchivoSolicitudesxTpoServ}"
+										ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)">
+										<p:fileDownload value="#{reportesMB.file}" />
+									</p:commandButton> <h:commandLink value="Exportar2"
+										disabled="#{reportesMB.noHabilitarExportar}"  rendered="false"
+										actionListener="#{reportesMB.descargarArchivoSolicitudesxTpoServ}"
+										target="_blank" ajax="true">
+										<p:fileDownload value="#{reportesMB.file}" />
+									</h:commandLink>
+								</td>
+								<td>
+									<p:commandButton value="Limpiar" actionListener="#{reportesMB.limpiarFilTipoServ}" update=":frm:oplFrm" />
+								</td>
+							</tr>
+	
+						</tbody>
+					</table>
+				</p:panel>
+				
+				<p:spacer height="20" />
+
+				<h:outputLabel value="#{reportesMB.textoTotalResultados}" />
+
+				<p:spacer height="30" />
+
+				<p:panel header="Resultados" id="panelRes" style="width: 1090px">
+					<p:dataTable value="#{reportesMB.lstSolicitudesTipoServicio}"
+						var="tbl" rows="5" id="datosSol" paginatorPosition="bottom"
+						scrollable="true" scrollHeight="200" paginator="true"
+						emptyMessage="No se encontraron registros."
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+						currentPageReportTemplate="Mostrando {startRecord} de {totalRecords}" 
+						rowsPerPageTemplate="5,10,15">
+
+						<p:column width="70">
+							<f:facet name="header">
+								<h:outputText value="Código Solicitud" style="font-size: 9px" />
+							</f:facet>
+							<h:outputText value="#{tbl.codSolicitud}" style="font-size: 9px" />
+						</p:column>
+
+						<p:column width="120">
+							<f:facet name="header">
+								<h:outputText value="Estudio" style="font-size: 9px" />
+							</f:facet>
+							<h:outputText value="#{tbl.estudio}" style="font-size: 9px" />
+						</p:column>
+
+						<p:column width="120">
+							<f:facet name="header">
+								<h:outputText value="Tipo de Servicio" style="font-size: 9px" />
+							</f:facet>
+							<h:outputText value="#{tbl.tipoServicio}" style="font-size: 9px" />
+						</p:column>
+
+						<p:column width="73">
+							<f:facet name="header">
+								<h:outputText value="Tipo de Operación" style="font-size: 9px" />
+							</f:facet>
+							<h:outputText value="#{tbl.tipoOperacion}" style="font-size: 9px" />
+						</p:column>
+
+						<p:column width="32">
+							<f:facet name="header">
+								<h:outputText value="Moneda" style="font-size: 9px" />
+							</f:facet>
+							<h:outputText value="#{tbl.moneda}" style="font-size: 9px" />
+						</p:column>
+
+						<p:column width="37">
+							<f:facet name="header">
+								<h:outputText value="Importe" style="font-size: 9px" />
+							</f:facet>
+							<h:outputText value="#{tbl.importe}" style="font-size: 9px" />
+						</p:column>
+
+						<p:column width="62">
+							<f:facet name="header">
+								<h:outputText value="Tipo de Cambio" style="font-size: 9px" />
+							</f:facet>
+							<h:outputText value="#{tbl.tipoCambio}" style="font-size: 9px" />
+						</p:column>
+
+						<p:column width="68">
+							<f:facet name="header">
+								<h:outputText value="Importe en Soles" style="font-size: 9px" />
+							</f:facet>
+							<h:outputText value="#{tbl.importeSoles}" style="font-size: 9px" />
+						</p:column>
+
+					</p:dataTable>
+				</p:panel>
+			</p:outputPanel>
+		</h:form>
+
+		<p:confirmDialog id="confirmDialog" message="Que desea hacer?"
+			header="Generar Reporte Solicitudes por Tipo Servicio"
+			severity="alert" widgetVar="confirmation">
+			<h:form>
+				<p:commandButton id="confirm" value="Abrir"
+					oncomplete="confirmation.hide()"
+					actionListener="#{reportesMB.abrirExcelSolicitudesxTpoServ}" />
+
+				<p:commandButton id="decline" value="Grabar"
+					onclick="PrimeFaces.monitorDownload(start, stop)" ajax="false"
+					icon="ui-icon-arrowthichk-s" oncomplete="confirmation.hide()"
+					actionListener="#{reportesMB.descargarArchivoSolicitudesxTpoServ}">
+					<p:fileDownload value="#{reportesMB.file}" />
+				</p:commandButton>
+			</h:form>
+		</p:confirmDialog>
+
+	</ui:define>
+</ui:composition>
+
+</html>

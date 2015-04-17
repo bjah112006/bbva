@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<head>
+<script src="jquery.js" type="text/javascript"></script>
+<script src="jquery.maskedinput.js" type="text/javascript"></script>
+</head>
+
+<ui:composition template="../WEB-INF/plantilla/layout.xhtml">
+	<ui:define name="contenido">
+		
+		<h:panelGrid id="pnlToolBar" columns="2">
+			<p:tabMenu activeIndex="0" style="width:350px;">
+				<p:menuitem value="Calculadora" url="/faces/paginas/calculadoraComision.xhtml" icon="ui-icon-star" />			
+			</p:tabMenu>
+	    
+	    
+			<p:toolbar>
+				<p:toolbarGroup align="rigth">				
+					<!-- <p:commandButton value="Imprimir" id="btnImprimir3" onclick="window.print();return false;" icon="ui-icon-document"/> -->
+					
+					<p:commandButton value="Imprimir" id="btnImprimir3" onclick="window.location.href='../../main/download/calculoComision.htm?param=#{calculadoraMB.item1};#{calculadoraMB.item2};#{calculadoraMB.item3};#{calculadoraMB.importeLimite};#{calculadoraMB.resultado}'" icon="ui-icon-document"/>					
+					<p:commandButton value="Salir" id="btnSalir3" onclick="window.location.href='./bienvenido.xhtml'" icon="ui-icon-document"/>
+					
+				</p:toolbarGroup>
+			</p:toolbar>
+			
+		</h:panelGrid>
+
+		<h:form id="formPrincipal">
+
+			<h:panelGrid id = "panelPrincipal" columns="1">
+			
+			<center><h3>CALCULADORA DE COMISIÓN</h3></center>
+		
+			<h:panelGrid id="pnlCabecera" columns="4" >
+				<p:spacer  width="330" height="10" />
+				<h:outputText>Si</h:outputText>
+				<p:spacer  width="10" height="10" />
+				<h:outputText>No</h:outputText>		
+			</h:panelGrid>		
+			
+			<h:panelGrid id="pnlCalculadora" columns="4" >
+								
+								
+				<h:outputText value="1. ¿ El beneficiario de la operación bancaria es persona jurídica?" />
+				
+				<h:selectOneRadio id="radioButton1" value="#{calculadoraMB.item1}" disabled="#{calculadoraMB.verItem1}">  
+			        <f:selectItem itemLabel="" itemValue="1" />  
+			        <f:selectItem itemLabel="" itemValue="0" />   
+			        <p:ajax listener="#{calculadoraMB.calcularComision}" update="textResultado, pnlCalculadora,:pnlToolBar" />
+				</h:selectOneRadio>
+								
+				<p:graphicImage value="/resources/images/pregunta.jpg" id="questionItem1" />
+					
+				<p:tooltip for="questionItem1" value="SI: Persona Juridica / NO: Persona Natural" showEffect="slide"  />
+
+				<h:outputText value="2. ¿ Dispondrá de bienes de fallecido?" />
+
+				<h:selectOneRadio id="radioButton2" value="#{calculadoraMB.item2}" disabled="#{calculadoraMB.verItem2}">  
+			        <f:selectItem itemLabel="" itemValue="1" />  
+			        <f:selectItem itemLabel="" itemValue="0" />   
+			        <p:ajax listener="#{calculadoraMB.calcularComision}" update="textResultado, pnlCalculadora,:pnlToolBar" />
+				</h:selectOneRadio>				
+
+				<p:graphicImage value="/resources/images/pregunta.jpg" id="questionItem2" />
+				
+				<p:tooltip for="questionItem2" value="SI: Persona Natural dispondra de Bienes de Fallecido / NO: Persona Natural No dispondra de Bienes de Fallecido" showEffect="slide" />
+
+				<h:outputText value="3. ¿ El importe a disponer es menor a #{calculadoraMB.importeLimite}?" />
+
+				<h:selectOneRadio id="radioButton3" value="#{calculadoraMB.item3}" disabled="#{calculadoraMB.verItem3}">  
+			        <f:selectItem itemLabel="" itemValue="1" />  
+			        <f:selectItem itemLabel="" itemValue="0" />   
+			        <p:ajax listener="#{calculadoraMB.calcularComision}" update="textResultado, pnlCalculadora,:pnlToolBar" />
+				</h:selectOneRadio>
+
+				<p:graphicImage value="/resources/images/pregunta.jpg" id="questionItem3" />
+				
+				<p:tooltip for="questionItem3" value="SI: El importe a disponer es menor a #{calculadoraMB.importeLimite} / NO: El importe es mayor a #{calculadoraMB.importeLimite}" showEffect="slide" />
+
+			</h:panelGrid>
+
+			<p:spacer width="10" height="30" />
+
+			<h:panelGrid columns="4">
+
+				<h:outputText>Ud. debe pagar:</h:outputText>
+
+				<p:spacer width="150" height="10" />
+				
+				<h:inputText id="textResultado" styleClass="inputText" maxlength="10" value="PEN S/. #{calculadoraMB.resultado}" disabled="true" />
+
+				<p:graphicImage value="/resources/images/pregunta.jpg" id="questionResultado" />
+				
+				<p:tooltip for="questionResultado" value="Comisión a pagar" showEffect="slide" />
+
+			</h:panelGrid>
+
+			<p:spacer width="10" height="30" />
+
+			</h:panelGrid>						
+
+		</h:form>
+
+	</ui:define>
+	<br />
+</ui:composition>
+
+</html>

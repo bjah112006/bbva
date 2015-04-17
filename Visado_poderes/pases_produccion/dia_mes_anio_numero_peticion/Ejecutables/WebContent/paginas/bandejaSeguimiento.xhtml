@@ -1,0 +1,428 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dtd XHTML 1.0 transitional//EN" "http://www.w3.org/tr/xhtml1/Dtd/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:param name="root" value="#{request.contextPath}/" />
+
+<ui:composition template="../WEB-INF/plantilla/layout.xhtml">
+	<ui:define name="contenido">
+	
+	<script type="text/JavaScript" src="../resources/js/visado.js" />	
+
+		<p:tabMenu activeIndex="0"  style="width:1155px;margin-top: 0px; "   >
+			<p:menuitem value="Solicitud" url="/faces/paginas/bandejaSeguimiento.xhtml" ajax="true" icon="ui-icon-star" />
+			
+		</p:tabMenu>
+		
+		<h:form id="frm">
+			<p:outputPanel id="pnlBndSol">
+					<p:growl id="idMsmBndSolicitud" sticky="true" />
+					
+					<p:spacer height="1"/>
+					
+					<p:accordionPanel multiple="true">
+						<p:tab title="Búsqueda Básica" >
+								<h:panelGrid columns="8"> 
+									<h:outputText styleClass="outputText" id="txtCod" value="Nro. Solicitud:" />
+									<p:inputText id="text100" value="#{seguimientoMB.codSolicitud}" maxlength="7" size="15" 
+													onkeypress="return validaNumero(event,'0',this,'0');" onblur="validaNumero(event,'0',this,'1');"/>
+											
+									<p:graphicImage value="/resources/images/pregunta.jpg" id="tooltxtSolicitud" />	
+									<p:tooltip for="tooltxtSolicitud" value="Número de solicitud" showEffect="fade" hideEffect="fade" />
+											
+									<h:outputText styleClass="outputText" id="txtEstado" value="Estado:" />
+											
+									<p:selectCheckboxMenu id="scmEstados" label="--TODOS--" value="#{seguimientoMB.lstEstadoSelected}" 
+													panelStyle="width:220px;" style="width:162px;" scrollHeight="250">  
+													<!-- CAMBIO 23/07/2014 HVB SE REEMPLAZA INFODEPLOY POR COMBOMB -->
+								     				<f:selectItems value="#{seguimientoMB.infoDeployMB.estados}"/>  
+								    </p:selectCheckboxMenu>  
+											
+									<p:graphicImage value="/resources/images/pregunta.jpg" id="tooltxtEstado" />
+									<p:tooltip for="tooltxtEstado" value="Estado de la solicitud" showEffect="fade" hideEffect="fade" />
+								</h:panelGrid>
+								
+								<h:panelGrid columns="16"> 
+									<h:outputText styleClass="outputText" id="txtDOIApod" value="DOI #{seguimientoMB.apoderdante}:" />
+									<h:inputText styleClass="inputText" id="text18" maxlength="18" 
+																value="#{seguimientoMB.nroDOIApoderado}" disabled="false" size="18"/>
+									<p:graphicImage value="/resources/images/pregunta.jpg" id="toolDOIApoderado" />
+								   	<p:tooltip for="toolDOIApoderado" value="Número de Documento del Representante" 
+																								showEffect="fade" hideEffect="fade" />
+									<h:outputText styleClass="outputText" id="txtApod" value="#{seguimientoMB.apoderdante}:" />
+									<p:autoComplete completeMethod="#{seguimientoMB.completePersona}"
+													value="#{seguimientoMB.objTiivsPersonaBusquedaNomApod}"
+													forceSelection="true" var="ap" converter="personaCvtr"
+													itemLabel="#{ap.nombreCompletoMayuscula}" itemValue="#{ap}"
+													size="25">
+									</p:autoComplete>
+									<p:graphicImage value="/resources/images/pregunta.jpg" id="toolApoderado" />
+									
+									<p:tooltip for="toolApoderado" value="Representante" showEffect="fade" hideEffect="fade" />
+								
+											
+									<h:outputText styleClass="outputText" id="txtDOIPod" value="DOI #{seguimientoMB.poderdante}:" />
+											
+									<h:inputText styleClass="inputText" id="text17" maxlength="18" size="18" value="#{seguimientoMB.nroDOIPoderdante}" disabled="false" />
+											
+									<p:graphicImage value="/resources/images/pregunta.jpg" id="toolDOIPoderdante" />
+											
+									<p:tooltip for="toolDOIPoderdante" value="Número de Documento del Representado" showEffect="fade" hideEffect="fade" />
+											
+											
+									<h:outputText styleClass="outputText" id="txtPoder" value="#{seguimientoMB.poderdante}:" />
+										
+											
+									<p:autoComplete completeMethod="#{seguimientoMB.completePersona}"
+														value="#{seguimientoMB.objTiivsPersonaBusquedaNomPoder}"
+														forceSelection="true" var="pod" converter="personaCvtr"
+														itemLabel="#{pod.nombreCompletoMayuscula}" itemValue="#{pod}"
+														size="23">
+									</p:autoComplete>
+											
+									<p:graphicImage value="/resources/images/pregunta.jpg" id="toolPoderdante" />	
+									<p:tooltip for="toolPoderdante" value="Representado" showEffect="fade" hideEffect="fade" />	
+								
+								</h:panelGrid>
+						</p:tab>		
+						
+						<p:tab title="Búsqueda Avanzada" >
+							<h:panelGrid columns="12"> 
+								<h:outputText styleClass="outputText" id="txtImporte" value="Importe:" />
+								<p:selectOneMenu value="#{seguimientoMB.idImporte}" id="somImporte" style="width:155px;">
+										<f:selectItem itemLabel="--TODOS--" itemValue="" />
+										<f:selectItems value="#{seguimientoMB.infoDeployMB.lstRangosImporte}" var="imp"
+												itemValue="#{imp.codigoRango}" itemLabel="#{imp.descripcion}" />
+								</p:selectOneMenu>
+									
+								<p:graphicImage value="/resources/images/pregunta.jpg" id="tooltxtImporte" />
+								<p:tooltip for="tooltxtImporte" value="Importe" showEffect="fade" hideEffect="fade" />  
+								
+								<h:outputText styleClass="outputText" id="txtTipoSol" value="T. de Solicitud:" />
+									
+								<p:selectCheckboxMenu id="scmTSolicitud" label="--TODOS--" value="#{seguimientoMB.lstTipoSolicitudSelected}" 
+											panelStyle="width:360px;" style="width:170px;" scrollHeight="250">  
+								      
+								      <!-- CAMBIO HVB 25/07/2014 SE UTILIZA EL LISTADO EN VEZ DEL MAP PLANTEADO -->
+								      <f:selectItems value="#{seguimientoMB.combosMB.lstTipoSolicitud}" var="tipo" itemValue="#{tipo.codTipSolic}"
+								      itemLabel="#{tipo.desTipServicio}"/>  
+								      
+								 </p:selectCheckboxMenu>
+									
+								<p:graphicImage value="/resources/images/pregunta.jpg" id="tooltxtTSolicitud" />
+								<p:tooltip for="tooltxtTSolicitud" value="Tipo de Solicitud" showEffect="fade" hideEffect="fade" />  
+									
+								<h:outputText styleClass="outputText" id="txtTipoOpe" value="T. de Operación:" />
+								<p:selectOneMenu value="#{seguimientoMB.idOpeBan}" id="somTipoOpe" style="width:167px;">
+											<f:selectItem itemLabel="--TODOS--" itemValue="" />
+											<f:selectItems value="#{seguimientoMB.combosMB.lstOpeBancaria}" var="tipoOpe"
+												itemValue="#{tipoOpe.codOperBan}" itemLabel="#{tipoOpe.desOperBan}" />
+								</p:selectOneMenu>
+								<p:graphicImage value="/resources/images/pregunta.jpg" id="tooltxtTOperacion" />
+								<p:tooltip for="tooltxtTOperacion" value="Tipo de Operación" showEffect="fade" hideEffect="fade" />
+									
+							</h:panelGrid>
+							
+							<h:panelGrid columns="12"> 
+	 							<h:outputText styleClass="outputText" id="txtTipoFecha" value="Tipo Fecha:" />
+								<p:selectOneMenu value="#{seguimientoMB.idTiposFecha}" id="somTiposFecha" style="width:120px;">
+										<f:selectItem itemLabel="--SELECCIONE--" itemValue="" />
+										<!-- CAMBIO 23/07/2014 SE REEMPLAZA COMBOMB POR INFODEPLOYMB -->
+										<f:selectItems value="#{seguimientoMB.infoDeployMB.lstTiposFecha}" var="tipoFec"
+												itemValue="#{tipoFec.codigoTipoFecha}" itemLabel="#{tipoFec.descripcion}" />
+								</p:selectOneMenu>
+								<p:graphicImage value="/resources/images/pregunta.jpg" id="tooltxtTFecha" />
+								<p:tooltip for="tooltxtTFecha" value="Tipo de Fecha" showEffect="fade" hideEffect="fade" />
+														
+							
+								<h:outputText styleClass="outputText" id="txtFechaInicio" value="Fecha de Inicio:" />
+								<p:calendar  id="calFecIni" disabled="#{seguimientoMB.noMostrarFechas}"
+											pattern="dd/MM/yyyy" value="#{seguimientoMB.fechaInicio}" 
+											showOn="button" maxlength="10" size="23" locale="es" />
+								<p:graphicImage value="/resources/images/pregunta.jpg" id="tooltxtFecIni" />
+								<p:tooltip for="tooltxtFecIni" value="Fecha de Inicio" showEffect="fade" hideEffect="fade" />  
+									
+								<h:outputText styleClass="outputText" id="txtFechaFin" value="Fecha de Fin:" />
+								
+								<p:calendar  id="calFecFin" disabled="#{seguimientoMB.noMostrarFechas}"
+											pattern="dd/MM/yyyy" value="#{seguimientoMB.fechaFin}"
+											showOn="button" maxlength="10" size="21" locale="es"/>
+								<p:graphicImage value="/resources/images/pregunta.jpg" id="tooltxtFecFin" />
+								<p:tooltip for="tooltxtFecFin" value="Fecha de Fin" showEffect="fade" hideEffect="fade" />
+								  
+							</h:panelGrid>
+							
+							<h:panelGrid columns="15"> 
+								<h:outputText styleClass="outputText" id="txtOficina" value="Oficina:"/>
+								<p:autoComplete id="acNomOFina" value="#{seguimientoMB.oficina}"
+											completeMethod="#{seguimientoMB.completeNomOficina}" var="ofi"
+											converter="oficinaConverter" size="24" disabled="#{seguimientoMB.bloquearOficina}"
+											itemLabel="#{ofi.nombreDetallado}" itemValue="#{ofi}"/>		
+								<p:graphicImage value="/resources/images/pregunta.jpg" id="tooltxtNomOfic" />
+								<p:tooltip for="tooltxtNomOfic" value="Oficina" showEffect="fade" hideEffect="fade" /> 
+								<h:outputText styleClass="outputText" id="txtNivel" value="Nivel:" />
+								<p:selectCheckboxMenu id="scmNivel" label="--TODOS--" value="#{seguimientoMB.lstNivelSelected}" panelStyle="width:100px;"  
+											style="width:150px;" scrollHeight="165">  
+											  <!-- CAMBIO HVB 25/07/2014 HVB
+											  	   SE CAMBIO EL ELEMENTO MAP POR EL LISTADO -->
+											  <f:selectItems value="#{seguimientoMB.combosMB.lstNivel}" var="nivel" itemValue="#{nivel.codNiv}"
+								      			itemLabel="#{nivel.desNiv}"/>    
+									        
+									    </p:selectCheckboxMenu>  
+								<p:graphicImage value="/resources/images/pregunta.jpg" id="toolNivel" />
+								<p:tooltip for="toolNivel" value="Nivel" showEffect="fade" hideEffect="fade" />	
+								<h:outputText styleClass="outputText" id="txtEstNivel" value="Estado del Nivel:" />
+								<p:selectCheckboxMenu id="scmEstadoNivel" label="--TODOS--" value="#{seguimientoMB.lstEstadoNivelSelected}" 
+												panelStyle="width:120px;" style="width:125px;">  
+												<!-- CAMBIO 23/07/2014 HVB SE REEMPLAZA INFODEPLOY POR COMBOMB -->
+									        <f:selectItems value="#{seguimientoMB.infoDeployMB.estadosNivel}"/>  
+								</p:selectCheckboxMenu> 
+								<p:graphicImage value="/resources/images/pregunta.jpg" id="toolEstNivel"  />	
+								<p:tooltip for="toolEstNivel" value="Estados del Nivel" showEffect="fade" hideEffect="fade" />	
+								<h:outputText styleClass="outputText" id="txtEstudio" value="Estudio:" />
+								<p:selectCheckboxMenu id="scmEstudio" label="--TODOS--" value="#{seguimientoMB.lstEstudioSelected}" panelStyle="width:170px;" 
+											style="width:170px;" scrollHeight="100">  
+											 <!-- CAMBIO HVB 25/07/2014 HVB
+											  	   SE CAMBIO EL ELEMENTO MAP POR EL LISTADO -->
+											  <f:selectItems value="#{seguimientoMB.combosMB.lstEstudio}" var="estudio" itemValue="#{estudio.codEstudio}"
+								      			itemLabel="#{estudio.desEstudio}"/>   
+									       
+								</p:selectCheckboxMenu>  
+								<p:graphicImage value="/resources/images/pregunta.jpg" id="toolEstudio"/>
+									<p:tooltip for="toolEstudio" value="Estudio" showEffect="fade" hideEffect="fade"/>
+							</h:panelGrid>
+							
+							<h:panelGrid columns="12"> 
+								<h:outputText styleClass="outputText" id="txtEnRev" value="En revisión:" />
+								<p:selectBooleanCheckbox id="bEnRevision" value="#{seguimientoMB.bRevision}"/>  
+								<p:graphicImage value="/resources/images/pregunta.jpg" id="toolEnRev" />
+								<p:tooltip for="toolEnRev" value="Solicitudes en revisión" showEffect="fade" hideEffect="fade" />	
+								<h:outputText styleClass="outputText" id="txtDel" value="Delegados:" rendered="#{sessionScope.GRUPO_OFI == null}"/>
+								<p:selectBooleanCheckbox id="bDelegados" value="#{seguimientoMB.bDelegados}" rendered="#{sessionScope.GRUPO_OFI == null}"/>  
+								<p:graphicImage value="/resources/images/pregunta.jpg" id="toolDele" rendered="#{sessionScope.GRUPO_OFI == null}"/>
+								<p:tooltip for="toolDele" value="Solicitudes con delegación de niveles" showEffect="fade" hideEffect="fade" rendered="#{sessionScope.GRUPO_OFI == null}"/>
+								<h:outputText styleClass="outputText" id="txtRevc" value="Revocatoria:" />
+								<p:selectBooleanCheckbox id="bExonerados" value="#{seguimientoMB.bRevocatoria}"/>  
+								<p:graphicImage value="/resources/images/pregunta.jpg" id="toolRevc" />
+								<p:tooltip for="toolRevc" value="Solicitudes con revocatoria" showEffect="fade" hideEffect="fade" />								
+							</h:panelGrid>
+							 
+						</p:tab>
+										
+					</p:accordionPanel>
+					
+					<p:spacer height="2"/>
+					
+					<table border="0">
+						<tr>
+							<td>
+								<p:commandButton value="Buscar" icon="ui-icon-search" 
+									actionListener="#{seguimientoMB.busquedaSolicitudes}" 
+									update=":frm:pnlBndSol:idMsmBndSolicitud" ajax="false"/>
+							</td>
+							<td>
+								<p:commandButton id="exportar" value="Exportar" onclick="PrimeFaces.monitorDownload(start, stop)" ajax="false"  
+									disabled="#{seguimientoMB.noHabilitarExportar}"  icon="ui-icon-arrowthichk-s" oncomplete="confirmation.hide()" 
+									actionListener="#{seguimientoMB.descargarArchivo}" >
+						   			<p:fileDownload value="#{seguimientoMB.file}" />  
+								</p:commandButton> 
+							</td>
+							<td>
+								<p:commandButton value="Limpiar" icon="ui-icon-trash" 
+									actionListener="#{seguimientoMB.limpiar}" 
+									update=":frm:pnlBndSol" ajax="false"/>
+							</td>
+						</tr>	
+					</table>	
+					
+					<p:spacer height="15"/>
+					
+					<h:outputLabel value="#{seguimientoMB.textoTotalResultados}"/>
+					
+					<table border="0" width="800px">	
+						<tbody>
+						<tr>	
+							<td>
+							
+							
+								<p:panel header="Resultados" id="panelRes" style="width: 1090px" >
+									<p:dataTable value="#{seguimientoMB.solicitudes}" var="tbl" rows="5" id="datosSol"
+											paginatorPosition="bottom" scrollable="true"
+											paginator="true" rowsPerPageTemplate="5,10,15" emptyMessage="">
+						
+											<p:column width="40">
+												   <f:facet name="header">  
+											         <h:outputText value="Solicitud" style="font-size: 9px"/>  
+											       </f:facet>  
+			                                       <p:commandLink value="#{tbl.codSoli}" action="#{consultarSolicitudMB.redirectDetalleSolicitud}" ajax="false" style="font-size: 9px">
+			                                       		<f:param value="#{tbl.codSoli}" id="prm_codSoli" name="prm_codSoli"></f:param>
+			                                       </p:commandLink>
+			                                </p:column>
+											
+											<p:column width="22" rendered="#{seguimientoMB.mostrarColumna}">
+												 <f:facet name="header">  
+											         <h:outputText value="Ofic." style="font-size: 9px"/>  
+											       </f:facet>  
+												<h:outputText value="#{tbl.tiivsOficina1.codOfi}" style="font-size: 9px"/>	
+												
+											</p:column>
+											
+											<p:column width="75">
+											 	<f:facet name="header">  
+											         <h:outputText value="Estado" style="font-size: 9px"/>  
+											    </f:facet>  
+												<h:outputText value="#{tbl.txtEstado}" style="font-size: 9px"/>	
+											</p:column>
+											
+											<p:column width="60">
+												<f:facet name="header">  
+											         <h:outputText value="Importe Total" style="font-size: 9px"/>  
+											    </f:facet> 
+												<h:outputText value="#{tbl.txtImporte}" style="font-size: 9px"/>	
+											</p:column>
+											
+											<p:column width="100">
+												<f:facet name="header">  
+											         <h:outputText value="#{seguimientoMB.poderdante}" style="font-size: 9px"/>  
+											    </f:facet> 
+												<h:outputText value="#{tbl.txtPoderdante}" style="font-size: 9px"/>		
+											</p:column>
+											
+											<p:column width="100">
+												<f:facet name="header">  
+											         <h:outputText value="#{seguimientoMB.apoderdante}" style="font-size: 9px"/>  
+											    </f:facet> 
+												<h:outputText value="#{tbl.txtApoderado}" style="font-size: 9px"/>		
+											</p:column>
+											
+											<p:column width="100">
+												<f:facet name="header">  
+											         <h:outputText value="T. Operación" style="font-size: 9px"/>  
+											    </f:facet>
+												<h:outputText value="#{tbl.txtOpeBan}" style="font-size: 9px"/>					
+											</p:column>
+											
+											<p:column width="40" rendered="#{seguimientoMB.mostrarEstudio}">
+												<f:facet name="header">  
+											         <h:outputText value="Estudio" style="font-size: 9px"/>  
+											    </f:facet>
+												<h:outputText value="#{tbl.tiivsEstudio.desEstudio}" style="font-size: 9px"/>	
+											</p:column>
+											
+											<p:column width="87">
+												<f:facet name="header">  
+											         <h:outputText value="Nivel de Autorización" style="font-size: 9px"/>  
+											    </f:facet>
+												<h:outputText value="#{tbl.txtNivel}" style="font-size: 9px"/>	
+											</p:column>
+											
+											<p:column width="60">
+												<f:facet name="header">  
+											         <h:outputText value="F. Envío" style="font-size: 9px"/>  
+											    </f:facet>
+												<h:outputText value="#{tbl.fechaEnvio}" style="font-size: 9px"/>	
+											</p:column>
+											
+											<p:column width="45">
+												<f:facet name="header">  
+											         <h:outputText value="Fecha Rpta" style="font-size: 9px"/>  
+											    </f:facet>
+												<h:outputText value="#{tbl.fechaRespuesta}" style="font-size: 9px">	
+													<f:convertDateTime pattern="yyyy-MM-dd" />
+												</h:outputText>
+											</p:column>
+											
+											<p:column width="60" rendered="#{seguimientoMB.mostrarFechaEstado}">
+												<f:facet name="header">  
+											         <h:outputText value="Fecha Estado" style="font-size: 9px"/>  
+											    </f:facet>
+												<h:outputText value="#{tbl.fechaEstado}" style="font-size: 9px"/>
+											</p:column>
+											
+											<p:column headerText="Seguimiento" width="50" exportable="false" style="font-size: 9px">
+		
+												<p:commandButton icon="ui-icon-document"
+													update=":frm:modalSeguimiento,:frm:datosSeguimiento"		
+													action="#{seguimientoMB.obtenerHistorialSolicitud}"																				
+													oncomplete="dlgSeguimiento.show();">
+													<f:setPropertyActionListener
+														target="#{seguimientoMB.selectedSolicitud}"
+														value="#{tbl}">
+													</f:setPropertyActionListener>
+												</p:commandButton>
+												
+												<p:spacer width="1"/>
+												
+			                                    <p:commandLink value="Liberar" action="#{seguimientoMB.liberarSolicitud}" ajax="false" style="font-size: 9px" 
+			                                    	rendered="#{tbl.bLiberado}" update=":frm:panelRes">
+			                                    	<f:param value="#{tbl.codSoli}" id="prm_codSoli2" name="prm_codSoli"/>
+			                                    </p:commandLink>
+		
+											</p:column>
+																				
+								   </p:dataTable>
+				  			 </p:panel>	
+						   </td>
+						</tr>
+					  </tbody>
+					</table>
+					
+					<p:confirmDialog id="confirmDialog" message="Que desea hacer?"  
+		                header="Exportar Excel" severity="alert" widgetVar="confirmation">  
+		                  
+				        <p:commandButton id="confirm" value="Abrir"  oncomplete="confirmation.hide()"  
+				                    actionListener="#{seguimientoMB.abrirExcel}" />  
+				        
+				        <p:commandButton id="decline" value="Grabar" onclick="PrimeFaces.monitorDownload(start, stop)" ajax="false"   
+						        icon="ui-icon-arrowthichk-s" oncomplete="confirmation.hide()" actionListener="#{seguimientoMB.descargarArchivo}" >
+						    <p:fileDownload value="#{seguimientoMB.file}" />  
+						</p:commandButton>  
+				                  
+				    </p:confirmDialog>  
+		    
+					<p:dialog
+						id="modalSeguimiento"
+						header="Seguimiento" widgetVar="dlgSeguimiento"
+						modal="true" height="270" width="555" >
+										
+									
+						<p:dataTable value="#{seguimientoMB.lstSeguimientoDTO}" var="seg" rows="5" id="datosSeguimiento"
+								paginatorPosition="bottom" scrollable="true" scrollHeight="200"
+								paginator="true"
+								paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink}"
+								rowsPerPageTemplate="5,10,15"
+								emptyMessage="">
+						
+								<p:column headerText="Estado" width="55" exportable="false" style="font-size: 9px">
+									<h:outputText value="#{seg.estado}" style="font-size: 9px"/>							  							 
+								</p:column>
+								
+								<p:column headerText="Nivel" width="55" exportable="false" style="font-size: 9px">
+									<h:outputText value="#{seg.nivel}" style="font-size: 9px"/>							  							 
+								</p:column>
+								
+								<p:column headerText="Fecha" width="55" exportable="false" style="font-size: 9px">
+									<h:outputText value="#{seg.fecha}" style="font-size: 9px"/>  							 
+								</p:column>
+								<!-- [28-10] Mejora: Se oculta columna para perfil: 'Oficina' -->
+								<p:column headerText="Usuario" rendered="#{seguimientoMB.mostrarUsuario}" width="165" exportable="false" style="font-size: 9px">
+									<h:outputText value="#{seg.regUsuario} #{seg.usuario}" style="font-size: 9px"/>  							 
+								</p:column>
+								
+								<p:column headerText="Ver" width="55" exportable="false" style="font-size: 9px">
+									<p:commandButton id="downloadLink2" icon="ui-icon-search" 
+										onclick="window.location.href='../../main/download/pdfReportObsHistorial.htm?id=#{seg.codSoli};#{seg.movimiento}'" />
+								</p:column>																		
+						</p:dataTable>
+					</p:dialog>
+			</p:outputPanel>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+
+</html>

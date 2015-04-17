@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="UploadFileApplet">
+	<target name="jar-applet">
+		<echo>Generando archivo jar</echo>
+		<jar destfile="dist/uploadFilesApplet.jar" basedir="bin">						
+			<zipfileset src="lib/commons-net-3.2.jar" 
+				excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />			
+			<zipfileset src="lib/commons-logging-1.1.1.jar" 
+				excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />			
+			<zipfileset src="lib/httpclient-4.2.3.jar" 
+				excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />						
+			<zipfileset src="lib/httpcore-4.2.2.jar" 
+				excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />				
+			<zipfileset src="lib/httpmime-4.2.3.jar" 
+				excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />
+		</jar>
+		
+		
+		
+		
+		<echo>Generando key</echo>
+		<!--
+		<genkey alias="bbva-applet" storepass="javajava" 
+				keystore="javajava" validity="9999">
+			<dname>
+				<param name="CN" value="BBVA" />
+				<param name="OU" value="VISPOD" />
+				<param name="O" value="BBVA" />
+				<param name="L" value="Lima" />
+				<param name="S" value="Lima" />
+				<param name="C" value="PE" />
+			</dname>
+		</genkey>-->
+	
+	<!--	<echo>Firmando el archivo jar</echo>
+		<signjar jar="dist/uploadFilesApplet.jar" alias="bbva-applet" 
+				storepass="javajava" keystore="javajava"/>
+		<echo>Fin</echo>-->
+		
+	</target>
+</project>

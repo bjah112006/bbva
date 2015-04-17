@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dtd XHTML 1.0 transitional//EN" "http://www.w3.org/tr/xhtml1/Dtd/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:param name="root" value="#{request.contextPath}/" />
+
+<ui:composition template="../WEB-INF/plantilla/layout.xhtml">
+	<ui:define name="contenido">
+
+		<h:form id="frm">
+		
+			<p:growl id="idMsgReporte" sticky="true" />
+			
+			<h2>Reporte de Recaudación</h2>
+		
+			<p:outputPanel id="oplFrm">
+				<p:spacer height="5" />
+				<p:panel>
+					<table id="tablaBusSol" border="0" bordercolor="#00BFFF">
+						<tbody>
+							<tr bordercolor="white">
+								<td><h:outputText styleClass="outputText" id="txtTerritorio" value="Territorio:" /></td>
+								<td><p:selectOneMenu value="#{reportesMB.idTerr}"
+										id="somTerr" style="width:155px;">
+										<f:selectItem itemLabel="--Todos--" itemValue="" />
+										<f:selectItems value="#{reportesMB.combosMB.lstTerritorio}"
+											var="ter" itemValue="#{ter.codTer}" itemLabel="#{ter.desTer}" />
+										<!--  <p:ajax event="change" update=":frm:somOfi, :frm:somNOfi"
+											process="@this"
+											listener="#{reportesMB.buscarOficinaPorTerritorio}" />-->
+									</p:selectOneMenu></td>
+								
+								<td><h:outputText styleClass="outputText" id="txtOficina" value="Oficina:" /></td>
+								<td><p:autoComplete id="acNomOFina" value="#{reportesMB.oficinaRPT}"
+										completeMethod="#{seguimientoMB.completeNomOficina}" style="width:300px;"
+										var="ofi" converter="oficinaConverter" size="50" 
+										itemLabel="#{ofi.nombreDetallado}" itemValue="#{ofi}"/>
+								</td>
+							</tr>
+	
+							<tr bordercolor="white">
+								<td><h:outputText styleClass="outputText"
+										id="txtFechaInicio" value="Fecha de Inicio:" /></td>
+								<td><p:calendar id="calFecIni" pattern="dd/MM/yyyy"
+										value="#{reportesMB.fechaInicio}" showOn="button"
+										maxlength="10" size="20" locale="es"/></td>
+	
+								<td><h:outputText styleClass="outputText" id="txtFechaFin"
+										value="Fecha de Fin:" /></td>
+								<td><p:calendar id="calFecFin" pattern="dd/MM/yyyy"
+										value="#{reportesMB.fechaFin}" showOn="button" maxlength="10"
+										size="20" locale="es"/></td>
+							</tr>
+	
+							<tr bordercolor="white">
+								<td></td>
+							</tr>
+	
+							<tr bordercolor="white">
+								<td><p:commandButton value="Buscar"
+										actionListener="#{reportesMB.buscarRecaudacionxTipoServ}"
+										update=":frm:oplFrm,:frm:idMsgReporte" />
+								</td>
+								<td><p:commandButton value="Exportar"
+										disabled="#{reportesMB.noHabilitarExportar}"
+										actionListener="#{reportesMB.descargarArchivoRecaudacion}"
+										ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)">
+										<p:fileDownload value="#{reportesMB.file}" />
+									</p:commandButton> <h:commandLink value="Exportar2"
+										disabled="#{reportesMB.noHabilitarExportar}"
+										actionListener="#{reportesMB.descargarArchivoRecaudacion}"  rendered="false"
+										target="_blank" ajax="true">
+										<p:fileDownload value="#{reportesMB.file}" />
+									</h:commandLink>
+								</td>
+								<td>
+									<p:commandButton value="Limpiar" actionListener="#{reportesMB.limpiarFilRecau}" update=":frm:oplFrm" />
+								</td>
+							</tr>
+	
+						</tbody>
+					</table>
+				</p:panel>
+				
+				<p:spacer height="20" />
+
+				<h:outputLabel value="#{reportesMB.textoTotalResultados}" />
+
+				<p:spacer height="30" />
+
+				<p:panel header="Resultados" id="panelRes">
+					<p:dataTable value="#{reportesMB.lstRecaudacionTipoServ}" var="tbl"
+						rows="3" id="datosSol" paginatorPosition="bottom"
+						scrollable="true" scrollHeight="200" paginator="true"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+						currentPageReportTemplate="Mostrando {startRecord} de {totalRecords}" 
+						rowsPerPageTemplate="5,10,15"
+						emptyMessage="No se encontraron registros que coinciden con los criterios de búsqueda ingresados"
+						styleClass="anchoGrilla">
+
+						<p:column styleClass="territorio">
+							<f:facet name="header">
+								<h:outputText value="Territorio" style="font-size: 9px;" />
+							</f:facet>
+							<h:outputText value="#{tbl.territorio}" style="font-size: 9px" />
+						</p:column>
+
+						<p:column styleClass="codigo">
+							<f:facet name="header">
+								<h:outputText value="Cod." style="font-size: 9px;" />
+							</f:facet>
+							<h:outputText value="#{tbl.codOficina}" style="font-size: 9px" />
+						</p:column>
+
+						<p:column styleClass="oficina">
+							<f:facet name="header">
+								<h:outputText value="Oficina" style="font-size: 9px;" />
+							</f:facet>
+							<h:outputText value="#{tbl.oficina}" style="font-size: 9px" />
+						</p:column>
+
+						<p:column styleClass="persona">
+							<f:facet name="header">
+								<h:outputText value="Persona Natural" style="font-size: 9px; " />
+							</f:facet>
+							<h:outputText value="#{tbl.iContPersonasNaturales}"
+								style="font-size: 9px" />
+						</p:column>
+
+						<p:column styleClass="recaudacion">
+							<f:facet name="header">
+								<h:outputText value="Recaudación" style="font-size: 9px;" />
+							</f:facet>
+							<h:outputText value="#{tbl.sTotalPersonasNat}"
+								style="font-size: 9px" />
+						</p:column>
+
+						<p:column styleClass="cantidad">
+							<f:facet name="header">
+								<h:outputText value="Persona Jurídica" style="font-size: 9px;" />
+							</f:facet>
+							<h:outputText value="#{tbl.iContPersonasJuridicas}"
+								style="font-size: 9px" />
+						</p:column>
+
+						<p:column styleClass="recaudacion">
+							<f:facet name="header">
+								<h:outputText value="Recaudación" style="font-size: 9px;" />
+							</f:facet>
+							<h:outputText value="#{tbl.sTotalPersonasJurd}"
+								style="font-size: 9px" />
+						</p:column>
+
+						<p:column styleClass="fallecida">
+							<f:facet name="header">
+								<h:outputText value="Persona Fallecida Mayor X"
+									style="font-size: 9px;" />
+							</f:facet>
+							<h:outputText value="#{tbl.iContPersonasFallecX}"
+								style="font-size: 9px" />
+						</p:column>
+
+						<p:column styleClass="total">
+							<f:facet name="header">
+								<h:outputText value="Recaudación" style="font-size: 9px;" />
+							</f:facet>
+							<h:outputText value="#{tbl.sTotalPersonasFallecX}"
+								style="font-size: 9px" />
+						</p:column>
+
+						<p:column styleClass="fallecida">
+							<f:facet name="header">
+								<h:outputText value="Persona Fallecida Menor X"
+									style="font-size: 9px;" />
+							</f:facet>
+							<h:outputText value="#{tbl.iContPersonasFallecX1}"
+								style="font-size: 9px" />
+						</p:column>
+
+						<p:column styleClass="recaudacion">
+							<f:facet name="header">
+								<h:outputText value="Recaudación" style="font-size: 9px;" />
+							</f:facet>
+							<h:outputText value="#{tbl.sTotalPersonasFallecX1}"
+								style="font-size: 9px" />
+						</p:column>
+
+						<p:column styleClass="total">
+							<f:facet name="header">
+								<h:outputText value="Recaudación Total" style="font-size: 9px;" />
+							</f:facet>
+							<h:outputText value="#{tbl.sRecaudacionTotal}"
+								style="font-size: 9px" />
+						</p:column>
+
+					</p:dataTable>
+				</p:panel>
+			</p:outputPanel>
+		</h:form>
+
+		<p:confirmDialog id="confirmDialog" message="Que desea hacer?"
+			header="Generar Reporte Extractor" severity="alert"
+			widgetVar="confirmation">
+			<h:form>
+				<p:commandButton id="confirm" value="Abrir"
+					oncomplete="confirmation.hide()"
+					actionListener="#{reportesMB.abrirExcelRecaudacion}" />
+
+				<p:commandButton id="decline" value="Grabar"
+					onclick="PrimeFaces.monitorDownload(start, stop)" ajax="false"
+					icon="ui-icon-arrowthichk-s" oncomplete="confirmation.hide()"
+					actionListener="#{reportesMB.descargarArchivoRecaudacion}">
+					<p:fileDownload value="#{reportesMB.file}" />
+				</p:commandButton>
+			</h:form>
+		</p:confirmDialog>
+
+	</ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportCartaAtencion" pageWidth="542" pageHeight="795" columnWidth="502" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.3995221406291998"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="86"/>
+	<property name="net.sf.jasperreports.awt.ignore.missing.font" value="true"/>
+	<parameter name="IMG_CABECERA" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["../../WEB-INF/classes/jasper/"]]></defaultValueExpression>
+	</parameter>
+	<field name="oficina" class="java.lang.String"/>
+	<field name="numeroSolicitud" class="java.lang.String"/>
+	<field name="instrucciones" class="java.lang.String"/>
+	<field name="numeroDiasForEjecucion" class="java.lang.String"/>
+	<field name="lstOperacionesDS" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<field name="fechaHistorial" class="java.sql.Timestamp"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="143">
+			<frame>
+				<reportElement mode="Transparent" x="0" y="11" width="502" height="91" backcolor="#99FF99"/>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy hh:mm:ss a">
+					<reportElement x="360" y="0" width="140" height="13"/>
+					<textElement/>
+					<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="97" y="64" width="403" height="25" forecolor="#00529B"/>
+					<textElement>
+						<font size="14" isBold="true" isUnderline="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["ATENCIÓN DE LA SOLICITUD NRO " + $F{numeroSolicitud}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<image onErrorType="Blank">
+				<reportElement x="0" y="1" width="234" height="77"/>
+				<imageExpression class="java.lang.String"><![CDATA["./resources/images/bbva2.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="17" y="122" width="474" height="20"/>
+				<textElement/>
+				<text><![CDATA[Se le informa a Usted, que se pueden hacer efectivas las siguientes operaciones :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="17" y="102" width="474" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estimado Colaborador,]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="40">
+			<rectangle>
+				<reportElement stretchType="RelativeToBandHeight" x="17" y="1" width="474" height="34" isPrintWhenDetailOverflows="true"/>
+			</rectangle>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="22" y="5" width="459" height="26" isPrintWhenDetailOverflows="true"/>
+				<textElement markup="html"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{instrucciones}!=null?$F{instrucciones}:" "]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="23">
+			<staticText>
+				<reportElement x="0" y="3" width="402" height="20" forecolor="#003399"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BBVA Continental © Copyright - Todos los Derechos Reservados]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="372" y="3" width="128" height="20" forecolor="#003399"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[[USO INTERNO: BANCO]]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="159">
+			<staticText>
+				<reportElement mode="Transparent" x="22" y="7" width="114" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Aprobación:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="139" y="7" width="167" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fechaHistorial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="33" y="69" width="452" height="80"/>
+				<textElement verticalAlignment="Top" rotation="None">
+					<font size="10" isUnderline="false" isStrikeThrough="false"/>
+					<paragraph lineSpacing="Single" tabStopWidth="5"/>
+				</textElement>
+				<text><![CDATA[Este documento interno permite hacer efectiva la operación del Visado de Poderes, señalado en ORGA.2008.035 - BASTANTEO Y VISADO DE PODERES.
+Generado este documento no procede reimpresión
+Tener en cuenta que la presente aprobación se ejecuta desde la fecha de aprobación hasta los 7 días siguientes. Transcurrido este plazo deberá presentar nuevamente su solicitud.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="69" width="5" height="80"/>
+				<textElement/>
+				<text><![CDATA[-
+
+-
+-]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="43" width="159" height="20"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Recomendaciones para Oficina:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

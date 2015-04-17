@@ -1,0 +1,364 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="../WEB-INF/plantilla/layout.xhtml">
+	<ui:define name="contenido">
+<ui:param name="root" value="#{request.contextPath}/" />
+		<h:panelGrid columns="5">
+
+			<p:tabMenu activeIndex="0" style="width:750px;">					
+				<p:menuitem value="Solicitud" url="/faces/paginas/detalleSolicitud.xhtml"
+					icon="ui-icon-star" />
+				<p:menuitem value="Seguimiento" actionListener="#{consultarSolicitudMB.obtenerHistorialSolicitud}"
+					url="/faces/paginas/seguimientoPestania.xhtml" icon="ui-icon-star" style="background-color:#c6deff;"/>
+			
+			</p:tabMenu>
+
+			<p:toolbar>
+				<p:toolbarGroup align="rigth">
+					<p:commandButton value="Imprimir" id="btnImprimir3"
+						onclick="window.location.href='../../main/download/pdfReportSolicitudVisado.htm'"
+						icon="ui-icon-document" />
+					<p:commandButton value="Salir" id="btnSalir3"
+						icon="ui-icon-document" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+		</h:panelGrid>
+		
+		<p:commandButton id="validar" value="Validar Vencimiento" update=":formSolicitudSeguimiento" 
+			rendered="false"  actionListener="#{consultarSolicitudMB.validarCambioEstadoVencido}"/>
+
+
+		<script type="text/javascript" language="javascript">
+						
+			var flagGuardado = false;
+			idleTime = 0;
+
+			$(document).ready(function() {
+				//Increment the idle time counter every minute.
+				var idleInterval = setInterval("timerIncrement()", 60*1000); // cada 10 segundos
+				//Zero the idle timer on mouse movement.
+				$(this).mousemove(function(e) {
+					idleTime = 0;
+				});
+				$(this).keypress(function(e) {
+					idleTime = 0;
+				});
+			});
+			function timerIncrement() {
+				idleTime = idleTime + 1;
+				if (idleTime > 1) { // 1 minuto
+					if (!flagGuardado) {						
+						document.getElementById('formSolicitudSeguimiento:guardarComentario').focus();
+						document.getElementById('formSolicitudSeguimiento:guardarComentario').click();
+						//guardarComentario();
+						flagGuardado = true;						
+						idleTime = 0;
+					}
+
+				}
+			}
+ 			/**************JTCH 02/07/2014************************/
+			function submit_reporte(){		
+				document.getElementById('formSolicitudSeguimiento').submit();
+				window.location.href='../../main/download/pdfReportCartaAtencion.htm';				
+			}
+			/**************JTCH 02/07/2014************************/
+			function ActivarAutoGuardar() {
+				flagGuardado = false;
+			}
+			
+		</script>
+
+		<h:form id="formSolicitudSeguimiento">
+		
+		  <p:growl id="growlSolicitudSeguimiento" sticky="true" />		  		  
+		
+	      <!-- <p:spacer></p:spacer>  -->
+	      <h:panelGrid id="pnlGridformSolicitudSeguimiento">
+		      <h:panelGrid rendered="#{consultarSolicitudMB.bSeccionComentario}" columns="1">
+			  	<p:separator styleClass="fielset" />
+			  	<h:panelGrid columns="3">
+					<p:commandButton id="comentar" value="Comentar" update=":formSolicitudSeguimiento:pnlGridformSolicitudSeguimiento" actionListener="#{consultarSolicitudMB.habilitarComentario}" onclick="ActivarAutoGuardar();"/>
+					<p:commandButton id="guardarComentario" value="Guardar" update=":formSolicitudSeguimiento:pnlGridformSolicitudSeguimiento" action="#{consultarSolicitudMB.guardarComentario}" disabled="#{consultarSolicitudMB.bMostrarComentario}" />
+			  		<p:commandButton id="clearButton" value="Limpiar" 			  			  
+			  			disabled="#{consultarSolicitudMB.bMostrarComentario}" 
+			  			icon="ui-icon-close"  actionListener="#{consultarSolicitudMB.limpiarComentario}" update=":formSolicitudSeguimiento:editor"/>
+				</h:panelGrid>
+				<h:panelGrid id="pnlEditor">	
+					<p:editor id="editor" onchange="actualizarEditor();" value="#{consultarSolicitudMB.solicitudRegistrarT.obs}" width="800" height="320" disabled="#{consultarSolicitudMB.bMostrarComentario}"/>
+					<p:remoteCommand name="actualizarEditor" update=":formSolicitudSeguimiento:editor" />									
+				</h:panelGrid>
+				
+				<p:separator styleClass="fielset" />
+				<p:dialog header="Content" widgetVar="dlg" showEffect="fade" hideEffect="fade" modal="true">
+			  		<h:outputText id="display" value="#{editorMB.value}"
+			  			escape="false" />
+			  	</p:dialog>	
+			  			
+		      </h:panelGrid>
+		      
+	     	  <h:panelGrid>
+					<table>
+					
+					<!-- <p:messages id="idGrowlSolicitudSeguimiento"></p:messages>  -->
+					
+					<!-- Seccion: SEGUIMIENTO -->
+					<tr>
+						<td width="100%">
+						<h:outputText title="Seguimiento" value="Seguimiento" styleClass="outputText" />
+						<p:separator styleClass="fielset" />			
+		            		<p:dataTable value="#{consultarSolicitudMB.lstSeguimientoDTO}" var="seg" rows="5" id="datosSeguimiento"
+								paginatorPosition="bottom" scrollable="true" scrollHeight="120"
+								paginator="true"
+								paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink}"
+								rowsPerPageTemplate="5,10,15"
+								emptyMessage="">
+						
+								<p:column headerText="Estado" width="90" exportable="false" style="font-size: 9px">
+									<h:outputText value="#{seg.estado}" style="font-size: 9px"/>							  							 
+								</p:column>
+								
+								<p:column headerText="Nivel" width="55" exportable="false" style="font-size: 9px">
+									<h:outputText value="#{seg.nivel}" style="font-size: 9px"/>							  							 
+								</p:column>
+								
+								<p:column headerText="Fecha" width="55" exportable="false" style="font-size: 9px">
+									<h:outputText value="#{seg.fecha}" style="font-size: 9px"/>  							 
+								</p:column>
+								
+								<!-- [28-10] Mejora: Se oculta columna del historial para perfil: 'Oficina' -->
+								<p:column headerText="Usuario" rendered="#{consultarSolicitudMB.mostrarUsuarioHist}"  width="165" exportable="false" style="font-size: 9px">
+									<h:outputText value="#{seg.regUsuario} #{seg.usuario}" style="font-size: 9px"/>  							 
+								</p:column>
+								
+								<p:column headerText="Observación" width="55" exportable="false" style="font-size: 9px">													
+									<p:commandButton id="downloadLink2" icon="ui-icon-search" 
+										onclick="window.location.href='#{root}main/download/pdfReportObsHistorial.htm?id=#{seg.codSoli};#{seg.movimiento}'" />
+								</p:column>		
+																								
+							</p:dataTable>
+					
+						</td>
+					</tr>
+					
+					<!-- Seccion: ACCION -->
+					<tr>
+						<td width="100%">
+							<p:panel rendered="#{consultarSolicitudMB.bMostrarGenerarRevision}" >
+								<h:outputText title="Acción" value="Acción" styleClass="outputText" />
+								<p:separator styleClass="fielset" />
+								<p:commandButton id="btnRevision" value="Generar Revisión" rendered="#{consultarSolicitudMB.bMostrarGenerarRevision}"
+									oncomplete="confirmation3.show()"/>
+									
+							</p:panel>
+						</td>
+					</tr>
+					
+					
+					<!-- Seccion: ACCION REEMPRIMIR CARTA DE ATENCION-->
+					<tr>
+						<td width="100%">
+							<p:panel rendered="#{consultarSolicitudMB.bMostrarReImprimirCartaAtencion}" >
+								<h:outputText title="Acción Reimprimir Carta de Atención" value="Acción Reimprimir Carta de Atención" styleClass="outputText" />
+								<p:separator styleClass="fielset" />
+								<p:commandButton id="btnReimprimirCartaAtención" value="REIMPRIMIR CARTA DE ATENCION" rendered="#{consultarSolicitudMB.bMostrarReImprimirCartaAtencion}"
+								 action="#{consultarSolicitudMB.ejecutarReimpresion}" update=":formSolicitudSeguimiento:pnlGridformSolicitudSeguimiento,:formSolicitudSeguimiento:growlSolicitudSeguimiento" />
+									
+							</p:panel>
+						</td>
+					</tr>
+					
+					<!-- Seccion: REASIGNAR -->
+					<tr>
+						<td width="100%">
+						<p:panel rendered="#{consultarSolicitudMB.bSeccionReasignacion}" >
+							<h:outputText title="Reasignar" value="Reasignar" styleClass="outputText" />
+							<p:separator styleClass="fielset" />
+							<h:panelGrid columns="2">
+								<h:panelGrid columns="2">
+									<h:outputText  value="Estudio" styleClass="outputText"/>
+									<!--  <p:selectOneMenu id="cboEstudio" value="{consultarSolicitudMB.solicitudRegistrarT.tiivsEstudio.codEstudio}" valueChangeListener="{consultarSolicitudMB.abogadosXEstudios}">
+									<p:ajax update=":formSolicitudSeguimiento:cboAbogado" event="change"> </p:ajax>  -->
+									<p:selectOneMenu id="cboEstudio" value="#{consultarSolicitudMB.solicitudRegistrarT.tiivsEstudio.codEstudio}">	
+										<f:selectItem itemLabel="-Seleccione-" itemValue="" />
+										 <f:selectItems  value="#{consultarSolicitudMB.combosMB.lstEstudio}" var="lOf" itemValue="#{lOf.codEstudio}" itemLabel="#{lOf.desEstudio}" />
+									</p:selectOneMenu>
+								</h:panelGrid>
+								<p:commandButton id="btnAceptar" value="Aceptar" action="#{consultarSolicitudMB.reasignacionManual}" update=":formSolicitudSeguimiento:growlSolicitudSeguimiento"/>
+								
+							</h:panelGrid>
+						</p:panel>
+					</td>
+					</tr>
+					
+					<!-- Seccion: EVALUAR NIVELES -->
+					<tr>
+						<td width="100%">
+							<h:panelGrid width="100%" columns="1" rendered="#{consultarSolicitudMB.bSeccionEvaluarNivel}">
+							 	 <!-- <p:messages id="idGrowlSolicitudAccion"></p:messages>  -->
+								<h:outputText title="Acción" value="Acción" styleClass="outputText" />
+								<p:separator styleClass="fielset" />						
+								<!-- Panel Evaluar x Nivel -->
+								<h:panelGrid columns="4"
+									rendered="#{consultarSolicitudMB.bSeccionEvaluarNivel}">
+									<h:outputText value="Evaluar Nivel:" styleClass="outputText" />
+									<p:selectOneMenu id="cboEvalNivel" value="#{consultarSolicitudMB.sCodigoEstadoNivel}" required="false"
+										widgetVar="varCboNivel"
+										valueChangeListener="#{consultarSolicitudMB.obtenerDictamenNivel}"
+										requiredMessage="Seleccione una acción"
+										style="font-size:0.98em; width:150px">	
+										<p:ajax event="change" update=":formSolicitudSeguimiento:confirmDialogDictamenNivel"></p:ajax>							
+										<f:selectItems  value="#{infoDeployMB.estadosNivel}" var="estNivel" itemValue="#{estNivel.codigoEstadoNivel}" itemLabel="#{estNivel.descripcion}" />								
+									</p:selectOneMenu>
+									<p:spacer width="15" />
+									<h:outputText value="Nivel: #{consultarSolicitudMB.sNivelSolicitud}" styleClass="outputText" />
+									<p:spacer />
+									<p:spacer />
+									<p:spacer />
+									<p:commandButton value="Aceptar" onclick="varCboNivel.getSelectedValue()=='0001' ? 1 : confirmationNivel.show()"/>
+								</h:panelGrid>
+							</h:panelGrid>
+						</td>
+					</tr>
+					
+					<!-- Seccion: DICTAMINAR -->
+					<tr>
+						<td width="100%">
+						<p:panel rendered="#{consultarSolicitudMB.bSeccionDictaminar}" menuTitle="Accion">
+							<h:outputText title="Dictaminar" value="Dictaminar" styleClass="outputText" />
+							<p:separator styleClass="fielset" />
+							<h:panelGrid columns="3">
+								<h:outputText  value="Dictamen : " styleClass="outputText"/>
+								<p:selectOneMenu id="cboDictamen" value="#{consultarSolicitudMB.valorDictamen}"
+									widgetVar="varCboDictamen"
+									valueChangeListener="#{consultarSolicitudMB.obtenerDictamen}" > 
+									<p:ajax event="change" update=":formSolicitudSeguimiento:confirmDialogDictamen"></p:ajax>
+									<f:selectItem itemLabel="-Seleccione-" itemValue="" />
+							 		<f:selectItems  value="#{consultarSolicitudMB.lstComboDictamen}" var="lOf" itemValue="#{lOf.key}" itemLabel="#{lOf.descripcion}" /> 
+								</p:selectOneMenu>
+								<p:commandButton id="btnAceptarDictamen" value="Aceptar" onclick="varCboDictamen.getSelectedValue()=='' ? 1 : confirmation.show()" />				
+							</h:panelGrid>
+						</p:panel>
+						</td>
+					</tr>
+					
+					
+					<tr>
+						<td width="100%">
+							<h:panelGrid id="pgDocumentos" width="100%" columns="1" rendered="#{consultarSolicitudMB.bSeccionDocumentos}">					
+								<h:outputText title="Documentos" value="Documentos" styleClass="outputText" />
+								<p:separator styleClass="fielset" />
+								<!-- c:if test="{consultarSolicitudMB.bMostrarSolicitudVisado}" -->
+									<a href="../../main/download/pdfReportSolicitudVisado.htm">
+										<font color="blue">
+											<u>Solicitud de Visado</u>
+										</font>
+									</a>
+			
+								<!-- /c:if -->
+								<c:if test="#{consultarSolicitudMB.bMostrarCartaAtencion}">
+									<a href="#" onclick="confirmation2.show()" id="hrCartaAtencion" >						
+										<font color="blue">
+											<u>Carta de atención</u>
+										</font>
+									</a>
+								</c:if>						
+								
+								<c:if test="#{consultarSolicitudMB.bMostrarCartaRevision}">
+									<font color="red">
+										Obtener la firma del cliente en la Carta de solicitud de revisión
+									</font>
+									<br/>
+									<a href="../../main/download/pdfReportCartaSolicitudRevision.htm" >
+										<font color="blue">
+											<u>Carta de solicitud de revisión</u>
+										</font>
+									</a>
+								</c:if>
+								<c:if test="#{consultarSolicitudMB.bMostrarCartaRechazo}">
+									<a href="../../main/download/pdfReportCartaRechazo.htm" >
+										<font color="blue">
+											<u>Carta Respuesta</u>
+										</font>
+									</a>
+								</c:if>
+								<c:if test="#{consultarSolicitudMB.bMostrarCartaImprocedente}">
+									<a href="../../main/download/pdfReportCartaImprocedente.htm">
+										<font color="blue">
+											Carta Improcedente
+										</font>
+									</a>
+								</c:if>
+								
+							</h:panelGrid>
+						</td>
+					</tr>
+					</table>
+			</h:panelGrid>
+		</h:panelGrid>
+
+	 	<p:confirmDialog id="confirmDialogDictamen" message="¿Está seguro de pasar a estado #{consultarSolicitudMB.descValorDictamen} la solicitud de visado?"  
+	                header="Confirmación" severity="alert" widgetVar="confirmation" >  
+	                  
+	        <center>
+	        <p:commandButton id="confirmSiDic" value="Si" update=":formSolicitudSeguimiento :formSolicitudSeguimiento:pnlGridformSolicitudSeguimiento :formSolicitudSeguimiento:growlSolicitudSeguimiento" oncomplete="confirmation.hide()"   
+	                    action="#{consultarSolicitudMB.dictaminarSolicitud}"  />  
+	        <p:commandButton id="declineNoDic" value="No" onclick="confirmation.hide()" type="button" />
+	        </center>   
+	                  
+	    </p:confirmDialog> 
+	    
+	    <p:confirmDialog id="confirmDialog" message="#{consultarSolicitudMB.textoMensajeCartaAtencion}"  
+	              header="Carta de Atención" severity="alert" widgetVar="confirmation2" visible="true">  
+	                
+	            <center>
+		       	<p:commandButton id="confirm" value="Si" 
+		        			oncomplete="confirmation2.hide(); submit_reporte();" update=":formSolicitudSeguimiento"
+		                    action="#{consultarSolicitudMB.actualizarEstadoEjecutadoSolicitud}"	                    
+		                     />	
+		                    	                    
+		       	<p:commandButton id="decline" value="No" oncomplete="confirmation2.hide()" />
+		       	</center>  
+	                  
+	    </p:confirmDialog>
+	    
+	    
+	    
+	    <p:confirmDialog id="confirmDialogRevision" message="¿Está seguro de generar una  revisión?"  
+	              header="Revisión" severity="alert" widgetVar="confirmation3" visible="true">  
+	            
+	            <center>    
+		        <p:commandButton id="confirmRev" value="Si"  oncomplete="confirmation3.hide()" update=":formSolicitudSeguimiento:pnlGridformSolicitudSeguimiento,:formSolicitudSeguimiento:growlSolicitudSeguimiento" 
+		            action="#{consultarSolicitudMB.mostrarCartaRevision}" actionListener="#{consultarSolicitudMB.actualizarEstadoEnRevisionSolicitud}" />  
+		        
+		        <p:commandButton id="declineRev" value="No" oncomplete="confirmation3.hide()" />
+		        </center>  
+	                  
+	    </p:confirmDialog>
+	    
+	    
+	    
+	    <!-- Pregunta Evaluación por nivel -->
+	    <p:confirmDialog id="confirmDialogDictamenNivel" message="¿Está seguro de pasar a estado #{consultarSolicitudMB.descValorDictamen} la solicitud de visado?"  
+	                header="Confirmación" severity="alert" widgetVar="confirmationNivel" >  
+	        
+	        <center>          
+	        <p:commandButton id="confirmSiDicNiv" value="Si" update=":formSolicitudSeguimiento:pnlGridformSolicitudSeguimiento,:formSolicitudSeguimiento:growlSolicitudSeguimiento" oncomplete="confirmationNivel.hide()"   
+	                 action="#{consultarSolicitudMB.registrarEvaluacionNivel}"     />  
+	        <p:commandButton id="declineNoDicNiv" value="No" onclick="confirmationNivel.hide()" type="button" />
+	        </center>   
+	                  
+	    </p:confirmDialog>
+  	</h:form>
+
+</ui:define>
+</ui:composition>
+
+</html>

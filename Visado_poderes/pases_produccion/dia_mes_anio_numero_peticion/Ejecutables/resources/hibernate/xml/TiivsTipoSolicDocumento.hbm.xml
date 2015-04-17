@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 10/01/2013 11:57:44 AM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.hildebrando.visado.modelo.TiivsTipoSolicDocumento" table="TIIVS_TIPO_SOLIC_DOCUMENTO">
+        <composite-id name="id" class="com.hildebrando.visado.modelo.TiivsTipoSolicDocumentoId">
+            <key-property name="codTipoSolic" type="string">
+                <column name="COD_TIPO_SOLIC" length="7" />
+            </key-property>
+            <key-property name="codDoc" type="string">
+                <column name="COD_DOC" length="7" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="tiivsDocumento" class="com.hildebrando.visado.modelo.TiivsDocumento" update="false" insert="false" fetch="select" lazy="false">
+            <column name="COD_DOC" length="7" not-null="true" unique="true" />
+        </many-to-one>
+        <many-to-one name="tiivsTipoSolicitud" class="com.hildebrando.visado.modelo.TiivsTipoSolicitud" lazy="false" update="false" insert="false" fetch="select">
+            <column name="COD_TIPO_SOLIC" length="7" not-null="true" />
+        </many-to-one>
+        <property name="activo" type="char">
+            <column name="ACTIVO" length="1" not-null="true" />
+        </property>
+        <property name="obligatorio" type="string">
+            <column name="OBLIGATORIO" length="1" />
+        </property>
+    </class>
+</hibernate-mapping>

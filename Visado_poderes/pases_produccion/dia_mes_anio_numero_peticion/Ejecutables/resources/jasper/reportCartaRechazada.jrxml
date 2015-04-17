@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportCartaAtencion" pageWidth="542" pageHeight="795" columnWidth="472" leftMargin="50" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="162"/>
+	<property name="net.sf.jasperreports.awt.ignore.missing.font" value="true"/>
+	<parameter name="IMG_CABECERA" class="java.lang.String"/>
+	<field name="numeroSolicitud" class="java.lang.String"/>
+	<field name="instrucciones" class="java.lang.String"/>
+	<field name="poderdantes" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="194">
+			<textField>
+				<reportElement x="331" y="9" width="124" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["N°" + $F{numeroSolicitud}]]></textFieldExpression>
+			</textField>
+			<image onErrorType="Blank">
+				<reportElement x="3" y="9" width="249" height="41"/>
+				<imageExpression class="java.lang.String"><![CDATA["./resources/images/bbva2.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement mode="Transparent" x="8" y="71" width="41" height="16" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Lima,]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="40" y="71" width="152" height="16"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="8" y="87" width="43" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Señor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="8" y="109" width="385" height="15"/>
+				<textElement>
+					<font size="10" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Atención: Solicitud de revisión de poderes N° " + $F{numeroSolicitud}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="51" y="87" width="404" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{poderdantes} + "   "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="8" y="132" width="447" height="61"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[De nuestra consideración:
+
+Mediante la presente le informamos que su solicitud no ha sido aprobada, por las siguientes razones:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="8" y="125" width="447" height="1"/>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="51">
+			<rectangle>
+				<reportElement stretchType="RelativeToBandHeight" x="8" y="3" width="447" height="45" isPrintWhenDetailOverflows="true"/>
+			</rectangle>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="23" y="14" width="413" height="23" isPrintWhenDetailOverflows="true"/>
+				<textElement markup="html">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{instrucciones}!=null?$F{instrucciones}:"") + "   "]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="22">
+			<staticText>
+				<reportElement x="0" y="0" width="447" height="20" forecolor="#003399"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BBVA Continental © Copyright - Todos los Derechos Reservados]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="87">
+			<staticText>
+				<reportElement x="8" y="0" width="447" height="86"/>
+				<textElement/>
+				<text><![CDATA[Si usted desea realizar la operación bancaria, deberá presentar su solicitud de servicios nuevamente previo pago de la comisión y habiendo superado las observaciones antes detalladas.
+
+Atentamente,                        ]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

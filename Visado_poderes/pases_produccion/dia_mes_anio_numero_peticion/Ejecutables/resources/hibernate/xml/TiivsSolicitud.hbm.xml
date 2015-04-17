@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 12/12/2012 12:08:20 PM by Hibernate Tools 3.4.0.CR1 
+
+
+  <column name="COD_SOLI" length="7" />
+            <generator class="sequence">
+            <param name="SEQ_SOLICITUD">SEQ_SOLICITUD</param>
+            </generator>
+
+-->
+<hibernate-mapping>
+    <class name="com.hildebrando.visado.modelo.TiivsSolicitud" table="TIIVS_SOLICITUD">
+        <id name="codSoli" type="string">
+            <column name="COD_SOLI" length="7" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="tiivsEstudio" class="com.hildebrando.visado.modelo.TiivsEstudio" fetch="select" lazy="false" >
+            <column name="COD_ESTUDIO" length="7" />
+        </many-to-one>
+        <many-to-one name="tiivsTipoSolicitud" class="com.hildebrando.visado.modelo.TiivsTipoSolicitud" fetch="select" lazy="false">
+            <column name="COD_TIPO_SOLIC" length="7" not-null="false" />
+        </many-to-one>
+        <many-to-one name="tiivsOficina1" class="com.hildebrando.visado.modelo.TiivsOficina1" fetch="select" lazy="false">
+            <column name="COD_OFI" length="8" not-null="true" />
+        </many-to-one>
+        <property name="estado" type="string">
+            <column name="ESTADO" length="7" not-null="true" />
+        </property>
+        <property name="fecha" type="java.sql.Timestamp">
+            <column name="FECHA" not-null="true" />
+        </property>
+        <property name="regAbogado" type="string">
+            <column name="REG_ABOGADO" length="7" />
+        </property>
+        <property name="obs" type="string">
+            <column name="OBS" length="4000" />
+        </property>
+        <property name="regUsuario" type="string">
+            <column name="REG_USUARIO" length="7" not-null="true" />
+        </property>
+        <property name="nomUsuario" type="string">
+            <column name="NOM_USUARIO" length="75" not-null="true" />
+        </property>
+        <property name="importe" type="double">
+            <column name="IMPORTE" precision="12" />
+        </property>
+        <property name="fechaEnvio" type="java.sql.Timestamp">
+            <column name="FECHA_ENVIO" />
+        </property>
+        <property name="fechaEstado" type="java.sql.Timestamp">
+            <column name="FECHA_ESTADO" />
+        </property>
+        <property name="moneda" type="string">
+            <column name="MONEDA" length="7" />
+        </property>
+        <property name="fechaRespuesta" type="java.sql.Timestamp">
+            <column name="FECHA_RESPUESTA" />
+        </property>
+        <property name="comision" type="double">
+            <column name="COMISION" precision="22" scale="0" />
+        </property>
+        <property name="nroVoucher" type="string">
+            <column name="NRO_VOUCHER" length="12" />
+        </property>
+        <property name="tipoComision" type="string">
+            <column name="TIPO_COMISION" length="7" />
+        </property>
+        <property name="exoneraComision" type="string">
+            <column name="EXONERA_COMISION" length="1"  />
+        </property>
+        <property name="flagReimprimir" type="string">
+            <column name="FLAG_REIMPRIMIR" length="1"  />
+        </property>
+        <!-- CAMBIO 22/07/2014 HVB -->
+        <!-- ***SE AGREGAN COLUMNAS A LA TABLA SOLICITUD PARA OBTENER INFORMACION CONCATENADA (TITULAR,APODERADO,DOCUMENTO,NIVELES)-->
+        <property name="txtPoderdante" type="string">
+            <column name="CADENA_TITULARES" length="4000"  />
+        </property>
+        <property name="txtApoderado" type="string">
+            <column name="CADENA_APODERADOS_HEREDEROS" length="4000"  />
+        </property>
+        <property name="txtOpeBan" type="string">
+            <column name="CADENA_OPERACIONES" length="4000"  />
+        </property>
+ 
+<!--         <set name="tiivsSolicitudNivels" table="TIIVS_SOLICITUD_NIVEL"  inverse="true" cascade="all" lazy="true" fetch="select" > -->
+<!-- 		<set name="tiivsSolicitudNivels" table="TIIVS_SOLICITUD_NIVEL"  inverse="true" lazy="false" fetch="select" > -->
+<!--             <key> -->
+<!--                 <column name="COD_SOLI" length="7" not-null="true" /> -->
+<!--             </key> -->
+<!--             <one-to-many class="com.hildebrando.visado.modelo.TiivsSolicitudNivel" /> -->
+<!--         </set> -->
+<!--         <set name="tiivsSolicitudAgrupacions" table="TIIVS_SOLICITUD_AGRUPACION"  cascade="delete-orphan,save-update" inverse="true" lazy="true"   fetch="select"  > -->
+		<set name="tiivsSolicitudAgrupacions" table="TIIVS_SOLICITUD_AGRUPACION" cascade="delete-orphan,save-update"  inverse="true" lazy="true"   fetch="join" >
+            <key> 
+                <column name="COD_SOLI" length="7" not-null="true" />
+            </key>
+            <one-to-many class="com.hildebrando.visado.modelo.TiivsSolicitudAgrupacion" />
+        </set>
+        
+<!--         <set name="tiivsSolicitudOperBanc" table="TIIVS_SOLICITUD_OPERBAN" inverse="true" lazy="true"   fetch="join"  > -->
+<!--             <key>  -->
+<!--                 <column name="COD_SOLI" length="7" not-null="true" /> -->
+<!--             </key> -->
+<!--             <one-to-many class="com.hildebrando.visado.modelo.TiivsSolicitudOperban" /> -->
+<!--         </set> -->
+    </class>
+</hibernate-mapping>

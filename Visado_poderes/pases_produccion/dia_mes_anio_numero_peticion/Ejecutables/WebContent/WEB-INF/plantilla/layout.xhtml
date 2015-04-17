@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<!--  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>  -->
+	<title><ui:insert name="titulo">
+			<h:outputText value="#{msjs.titulo_defecto}" />
+		</ui:insert></title>
+
+<h:outputStylesheet library="css" name="visado.css" />
+<h:outputStylesheet library="css" name="general.css" />
+<!--[if IE 7]>
+<style type="text/css">
+.ui-menu .ui-menu-parent .ui-menu-child {
+       z-index: 9999999;
+}
+.ui-widget-content .ui-menu-list .ui-corner-all .ui-helper-clearfix .ui-menu-child .ui-shadow {
+       z-index: 9999999;
+}
+
+</style>
+<![endif]-->
+
+<script type="text/javascript">
+function redireccionar(){
+	var url = location.href;
+	var str = url.substring(url.indexOf("VisadoPoderes"), url.length);
+	url = url.substring(0, url.indexOf("VisadoPoderes"));
+	var inicio = str.indexOf("/");
+	str= str.substring(0,inicio);
+	url = url+str;
+	// alert('var inicio ' +inicio+' url samira ' +url +' str '+str);
+	 location.href=url;
+	   }
+
+	PrimeFaces.locales['es'] = {
+		    closeText: 'Cerrar',
+		    prevText: 'Anterior',
+		    nextText: 'Siguiente',
+		    monthNames: ['Enero','Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+		    monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+		    dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+		    dayNamesShort: ['Dom','Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+		    dayNamesMin: ['D','L','M','MI','J','V','S'],
+		    weekHeader: 'Semana',
+		    firstDay: 1,
+		    isRTL: false,
+		    showMonthAfterYear: false,
+		    yearSuffix: '',
+		    timeOnlyTitle: 'Sólo hora',
+		    timeText: 'Tiempo',
+		    hourText: 'Hora',
+		    minuteText: 'Minuto',
+		    secondText: 'Segundo',
+		    currentText: 'Fecha actual',
+		    ampm: false,
+		    month: 'Mes',
+		    week: 'Semana',
+		    day: 'Día',
+		    allDayText : 'Todo el día'
+	};
+	
+</script>
+
+
+</h:head>
+<h:body>
+	<div id="container">
+
+		<div id="header">
+
+			<div id="logo">
+			
+				<h:graphicImage library="images" name="bbva.gif"></h:graphicImage>
+            </div>
+
+			<div id="titulo">
+			     <h:panelGrid columns="2">
+				 <h:graphicImage library="images" name="titulo.gif" ></h:graphicImage>
+				 <h:panelGrid columns="1" style="padding-left:180px; width:500px;"> 
+				 <h:outputText styleClass="outputText" value="Usuario: ${usuarioId} / ${usuarioNombre}  " />
+				 <h:outputText styleClass="outputText" value="Perfil: ${PERFIL_USUARIO}" />
+				 <p:commandLink styleClass="outputText" onclick="cfdCerrarSesion.show()" value="Cerrar Sesión"> </p:commandLink>
+		         </h:panelGrid>
+				</h:panelGrid>
+			</div>
+
+			<div id="banner"></div>
+
+			<div class="clear"></div>
+			
+          <div id="usuario">
+         
+			</div>
+		</div>
+
+		<div id="menu"  >
+			<ui:insert name="menu">
+
+				<ui:include src="menuRight.xhtml" />
+
+			</ui:insert>
+		</div>
+
+		<div id="contenido">
+			<ui:insert name="contenido"  >
+
+			</ui:insert>
+			
+			<h:inputHidden value="#{msjs.ambito}" id="idAmbito" />
+			
+			<script type="text/javascript">
+				$ = jQuery;
+				$(document).ready(function() {
+
+					//var ambito = $("#idAmbito").attr("value");
+
+					$(".btnOpenDialog").live("click", function()
+					{
+						var formulariosEnDialog = $(".ui-dialog-content form");
+						formulariosEnDialog.each(function(index) 
+						{
+							//var str = $(this).attr("action");
+							
+							//var url = location.href;
+							//url = url.substring(0, url.indexOf("VisadoPoderes"));
+							//url = url + ambito + str;
+							
+							var url = location.href;
+							var str = url.substring(url.indexOf("VisadoPoderes"), url.length);
+							url = url.substring(0, url.indexOf("VisadoPoderes"));
+							url = url+str;
+
+							$(this).attr("action", url);
+							
+						});
+						
+					});
+					
+				});
+				
+			</script>
+		</div>
+
+			<div id="footer">
+			<ui:insert name="pie">
+				<ui:include src="pie.xhtml" />
+			</ui:insert>
+		</div>
+
+	</div>
+
+   <p:confirmDialog message="¿Est&#225; seguro de cerrar sesi&#243;n?"
+		width="300" header="Mensaje de cerrar sesión" severity="alert"
+		widgetVar="cfdCerrarSesion" modal="true">
+		<h:form id="frmCerrarSesion">
+			<p:commandButton value="Si" ajax="true"
+				onclick="window.location.href='../../logout.jsp'"
+				/>
+			<!-- 	
+			<h:outputLink value="../../logout.jsp">
+				<h:outputText value="Si"></h:outputText>
+			</h:outputLink>
+			 -->
+			<p:commandButton value="No" onclick="cfdCerrarSesion.hide()"
+				type="button" />
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:idleMonitor onactive="sesionCaducada.show();"
+		timeout="#{session.maxInactiveInterval * 1000}" />
+	<p:dialog header="Sesión caducada" widgetVar="sesionCaducada"
+		modal="true" fixedCenter="true" closable="false" width="400"
+		visible="false">
+		<h:outputText
+			value="La sesión ha caducado, por favor vuelva a intentarlo" />
+		<input id="confirmBackToLogin" type="button"
+			value="ir a iniciar sesión" onclick="redireccionar()"
+			 />
+			 <!-- onclick="window.location.href='../../logout.jsp'" -->
+	</p:dialog>
+
+
+</h:body>
+
+</html>

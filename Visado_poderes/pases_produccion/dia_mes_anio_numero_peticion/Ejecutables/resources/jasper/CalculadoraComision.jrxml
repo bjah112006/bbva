@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CalculadoraComision" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="165"/>
+	<property name="net.sf.jasperreports.awt.ignore.missing.font" value="true"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["../../WEB-INF/classes/jasper/"]]></defaultValueExpression>
+	</parameter>
+	<field name="item1" class="java.lang.String"/>
+	<field name="item2" class="java.lang.String"/>
+	<field name="item3" class="java.lang.String"/>
+	<field name="importe" class="java.lang.Double"/>
+	<field name="importeLimite" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="84" splitType="Stretch">
+			<image onErrorType="Blank">
+				<reportElement x="1" y="0" width="227" height="39"/>
+				<imageExpression class="java.lang.String"><![CDATA["./resources/images/bbva2.gif"]]></imageExpression>
+			</image>
+			<textField pattern="dd/MM/yyyy hh:mm:ss a">
+				<reportElement x="418" y="0" width="128" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="193" y="64" width="134" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Calculadora de Comisión]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="166">
+			<staticText>
+				<reportElement x="96" y="38" width="266" height="30"/>
+				<textElement/>
+				<text><![CDATA[1. ¿El beneficiario de la operación bancaria es persona jurídica?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="96" y="88" width="266" height="20"/>
+				<textElement/>
+				<text><![CDATA[3. El importe a disponer es menor a ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="239" y="144" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[Ud. debe pagar:	 PEN S/. 0.0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="18" width="22" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Si]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="384" y="18" width="22" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<textField pattern="###0.00">
+				<reportElement x="362" y="144" width="88" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[new BigDecimal($F{importe})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="362" y="38" width="22" height="30"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{item1}.equals( "1" )?"X":""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="384" y="38" width="22" height="30"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{item1}.equals( "0" )?"X":""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="362" y="68" width="22" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{item2}.equals( "1" )?"X":""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="384" y="68" width="22" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{item2}.equals( "0" )?"X":""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="362" y="88" width="22" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{item3}.equals( "1" )?"X":""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="384" y="88" width="22" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{item3}.equals( "0" )?"X":""]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00">
+				<reportElement x="257" y="88" width="64" height="20" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[new BigDecimal($F{importeLimite})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="96" y="68" width="266" height="20"/>
+				<textElement/>
+				<text><![CDATA[2. ¿Dispondrá de bienes de fallecido?]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="2"/>
+	</detail>
+	<pageFooter>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement x="7" y="2" width="533" height="20" forecolor="#003399"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BBVA Continental © Copyright - Todos los Derechos Reservados]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band/>
+	</lastPageFooter>
+	<summary>
+		<band height="5"/>
+	</summary>
+</jasperReport>

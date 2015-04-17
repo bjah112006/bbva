@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 23/01/2013 04:04:35 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.hildebrando.visado.modelo.TiivsMovimientoNivel" table="TIIVS_MOVIMIENTO_NIVEL">
+        <id name="idMovimiento" type="int">
+            <column name="ID_MOVIMIENTO" precision="8" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">SEQ_MOVIMIENTO_NIVEL</param>
+            </generator>
+        </id>
+        <many-to-one name="tiivsSolicitudNivel" class="com.hildebrando.visado.modelo.TiivsSolicitudNivel" fetch="select">
+            <column name="ID_SOL_NIVEL" precision="22" scale="0" />
+        </many-to-one>
+        <property name="estado" type="string">
+            <column name="ESTADO" length="4" />
+        </property>
+        <property name="grupo" type="java.lang.Integer">
+            <column name="GRUPO" precision="8" scale="0" />
+        </property>
+        <property name="usuarioRegistro" type="string">
+            <column name="USUARIO_REGISTRO" length="7">
+                <comment>Se registra el codigo de usuario del delegado</comment>
+            </column>
+        </property>
+        <property name="fechaRegistro" type="java.sql.Timestamp">
+            <column name="FECHA_REGISTRO" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportCartaAtencion" pageWidth="542" pageHeight="795" columnWidth="502" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="240"/>
+	<property name="ireport.y" value="229"/>
+	<property name="net.sf.jasperreports.awt.ignore.missing.font" value="true"/>
+	<parameter name="IMG_CABECERA" class="java.lang.String"/>
+	<field name="numeroSolicitud" class="java.lang.String"/>
+	<field name="instrucciones" class="java.lang.String"/>
+	<field name="poderdantes" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="203">
+			<textField>
+				<reportElement x="367" y="9" width="118" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["NRO " + $F{numeroSolicitud}]]></textFieldExpression>
+			</textField>
+			<image onErrorType="Blank">
+				<reportElement x="22" y="9" width="249" height="41"/>
+				<imageExpression class="java.lang.String"><![CDATA["./resources/images/bbva2.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement mode="Transparent" x="22" y="71" width="41" height="16" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Lima,]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="54" y="71" width="132" height="16"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="22" y="114" width="453" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Atención: Solicitud de revisión de poderes N° " + $F{numeroSolicitud}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="22" y="93" width="453" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Señor: " + $F{poderdantes}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="22" y="139" width="453" height="1" forecolor="#666666"/>
+			</line>
+			<staticText>
+				<reportElement x="22" y="141" width="454" height="61"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[De nuestra consideración:
+
+Mediante la presente le reiteramos que su solicitud de revisión no ha sido aprobada, por las siguientes razones:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="45">
+			<rectangle>
+				<reportElement stretchType="RelativeToBandHeight" x="23" y="2" width="453" height="40" isPrintWhenDetailOverflows="true"/>
+			</rectangle>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="38" y="6" width="428" height="24" isPrintWhenDetailOverflows="true"/>
+				<textElement markup="html">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{instrucciones}!=null?$F{instrucciones}:" "]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="22">
+			<staticText>
+				<reportElement x="0" y="0" width="485" height="20" forecolor="#003399"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BBVA Continental © Copyright - Todos los Derechos Reservados]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="92">
+			<staticText>
+				<reportElement positionType="Float" x="23" y="8" width="443" height="84"/>
+				<textElement textAlignment="Justified">
+					<font isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Si usted desea realizar la operación bancaria, deberá  presentar su solicitud de servicios nuevamente previo pago de la comisión y habiendo superado las observaciones antes detalladas.
+
+
+
+Solicitante]]></text>
+			</staticText>
+			<line>
+				<reportElement x="23" y="61" width="111" height="1" forecolor="#666666"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

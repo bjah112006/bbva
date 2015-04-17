@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           				http://www.springframework.org/schema/context 
+           				http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            			http://www.springframework.org/schema/security 
+            			http://www.springframework.org/schema/security/spring-security-3.0.xsd
+            			http://www.springframework.org/schema/aop 
+            			http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+            			http://www.springframework.org/schema/tx 
+            			http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+            			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+	<context:component-scan base-package="org.springannotations.web" />
+	<context:component-scan base-package="com.hildebrando.visado.controller"></context:component-scan>  
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<property name="basename"  value="/properties/jasper" />
+	</bean>  
+	
+	
+	<bean id="initLogging" name="initLogging"
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
+		autowire="byName">
+		<property name="staticMethod"
+			value="org.springframework.util.Log4jConfigurer.initLogging" />
+		<property name="arguments">
+			<list>
+				<value>classpath:properties/log4j.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Mensajes desde un archivo properties -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>properties/visado</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Definimos un Locale para el Lenguaje de los mensajes -->
+	<bean id="locale" class="java.util.Locale">
+		<constructor-arg>
+			<value>ES</value>
+		</constructor-arg>
+	</bean>
+		
+
+	<bean id="myDataSourceProperty" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:properties/jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+
+<!-- 	transacctionManager -->
+	<tx:annotation-driven transaction-manager="transactionManager"/> 
+
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- Usamos LocalSessionFactoryBean porque configuramos nuestros objetos de dominio persistentes utilizando
+	archivos de asignacion de XML de hibernate  -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="jndiDataSource" />
+		<property name="mappingResources" ref="mappingResourcesList" />
+		<property name="hibernateProperties">
+			<value>
+                hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
+                hibernate.show_sql=false  
+                hibernate.default_schema=VISPOD    
+                
+                <!-- =============================================================== -->
+                hibernate.connection.pool_size=100
+<!--                 hibernate.connection.release_mode=after_transaction -->
+                use_jdbc_metadata_defaults=true
+                hibernate.format_sql=false
+                hibernate.use_sql_comments=false
+                
+                <!-- =============================================================== -->
+				<!--    VMORE: CONFIGURACION DEL POOL DE CONEXIONES CON C3PO   -->
+				<!-- =============================================================== -->
+				hibernate.c3p0.min_size=30
+				hibernate.c3p0.max_size=60
+				hibernate.c3p0.timeout=600
+<!-- 				hibernate.c3p0.max_statements=50 -->
+				       
+            </value>
+		</property>
+	</bean>
+	
+<!-- 	<bean id="jndiDataSource" class="org.springframework.jndi.JndiObjectFactoryBean" > -->
+<!-- 		<property name="jndiName" value="${jdbc.jndi.visadopoderes}"></property> -->
+	<!-- 		<property name="resourceRef" value="true" /> se agrega  (estaba comentado)-->
+<!-- 		<property name="lookupOnStartup" value="false"></property> -->
+<!-- 		<property name="cache" value="true"></property> -->
+<!-- 		<property name="proxyInterface" value="javax.sql.DataSource"></property> -->
+<!-- 	</bean> -->
+	
+	
+	<jee:jndi-lookup id="jndiDataSource" jndi-name="${jdbc.jndi.visadopoderes}" lookup-on-startup="false" cache="true" proxy-interface="javax.sql.DataSource" />
+	
+	<!-- <bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobFactory">
+          <bean class="org.springframework.scheduling.quartz.SpringBeanJobFactory"/>
+        </property>
+		<property name="dataSource" ref="jndiDataSource" />
+		<property name="transactionManager" ref="transactionManager" />
+	    <property name="overwriteExistingJobs" value="true" /> 
+        <property name="configLocation" value="classpath:properties/quartz.properties" />
+		<property name="applicationContextSchedulerContextKey" value="applicationContext" />
+        <property name="waitForJobsToCompleteOnShutdown" value="true" />
+		<property name="autoStartup" value="true" />
+		<property name="quartzProperties">
+			<props>
+			<prop key="org.quartz.jobStore.selectWithLockSQL">SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ?</prop>
+			</props>
+		</property>
+		
+	</bean> -->
+	
+	<bean id="tablaGeneralServiceLocator"  class="com.bbva.general.service.TablaGeneralServiceLocator" >		 
+		 <property	name="tablaGeneralEndpointAddress" value="${tablaGeneral.urlWS}" /> 
+	</bean>
+	
+	<!-- Definicion de bean para servicio de Reniec -->
+	<bean id="reniecService" class="com.bbva.consulta.reniec.impl.ObtenerPersonaReniecServiceImpl"
+		init-method="initialize" destroy-method="finalize" lazy-init="false">
+		<property name="properties">
+			<bean
+				class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+				<property name="location">					
+					<value>classpath:properties/reniec.properties</value>
+				</property>
+			</bean>
+		</property>			
+	</bean>
+
+	<bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobFactory">
+		     <bean class="org.springframework.scheduling.quartz.SpringBeanJobFactory" />
+		</property>
+		<property name="dataSource" ref="jndiDataSource" />
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="overwriteExistingJobs" value="true" />
+		<property name="configLocation" value="classpath:properties/quartz.properties" />
+		<property name="applicationContextSchedulerContextKey" value="applicationContext" />
+		<property name="waitForJobsToCompleteOnShutdown" value="true" />
+		<property name="autoStartup" value="true" />
+		<property name="quartzProperties">
+			<props>
+			<prop key="org.quartz.jobStore.selectWithLockSQL">SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ?
+			</prop>
+			</props>
+		</property>
+	</bean>
+
+</beans>
