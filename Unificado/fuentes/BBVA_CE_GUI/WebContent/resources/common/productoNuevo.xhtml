@@ -1,0 +1,406 @@
+
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"> 
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<div class="bloque">
+    <script type="text/javascript">
+		/* <![CDATA[ */  
+		$(document).ready(function(){				
+			$(".cmpNumeroDecimalMill").autoNumeric({aSep: ',', aDec: '.'});		
+               $(".cmpNumeroDecimalDece").autoNumeric({aSep: ',', aDec: '.', vMax:99.99});	
+     		$(".cmpNumeroDecimalCent").autoNumeric({aSep: ',', aDec: '.', vMax:999.99});
+		});
+		
+		/**
+		* @author Daniel Flores
+		*
+		* Correcciones:
+		* - Ya no se usa la variable procesandoEst
+		* - Se bloquea el TAB cuando el modal está presente.
+		*
+		* Observaciones :
+		* - Parece que este método está sobreescribiendo
+		* otros myFuncion en la misma página donde se incluye
+		* el productoNuevo.xhtml
+		*
+		*/
+		function myFuncion(event) {
+			
+			switch(event.status){
+				case "begin":
+					$(document).keydown(function(e) {
+					    if (e.keyCode == 9)
+					    	e.preventDefault();
+					});
+					break;
+				case "success":
+					$(document).off("keydown");
+					break;
+				case "complete":
+					$(document).off("keydown");
+					break;
+			}
+			
+			mostrarProcesando(event);
+		}
+		/* ]]> */
+	</script>
+	
+    <div class="contenido-bloque">
+    
+        <h:inputHidden value="#{productoNuevo.renderedClasificacionSbs}" /> 
+      
+      <h:panelGrid columns="2">
+         <h:panelGroup>   
+        <span class="columna" style="width:320px">
+			    <div class="titulo titulo-espaciado">
+			         <h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.titulo']}"/>
+			     </div>
+			      <div class="campo-espaciado">
+			      	<h:panelGrid columns="2">
+				    	<h:panelGroup>
+				            <span class="columna" style="width:265px">
+				            	<span class="columna" style="width:120px">
+							          <h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.producto']}:" styleClass="etiqueta"/>
+							    </span>
+				                <span class="columna" style="width:140px">
+				                	<h:outputText value="#{productoNuevo.expediente.producto.descripcion}" styleClass="valor"  
+							                	rendered="#{productoNuevo.renderedProducto}"/>
+					                <h:selectOneMenu value="#{productoNuevo.codProducto}"
+					                 style ="width:180px;" styleClass="txt-resaltado-2 valor-componente" id="selProducto" 
+					                 rendered="#{!productoNuevo.renderedProducto}">
+					                    <f:selectItems value="#{productoNuevo.listaProducto}"/>
+					                    <!-- immediate="true" valueChangeListener="#{paneldocumentos.actualizaTipoOferta}" -->
+					                    <!-- <f:ajax event="change" render="idPanelDocumentos" execute="@form" listener="#{paneldocumentos.cargarDocumentosPanel}"/>  -->
+					                    <f:ajax onevent="myFuncion" event="change" render="idPanelCaractAdicionalesDatos idPanelConyuge idPanelDatosConyuge idPanelCaractAdicionales idPanelPlazoSoloc idPanelEnvioTarjeta idPanelTasaEspecialCheck idPanelTasaEspecialValor idPanelTasaEspecialTitulo idPanelVerificacionDPS idPanelGarantia idPanelDocumentos appletContentRefresh idSubProducto idPanelGridEnvioTarjeta idDocumentosReutilizables" 
+					                    execute="@form" listener="#{productoNuevo.cambiarSubProductos}"/>
+					                </h:selectOneMenu> 
+					              </span>               
+				                <h:message for="selProducto" errorClass="mensaje-error"/>
+				             </span>
+				          </h:panelGroup>
+			  		</h:panelGrid>
+			       </div>
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2">
+			    	<h:panelGroup>
+			    		<span class="columna" style="width:265px">
+			                   <span class="columna" style="width:120px">
+					                <h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.tipoOferta']}:" styleClass="etiqueta"/>
+			                	</span>
+			                	<span class="columna" style="width:120px">
+			                		<h:outputText value="#{productoNuevo.expediente.expedienteTC.tipoOferta.descripcion}" styleClass="valor" rendered="#{productoNuevo.renderedTipoOferta}"/>
+					                <h:selectOneMenu value="#{productoNuevo.codTipoOferta}" 
+					                 style ="width:180px;" styleClass="txt-resaltado-2 valor-componente" id="selTipoOferta" 
+					                 rendered="#{!productoNuevo.renderedTipoOferta}">
+					                    <f:selectItems value="#{productoNuevo.listaTipoOferta}"/>
+					                    <f:ajax onevent="myFuncion" event="change" render="idPanelConyuge idPanelDatosConyuge idPanelDocumentos appletContentRefresh idPanelClasificacionSbs idDocumentosReutilizables" execute="@form" listener="#{productoNuevo.cambiarTipoOferta}"/>
+					                </h:selectOneMenu>
+					             </span>
+			                <h:message for="selTipoOferta" errorClass="mensaje-error"/>
+			             </span>
+			         </h:panelGroup>
+			    </h:panelGrid>
+            </div>
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2">
+			    	<h:panelGroup>
+			    		<span class="columna" style="width:265px">
+			                <span class="columna" style="width:120px">
+			                    <h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.lineaCredito']}:" styleClass="etiqueta" />
+			                </span>
+			                <span class="columna" style="width:46px">
+			                   <h:panelGroup id="idTipoMonedaSol">
+			                    <h:inputHidden value="#{productoNuevo.codSubproducto}"></h:inputHidden>   
+			                	<h:outputText value="#{productoNuevo.desTipoMoneda}" styleClass="etiqueta"  rendered="#{productoNuevo.renderedLineaCredTipMoneda}"/>
+			                    <h:selectOneMenu value="#{productoNuevo.codTipoMoneda}" style ="width:50px;" 
+			                    		styleClass="txt-resaltado-2" id="selTipoMoneda" rendered="#{!productoNuevo.renderedLineaCredTipMoneda}"
+			                    		disabled="true" readonly="true">
+			                        <f:selectItems value="#{productoNuevo.listaTipoMoneda}"/>
+			                    </h:selectOneMenu>
+			                   </h:panelGroup>
+			                </span>
+                	<script type="text/javascript">
+						<f:verbatim>
+					        $(document).ready(function(){
+					        	$(".numLineaCredSol").numeric();
+					        });
+				        </f:verbatim>
+				    </script>
+				    <span class="columna" >
+				    	<h:outputText value="#{productoNuevo.expediente.expedienteTC.lineaCredSol}" styleClass="etiqueta"  rendered="#{productoNuevo.renderedCantCred}"/>
+				    </span>
+				    <span class="columna" >
+					    <h:panelGroup id="idPanelLineaCredSol" style="#{productoNuevo.renderedCantCred ? 'display:none;': ''}">
+						    <h:inputText value="#{productoNuevo.expediente.expedienteTC.lineaCredSol}" style ="width:80px;" 
+		                    		styleClass="txt-resaltado-2 campoValor1 cmpNumeroDecimalMill" id="lineaCredSolInp" rendered="#{!productoNuevo.renderedScoring}"
+		                    		onkeypress="return disableEnterKey(event);">
+		                      <f:convertNumber locale="en" pattern="#,##0.00"/>
+		                    </h:inputText>
+						    
+		                    <h:inputText value="#{productoNuevo.expediente.expedienteTC.lineaCredSol}"
+		                    		styleClass="txt-resaltado-2 campoValor1 cmpNumeroDecimalMill" id="lineaCredSol" rendered="#{productoNuevo.renderedScoring}"
+		                    		onkeypress="return disableEnterKey(event);">
+		                      <f:convertNumber locale="en" pattern="#,##0.00"/>
+		                      <f:ajax event="blur" render="idModificacionScoring" execute="@form" listener="#{productoNuevo.cambiarLineaCreditoSol}"/>
+		                    </h:inputText>
+	                    </h:panelGroup>
+                    </span>
+                </span>  
+                </h:panelGroup>
+		       </h:panelGrid>              
+                <h:message for="selTipoMoneda" errorClass="mensaje-error"/>
+                <h:message for="lineaCredSol" errorClass="mensaje-error"/>
+                <h:message for="lineaCredSolInp" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta" style="margin-top:-8px;">                
+                <h:panelGrid columns="2" style="#{!productoNuevo.renderedLineaCreditoApr?'':'display:none'}">
+			    	<h:panelGroup>
+			    		<span class="columna" style="width:265px">
+			                <span class="columna" style="width:120px">
+                				<h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.lineaCreditoApr']}:" styleClass="etiqueta" rendered="#{productoNuevo.renderedLineaCreditoApr}"/>
+                			</span>
+                			<span class="columna" style="width:120px">
+				                <h:outputText value="#{productoNuevo.expediente.expedienteTC.tipoMonedaAprob.descripcion} " styleClass="valor" style="width: 80px;"  rendered="#{productoNuevo.renderedLineaCreditoApr}"/>
+				                <h:outputText value="#{productoNuevo.expediente.expedienteTC.lineaCredAprob}" styleClass="valor"  rendered="#{productoNuevo.renderedLineaCreditoApr}" style ="width:173px;" >
+				                   <f:convertNumber locale="en" pattern="#,##0.00"/>
+				                </h:outputText>
+				            </span>
+				       </span>
+				   </h:panelGroup>
+				</h:panelGrid>
+            </div>             
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2" id="idPanelGridEnvioTarjeta" style="#{productoNuevo.renderedEnvioTarjeta?'':'display:none'}">
+			            <h:panelGroup id="idPanelEnvioTarjeta">
+			            	<span class="columna" style="width:265px">
+			                	<span class="columna" style="width:120px">
+			                		<h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.envio']}:" styleClass="etiqueta" 
+			                		rendered="#{productoNuevo.renderedEnvioTarjeta}"/>
+			                 	</span>
+			                 	<span class="columna" style="width:120px">
+				                	<h:selectOneMenu value="#{productoNuevo.codTipoEnvio}" style ="width:139px;" 
+				                		styleClass="txt-resaltado-2 valor-componente" id="selTipoEnvio"
+				                		rendered="#{productoNuevo.renderedEnvioTarjeta}">
+				                    <f:selectItems value="#{productoNuevo.listaTipoEnvio}"/>
+				                </h:selectOneMenu>
+				               </span>
+				               <h:message for="selTipoEnvio" errorClass="mensaje-error"/>
+				            </span>
+			            </h:panelGroup>
+			     </h:panelGrid>
+            </div>
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2">
+			            <h:panelGroup id="idPanelPlazoSoloc" style="#{productoNuevo.renderedPlazoSolicitado?'':'display:none'}">
+			                	<span class="columna" style="width:120px">
+					                <h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.plazoSolicitado']}:" styleClass="etiqueta" 
+					                rendered="#{productoNuevo.renderedPlazoSolicitado}"/>
+					             </span>
+			                <h:panelGroup>
+			                	<span class="columna" style="width:100px">
+			                	   <span class="columna" style="width:130px">
+						                <h:inputText value="#{productoNuevo.expediente.expedienteTC.plazoSolicitado}" 
+						                    		styleClass="campoValor1 txt-resaltado-2 soloNumeros" maxlength="3" id="idPlazoSol" 
+						                    		rendered="#{productoNuevo.renderedPlazoSolicitado}" 
+						                    		onkeypress="return disableEnterKey(event);" />
+					               		<h:outputText value=" #{msg['com.ibm.bbva.common.productoNuevo.simboloTiempo']}" styleClass="etiqueta" 
+					               		rendered="#{productoNuevo.renderedPlazoSolicitado}" />
+					               </span>
+					             </span>		                
+			                </h:panelGroup>   
+			                <h:message for="idPlazoSol" errorClass="mensaje-error"/>                		
+			            </h:panelGroup>
+	            </h:panelGrid>
+            </div> 
+            <div class="campo-espaciado espacios-etiqueta">
+            	<h:panelGrid columns="2" style="#{!productoNuevo.renderedPlazoSolicitadoApr?'':'display:none'}">
+			            <h:panelGroup id="idPanelPlazoSolocAprLabel2">
+			            	<span class="columna" style="width:120px">
+				                <h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.plazoSolicitadoApr']}:" styleClass="etiqueta" 
+				                rendered="#{productoNuevo.renderedPlazoSolicitadoApr}" />
+				             </span>
+				             <span class="columna" style="width:120px">
+				                <h:panelGroup>
+					                <h:outputText value="#{productoNuevo.expediente.expedienteTC.plazoSolicitadoApr}" 
+					                    		styleClass="valor" rendered="#{productoNuevo.renderedPlazoSolicitadoApr}" /> 
+				               		<h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.simboloTiempo']}" styleClass="etiqueta" 
+				               		rendered="#{productoNuevo.renderedPlazoSolicitadoApr}" />		                
+				                </h:panelGroup>
+				             </span>                   		
+			            </h:panelGroup>
+			      </h:panelGrid>
+            </div>      
+            <div class="titulo titulo-espaciado">
+            	<h:panelGroup id="idPanelTasaEspecialTitulo" style="#{productoNuevo.renderedSolicitudTasaEsp? '':'display:none'}">
+               		<h:outputText value="#{msg['com.ibm.bbva.common.producto.tituloVerifAprob']}" styleClass="etiqueta" 
+               		rendered="#{productoNuevo.renderedSolicitudTasaEsp}" />
+                </h:panelGroup>              
+            </div>                      
+            <div>
+		     	<h:panelGroup id="idPanelTasaEspecialCheck" style="#{productoNuevo.renderedSolicitudTasaEsp? '':'display:none'}">
+		         	<h:selectBooleanCheckbox value="#{productoNuevo.tasaEspecial}" rendered="#{productoNuevo.renderedSolicitudTasaEsp}" disabled="#{productoNuevo.disabledSolicitudTasaEsp}" onclick="checkClick1(this)" >
+                    	 <f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{productoNuevo.cambiarTasaEspecial}"/>
+		            </h:selectBooleanCheckbox>
+		            <h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.tasaEspecial']}" styleClass="etiqueta" 
+		            	rendered="#{productoNuevo.renderedSolicitudTasaEsp}" />
+		        </h:panelGroup>    
+		        <h:panelGroup id="idPanelTasaEspecialValor" style="#{productoNuevo.renderedSolicitudTasaEsp? '':'display:none'}">
+		            <h:inputText value="#{productoNuevo.expediente.expedienteTC.tasaEsp}" maxlength="5"
+		                		styleClass="txt-resaltado-2  campoValor1 soloNumerosConDecimales" id="idValorTasaEsp" 
+		                		rendered="#{productoNuevo.renderedSolicitudTasaEsp}" disabled="#{productoNuevo.disabledInputTasaEsp}"
+		                		onblur="validarFormatoTasaEspecial();" onclick="eliminarFormatoTasaEspecial();"> 
+		                <f:ajax event="change" render="idValorTasaEsp"/>
+		            </h:inputText>
+					<h:outputText value=" #{msg['com.ibm.bbva.common.productoNuevo.simboloPorcentaje']}" styleClass="etiqueta" 
+		          		rendered="#{productoNuevo.renderedSolicitudTasaEsp}" />	                    	                    		
+		            <h:message for="idValorTasaEsp" errorClass="mensaje-error"/> 	 		
+		        </h:panelGroup> 
+		        <br />                  
+		        <h:selectBooleanCheckbox id="idModificacionScoring" value="#{productoNuevo.modificacionScoring}" rendered="#{productoNuevo.renderedScoring}"/>
+		        <h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.modificacionScoring']}" styleClass="etiqueta" rendered="#{productoNuevo.renderedScoring}"/>
+            </div>
+        </span>
+        <span class="columna" style="width:400px">
+            <div class="titulo titulo-espaciado">
+                <h:outputText value="    "/>
+            </div>
+            <div class="campo-espaciado" style="margin-top: 24px;">    
+              <h:panelGrid columns="2">
+                <h:panelGroup>                 
+		            	<h:panelGroup id="idSubProducto">   
+		            		<span class="columna" style="width:400px">
+			            		<span class="columna" style="width:120px">         	
+					                <h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.subproductos']}:" styleClass="etiqueta"/>
+					            </span>
+			                	<span class="columna" style="width:150px">  
+			                		<h:outputText value="#{productoNuevo.expediente.expedienteTC.subproducto.descripcion}" styleClass="valor-componente" rendered="#{productoNuevo.renderedSubProducto}"/> 
+				                	<h:selectOneMenu value="#{productoNuevo.codSubproducto}"  
+				                	style ="width:310px;" styleClass="txt-resaltado-2" id="selSubproducto"  
+				                	rendered="#{!productoNuevo.renderedSubProducto}">
+				                    <f:selectItems value="#{productoNuevo.listaSubproducto}"/>
+				                    <!--immediate="true" valueChangeListener="#{paneldocumentos.actualizaSubProducto}"  -->
+				                      <f:ajax onevent="myFuncion" event="change" render="idTipoMonedaSol idPanelDocumentos appletContentRefresh" execute="@form" listener="#{productoNuevo.cambiarTipoMoneda}"/>              
+				                	</h:selectOneMenu>
+				                </span>
+				              </span>
+		                </h:panelGroup>
+                		<h:message for="selSubproducto" errorClass="mensaje-error"/>
+                </h:panelGroup>
+              </h:panelGrid>
+            </div>
+            <div class="campo-espaciado" style="margin-top: -8px;"> 
+               <h:panelGrid columns="3">
+                <h:panelGroup>   
+                	<span class="columna" style="width:300px">
+			             <span class="columna" style="width:120px">           
+	                		<h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.preEvaluador']}:" styleClass="etiqueta"/>
+	                	 </span>
+	                	 <span class="columna" style="width:120px"> 
+			                	<h:inputText value="#{productoNuevo.expediente.expedienteTC.codPreEval}" style="width:110px;"
+			                    		styleClass="txt-resaltado-2 campoValor1 soloNumeros" maxlength="14" id="codPreEval" rendered="#{!productoNuevo.renderedPreEvaluador}" 
+			                    		onkeypress="return disableEnterKey(event);"/> <!-- focusOn(event); --> 
+			              </span>
+			              <span class="columna" style="width:120px">
+				                 <h:outputText value="#{productoNuevo.expediente.expedienteTC.codPreEval}" styleClass="etiqueta"  
+				                    		rendered="#{productoNuevo.renderedPreEvaluador}" />  
+				           </span>            
+	                       <h:message for="codPreEval" errorClass="mensaje-error"/>
+	                  </span>
+	              </h:panelGroup>
+	            </h:panelGrid>
+            </div>
+            <div class="campo-espaciado" style="margin-top: -13px;">
+            	<h:panelGroup id="idPanelGarantia">
+            		<h:panelGrid columns="2" style="width:320px">
+                      <h:panelGroup>   
+                	    <span class="columna" style="width:320px">
+			             <span class="columna" style="width:120px">
+	               		    <h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.garantias']}:" 
+	               		    	styleClass="etiqueta" rendered="#{productoNuevo.renderedGarantia}"/>
+	               		  </span>
+			               <span class="columna" style="width:120px">
+				                <h:selectOneMenu value="#{productoNuevo.codGarantia}"  
+				                	style ="width:310px;" styleClass="txt-resaltado-2" id="selGarantia"  
+				                	rendered="#{productoNuevo.renderedGarantia}">
+				                    <f:selectItems value="#{productoNuevo.listaGarantia}"/>
+				                    <!--immediate="true" valueChangeListener="#{paneldocumentos.actualizaSubProducto}"  -->
+				                </h:selectOneMenu>
+				            </span>
+				      </span>
+				     </h:panelGroup>
+				   </h:panelGrid>
+                </h:panelGroup>
+                <h:message for="selGarantia" errorClass="mensaje-error"/>
+            </div>            
+            <div class="campo-espaciado">               
+            <h:panelGroup id="idPanelClasificacionSbs" style="#{productoNuevo.renderedClasificacionSbs?'':'display:none'}">	            
+	            <div class="campo-espaciado">               
+                <h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.clasificaionSbs']}:" styleClass="etiqueta"/>
+            </div>
+            <div class="campo-espaciado">  
+            	<h:panelGrid columns="2" style="width:265px">
+                      <h:panelGroup>   
+                	    <span class="columna" style="width:265px">
+				             <span class="columna" style="width:120px">             
+	                			<h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.titular']}:" styleClass="etiqueta"/>
+	                		</span>
+	                		<span class="columna" style="width:100px">
+	                			<h:inputText value="#{productoNuevo.expediente.expedienteTC.clasificacionSbs}" 
+	                    		styleClass="txt-resaltado-2  campoValor1" maxlength="5"
+	                    		id="clasificacionSbs" rendered="#{!productoNuevo.renderedTitular}" style="margin-left: 13px;"
+	                    		onkeydown="onkeydownNumeroConDecimales(event);"
+								onblur="validarFormatoClasificacionSBS();" onclick="eliminarFormatoClasificacionSBS();">  
+				                    <f:ajax event="change" render="clasificacionSbs idPanelBotones" execute="@form" listener="#{productoNuevo.validaPautaClasificacionSBS}"/>                    		
+				                </h:inputText>
+				                <h:outputText value="#{productoNuevo.expediente.expedienteTC.clasificacionSbs}" styleClass="etiqueta"  
+				                    		rendered="#{productoNuevo.renderedTitular}" />
+	                			<h:outputText value=" #{msg['com.ibm.bbva.common.productoNuevo.simboloPorcentaje']}" 
+	                				styleClass="etiqueta"/> 
+	                		</span>   		               
+	                		<h:message for="clasificacionSbs" errorClass="mensaje-error"/>
+	                </span>
+	               </h:panelGroup>
+	            </h:panelGrid>
+            </div>
+            <div class="campo-espaciado" style="margin-top: -10px;"> 
+	            <h:panelGrid columns="2" style="width:265px">
+	                      <h:panelGroup>   
+	                	    <span class="columna" style="width:265px">
+					             <span class="columna" style="width:120px">                
+                					<h:outputText value="#{msg['com.ibm.bbva.common.productoNuevo.conyuge']}:" styleClass="etiqueta"
+                					style="#{!productoNuevo.renderedConyuge and !productoNuevo.renderedSoltero ? '' : 'display:none;'}"/>
+                				</span>
+                				<span class="columna" style="width:100px">  
+				                	<h:inputText value="#{productoNuevo.expediente.expedienteTC.sbsConyuge}"
+				                    		styleClass="txt-resaltado-2  campoValor1" maxlength="5" id="sbsConyuge" 
+				                    		rendered="#{!productoNuevo.renderedConyuge}" 
+				                    		onkeydown="onkeydownNumeroConDecimales(event);"
+											onblur="validarFormatoConyugeSBS();" onclick="eliminarFormatoConyugeSBS();"> 
+				                    	<f:ajax event="change" render="clasificacionSbs idPanelBotones sbsConyuge" execute="@form" listener="#{productoNuevo.validaPautaClasificacionSBS}"/>                    		
+				                	</h:inputText>
+					                <h:outputText value="#{productoNuevo.expediente.expedienteTC.sbsConyuge}" styleClass="etiqueta"  
+					                    		style="#{!productoNuevo.renderedConyuge and productoNuevo.renderedSoltero ? '' : 'display:none;'}" />               
+					                <h:outputText value=" #{msg['com.ibm.bbva.common.productoNuevo.simboloPorcentaje']}" 
+					                styleClass="etiqueta" style="#{!productoNuevo.renderedConyuge and !productoNuevo.renderedSoltero ? '' : 'display:none;'}"/>
+				                </span>	
+                			<h:message for="sbsConyuge" errorClass="mensaje-error"/>
+                		</span>
+                	</h:panelGroup>
+               </h:panelGrid>
+            </div>
+            </h:panelGroup>
+            </div>
+            <h:panelGroup id="idMsgPautaClasificacion" style="#{!productoNuevo.renderedMsgPauta ? '' : 'display:none;'}" >
+                   <h:message for="idMsgPautaClasificacion" errorClass="mensaje-error"/>
+            </h:panelGroup>           
+        </span>
+        </h:panelGroup>
+        </h:panelGrid>
+    </div>
+</div>
+</ui:composition>

@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+    	<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+        <h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="style.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>	
+		<h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+	    <h:outputScript library="js" name="jquery-ui.js" target="head"/>
+	    <h:outputScript library="js" name="jquery.mask.min.js" target="head"/>
+        <h:outputScript library="js" name="jquery.numeric.js" target="head"/>
+        <h:outputScript library="js" name="autoNumeric-1.7.4-B.js" target="head"/>
+        <h:outputScript library="js" name="funciones.js" target="head"/>
+        <h:outputScript target="head">
+		/* <![CDATA[ */ 
+            $(document).ready(function(){              
+	          if($("#frmEvaluarDevolucionRiesgos\\:idMsgGuiaDoc").val() == "true") {
+	        	var msg = $("#frmEvaluarDevolucionRiesgos\\:msgGuiaDoc").text();
+	        	var docsPendientes = $("#frmEvaluarDevolucionRiesgos\\:idValidaGuiaEsc").val();
+				alert(msg + ":\n" + docsPendientes);
+	        	$("#frmEvaluarDevolucionRiesgos\\:idMsgGuiaDoc").val("false");
+	          }
+	          
+	          $("#frmEvaluarDevolucionRiesgos\\:fecVenDoi").mask("00/00/0000", {
+		 			placeholder: "__/__/____"}
+		 		);
+            });          
+        	function confAceptar (form) {
+        		var msg = $("#frmEvaluarDevolucionRiesgos\\:registrar").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+		        var msgDocsObs = '';
+		        docsObs = $.trim(docsObs);
+		        if(docsObs != ''){
+		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+		        }
+        		var op = confirm(msg);
+        		if (op) {
+        			clickAceptar(form);
+        		}
+        		return op;
+        	}
+        	function cancOperacion () {
+        		var msg = $("#frmEvaluarDevolucionRiesgos\\:operacion").text();
+        		return confirm(msg);
+        	}
+        	function uncheckReutDoc(parmCodigo) {                 
+                if (parmCodigo == undefined) {
+                    return;
+                }              
+                var codigo, seleccion;                    
+                var tabla = document.getElementById("frmEvaluarDevolucionRiesgos:tabla");              
+ 
+                for (var i=0; i < tabla.rows.length; i++) {         
+                    codigo = document.getElementById("frmEvaluarDevolucionRiesgos:"+i+":idCodigoDocumentoReu");
+                    seleccion = document.getElementById("frmEvaluarDevolucionRiesgos:"+i+":idSeleccionReu");
+                    if (codigo.value == parmCodigo) {                          
+                        seleccion.checked = false;
+                    }
+                }                                    
+            }
+            
+            function validarFormatoFecha(){
+					if($('#frmEvaluarDevolucionRiesgos\\:fecVenDoi').val().length<10 && $('#frmEvaluarDevolucionRiesgos\\:fecVenDoi').val().length!=0)
+				{
+					alert('El formato de la fecha debe ser dd/MM/yyyy');
+					$('#frmEvaluarDevolucionRiesgos\\:fecVenDoi').val("");
+				}
+			}
+			
+			
+			function validarFecha() {
+	 			if($('#frmEvaluarDevolucionRiesgos\\:fecVenDoi').val().length!=0){
+	 				var fecha =$("#frmEvaluarDevolucionRiesgos\\:fecVenDoi").val();
+					if(validate_fecha(fecha)==false){
+        				alert("La fecha ingresada no es correcta.");
+						$('#frmEvaluarDevolucionRiesgos\\:fecVenDoi').val("");
+        			}
+				}
+			}
+	
+    		function validate_fecha(fecha){
+		   		//Obtenemos los valores dia, mes y año:
+				  //-------------------------------------
+				  var arrayFecha = fecha.split("/");
+					
+				  //Comprobamos que se tengan 3 datos (dia, mes y año) no vacios
+				  if (arrayFecha.length!=3 || arrayFecha[0]=="" || arrayFecha[1]=="" || arrayFecha[2]=="")
+				    return false;
+				    
+				  var anyo = parseInt(quitaCeros(arrayFecha[2]));
+				  //Devuelve el mes numérico o null
+				  var mes = devuelveMes(quitaCeros(arrayFecha[1]));
+				  var dia = parseInt(quitaCeros(arrayFecha[0]));
+				  //-------------------------------------
+					
+				  //Comprobamos que los valores son numéricos
+				  if (isNaN(anyo) || isNaN(mes) || isNaN(dia)) 
+				    return false;
+				
+				  //Comprobamos valores correctos de dia mes y anyo
+				  if (dia<1 || dia>31 || mes<1 || mes>12 || anyo<0)
+				    return false;
+				    		
+				  //Comprobamos meses de 30 dias
+				  if ((mes==4 || mes==6 || mes==9 || mes==11) && dia>30)
+				    return false;
+				    		
+				  //Comprobamos mes febrero & bisiestos
+				  if (mes==2 && (dia > 29 || (dia==29 && ((anyo%400!=0) && ((anyo%4!=0) || (anyo%100==0)))) ))
+				    return false;
+				    		
+				  return true;
+			}
+	
+			function quitaCeros(cad){
+			  var enc = false;
+			  var i=0;
+			  while (i<cad.length && !enc) {
+			    if (cad.charAt(i)=='0'){
+			      i++;
+			    } else{
+			      enc = true;
+			    }
+  			}
+  		   return (cad.substring(i,cad.length));
+		  }
+
+		/* Recibe una cadena con un mes (número o cadena)
+   			y devuelve el número de mes.*/
+ 
+			function devuelveMes (mes) {
+			  var numMes = null;
+			  var meses = new Array("jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec");
+				
+			  if (!isNaN(parseInt(mes))) //Es un número
+			    numMes = parseInt(mes);
+			  else {
+			    var encontrado=false;
+			    var i=0;
+			    while (i<meses.length && !encontrado) {
+			      //Comparamos el mes en minúsculas
+			      if (mes.toLowerCase()==meses[i]) {
+			        encontrado=true;
+			        numMes=i+1;
+			      }
+			      i++;
+			    }
+			  }
+			  return numMes;
+		}
+            
+        /* ]]> */
+		</h:outputScript>
+		<script type="text/javascript">
+	        function checkClick1(check) {
+	            document.getElementById('frmEvaluarDevolucionRiesgos:idValorTasaEsp').disabled = !check.checked; 
+	            document.getElementById('frmEvaluarDevolucionRiesgos:idValorTasaEsp').value = "0.00"; }
+	        function mostrarTabLogPorPerfil(){
+	        	var perfil = $("#frmEvaluarDevolucionRiesgos\\:descPerfilPage").val();
+	        	var descAdmin = $("#frmEvaluarDevolucionRiesgos\\:descPerfilFiltro").val();
+	        	perfil = (perfil == "")?$("#frmEvaluarDevolucionRiesgos\\:descPerfilPage").text():perfil;
+	        	descAdmin = (descAdmin == "")?$("#frmEvaluarDevolucionRiesgos\\:descPerfilFiltro").text():descAdmin;
+	        	if (perfil == descAdmin) {
+	        		$("#frmEvaluarDevolucionRiesgos\\:descPerfilTabs").show();
+	        	} else {
+	        		$("#frmEvaluarDevolucionRiesgos\\:descPerfilTabs").hide();
+	        	}
+	        }
+		</script>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+        <title><h:outputText value="#{msg['com.ibm.bbva.evaluarDevolucionRiesgos.formEvaluarDevolucionRiesgos.titulo']}"/></title>
+    </h:head>
+    <h:body onload="mostrarTabLogPorPerfil()">
+    <h:form id="frmEvaluarDevolucionRiesgos">
+        <h:inputHidden value="#{detalleExpediente1.clienteNatural.estadoCivil.codigo}"  id="datoCivil"></h:inputHidden>
+        <h:inputHidden value="#{datosConyuge.mensajeOperacion}" id="msjObservacion" />
+        <h:inputHidden value="#{productoNuevo.expediente.expedienteTC.tipoOferta.codigo}" id="idTipoOferta"/>
+        
+        <h:inputHidden id="idMsgGuiaDoc" value="#{evaluarDevolucionRiesgos.msgGuiaDocumentaria}"></h:inputHidden>
+    	<h:outputText value="#{msg['com.ibm.bbva.evaluarDevolucionRiesgos.formEvaluarDevolucionRiesgos.aceptar.confirm']}"
+    			id="registrar" style="display:none;"/>
+    	<h:outputText value="#{msg['com.ibm.bbva.evaluarDevolucionRiesgos.formEvaluarDevolucionRiesgos.cancelarOperacion.confirm']}"
+    			id="operacion" style="display:none;"/>
+        <h:outputText value="#{msg['com.ibm.bbva.evaluarDevolucionRiesgos.formEvaluarDevolucionRiesgos.msgGuiaDoc']}"
+    			id="msgGuiaDoc" style="display:none;"/>    			    	    			
+        <div class="contenido">
+            <div class="cabecera">
+                <ui:include src="/resources/common/cabecera.xhtml" />
+                <h:outputText id="descPerfilPage"  value="#{datosCabecera.empleado.perfil.descripcion}" style="display:none;"/>
+                <h:outputText id="descPerfilFiltro"  value="#{msg['com.ibm.bbva.common.perfil.administrador']}" style="display:none;"/>
+            </div>
+            <div class="cuerpo">
+                <div class="menu">
+                    <ui:include src="/resources/common/menu.xhtml" />
+                </div>
+                <div class="datos">
+                	<ui:include src="/resources/common/tabs.xhtml" />
+                	<div class="tab-expediente tab-item">
+						<ui:include src="/resources/common/datosGestor.xhtml" />
+						<ui:include src="/resources/common/estadoAnterior.xhtml" />
+						<ui:include src="/resources/common/detalleExpediente1.xhtml" />
+						<h:panelGroup id="idPanelProductoNuevo">
+						      <ui:include src="/resources/common/productoNuevo.xhtml" flush="true" />
+				        </h:panelGroup>
+						<h:panelGroup id="idPanelConyuge" style="#{evaluarDevolucionRiesgos.mostrarPanelConyuge ? '':'display:none;'}">
+						   <ui:include src="/resources/common/buscarConyuge.xhtml" flush="true" />
+						</h:panelGroup>
+						<h:panelGroup id="idPanelDatosConyuge" 
+						style="#{datosConyuge.mostrarDatosConyuge ? '':'display:none;'}" >
+						   <ui:include src="/resources/common/datosConyugue.xhtml" flush="true" />
+						</h:panelGroup>
+						<ui:include src="/resources/common/verificacionApr.xhtml" />
+						
+						<h:panelGroup id="idDocumentosReutilizables">
+							<ui:include src="/resources/common/documentoReutilizable.xhtml" />
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" styleClass="bloque">
+							<h:panelGroup id="appletContentRefresh">
+								<ui:include src="/resources/common/documentoEsc.xhtml" />
+							</h:panelGroup>
+							<h:panelGroup id="idPanelDocumentos">
+								<ui:include src="/resources/common/panelDocumentos.xhtml" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<ui:include src="/resources/common/comentarios.xhtml" />
+						<ui:include src="/resources/common/observacionRechazo.xhtml" />
+						<h:panelGroup id="idPanelBotones">
+	                        <div class="column boton-principal">
+								<h:commandButton value="#{msg['com.ibm.bbva.evaluarDevolucionRiesgos.formEvaluarDevolucionRiesgos.aceptar']}"
+				            					 onclick="return confAceptar(this.form);" type="button" 
+				            					 disabled="#{!evaluarDevolucionRiesgos.activoAceptar}"/>
+				                <h:commandButton value="#{msg['com.ibm.bbva.evaluarDevolucionRiesgos.formEvaluarDevolucionRiesgos.cancelarOperacion']}"
+				            					 action="#{evaluarDevolucionRiesgos.cancelarOperacion}" onclick="return cancOperacion();"/>
+	                            <h:commandLink id="btnEjecutaApplet" 
+			    	                           action="#{evaluarDevolucionRiesgos.aceptar}" 
+			    	                           styleClass="display:none">
+			    	            </h:commandLink>
+			    	        </div>    			            						           		                     					
+						</h:panelGroup>
+					</div>
+					<div class="tab-ayuda-memoria tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />		
+	               		<ui:include src="/resources/common/tablaAyudaMemoria.xhtml" />
+					</div>
+					<div class="tab-historial tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />	
+               			<ui:include src="/resources/common/tablaHistorial.xhtml" />
+					</div>
+					<div class="tab-observaciones tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />
+						<ui:include src="/resources/common/tablaObservaciones.xhtml" />
+					</div>
+					<div class="tab-log tab-item" style="display:none;">
+	               		<ui:include src="/resources/common/datosHistorico.xhtml" />	
+	               		<ui:include src="/resources/common/tablaLog.xhtml" />
+					</div>
+				</div>
+            </div>
+        </div>
+    </h:form>
+    </h:body>
+</html>

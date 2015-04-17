@@ -1,0 +1,80 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<div class="bloque">
+	<script type="text/javascript">
+		<f:verbatim>
+	        $(document).ready(function(){
+	        	var chkCom = $("input:checkbox").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:chkComentario$/);
+			        });
+		        var txtCom = $("textarea").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:txtComentario$/);
+			        });
+		        $(chkCom).click(function () {
+		        	if ($(this).is(":checked")) {
+		        		$(txtCom).show();
+		        	} else {
+		        		$(txtCom).hide();
+		        	}
+	            });
+	            $(txtCom).keypress(function(event){
+	            	var key = event.which;
+	            	if(key >= 33 || key == 13) {
+		            	var maxLength = 250;
+						var length = this.value.length;
+						if(length >= maxLength) {
+							event.preventDefault();
+						}
+					}
+				});
+	        });
+        </f:verbatim>
+        
+        function validarCom() {
+	        if(document.getElementById('frmRegistrarExpediente:txtComentario').value.length>250){
+	        	alert("El comentario excede el límite máximo de 250 caracteres,\n No podrá registrar el expediente");
+	        	return false;
+	        }
+	        return true;
+		}       
+        
+        function validarPegadoCom(e, campo){
+        	num_caracteres_permitidos = 250;
+        	if (e.button == 2 || e.ctrlKey) {
+        		num_caracteres = campo.value.length;
+        		contenido = $.trim(campo.value);
+        		if(num_caracteres >= num_caracteres_permitidos) {
+        			//alert("El comentario excede el límite máximo de 250 caracteres,\n No podrá registrar el expediente");
+        			alert("Solo se permite ingresar 250 caracteres,\n No podrá registrar el expediente");
+        			campo.value = contenido.substr(0,250);
+        		}      		
+        	}
+        }
+    </script>
+    <div class="contenido-bloque">
+        
+            <span class="titulo titulo-espaciado">
+               <h:outputText value="#{msg['com.ibm.bbva.common.comentario.titulo']}"/>
+            </span> 
+            <div>
+                <!-- 
+                <h:selectBooleanCheckbox id="chkComentario" value="#{comentario.comentario}"/>
+                 -->
+                <h:outputText value="#{msg['com.ibm.bbva.common.comentario.comentarios']}" styleClass="etiqueta"/>                
+            </div>
+            <div>              
+                <h:inputTextarea value="#{comentario.expedienteVO.comentario}" style="width:750px;" rows="5" id="txtComentario" onkeypress="disableEnterKey(event)"
+                 onkeydown="validarPegadoCom(event, this)" onmousedown="validarPegadoCom(event, this)" />
+                <h:message for="txtComentario" errorClass="mensaje-error"/>		
+            </div>        
+    </div>
+</div>
+</ui:composition>

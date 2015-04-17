@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+		<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+        <h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="style.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+        <h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+        <h:outputScript library="js" name="jquery-ui.js" target="head"/>
+        <h:outputScript library="js" name="jquery.numeric.js" target="head"/>
+        <h:outputScript library="js" name="autoNumeric-1.7.4-B.js" target="head"/>
+        <h:outputScript library="js" name="funciones.js" target="head"/>
+        <h:outputScript target="head">
+		/* <![CDATA[ */    
+            $(document).ready(function(){  
+                   
+	          if($("#frmRegistrarDatos\\:idMsgGuiaDoc").val() == "true") {
+	        	var msg = $("#frmRegistrarDatos\\:msgGuiaDoc").text();
+	        	var docsPendientes = $("#frmRegistrarDatos\\:idValidaGuiaEsc").val();
+				alert(msg + ":\n" + docsPendientes);
+	        	$("#frmRegistrarDatos\\:idMsgGuiaDoc").val("false");
+	          }
+	          
+	          if($("#frmRegistrarDatos\\:idMsgOperacionOf").val() == "true") {
+	        	var msg = $("#frmRegistrarDatos\\:msgOperacionOf").text();
+	        	alert(msg);
+	        	$("#frmRegistrarDatos\\:idMsgOperacionOf").val("false");
+	          }
+	          
+	          if($("#frmRegistrarDatos\\:idMsgOperacionLin").val() == "true") {
+	        	var msg = $("#frmRegistrarDatos\\:msgOperacionLin").text();
+	        	alert(msg);
+	        	$("#frmRegistrarDatos\\:idMsgOperacionLin").val("false");
+	          }	          
+	          	          
+            });
+         
+            function confConfirmar (form) {
+	        		var msg = $("#frmRegistrarDatos\\:confirmacion").text();
+	        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+			        var msgDocsObs = '';
+			        docsObs = $.trim(docsObs);
+			        if(docsObs != ''){
+			        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+			        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+			        }
+	        		var op = confirm(msg);
+	        		if (op) {
+	        			clickAceptar(form);
+	        		}
+	        		return op;
+	       	}
+				       	     
+           /* ]]> */
+		</h:outputScript>
+		<script type="text/javascript">
+			function mostrarTabLogPorPerfil(){
+				var perfil = $("#frmRegistrarDatos\\:descPerfilPage").val();
+	        	var descAdmin = $("#frmRegistrarDatos\\:descPerfilFiltro").val();
+	        	perfil = (perfil == "")?$("#frmRegistrarDatos\\:descPerfilPage").text():perfil;
+	        	descAdmin = (descAdmin == "")?$("#frmRegistrarDatos\\:descPerfilFiltro").text():descAdmin;
+	        	if (perfil == descAdmin) {
+	        		$("#frmRegistrarDatos\\:descPerfilTabs").show();
+	        	} else {
+	        		$("#frmRegistrarDatos\\:descPerfilTabs").hide();
+	        	}
+	        }
+		</script> 
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+        <title><h:outputText value="#{msg['com.ibm.bbva.registrarDatos.formRegistrarDatos.titulo']}"/></title>
+    </h:head>
+    <h:body onload="mostrarTabLogPorPerfil()">
+    <h:form id="frmRegistrarDatos">
+    
+		<h:inputHidden id="idMsgOperacionLin"
+			value="#{corregirExp32.msjOperacionBol}"></h:inputHidden>
+		<h:outputText
+			value="#{corregirExp32.msjOperacion}"
+			id="msgOperacionLin" style="display:none;" />
+			   
+		<h:inputHidden id="idMsgOperacionOficina"
+			value="#{corregirExp32.msjOperacionOfBol}"></h:inputHidden>
+		<h:outputText
+			value="#{corregirExp32.msjOperacionOf}"
+			id="msgOperacionOficina" style="display:none;" />
+						    
+	    <h:inputHidden value="#{detalleExpediente.clienteNatural.estadoCivil.codigo}"  id="datoCivil"></h:inputHidden> 
+		<h:inputHidden value="#{datosConyuge.mensajeOperacion}" id="msjObservacion" />
+		<h:inputHidden value="#{datosProducto2.expediente.expedienteTC.tipoOferta.codigo}" id="idTipoOferta"/>
+		    
+    	<h:outputText value="#{msg['com.ibm.bbva.corregirExpediente.formCorregirExpediente32.confirmar.confirm']}"
+    			id="confirmacion" style="display:none;"/>
+    	<h:outputText value="#{msg['com.ibm.bbva.corregirExpediente.formCorregirExpediente32.msgGuiaDoc']}"
+    			id="msgGuiaDoc" style="display:none;"/>
+    	<h:inputHidden id="idMsgGuiaDoc" value="#{corregirExp32.msgGuiaDocumentaria}"></h:inputHidden>
+        <div class="contenido">
+            <div class="cabecera">               
+                <ui:include src="/resources/common/cabecera.xhtml" />
+                <h:outputText id="descPerfilPage"  value="#{datosCabecera.empleado.perfil.descripcion}" style="display:none;"/>
+                <h:outputText id="descPerfilFiltro"  value="#{msg['com.ibm.bbva.common.perfil.administrador']}" style="display:none;"/>
+            </div>
+            <div class="cuerpo">
+                <div class="menu">
+                    <ui:include src="/resources/common/menu.xhtml" />
+                </div>
+                <div class="datos">
+                	<ui:include src="/resources/common/tabs.xhtml" />
+                	<div class="tab-expediente tab-item">
+	                	<ui:include src="/resources/common/datosGestor.xhtml" />
+						<ui:include src="/resources/common/estadoAnterior.xhtml" />
+						<ui:include src="/resources/common/detalleExpediente.xhtml" />
+						<h:panelGroup id="idPanelDatosConyuge" 
+							style="#{datosConyuge.mostrarDatosConyugePrincipal ? '':'display:none;'}" >
+								<ui:include src="/resources/common/datosConyugue.xhtml" />
+						</h:panelGroup>				
+						<ui:include src="/resources/common/datosProducto2.xhtml" />
+						<ui:include src="/resources/common/verificacionApr.xhtml" />
+						
+						<h:panelGroup id="idDocumentosReutilizables"/>
+						
+						<h:panelGroup layout="block" styleClass="bloque">
+							<h:panelGroup id="appletContentRefresh">
+								<ui:include src="/resources/common/documentoEsc.xhtml" />
+							</h:panelGroup>
+							<h:panelGroup id="idPanelDocumentos">
+								<ui:include src="/resources/common/panelDocumentos.xhtml" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<ui:include src="/resources/common/comentarios.xhtml" />
+						<ui:include src="/resources/common/observacionRechazo.xhtml" />
+						<div class="column boton-principal">
+			 					
+						    <h:commandButton value="#{msg['com.ibm.bbva.corregirExpediente.formCorregirExpediente32.confirmar']}"
+	            		                     onclick="return confConfirmar(this.form);" type="button"
+	            		                     accesskey="a"/>
+							
+	            		    <h:commandLink id="btnEjecutaApplet" 
+		    	                           action="#{corregirExp32.confirmar}"
+		    	                           class="display:none">
+		    	            </h:commandLink>    	            		                             		                     					
+						</div>
+					</div>
+					<div class="tab-ayuda-memoria tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />		
+	               		<ui:include src="/resources/common/tablaAyudaMemoria.xhtml" />
+					</div>
+					<div class="tab-historial tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />	
+               			<ui:include src="/resources/common/tablaHistorial.xhtml" />
+					</div>
+					<div class="tab-observaciones tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />
+						<ui:include src="/resources/common/tablaObservaciones.xhtml" />
+					</div>
+					<div class="tab-log tab-item" style="display:none;">
+	               		<ui:include src="/resources/common/datosHistorico.xhtml" />	
+	               		<ui:include src="/resources/common/tablaLog.xhtml" />
+					</div>
+				</div>
+            </div>
+        </div>
+    </h:form>
+    </h:body>
+</html>

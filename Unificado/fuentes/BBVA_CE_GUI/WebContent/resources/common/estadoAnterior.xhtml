@@ -1,0 +1,29 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<div>
+	<span class="titulo1">
+		<h:outputText value="#{msg['com.ibm.bbva.common.estadoAnterior.titulo']}" />
+	</span>
+</div>
+<div class="bloque datos-cabecera-muestra">
+  <span style="width: 220px;display:inline-block"> 
+	<h:outputText value="#{msg['com.ibm.bbva.common.estadoAnterior.estado']}:"	styleClass="titulo" /> 				
+    <h:outputText value="#{estadoAnterior.historial.estado.descripcion}" styleClass="etiqueta valor" />
+  </span>  
+  <span style="width: 225px;display:inline-block">
+	<h:outputText value="#{msg['com.ibm.bbva.common.estadoAnterior.usuario']}:" styleClass="titulo" />
+	<h:outputText value="#{estadoAnterior.historial.empleado.nombresCompletos}" styleClass="etiqueta valor" />
+  </span>	
+  <span style="width: 240px;display:inline-block">
+	<h:outputText value="#{msg['com.ibm.bbva.common.estadoAnterior.perfil']}:" styleClass="titulo" />
+	<h:outputText value="#{estadoAnterior.descripcionPerfil}" styleClass="etiqueta valor" />
+  </span>	
+</div>
+
+</ui:composition>

@@ -1,0 +1,32 @@
+.logo-bbva {
+    width: 200px;
+    height: 70px;
+    background-image: url("#{resource['images/bbva_logo.PNG']}");
+    background-repeat: no-repeat;
+    background-position: 0% 50%;
+    float: left; 
+}
+
+.datos-cabecera {
+    position: relative;
+    float: right;
+    width: 800px;
+    height: 75px;
+    background-color: #2266BB;
+}
+
+.datos-cabecera .titulo {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 24px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.datos-cabecera .datos-sesion span {
+    color: #FFFFFF;
+    display: inline-block;
+    padding: 0px 0px 0px 5px;
+    margin-top: 3px;
+    margin-bottom: 5px;;
+}

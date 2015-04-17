@@ -1,0 +1,249 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<script type="text/javascript">
+	
+	function eliminarItemAyudaMemoria(idAyudaMemoria) {
+		if (confirm('¿Desea eliminar el Item de Ayuda de Memoria?')) {
+			$("[id='#{tablaAyudaMemoria.htmlCodigoAyudaMemoriaEliminar.clientId}']").val(idAyudaMemoria);
+			$("[id='#{tablaAyudaMemoria.btnEliminarAyudaMemoria.clientId}']").click();
+		}
+		return false; 	
+	}
+	
+	function editarItemAyudaMemoria(idAyudaMemoria) {
+		//$('#frmRegistrarExpediente\\:txtComentAyuMem').val("");
+		//$('#frmRegularizarEscanearDocumentacion\\:txtComentAyuMem').val("");
+		var txtCom = $("textarea").filter(function() {
+	        	var txtIds = $(this).attr("name");
+	        	return txtIds.match(/^.*\:txtComentAyuMem$/);
+	        });
+	    $(txtCom).val("");
+		if (confirm('¿Desea Modificar el Item de Ayuda de Memoria?')) {
+			$("[id='#{tablaAyudaMemoria.htmlCodigoAyudaMemoriaEditar.clientId}']").val(idAyudaMemoria);
+			$("[id='#{tablaAyudaMemoria.btnEditarAyudaMemoria.clientId}']").click();
+		}
+		else{
+			$("[id='#{tablaAyudaMemoria.btnDesasociarEditarAyudaMemoria.clientId}']").click();
+		}
+		return false; 	
+		 
+	}
+
+</script>
+	<h:inputText id="codigoAyudaMemoriaEliminar" value="#{tablaAyudaMemoria.strCodigoAyudaMemoriaEliminar}" binding="#{tablaAyudaMemoria.htmlCodigoAyudaMemoriaEliminar}" style="display:none;" />
+	<h:commandButton id="btnEliminarAyudaMemoria" binding="#{tablaAyudaMemoria.btnEliminarAyudaMemoria}" style="display:none">
+		<f:ajax event="click" render="panelAyuMem" execute="@form" listener="#{tablaAyudaMemoria.eliminarItemAyudaMemoria}" />
+	</h:commandButton>
+
+	<h:inputText id="codigoAyudaMemoriaEditar" value="#{tablaAyudaMemoria.strCodigoAyudaMemoriaEditar}"  binding="#{tablaAyudaMemoria.htmlCodigoAyudaMemoriaEditar}" style="display:none;" />
+	<h:commandButton id="btnEditarAyudaMemoria" binding="#{tablaAyudaMemoria.btnEditarAyudaMemoria}" style="display:none">
+		<f:ajax event="click" render="panelAyuMem panTextArea" execute="@form" listener="#{tablaAyudaMemoria.obtenerDatoEditarAyudaMemoria}" />
+	</h:commandButton>
+	
+	<h:commandButton id="btnDesasociarEditarAyudaMemoria" binding="#{tablaAyudaMemoria.btnDesasociarEditarAyudaMemoria}" action="#{tablaAyudaMemoria.desasociarEditarAyudaMemoria}" style="display:none">
+		<f:ajax event="action" execute="@form"/>
+	</h:commandButton>
+
+
+<h:panelGroup id="panelAyuMem">
+	<h:dataTable border="1" cellpadding="0" cellspacing="0" rendered="true" id="tablaAyuMem"
+				value="#{tablaAyudaMemoria.listTabla}" var="item"
+				styleClass="tablaTask" headerClass="headerClass headerTabla1"
+				footerClass="fondo" rowClasses="uno,dos" columnClasses="text,text,text" width="100%" 
+				rows="#{tablaAyudaMemoria.filas}">
+		<h:column width="68px" nowrap="true" style="white-space: normal; word-wrap: break-word;">
+			<f:facet name="header">	
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaAyudaMemoria.rol']}" styleClass="tabla-titulo"></h:outputText>
+			</f:facet>
+			<div style="margin-left: 2px;"><h:outputText value="#{item.perfilUsuario}"></h:outputText></div>
+		</h:column>
+		<h:column width="64px" nowrap="true" style="white-space: normal; word-wrap: break-word;">
+			<f:facet name="header">
+				<h:outputText value="#{msg['com.ibm.bbva.common.tablaAyudaMemoria.usuario']}" styleClass="tabla-titulo"></h:outputText>
+			</f:facet>
+			<div style="margin-left: 2px;"><h:outputText value="#{item.codigoUsuario}"></h:outputText></div>
+		</h:column>
+		<h:column width="144px" nowrap="true" align="center" style="white-space: normal; word-wrap: break-word;">
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaAyudaMemoria.fechaHora']}"></h:outputText>
+			</f:facet>
+			<div style="margin-left: 2px;"><h:outputText value="#{item.fechaHora}"></h:outputText></div>
+		</h:column>
+		<h:column width="360px" nowrap="true" style="white-space: normal; word-wrap: break-word;">
+			<f:facet name="header">
+			<h:outputText style="text-align:center" value="#{msg['com.ibm.bbva.common.tablaAyudaMemoria.ayudaMemoria']}"></h:outputText>
+			</f:facet>
+			<div style="margin-left: 2px;"><h:outputText value="#{item.comentario}"></h:outputText></div>
+		</h:column>
+		<h:column widt="auto" style="text-align:center" rendered="#{tablaAyudaMemoria.mostrarPaneles}">
+			<f:facet name="header">
+			<h:outputText style="text-align:center" value="#{msg['com.ibm.bbva.common.tablaAyudaMemoria.eliminar']}"></h:outputText>
+			</f:facet>			
+			<h:outputText nowrap="true" style="text-align:center" render="panelAyuMem" value="#{item.colEliminar}"  />
+			<!--<h:commandButton styleClass="boton"											
+				                 rendered="#{tablaAyudaMemoria.renderedEliminarAyudaMemoria}" 
+								 image="#{resource['images:action_remove.gif']}" 
+							     onclick="return eliminarItemAyudaMemoria('#{item.idAyudaMemoria}');"/>	-->
+			<h:commandButton styleClass="boton"											
+				             rendered="#{tablaAyudaMemoria.mostrarPaneles and !item.visOpElimina}" 
+							 image="#{resource['images:action_remove.gif']}" 
+							 onclick="return confirm('¿Desea eliminar el Item de Ayuda de Memoria?');"
+							 action="#{tablaAyudaMemoria.borrarElemento(item)}">
+				<f:ajax event="action" execute="@form" render="#{tablaAyudaMemoria.renderedTablaAyudaMemoria}"/>	
+			</h:commandButton>
+		 </h:column>
+		<h:column width="auto" style="text-align:center" rendered="#{tablaAyudaMemoria.mostrarPaneles}" >
+			<f:facet name="header">
+			<h:outputText nowrap="true" style="text-align:center" value="#{msg['com.ibm.bbva.common.tablaAyudaMemoria.editar']}"></h:outputText>
+			</f:facet>
+			<h:outputText style="text-align:center" render="panelAyuMem panTextArea" value="#{item.colEditar}"  />
+			<h:commandButton onclick="return editarItemAyudaMemoria('#{item.idAyudaMemoria}');"						
+							 rendered="#{tablaAyudaMemoria.mostrarPaneles and !item.visOpModificar}" 
+							 image="#{resource['images:action_editar.gif']}"/>
+		</h:column>
+
+	</h:dataTable>
+	<h:outputText styleClass="paginacion" value="#{msg['com.ibm.bbva.paginacion.pagina']} #{tablaAyudaMemoria.paginaActual} #{msg['com.ibm.bbva.paginacion.de']} #{tablaAyudaMemoria.totalPaginas}"/>
+</h:panelGroup>
+<h:panelGroup styleClass="botones-paginacion">
+	<h:commandButton actionListener="#{tablaAyudaMemoria.inicio}" immediate="true"
+				value="#{msg['com.ibm.bbva.paginacion.inicio']}" id="btnInicioAyuMem">
+		<f:ajax event="click" render="panelAyuMem" />
+	</h:commandButton>
+	
+	<h:commandButton actionListener="#{tablaAyudaMemoria.anterior}" immediate="true"
+				value="#{msg['com.ibm.bbva.paginacion.anterior']}" id="btnAnteriorAyuMem">
+		<f:ajax event="click" render="panelAyuMem" />
+	</h:commandButton>
+	
+	<h:commandButton actionListener="#{tablaAyudaMemoria.siguiente}" immediate="true"
+				value="#{msg['com.ibm.bbva.paginacion.siguiente']}" id="btnSiguienteAyuMem">
+		<f:ajax event="click" render="panelAyuMem" />
+	</h:commandButton>
+	
+	<h:commandButton actionListener="#{tablaAyudaMemoria.fin}" immediate="true" 
+				value="#{msg['com.ibm.bbva.paginacion.fin']}" id="btnFinAyuMem">
+		<f:ajax event="click" render="panelAyuMem" />
+	</h:commandButton>
+</h:panelGroup>
+<h:panelGroup style="#{tablaAyudaMemoria.mostrarPaneles ? '':'display:none;'}">
+<div class="bloque" style="margin-top:40px;">
+	<script type="text/javascript">
+	/* <![CDATA[ */
+			var ejecutando = false;
+			function completo (event) {
+				if (event.status == 'success') {
+					ejecutando = false;
+					var txtCom = $("textarea").filter(function() {
+				        	var txtIds = $(this).attr("name");
+				        	return txtIds.match(/^.*\:txtComentAyuMem$/);
+				        });
+				    $(txtCom).val("");
+			    }
+			}
+			function iniciar () {
+				//var valorTexto = ($('#frmRegistrarExpediente\\:txtComentAyuMem').val() == null || $('#frmRegistrarExpediente\\:txtComentAyuMem').val() == "undefined") ? $('#frmRegularizarEscanearDocumentacion\\:txtComentAyuMem').val() : $('#frmRegistrarExpediente\\:txtComentAyuMem').val();
+				var valorTexto = '';
+				var txtCom = $("textarea").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:txtComentAyuMem$/);
+			        });
+			    valorTexto = $(txtCom).val();
+				if(valorTexto == ''){
+					alert("Debe ingresar el texto");
+					return false;
+				}
+				else if($.trim(valorTexto).length > 500){ //I8 no soporta trim(), se usa funcion de jQuery en su lugar
+					alert("El texto no debe superar el tama" + String.fromCharCode(241) + "o m" + String.fromCharCode(225) + "ximo de 500 caracteres");
+					return false;
+				}	
+				else{
+					if (ejecutando) {
+						return false;
+					} else {
+						ejecutando = true;
+						return true;
+					}
+				}
+			}
+			
+	        $(document).ready(function(){
+	        	var num_caracteres_permitidos = 500;
+		        var txtCom = $("textarea").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:txtComentAyuMem$/);
+			        });
+	            $(txtCom).keypress(function(event){
+	            	var key = event.which;
+	            	if(key >= 33 || key == 13) {
+						var length = this.value.length;
+						if(length >= num_caracteres_permitidos) {
+							event.preventDefault();
+						}
+					}
+				});
+	        });
+	        
+	        function validaAyudaMemoria() {
+	        	var num_caracteres_permitidos = 500;
+	        	
+	        	var txtCom = $("textarea").filter(function() {
+		        	var txtIds = $(this).attr("name");
+		        	return txtIds.match(/^.*\:txtComentAyuMem$/);
+		        });
+	        	
+	            $(txtCom).keypress(function(event){
+	            	var key = event.which;
+	            	if(key >= 33 || key == 13) {
+						var length = this.value.length;
+						if(length >= num_caracteres_permitidos) {
+							event.preventDefault();
+						}
+					}
+				});
+	        }
+	        
+	        function validarPegado(e, campo){
+	        	num_caracteres_permitidos = 500;
+	        	if (e.button == 2 || e.ctrlKey) {
+	        		num_caracteres = campo.value.length;
+	        		contenido = $.trim(campo.value);
+	        		if(num_caracteres >= num_caracteres_permitidos) {
+	        			alert("El texto no debe superar el tama" + String.fromCharCode(241) + "o m" + String.fromCharCode(225) + "ximo de 500 caracteres");
+	        			campo.value = contenido.substr(0,250);
+	        		}      		
+	        	}
+	        }
+    /* ]]> */
+    </script>
+    <div class="contenido-bloque">
+        <span class="columna" style="width:100%">
+            <div class="titulo titulo-espaciado">
+               <h:outputText value="#{msg['com.ibm.bbva.common.tablaAyudaMemoria.titulo']}"/>
+            </div> 
+            <div>
+            	<h:panelGroup id="panTextArea">
+                	<h:inputTextarea value="#{tablaAyudaMemoria.ayudaMemoria.comentario}" style="width:750px;" 
+                			rows="5" id="txtComentAyuMem"  onkeypress="validaAyudaMemoria()"
+                			onkeydown="validarPegado(event, this)" onmousedown="validarPegado(event, this)"/>
+                </h:panelGroup>
+			</div>
+        </span>
+    </div>
+</div>
+<div class="column boton-principal" style="width:100%;">
+	<h:commandButton value="#{msg['com.ibm.bbva.common.tablaAyudaMemoria.aceptar']}"
+		actionListener="#{tablaAyudaMemoria.ingresarComentario}" immediate="true"
+		id="btnIngCom" onclick="return iniciar()">
+		<f:ajax render="panelAyuMem" onevent="completo" execute="@form" />
+	</h:commandButton>
+
+</div>
+</h:panelGroup>
+
+</ui:composition>

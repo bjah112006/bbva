@@ -1,0 +1,214 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <f:verbatim>
+		<script type="text/javascript" language="javascript">
+			/*var compSel = null;
+			var sel = null;*/
+			function cambiarEstadoCorreoSeleccionado (comp) {
+			
+				var opcion = $(comp).attr('checked');    
+				/*if ($(comp).is(':checked')) {
+				aaaaa
+					if (compSel!=null) {
+					AAAA
+						$(compSel).attr('checked', false);
+						
+					}
+					compSel = comp;
+				} else {
+					compSel = null;
+				}*/
+				$(".seleccionar").each(function() {
+					$(this).attr('checked', false);
+				});
+			
+				$(comp).attr('checked', opcion);
+			}
+		</script>
+	    </f:verbatim>
+    
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg" />
+
+<div class="bloque">
+		<div class="contenido-bloque">
+			<span class="columna" style="width: 300px"> 
+				<h:panelGroup
+					styleClass="titulo">
+					<h:outputText id="idNombrePagina" value="Mantenimiento - Correo" />
+					<h:outputText value=" " />
+				</h:panelGroup> 
+			</span>
+		</div>
+		<div class="contenido-bloque">
+			<span class="columna" style="width: 90px"> 
+				<h:outputText
+					value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.producto']}"
+					styleClass="etiqueta" /> 
+			</span> 
+			<span class="columna" style="width: 150px"> 
+				<h:selectOneMenu id="cmbProducto"
+					value="#{buscarCorreo.productoSeleccionado}" 
+					style="width:205px;" styleClass="valor-componente">
+					<f:selectItems value="#{buscarCorreo.tiposProducto}" />
+					<f:ajax event="change" render="cmbPerfil cmbTarea"
+						execute="@form" listener="#{buscarCorreo.limpiarPerfilTarea}" />
+				</h:selectOneMenu> 
+			</span>
+		</div>
+		<div class="contenido-bloque">
+			<span class="columna" style="width: 90px"> 
+				<h:outputText
+					value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.perfil']}"
+					styleClass="etiqueta" /> 
+			</span> 
+			<span class="columna" style="width: 150px"> 
+				<h:selectOneMenu id="cmbPerfil"
+					value="#{buscarCorreo.perfilSeleccionado}" 
+					style="width:205px;" styleClass="valor-componente">
+					<f:selectItems value="#{buscarCorreo.tiposPerfil}" />
+					<f:ajax event="change" render="cmbTarea"
+						execute="@form" listener="#{buscarCorreo.buscarTarea}" />
+				</h:selectOneMenu> 
+			</span>
+		</div>
+		<div class="contenido-bloque">
+			<span class="columna" style="width: 90px"> 
+				<h:outputText
+					value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.tarea']}"
+					styleClass="etiqueta" /> 
+			</span> 
+			<span class="columna" style="width: 150px"> 
+				<h:selectOneMenu id="cmbTarea"
+					value="#{buscarCorreo.tareaSeleccionada}" required="true"
+					style="width:205px;" styleClass="valor-componente" immediate="true">
+					<f:selectItems value="#{buscarCorreo.tiposTareas}" />
+				</h:selectOneMenu> 
+			</span>
+			<h:message for="cmbTarea" errorClass="mensaje-error"/>
+		</div>
+		<div style="width: 790px; overflow-x: auto; ">
+			<h:panelGroup id="panelBotones">
+				<div class="contenido-bloque">
+					<span class="columna" style="width: 62px"> 
+						<h:commandButton
+							value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.buscar']}"
+							action="#{buscarCorreo.buscar}"/>
+					</span> 
+					<span class="columna" style="width: 65px"> 
+						<h:commandButton id="limpiarbr"
+							value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.limpiar']}"
+							styleClass="boton" action="#{buscarCorreo.limpiar}" />
+					</span>
+				</div>
+			</h:panelGroup>
+		</div>
+		
+		<div  style="width: 775px; overflow-x: auto; overflow-y: auto;">
+			<h:panelGroup id="panelConsultaCorreo">
+				<h:dataTable border="1" styleClass="tablaTask" style="border-collapse:collapse;" 
+					columnClasses="text,text,text" headerClass="headerClass headerTabla1" rendered="true" 
+					rowClasses="uno,dos" id="idTablaEnvioCorreo" 
+					value="#{buscarCorreo.listEnvioCorreo}" var="item" footerClass="fondo"
+					rows="#{buscarCorreo.numeroRegistro}" binding="#{buscarCorreo.dataTable}" >
+					<h:column width="5%" align="center">
+						<f:facet name="header">
+							<h:outputText value="Sel."></h:outputText>
+						</f:facet>
+						<h:selectBooleanCheckbox id="idSelect" value="#{item.seleccion}" styleClass="seleccionar" onclick="cambiarEstadoCorreoSeleccionado(this);">
+							<f:ajax event="click" execute="@form" render="eliminarbr"
+								listener="#{buscarCorreo.cargarCorreos(item.idDatosCorreo,item.seleccion)}" />
+						</h:selectBooleanCheckbox>
+					</h:column>					
+					<h:column width="15%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.tarea']}"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.tarea}" styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.accion']}"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.accion}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.asunto']}"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.asunto}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%">
+						<f:facet name="header">
+							<h:outputText escape="true"
+								value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.cuerpo']}"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.cuerpo}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.producto']}"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.producto}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%" align="center">
+						<f:facet name="header">
+							<h:outputText
+								value="Flag Activo"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:selectBooleanCheckbox id="idFlgActivo" value="#{item.flagActivo}" disabled="true">
+						</h:selectBooleanCheckbox>
+				    </h:column>
+					<f:facet name="footer">
+			            <div class="espacios-etiqueta2">
+			                <span class="columna" style="width:150px">
+			                	<h:panelGroup layout="block" style="padding:5px 10px;">
+			                   		<h:outputText value="#{buscarCorreo.numRegistros}" styleClass="etiqueta"/>
+			                   	</h:panelGroup>	
+			                </span>
+			                <span class="columna" style="width:150px">			
+								<h:panelGroup layout="block" style="padding:5px 10px;">
+									<h:commandButton id="agregarNuevo" action="#{buscarCorreo.agregar}"
+											value="Agregar" styleClass="boton"/>
+									<h:commandButton id="actualizar" action="#{buscarCorreo.editar}"
+										value="Actualizar" styleClass="boton"/>
+									<h:commandButton id="cancelarbr" value="Cancelar"
+										action="#{buscarCorreo.cancelar}" styleClass="boton" />
+									<h:commandButton id="eliminarbr" value="Eliminar" 
+										disabled="#{buscarCorreo.habBotonEliminar}"
+										onclick="return confirm('¿Desea eliminar el registro seleccionado?');" 
+										action="#{buscarCorreo.eliminar}" styleClass="boton"/>
+									<h:commandButton value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.btnAnterior']}"
+										actionListener="#{buscarCorreo.pagePrevious}"  styleClass="boton"
+										disabled="#{buscarCorreo.dataTable.first == 0}" />
+									<h:commandButton value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.btnSiguiente']}"
+										actionListener="#{buscarCorreo.pageNext}"  styleClass="boton"
+										disabled="#{buscarCorreo.dataTable.first + buscarCorreo.dataTable.rows >= buscarCorreo.dataTable.rowCount}" />
+								</h:panelGroup>
+			                </span>                              
+			            </div>				
+					</f:facet>
+				</h:dataTable>
+			</h:panelGroup>
+		</div>
+		<h:message for="idTablaEnvioCorreo" errorClass="mensaje-error"/>
+	</div>
+</ui:composition>

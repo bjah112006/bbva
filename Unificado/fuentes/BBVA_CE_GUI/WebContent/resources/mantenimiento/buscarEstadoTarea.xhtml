@@ -1,0 +1,98 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+	    
+    <h:panelGrid styleClass="bloque">
+		<h:panelGroup styleClass="titulo">
+			<h:outputText id="nombreTablaOTX"  
+				value="Mantenimiento - Estado del Expediente" />			
+			<h:outputText value=" " />
+		</h:panelGroup>
+    	
+    	<h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+		  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+		  <tr><h:outputText value=" " /></tr>
+             </table>				
+		</h:panelGroup>
+    	
+	<h:panelGroup id="panelTablaET">
+			<h:dataTable border="1" cellpadding="0" cellspacing="0"
+						 id="tablaBandejaHist" style="border-collapse:collapse;"
+						 rendered="#{not empty consultarTabla.listaEsTarea}"
+						value="#{consultarTabla.listaEsTarea}" var="item"
+						styleClass="tablaTask" headerClass="headerClass headerTabla1"
+						footerClass="fondo" rows="10" binding="#{consultarTabla.tablaBinding}">				 
+					<h:column nowrap="true"   width="10%">
+						<f:facet name="header">
+								<h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.estado']}" styleClass="tabla-titulo"/>
+						</f:facet>
+						<h:outputText id="idEstado" value="#{item.estado}" style="text-align:left" ></h:outputText>
+					</h:column>		 						 
+					<h:column nowrap="true" width="10%">
+						<f:facet name="header">
+								<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaPend.tarea']}" styleClass="tabla-titulo"/>
+						</f:facet>
+						<h:outputText value="#{item.tarea}" style="text-align:left"></h:outputText>
+					</h:column>				 					
+			</h:dataTable>									 
+	</h:panelGroup>	
+ 	 <h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+		  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+		  <tr><h:outputText value=" " /></tr>
+             </table>				
+		</h:panelGroup>
+
+		<h:panelGroup>
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td align="left">
+				<h:commandButton id="agregar" action="#{consultarTabla.agregar}"
+					value="Agregar" styleClass="boton"
+					disabled="true" />
+				<h:commandButton id="actualizar" action="#{consultarTabla.editar}"
+					value="Actualizar" styleClass="boton"
+					disabled="true" />
+				<h:commandButton id="eliminar" action="#{consultarTabla.eliminar}"
+					onclick="return confirmarElimina(this);"
+					value="Eliminar" styleClass="boton"
+					disabled="true" />
+				<h:commandButton id="cancelar" action="#{consultarTabla.cancelarEstadoTarea}"
+					value="Cancelar" styleClass="boton" />
+				
+				<h:commandButton value="&#60;&#60;anterior"
+				        styleClass="boton" id="button112"
+						disabled="#{consultarTabla.tablaBinding.first == 0}"
+						action="#{consultarTabla.pagePrevious}"
+						rendered="#{not empty consultarTabla.listaEsTarea}"/>
+				<h:commandButton value="siguiente&#62;&#62;" 
+				    styleClass="boton"
+					id="button221"
+					rendered="#{not empty consultarTabla.listaEsTarea}"
+					disabled="#{consultarTabla.tablaBinding.first + consultarTabla.tablaBinding.rows >= consultarTabla.tablaBinding.rowCount}"
+					action="#{consultarTabla.pageNext}"/>
+			</td>
+		</tr>
+		</table>
+		</h:panelGroup>
+
+           <h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+		  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+		  <tr><h:outputText value=" " /></tr>
+             </table>				
+		</h:panelGroup>
+           <h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+		  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+		  <tr><h:outputText value=" " /></tr>
+             </table>				
+		</h:panelGroup>
+		<h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+		    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+		    <tr><td>
+				<h:messages styleClass="mensaje-error" globalOnly="true"></h:messages>
+			</td></tr>
+			</table>
+		</h:panelGroup>
+</h:panelGrid>
+</ui:composition>

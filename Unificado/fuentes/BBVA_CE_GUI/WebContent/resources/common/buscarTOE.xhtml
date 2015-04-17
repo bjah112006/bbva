@@ -1,0 +1,173 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+<script type="text/javascript">
+/* <![CDATA[ */
+		$(document).ready(function(){
+			var existeError = $("#formGeneraReporteTOE\\:existeErrorGenerar").val();
+			if (existeError=='false') {
+				var urlRep ="../ReporteTCCSVServlet?" +
+					"accion=REPORTETOE" + 
+					"&fechaInicio="+$("#formGeneraReporteTOE\\:fecInicial").val() +
+					"&fechaFin="+$("#formGeneraReporteTOE\\:fecFinal").val() +
+					"&codProducto="+$("#formGeneraReporteTOE\\:selProducto").val() +
+					"&codPerfil="+$("#formGeneraReporteTOE\\:selPerfil").val() +
+					"&codTipoOferta="+$("#formGeneraReporteTOE\\:selTipoOferta").val() +
+					"&codEstado="+$("#formGeneraReporteTOE\\:selEstado").val() +
+					"&codTerritorio="+$("#formGeneraReporteTOE\\:selTerritorio").val() +
+					"&codOficina="+$("#formGeneraReporteTOE\\:selOficina").val() +
+					"&tipoReporteTOE="+$("#formGeneraReporteTOE\\:tipoReporte").val();
+				
+				document.location.href = urlRep;
+			}
+		});
+/* ]]> */
+</script>
+<div class="bloque">
+    <div class="titulo titulo-espaciado">
+    	<h:inputHidden id="existeErrorGenerar" value="#{reporteTOE.existeErrorGenerar}" />
+		<h:inputHidden id="tipoReporte" value="#{buscarTOE.paramTipoReporteApplet}" />
+    </div>
+    <div class="titulo titulo-espaciado">
+    	<h:outputText value="#{msg['com.ibm.bbva.common.reporteTOE.titulo']}"/>
+    </div>
+    <div class="contenido-bloque">
+        <span class="columna" style="width:350px">
+            <div class="campo-espaciado">
+			 <h:panelGroup id="idFechaInicio">            
+              <span class="columna" style="width:280px">
+                 <span class="columna" style="width:130px">
+                    <h:outputText value="#{msg['com.ibm.bbva.common.reporteTOE.fechaInicio']}:" class="etiqueta "/>
+                 </span>
+                 <span class="columna" style="width:110px">
+                    <h:inputText id="fecInicial" value="#{buscarTOE.fechaInicio}" style="width80px;" 
+                		         class="txt-resaltado-2 formatoFecha" maxlength="10" onblur="validarFormatoFechaInicio(); validarFechaInicio();">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        
+                    </h:inputText>
+                 </span>
+                 <h:message for="fecInicial" errorClass="mensaje-error"/>
+               </span>  
+               </h:panelGroup> 
+            </div> 
+            <div class="campo-espaciado">
+             	<h:panelGroup id="idPanelProducto">
+             		<span class="columna" style="width:130px">
+                  		<h:outputText value="#{msg['com.ibm.bbva.common.reporteTOE.producto']}:" styleClass="etiqueta"/>
+               		</span>
+               		<span class="columna" style="width:90px">
+                <h:selectOneMenu value="#{buscarTOE.codProducto}"
+                 style ="width:180px;" styleClass="txt-resaltado-2 valor-componente" id="selProducto" >
+                    <f:selectItems value="#{buscarTOE.listaProducto}"/>
+                </h:selectOneMenu>                
+                <h:message for="selProducto" errorClass="mensaje-error"/>
+               		</span>
+             	</h:panelGroup>            
+            </div>                       
+             <div class="campo-espaciado">
+              <h:panelGroup id="idPanelPerfil">
+               <span class="columna" style="width:130px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.reporteTOE.perfil']}:" class="etiqueta "/>
+               </span>
+               <span class="columna" style="width:90px">
+                  <h:selectOneMenu value="#{buscarTOE.codPerfil}" style ="width:180px;"
+                                  styleClass="txt-resaltado-2" id="selPerfil"  >
+                      <f:selectItems value="#{buscarTOE.listaPerfil}"/>
+                      <f:ajax event="change" render="idEstado idPanelTipoOferta" execute="@form" listener="#{buscarTOE.listarEstados}"/>
+                  </h:selectOneMenu>
+                  <h:message for="selPerfil" errorClass="mensaje-error"/>
+               </span>
+             </h:panelGroup>
+            </div>                               
+        </span>
+        <span class="columna" style="width:350px">
+            <div class="campo-espaciado">
+              <span class="columna" style="width:280px">
+                 <span class="columna" style="width:100px">
+                    <h:outputText value="#{msg['com.ibm.bbva.common.reporteTOE.fechaFin']}:" class="etiqueta "/>
+                 </span>
+                 <span class="columna" style="width:110px">
+                    <h:inputText id="fecFinal" value="#{buscarTOE.fechaFin}" style="width:80px;" 
+                		         class="txt-resaltado-2 formatoFecha" maxlength="10" onblur="validarFormatoFechaFin(); validarFechaFin();">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                       <!-- <f:ajax event="change" render="panelAppletTOE" execute="@form" listener="#{buscarTOE.actVistaGenerar}"/> --> 
+                    </h:inputText>
+                 </span>
+                 <h:message for="fecFinal" errorClass="mensaje-error"/>
+               </span>   
+            </div> 
+            
+            <div class="campo-espaciado">
+             <h:panelGroup id="idPanelTipoOferta">
+               <span class="columna" style="width:100px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.reporteTOE.tipoOferta']}:" class="etiqueta "/>
+               </span>
+               <span class="columna" style="width:90px">
+                  <h:selectOneMenu value="#{buscarTOE.codTipoOferta}" style ="width:180px;"
+                                  class="txt-resaltado-2" id="selTipoOferta"  >
+                      <f:selectItems value="#{buscarTOE.listaTipoOferta}"/>
+					  <f:ajax event="change" render="idPanelTipoOferta" execute="@form" listener="#{buscarTOE.actVistaGenerar}"/>                      
+                  </h:selectOneMenu>
+                 <h:message for="selTipoOferta" errorClass="mensaje-error"/>
+               </span>
+              </h:panelGroup>
+            </div> 
+            
+             <div class="campo-espaciado">
+	             <h:panelGroup id="idEstado">
+		               <span class="columna" style="width:100px">
+		                  <h:outputText value="#{msg['com.ibm.bbva.common.reporteTOE.estado']}:" class="etiqueta "/>
+		               </span>
+		               <span class="columna" style="width:90px">
+		                  <h:selectOneMenu value="#{buscarTOE.codEstado}" style ="width:180px;"
+		                                  styleClass="txt-resaltado-2" id="selEstado"  >
+		                      <f:selectItems value="#{buscarTOE.listaEstado}"/>
+		                      <f:ajax event="change" render="idEstado" execute="@form" listener="#{buscarTOE.seteoEstado}"/>
+		                  </h:selectOneMenu>
+		                  <h:message for="selEstado" errorClass="mensaje-error"/>
+		               </span>
+                </h:panelGroup>
+            </div> 
+            
+             <!-- 
+             
+            <div class="campo-espaciado">
+             <h:panelGroup id="idTerritorio">
+               <span class="columna" style="width:100px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.reporteTOE.territorio']}:" class="etiqueta "/>
+               </span>
+               <span class="columna" style="width:90px">
+                  <h:selectOneMenu value="#{buscarTOE.codTerritorio}" style ="width:180px;"
+                                  class="txt-resaltado-2" id="selTerritorio"  >
+                      <f:selectItems value="#{buscarTOE.listaTerritorio}"/>
+                      <f:ajax event="change" render="idOficina" execute="@form" listener="#{buscarTOE.listarOficinas}"/>
+                  </h:selectOneMenu>
+                   <h:message for="selTerritorio" errorClass="mensaje-error"/>
+               </span>
+               </h:panelGroup>
+            </div>    
+            
+           <div class="campo-espaciado">
+             <h:panelGroup id="idOficina">
+               <span class="columna" style="width:100px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.reporteTOE.oficina']}:" class="etiqueta "/>
+               </span>
+               <span class="columna" style="width:90px">
+                  <h:selectOneMenu value="#{buscarTOE.codOficina}" style ="width:180px;"
+                                  class="txt-resaltado-2" id="selOficina"  >
+                      <f:selectItems value="#{buscarTOE.listaOficina}"/>
+                  </h:selectOneMenu>
+                   <h:message for="selOficina" errorClass="mensaje-error"/>
+               </span>
+               </h:panelGroup>
+            </div> 
+            
+            --> 
+           
+        </span>
+    </div>
+
+</div>
+</ui:composition>

@@ -1,0 +1,182 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<div id="divBloque4_1" class="bloque"> 
+       
+    <div class="contenido-bloque">
+    	<span class="columna" style="width:310px">
+	       <span class="columna" style="width:300px">
+            <div class="campo-espaciado" style="margin-bottom: 19px;">
+             	<span class="columna" style="width:90px">
+	            	<h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaAsig.tipoFecha']}:" styleClass="etiqueta"/>
+	            </span>
+	            <span class="columna" style="width:150px">
+		           <h:selectOneMenu value="#{buscarBandejaAsig.tipoFechaSeleccionado}" required="true" 
+		            		         style ="width:205px;" styleClass="valor-componente" immediate="true">
+						    <f:selectItems value="#{buscarBandejaAsig.tiposFechas}"/>
+		            </h:selectOneMenu>  
+				</span>		                       
+  
+            </div>
+       
+	        <div class="campo-espaciado" >
+		        <span class="columna" style="width:90px">
+		            <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaAsig.rol']}:" styleClass="etiqueta"/>
+		        </span>	  
+		        <span class="columna" style="width:150px"> 
+		            <h:selectOneMenu value="#{buscarBandejaAsig.rolSeleccionado}" required="true"
+		            		             style ="width:205px;" styleClass="valor-componente" onkeypress="eventoEnter(event);">
+						    <f:selectItems value="#{buscarBandejaAsig.roles}"/>
+						    <f:ajax 
+						    	event="change" 
+						    	render="idOficinasBuscar idUsuariosBuscar idUsuariosBuscar2 idTareaBuscar idEstadoBuscar tablaBandejaAsig idUsuAsigSeleccinado" 
+						    	listener="#{buscarBandejaAsig.buscarRol}"/>
+		            </h:selectOneMenu>	
+		        </span>	                    
+	         </div>
+	         <div class="campo-espaciado"  >
+		         <span class="columna" style="width:90px">
+		            <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaAsig.tarea']}:" styleClass="etiqueta"/>
+		         </span>	    
+		         <span class="columna" style="width:150px">   
+		            <h:selectOneMenu id="idTareaBuscar" value="#{buscarBandejaAsig.tareaSeleccionada}" required="true"
+		            		             style ="width:205px;" styleClass="valor-componente" onkeypress="eventoEnter(event);">
+						    <f:selectItems value="#{buscarBandejaAsig.tareas}"/>
+						    <f:ajax event="change" render="idEstadoBuscar" execute="@form" listener="#{buscarBandejaAsig.buscarEstado}"/>
+		            </h:selectOneMenu>	
+		         </span>	                                    
+	          </div>
+	          <div class="campo-espaciado" >
+		          <span class="columna" style="width:90px">
+		              <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaAsig.estado']}:" styleClass="etiqueta"/>
+		          </span>    
+		          <span class="columna" style="width:150px">    
+		              <h:selectOneMenu id="idEstadoBuscar" value="#{buscarBandejaAsig.estadoSeleccionado}" required="true"
+		            		             style ="width:205px;" styleClass="valor-componente" onkeypress="eventoEnter(event);">
+						    <f:selectItems value="#{buscarBandejaAsig.estados}"/>
+		              </h:selectOneMenu>
+		          </span>    	                              
+	          </div>	 
+	            	            
+	            <div class="campo-espaciado espacios-etiqueta">
+	                                
+	            </div>
+	            <div class="campo-espaciado espacios-etiqueta" style="width: 140px;">
+		            <span class="columna" style="width:150px"> 
+		                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaAsig.asignacionT']}" styleClass="etiqueta"/>
+		            </span>                                    
+	            </div>     
+	        </span>
+	    
+	        <div class="campo-espaciado espacios-etiqueta">
+		        <span class="columna" style="width:300px"> 
+		            <h:panelGrid columns="2" style="margin: 7px 0px; border: 1px solid; border-color: #999999; padding: 7px;">
+		                <h:panelGroup styleClass="campo-espaciado espacios-etiqueta">
+		                   <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaAsig.asignacionL']}:" styleClass="etiqueta"/>
+		                </h:panelGroup> 
+		                <h:panelGroup id="idAsignarUsuario" styleClass="campo-espaciado">
+		                   <h:selectOneMenu value="#{buscarBandejaAsig.usuarioAsigSeleccionado}" required="true" id="idUsuAsigSeleccinado"
+		            		             style ="width:205px;" styleClass="valor-componente">
+						      <f:selectItems value="#{buscarBandejaAsig.usuariosAsig}"/>
+						      <f:ajax event="change" render="asigForm" execute="@form" listener="#{tablaBandejaAsig.validarCantExpSeleccionados}"/>
+		                   </h:selectOneMenu>
+		                </h:panelGroup>
+		            </h:panelGrid>	
+		        </span>            
+	        </div>
+
+        </span>
+        
+        <span class="columna" style="width:420px">
+            <h:panelGrid columns="4">
+	            <h:panelGroup class="campo-espaciado espacios-etiqueta" >
+	                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaAsig.fechaInicio']}:" styleClass="etiqueta"/>                                
+	            </h:panelGroup>
+	            <h:panelGroup class="campo-espaciado">
+	               <h:inputText id="fecInicio" value="#{buscarBandejaAsig.fechaInicio}" style="width:80px;" class="formatoFecha" maxlength="10"
+	               onblur="validarFormatoFechaInicio(); validarFechaInicio();">
+	                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+	               </h:inputText>
+	            </h:panelGroup>
+	            <h:panelGroup class="campo-espaciado espacios-etiqueta">
+                   <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaAsig.fechaFin']}:" styleClass="etiqueta"/>                                
+                </h:panelGroup>
+	            <h:panelGroup class="campo-espaciado">                
+	               <h:inputText id="fecFin" value="#{buscarBandejaAsig.fechaFin}" style="width:80px;" class="formatoFecha" maxlength="10"
+	               onblur="validarFormatoFechaFin(); validarFechaFin();">
+	                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+	               </h:inputText>
+	            </h:panelGroup>
+	        </h:panelGrid>   
+	        <span class="columna" style="width:90px">
+	        	<div class="campo-espaciado espacios-etiqueta" style="#{buscarBandejaAsig.empleado.perfil.flagAdministracion == '1' ? '':'display:none;'}" >
+	                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaAsig.oficina']}:" styleClass="etiqueta"/>              
+	            </div>
+	            <div class="campo-espaciado espacios-etiqueta" style="#{!buscarBandejaAsig.mostrarXusuario ? '':'display:none;'}" >
+	                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaAsig.usuario']}:" styleClass="etiqueta"/>              
+	            </div>
+	            <div class="campo-espaciado espacios-etiqueta">
+	                <h:outputText value="" styleClass="etiqueta"/>                                
+	            </div>
+	        </span>	         
+	        <span class="columna" style="width:300px">
+	        
+	        	<h:panelGroup id="idOficinasBuscar" layout="block" style="position: relative; height:12px !important" styleClass="campo-espaciado espacios-etiqueta" rendered="#{buscarBandejaAsig.empleado.perfil.flagAdministracion == '1'}" >
+	               <h:selectOneMenu id="selectIdOficinasBuscar" value="#{buscarBandejaAsig.oficinaSeleccionada}" 
+	            		             style ="width:287px; position: absolute;" styleClass="valor-componente" onkeypress="eventoEnter(event);">
+					    <f:selectItems value="#{buscarBandejaAsig.oficinas}" />
+					    <f:ajax event="change" render="idUsuariosBuscar idUsuariosBuscar2 idTareaBuscar idEstadoBuscar tablaBandejaAsig idUsuAsigSeleccinado idOficinasBuscar" 
+					    	listener="#{buscarBandejaAsig.buscarOficina}"/>
+	               </h:selectOneMenu>           
+	            </h:panelGroup>
+	            
+	            <h:panelGroup id="idUsuariosBuscar" layout="block" styleClass="campo-espaciado espacios-etiqueta" style="#{!buscarBandejaAsig.mostrarXusuario ? '':'display:none;'}" >
+	               <h:selectOneMenu id="selectUsuario2" value="#{buscarBandejaAsig.usuarioSeleccionado2}" required="true"
+	            		             style ="width:287px;" styleClass="valor-componente" immediate="true" >
+					    <f:selectItems value="#{buscarBandejaAsig.usuarios}"/>
+	               </h:selectOneMenu>           
+	            </h:panelGroup>
+	            <div class="campo-espaciado espacios-etiqueta" style="width: 210px; margin-left: -3px;">
+	                <h:selectOneRadio value="#{buscarBandejaAsig.oficina}" style="#{!buscarBandejaAsig.mostrarXusuario ? '':'display:none;'}" >
+	   	              <f:selectItem itemValue="0" itemLabel="Lima" />
+	   	              <f:selectItem itemValue="1" itemLabel="Provincia" />
+	   	              <f:selectItem itemValue="2" itemLabel="Todos"/>
+	                </h:selectOneRadio>
+	            </div>
+	        </span>
+	            <div class="campo-espaciado" style="#{buscarBandejaAsig.mostrarXusuario ? '':'display:none;'}">
+				<span class="columna" style="width:90px">
+		        	<h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaAsig.usuario']}:" styleClass="etiqueta"/>
+		        </span>	
+		        <span class="columna" style="width:150px">
+		            <h:selectOneMenu id="idUsuariosBuscar2" value="#{buscarBandejaAsig.usuarioSeleccionado}" required="true"
+		            		             style ="width:287px;" styleClass="valor-componente" immediate="true" onkeypress="eventoEnter(event);">
+						    <f:selectItems value="#{buscarBandejaAsig.usuarios}"/>
+		            </h:selectOneMenu>	  
+		        </span>        	      
+	        </div>
+	        <h:panelGrid columns="2" style="margin: 7px 0px; padding-left: 0px; padding-top: 10px; margin-top:-15px;">
+	            <h:panelGroup class="campo-espaciado espacios-etiqueta" >
+	                <!--<h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaAsig.codExpediente']}:" styleClass="etiqueta"/>-->
+	                <span class="etiqueta" style="
+					    width: 82px;
+					    display: inline-block;
+					    word-wrap: break-word;
+					">Cod.<br/> Expediente:</span>                          
+	            </h:panelGroup>
+	            <h:panelGroup class="campo-espaciado">        
+	                <h:inputText id="idCodExpediente" value="#{buscarBandejaAsig.codigoExpediente}" styleClass="valor soloNumeros" style="width: 200px;"
+	                onkeypress="eventoEnter(event);"/>                
+	            </h:panelGroup>               
+	        </h:panelGrid>
+	        
+        </span>
+    </div>
+</div>
+
+</ui:composition>

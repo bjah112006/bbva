@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="3.0"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	<display-name>BBVA_CE_GUI</display-name>
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+		<enabled>true</enabled>
+		<async-supported>false</async-supported>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.faces</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ReporteCVSServlet</servlet-name>
+		<url-pattern>/ReporteCVSServlet</url-pattern>
+	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>index.faces</welcome-file>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+	<!--
+	<security-constraint>
+		<display-name>loginUserConstraint</display-name>
+		<web-resource-collection>
+			<web-resource-name>loginUserCollection</web-resource-name>
+			<url-pattern>/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>PUT</http-method>
+			<http-method>HEAD</http-method>
+			<http-method>TRACE</http-method>
+			<http-method>POST</http-method>
+			<http-method>DELETE</http-method>
+			<http-method>OPTIONS</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<description>authenticated user</description>
+			<role-name>loginUser</role-name>
+		</auth-constraint>
+		<user-data-constraint>
+			<transport-guarantee>INTEGRAL</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+	<security-role>
+		<role-name>loginUser</role-name>
+	</security-role>
+	<login-config>
+		<auth-method>FORM</auth-method>
+		<form-login-config>
+			<form-login-page>/inicio/login.jsp</form-login-page>
+			<form-error-page>/inicio/login.jsp?errorLogin=true</form-error-page>
+		</form-login-config>
+	</login-config>
+	-->
+	<!-- Filtro WebSeal -->
+	<filter>
+    	<filter-name>SimpleFilter</filter-name>
+    	<filter-class>com.ibm.bbva.filter.SimpleFilter</filter-class>
+  	</filter>
+  	<filter-mapping>
+    	<filter-name>SimpleFilter</filter-name>
+    	<servlet-name>Faces Servlet</servlet-name>
+ 	</filter-mapping>
+ 	<!-- Fin Filtro WebSeal -->
+	<session-config>
+	  <session-timeout>30</session-timeout>
+	</session-config>
+	<!--
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error/errorTimeOut.faces</location>
+	</error-page>	
+	-->
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error/errorPage.faces</location>
+	</error-page>
+	<context-param>
+		<param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+    	<param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
+    	<param-value>false</param-value>
+	</context-param>
+	<context-param>
+		<param-name>
+			javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<servlet>
+		<display-name>ReporteCVSServlet</display-name>
+		<servlet-name>ReporteCVSServlet</servlet-name>
+		<servlet-class>com.ibm.bbva.util.cvs.ReporteCVSServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>log4j-init</servlet-name>
+		<servlet-class>com.ibm.bbva.log.LogServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+</web-app>

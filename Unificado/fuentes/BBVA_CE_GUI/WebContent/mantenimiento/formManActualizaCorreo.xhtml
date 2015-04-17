@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:util="http://java.sun.com/jsf/composite/util">
+      
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=8"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+    	<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+        <h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="style.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+		<h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+	    <h:outputScript library="js" name="jquery-ui.js" target="head"/>
+        <h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+        
+		
+		<script type="text/javascript">
+			/* <![CDATA[ */  
+			  function jMoveToRight(moveAll)   
+                    {  
+                        var srcList = document.getElementById('formRegistroCorreo:origen');  
+                        var destList = document.getElementById('formRegistroCorreo:destino');  
+                        moveList( srcList, destList, moveAll ); 
+                        cargarDestinos(destList);
+                        return false;  
+                    }  
+                      
+                    function jMoveToLeft(moveAll)   
+                    {  
+                        var srcList = document.getElementById('formRegistroCorreo:destino');  
+                        var destList = document.getElementById('formRegistroCorreo:origen');  
+                        moveList( srcList, destList, moveAll );
+                        cargarDestinos(srcList); 
+                        return false;  
+                    }  
+                    
+                    function cargarDestinos(lista){
+                    	var destino = document.getElementById("formRegistroCorreo:lstDestinatarios");
+                    	$(destino).html("");
+                    	
+                    	var items = $(lista).find("option");
+  						
+  						var ids="";
+  						for(var i =0; i<items.length;i++){
+  							var option = items[i];
+  							ids = ids+items[i].value + ',';
+  							$(destino).append($(option).clone());	
+  						}
+  						  $("[id='#{actualizarCorreo.htmlListaDestinoValores.clientId}']").val(ids);                 	
+                    }
+   
+                    function moveList(srcList,destList,moveAll )   
+                    {  
+                        if (moveAll == true)  
+                        {  
+                            for(var count=0;count<srcList.length; count++)   
+                            {  
+                                var option = srcList[count];  
+                                try   
+                                {  
+                                    destList.add(new Option(option.text, option.text), null); //Standard  
+                                    srcList.remove(count, null);  
+                                }   
+                                catch(error)   
+                                {  
+                                    destList.add(new Option(option.text, option.text)); // IE only  
+                                    srcList.remove(count);  
+                                }   
+                                count--;  
+                            }                                                     
+                        }  
+                        else  
+                        {  
+                            for(var count=0;count<srcList.length; count++)   
+                            {  
+                                if(srcList[count].selected == true)   
+                                {  
+                                    var option = srcList[count];  
+                                    try   
+                                    {  
+                                        destList.add(new Option(option.text, option.value), null); //Standard  
+                                        srcList.remove(count, null);  
+                                    }   
+                                    catch(error)   
+                                    {  
+                                        destList.add(new Option(option.text, option.value)); // IE only  
+                                        srcList.remove(count);  
+                                    }    
+                                    count--;               
+                                }  
+                            }  
+                        }  
+                        return true;  
+                    }  
+			/* ]]> */
+		</script>   
+			
+		     
+			
+	</h:head>
+	<h:body>
+		<h:form id="formRegistroCorreo">
+			<div style="display:none;">   	
+				<h:selectOneMenu id="lstDestinatarios" value="#{actualizarCorreo.destinoSeleccionado}" 
+							style="width:300px;" styleClass="valor-componente" >
+					<f:selectItems value="#{actualizarCorreo.lstAuxDestinatarios}" />
+				</h:selectOneMenu>
+			</div>
+			<h:inputText id="listaDestinoValores" value="#{actualizarCorreo.strListaDestinoValores}" binding="#{actualizarCorreo.htmlListaDestinoValores}" style="display:none;" />
+			<div class="contenido">
+				<div class="cabecera">
+					<ui:include src="/resources/common/cabecera.xhtml" />
+				</div>	
+				<div class="cuerpo">
+					<div class="menu">
+					   <ui:include src="/resources/common/menu.xhtml" />
+					</div>
+				
+				   <h:panelGroup id="idActualizaTabla" styleClass="datos" >						
+				      <ui:include src="/resources/mantenimiento/actualizaCorreo.xhtml" />
+				   </h:panelGroup>					
+				</div>
+       		</div>
+   		</h:form>
+   	</h:body>
+</html>

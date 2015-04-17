@@ -1,0 +1,193 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<h:inputHidden value="#{datosConyuge.mensajeOperacion}" id="lblMensajeOperacion"/>
+<h:inputHidden value="#{datosConyuge.estadoCivilConviviente}" id="estCivilConviviente"/>
+<h:inputHidden value="#{datosConyuge.tipoOferta}" id="tipoOferta"/>
+
+<div class="bloque" id="minMax" style="#{datosConyuge.mostrarCampos and datosConyuge.mostrarDatosConyuge ? 'height: 15px;':'display:none;'}" >    
+    <div class="contenido-bloque" >
+        <span class="columna" style="width:270px">
+             <div class="titulo titulo-espaciado" style="#{datosConyuge.mostrarTituloConyugeA ? '':'display:none;'}">
+    	        <h:outputText value="#{msg['com.ibm.bbva.common.detalleConyugue.tituloa']}"/>
+             </div>
+             <div class="titulo titulo-espaciado" style="#{!datosConyuge.mostrarTituloConyugeA ? '':'display:none;'}">
+    	        <h:outputText value="#{msg['com.ibm.bbva.common.detalleConyugue.titulob']}"/>
+             </div>
+             <div class="campo-espaciado" id="minMax1" style="display:none;" >
+             	<h:panelGrid columns="2">
+            		<h:panelGroup>
+            			<span class="columna" style="width:280px">
+                   			<span class="columna" style="width:120px">
+                				<h:outputText value="#{datosConyuge.clienteNatural.tipoDoi.descripcion}:" styleClass="etiqueta"/>
+                			</span>
+                			<span class="columna" style="width:120px">
+                				<h:outputText value="#{datosConyuge.clienteNatural.numDoi}" styleClass="valor"/>
+           					</span>
+           				</span>
+           			</h:panelGroup>
+           		</h:panelGrid>
+			</div>
+            <div class="campo-espaciado" id="minMax2" style="display:none;"  >
+                <h:panelGrid columns="2">
+            		<h:panelGroup>
+            			<span class="columna" style="width:280px">
+                   			<span class="columna" style="width:120px">
+                				<h:outputText value="#{msg['com.ibm.bbva.common.detalleConyugue.nombre']}:" styleClass="etiqueta"/>
+                			</span>
+                			<span class="columna" style="width:120px">
+                				<h:outputText value="#{datosConyuge.clienteNatural.nombre}" styleClass="valor"/>
+            				</span>
+            			</span>
+            		</h:panelGroup>
+            	</h:panelGrid>
+            </div>
+            <div class="campo-espaciado" id="minMax3" style="display:none;"   >
+                <h:panelGrid columns="2">
+            		<h:panelGroup>
+            			<span class="columna" style="width:280px">
+                   			<span class="columna" style="width:120px">
+				                <h:outputText value="#{msg['com.ibm.bbva.common.detalleConyugue.apPaterno']}:" styleClass="etiqueta"/>
+				             </span>
+                			<span class="columna" style="width:120px">  
+				                <h:outputText value="#{datosConyuge.clienteNatural.apePat}" styleClass="valor"/>
+            				</span>
+            			</span>
+            		</h:panelGroup>
+            	</h:panelGrid>	
+            </div>
+            <div class="campo-espaciado" id="minMax4" style="display:none;" >
+                <h:panelGrid columns="2">
+            		<h:panelGroup>
+            			<span class="columna" style="width:280px">
+                   			<span class="columna" style="width:120px">
+                				<h:outputText value="#{msg['com.ibm.bbva.common.detalleConyugue.apMaterno']}:" styleClass="etiqueta"/>
+                			</span>
+                			<span class="columna" style="width:120px">
+                				<h:outputText value="#{datosConyuge.clienteNatural.apeMat}" styleClass="valor"/>
+            				</span>
+            			</span>
+            		</h:panelGroup>
+            	</h:panelGrid>
+            </div>         
+        </span>   
+        
+        
+        <span class="columna" style="width:320px; margin-top: 14px;" >    
+				<div class="titulo titulo-espaciado">
+					<h:outputText value="   " />
+				</div>               
+            <div class="campo-espaciado" id="minMax5" style="display:none;"  >
+                <h:outputText value="#{datosConyuge.clienteNatural.tipoCliente.descripcion}" styleClass="txt-resaltado-1 valor-componente"/>
+            </div>
+            <!-- <h:outputText value="#{datosConyuge.clienteNatural.segmento.descripcion}" styleClass="valor txt-resaltado-1 valor-componente"/> -->
+            <div class="campo-espaciado" id="minMax6" style="display:none;" >
+                <h:panelGrid columns="2">
+            		<h:panelGroup>
+            			<span class="columna" style="width:280px">
+                   			<span class="columna" style="width:120px">
+                				<h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente.segmento']}:" styleClass="etiqueta"/>
+                			</span>
+                			<span class="columna" style="width:120px">
+                				<h:outputText value="#{datosConyuge.segmento.descripcion}" styleClass="valor txt-resaltado-1 valor-componente"/>
+            				</span>
+            			</span>
+            		</h:panelGroup>
+            	</h:panelGrid>
+            </div>
+            <div class="campo-espaciado" id="minMax7" style="display:none;"  >
+                <h:panelGrid columns="2">
+            		<h:panelGroup>
+            			<span class="columna" style="width:280px">
+                   			<span class="columna" style="width:120px">
+                				<h:outputText value="#{msg['com.ibm.bbva.common.detalleConyugue.codCliente']}:" styleClass="etiqueta"/>
+                			</span>
+                			<span class="columna" style="width:120px">
+                				<h:outputText value="#{datosConyuge.clienteNatural.codCliente}" styleClass="valor"/>
+            				</span>
+            			</span>
+            		</h:panelGroup>
+            	</h:panelGrid>
+            </div>
+        </span>
+        <span class="columna" style="left: 80px"  >           
+           <div class="campo-espaciado" id="max" style="#{datosConyuge.mostrarDatosConyuge ? 'left: 7px;':'display:none;'}" >
+                <a href="#" onclick="return maxDiv();">[+]</a>
+            </div>
+           <div class="campo-espaciado" id="min" style="left: 9px; display:none;" >
+                <a href="#" onclick="return minDiv();">[-]</a>
+            </div>            
+        </span>           
+    </div>
+</div>
+
+<div class="bloque" id="minMaxObservacion" style="#{datosConyuge.mostrarDatosConyuge and !datosConyuge.mostrarCampos ? 'height: 45px;':'display:none;'}" >    
+    <div class="contenido-bloque" >
+        <span class="columna" style="width:270px">
+		    <div class="titulo titulo-espaciado" >
+		  		<h:outputText value="#{msg['com.ibm.bbva.common.detalleConyugue.tituloc']}"/>	  		
+		    </div>
+	    	<div class="campo-espaciado" id="cuerpoB" style="#{!datosConyuge.mostrarCampos ? '':'display:none;'}">
+				<h:outputText value="#{datosConyuge.mensajeOperacion}" styleClass="etiqueta" id="mensajeOperacion" />
+			</div>          
+        </span>           
+    </div>
+</div>
+ 
+<script type="text/javascript">
+			function minDiv(){
+				document.getElementById("minMax").style.width = "775px";
+				document.getElementById("minMax").style.height = "13px";
+				document.getElementById("min").style.display="none";
+				document.getElementById("max").style.display="block";
+				 
+                  
+                document.getElementById("minMax1").style.display="none";                  	    
+                document.getElementById("minMax2").style.display="none";
+                document.getElementById("minMax3").style.display="none";
+                document.getElementById("minMax4").style.display="none";
+                document.getElementById("minMax5").style.display="none";
+                document.getElementById("minMax6").style.display="none";
+                document.getElementById("minMax7").style.display="none";	
+                
+                return false;
+			}
+			
+			function maxDiv(){				
+				document.getElementById("minMax").style.width = "780px";
+				document.getElementById("minMax").style.height = "150px";
+				document.getElementById("min").style.display="block";
+				document.getElementById("max").style.display="none";
+					
+                document.getElementById("minMax1").style.display="block";                  	    
+                document.getElementById("minMax2").style.display="block";
+                document.getElementById("minMax3").style.display="block";
+                document.getElementById("minMax4").style.display="block";
+                document.getElementById("minMax5").style.display="block";
+                document.getElementById("minMax6").style.display="block";
+                document.getElementById("minMax7").style.display="block"; 
+                
+                return false;		
+			}
+			
+			function observacion(){
+				document.getElementById("minMax").style.width = "775px";
+				document.getElementById("minMax").style.height = "45px";
+				document.getElementById("min").style.display="none";
+				document.getElementById("max").style.display="none";
+					
+                document.getElementById("minMax1").style.display="none";                  	    
+                document.getElementById("minMax2").style.display="none";
+                document.getElementById("minMax3").style.display="none";
+                document.getElementById("minMax4").style.display="none";
+                document.getElementById("minMax5").style.display="none";
+                document.getElementById("minMax6").style.display="none";
+                document.getElementById("minMax7").style.display="none";  		
+			}					
+</script>
+</ui:composition>

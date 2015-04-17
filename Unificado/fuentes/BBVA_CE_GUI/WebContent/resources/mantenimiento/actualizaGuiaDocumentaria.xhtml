@@ -1,0 +1,275 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+<div class="bloque">
+	<div class="contenido-bloque">    
+        <span class="columna" style="width:750px" >
+        	<div class="titulo titulo-espaciado">            
+    	        <h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.tituloGuia']}"/>    	        
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+            	<span class="columna" style="width:8px;"/>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Tarea']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:300px;">
+	                <h:selectOneMenu id="cmbTarea" 
+						value="#{actualizaGuiaDocumentaria.tareaSeleccionado}" required="true"
+						style="width:300px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizaGuiaDocumentaria.tarea}" />
+					</h:selectOneMenu>
+				</span>
+				<h:message for="cmbTarea" errorClass="mensaje-error"/>
+            </div>
+        	<div class="campo-espaciado espacios-etiqueta">
+        		<span class="columna" style="width:8px;">
+        			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+				</span>				
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.TipoDocumento']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:500px;">
+	                <h:selectOneMenu id="cmbTipoDocumento" 
+						value="#{actualizaGuiaDocumentaria.tipoDocumentoSeleccionado}" required="true"
+						style="width:500px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizaGuiaDocumentaria.documentos}" />
+					</h:selectOneMenu>
+				</span>
+				<h:message for="cmbTipoDocumento" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+        		<span class="columna" style="width:8px;">
+        			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+        		</span>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Obligatorio']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:125px;">
+	                <h:selectBooleanCheckbox id="idFlgObligatorio" 
+	                		value="#{actualizaGuiaDocumentaria.flagObligatorio}" >
+					</h:selectBooleanCheckbox>
+				</span>
+				<h:message for="idFlgObligatorio" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+            	<span class="columna" style="width:8px;"/>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Producto']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:200px;">
+	                <h:selectOneMenu id="cmbProducto" 
+						value="#{actualizaGuiaDocumentaria.productoSeleccionado}" required="true"
+						style="width:200px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizaGuiaDocumentaria.productos}" />
+					</h:selectOneMenu>
+				</span>
+				<h:message for="cmbProducto" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+        		<span class="columna" style="width:8px;"/>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.TipoOferta']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:80px;">
+	                <h:selectOneMenu id="cmbTipoOferta" 
+						value="#{actualizaGuiaDocumentaria.tipoOfertaSeleccionado}" required="true"
+						style="width:100px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizaGuiaDocumentaria.tipoOferta}" />
+					</h:selectOneMenu>
+				</span>
+				<h:message for="cmbTipoOferta" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+        		<span class="columna" style="width:8px;"/>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.ClienteNuevo']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:125px;">
+                	<!--<h:selectBooleanCheckbox id="idFlgClienteNuevo" 
+	                		value="#{actualizaGuiaDocumentaria.flagClienteNuevo}">
+					</h:selectBooleanCheckbox>-->
+					<h:selectOneMenu id="idFlgClienteNuevo"
+						value="#{actualizaGuiaDocumentaria.flagClienteNuevo}" required="true"
+						style="width:100px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizaGuiaDocumentaria.listaGenerica}" />	
+					</h:selectOneMenu>
+				</span>
+				<h:message for="idFlgClienteNuevo" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+        		<span class="columna" style="width:8px;"/>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.PagoHabiente']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:125px;">
+	                <!--<h:selectBooleanCheckbox id="idFlgPagoHabiente" 
+	                		value="#{actualizaGuiaDocumentaria.flagPagoHabiente}">
+					</h:selectBooleanCheckbox>-->
+					<h:selectOneMenu id="idFlgPagoHabiente"
+						value="#{actualizaGuiaDocumentaria.flagPagoHabiente}" required="true"
+						style="width:100px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizaGuiaDocumentaria.listaGenerica}" />
+					</h:selectOneMenu>
+				</span>
+				<h:message for="idFlgPagoHabiente" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+        		<span class="columna" style="width:8px;"/>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.CategoriaRenta']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:100px;">
+	                <h:selectOneMenu id="cmbCategoriaRenta" 
+						value="#{actualizaGuiaDocumentaria.categoriaRentaSeleccionado}" required="true"
+						style="width:100px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizaGuiaDocumentaria.categoriaRenta}" />
+					</h:selectOneMenu>
+				</span>
+				<h:message for="cmbCategoriaRenta" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+        		<span class="columna" style="width:8px;">
+        			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+        		</span>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Persona']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:80px;">
+	                <h:selectOneMenu id="cmbPersona" 
+						value="#{actualizaGuiaDocumentaria.personaSeleccionado}" required="true"
+						style="width:100px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizaGuiaDocumentaria.persona}" />
+					</h:selectOneMenu>
+				</span>
+				<h:message for="cmbPersona" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+            	<span class="columna" style="width:8px;"/>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.TasaEspecial']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:125px;">
+	                <!--<h:selectBooleanCheckbox id="idFlgTasaEspecial" 
+	                		value="#{actualizaGuiaDocumentaria.flagTasaEspecial}">
+					</h:selectBooleanCheckbox>-->
+					<h:selectOneMenu id="idFlgTasaEspecial"
+						value="#{actualizaGuiaDocumentaria.flagTasaEspecial}" required="true"
+						style="width:100px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizaGuiaDocumentaria.listaGenerica}" />
+					</h:selectOneMenu>
+				</span>
+				<h:message for="idFlgTasaEspecial" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+            	<span class="columna" style="width:8px;"/>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.VerificacionDomiciliaria']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:125px;">
+	                <!--<h:selectBooleanCheckbox id="idFlgVeriDomicil" 
+	                		value="#{actualizaGuiaDocumentaria.flagVeriDomicil}">
+					</h:selectBooleanCheckbox>-->
+					<h:selectOneMenu id="idFlgVeriDomicil"
+						value="#{actualizaGuiaDocumentaria.flagVeriDomicil}" required="true"
+						style="width:100px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizaGuiaDocumentaria.listaGenerica}" />
+					</h:selectOneMenu>
+				</span>
+				<h:message for="idFlgVeriDomicil" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+        		<span class="columna" style="width:8px;"/>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.VerificacionLaboral']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:125px;">
+	               <!--<h:selectBooleanCheckbox id="idFlgVeriLaboral" 
+	                		value="#{actualizaGuiaDocumentaria.flagVeriLaboral}">
+					</h:selectBooleanCheckbox>-->
+					<h:selectOneMenu id="idFlgVeriLaboral"
+						value="#{actualizaGuiaDocumentaria.flagVeriLaboral}" required="true"
+						style="width:100px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizaGuiaDocumentaria.listaGenerica}" />
+					</h:selectOneMenu>
+				</span>
+				<h:message for="idFlgVeriLaboral" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+        		<span class="columna" style="width:8px;"/>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.FlagDps']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:125px;">
+	               <!--<h:selectBooleanCheckbox id="idFlgDPS" 
+	                		value="#{actualizaGuiaDocumentaria.flagDPS}">
+					</h:selectBooleanCheckbox>-->
+					<h:selectOneMenu id="idFlgDPS"
+						value="#{actualizaGuiaDocumentaria.flagDPS}" required="true"
+						style="width:100px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizaGuiaDocumentaria.listaGenerica}" />	
+					</h:selectOneMenu>
+				</span>
+				<h:message for="idFlgDPS" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+        		<span class="columna" style="width:8px;"/>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.FlagComiteRiesgo']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:125px;">
+	               <h:selectBooleanCheckbox id="idFlgComiteRiesgo" 
+	                		value="#{actualizaGuiaDocumentaria.flagComiteRiesgo}">
+					</h:selectBooleanCheckbox>
+				</span>
+				<h:message for="idFlgComiteRiesgo" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+        		<span class="columna" style="width:8px;"/>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Descripcion']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:300px;">
+	                <h:inputText value="#{actualizaGuiaDocumentaria.descripcion}" id="idDescripcion" 
+	                	style="width: 250px;"/>
+				</span>
+				<h:message for="idFlgComiteRiesgo" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+            	<span class="columna" style="width:8px;">
+            		<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+            	</span>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.FlagActivo']}" styleClass="etiqueta" style="width:200px;"/>
+                </span>
+                <span class="columna" style="width:125px;">
+	                <h:selectBooleanCheckbox id="idFlgActivo" 
+	                		value="#{actualizaGuiaDocumentaria.flagActivo}">
+					</h:selectBooleanCheckbox>
+				</span>
+				<h:message for="idFlgActivo" errorClass="mensaje-error"/>
+            </div>
+        </span>
+     </div>
+     <div class="contenido-bloque" align="center">
+        <span class="columna" style="width:290px">
+        	<h:commandButton id="grabarbr" 
+				value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Grabar']}"
+				action="#{actualizaGuiaDocumentaria.grabar}" />
+			<h:commandButton id="cancelarbr"
+				value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Cancelar']}"
+				styleClass="boton" action="#{actualizaGuiaDocumentaria.cancelar}"/>
+        </span>
+     </div>
+</div>
+
+</ui:composition>

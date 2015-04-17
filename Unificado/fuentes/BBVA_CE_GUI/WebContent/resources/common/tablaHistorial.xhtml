@@ -1,0 +1,96 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+<h:panelGroup id="panelTabla">
+	<div style="width:774px; overflow:auto;height: 225px">
+	<h:dataTable border="1" cellpadding="0" cellspacing="0" rendered="true" id="tablaHistorial"
+				value="#{tablaHistorial.listTabla}" var="item"
+				styleClass="tablaTaskHist" headerClass="headerClass headerTabla1"
+				footerClass="fondo" rowClasses="uno,dos" columnClasses="text,text,text" width="100%" 
+				rows="#{tablaHistorial.filas}" style="max-width:788px">
+		<h:column nowrap="true" align="center" width="10%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaHistorial.terminal']}"></h:outputText>
+			</f:facet>
+			<h:outputText value="#{item.numTerminal}"></h:outputText>
+		</h:column>
+		<h:column nowrap="true" width="6%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaHistorial.registro']}" styleClass="tabla-titulo"></h:outputText>
+			</f:facet>
+			<h:outputText value="#{item.codigoUsuario}" styleClass="tabla-campo-texto"></h:outputText>
+		</h:column>
+		<h:column nowrap="true" width="10%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaHistorial.usuario']}" styleClass="tabla-titulo"></h:outputText>
+			</f:facet>
+			<h:outputText value="#{item.perfilUsuario}" styleClass="tabla-campo-texto"></h:outputText>
+		</h:column>
+		<h:column nowrap="true" width="29%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaHistorial.responsable']}" styleClass="tabla-titulo"></h:outputText>
+			</f:facet>
+			<h:outputText value="#{item.nombresCompletosEmpleado}" styleClass="tabla-campo-texto"></h:outputText>
+		</h:column>
+		
+		<h:column nowrap="true" align="center" width="10%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaHistorial.fechaEnvio']}"></h:outputText>
+			</f:facet>
+			<h:outputText value="#{item.fechaEnvio}"></h:outputText>
+		</h:column>
+		<h:column nowrap="true" align="center" width="10%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaHistorial.fechaProgramada']}"></h:outputText>
+			</f:facet>
+			<h:outputText value="#{item.fechaProgramada}"></h:outputText>
+		</h:column>
+		<h:column nowrap="true" align="center" width="10%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaHistorial.fechaFin']}"></h:outputText>
+			</f:facet>
+			<h:outputText value="#{item.fechaFin}"></h:outputText>
+		</h:column>
+		<h:column nowrap="true" width="15%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaHistorial.estado']}" styleClass="tabla-titulo"></h:outputText>
+			</f:facet>
+			<h:outputText value="#{item.estadoDescripcion}" styleClass="tabla-campo-texto"></h:outputText>
+		</h:column>
+	</h:dataTable>
+	</div>
+	<h:outputText styleClass="paginacion" value="#{msg['com.ibm.bbva.paginacion.pagina']} #{tablaHistorial.paginaActual} #{msg['com.ibm.bbva.paginacion.de']} #{tablaHistorial.totalPaginas}"/>
+	
+</h:panelGroup>
+
+<h:panelGroup styleClass="botones-paginacion">
+	<h:commandButton actionListener="#{tablaHistorial.inicio}"
+		immediate="true" value="#{msg['com.ibm.bbva.paginacion.inicio']}"
+		id="btnInicio">
+		<f:ajax event="click" render="panelTabla" />
+	</h:commandButton>
+
+	<h:commandButton actionListener="#{tablaHistorial.anterior}"
+		immediate="true" value="#{msg['com.ibm.bbva.paginacion.anterior']}"
+		id="btnAnterior">
+		<f:ajax event="click" render="panelTabla" />
+	</h:commandButton>
+
+	<h:commandButton actionListener="#{tablaHistorial.siguiente}"
+		immediate="true" value="#{msg['com.ibm.bbva.paginacion.siguiente']}"
+		id="btnSiguiente">
+		<f:ajax event="click" render="panelTabla" />
+	</h:commandButton>
+
+	<h:commandButton actionListener="#{tablaHistorial.fin}"
+		immediate="true" value="#{msg['com.ibm.bbva.paginacion.fin']}"
+		id="btnFin">
+		<f:ajax event="click" render="panelTabla" />
+	</h:commandButton>
+</h:panelGroup>
+
+</ui:composition>

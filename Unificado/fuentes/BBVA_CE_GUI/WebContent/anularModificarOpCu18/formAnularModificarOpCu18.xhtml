@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+        <h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+		<h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="style.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+        <h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+		<h:outputScript library="js" name="jquery-ui.js" target="head"/>
+		<h:outputScript library="js" name="jquery.numeric.js" target="head"/>
+		<h:outputScript library="js" name="autoNumeric-1.7.4-B.js" target="head"/>
+		<h:outputScript library="js" name="funciones.js" target="head"/>
+		<h:outputScript target="head">   
+		/* <![CDATA[ */
+            $(document).ready(function(){              
+	          if($("#frmAnularModificarOpCu18\\:idMsgGuiaDoc").val() == "true") {
+	        	var msg = $("#frmAnularModificarOpCu18\\:msgGuiaDoc").text();
+	        	var docsPendientes = $("#frmAnularModificarOpCu18\\:idValidaGuiaEsc").val();
+				alert(msg + ":\n" + docsPendientes);
+	        	$("#frmAnularModificarOpCu18\\:idMsgGuiaDoc").val("false");
+	          }
+	          
+	          if($("#frmAnularModificarOpCu18\\:idMsgOperacionOf").val() == "true") {
+	        	var msg = $("#frmAnularModificarOpCu18\\:msgOperacionOf").text();
+	        	alert(msg);
+	        	$("#frmAnularModificarOpCu18\\:idMsgOperacionOf").val("false");
+	          }
+	          if($("#frmAnularModificarOpCu18\\:idMsgOperacion").val() == "true") {
+		        	var msg = $("#frmAnularModificarOpCu18\\:msgOperacion").text();
+		        	alert(msg);
+		        	$("#frmAnularModificarOpCu18\\:idMsgOperacion").val("false");
+	            }
+	            
+	          if($("#frmAnularModificarOpCu18\\:idMsgOperacion292").val() == "true") {
+		        	var msg = $("#frmAnularModificarOpCu18\\:msgOperacion292").text();
+		        	alert(msg);
+		        	$("#frmAnularModificarOpCu18\\:idMsgOperacion292").val("false");
+	            }  
+	          	          
+            });           
+        	function confAceptar (form) {
+        		var msg = $("#frmAnularModificarOpCu18\\:confirmacion").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+		        var msgDocsObs = '';
+		        docsObs = $.trim(docsObs);
+		        if(docsObs != ''){
+		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+		        }
+        		var op = confirm(msg);
+        		if (op) {
+        			clickAceptar(form);
+        		}
+        		return op;
+        	}
+        	function confDevolver () {
+        		var msg = $("#frmAnularModificarOpCu18\\:devolver").text();
+        		return confirm(msg);
+        	} 
+			        	        	
+		/* ]]> */
+		</h:outputScript>
+		<script type="text/javascript">
+			function mostrarTabLogPorPerfil(){
+				var perfil = $("#frmAnularModificarOpCu18\\:descPerfilPage").val();
+	        	var descAdmin = $("#frmAnularModificarOpCu18\\:descPerfilFiltro").val();
+	        	perfil = (perfil == "")?$("#frmAnularModificarOpCu18\\:descPerfilPage").text():perfil;
+	        	descAdmin = (descAdmin == "")?$("#frmAnularModificarOpCu18\\:descPerfilFiltro").text():descAdmin;
+	        	if (perfil == descAdmin) {
+	        		$("#frmAnularModificarOpCu18\\:descPerfilTabs").show();
+	        	} else {
+	        		$("#frmAnularModificarOpCu18\\:descPerfilTabs").hide();
+	        	}
+	        }
+		</script> 
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+        <title><h:outputText value="#{msg['com.ibm.bbva.anularModificarOpCu18.formAnularModificarOpCu18.titulo']}"/></title>
+    </h:head>
+    <h:body onload="mostrarTabLogPorPerfil()">
+    <h:form id="frmAnularModificarOpCu18">
+    	<h:inputHidden id="idMsgOperacion" value="#{anularModificarOpCu18.msjOperacionBol}"></h:inputHidden>
+		<h:outputText value="#{anularModificarOpCu18.msjOperacion}"
+			id="msgOperacion" style="display:none;" />
+			
+		<h:inputHidden id="idMsgOperacion292" value="#{anularModificarOpCu18.msjOperacionBol292}"></h:inputHidden>
+		<h:outputText value="#{anularModificarOpCu18.msjOperacion292}"
+			id="msgOperacion292" style="display:none;" />
+				
+	    <h:inputHidden value="#{detalleExpediente.clienteNatural.estadoCivil.codigo}"  id="datoCivil"></h:inputHidden> 
+		<h:inputHidden value="#{datosConyuge.mensajeOperacion}" id="msjObservacion" />
+		<h:inputHidden value="#{datosProducto2.expediente.expedienteTC.tipoOferta.codigo}" id="idTipoOferta"/>
+		    
+        <h:inputHidden value="#{anularModificarOpCu18.titulo}"></h:inputHidden>      
+        <h:inputHidden id="idMsgGuiaDoc" value="#{anularModificarOpCu18.msgGuiaDocumentaria}"></h:inputHidden> 
+    	<h:outputText value="#{msg['com.ibm.bbva.anularModificarOpCu18.formAnularModificarOpCu18.aceptar.confirm']}"
+    			id="confirmacion" style="display:none;"/>
+    	<h:outputText value="#{msg['com.ibm.bbva.anularModificarOpCu18.formAnularModificarOpCu18.devolver.confirm']}"
+    			id="devolver" style="display:none;"/>   
+        <h:outputText value="#{msg['com.ibm.bbva.anularModificarOpCu18.formAnularModificarOpCu18.msgGuiaDoc']}"
+    			id="msgGuiaDoc" style="display:none;"/>     			 			
+        <div class="contenido">
+            <div class="cabecera">
+                <ui:include src="/resources/common/cabecera.xhtml" />
+                <h:outputText id="descPerfilPage"  value="#{datosCabecera.empleado.perfil.descripcion}" style="display:none;"/>
+                <h:outputText id="descPerfilFiltro"  value="#{msg['com.ibm.bbva.common.perfil.administrador']}" style="display:none;"/>
+            </div>
+            <div class="cuerpo">
+                <div class="menu">
+                    <ui:include src="/resources/common/menu.xhtml" />
+                </div>
+                <div class="datos">
+                	<ui:include src="/resources/common/tabs.xhtml" />
+                	<div class="tab-expediente tab-item">
+	                	<ui:include src="/resources/common/datosGestor.xhtml" />
+						<ui:include src="/resources/common/estadoAnterior.xhtml" />
+						<ui:include src="/resources/common/detalleExpediente.xhtml" />
+						<h:panelGroup id="idPanelDatosConyuge" 
+							style="#{datosConyuge.mostrarDatosConyuge ? '':'display:none;'}" >
+								<ui:include src="/resources/common/datosConyugue.xhtml" />
+						</h:panelGroup>						
+						<ui:include src="/resources/common/datosProducto2.xhtml" />
+						<ui:include src="/resources/common/verificacionApr.xhtml" />
+						
+						<h:panelGroup id="idDocumentosReutilizables"/>
+						
+						<h:panelGroup layout="block" styleClass="bloque">
+							<h:panelGroup id="appletContentRefresh">
+								<ui:include src="/resources/common/documentoEsc.xhtml" />
+							</h:panelGroup>
+							<h:panelGroup id="idPanelDocumentos">
+								<ui:include src="/resources/common/panelDocumentos.xhtml" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<ui:include src="/resources/common/comentarios.xhtml" />
+						<ui:include src="/resources/common/observacionRechazo.xhtml" />
+						<h:outputText value="#{anularModificarOpCu18.msgPersonalizado}" escape="false" />
+						<div class="column boton-principal">	
+							<h:commandButton value="#{msg['com.ibm.bbva.anularModificarOpCu18.formAnularModificarOpCu18.aceptar']}"
+	            		                     onclick="return confAceptar(this.form);"
+	            		                     type="button"/> 
+							
+							<!-- <h:commandButton value="#{msg['com.ibm.bbva.anularModificarOpCu18.formAnularModificarOpCu18.devolver']}"
+	            		                     action="#{anularModificarOpCu18.devolver}" onclick="return confDevolver();"/> -->	
+							
+                            <h:commandLink id="btnEjecutaApplet" 
+		    	                           action="#{anularModificarOpCu18.aceptar}" 
+		    	                           styleClass="display:none">
+		    	            </h:commandLink>	            		                     
+						</div>
+					</div>
+					<div class="tab-ayuda-memoria tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />		
+	               		<ui:include src="/resources/common/tablaAyudaMemoria.xhtml" />
+					</div>
+					<div class="tab-historial tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />	
+               			<ui:include src="/resources/common/tablaHistorial.xhtml" />
+					</div>
+					<div class="tab-observaciones tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />
+						<ui:include src="/resources/common/tablaObservaciones.xhtml" />
+					</div>
+					<div class="tab-log tab-item" style="display:none;">
+	               		<ui:include src="/resources/common/datosHistorico.xhtml" />	
+	               		<ui:include src="/resources/common/tablaLog.xhtml" />
+					</div>
+				</div>
+            </div>
+        </div>
+    </h:form>
+    </h:body>
+</html>

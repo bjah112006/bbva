@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+        <h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+		<h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="style.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+        <h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+		<h:outputScript library="js" name="jquery-ui.js" target="head"/>
+		<h:outputScript library="js" name="autoNumeric-1.7.4-B.js" target="head"/>
+		<h:outputScript library="js" name="funciones.js" target="head"/>
+		<h:outputScript target="head">   
+		/* <![CDATA[ */
+        	$(document).ready(function(){        	                  
+	            if($("#frmRevisarRegistrarDictamen\\:idMsgGuiaDoc").val() == "true") {
+	        	  var msg = $("#frmRevisarRegistrarDictamen\\:msgGuiaDoc").text();
+	        	  var docsPendientes = $("#frmRevisarRegistrarDictamen\\:idValidaGuiaEsc").val();
+				  alert(msg + ":\n" + docsPendientes);
+	        	  $("#frmRevisarRegistrarDictamen\\:idMsgGuiaDoc").val("false");
+	             } 
+	                          
+	          if($("#frmRevisarRegistrarDictamen\\:idMsgOperacion").val() == "true") {
+	        	var msg = $("#frmRevisarRegistrarDictamen\\:msgOperacion").text();
+	        	alert(msg);
+	        	$("#frmRevisarRegistrarDictamen\\:idMsgOperacion").val("false");
+	          }else{
+	              if($("#frmRevisarRegistrarDictamen\\:idMsgOperacionOf").val() == "true") {
+		        	var msg = $("#frmRevisarRegistrarDictamen\\:msgOperacionOf").text();
+		        	alert(msg);
+		        	$("#frmRevisarRegistrarDictamen\\:idMsgOperacionOf").val("false");
+		          }		          
+	          }
+
+				/* acciones para habilitar el boton aprobar con el check de 
+				 * Exclusión de la delegación del JSP datosProducto3
+				 */
+		        var chkExclDeleg = $("input:checkbox").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:exclDeleg$/);
+			        });
+			    var btnAcep = $("input:submit").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:btnAceptar$/);
+			        });
+			    
+			    $(chkExclDeleg).click(function(){
+	            	if ($(this).is(":checked")) {
+	            		$(btnAcep).attr("disabled", true)
+	            	} else {
+	            		$(btnAcep).removeAttr("disabled")
+	            	}
+				});
+			});
+        	function confAceptar (form, idBoton) {
+        		var msg = $("#frmRevisarRegistrarDictamen\\:confirmacion").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+        		var msgDocsObs = '';
+        		docsObs = $.trim(docsObs);
+        		if(docsObs != ''){
+        			msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+        			msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+        		}
+        		var op = confirm(msg);
+        		if (op) {
+        			clickAceptarGenerico(form, idBoton);
+        		}
+        		return op;
+        	} 	
+        	function confAprobMod (form, idBoton) {
+        		var msg = $("#frmRevisarRegistrarDictamen\\:modificacion").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+        		var msgDocsObs = '';
+        		docsObs = $.trim(docsObs);
+        		if(docsObs != ''){
+        			msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+        			msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+        		}
+        		var op = confirm(msg);
+        		if (op) {
+        			clickAceptarGenerico(form, idBoton);
+        		}
+        		return op;
+        	} 
+        	function confAprobObs (form, idBoton) {
+        		var msg = $("#frmRevisarRegistrarDictamen\\:observacion").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+        		var msgDocsObs = '';
+        		docsObs = $.trim(docsObs);
+        		if(docsObs != ''){
+        			msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+        			msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+        		}
+        		var op = confirm(msg);
+        		if (op) {
+        			clickAceptarGenerico(form, idBoton);
+        		}
+        		return op;
+        	} 
+        	function confDevolverRiesgos (form, idBoton) {
+        		var msg = $("#frmRevisarRegistrarDictamen\\:devolverRiesgos").text();
+        		var op = confirm(msg);
+        		if (op) {
+        			clickAceptarGenerico(form, idBoton);
+        		}
+        		return op;
+        	}         	        	        			
+        	
+        	function confDevolverGestor () {
+        		var msg = $("#frmRevisarRegistrarDictamen\\:devolverGestor").text();
+        		return confirm(msg);
+        	}
+        	function confDenegar () {
+        		var msg = $("#frmRevisarRegistrarDictamen\\:denegar").text();
+        		return confirm(msg);
+        	}
+			        	
+		/* ]]> */
+		</h:outputScript>
+		<script type="text/javascript">
+	        function checkClick2(check) {
+	            document.getElementById('frmRevisarRegistrarDictamen:idValorTasaEsp3').disabled = !check.checked; 
+	            document.getElementById('frmRevisarRegistrarDictamen:idValorTasaEsp3').value = "0.00"; 
+	        }
+	        function mostrarTabLogPorPerfil(){
+	        	var perfil = $("#frmRevisarRegistrarDictamen\\:descPerfilPage").val();
+	        	var descAdmin = $("#frmRevisarRegistrarDictamen\\:descPerfilFiltro").val();
+	        	perfil = (perfil == "")?$("#frmRevisarRegistrarDictamen\\:descPerfilPage").text():perfil;
+	        	descAdmin = (descAdmin == "")?$("#frmRevisarRegistrarDictamen\\:descPerfilFiltro").text():descAdmin;
+	        	if (perfil == descAdmin) {
+	        		$("#frmRevisarRegistrarDictamen\\:descPerfilTabs").show();
+	        	} else {
+	        		$("#frmRevisarRegistrarDictamen\\:descPerfilTabs").hide();
+	        	}
+	        }
+		</script>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+        <title><h:outputText value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.titulo']}"/></title>
+    </h:head>
+    <h:body onload="mostrarTabLogPorPerfil()">
+	    <h:form id="frmRevisarRegistrarDictamen">
+		    <h:inputHidden value="#{detalleExpediente.clienteNatural.estadoCivil.codigo}"  id="datoCivil"></h:inputHidden> 
+			<h:inputHidden value="#{datosConyuge.mensajeOperacion}" id="msjObservacion" />
+			<h:inputHidden value="#{datosProducto3.expediente.expedienteTC.tipoOferta.codigo}" id="idTipoOferta"/>
+			    
+	    	<h:inputHidden value="#{revisarRegistrarDictamen.accion}"/>
+	    	<h:inputHidden value="#{revisarRegistrarDictamen.estado}"/>
+	        <h:inputHidden id="idMsgGuiaDoc" value="#{revisarRegistrarDictamen.msgGuiaDocumentaria}"></h:inputHidden>    	
+	    	<h:outputText value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.aprobar.confirm']}"
+	    			id="confirmacion" style="display:none;"/>
+	    	<h:outputText value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.aprobarModificacion.confirm']}"
+	    			id="modificacion" style="display:none;"/>
+	    	<h:outputText value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.aprobarObservacion.confirm']}"
+	    			id="observacion" style="display:none;"/>	    				    			
+	    	<h:outputText value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.devolverRiesgos.confirm']}"
+	    			id="devolverRiesgos" style="display:none;"/>
+	    	<h:outputText value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.devolverGestor.confirm']}"
+	    			id="devolverGestor" style="display:none;"/>
+	    	<h:outputText value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.denegar.confirm']}"
+	    			id="denegar" style="display:none;"/>  
+	        <h:outputText value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.msgGuiaDoc']}"
+	    			id="msgGuiaDoc" style="display:none;"/>      			  			    			    			
+	        <div class="contenido">
+	            <div class="cabecera">
+	                <ui:include src="/resources/common/cabecera.xhtml" />
+	                <h:outputText id="descPerfilPage"  value="#{datosCabecera.empleado.perfil.descripcion}" style="display:none;"/>
+	                <h:outputText id="descPerfilFiltro"  value="#{msg['com.ibm.bbva.common.perfil.administrador']}" style="display:none;"/>
+	            </div>
+	            <div class="cuerpo">
+	                <div class="menu">
+	                    <ui:include src="/resources/common/menu.xhtml" />
+	                </div>
+	                <div class="datos">
+	                	<ui:include src="/resources/common/tabs.xhtml" />
+	                	<div class="tab-expediente tab-item">
+		                	<ui:include src="/resources/common/datosGestor.xhtml" />
+							<ui:include src="/resources/common/estadoAnterior.xhtml" />
+							<ui:include src="/resources/common/detalleExpediente.xhtml" />
+							<h:panelGroup id="idPanelDatosConyuge" 
+								style="#{datosConyuge.mostrarDatosConyuge ? '':'display:none;'}" >
+									<ui:include src="/resources/common/datosConyugue.xhtml" />
+							</h:panelGroup>					
+							<ui:include src="/resources/common/datosProducto3.xhtml" />
+							<ui:include src="/resources/common/verificacionApr.xhtml" />
+							
+							<h:panelGroup id="idDocumentosReutilizables"/>
+							
+							<h:panelGroup layout="block" styleClass="bloque">
+								<h:panelGroup id="appletContentRefresh">
+									<ui:include src="/resources/common/documentoEsc.xhtml" />
+								</h:panelGroup>
+								<h:panelGroup id="idPanelDocumentos">
+									<ui:include src="/resources/common/panelDocumentos.xhtml" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<ui:include src="/resources/common/comentarios.xhtml" />
+							<ui:include src="/resources/common/observacionRechazo.xhtml" />
+							<!--ui:include src="/resources/common/tipoResolucion.xhtml" /--><!-- TODO modal -->
+							<ui:include src="/resources/common/observacion.xhtml" />
+							
+							<div class="column boton-principal" style="widht:50px;">	
+							
+								<h:commandButton value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.aprobarOp']}"
+		            		                     disabled="#{!revisarRegistrarDictamen.activoAceptar}"
+		            		                     onclick="return confAceptar(this.form, 'btnEjecutaApplet');" type="button" id="btnAceptarOp"/>	
+								
+							    <h:commandButton value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.aprobarMod']}"
+		            		                     onclick="return confAprobMod(this.form, 'btnEjecutaAppletMod');"
+		            		                     type="button" id="btnAceptarMod"/>  
+		            		                     								
+							<!-- <h:commandButton value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.devolverRiesgos']}"
+		            		                     action="#{revisarRegistrarDictamen.devolverRiesgos}" disabled="#{!revisarRegistrarDictamen.activoDevRiesgos}"
+		            		                     onclick="return confDevolverRiesgos();" /> -->	
+					
+							    <h:commandButton value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.devolverGestor']}"
+		            		                     action="#{revisarRegistrarDictamen.devolver}" disabled="#{!revisarRegistrarDictamen.activoDevGest}"
+		            		                     onclick="return confDevolverGestor();" />             		                     					
+												
+							    <h:commandButton value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.denegar']}"
+		            		                     action="#{revisarRegistrarDictamen.denegar}" disabled="#{!revisarRegistrarDictamen.activoDenegar}"
+	                                             onclick="return confDenegar();" />
+	                                             
+								<!--<h:commandButton value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.aprobarObs']}"
+		            		                     onclick="return confAprobObs(this.form, 'btnEjecutaAppletObs');" 
+		            		                     type="button" id="btnAceptarObs"/>-->
+		            		                     	              
+								<h:commandButton value="#{msg['com.ibm.bbva.revisarRegistrarDictamen.formRevisarRegistrarDictamen.devolverRiesgos']}"
+		            		                     onclick="return confDevolverRiesgos(this.form, 'btnEjecutaAppletDelvRiesgo');"   
+		            		                     type="button" id="btnDevolverRiesgo" />
+		            		                     		            		                     	                                             
+								<h:commandLink id="btnEjecutaApplet"
+												action="#{revisarRegistrarDictamen.aprobar}"
+												styleClass="display:none" />
+								<h:commandLink id="btnEjecutaAppletMod"
+												action="#{revisarRegistrarDictamen.aprobarMod}"
+												styleClass="display:none" />
+								<h:commandLink id="btnEjecutaAppletObs"
+												action="#{revisarRegistrarDictamen.aprobarObs}"
+												styleClass="display:none" />	
+								<h:commandLink id="btnEjecutaAppletDelvRiesgo"
+												action="#{revisarRegistrarDictamen.devolverRiesgo}"
+												styleClass="display:none" />																								
+							</div>
+						</div>
+						<div class="tab-ayuda-memoria tab-item" style="display:none;">
+							<ui:include src="/resources/common/datosHistorico.xhtml" />		
+		               		<ui:include src="/resources/common/tablaAyudaMemoria.xhtml" />
+						</div>
+						<div class="tab-historial tab-item" style="display:none;">
+							<ui:include src="/resources/common/datosHistorico.xhtml" />	
+	               			<ui:include src="/resources/common/tablaHistorial.xhtml" />
+						</div>
+						<div class="tab-observaciones tab-item" style="display:none;">
+							<ui:include src="/resources/common/datosHistorico.xhtml" />
+							<ui:include src="/resources/common/tablaObservaciones.xhtml" />
+						</div>
+						<div class="tab-log tab-item" style="display:none;">
+		               		<ui:include src="/resources/common/datosHistorico.xhtml" />	
+		               		<ui:include src="/resources/common/tablaLog.xhtml" />
+						</div>
+					</div>
+	            </div>
+	        </div>
+	    </h:form>
+    </h:body>
+</html>

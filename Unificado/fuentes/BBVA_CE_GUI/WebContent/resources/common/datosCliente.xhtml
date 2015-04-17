@@ -1,0 +1,252 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<h:inputHidden value="#{datosCliente.clienteNatural.tipoDoi.id}"/>
+<h:inputHidden value="#{datosCliente.clienteNatural.numDoi}"/>
+
+<div class="bloque">
+	<script type="text/javascript">
+		/* <![CDATA[ */  
+		function myFuncion(event) {
+		    if (event.status == "success") {
+		        $(".soloNumeros").keypress(function (event) {
+       				if (event.which > 31 && (event.which < 48 || event.which > 57)) {
+    	   		event.preventDefault();
+       			}     
+   			});
+		   }
+		   mostrarProcesando(event);
+		}
+		
+		/*function devolverFocoRegistrarExp(){
+			if (activeElementName != null && typeof activeElementName != "undefined" && activeElementName != "undefined"){
+				if(document.getElementById(activeElementName) != null){
+					if(document.getElementById(activeElementName).value != null && typeof document.getElementById(activeElementName).value != "undefined" && document.getElementById(activeElementName).value != "undefined"){
+						setTimeout(function(){
+							if(document.getElementById(activeElementName).style.display != "none" && document.getElementById(activeElementName).disabled != true){
+								document.getElementById(activeElementName).focus();
+							}
+					    }, 1000);
+					}
+				}
+			}
+			procesandoEst='';
+		}*/	
+		/* ]]> */
+	</script>
+
+
+    <div class="contenido-bloque">
+        <span class="columna" style="width:280px">
+            <div class="titulo titulo-espaciado">
+    	      <h:outputText value="#{msg['com.ibm.bbva.common.datosCliente.titulo']}"/>
+            </div>
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2">
+            		<h:panelGroup>
+            			<span class="columna" style="width:280px">
+                   			<span class="columna" style="width:120px">
+		                		<h:outputText value="#{msg['com.ibm.bbva.common.datosCliente.nombres']}:" class="etiqueta"/>
+		                	</span>	
+		                	<span class="columna" style="width:120px">
+		                		<h:outputText value="#{datosCliente.clienteNatural.nombre}" class="valor"/>
+		                	</span>
+		                	<h:inputHidden value="#{datosCliente.clienteNatural.nombre}" id="dcnNombres"/>
+		                </span>
+		             </h:panelGroup>
+	            </h:panelGrid>
+	           
+            </div>
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2">
+            		<h:panelGroup style="#{!buscarCliente.doiSeleccionadoRuc? '':'display:none'}">
+            			<span class="columna" style="width:280px">
+                   			<span class="columna" style="width:120px">
+                				<h:outputText value="#{msg['com.ibm.bbva.common.datosCliente.paterno']}:" class="etiqueta"/>
+                			</span>
+                			<span class="columna" style="width:120px">
+                				<h:outputText value="#{datosCliente.clienteNatural.apePat}" class="valor"/>
+                			</span>
+                			<h:inputHidden value="#{datosCliente.clienteNatural.apePat}" id="dcnApePat"/>
+                		</span>
+                	</h:panelGroup>
+               </h:panelGrid>
+            </div>
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2">
+            		<h:panelGroup style="#{!buscarCliente.doiSeleccionadoRuc? '':'display:none'}">
+            			<span class="columna" style="width:280px">
+                   			<span class="columna" style="width:120px">
+                				<h:outputText value="#{msg['com.ibm.bbva.common.datosCliente.materno']}:" class="etiqueta"/>
+                			</span>
+                			<span class="columna" style="width:120px">
+                				<h:outputText value="#{datosCliente.clienteNatural.apeMat}" class="valor"/>
+                			</span>
+                			<h:inputHidden value="#{datosCliente.clienteNatural.apeMat}" id="dcnApeMat"/>
+                		</span>
+                	</h:panelGroup>
+                </h:panelGrid>
+            </div>
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2">
+            		<h:panelGroup>
+			              <span class="columna" style="width:280px">
+			                 <span class="columna" style="width:120px">
+			                    <h:outputText value="#{msg['com.ibm.bbva.common.datosCliente.vencimiento']}:" class="etiqueta "/>
+			                 </span>
+			                 <span class="columna" style="width:92px">
+			                    <h:inputText id="fecVenDoi" value="#{datosCliente.clienteNatural.fecVenDoi}" style="width:66px;" 
+			                		         class="txt-resaltado-2 formatoFecha" maxlength="10" onkeypress="return disableEnterKey(event);"
+			                		         onblur="validarFormatoFechaAntiguo(); validarFechaAntiguo();">
+			                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+			                    </h:inputText>
+			                 </span>
+			                 <h:message for="fecVenDoi" errorClass="mensaje-error"/>
+			               </span>
+			         </h:panelGroup>
+			     </h:panelGrid>   
+            </div>
+            <div class="campo-espaciado" style="margin-top:-12px;"> 
+	            <h:panelGrid columns="2">
+	            		<h:panelGroup>
+				              <span class="columna" style="width:280px">
+					               <span class="columna" style="width:120px">
+					                  <h:outputText value="#{msg['com.ibm.bbva.common.datosCliente.estadoCivil']}:" class="etiqueta "/>
+					               </span>
+					               <span class="columna" style="width:90px">
+					                  <h:selectOneMenu value="#{datosCliente.idEstadoCivil}" style ="width:93px;"
+					                                  class="txt-resaltado-2" id="estadoCivil">
+					                      <f:selectItems value="#{datosCliente.listaEstadoCivil}"/>
+					                      <f:ajax onevent="myFuncion" event="change" render="idPanelClasificacionSbs idPanelConyuge idPanelDatosConyuge idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{datosClienteNuevo.cambiarEstadoCivil}"/>
+					                  </h:selectOneMenu>
+					               </span>
+					              <h:message for="estadoCivil" errorClass="mensaje-error"/>
+					           </span>
+					    </h:panelGroup>
+				</h:panelGrid>
+            </div>
+            
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2">
+	            		<h:panelGroup>
+			                <span class="columna" style="width:280px">
+			                   <span class="columna" style="width:120px">
+			                       <h:outputText value="#{msg['com.ibm.bbva.common.datosCliente.correo']}:" class="etiqueta"/>
+			                   </span>
+			                   <span class="columna" style="width:120px">       
+			                       <h:inputText value="#{datosCliente.clienteNatural.correo}" id="dcnCorreo" 
+			                	                class="valor txt-resaltado-2" maxlength="50" onkeypress="return disableEnterKey(event);"/>
+			                   </span>
+			                   <h:message for="dcnCorreoN" errorClass="mensaje-error"/>
+			                </span>
+			              </h:panelGroup>
+			    </h:panelGrid>                
+            </div>
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2">
+	            		<h:panelGroup>
+			                <span class="columna" style="width:280px">
+			                   <span class="columna" style="width:120px">
+			                       <h:outputText value="#{msg['com.ibm.bbva.common.datosCliente.celular']}:" class="etiqueta"/>
+			                   </span>
+			                   <span class="columna" style="width:120px">       
+			                       <h:inputText value="#{datosCliente.clienteNatural.celular}" id="dcnCelular" 
+			                	                maxlength="14" onkeypress="return disableEnterKey(event);"
+			                	                styleClass="valor txt-resaltado-2 onlyNumbers"/>
+			                   </span>
+			                   <h:message for="dcnCelularN" errorClass="mensaje-error"/>
+			                </span>
+			             </h:panelGroup>
+			     </h:panelGrid>                
+            </div>
+        </span>
+        <span class="columna" style="width:320px">
+            <div class="titulo titulo-espaciado" style="margin-top: 24px;">
+    	        <h:outputText value="     "/>
+            </div>
+            <div class="campo-espaciado">
+                <h:outputText value="#{datosCliente.tipoCliente.descripcion}" class="txt-resaltado-1"/>
+                <h:inputHidden value="#{datosCliente.tipoCliente.descripcion}"/>
+                <h:inputHidden value="#{datosCliente.tipoCliente.id}"/>
+            </div>
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2">
+	            		<h:panelGroup>
+			                <span class="columna" style="width:280px">
+			                   <span class="columna" style="width:120px">
+					                <h:outputText value="#{msg['com.ibm.bbva.common.datosCliente.segmento']}:" class="etiqueta"/>
+					           </span>
+					           <span class="columna" style="width:120px">
+					                <h:outputText value="#{datosCliente.segmento.descripcion}" class="valor txt-resaltado-1"/>
+					           </span>     
+					               	<h:inputHidden value="#{datosCliente.segmento.descripcion}"/>
+					                <h:inputHidden value="#{datosCliente.segmento.id}"/>
+					                <h:inputHidden value="#{datosCliente.segmento.grupoSegmento.id}"/>
+					                <h:inputHidden value="#{datosCliente.segmento.grupoSegmento.descripcion}"/>
+					        </span>
+					    </h:panelGroup>
+				</h:panelGrid>
+            </div>
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2">
+	            		<h:panelGroup>
+			                <span class="columna" style="width:280px">
+			                   <span class="columna" style="width:120px">
+					                <h:outputText value="#{msg['com.ibm.bbva.common.datosCliente.codigoCliente']}:" class="etiqueta"/>
+					           </span>
+					           <span class="columna" style="width:120px">
+					                <h:outputText value="#{datosCliente.clienteNatural.codCliente}" class="valor"/>
+					           </span>
+					                <h:inputHidden value="#{datosCliente.clienteNatural.codCliente}"/>
+					        </span>
+					   </h:panelGroup>
+				</h:panelGrid>
+            </div>
+            <div class="campo-espaciado" style="margin-top: 5px;">
+            <h:panelGroup id="idPanelCaractAdicionalesDatos">
+                <h:outputText value="#{msg['com.ibm.bbva.common.datosCliente.caractAdicionales']}:" class="etiqueta"/>
+                <h:selectManyCheckbox id="chkBoxSubrogacion" value="#{datosCliente.caracAdicionales}" class="separaCheck1">
+                    <h:inputHidden>
+                    <f:selectItem itemValue="1" 
+                    		itemLabel="#{msg['com.ibm.bbva.common.datosCliente.caractAdicionales.pep']}" itemDisabled="#{datosCliente.itemDisabledcaractPep }"/>
+                    </h:inputHidden>		
+                    <f:selectItem itemValue="2" 
+                    		itemLabel="#{msg['com.ibm.bbva.common.datosCliente.caractAdicionales.pagoHabiente']}"/>
+                    <h:inputHidden>
+                    <f:selectItem itemValue="3" 
+                    		itemLabel="#{msg['com.ibm.bbva.common.datosCliente.caractAdicionales.aval']}" itemDisabled="#{datosCliente.itemDisabledcaractAval }"/>
+                    </h:inputHidden>
+                    <f:selectItem itemValue="4" itemDisabled="#{registrarExpediente.itemDisabledSubrogacion }"  
+                    		itemLabel="#{msg['com.ibm.bbva.common.datosCliente.caractAdicionales.subrogacion']}"/>
+                    		
+					<f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{datosCliente.cambiarCaracteristicas}"/>
+                    		
+                </h:selectManyCheckbox>            
+            </h:panelGroup>
+
+            </div>
+        </span>
+        <span class="columna" style="width:160px">
+            <div class="titulo titulo-espaciado" style="margin-top: 24px;">
+    	        <h:outputText value="     "/>
+            </div>        
+            <div class="campo-espaciado">
+                <h:outputText value="#{msg['com.ibm.bbva.common.datosCliente.categorias']}:" class="etiqueta"/>
+            </div>
+            <span class="columna">
+                <h:selectManyCheckbox value="#{datosCliente.categoriasRenta}" layout="pageDirection" 
+                		id="categoriasRenta" style="margin-bottom: -8px;">
+                    <f:selectItems value="#{datosCliente.listaCategoriaRenta}"/>
+                    <f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{datosCliente.cambiarCategorias}"/>
+                </h:selectManyCheckbox>
+            </span>
+            <h:message for="categoriasRenta" errorClass="mensaje-error"/>
+        </span>
+    </div>
+</div>
+</ui:composition>

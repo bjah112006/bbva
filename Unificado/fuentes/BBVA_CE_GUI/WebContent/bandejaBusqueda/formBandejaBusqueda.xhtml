@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head> 
+    	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+		<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+        <h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="style.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+        <h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+        <h:outputScript library="js" name="jquery-ui.js" target="head"/>
+        <h:outputScript library="js" name="jquery.numeric.js" target="head"/>
+        <h:outputScript library="js" name="jquery.mask.min.js" target="head"/>
+        <h:outputScript library="js" name="autoNumeric-1.7.4-B.js" target="head"/>
+        <h:outputScript library="js" name="funciones.js" target="head"/>
+        <h:outputScript target="head">
+        /* <![CDATA[ */
+        
+        $(document).ready(function(){
+			$("#frmBandejaBusqueda\\:fecInicio").mask("00/00/0000", {
+	 			placeholder: "__/__/____"}
+	 		);
+	 		$("#frmBandejaBusqueda\\:fecFin").mask("00/00/0000", {
+	 			placeholder: "__/__/____"}
+	 		);
+	 		
+	 		$(".mostrarModal").click(function (event) {
+	   				var img = '<img src="/BBVA_CE_GUI/resources/images/loading.gif" height="60" width="60"><span style="text-align:center; display:block; margin-top:5px">Procesando...</span>';
+					modal.open({content: img});
+	   			});
+	   		
+	   		try {
+		   		var preloadImg = new Image();
+		 		preloadImg.src = "/BBVA_CE_GUI/resources/images/loading.gif";
+		 	} catch (e) { }
+		});
+		
+        function validarFormatoFechaInicio(){
+			if($('#frmBandejaBusqueda\\:fecInicio').val().length<10 && $('#frmBandejaBusqueda\\:fecInicio').val().length!=0){
+				alert('El formato de la fecha debe ser dd/MM/yyyy');
+				$('#frmBandejaBusqueda\\:fecInicio').val("");
+				$('#frmBandejaBusqueda\\:fecInicio').focus();
+			}
+		}
+		
+		function validarFechaInicio() {
+			if($('#frmBandejaBusqueda\\:fecInicio').val().length!=0){
+		 		var fecha =$("#frmBandejaBusqueda\\:fecInicio").val();
+				if(validate_fecha(fecha)==false){
+	        		alert("La fecha ingresada no es correcta.");
+					$('#frmBandejaBusqueda\\:fecInicio').val("");
+					$('#frmBandejaBusqueda\\:fecInicio').focus();
+	        	}
+			}
+		}
+		
+		function validarFormatoFechaFin(){
+			if($('#frmBandejaBusqueda\\:fecFin').val().length<10 && $('#frmBandejaBusqueda\\:fecFin').val().length!=0){
+				alert('El formato de la fecha debe ser dd/MM/yyyy');
+				$('#frmBandejaBusqueda\\:fecFin').val("");
+				$('#frmBandejaBusqueda\\:fecFin').focus();
+			}
+		}
+		
+		function validarFechaFin() {
+			if($('#frmBandejaBusqueda\\:fecFin').val().length!=0){
+		 		var fecha =$("#frmBandejaBusqueda\\:fecFin").val();
+				if(validate_fecha(fecha)==false){
+	        		alert("La fecha ingresada no es correcta.");
+					$('#frmBandejaBusqueda\\:fecFin').val("");
+					$('#frmBandejaBusqueda\\:fecFin').focus();
+	        	}
+			}
+		}
+		
+		function validate_fecha(fecha){
+	    	//Obtenemos los valores dia, mes y año:
+		  	//-------------------------------------
+		  	var arrayFecha = fecha.split("/");
+			
+		  	//Comprobamos que se tengan 3 datos (dia, mes y año) no vacios
+		  	if (arrayFecha.length!=3 || arrayFecha[0]=="" || arrayFecha[1]=="" || arrayFecha[2]=="")
+		    	return false;
+		    
+		  	var anyo = parseInt(quitaCeros(arrayFecha[2]));
+		  	//Devuelve el mes numérico o null
+		  	var mes = devuelveMes(quitaCeros(arrayFecha[1]));
+		  	var dia = parseInt(quitaCeros(arrayFecha[0]));
+		  	//-------------------------------------
+			
+		  	//Comprobamos que los valores son numéricos
+		  	if (isNaN(anyo) || isNaN(mes) || isNaN(dia)) 
+		    	return false;
+		
+		  	//Comprobamos valores correctos de dia mes y anyo
+		  	if (dia<1 || dia>31 || mes<1 || mes>12 || anyo<0)
+		    	return false;
+		    		
+		  	//Comprobamos meses de 30 dias
+		  	if ((mes==4 || mes==6 || mes==9 || mes==11) && dia>30)
+		    	return false;
+		    		
+		  	//Comprobamos mes febrero & bisiestos
+		  	if (mes==2 && (dia > 29 || (dia==29 && ((anyo%400!=0) && ((anyo%4!=0) || (anyo%100==0)))) ))
+		    	return false;
+		    		
+			return true;
+		}
+		
+		function quitaCeros(cad){
+			var enc = false;
+		  	var i=0;
+		  	while (i<cad.length && !enc) {
+		  		if (cad.charAt(i)=='0'){
+		  			i++;
+		    	} else{
+		      		enc = true;
+		    	}
+		  	}
+		  	return (cad.substring(i,cad.length));
+		}
+	
+		/* Recibe una cadena con un mes (número o cadena)
+		   y devuelve el número de mes.*/
+		function devuelveMes (mes) {
+			var numMes = null;
+		  	var meses = new Array("jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec");
+			
+		  	if (!isNaN(parseInt(mes))) //Es un número
+		    	numMes = parseInt(mes);
+		  	else {
+		    	var encontrado=false;
+		    	var i=0;
+		    	while (i<meses.length && !encontrado) {
+			      	//Comparamos el mes en minúsculas
+			      	if (mes.toLowerCase()==meses[i]) {
+			        	encontrado=true;
+			        	numMes=i+1;
+			      	}
+			      	i++;
+		    	}
+		  	}
+		  	return numMes;
+		}
+        /* ]]> */
+        </h:outputScript>        
+      <script type="text/javascript">
+      	function eventoEnter(e){
+      		tecla=(document.all) ? e.keyCode : e.which;
+      		if (tecla == 13){
+            	var btn = document.getElementById('frmBandejaBusqueda:idBuscarBusq');
+            	e.preventDefault();
+            	if (btn != null){
+                	btn.click();
+                	//event.keyCode = 0;
+            	}
+        	  }
+      	
+      	}
+      	
+      	function focusOnCodExpediente(){					
+	       	$("#frmBandejaBusqueda\\:idCodExpediente").focus();				
+	    }
+      	
+      	function ocultarMenu() {
+      		$("#frmBandejaBusqueda\\:idEventMenu").val("true");
+      		
+        	document.getElementById('divOcultar').style.display = 'none';
+        	document.getElementById('divMostrar').style.display = 'block';
+        	
+        	document.getElementById('divMostrar').style.width = "20px";
+        	
+        	document.getElementById('divMenu').style.display = 'none';
+        	document.getElementById('divMenu').style.width = "0px";
+        	
+        	document.getElementById('divDatos').className = "datos1";
+        	document.getElementById('divBloque1_1').className = "bloque1";
+        	document.getElementById('divBloque1_2').className = "bloque1";
+        	document.getElementById('divBloque1_3').className = "bloque1";
+        	document.getElementById('divBloque1_4').className = "grilla1";
+        	
+        	focusOnCodExpediente();
+		}
+        
+        function mostrarMenu() {
+        	$("#frmBandejaBusqueda\\:idEventMenu").val("false");
+        	
+        	document.getElementById('divOcultar').style.display = 'block';
+        	document.getElementById('divMostrar').style.display = 'none';
+        	
+        	document.getElementById('divMenu').style.display = 'block';
+        	document.getElementById('divMenu').style.width = "195px";
+        	
+        	document.getElementById('divDatos').className = "datos";
+        	document.getElementById('divBloque1_1').className = "bloque";
+        	document.getElementById('divBloque1_2').className = "bloque";
+        	document.getElementById('divBloque1_3').className = "bloque";
+        	document.getElementById('divBloque1_4').className = "grilla";
+        	
+        	focusOnCodExpediente();
+        }
+        
+        function eventoMenu() {
+        	var id = $("#frmBandejaBusqueda\\:idEventMenu").val();
+        	if(id=="true"){
+        		ocultarMenu();
+        	}else{
+        		mostrarMenu();
+        	}
+        }
+      	
+      </script>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+        <title><h:outputText value="#{msg['com.ibm.bbva.bandejaBusqueda.formBandejaBusqueda.titulo']}"/></title>
+    </h:head>
+    <h:body onload="focusOnCodExpediente(); eventoMenu();">
+    <h:form id="frmBandejaBusqueda">  
+    	<h:inputHidden value="false" id="idEventMenu"/>  	
+        <div class="contenido">
+            <div class="cabecera">
+                <ui:include src="/resources/common/cabecera.xhtml"/>
+            </div>
+            <div class="cuerpo">
+                <div class="menu">
+                    <div id="divMenu">
+						<ui:include src="/resources/common/menu.xhtml" />
+					</div>
+					<div id="divOcultar" onclick="ocultarMenu();">
+						<h:graphicImage value="/resources/images/left_over.gif" align="right" style="border:0px;"/>
+					</div>
+					<div id="divMostrar" onclick="mostrarMenu();" style="display:none;">
+						<h:graphicImage value="/resources/images/right_over.gif" align="right" style="border:0px;"/>
+					</div>
+                </div>
+                <div id="divDatos" class="datos">
+                	    <h:panelGroup styleClass="tituloMenu">
+							<h:outputText id="idTblPendiente" value="Búsqueda de Expedientes" />			
+							<h:outputText value=" " />
+						</h:panelGroup>           	
+	                    <ui:include src="/resources/common/buscarBandeja.xhtml"/>
+						<h:outputText value="#{buscarBandeja.textoMensajeSinFiltro}" escape="false"/>
+						<h:panelGroup id="pnlHistorico">
+							<h:outputText value="#{buscarBandeja.textoMensajeSoloExpediente}" escape="false"/>
+							<h:commandLink styleClass="colorLink" immediate="true" id="cmlExpediente"
+										value="#{buscarBandeja.codigoExpediente}" style="#{buscarBandeja.mostrarLinkExp?'':'display:none'}"
+										action="#{buscarBandeja.seleccionaFila}">
+									<f:param value="#{buscarBandeja.codigoExpediente}" name="codExpediente" />
+							</h:commandLink>
+						</h:panelGroup>
+						<h:outputText value="#{buscarBandeja.textoMensajeOtrosCriterios}" escape="false"/>
+						<br/>
+						<div class="column">					
+						    <!-- <h:commandButton id="idBuscarBusq" value="#{msg['com.ibm.bbva.bandejaBusqueda.formBandejaBusqueda.buscar']}">
+	            		    	<f:ajax onevent="mostrarProcesando" event="click" render="@form" execute="@form" listener="#{bandejaBusqueda.buscar}"/>
+	            		    </h:commandButton>-->
+	            		    <h:commandButton id="idBuscarBusq" value="#{msg['com.ibm.bbva.bandejaBusqueda.formBandejaBusqueda.buscar']}"
+	            		                     action="#{bandejaBusqueda.buscar}" styleClass="mostrarModal"/>
+                            <h:commandButton value="#{msg['com.ibm.bbva.bandejaBusqueda.formBandejaBusqueda.limpiar']}"
+	            		                     action="#{bandejaBusqueda.limpiar}"/>		            		                     							
+						    <h:commandButton id="salirbb" value="#{msg['com.ibm.bbva.bandejaBusqueda.formBandejaBusqueda.salir']}"
+	            		                      styleClass="boton" action="#{bandejaBusqueda.cancelar}"/>
+						</div>		
+						
+						<ui:include src="/resources/common/tablaBandejaPend.xhtml"/>
+				</div>
+            </div>
+        </div>
+    </h:form>
+    </h:body>
+</html>

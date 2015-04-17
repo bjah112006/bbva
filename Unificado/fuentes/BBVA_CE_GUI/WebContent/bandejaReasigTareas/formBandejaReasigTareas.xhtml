@@ -1,0 +1,412 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+		<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+        <h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="style.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+        <h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+        <h:outputScript library="js" name="jquery-ui.js" target="head"/>
+		<h:outputScript library="js" name="jquery.mask.min.js" target="head"/>
+        <h:outputScript library="js" name="autoNumeric-1.7.4-B.js" target="head"/>
+        <h:outputScript library="js" name="funciones.js" target="head"/>
+	 	<h:outputScript target="head">
+	 	/* <![CDATA[ */
+        
+	    function validar() {
+        	if(document.getElementById('frmBandejaReasigTareas:idUsuAsigSeleccinado').value == "-1"){
+        		alert("Debe Seleccionar un Usuario a Asignar");
+        		return false;
+        	}
+       		$("#frmBandejaReasigTareas\\:idDeshabBotton").val("true");
+       		return true;
+        }	
+	                 	                
+	    function eventoEnter(e){
+      		tecla=(document.all) ? e.keyCode : e.which;
+      		if (tecla == 13){
+            	var btn = document.getElementById('frmBandejaReasigTareas:idBuscarAsig');
+            	if (btn != null){ 
+                	btn.click();
+                	event.keyCode = 0
+            	}
+        	}
+      	}   	
+	
+		function validarFormatoFechaInicio(){
+			if($('#frmBandejaReasigTareas\\:fecInicio').val().length<10 && $('#frmBandejaReasigTareas\\:fecInicio').val().length!=0){
+				alert('El formato de la fecha debe ser dd/MM/yyyy');
+				$('#frmBandejaReasigTareas\\:fecInicio').val("");
+				$('#frmBandejaReasigTareas\\:fecInicio').focus();
+			}
+		}
+		
+		function validarFechaInicio() {
+			if($('#frmBandejaReasigTareas\\:fecInicio').val().length!=0){
+		 		var fecha =$("#frmBandejaReasigTareas\\:fecInicio").val();
+				if(validate_fecha(fecha)==false){
+	        		alert("La fecha ingresada no es correcta.");
+					$('#frmBandejaReasigTareas\\:fecInicio').val("");
+					$('#frmBandejaReasigTareas\\:fecInicio').focus();
+	        	}
+			}
+		}
+		
+		function validarFormatoFechaFin(){
+			if($('#frmBandejaReasigTareas\\:fecFin').val().length<10 && $('#frmBandejaReasigTareas\\:fecFin').val().length!=0){
+				alert('El formato de la fecha debe ser dd/MM/yyyy');
+				$('#frmBandejaReasigTareas\\:fecFin').val("");
+				$('#frmBandejaReasigTareas\\:fecFin').focus();
+			}
+		}
+		
+		function validarFechaFin() {
+			if($('#frmBandejaReasigTareas\\:fecFin').val().length!=0){
+		 		var fecha =$("#frmBandejaReasigTareas\\:fecFin").val();
+				if(validate_fecha(fecha)==false){
+	        		alert("La fecha ingresada no es correcta.");
+					$('#frmBandejaReasigTareas\\:fecFin').val("");
+					$('#frmBandejaReasigTareas\\:fecFin').focus();
+	        	}
+			}
+		}
+		
+		function validate_fecha(fecha){
+	    	//Obtenemos los valores dia, mes y año:
+		  	//-------------------------------------
+		  	var arrayFecha = fecha.split("/");
+			
+		  	//Comprobamos que se tengan 3 datos (dia, mes y año) no vacios
+		  	if (arrayFecha.length!=3 || arrayFecha[0]=="" || arrayFecha[1]=="" || arrayFecha[2]=="")
+		    	return false;
+		    
+		  	var anyo = parseInt(quitaCeros(arrayFecha[2]));
+		  	//Devuelve el mes numérico o null
+		  	var mes = devuelveMes(quitaCeros(arrayFecha[1]));
+		  	var dia = parseInt(quitaCeros(arrayFecha[0]));
+		  	//-------------------------------------
+			
+		  	//Comprobamos que los valores son numéricos
+		  	if (isNaN(anyo) || isNaN(mes) || isNaN(dia)) 
+		    	return false;
+		
+		  	//Comprobamos valores correctos de dia mes y anyo
+		  	if (dia<1 || dia>31 || mes<1 || mes>12 || anyo<0)
+		    	return false;
+		    		
+		  	//Comprobamos meses de 30 dias
+		  	if ((mes==4 || mes==6 || mes==9 || mes==11) && dia>30)
+		    	return false;
+		    		
+		  	//Comprobamos mes febrero & bisiestos
+		  	if (mes==2 && (dia > 29 || (dia==29 && ((anyo%400!=0) && ((anyo%4!=0) || (anyo%100==0)))) ))
+		    	return false;
+		    		
+			return true;
+		}
+		
+		function quitaCeros(cad){
+			var enc = false;
+		  	var i=0;
+		  	while (i<cad.length && !enc) {
+		  		if (cad.charAt(i)=='0'){
+		  			i++;
+		    	} else{
+		      		enc = true;
+		    	}
+		  	}
+		  	return (cad.substring(i,cad.length));
+		}
+	
+		/* Recibe una cadena con un mes (número o cadena)
+		   y devuelve el número de mes.*/
+		function devuelveMes (mes) {
+			var numMes = null;
+		  	var meses = new Array("jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec");
+			
+		  	if (!isNaN(parseInt(mes))) //Es un número
+		    	numMes = parseInt(mes);
+		  	else {
+		    	var encontrado=false;
+		    	var i=0;
+		    	while (i<meses.length && !encontrado) {
+			      	//Comparamos el mes en minúsculas
+			      	if (mes.toLowerCase()==meses[i]) {
+			        	encontrado=true;
+			        	numMes=i+1;
+			      	}
+			      	i++;
+		    	}
+		  	}
+		  	return numMes;
+		}			
+	    
+	    /**
+  		* Este evento se ejecuta cada vez que se hace una llamada
+  		* AJAX al seleccionar la opción de "Seleccionar todos"
+  		*/
+     	function onCheckAllEvent(data){
+           	var status = data.status;
+		    switch (status) {
+		        case "begin": 
+		            // Antes de hacer la llamada AJAX, cambiar el checkbox a todos.
+		            var element = $("#frmBandejaReasigTareas\\:tablaBandejaAsig\\:idSelectAllExp");
+		            $(element).closest("table").find('input[type=checkbox]').attr('checked', element[0].checked);
+		            break;
+		
+		        case "complete": 
+		            // ...
+		            break;
+		
+		        case "success": 
+		            // ...
+		            break;
+		    }
+        }
+            
+        /*
+        $("#frmBandejaReasigTareas\\:selectIdOficinasBuscar").mousedown(function(e){
+         	if(this.options.length>20){
+         		this.size=20;
+         		if(this.minimizar==true){
+         			this.size=1; 
+         			this.minimizar=false
+         		} else{
+         			if(this.minimizar==undefined||this.minimizar==false){
+         				this.minimizar=true
+         			}
+         		}
+         	}
+       	});
+       	*/     			
+        /* ]]> */
+		</h:outputScript>
+		
+        <title><h:outputText value="#{msg['com.ibm.bbva.bandejaReasigTareas.formBandejaReasigTareas.titulo']}"/></title>
+    </h:head>
+    <h:body onload="eventoMenu();">
+    <h:form id="frmBandejaReasigTareas">
+    <h:inputHidden value="false" id="idEventMenu"/>
+    <h:inputHidden id="idMsgEstadoRegistro" value="#{bandejaReasigTareas.bolEstadoExp}"></h:inputHidden>
+    <h:inputHidden id="idActEstadoRegistro" value="#{bandejaReasigTareas.actEstadoExp}"></h:inputHidden>
+    <h:inputHidden id="idDeshabBotton" value="#{bandejaReasigTareas.deshabilitar}"></h:inputHidden>
+   <h:inputHidden id="idValidarBusquedaOK" value="#{bandejaReasigTareas.validacionBuscarOK}"></h:inputHidden>
+   
+    <script type="text/javascript">
+		/* <![CDATA[ */
+		
+		$(document).ready(function(){ 
+			$("#frmBandejaReasigTareas\\:fecInicio").mask("00/00/0000", {
+	 			placeholder: "__/__/____"}
+	 		);
+	 		$("#frmBandejaReasigTareas\\:fecFin").mask("00/00/0000", {
+	 			placeholder: "__/__/____"}
+	 		);
+			
+      		if($("#frmBandejaReasigTareas\\:idMsgEstadoRegistro").val() == "true") {
+
+      			if($("#frmBandejaReasigTareas\\:msgEstadoRegistro").text() == ""){
+      				
+      				$("#frmBandejaReasigTareas\\:btnAceptar").click();
+      				
+      			}else{
+					var msg = $("#frmBandejaReasigTareas\\:msgEstadoRegistro").text();
+					msgExp = 'Los siguientes expedientes estan siendo usados : ';
+					msgExpConfirm = '¿Esta seguro que desea seguir?';
+					msg = msgExp + '\n' + msg + '\n' + msgExpConfirm; 	
+					
+					op = confirm(msg);
+						
+		        	if (op) {
+		        		$("#frmBandejaReasigTareas\\:btnAceptar").click();
+		        		$("#frmBandejaReasigTareas\\:idMsgEstadoRegistro").val("false"); 
+		        	}
+		
+      			}
+			}
+			
+		    if($("#frmBandejaReasigTareas\\:idValidarBusquedaOK").val() == "1"){
+		    	$("#frmBandejaReasigTareas\\:btnBuscar").click();
+		    }  
+		      
+		    if($("#frmBandejaReasigTareas\\:idResultAsigna").val() == "Asignación satisfactoria"){
+		    	$("#frmBandejaReasigTareas\\:idResultAsigna").val("");
+		    } 		        
+			
+        });
+
+		function myFuncion(data) {
+			if (data.status == "success") {
+				$(".soloNumeros").keypress(function (event) {
+					if (event.which > 31 && (event.which < 48 || event.which > 57)) {
+						event.preventDefault();
+					}
+				});
+			}
+			$( ".formatoFecha" ).datepicker({
+			   autoSize: true,
+			   buttonImage: "/BBVA_CE_GUI/resources/images/1x1.gif",
+			   buttonImageOnly: true,
+			   changeMonth: true,
+			   changeYear: true,
+			   constrainInput: true,
+			   dateFormat: "dd/mm/yy",
+			   firstDay: 1,
+			   selectOtherMonths: true,
+			   showOn: "button",
+			   showOtherMonths: true,
+			   closeText: 'Cerrar',
+			   prevText: '&#x3c;Ant',
+			   nextText: 'Sig&#x3e;',
+			   currentText: 'Hoy',
+			   monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+			   monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+			   dayNames: ['Domingo','Lunes','Martes','Mi&eacute;rcoles','Jueves','Viernes','S&aacute;bado'],
+			   dayNamesShort: ['Dom','Lun','Mar','Mi&eacute;','Juv','Vie','S&aacute;b'],
+			   dayNamesMin: ['D','L','M','M','J','V','S'],
+			   weekHeader: 'Sm',
+			   yearRange:'2014:+10'
+			});
+			mostrarProcesando(data);
+		}
+		
+		function ocultarMenu() {
+			$("#frmBandejaReasigTareas\\:idEventMenu").val("true");
+			
+        	document.getElementById('divOcultar').style.display = 'none';
+        	document.getElementById('divMostrar').style.display = 'block';
+        	
+        	document.getElementById('divMostrar').style.width = "20px";
+        	
+        	document.getElementById('divMenu').style.display = 'none';
+        	document.getElementById('divMenu').style.width = "0px";
+        	
+        	document.getElementById('divDatos').className = "datos1";
+        	document.getElementById('divBloque4_1').className = "bloque1";
+        	document.getElementById('divBloque4_2').className = "grilla1";
+		}
+        
+        function mostrarMenu() {
+        	$("#frmBandejaReasigTareas\\:idEventMenu").val("false");
+        	
+        	document.getElementById('divOcultar').style.display = 'block';
+        	document.getElementById('divMostrar').style.display = 'none';
+        	
+        	document.getElementById('divMenu').style.display = 'block';
+        	document.getElementById('divMenu').style.width = "195px";
+        	
+        	document.getElementById('divDatos').className = "datos";
+        	document.getElementById('divBloque4_1').className = "bloque";
+        	document.getElementById('divBloque4_2').className = "grilla";
+        }
+        
+        function eventoMenu() {
+        	var id = $("#frmBandejaReasigTareas\\:idEventMenu").val();
+        	if(id=="true"){
+        		ocultarMenu();
+        	}else{
+        		mostrarMenu();
+        	}
+        }
+		/* ]]> */
+	</script>
+	    
+    <h:outputText value="#{bandejaReasigTareas.strExpedientes}"
+    			id="msgEstadoRegistro" style="display:none;"/>   
+    			 
+        <div class="contenido">
+            <div class="cabecera">
+                <ui:include src="/resources/common/cabecera.xhtml"/>
+            </div>
+            <div class="cuerpo">
+                <div class="menu">
+                    <div id="divMenu">
+						<ui:include src="/resources/common/menu.xhtml"/>
+					</div>
+					<div id="divOcultar" onclick="ocultarMenu();">
+						<h:graphicImage value="/resources/images/left_over.gif" align="right" style="border:0px;"/>
+					</div>
+					<div id="divMostrar" onclick="mostrarMenu();" style="display:none;">
+						<h:graphicImage value="/resources/images/right_over.gif" align="right" style="border:0px;"/>
+					</div>
+                </div>
+                <div id="divDatos" class="datos">
+                	    <h:panelGroup styleClass="tituloMenu">
+							<h:outputText id="idTblPendiente" value="Bandeja de Asignación" />			
+							<h:outputText value=" " />
+						</h:panelGroup>           	
+	                    <ui:include src="/resources/common/buscarBandejaAsig.xhtml"/>
+						<h:inputHidden value="" id="datoBusqueda"/>
+						<h:message for="datoBusqueda" errorClass="mensaje-error"/>
+						<h:inputHidden value="" id="datoAsignacion"/>
+						<h:message for="datoAsignacion" errorClass="mensaje-info"/>						
+						<h:outputText value="#{buscarBandejaAsig.textoMensajeSinFiltro}" escape="false"/>		
+                	    <h:panelGroup>
+							<h:outputText id="idResultAsigna" value="#{bandejaReasigTareas.strResultado}" style="color:blue;" />			
+							<h:outputText value=" " />
+						</h:panelGroup> 
+																		
+						<div class="column boton-principal">
+						<!-- 
+						    <h:commandButton id="idBuscarAsig" value="#{msg['com.ibm.bbva.bandejaReasigTareas.formBandejaReasigTareas.buscar']}"
+	            		                     action="#{bandejaReasigTareas.buscar}"/>							
+						 -->					
+						    <h:commandButton id="idBuscarAsig" value="#{msg['com.ibm.bbva.bandejaReasigTareas.formBandejaReasigTareas.buscar']}"
+	            		                     actionListener="#{bandejaReasigTareas.validarBusqueda}" disabled="#{bandejaReasigTareas.deshabilitar}"/>	               	
+	            		                     
+                            <h:commandButton value="#{msg['com.ibm.bbva.bandejaBusqueda.formBandejaBusqueda.limpiar']}"
+	            		                     action="#{bandejaReasigTareas.limpiar}" disabled="#{bandejaReasigTareas.deshabilitar}" />
+	            		                     
+	            		    <!-- 
+	            		    <h:commandButton value="#{msg['com.ibm.bbva.bandejaReasigTareas.formBandejaReasigTareas.asignar']}" onclick="if (validar()==false) return false;"
+	            		                     action="#{bandejaReasigTareas.asignar}" id="asigForm" disabled="#{bandejaReasigTareas.desAsignar}" execute="@form" />	            		    
+	            		     -->                 		            		                     							
+	            		    <!-- 
+	            		    <h:commandButton value="#{msg['com.ibm.bbva.bandejaReasigTareas.formBandejaReasigTareas.asignar']}" onclick="if (validar()==false) return false;" 
+	            		                     action="#{bandejaReasigTareas.validar}" id="asigForm" disabled="#{bandejaReasigTareas.desAsignar}" 
+	            		                     accesskey="a"/>	            		    
+	            		     --> 
+                  
+	            		    <h:commandButton value="#{msg['com.ibm.bbva.bandejaReasigTareas.formBandejaReasigTareas.asignar']}" onclick="if (validar()==false) return false;" 
+	            		                     actionListener="#{bandejaReasigTareas.validar}" id="asigForm" disabled="#{bandejaReasigTareas.desAsignar}" 
+	            		                     accesskey="a">        
+	            		     </h:commandButton>                	            		                     
+	            		                     	            		                     
+						    <h:commandButton id="salirbr" value="#{msg['com.ibm.bbva.bandejaReasigTareas.formBandejaReasigTareas.salir']}"
+	            		                     styleClass="boton" action="#{bandejaReasigTareas.cancelar}" disabled="#{bandejaReasigTareas.deshabilitar}" />							
+							
+							
+	            		    <h:commandLink id="btnAceptar" 
+	            		    			   action="#{bandejaReasigTareas.asignar}" 
+		    	                           class="display:none">
+					             <f:ajax onevent="myFuncion" event="click" render=":frmBandejaReasigTareas" listener="#{bandejaReasigTareas.asignar}"/>
+		    	            </h:commandLink> 	
+		    	            
+
+	            		    <h:commandLink id="btnBuscar" 
+		    	                           action="#{bandejaReasigTareas.buscar}"
+		    	                           class="display:none">
+		    	                   <f:ajax onevent="myFuncion" event="click" render=":frmBandejaReasigTareas" listener="#{bandejaReasigTareas.buscar}"/>
+		    	            </h:commandLink>		    	                	            		    	            		    	            						
+						</div>		
+						
+						<ui:include src="/resources/common/tablaBandejaAsig.xhtml"/>
+						
+						<h:inputHidden value="" id="datoReasignar"/>
+						<h:message for="datoReasignar" errorClass="mensaje-error"/>
+						
+				</div>
+            </div>
+        </div>
+    </h:form>
+    </h:body>
+</html>

@@ -1,0 +1,100 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg" />
+<script type="text/javascript">
+/* <![CDATA[ */
+		/*function salir () {
+			if (confirm("¿Desea salir del Sistema?")) {
+				location.href = "ibm_security_logout?logoutExitPage=/index.faces";
+				disableBack();
+			}
+		}
+		
+        function disableBack(){
+        	window.history.forward();
+        }*/	
+        
+        function salir () {
+			if (confirm("¿Desea Salir del Sistema?")) {
+				$("[id='#{menu.btnCerrarSesion.clientId}']").click();
+				var winD = window.open('', '_self', '');
+				winD.close();
+			}
+		}
+		
+		/*function salir () {
+			return confirm("¿Desea Salir del Sistema?");
+		}*/
+/* ]]> */
+</script>
+<div class="menu-lista">
+	<h:commandLink action="#{menu.nuevoExpediente}" immediate="true" rendered="#{menu.habMenuRegistrarExpediente}">
+		<h:outputText value="#{msg['com.ibm.bbva.common.menu.regexp']}" />
+	</h:commandLink>	
+	<h:commandLink action="#{menu.bandejaPendientes}" immediate="true" rendered="#{menu.habMenuBandejaPendientes}">
+		<h:outputText value="#{msg['com.ibm.bbva.common.menu.banpend']}" />
+	</h:commandLink> 
+	<h:commandLink action="#{menu.bandejaBusqueda}" immediate="true" rendered="#{menu.habMenuBusqueda}">
+		<h:outputText value="#{msg['com.ibm.bbva.common.menu.banbus']}" />
+	</h:commandLink>
+	<h:commandLink action="#{menu.bandejaHistorica}" immediate="true" rendered="#{menu.habMenuBandejaHistorica}">
+		<h:outputText value="#{msg['com.ibm.bbva.common.menu.banhis']}" />
+	</h:commandLink>
+	<h:commandLink action="#{menu.bandejaReasigTareas}" immediate="true" rendered="#{menu.habMenuBandejaAsignacion}">
+		<h:outputText value="#{msg['com.ibm.bbva.common.menu.banreasig']}" />
+	</h:commandLink> 
+	<h:commandLink action="#{menu.bandejaMantenimiento}" immediate="true" rendered="#{menu.habMenuBandejaMantenimiento}">
+		<h:outputText value="#{msg['com.ibm.bbva.common.menu.banMant']}" />
+	</h:commandLink>
+	<!-- 
+	<h:commandLink action="#{menu.reporteToeExcel}" immediate="true" >
+		<h:outputText value="#{msg['com.ibm.bbva.common.menu.banRepToe']}" />
+	</h:commandLink>
+	 --> 
+
+	<h:outputText value="#{msg['com.ibm.bbva.common.menu.banRep']}" style="color: #ffffff"  rendered="#{menu.habMenuReportes}"/>	
+			<h:commandLink action="#{menu.reporteHistoricoTc}" inmediate="true" style="padding-left:12px; margin-left:8px;" rendered="#{menu.habMenuReporteHistorial}">
+				<h:outputText value="#{msg['com.ibm.bbva.common.reporteTC.his.titulo']}" />
+			</h:commandLink>
+
+			<h:commandLink action="#{menu.reporteConsolidadoTc}" inmediate="true" style="padding-left:12px; margin-left:8px;" rendered="#{menu.habMenuReporteConsolidado}">
+				<h:outputText value="#{msg['com.ibm.bbva.common.reporteTC.con.titulo']}" />
+			</h:commandLink>
+
+			<h:commandLink action="#{menu.reporteToeExcel}" immediate="true" style="padding-left:12px; margin-left:8px;" rendered="#{menu.habMenuReporteTOE}">
+				<h:outputText value="#{msg['com.ibm.bbva.common.menu.banRepToe']}" />
+			</h:commandLink>
+ 	<!-- 
+	<h:commandLink action="#{menu.bandejaReporte}" immediate="true" rendered="#{menu.renderedBanMant}">
+		<h:outputText value="#{msg['com.ibm.bbva.common.menu.reporte']}" />
+	</h:commandLink> 
+	--> 
+	<h:commandLink action="#{menu.bandejaHorario}" immediate="true" rendered="#{menu.habMenuHorario}">
+		<h:outputText value="Horario" />
+	</h:commandLink>
+	
+	<h:commandLink action="#{menu.bandejaMonitoreo}" immediate="true" rendered="#{menu.habMenuBandejaMonitoreo}">
+		<h:outputText value="Admin Procesos" />
+	</h:commandLink>
+
+	<h:outputLink value="javascript: salir();">
+		<h:outputText value="#{msg['com.ibm.bbva.common.menu.salir']}" />
+	</h:outputLink>
+
+	<!--
+	<h:commandLink onclick="return salir();" action="#{menu.irCerrarSesion}" style="display:none;">
+   		<h:outputText value="#{msg['com.ibm.bbva.common.menu.salir']}" />
+   	</h:commandLink>
+   	-->
+   	
+   	<h:commandButton id="btnCerrarSesion" binding="#{menu.btnCerrarSesion}" style="display:none">
+		<f:ajax event="click" execute="@this" listener="#{menu.cerrarSesionWAS}"/>
+	</h:commandButton>
+
+</div>
+
+</ui:composition>

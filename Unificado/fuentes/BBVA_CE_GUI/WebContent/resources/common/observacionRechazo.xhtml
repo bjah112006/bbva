@@ -1,0 +1,136 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<script type="text/javascript" >
+	$(document).ready(function() {
+		// Modal dialog
+		$("[id='#{observacionRechazo.dialogoModal.clientId}']").dialog({
+			modal: true,
+			draggable: false,
+			resizable: false,
+			dialogClass: "panelDialog",
+			width: 492,
+			autoOpen: #{observacionRechazo.mostrarDialogo},
+			title: '#{observacionRechazo.tituloVentana}'
+		}).parent().appendTo($("[id='#{observacionRechazo.nombreFormPadre}']"));
+	});
+</script>
+<h:panelGroup id="dialog1" binding="#{observacionRechazo.dialogoModal}" layout="block">
+<div>
+	<div class="titulo1">
+		<h:outputText value="#{msg['com.ibm.bbva.common.observacionRechazo.titulo1']}" />
+	</div>
+</div>
+<div class="bloque" style="width:auto;">
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var flagOtros = $("[id='#{observacionRechazo.inputFlagOtros.clientId}']");
+			var selCom = $("[id='#{observacionRechazo.selectObservacion.clientId}']");
+			var txtCom = $("[id='#{observacionRechazo.inputTxtObservacion.clientId}']");
+			var hbtText = $("[id='#{observacionRechazo.inputHabText.clientId}']");
+			
+			$(selCom).change(function () {
+				if ($(hbtText).val() == '1') {
+					$(txtCom).removeAttr("disabled");
+				}else{
+					if ($(flagOtros).val() == $(this).val()) {
+						$(txtCom).removeAttr("disabled");
+					} else {
+						$(txtCom).attr("disabled", true);
+					}					
+				}
+			});
+			
+			var num_caracteres_permitidos = 250;
+			
+			var txtCom = $("textarea").filter(function() {
+	        	var txtIds = $(this).attr("name");
+	        	return txtIds.match(/^.*\:txtObservacion$/);
+	        });
+	        $(txtCom).keypress(function(event){
+	        	var key = event.which;
+	        	if(key >= 33 || key == 13) {
+					var length = this.value.length;
+					if(length >= num_caracteres_permitidos) {
+						event.preventDefault();
+					}
+				}
+			});
+		});
+		
+		function verificarSel() {
+			var selCom = $("[id='#{observacionRechazo.selectObservacion.clientId}']");
+			if ($(selCom).val() == "" || $(selCom).val() == "-1") {
+				alert("Debe seleccionar un motivo");
+				return false;
+			} else {
+				var txtCom = $("textarea").filter(function() {
+		        	var txtIds = $(this).attr("name");
+		        	return txtIds.match(/^.*\:txtObservacion$/);
+		        });
+		    	valorTexto = $(txtCom).val();
+		    	if (valorTexto.trim().length > 250) {
+		    		alert("El texto no debe superar el tama" + String.fromCharCode(241) + "o m" + String.fromCharCode(225) + "ximo de 250 caracteres");
+					return false;
+		    	} else {
+		    		return true;
+		    	}
+
+			}
+		}
+		
+		function validarPegadoRechazo(e, campo){
+        	num_caracteres_permitidos = 250;
+        	if (e.button == 2 || e.ctrlKey) {
+        		num_caracteres = campo.value.length;
+        		contenido = $.trim(campo.value);
+        		if(num_caracteres >= num_caracteres_permitidos) {
+        			alert("El texto no debe superar el tama" + String.fromCharCode(241) + "o m" + String.fromCharCode(225) + "ximo de 250 caracteres");
+        			campo.value = contenido.substr(0,250);
+        		}      		
+        	}
+        }
+	</script>
+    <div class="contenido-bloque">
+    
+    	<h:inputHidden value="#{observacionRechazo.flagOtros}" id="flagOtros" binding="#{observacionRechazo.inputFlagOtros}" />
+    	<h:inputHidden value="#{observacionRechazo.habilitarText}" id="habText" binding="#{observacionRechazo.inputHabText}"/>
+            <div class="campo-espaciado">
+                <h:outputText value="#{msg['com.ibm.bbva.common.observacionRechazo.titulo2']}" styleClass="etiqueta"/>
+            </div>
+			<span class="columna" style="width: auto;">
+				<!--h:selectManyCheckbox value="#{observacionRechazo.selectedItems}" layout="pageDirection" id="chkObservacion" styleClass="chkObservacion">
+					<f:selectItems value="#{observacionRechazo.listaMotivoRechazo}"/>
+				</h:selectManyCheckbox-->
+				<h:selectOneMenu value="#{observacionRechazo.motivoSeleccionado}" id="selObservacion" binding="#{observacionRechazo.selectObservacion}" >
+					<f:selectItems value="#{observacionRechazo.listaMotivoRechazo}" />
+				</h:selectOneMenu>
+			</span>
+			<div style="padding-top: 5px;">
+				<h:inputTextarea value="#{observacionRechazo.observacionRechazo}" style="width:464px; resize: none;" rows="5" 
+				id="txtObservacion" binding="#{observacionRechazo.inputTxtObservacion}" disabled="#{!observacionRechazo.activoTxtObservacion}"
+				onkeydown="validarPegadoRechazo(event, this)" onmousedown="validarPegadoRechazo(event, this)"/>
+                <!--
+                	<h:inputTextarea value="#{observacionRechazo.observacionRechazo}" style="width:350px; resize: none;" rows="5" id="txtObservacion" binding="#{observacionRechazo.inputTxtObservacion}" /> 
+                 -->
+                 <h:outputLabel value="#{observacionRechazo.msgValidacion}" 
+                 				rendered="#{observacionRechazo.activoObervacion}" style="color: red;">
+                 </h:outputLabel>
+            </div>
+            <div class="column boton-principal">					
+				 <h:commandButton value="#{msg['com.ibm.bbva.common.observacionRechazo.aceptar']}"
+				                  onclick="return verificarSel()"
+            	                  action="#{observacionRechazo.aceptar}"/>                        
+                 <h:commandButton value="#{msg['com.ibm.bbva.common.observacionRechazo.cancelar']}"
+            	                  action="#{observacionRechazo.cancelar}"/>
+			</div>
+    </div>
+</div>
+</h:panelGroup>
+
+</ui:composition>

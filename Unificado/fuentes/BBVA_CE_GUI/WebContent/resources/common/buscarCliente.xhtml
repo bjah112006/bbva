@@ -1,0 +1,90 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<div class="bloque">
+	<script type="text/javascript">
+		/* <![CDATA[ */
+			$(document).ready(function(){
+				var tipoDocumento = $("#frmRegistrarExpediente\\:selectTipoDOI").val();
+			    if (tipoDocumento == "3" || tipoDocumento == "6") {
+			        $(".onlyNumbers").keypress(function (event) {
+	       				if (event.which > 31 && (event.which < 48 || event.which > 57)) {
+	    	   				event.preventDefault();
+	       				}     
+		   			});
+	   			}
+	   			
+	   			$(".mostrarModal").click(function (event) {
+	   				var img = '<img src="/BBVA_CE_GUI/resources/images/loading.gif" height="60" width="60"><span style="text-align:center; display:block; margin-top:5px">Procesando...</span>';
+					//procesandoEst='1';
+					modal.open({content: img});
+	   			});
+	 	 	});	
+	 	 
+		    function validarTipoDocumento(event) {
+	 			if (event.status == "success") {
+	 				var tipoDocumento = $("#frmRegistrarExpediente\\:selectTipoDOI").val();
+				    if (tipoDocumento == "3" || tipoDocumento == "6") {
+				        $(".onlyNumbers").keypress(function (event) {
+		       				if (event.which > 31 && (event.which < 48 || event.which > 57)) {
+		    	   				event.preventDefault();
+		       				}     
+			   			});
+		   			}
+				}
+	 			$("#frmRegistrarExpediente\\:numeroDOI").focus();
+			}
+	 	 
+		    function eventoEnterKey(e){
+		    	var tipoDocumento = $("#frmRegistrarExpediente\\:selectTipoDOI").val();
+		        if (tipoDocumento == "3" || tipoDocumento == "6"){
+		        	if (e.which > 31 && (e.which < 48 || e.which > 57)) {
+		        		e.preventDefault();
+		           	}         		
+		        }
+		    }	 	 
+		/* ]]> */
+	</script>
+    <div class="titulo-borde2">
+    	<h:outputText value="#{msg['com.ibm.bbva.common.buscarCliente.tituloBorde']}"/>
+    </div>
+    <div class="contenido-bloque" style="margin-top: 8px;">
+        <span class="columna" style="width:400px">
+        	<h:outputText value="#{msg['com.ibm.bbva.common.buscarCliente.tipoDOI']}:" 
+            		styleClass="etiqueta"/>
+            		<!-- immediate="true" -->
+            <h:selectOneMenu value="#{buscarCliente.tipoDOISeleccionado}" required="true"
+            		style="width:205px;" styleClass="txt-resaltado-2 valor-componente"
+            		id="selectTipoDOI" >
+				<f:selectItems value="#{buscarCliente.tiposDOI}"/>
+                <f:ajax onevent="validarTipoDocumento"   event="change" render="PanelDOI numeroDOI" 
+                    execute="@form" listener="#{buscarCliente.actSizeTipoDOI}"/>				
+            </h:selectOneMenu>
+            <h:message for="selectTipoDOI" errorClass="mensaje-error"/> 
+        </span>
+        <span class="columna">
+        
+	        <h:outputText value="#{msg['com.ibm.bbva.common.buscarCliente.numeroDOI']}:"
+	        		styleClass="etiqueta valor-componente"/>
+	        <h:inputText id="numeroDOI" value="#{buscarCliente.numeroDOI}" styleClass="etiqueta onlyNumbers"
+	        		maxlength="#{buscarCliente.sizeNumeroDOI}"
+	        		onkeypress="eventoEnter(event); eventoEnterKey(event);"/>
+	        <h:message for="numeroDOI" errorClass="mensaje-error"/>        
+        
+        </span>
+        <div>
+           <h:commandButton value="#{msg['com.ibm.bbva.common.buscarCliente.buscar']}" id="btnBuscar" styleClass="mostrarModal"
+            		actionListener="#{buscarCliente.buscar}"/>
+           <!-- <h:commandButton value="#{msg['com.ibm.bbva.common.buscarCliente.buscar']}" id="btnBuscar">
+            	<f:ajax onevent="mostrarProcesando" event="click" render="@form" execute="@form" listener="#{buscarCliente.buscar}"/>
+            </h:commandButton>-->
+        </div>
+    </div>
+</div>
+
+</ui:composition>

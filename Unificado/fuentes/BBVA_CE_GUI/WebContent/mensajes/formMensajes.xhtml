@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+		<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+        <h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="style.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+		<h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+        <h:outputScript library="js" name="jquery-ui.js" target="head"/>
+		<h:outputScript target="head">
+		<!-- 
+			$(document).ready (function(){
+	        	var resultado = $("#frmMensajes\\:idCopiaArchivosME").val();
+	        	//alert ("(1) abre ventana : "+resultado);
+	        	/*Indica que se permite la copia de los arch. escaneados*/	           
+	            if (resultado == "1") {
+	               window.open("../applet/avisoMoverArchivos.faces", "popup", "width=250, height=100");
+	            }
+        	});		
+		 -->
+		/* <![CDATA[ */        	
+        	
+        /* ]]> */
+		</h:outputScript>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+        <title><h:outputText value="#{msg['com.ibm.bbva.mensajes.formMensajes.titulo']}"/></title>
+        <script type="text/javascript">
+	        function accionCerrar() {
+	        	var menu = document.getElementById("idMenu");
+	        	var mensaje = document.getElementById("idMensaje");
+	        	var animacion = document.getElementById("idAnimacion");
+	        	animacion.style.display = 'none';
+	        	menu.style.display = 'block';
+	        	mensaje.style.display = 'block';
+	         }
+        </script>
+    </h:head>
+    <h:body>
+	    <h:form id="frmMensajes">
+	        <div class="contenido">
+	            <h:inputHidden id="idCopiaArchivosME" value="#{mensajes.flCopiaArchivos}"></h:inputHidden> 
+	            <div class="cabecera">
+	                <ui:include src="/resources/common/cabecera.xhtml" />
+	            </div>
+	            <div class="cuerpo">
+	                <div id="idMenu" class="menu" style="display:none">
+	                    <ui:include src="/resources/common/menu.xhtml" />
+	                </div>
+	                <div class="datos">
+	                	<div id="idMensaje" style="display:none">
+	                		<h:outputText value="#{mensajes.mensaje}"/>
+	            			<h:outputText value="#{mensajes.mensajeNoCarterizacion}" class="valor txt-resaltado-3" />
+	                	</div>
+	                </div>
+	                <div class="datos" align="center">
+		            	<div id="idAnimacion" style="width:410px; display:block">
+							<div id="appletContent" class="contenido-bloque">
+								<applet id="idApplet" code="com.ibm.bbva.app.applet.FTP"
+									        archive="../applet/BBVAAppletFTP.jar" 
+									        width="400" 
+									        height="80"
+									        hspace="0"
+									        vspace="10" 
+									        align="middle">
+									<param name="host" value="#{avisoMoverArchivos.hostParam}" />
+									<param name="user" value="#{avisoMoverArchivos.userParam}" />
+									<param name="password" value="#{avisoMoverArchivos.passwordParam}" />
+									<param name="periodo" value="#{avisoMoverArchivos.periodoParam}" />
+									<param name="tasaKBytes" value="#{avisoMoverArchivos.tasaKBytesParam}" />
+									<param name="escaneosPath" value="#{avisoMoverArchivos.escaneosPathParam}" />
+									<param name="prefix" value="#{avisoMoverArchivos.prefixParam}" />
+									<param name="hostws" value="#{avisoMoverArchivos.strHostWs}"/>
+									<param name="log" value="#{avisoMoverArchivos.pathLog}"/>
+									<param name="carpetaFTP" value="#{avisoMoverArchivos.carpetaFTP}"/>
+									<param name="descargados" value="#{avisoMoverArchivos.pathDescargados}" />
+									<param name="transferencias" value="#{avisoMoverArchivos.escaneosPathParam}" />
+									<param name="listaDocumentosAdjuntos" value="#{avisoMoverArchivos.listaDocumentosAdjuntos}" />
+								</applet>
+								<div class="titulo1">
+									<h:outputText value="#{msg['com.ibm.bbva.applet.avisoMoverArchivos.mensaje']}"/>
+								</div>
+							</div>
+						</div>
+					</div>
+	            </div>
+	        </div>
+	    </h:form>
+    </h:body>
+</html>

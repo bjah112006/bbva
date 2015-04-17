@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+		<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+        <h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="style.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+        <h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+        <h:outputScript library="js" name="jquery-ui.js" target="head"/>
+        <h:outputScript library="js" name="autoNumeric-1.7.4-B.js" target="head"/>
+        <h:outputScript library="js" name="funciones.js" target="head"/>
+        <h:outputScript target="head">
+		/* <![CDATA[ */
+			var myVar;
+			var intentosActuales;
+			
+            $(document).ready (function(){
+                /*
+               	var resultado = $("#frmBandejaPendientes\\:idCopiaArchivosBP").val();
+               	Indica que se permite la copia de los arch. escaneados
+               	if (resultado == "1") {
+               		document.getElementById('idCuerpoHtml').style.display = 'none';
+	                document.getElementById('idSubiendoArchivos').style.display = 'block';
+                  	window.open("../applet/avisoMoverArchivos.faces", "popup", "width=400, height=100");
+               	}
+                */
+               	myVar = setInterval(pinWS, 300000);
+		 		intentosActuales = 1;
+		 		
+            });
+            
+            function pinWS(){
+				var numeroIntentos = parseInt($("#frmBandejaPendientes\\:idIntentos").val());
+				$("[id='#{bandejaPendientes.btnActualizaWebSeal.clientId}']").click();
+				if(intentosActuales == numeroIntentos ){
+					clearInterval(myVar);
+				}
+				else{
+					intentosActuales++;
+				}
+			}
+        /* ]]> */
+		</h:outputScript> 
+		<script type="text/javascript">
+		 function eventoEnter(e){
+      		tecla=(document.all) ? e.keyCode : e.which;
+      		if (tecla == 13){
+            	var btn = document.getElementById('frmBandejaPendientes:idBuscarPend');
+            	if (btn != null){ 
+                	btn.click();
+                	event.keyCode = 0
+            	}
+        	  }
+      	
+      	}
+		 
+		 function ocultarMenu() {
+			 	$("#frmBandejaPendientes\\:idEventMenu").val("true");
+			 
+	        	document.getElementById('divOcultar').style.display = 'none';
+	        	document.getElementById('divMostrar').style.display = 'block';
+	        	
+	        	document.getElementById('divMostrar').style.width = "20px";
+	        	
+	        	document.getElementById('divMenu').style.display = 'none';
+	        	document.getElementById('divMenu').style.width = "0px";
+	        	
+	        	document.getElementById('divDatos').className = "datos1";
+	        	document.getElementById('divBloque3_1').className = "bloque1";
+	        	document.getElementById('divBloque1_4').className = "grilla1";
+			}
+		 
+		 	/*
+		 	function cerrarMensajeSubirArchivos() {
+				document.getElementById('idSubiendoArchivos').style.display = 'none';
+				document.getElementById('idCuerpoHtml').style.display = 'block';
+			}
+	        */
+	        
+	        function mostrarMenu() {
+	        	$("#frmBandejaPendientes\\:idEventMenu").val("false");
+	        	
+	        	document.getElementById('divOcultar').style.display = 'block';
+	        	document.getElementById('divMostrar').style.display = 'none';
+	        	
+	        	document.getElementById('divMenu').style.display = 'block';
+	        	document.getElementById('divMenu').style.width = "195px";
+	        	
+	        	document.getElementById('divDatos').className = "datos";
+	        	document.getElementById('divBloque3_1').className = "bloque";
+	        	document.getElementById('divBloque1_4').className = "grilla";
+	        }
+	        
+	        function eventoMenu() {
+	        	var id = $("#frmBandejaPendientes\\:idEventMenu").val();
+	        	if(id=="true"){
+	        		ocultarMenu();
+	        	}else{
+	        		mostrarMenu();
+	        	}
+	        }
+	        
+		</script>       
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+        <title><h:outputText value="#{msg['com.ibm.bbva.bandejaPendientes.formBandejaPendientes.titulo']}"/></title>
+    </h:head>
+    <h:body onload="eventoMenu();">
+    <h:form id="frmBandejaPendientes"> 
+    	<h:inputHidden value="false" id="idEventMenu"/>  	   	
+        <div class="contenido">
+            <h:inputHidden id="idCopiaArchivosBP" value="#{bandejaPendientes.flCopiaArchivos}"></h:inputHidden>
+            <h:inputHidden id="idIntentos" value="#{bandejaPendientes.numeroIntentos}"></h:inputHidden> 
+            <h:commandButton id="btnActualizaWebSeal" binding="#{bandejaPendientes.btnActualizaWebSeal}" style="display:none">
+				<f:ajax event="click" execute="@this" listener="#{bandejaPendientes.pinWebSeal}"/>
+			</h:commandButton>
+            <div class="cabecera">
+                <ui:include src="/resources/common/cabecera.xhtml"/>
+            </div>
+            <div id="idSubiendoArchivos" style="display:none" class="titulo1">
+	    		<h:outputText value="#{msg['com.ibm.bbva.applet.avisoMoverArchivos.titulo']}" />
+	    	</div>
+            <div id="idCuerpoHtml" class="cuerpo">
+                <div class="menu">
+                    <div id="divMenu">
+						<ui:include src="/resources/common/menu.xhtml"/>
+					</div>
+					<div id="divOcultar" onclick="ocultarMenu();">
+						<h:graphicImage value="/resources/images/left_over.gif" align="right" style="border:0px;"/>
+					</div>
+					<div id="divMostrar" onclick="mostrarMenu();" style="display:none;">
+						<h:graphicImage value="/resources/images/right_over.gif" align="right" style="border:0px;"/>
+					</div>
+                </div>
+                <div id="divDatos" class="datos">                	               	
+	                     <h:panelGroup styleClass="tituloMenu">
+							<h:outputText id="idTblPendiente" value="Bandeja de Expedientes Pendientes" />			
+							<h:outputText value=" " />
+						</h:panelGroup>
+						<ui:include src="/resources/common/buscarBandejaPend.xhtml"/>
+						<h:outputText value="#{buscarBandejaPend.textoMensajeSinFiltro}" escape="false"/>
+						<div class="column">					
+						    <h:commandButton value="#{msg['com.ibm.bbva.bandejaPendientes.formBandejaPendientes.buscar']}"
+						    				 id="idBuscarPend">
+	            		    	<f:ajax onevent="mostrarProcesando" event="click" render="@form" execute="@form" listener="#{bandejaPendientes.buscar}"/>
+	            		    </h:commandButton>       
+	            		    		
+	            		    <h:commandButton value="#{msg['com.ibm.bbva.bandejaPendientes.formBandejaPendientes.limpiar']}"
+	            		                     action="#{bandejaPendientes.limpiar}"/>	                 						
+						    <h:commandButton id="salirbp" value="#{msg['com.ibm.bbva.bandejaPendientes.formBandejaPendientes.salir']}"
+	            		                     styleClass="boton" action="#{bandejaPendientes.cancelar}"/>	
+	            		   									
+						</div>		
+						
+						<ui:include src="/resources/common/tablaBandejaPend.xhtml"/>
+				</div>
+            </div>
+        </div>
+    </h:form>
+    </h:body>
+</html>

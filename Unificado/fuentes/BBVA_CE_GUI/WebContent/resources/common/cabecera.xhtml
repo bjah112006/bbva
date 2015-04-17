@@ -1,0 +1,105 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<script type="text/javascript">
+	/* <![CDATA[ */  
+	$(document).ready(function() {
+		if (window.jsf != undefined && jsf.ajax != undefined) {
+			jsf.ajax.addOnError(errorAjaxWebSeal);
+		}
+	});
+	
+	function errorAjaxWebSeal(data) {
+		//alert(data.status);
+		if(data.status != null && data.status != "undefined" && data.status == "malformedXML"){
+			location.href = "/index.faces";
+		}
+	}
+	
+	/*function cerrarSesion () {
+		if (confirm("¿Desea Cerrar Sesi" + String.fromCharCode(243) + "n?")) {
+			location.href = "ibm_security_logout?logoutExitPage=/index.faces";
+			disableBack();
+		}
+	}
+	
+    function disableBack(){
+       	window.history.forward();
+    }*/
+    
+    /*function cerrarSesion () {
+		return confirm("¿Desea Cerrar Sesi" + String.fromCharCode(243) + "n?");
+	}*/
+	
+	function cerrarSesion () {
+		if (confirm("¿Desea Cerrar Sesi" + String.fromCharCode(243) + "n?")) {
+			$("[id='#{menu.btnCerrarSesion.clientId}']").click();
+			var winD = window.open('', '_self', '');
+			winD.close();
+		}
+	}
+	
+	/* ]]> */
+</script>
+
+<div class="logo-bbva"/>
+
+<div class="datos-cabecera">
+    <div class="titulo">
+    	<h:outputText value="#{msg['com.ibm.bbva.common.buscarCliente.titulo']}"/>
+    	
+    	<!--
+    	<h:commandLink onclick="return cerrarSesion();" action="#{menu.irCerrarSesion}" >
+    	  <h:graphicImage value="/resources/images/boton_apagar.png" align="right" style="border:0px;"/>
+    	</h:commandLink>
+    	
+    	<h:commandLink onclick="javascript: cerrarSesion();" >
+    	  <h:graphicImage value="/resources/images/boton_apagar.png" align="right" style="border:0px;"/>
+    	</h:commandLink>
+    	-->
+    	
+    	<h:outputLink value="javascript: cerrarSesion();">
+			<h:graphicImage value="/resources/images/boton_apagar.png" align="right" style="border:0px;"/>
+		</h:outputLink>
+		
+		<h:commandButton id="btnCerrarSesion" binding="#{menu.btnCerrarSesion}" style="display:none">
+			<f:ajax event="click" execute="@this" listener="#{menu.cerrarSesionWAS}"/>
+		</h:commandButton>
+
+    </div>
+    
+	    <div class="datos-sesion">
+	        <span class="columna" style="width: 50px">
+	            <h:outputText value="#{msg['com.ibm.bbva.common.buscarCliente.oficina']}:  " style="font-weight: bold"/>
+	        </span>
+	        <span class="columna" style="width: 30px">
+	        	<h:outputText value="#{datosCabecera.empleado.oficina.codigo}"/>
+	        </span> 
+	        <span class="columna" style="width: 60px">
+	            <h:outputText value="#{msg['com.ibm.bbva.common.buscarCliente.usuario']}:  " style="font-weight: bold"/>	
+	        </span>
+	        <span class="columna" style="width: 180px">
+	        <h:outputText value="#{datosCabecera.cortarNombreCompleto(datosCabecera.empleado.nombresCompletos)}"/>
+	        </span>
+	        <span class="columna" style="width: 80px">
+	            <h:outputText value="#{msg['com.ibm.bbva.common.buscarCliente.codigo']}:  " style="font-weight: bold"/>
+	        </span>
+			<span class="columna" style="width: 40px">
+				<h:outputText value="#{datosCabecera.empleado.codigo}"/>
+			</span>	        
+	        <span class="columna" style="width: 40px">
+	            <h:outputText value="#{msg['com.ibm.bbva.common.buscarCliente.perfil']}:  " style="font-weight: bold"/>
+	        </span>
+	        <span class="columna" style="width: 180px">
+	        	<h:outputText value="#{datosCabecera.empleado.perfil.descripcion}"/>
+	        </span>
+	    </div>
+   
+</div>
+
+</ui:composition>

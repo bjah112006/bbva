@@ -1,0 +1,162 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:util="http://java.sun.com/jsf/composite/util">
+   
+<div class="bloque">	<div class="contenido-bloque">    
+        <span class="columna" style="width:750px" >
+        	<div class="titulo titulo-espaciado">            
+    	        <h:outputText value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.tituloCorreo']}"/>    	        
+            </div> 
+            <div class="campo-espaciado espacios-etiqueta">
+            	<span class="columna" style="width:8px;">
+        			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+				</span>			
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.producto']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:125px;">
+	                <h:selectOneMenu id="cmbProducto"
+						value="#{actualizarCorreo.productoSeleccionado}" required="true"
+						style="width:300px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizarCorreo.tipoProductos}" />
+					</h:selectOneMenu>
+				</span>
+				<h:message for="cmbProducto" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+        		<span class="columna" style="width:8px;">
+        			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+				</span>			
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.perfil']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:125px;">
+	                <h:selectOneMenu id="cmbPerfil" value="#{actualizarCorreo.perfilSeleccionado}" 
+						style="width:300px;" styleClass="valor-componente">
+						<f:selectItems value="#{actualizarCorreo.tipoPerfil}" />
+						<f:ajax event="change" render="cmbTarea cmbAccion"
+						execute="@form" listener="#{actualizarCorreo.buscarTarea}" />
+					</h:selectOneMenu>
+				</span>
+				<h:message for="cmbPerfil" errorClass="mensaje-error"/>
+            </div>
+        	<div class="campo-espaciado espacios-etiqueta" >
+        		<span class="columna" style="width:8px;">
+        			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+				</span>			
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.tarea']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:125px;">
+	                <h:selectOneMenu id="cmbTarea"
+						value="#{actualizarCorreo.tareaSeleccionada}" 
+						style="width:300px;" styleClass="valor-componente">
+						<f:selectItems value="#{actualizarCorreo.tiposTareas}" />
+						<f:ajax event="change" render="cmbAccion"
+						execute="@form" listener="#{actualizarCorreo.buscarAccion}" />
+					</h:selectOneMenu>
+				</span>
+				<h:message for="cmbTarea" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+            	<span class="columna" style="width:8px;"/>
+            	<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.accion']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:125px;">
+	                <h:selectOneMenu id="cmbAccion" 
+						value="#{actualizarCorreo.accionSeleccionado}" required="true"
+						style="width:250px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizarCorreo.tipoAccion}" />
+					</h:selectOneMenu>
+				</span>
+	            <h:message for="cmbAccion" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+            		<span class="columna" style="width:8px;"/>
+	            	<span class="columna" style="width:160px;">
+	                     <h:outputText value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.asunto']}:" styleClass="etiqueta"/>
+	                </span>
+	                <span class="columna" style="width:125px;">
+	                     <h:inputText value="#{actualizarCorreo.asunto}" 
+	                	              id="asunto"  style="width: 500px;">                	                                 
+	               	     </h:inputText>
+	               	</span>  
+	               	<h:message for="asunto" errorClass="mensaje-error"/>
+              </div>
+              <div class="campo-espaciado espacios-etiqueta">
+	            	<span class="columna" style="width:8px;"/>
+	            	<span class="columna" style="width:160px;">
+	                     <h:outputText value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.cuerpo']}:" styleClass="etiqueta"/>
+	                </span>
+	                <span class="columna" style="width:300px;">
+	                	 <util:editor id="idCuerpo" value="#{actualizarCorreo.strCuerpo}"
+						width="500"/>  
+	               	</span>
+	               	<h:message for="idCuerpo" errorClass="mensaje-error"/>
+              </div>  
+              <div class="campo-espaciado espacios-etiqueta">
+        		<span class="columna" style="width:8px;"/>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.Activo']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:100px;">
+	                <h:selectOneMenu id="cmbEstado"
+						value="#{actualizarCorreo.estadoSeleccionado}" required="true"
+						style="width:100px;" styleClass="valor-componente" immediate="true">
+						<f:selectItem itemValue="0" itemLabel="NO" />
+   						<f:selectItem itemValue="1" itemLabel="SI" />	
+					</h:selectOneMenu>
+				</span>
+				<h:message for="cmbEstado" errorClass="mensaje-error"/>
+            </div>    
+        </span>
+        <span class="columna" style="width:750px" >
+        	<div class="campo-espaciado espacios-etiqueta">
+        		<table>
+        			<tr>
+        				<td style="width:160px;">
+        				</td>
+        				<td style="width:160px;">
+        					<table border="0">
+			        			<tr>
+			        				<td class="columna" >
+			        					<h:outputText value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.tituloDestinatario']}"  styleClass="etiqueta"/>
+			        				</td>
+			        			</tr>      
+				    	         <tr>
+				    	         	<td>
+				    	         		<ui:include src="/resources/mantenimiento/tablaDestinatarios.xhtml" />
+				    	         	</td>
+				    	         </tr>
+				    	      </table>   	        
+		            	</td>
+		            </tr>	
+		            </table>
+            </div>
+        </span>
+     </div>
+     <div class="contenido-bloque" align="center">
+        <span class="columna" style="width:290px">
+        	<h:commandButton id="grabarbr" 
+				value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.grabar']}"
+				onclick="return confirm('¿Desea Grabar el Registro?');"
+				action="#{actualizarCorreo.grabar}" />
+			<h:commandButton id="cancelarbr"
+				value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.cancelar']}"
+				styleClass="boton" action="#{actualizarCorreo.cancelar}"/>
+        </span>
+        <h:message for="grabarbr" errorClass="mensaje-error"/>
+     </div>
+</div>
+
+</ui:composition>

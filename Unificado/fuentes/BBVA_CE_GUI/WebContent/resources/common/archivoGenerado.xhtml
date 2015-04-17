@@ -1,0 +1,72 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<h:outputScript library="js" name="scan_fin2.js" target="head"/>
+<script type="text/javascript">
+    /* <![CDATA[ */ 
+    var formulario;   
+    var valor;     
+	
+    function showArchivos(archivos) {
+        var id = formulario.id;        
+		document.getElementById(id+':retornaDocEscApplet').value = archivos ;		
+		if (valor == "ok") {		
+		    document.getElementById(id+':btnClickActDoc').click();
+		}
+    }
+
+    /* ]]> */	
+</script>
+
+    <div class="contenido-bloque"> 
+        <span class="columna" style="width:450px">
+            <div class="titulo titulo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.common.documentoEscaneado.titulo']}"/>
+            </div>
+        </span>
+    </div>
+    <h:panelGroup id="appletReporte" class="contenido-bloque"> 	
+        <applet 
+            id      = "appletReporteTOE"
+            name    = "appletReporteTOE" 
+	        code    = "com.ibm.bbva.app.applet.SeleccionarRuta.class"	        
+	        archive = "../applet/BBVAAppletReporte1.jar"
+	        width   = "700"
+	        height  = "125"
+	        hspace  = "0"
+	        vspace  = "0"
+	        align   = "middle"
+	        mayscript="mayscript"
+	      >
+	           
+	      
+	      <param name="tramaPosibleValor" value="#{reporteTOE.tramaPosibleValor}"/>
+	      <param name="tramaDatosPorcentaje" value="#{reporteTOE.tramaDatosPorcentaje}"/>
+	      <param name="tramaDatosUnidad" value="#{reporteTOE.tramaDatosUnidad}"/>
+	      <param name="tipoReporte" value="#{buscarTOE.paramTipoReporteApplet}"/>
+	      <param name="rangoFechas" value="#{reporteTOE.paramRangoFechas}"/>
+	      <!-- 
+	      <param name="tramaDatosGenerados" value="#{reporteTOE.tramaDatosGenerados}"/>
+	      <param name="descripTipoOferta" value="#{reporteTOE.paramTipoOferta}"/>
+	      <param name="descripFlujo" value="#{reporteTOE.paramFlujo}"/>	      
+	       -->
+
+	      
+	      <param name="param1" value="#{reporteTOE.tramaDatosGeneradosVO_Prod_1_TipOferta_1}"/>
+	      <param name="param2" value="#{reporteTOE.tramaDatosGeneradosVO_Prod_1_TipOferta_2}"/>
+	      <param name="param3" value="#{reporteTOE.tramaDatosGeneradosVO_Prod_2_TipOferta_1}"/>
+	      <param name="param4" value="#{reporteTOE.tramaDatosGeneradosVO_Prod_2_TipOferta_2}"/>
+	      
+	      <param name="trama_tipos_productos" value="#{reporteTOE.trama_tipos_productos}"/>
+	      <param name="trama_tipos_oferta" value="#{reporteTOE.trama_tipos_oferta}"/>
+	      
+	      <param name="accion" value="#{reporteTOE.accion}"/>
+	    </applet>
+ 	</h:panelGroup>
+
+</ui:composition>

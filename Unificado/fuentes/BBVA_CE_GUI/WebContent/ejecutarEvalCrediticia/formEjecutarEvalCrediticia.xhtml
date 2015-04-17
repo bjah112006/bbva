@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+        <h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+		<h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="style.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+        <h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+		<h:outputScript library="js" name="jquery-ui.js" target="head"/>
+		<h:outputScript library="js" name="autoNumeric-1.7.4-B.js" target="head"/>
+		<h:outputScript library="js" name="funciones.js" target="head"/>
+        <h:outputScript target="head">   
+		/* <![CDATA[ */
+        	$(document).ready(function(){
+        	    if($("#frmEjecutarEvalCrediticia\\:idMsgGuiaDoc").val() == "true") {
+	        	   var msg = $("#frmEjecutarEvalCrediticia\\:msgGuiaDoc").text();
+	        	   var docsPendientes = $("#frmEjecutarEvalCrediticia\\:idValidaGuiaEsc").val();
+				   alert(msg + ":\n" + docsPendientes);
+	        	   $("#frmEjecutarEvalCrediticia\\:idMsgGuiaDoc").val("false");
+	            }
+	            if($("#frmEjecutarEvalCrediticia\\:idMsgOperacion292").val() == "true") {
+		        	var msg = $("#frmEjecutarEvalCrediticia\\:msgOperacion292").text();
+		        	alert(msg);
+		        	$("#frmEjecutarEvalCrediticia\\:idMsgOperacion292").val("false");
+	            }
+             
+	          if($("#frmEjecutarEvalCrediticia\\:idMsgOperacion").val() == "true") {
+	        	var msg = $("#frmEjecutarEvalCrediticia\\:msgOperacion").text();
+	        	alert(msg);
+	        	$("#frmEjecutarEvalCrediticia\\:idMsgOperacion").val("false");
+	          }else{
+				 if($("#frmEjecutarEvalCrediticia\\:idMsgOperacionOf").val() == "true") {
+		        	var msg = $("#frmEjecutarEvalCrediticia\\:msgOperacionOf").text();
+		        	alert(msg);
+		        	$("#frmEjecutarEvalCrediticia\\:idMsgOperacionOf").val("false");
+		          } 	          
+	          }
+           
+				/* acciones para habilitar el boton aprobar con el check de 
+				 * Exclusión de la delegación del JSP datosProducto3
+				 */
+		        var chkExclDeleg = $("input:checkbox").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:exclDeleg$/);
+			        });
+			    var btnAcep = $("input:submit").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:btnAceptar$/);
+			        });
+			    
+			    $(chkExclDeleg).click(function(){
+	            	if ($(this).is(":checked")) {
+	            		$(btnAcep).attr("disabled", true)
+	            	} else {
+	            		$(btnAcep).removeAttr("disabled")
+	            	}
+				});
+			});
+        	
+        	function confAceptar (form) {
+        		var msg = $("#frmEjecutarEvalCrediticia\\:confirmacion").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+		        var msgDocsObs = '';
+		        docsObs = $.trim(docsObs);
+		        if(docsObs != ''){
+		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+		        }
+        		return confirm(msg);
+        	}
+        	
+        	function confAprobMod (form) {
+        		var msg = $("#frmEjecutarEvalCrediticia\\:modificacion").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+		        var msgDocsObs = '';
+		        docsObs = $.trim(docsObs);
+		        if(docsObs != ''){
+		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+		        }
+        		return confirm(msg);
+        	}     
+        	
+        	function confAprobObs (form) {
+        		var msg = $("#frmEjecutarEvalCrediticia\\:observacion").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+		        var msgDocsObs = '';
+		        docsObs = $.trim(docsObs);
+		        if(docsObs != ''){
+		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+		        }
+        		return confirm(msg);
+        	}            	   	
+        	     
+        	function confActScoring () {
+        		var msg = $("#frmEjecutarEvalCrediticia\\:actScoring").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+		        var msgDocsObs = '';
+		        docsObs = $.trim(docsObs);
+		        if(docsObs != ''){
+		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+		        }
+        		return confirm(msg);
+        	} 
+        	        	        	
+        	function confDevolerCpm () {
+        		var msg = $("#frmEjecutarEvalCrediticia\\:devolverCpm").text();
+        		return confirm(msg);
+        	}
+        	function confDevolverGestor () {
+        		var msg = $("#frmEjecutarEvalCrediticia\\:devolverGestor").text();
+        		return confirm(msg);
+        	}
+        	function confDenegar () {
+        		var msg = $("#frmEjecutarEvalCrediticia\\:denegar").text();
+        		return confirm(msg);
+        	}        	
+        	function confElevarSuperior () {
+        		var msg = $("#frmEjecutarEvalCrediticia\\:elevarSuperior").text();
+        		return confirm(msg);
+        	}   
+			        	     	        	
+        /* ]]> */
+		</h:outputScript>
+		<script type="text/javascript">
+         	function checkClick2(check) {
+	            document.getElementById('frmEjecutarEvalCrediticia:idValorTasaEsp3').disabled = !check.checked; 
+	            document.getElementById('frmEjecutarEvalCrediticia:idValorTasaEsp3').value = "0.00"; 
+	        }
+         	function mostrarTabLogPorPerfil(){
+         		var perfil = $("#frmEjecutarEvalCrediticia\\:descPerfilPage").val();
+            	var descAdmin = $("#frmEjecutarEvalCrediticia\\:descPerfilFiltro").val();
+            	perfil = (perfil == "")?$("#frmEjecutarEvalCrediticia\\:descPerfilPage").text():perfil;
+            	descAdmin = (descAdmin == "")?$("#frmEjecutarEvalCrediticia\\:descPerfilFiltro").text():descAdmin;
+            	if (perfil == descAdmin) {
+            		$("#frmEjecutarEvalCrediticia\\:descPerfilTabs").show();
+            	} else {
+            		$("#frmEjecutarEvalCrediticia\\:descPerfilTabs").hide();
+            	}
+            }
+		</script>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+        <title><h:outputText value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.titulo']}"/></title>
+    </h:head>
+    <h:body onload="mostrarTabLogPorPerfil()">
+	    <h:form id="frmEjecutarEvalCrediticia">
+	    	<h:inputHidden id="idMsgOperacion292" value="#{datosProducto3.msjOperacionBol292}"></h:inputHidden>
+			<h:outputText value="#{datosProducto3.msjOperacion292}" id="msgOperacion292" style="display:none;" />
+		    <h:inputHidden value="#{detalleExpediente.clienteNatural.estadoCivil.codigo}"  id="datoCivil"></h:inputHidden> 
+			<h:inputHidden value="#{datosConyuge.mensajeOperacion}" id="msjObservacion" />	
+			<h:inputHidden value="#{datosProducto3.expediente.expedienteTC.tipoOferta.codigo}" id="idTipoOferta"/>
+			    
+	    	<h:inputHidden value="#{ejecutarEvalCrediticia.accion}"/>
+	    	<h:inputHidden value="#{ejecutarEvalCrediticia.estado}"/>
+	    	<h:inputHidden id="idMsgGuiaDoc" value="#{ejecutarEvalCrediticia.msgGuiaDocumentaria}"></h:inputHidden>
+	    	<h:outputText value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.aprobar.confirm']}"
+	    			id="confirmacion" style="display:none;"/>
+	    			
+    		<h:outputText value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.aprobarObservacion.confirm']}"
+    			id="observacion" style="display:none;"/>	
+    			 	    			
+    		<h:outputText value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.actScoring']}"
+    			id="actScoring" style="display:none;"/>	    			
+	    	<h:outputText value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.aprobar.modificacion']}"
+	    			id="modificacion" style="display:none;"/>	    			
+	    	<h:outputText value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.devolverCpm.confirm']}"
+	    			id="devolverCpm" style="display:none;"/>
+	    	<h:outputText value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.devolverGestor.confirm']}"
+	    			id="devolverGestor" style="display:none;"/>
+	    	<h:outputText value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.denegar.confirm']}"
+	    			id="denegar" style="display:none;"/>
+	    	<h:outputText value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.elevarSuperior.confirm']}"
+	    			id="elevarSuperior" style="display:none;"/>
+	        <h:outputText value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.msgGuiaDoc']}"
+	    			id="msgGuiaDoc" style="display:none;"/>	    			    			    			    			    			
+	        <div class="contenido">
+	            <div class="cabecera">
+	                <ui:include src="/resources/common/cabecera.xhtml" />
+	                <h:outputText id="descPerfilPage"  value="#{datosCabecera.empleado.perfil.descripcion}" style="display:none;"/>
+	                <h:outputText id="descPerfilFiltro"  value="#{msg['com.ibm.bbva.common.perfil.administrador']}" style="display:none;"/>
+	            </div>
+	            <div class="cuerpo">
+	                <div class="menu">
+	                    <ui:include src="/resources/common/menu.xhtml" />
+	                </div>
+	                <div class="datos">
+	                	<ui:include src="/resources/common/tabs.xhtml" />
+	                	<div class="tab-expediente tab-item">
+		                	<ui:include src="/resources/common/datosGestor.xhtml" />
+							<ui:include src="/resources/common/estadoAnterior.xhtml" />
+							<ui:include src="/resources/common/detalleExpediente.xhtml" />
+							<h:panelGroup id="idPanelDatosConyuge" 
+							style="#{datosConyuge.mostrarDatosConyuge ? '':'display:none;'}" >
+							   <ui:include src="/resources/common/datosConyugue.xhtml" flush="true" />
+							</h:panelGroup>					
+							<ui:include src="/resources/common/datosProducto3.xhtml" />
+							<ui:include src="/resources/common/verificacionApr.xhtml" />
+							
+							<h:panelGroup id="idDocumentosReutilizables"/>
+							
+							<h:panelGroup layout="block" styleClass="bloque">
+							
+								<h:panelGroup id="appletContentRefresh">
+								 
+									<ui:include src="/resources/common/documentoEsc.xhtml" />
+									
+								</h:panelGroup>							
+							 
+
+								<h:panelGroup id="idPanelDocumentos">
+									<ui:include src="/resources/common/panelDocumentos.xhtml" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<ui:include src="/resources/common/comentarios.xhtml" />
+							<ui:include src="/resources/common/observacionRechazo.xhtml" />
+							<!--ui:include src="/resources/common/tipoResolucion.xhtml" /--><!-- TODO MODAL -->
+							<ui:include src="/resources/common/observacion.xhtml" />
+							<ui:include src="/resources/common/elevaSuperior.xhtml" />
+							
+							<div class="column boton-principal" style="widht:50px;">
+								
+								<h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.aprobarOp']}"
+												 action="#{ejecutarEvalCrediticia.aprobar}" 
+		            		                     disabled="#{!ejecutarEvalCrediticia.activoAceptar}" 
+		            		                     onclick="return confAceptar();" accesskey="a" />
+		            		                     
+								<h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.aprobarMod']}"
+												 action="#{ejecutarEvalCrediticia.aprobarMod}" 
+		            		                     onclick="return confAprobMod();" accesskey="m" />
+		            		                     
+							    <h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.elevarSuperior']}"
+		            		                     action="#{ejecutarEvalCrediticia.elevaSuperior}" disabled="#{!ejecutarEvalCrediticia.activoElevarSup}"
+		            		                     onclick="return confElevarSuperior();" />  		            		                     
+		            		                     
+								<h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.actScoring']}"
+												 action="#{ejecutarEvalCrediticia.actScoring}" 
+		            		                     onclick="return confActScoring();" accesskey="a" />
+
+							    <h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.devolverGestor']}"
+		            		                     action="#{ejecutarEvalCrediticia.devolver}" 
+		            		                     onclick="return confDevolverGestor();" /> 
+		            		                     
+								<!-- 
+							    <h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.devolverGestor']}"
+		            		                     action="#{ejecutarEvalCrediticia.devolver}" disabled="#{!ejecutarEvalCrediticia.activoDevGest}"
+		            		                     onclick="return confDevolverGestor();" /> 								
+								 -->		            		                     
+		            		                     
+							    <h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.denegar']}"
+		            		                     action="#{ejecutarEvalCrediticia.rechazarExp}" disabled="#{!ejecutarEvalCrediticia.activoDenegar}"
+		            		                     onclick="return confDenegar();" />    		            		                      
+		            		                     		            		                     
+								<!--<h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.aprobarObs']}"
+												 action="#{ejecutarEvalCrediticia.aprobarObs}" 
+		            		                     onclick="return confAprobObs();" accesskey="a" />-->		            		                     		            		                     		            		                     
+										            		                      
+								<!-- 
+								<h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.aprobarOp']}"
+		            		                     disabled="#{!ejecutarEvalCrediticia.activoAceptar}"
+		            		                     onclick="return confAceptar(this.form, 'btnEjecutaApplet');" type="button" id="btnAceptar"/>	
+		            		                     
+							    <h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.aprobarMod']}"
+		            		                     onclick="return confAceptar(this.form, 'btnEjecutaAppletMod');" type="button" id="btnAceptarMod"/>
+		            		                     
+								<h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.actScoring']}"
+		            		                     onclick="return confAceptar(this.form, 'btnEjecutaAppletScoring');" type="button"  
+		            		                     id="btnActScoring"/> 
+		            		                     
+								<h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.aprobarObs']}"
+		            		                     onclick="return confAceptar(this.form, 'btnEjecutaAppletObs');" type="button" id="btnAceptarObsEec"/> 		            		                     		            		                     		            		                     							
+								 -->	
+		            		                     		            		                     
+		            		  <!--<h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.devolverCpm']}"
+		            		                     action="#{ejecutarEvalCrediticia.devolverCpm}" disabled="#{!ejecutarEvalCrediticia.activoDevCpm}"
+		            		                     onclick="return confDevolerCpm();" /> -->                   								
+											
+						<!-- 
+								<h:commandLink id="btnEjecutaApplet"
+												action="#{ejecutarEvalCrediticia.aprobar}"
+												styleClass="display:none" />												
+								<h:commandLink id="btnEjecutaAppletMod"
+												action="#{ejecutarEvalCrediticia.aprobarMod}"
+												styleClass="display:none" />
+								<h:commandLink id="btnEjecutaAppletScoring"
+												action="#{ejecutarEvalCrediticia.actScoring}"
+												styleClass="display:none" />												
+	                            <h:commandLink id="btnEjecutaAppletObs"
+												action="#{ejecutarEvalCrediticia.aprobarObs}"
+												styleClass="display:none" />												
+ 						-->												
+							</div>
+						</div>
+						<div class="tab-ayuda-memoria tab-item" style="display:none;">
+							<ui:include src="/resources/common/datosHistorico.xhtml" />		
+		               		<ui:include src="/resources/common/tablaAyudaMemoria.xhtml" />
+						</div>
+						<div class="tab-historial tab-item" style="display:none;">
+							<ui:include src="/resources/common/datosHistorico.xhtml" />	
+	               			<ui:include src="/resources/common/tablaHistorial.xhtml" />
+						</div>
+						<div class="tab-observaciones tab-item" style="display:none;">
+							<ui:include src="/resources/common/datosHistorico.xhtml" />
+							<ui:include src="/resources/common/tablaObservaciones.xhtml" />
+						</div>
+						<div class="tab-log tab-item" style="display:none;">
+		               		<ui:include src="/resources/common/datosHistorico.xhtml" />	
+		               		<ui:include src="/resources/common/tablaLog.xhtml" />
+						</div>
+					</div>
+	            </div>
+	        </div>
+	    </h:form>
+    </h:body>
+</html>

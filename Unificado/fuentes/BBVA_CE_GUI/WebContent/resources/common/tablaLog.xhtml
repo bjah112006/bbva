@@ -1,0 +1,85 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<h:panelGroup id="panelLog">
+	<div style="width:774px; overflow:auto;height: 225px">
+	<h:dataTable border="1" cellpadding="0" cellspacing="0" rendered="true" id="tablaLog"
+				value="#{tablaLog.listTabla}" var="item"
+				styleClass="tablaTask" headerClass="headerClass headerTabla1"
+				footerClass="fondo" rowClasses="uno,dos" columnClasses="text,text,text" width="100%"
+				rows="#{tablaLog.filas}">
+		<h:column nowrap="true" align="center" width="10%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaLog.terminal']}"></h:outputText>
+			</f:facet>
+			<h:outputText value="#{item.numTerminal}"></h:outputText>
+		</h:column>
+		<h:column nowrap="true" width="10%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaLog.registro']}" styleClass="tabla-titulo"></h:outputText>
+			</f:facet>
+			<h:outputText value="#{item.codigoUsuario}" styleClass="tabla-campo-texto"></h:outputText>
+		</h:column>
+		<h:column nowrap="true" width="10%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaLog.usuario']}" styleClass="tabla-titulo"></h:outputText>
+			</f:facet>
+			<h:outputText value="#{item.perfilUsuario}" styleClass="tabla-campo-texto"></h:outputText>
+		</h:column>
+		<h:column nowrap="true" width="40%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaLog.historial']}" styleClass="tabla-titulo"></h:outputText>
+			</f:facet>
+			<h:inputText value="#{item.historial}" readonly="true" size="75" styleClass="tabla-campo-obs"></h:inputText>
+		</h:column>
+		<h:column nowrap="true" align="center" width="10%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaLog.fecha']}"></h:outputText>
+			</f:facet>
+			<h:outputText value="#{item.fecha}"></h:outputText>
+		</h:column>
+		<h:column nowrap="true" align="center" width="10%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaLog.hora']}"></h:outputText>
+			</f:facet>
+			<h:outputText value="#{item.hora}"></h:outputText>
+		</h:column>
+		<h:column nowrap="true" width="10%" >
+			<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.common.tablaLog.estado']}" styleClass="tabla-titulo"></h:outputText>
+			</f:facet>
+			<h:outputText value="#{item.estado}" styleClass="tabla-campo-texto"></h:outputText>
+		</h:column>
+	</h:dataTable>
+	</div>
+	<h:outputText styleClass="paginacion" value="#{msg['com.ibm.bbva.paginacion.pagina']} #{tablaLog.paginaActual} #{msg['com.ibm.bbva.paginacion.de']} #{tablaLog.totalPaginas}"/>
+</h:panelGroup>
+
+<h:panelGroup styleClass="botones-paginacion">
+	<h:commandButton actionListener="#{tablaLog.inicio}" immediate="true"
+		value="#{msg['com.ibm.bbva.paginacion.inicio']}" id="btnInicioLog">
+		<f:ajax event="click" render="panelLog" />
+	</h:commandButton>
+
+	<h:commandButton actionListener="#{tablaLog.anterior}" immediate="true"
+		value="#{msg['com.ibm.bbva.paginacion.anterior']}" id="btnAnteriorLog">
+		<f:ajax event="click" render="panelLog" />
+	</h:commandButton>
+
+	<h:commandButton actionListener="#{tablaLog.siguiente}" immediate="true"
+		value="#{msg['com.ibm.bbva.paginacion.siguiente']}" id="btnSiguienteLog">
+		<f:ajax event="click" render="panelLog" />
+	</h:commandButton>
+
+	<h:commandButton actionListener="#{tablaLog.fin}" immediate="true"
+		value="#{msg['com.ibm.bbva.paginacion.fin']}" id="btnFinLog">
+		<f:ajax event="click" render="panelLog" />
+	</h:commandButton>
+</h:panelGroup>
+
+</ui:composition>
