@@ -1,0 +1,3 @@
+actualizar parametros del process en la tabla parametros
+
+actualizar ruta de balanceador del servicio broker en la tabla parametros
