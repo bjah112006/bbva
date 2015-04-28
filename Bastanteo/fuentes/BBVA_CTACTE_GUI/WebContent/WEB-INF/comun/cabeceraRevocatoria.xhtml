@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+
+	<f:verbatim>
+		<script type="text/javascript">
+			myWindow = null;
+			timeInMilliseconds = 2000;
+			
+			function f_OpenSFP(){
+				url = $("#form\\:linkSFP").val();
+				//myWindow=window.open(url,'myWindow','width=850,height=650,resizable=1,scrollbars=1');
+				wPadre = window;
+				var sOptions;
+				sOptions = 'status=yes,menubar=no,scrollbars=yes,resizable=yes,toolbar=no,channelmode=1';
+				sOptions = sOptions + ',width=' + (screen.availWidth - 5).toString();
+				sOptions = sOptions + ',height=' + (screen.availHeight - 122).toString();
+				sOptions = sOptions + ',screenX=0,screenY=0,left=0,top=0';
+				myWindow = window.open('', 'myWindow', sOptions);
+				//myWindow=window.open(url,'myWindow','width=850,height=650,resizable=1,scrollbars=1');
+				myWindow.location = url;
+				myWindow.focus();
+				myWindow.moveTo( 0, 0 );
+				myWindow.resizeTo( screen.availWidth, screen.availHeight );
+			}
+			
+			function f_CheckWin(){
+				if (myWindow!=null){
+					if (myWindow.closed)
+					{
+						verificarFacultadesEspeciales();
+						myWindow=null;
+						
+					}
+				}
+			}						
+			window.setInterval('f_CheckWin()',timeInMilliseconds);
+		</script>
+	</f:verbatim>
+	
+	<h:panelGroup layout="block" styleClass="ui-state-error ui-corner-all" style="padding:5px;" rendered="#{not empty cabeceraRevocatoria.mensajeContent}">
+		<h:panelGroup style="float: left; margin-right: 2px;" styleClass="ui-icon ui-icon-alert"></h:panelGroup>
+		<h:outputText value="#{cabeceraRevocatoria.mensajeContent}" escape="false"/>
+	</h:panelGroup>
+	
+	<!-- div id="msg">Estado de la ventana</div-->
+	<h:inputHidden id="idExpedienteOculto"
+		value="#{cabeceraRevocatoria.expediente.id}" />
+	<table width="750px" border="0" cellpadding="5">
+		<tr>
+			<!--td align="right"><h:commandLink value="Ir a SFP: Realizar Bastanteo"
+				onclick="f_OpenSFP()" disabled="#{cabeceraRevocatoria.modoConsulta}" /></td-->
+			<td align="right">
+				<h:outputLink value="javascript:void(0);" onclick="f_OpenSFP()" rendered="#{!cabeceraRevocatoria.modoConsulta}">Ir a SFP: Realizar Bastanteo</h:outputLink>
+				<h:commandButton id="btnActualizarParticipes"
+					image="#{resource['imagenes:actualizar.png']}"
+					rendered="#{!cabeceraRevocatoria.modoConsulta and (cabeceraRevocatoria.pagina == 'formVerificarRealizarBastanteo')}"
+					title="Obtener Partícipes"
+					style="margin-left: 5px; vertical-align: middle;"
+					onclick="return confirm('¿Desea actualizar los partícipes?')">
+					<f:ajax event="action" listener="#{cabeceraRevocatoria.actualizarParticipes}" 
+						render="idMsgActualizarParticipes" execute="@this" />
+				</h:commandButton>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">
+				<h:message for="btnActualizarParticipes" id="idMsgActualizarParticipes" errorClass="mensaje-error" infoClass="mensaje-info" />
+			</td>
+		</tr>
+	</table>
+	<custom:tabView id="idDatosCliente">
+		<custom:tab title="Datos del Cliente">
+			<table width="750px" border="0" cellpadding="5">
+				<tr>
+					<td><h:outputText value="Operación:" styleClass="titulo-bold" />
+					</td>
+					<td><h:outputText
+						value="#{cabeceraRevocatoria.expediente.operacion.descripcion}" /></td>
+				</tr>
+				<tr>
+					<td><h:outputText value="Cliente:" styleClass="titulo-bold" /></td>
+					<td><h:outputText
+						value="#{cabeceraRevocatoria.expediente.cliente.codigoCentral} - #{cabeceraRevocatoria.expediente.cliente.numeroDoi} - #{cabeceraRevocatoria.expediente.cliente.razonSocial}" />
+					</td>
+				</tr>
+			</table>
+		</custom:tab>
+	</custom:tabView>
+	<h:inputHidden id="linkSFP" value="#{cabeceraRevocatoria.urlSFPFirmas}" />
+</ui:composition>

@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/plantillas/paginaTarea.xhtml">
+
+	<ui:define name="title">Registrar Modificatoria - Mensaje</ui:define>
+	
+	<ui:define name="content">
+		<ui:include src="/WEB-INF/comun/ftp.xhtml"/>
+		<h:outputText value="#{mensaje.texto}"/>
+		<br/>
+		<h:outputText value="#{mensaje.textoRespuesta}" rendered="#{mensaje.textoRespuesta != ''}"/>
+		<f:verbatim>
+			<script type="text/javascript">
+				var ventanaSubir;
+				$(document).ready(function(){
+					var abrirVentana = $("#form\\:idAbrirVentana").text();
+					if (abrirVentana!="true") {
+						$("#form\\:btnReenviar").css("display", "none");
+					}
+				});
+				function reenviar() {
+					window.open('../applet/envioFTP.faces', 'WindowName', 'dependent=yes, menubar=no, height=125,width=380, toolbar=no, resizable=yes');
+					return false;
+				}
+			</script>
+		</f:verbatim>
+		<br/>
+		<br/>
+		<!--h:panelGroup layout="block">
+			<h:commandButton id="btnReenviar" onclick="return reenviar()" value="Reenviar documentos"/>
+		</h:panelGroup-->
+	</ui:define>
+
+</ui:composition>

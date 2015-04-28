@@ -1,0 +1,247 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	
+	<f:verbatim>
+		<script type="text/javascript" language="javascript">
+			var compSel = null;
+			function cambiarEstado (comp) {
+				if ($(comp).is(':checked')) {
+					if (compSel!=null) {
+						$(compSel).attr('checked', false);
+					}
+					compSel = comp;
+				} else {
+					compSel = null;
+				}
+			}
+			function validaPreRegistro (data) {
+				if (data.status == 'success') {
+					var args = getCallbackParams(data);
+					if (args.tienePreRegistro) {
+						var conf = confirm (args.mensaje);
+						if (conf) {
+							abrirExpedientePreRegistro ();
+						} else {
+							alert ("El cliente "+args.cliente+" no puede realizar este tipo de solicitud");
+							redireccionar();
+						}
+					}
+				}
+			}
+			function openArchivoPdf(rutaCM){
+				var params = { url: rutaCM };
+				if ($.browser.msie) {
+					winCM=window.open('../pdfContent/abrirPDF.faces?'+$.param(params),'winDocCM','width=850,height=450,resizable=yes');
+				} else {
+					winCM=window.open(rutaCM,'winDocCM','width=850,height=450,resizable=yes');
+				}
+				return false;
+			}
+		</script>
+	</f:verbatim>
+	
+	<custom:tabView id="idIdenPJOp">
+		<custom:tab title="Paso 1: Identifique la PJ y la Operación">
+		 
+			<custom:remoteCommand name="redireccionar"
+					actionListener="#{identifiquePJOperacion1.redireccionar}"/>
+			<custom:remoteCommand name="abrirExpedientePreRegistro"
+					actionListener="#{identifiquePJOperacion1.abrirExpedientePreRegistro}"/>
+			
+			<h:message for="idIdenPJOp" id="idMsgConexion" errorClass="mensaje-error"/>
+			
+			<h:panelGrid columns="3">
+				<h:panelGroup>
+					<h:panelGrid columns="2">
+						<h:outputText value="Código Central:"/>
+						<h:inputText value="#{identifiquePJOperacion1.codigoCentral}" 
+								maxlength="8" id="idCodCent" 
+								disabled="#{identifiquePJOperacion1.disCodigoCentral}">
+							<f:ajax event="keyup" render="idNumDOI idBuscar" 
+									listener="#{identifiquePJOperacion1.modificarEstadoNumDOI}"/>
+							<f:ajax event="mouseout" render="idNumDOI idBuscar" 
+									listener="#{identifiquePJOperacion1.modificarEstadoNumDOI}"/>
+						</h:inputText>
+					</h:panelGrid>
+					<h:message for="idCodCent" errorClass="mensaje-error"/>
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:panelGrid columns="2">
+						<h:outputText value="Número DOI:"/>
+						<h:inputText value="#{identifiquePJOperacion1.numeroDOI}" 
+								maxlength="15" id="idNumDOI" 
+								disabled="#{identifiquePJOperacion1.disNumeroDOI}">
+							<f:ajax event="keyup" render="idCodCent idBuscar" 
+									listener="#{identifiquePJOperacion1.modificarEstadoCodCentral}"/>
+							<f:ajax event="mouseout" render="idNumDOI idBuscar" 
+									listener="#{identifiquePJOperacion1.modificarEstadoCodCentral}"/>
+						</h:inputText>
+					</h:panelGrid>
+					<h:message for="idNumDOI" errorClass="mensaje-error"/>
+				</h:panelGroup>
+				<h:commandButton value="Buscar" actionListener="#{identifiquePJOperacion1.buscar}" 
+						id="idBuscar" disabled="#{identifiquePJOperacion1.disBuscar}"/>
+			</h:panelGrid>
+			
+			<h:message for="idBuscar" errorClass="mensaje-error" infoClass="mensaje-info" />
+			
+			<h:dataTable value="#{identifiquePJOperacion1.listaCliente}" width="100%" id="dtClientes" 
+					var="item" rendered="#{identifiquePJOperacion1.mostrarTabla}"
+					headerClass="cabecera-tabla">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value=""/>
+					</f:facet>
+					<h:selectBooleanCheckbox value="#{item.seleccionado}" id="idItemCliente"
+							valueChangeListener="#{identifiquePJOperacion1.seleccionarCliente}" 
+							onchange="cambiarEstado(this)">
+						<f:ajax event="change" render="@form"/>
+						<f:param name="codigoCentral" value="#{item.cliente.codigoCentral}"/>
+					</h:selectBooleanCheckbox>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Cód. Central"/>
+					</f:facet>
+					<h:outputText value="#{item.cliente.codigoCentral}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Tipo DOI"/>
+					</f:facet>
+					<h:outputText value="#{item.cliente.descripcionDOI}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Nro. DOI"/>
+					</f:facet>
+					<h:outputText value="#{item.cliente.numeroDOI}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Razón Social"/>
+					</f:facet>
+					<h:outputText value="#{item.cliente.razonSocial}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Fecha de Constitución"/>
+					</f:facet>
+					<h:outputText value="#{item.cliente.fechaConstitucion}">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+				</h:column>
+			</h:dataTable>
+			
+			<h:message for="dtClientes" id="idMsgValidacion" errorClass="mensaje-error" />
+			
+			<h:panelGrid columns="2">
+				<h:outputText value="Operación:" rendered="#{identifiquePJOperacion1.mostrarOperacion}"/>
+				<h:selectOneMenu value="#{identifiquePJOperacion1.operacion}" id="idOperacion"
+						 rendered="#{identifiquePJOperacion1.mostrarOperacion}" 
+						 valueChangeListener="#{identifiquePJOperacion1.seleccionarOperacion}">
+	            	<f:selectItems value="#{identifiquePJOperacion1.listaOperacion}" />
+	            	<f:ajax event="change" render="@form" onevent="validaPreRegistro"/>
+				</h:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="4" width="80%" columnClasses="colwidth120, colwidth120, colwidth120, combowidth140">
+				<h:outputText value="Cta. Cte. Negocio:" rendered="#{identifiquePJOperacion1.mostrarCcNegocio}"/>
+				<h:outputText value="#{identifiquePJOperacion1.ccNegocio}" rendered="#{identifiquePJOperacion1.mostrarCcNegocio}"/>
+				<h:outputText value="Campaña:" rendered="#{identifiquePJOperacion1.mostrarCampania}"/>
+				<h:panelGroup>
+					<h:selectOneMenu value="#{identifiquePJOperacion1.campania}" rendered="#{identifiquePJOperacion1.mostrarCampania}"
+							id="idCampania">
+		            	<f:selectItems value="#{identifiquePJOperacion1.listaCampanias}" />  
+					</h:selectOneMenu>
+					<h:message for="idCampania" errorClass="mensaje-error"/>
+				</h:panelGroup>
+			</h:panelGrid>
+			
+			<h:panelGroup style="width:100%" rendered="#{identifiquePJOperacion1.mostrarTablaBast}">
+				<h:panelGroup layout="block" style="width:100%" styleClass="cabecera-bastanteo">
+					<h:outputText value="Ultimo expediente de bastanteo"/>
+				</h:panelGroup>
+				<h:panelGrid columns="9">
+					<h:outputText value="Fecha:" styleClass="subtitulo-bastanteo"/>
+					<h:outputText value="#{identifiquePJOperacion1.ultimExpBast.fechaRegistro}">
+						<f:convertDateTime pattern="yyyy-MM-dd"/>
+					</h:outputText>
+					<h:outputText value="Tipo Operación:" styleClass="subtitulo-bastanteo"/>
+					<h:panelGroup>
+						<h:outputText value="#{identifiquePJOperacion1.ultimExpBast.operacion.codigoOperacion} #{identifiquePJOperacion1.ultimExpBast.operacion.descripcion}"/>
+					</h:panelGroup>
+					<h:outputText value="Dictámen:" styleClass="subtitulo-bastanteo"/>
+					<h:outputText value="#{identifiquePJOperacion1.ultimExpBast.resultado}"/>
+					<h:outputLink value="#" onclick="openArchivoPdf('#{identifiquePJOperacion1.urlDictamen}')">
+						<h:graphicImage value="#{resource['imagenes:acrobat.jpg']}" height="20" width="20"
+								rendered="#{identifiquePJOperacion1.mostrarPDFDictamen}"/>
+					</h:outputLink>
+					<h:outputText value="Instrucciones modificatorias:" styleClass="subtitulo-bastanteo"
+							rendered="#{identifiquePJOperacion1.mostrarPDFInstMod}"/>
+					<h:outputLink value="#" onclick="openArchivoPdf('#{identifiquePJOperacion1.urlInstMod}')">
+						<h:graphicImage value="#{resource['imagenes:acrobat.jpg']}" height="20" width="20"
+								rendered="#{identifiquePJOperacion1.mostrarPDFInstMod}"/>
+					</h:outputLink>
+				</h:panelGrid>
+			</h:panelGroup>
+			
+			<h:panelGrid columns="2">
+				<h:outputText value="Cargo de comisión:" rendered="#{identifiquePJOperacion1.mostrarCComision}"/>
+				<h:selectOneMenu value="#{identifiquePJOperacion1.numCuenta}" rendered="#{identifiquePJOperacion1.mostrarCComision}"
+						valueChangeListener="#{identifiquePJOperacion1.seleccionarCuenta}"
+						disabled="#{identifiquePJOperacion1.disCargoComis}" readonly="#{identifiquePJOperacion1.disCargoComis}">
+	            	<f:selectItems value="#{identifiquePJOperacion1.listaCuentas}" />  
+	            	<f:ajax event="change" render="@form"/>
+				</h:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:dataTable value="#{identifiquePJOperacion1.participes}" width="100%" id="dtParticipes" 
+					headerClass="cabecera-tabla" var="itemPart" 
+					rendered="#{identifiquePJOperacion1.mostrarSubTabla and fn:length(identifiquePJOperacion1.participes)>0}">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="C. Central"/>
+					</f:facet>
+					<h:outputText value="#{itemPart.codigoCentral}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Tipo DOI"/>
+					</f:facet>
+					<h:outputText value="#{itemPart.tipoDoiDes}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Nro. DOI"/>
+					</f:facet>
+					<h:outputText value="#{itemPart.numeroDoi}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Nombre"/>
+					</f:facet>
+					<h:outputText value="#{itemPart.nombre} #{itemPart.apellidoPaterno} #{itemPart.apellidoMaterno}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Número de cuenta"/>
+					</f:facet>
+					<h:outputText value="#{itemPart.numeroCuenta}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="¿Tiene firma?"/>
+					</f:facet>
+					<h:outputText value="#{itemPart.flagIndicadorFirma=='1' ? 'Si' : 'No'}"/>
+				</h:column>
+			</h:dataTable>
+			
+		</custom:tab>
+	</custom:tabView>
+	
+</ui:composition>

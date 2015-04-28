@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+	
+	<h:panelGroup layout="block" styleClass="ui-state-error ui-corner-all" style="padding:5px;" rendered="#{not empty datosGenerales.mensajeContent}">
+		<h:panelGroup style="float: left; margin-right: 2px;" styleClass="ui-icon ui-icon-alert"></h:panelGroup>
+		<h:outputText value="#{datosGenerales.mensajeContent}" escape="false"/>
+	</h:panelGroup>
+	
+	<custom:tabView id="idDatosGenerales">
+		<custom:tab title="Datos Generales">
+			
+		<table border="0"  width="100%">
+			<tr>
+				<td width="16%"></td>
+				<td width="15%"></td>
+				<td width="16%"></td>
+				<td width="27%"></td>
+				<td width="13%"></td>
+				<td width="14%"></td>
+			</tr>
+			<tr>
+				<td colspan="6" align="right">		
+		    	    <h:outputText style="font-weight:bold;color:red;width:100%" value="#{datosGenerales.mensajePlazoSubsanacion}" />
+		        </td>
+		    </tr>
+			<tr>
+				<td align="right">
+			        <h:outputText style="font-weight:bold" value="Nro.:"/>
+				</td>
+				<td>			        
+			        <h:outputText style="width:100%" value="#{datosGenerales.expediente.id}"/>
+				</td>
+				<td align="right">		        
+			        <h:outputText style="font-weight:bold" value="Operación:"/>
+				</td>
+				<td>			          
+			        <h:outputText style="width:100%" value="#{datosGenerales.expediente.operacion.id} - #{datosGenerales.expediente.operacion.descripcion}"/>
+				</td>
+				<td align="right">			        
+			        <h:outputText style="font-weight:bold" value="ANS:"/>
+				</td>
+				<td>			          
+			        <h:graphicImage library="imagenes" name="#{datosGenerales.rutaANS}" />
+		        </td>
+		    </tr>
+			<tr>
+				<td align="right">			        		        
+		        	<h:outputText style="font-weight:bold" value="Gestor solicitante:"/>
+				</td>
+				<td>
+		        	<h:outputText style="width:100%" value="#{datosGenerales.expediente.empleado.nombresCompletos}" /> 
+				</td>
+				<td align="right">		        	
+		        	<h:outputText style="font-weight:bold" value="Oficina,Territorio:"/>  
+				</td>
+				<td colspan="3">		
+		    	    <h:outputText style="width:100%" value="#{datosGenerales.expediente.oficina.codigo} - #{datosGenerales.expediente.oficina.descripcion}, #{datosGenerales.expediente.oficina.territorio.descripcion}" />
+		        </td>
+		    </tr>	
+		</table>
+				
+		</custom:tab>
+		
+	</custom:tabView>
+
+</ui:composition> 
+
+

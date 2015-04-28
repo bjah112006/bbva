@@ -1,0 +1,171 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	xmlns:bbva="http://java.sun.com/jsf/composite/components/bbva">
+
+	<f:verbatim>
+		<script type="text/javascript" language="javascript">
+			$(document).ready (function(){
+				$("#form\\:tablaTask tbody tr").bind("dblclick", function(){
+					var id = $(this).find("input:eq(0)").val();
+					seleccionarTarea({"idExpTar":id});
+				});
+			});
+		</script>
+	</f:verbatim>
+
+	
+<h:panelGroup id="tablaContainer" layout="block" styleClass="ui-datatable ui-widget">
+
+	<bbva:paginator container=":form:tablaContainer" managedBean="#{bandejaMB}" position="top"/>
+	
+	<div class="ui-datatable-scrollable-body" style="#{bandejaMB.menuColapsado ? 'width:1285px' : 'width:1110px'}">
+	<h:dataTable border="0" cellspacing="0" 
+		cellpadding="0" id="tablaTask" var="bandeja"
+		style="border-spacing: 1px;"
+		widgetVar="regTareas"
+		value="#{bandejaMB.modelo}" rows="#{bandejaMB.rowsPerPage}" first="#{bandejaMB.first}"
+		styleClass="#{empty bandejaMB.modelo ? 'ui-datatable-empty' : 'ui-datatable-not-empty'}"
+		headerClass="ui-state-default"
+		columnClasses="columna-bandeja,columnaCodTarea,columnaNomTarea,columnaFeAsig,columnaDscEstTarea,columnaCodSemaforo,columnaFeAten,columnaResponsable,columnaOficinaTarea,columnaTerritorioTarea,columnaExpediente,columnaOperacion,columnaDscCliente,columnaFechaInicio,columnaDscEstadoExp,columnaFechaTermino,columnaAbogadoEstudio,columnaEstudio"
+		rowClasses="ui-widget-content">
+
+		<h:column headerClass="columna-bandeja">
+			<h:inputHidden value="#{bandeja.id}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="codTarea" />
+			</f:facet>			
+			<h:commandLink styleClass="colorLink"
+            	    value="#{bandeja.codTarea}"
+            	    actionListener="#{bandejaMB.dblTareaSeleccionada}">			       
+			        <f:param name="idExpTar" value="#{bandeja.id}" />
+			        <f:param name="codResponsable" value="#{bandeja.codResponsable}" />
+			</h:commandLink>						
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="nomTarea" />
+			</f:facet>
+			<h:outputText value="#{bandeja.nomTarea}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="strFechaAsignacion" />
+			</f:facet>
+			<h:outputText value="#{bandeja.strFechaAsignacion.target}">
+				<f:convertDateTime type="date" pattern="dd-MM-yyyy hh:mm:ss aa" />
+			</h:outputText>
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="dscEstadoTarea" />
+			</f:facet>
+			<h:outputText value="#{bandeja.dscEstadoTarea}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="ans" />
+			</f:facet>
+			<h:graphicImage library="imagenes" name="#{bandeja.codSemaforo}" />
+			<f:attribute value="center" name="align" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="strFechaAtencion" />
+			</f:facet>
+			<h:outputText value="#{bandeja.strFechaAtencion.target}">
+				<f:convertDateTime type="date" pattern="dd-MM-yyyy hh:mm:ss aa" />
+			</h:outputText>
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="responsable" />
+			</f:facet>
+			<h:outputText value="#{bandeja.responsable}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="oficinaTarea" />
+			</f:facet>
+			<h:outputText value="#{bandeja.oficinaTarea}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="territorioTarea" />
+			</f:facet>
+			<h:outputText value="#{bandeja.territorioTarea}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="expediente" />
+			</f:facet>						
+			<h:commandLink styleClass="colorLink"
+            	    value="#{bandeja.expediente}"
+            	    actionListener="#{bandejaMB.dblTareaSeleccionada}">			       
+			        <f:param name="idExpTar" value="#{bandeja.id}" />
+			        <f:param name="codResponsable" value="#{bandeja.codResponsable}" />
+			</h:commandLink>			
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="operacion" />
+			</f:facet>
+			<h:outputText value="#{bandeja.operacion}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="dscCliente" />
+			</f:facet>
+			<h:outputText value="#{bandeja.dscCliente}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="strFechaInicio" />
+			</f:facet>
+			<h:outputText value="#{bandeja.strFechaInicio.target}">
+				<f:convertDateTime type="date" pattern="dd-MM-yyyy hh:mm:ss aa" />
+			</h:outputText>
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="dscEstadoExp" />
+			</f:facet>
+			<h:outputText value="#{bandeja.dscEstadoExp}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="strFechaTermino" />
+			</f:facet>
+			<h:outputText value="#{bandeja.strFechaTermino.target}">
+				<f:convertDateTime type="date" pattern="dd-MM-yyyy hh:mm:ss aa" />
+			</h:outputText>
+		</h:column>
+		<h:column rendered="#{bandejaMB.mostrarSeccionAbogadoEstudio}">
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="abogadoEstudio" />
+			</f:facet>
+			<h:outputText value="#{bandeja.abogadoEstudio}" />
+		</h:column>
+		<h:column rendered="#{bandejaMB.mostrarSeccionAbogadoEstudio}">
+			<f:facet name="header">
+				<bbva:sortCabecera propertyName="estudio" />
+			</f:facet>
+			<h:outputText value="#{bandeja.estudio}" />
+		</h:column>
+		
+		<f:facet name="footer">
+        	<h:outputText value="No se encontró registros" rendered="#{empty bandejaMB.modelo}"/>
+        </f:facet>
+	</h:dataTable>
+	</div>
+	
+	<bbva:paginator container=":form:tablaContainer" managedBean="#{bandejaMB}" position="bottom"/>
+	
+	<h:message for="tablaTask" id="idMsgTablaTask" errorClass="mensaje-error" />
+</h:panelGroup>
+
+</ui:composition>

@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<!--f:view-->
+	<h:head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+		<title><ui:insert name="title"></ui:insert></title>
+		<h:outputStylesheet library="css" name="general.css" target="head"/>
+		<h:outputStylesheet library="css" name="style.css" target="head"/>
+		<link rel="shortcut icon" type="image/x-icon" href="#{resource['imagenes:favicon.ico']}" />
+	    <link rel="icon" type="image/x-icon" href="#{resource['imagenes:favicon.ico']}" />	
+		<h:outputScript library="javascript" name="jquery-1.8.2.min.js" target="head"/>
+		<h:outputScript library="javascript" name="general.js" target="head"/>
+		<ui:insert name="head"></ui:insert>
+	</h:head>
+	<h:body>
+		<h:form id="form">
+			<table  border="0" cellpadding="0" cellspacing="0" align="center">
+				<tbody>					
+					<tr>						
+						<td width="800px" style="text-align:center; vertical-align:center;">								         
+							<ui:insert name="content"></ui:insert>							
+						</td>						
+					</tr>
+					
+				</tbody>
+			</table>
+		</h:form>
+	</h:body>
+<!--/f:view-->
+</html>

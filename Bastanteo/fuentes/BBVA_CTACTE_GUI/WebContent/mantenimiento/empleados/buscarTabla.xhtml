@@ -1,0 +1,144 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+		<script type="text/javascript">
+String.prototype.trim = function() {return this.replace(/^\s+|\s+$/g,"")};
+var tipoDato="";
+onload = function() {
+  if (document.getElementById('actualizaTabla:columnasTablaParametricaDTB')!=null){
+    if (!document.getElementsByTagName || !document.createTextNode) return;
+    var rows = document.getElementById('actualizaTabla:columnasTablaParametricaDTB').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+    for (i = 0; i &#60; rows.length; i++) {
+        rows[i].onclick = function() {            
+            var row = this.rowIndex;
+            tipoDato =document.getElementById("actualizaTabla:columnasTablaParametricaDTB:"+row+":tipoDatoOculto").value;           
+            
+        }
+    }
+  }
+}
+function soloNumeros(e){
+ if(window.event) // IE
+    {
+        charCode = e.keyCode;
+        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode > 57)) {
+            window.event.returnValue=0;
+        }
+    }
+    else if(e.which) // Netscape/Firefox/Opera
+    {
+        charCode = e.which;
+        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode > 57)) {
+            e.preventDefault();
+        }
+    }
+}
+function soloNumerosConDecimales(e)
+{
+    if(window.event) // IE
+    {
+        charCode = e.keyCode;
+
+        if (charCode!=46 &#38;&#38; charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode > 57)) {
+            window.event.returnValue=0;
+        }
+    }
+    else if(e.which) // Netscape/Firefox/Opera
+    {
+        charCode = e.which;
+        if (charCode!=46 &#38;&#38; charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode > 57)) {
+            e.preventDefault();
+        }
+    }
+}
+function validaInputText(e) {    
+  if (tipoDato=="STRING") {  
+  }else if(tipoDato=="INTEGER" || tipoDato=="SHORT" || tipoDato=="LONG") {
+     soloNumeros(e);
+  }else if(tipoDato=="DOUBLE" || tipoDato=="FLOAT") {
+     soloNumerosConDecimales(e);       
+  }  
+}
+</script>
+
+<h:panelGroup>
+	<h:panelGrid width="100%" border="0" align="center" cellspacing="0">
+		<table width="100%">
+			<tr>
+				<td align="left" valign="top" width="100%">
+					
+					<h:panelGrid columns="2">
+					
+					<!--  PERFIL -->					
+						<h:outputLabel style="width:150px;" for="selectPerfil"
+							value="Perfil"
+							styleClass="etiqueta" />
+						<h:selectOneMenu id="selectPerfil"
+							value="#{buscarEmpleado.perfilSeleccionado}"
+							styleClass="select">
+							<f:selectItems value="#{buscarEmpleado.lstPerfiles}" />
+						</h:selectOneMenu>
+					
+					<!-- OFICINA -->
+					
+						<h:outputLabel style="width:150px;" for="selectOficinas"
+							value="Oficina"
+							styleClass="etiqueta" />
+						<h:selectOneMenu id="selectOficinas"
+							value="#{buscarEmpleado.oficinaSeleccionada}"
+							styleClass="select">
+							<f:selectItems value="#{buscarEmpleado.lstOficinas}" />
+						</h:selectOneMenu>
+					
+					<!-- ESTUDIO ABOGADO -->
+					
+						<h:outputLabel style="width:150px;" for="selectEstudioAbogados"
+							value="Estudio Abogado"
+							styleClass="etiqueta" />
+						<h:selectOneMenu id="selectEstudioAbogados"
+							value="#{buscarEmpleado.estudioAbogadoSeleccionado}"
+							styleClass="select">
+							<f:selectItems value="#{buscarEmpleado.lstEstudioAbogados}" />
+						</h:selectOneMenu>
+					
+					<!-- COD. EMPLEADO -->
+					
+						<h:outputLabel style="width:150px;" for="codEmpleado"
+							value="Cod. Empleado"
+							styleClass="etiqueta" />
+						<h:inputText onkeypress="validaInputText(event);" size="39"
+							maxlength="7" id="codEmpleado"
+							value="#{buscarEmpleado.codigoEmpleado}"
+							styleClass="caja-texto">
+						</h:inputText>
+					
+					<!-- FLAG ACTIVO -->		
+					
+						<h:outputLabel style="width:150px;" for="flagActivo"
+							value="Flag Activo"
+							styleClass="etiqueta" />
+						<h:selectBooleanCheckbox id="flagActivo"
+							value="#{buscarEmpleado.flagActivo}" />
+							
+					</h:panelGrid>		
+					
+				</td>
+			</tr>
+	
+            <h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+			   <h:outputText value=" " />
+			   <tr>						
+				  <td align="left">
+					<h:commandButton id="buscar" action="#{buscarEmpleado.buscar}" value="Buscar" styleClass="boton"/>
+					<h:commandButton id="limpiar" action="#{buscarEmpleado.limpiar}" value="Limpiar" styleClass="boton"/>
+				  </td>
+			   </tr>					
+			   <h:outputText value=" " />	
+			</h:panelGroup>
+	
+		</table>
+	</h:panelGrid>
+</h:panelGroup>
+</ui:composition>

@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<f:verbatim>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$(".soloNumeros").keypress(function (event) {
+					if (event.which &gt; 31) { 
+						if (event.which &lt; 48 || event.which &gt; 57)
+							event.preventDefault();
+					}
+				});
+			});
+		</script>
+	</f:verbatim>
+
+	<br />
+
+	<h:panelGrid columns="2">
+		<h:panelGroup>
+			<h:panelGrid columns="2">
+				<h:outputText styleClass="titulo-bold"
+				value="¿Enviar SMS?: " />
+				<h:outputText
+				value="#{pieVerificarResultado.expediente.flagSmstexto=='1'? 'SI':'NO'}" />
+			</h:panelGrid>	
+			<h:panelGrid columns="1">
+				<h:inputText size="25" disabled="#{pieVerificarResultado.modoConsulta}"
+					styleClass="soloNumeros" maxlength="14"
+					value="#{pieVerificarResultado.expediente.cliente.numeroCelular1}" />
+				<h:inputText size="25" disabled="#{pieVerificarResultado.modoConsulta}"
+					styleClass="soloNumeros" maxlength="14"
+					value="#{pieVerificarResultado.expediente.cliente.numeroCelular2}" />
+			</h:panelGrid>		
+		</h:panelGroup>
+	    <h:panelGroup>
+			<h:panelGrid columns="2">
+				<h:outputText styleClass="titulo-bold"
+				value="¿Enviar Correo?: " />
+				<h:outputText
+				value="#{pieVerificarResultado.expediente.flagCorreo=='1'? 'SI':'NO'}" />
+			</h:panelGrid>
+			<h:panelGrid columns="1">
+				<h:inputText size="25" disabled="#{pieVerificarResultado.modoConsulta}" maxlength="50"
+					value="#{pieVerificarResultado.expediente.cliente.correoElectronico1}" />
+				<h:inputText size="25" disabled="#{pieVerificarResultado.modoConsulta}" maxlength="50"
+					value="#{pieVerificarResultado.expediente.cliente.correoElectronico2}" />
+			</h:panelGrid>
+		</h:panelGroup>
+	</h:panelGrid>
+		
+	<table width="500px" border="0" cellpadding="5">
+		<tr>
+			<td align="right"><h:commandButton id="idAceptar"
+				value="Aceptar" disabled="#{pieVerificarResultado.modoConsulta}"
+				actionListener="#{pieVerificarResultado.actionAceptar}" 
+				onclick="return confirm('¿Desea culminar la tarea?')"/></td>
+		</tr>
+	</table>
+
+</ui:composition>

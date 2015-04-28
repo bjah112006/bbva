@@ -1,0 +1,582 @@
+html {
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 11px;
+	margin: 0px;
+}
+
+body {
+	margin: 0px;
+}
+
+img {
+	border-width: 0px;
+}
+
+.mensaje-error {
+	color: #FF0000;
+	display: block;
+	margin-left: 5px;
+}
+
+.mensaje-info {
+	color: #0000FF;
+	display: block;
+	margin-left: 5px;
+}
+
+.mensaje-error-fecha {
+	color: #FF0000;
+	display: block;
+	margin: 0px;
+	font-size: 11px;
+}
+
+.datos-cabecera {
+	background-color: #2266BB;
+	margin: 0px 0px 5px 0px;
+}
+
+.datos-cabecera .titulo {
+	color: #FFFFFF;
+	font-weight: bold;
+	font-size: 24px;
+	text-align: center;
+	margin-top: 5px;
+}
+
+.datos-cabecera .dato {
+	color: #FFFFFF;
+	font-weight: bold;
+	display: inline-block;
+	padding: 0px 0px 0px 5px;
+	margin: 8px 0px 3px 0px;
+}
+
+.tabla-cabecera {
+	background-color: #FFFFFF;
+	margin: 0px 0px 5px 0px;
+}
+
+.tabla-cabecera .titulo {
+	color: #2266BB;
+	font-weight: bold;
+	font-size: 13px;
+	text-align: center;
+	margin-top: 5px;
+}
+
+.tabla-cabecera .dato {
+	color: #000000;
+	text-decoration: none;
+	font-size: 11px;
+	text-align: center;
+	margin-top: 5px;
+}
+
+.cabecera-tabla {
+	background-color: #2266BB;
+	color: white;
+}
+
+.cabecera-bastanteo {
+	background-color: #2266BB;
+	color: white;
+	padding: 2px;
+}
+
+.subtitulo-bastanteo {
+	font-weight: bold;
+}
+
+.columna-align-center {
+	text-align: center;
+}
+
+.columna-align-left {
+	text-align: left;
+}
+
+.menu-lista {
+	background-color: #2266BB;
+	padding: 0px 0px 0px 10px;
+	list-style-type: none;
+	margin: 0px 5px 0px 0px;
+}
+
+.menu-lista a, .menu-lista span {
+	color: #FFFFFF;
+	text-decoration: none;
+	padding: 3px 0px;
+	display: block;
+	border: 0px;
+}
+
+.menu-lista a:hover {
+	text-decoration: underline;
+	color: #999999;
+}
+
+.menu-lista a:active {
+	text-decoration: none;
+	color: #999999;
+	font-weight: bold;
+}
+
+.tb-grilla-2 {
+	border: none;
+}
+
+.hr {
+	border: 100;
+	width: 80%;
+}
+
+input:disabled {
+	background-color: #CCCCCC;
+}
+
+.titulo-bold {
+	font-weight: bold;
+	font-size: 1.1em; 
+}
+
+.driverLicExpCal {
+	width: 85px;
+}
+
+.dateTimeField input {
+	width: 122px;
+}
+
+.newDateTimeField input {
+	width: 80px !important;
+}
+
+.colwidth130 {
+	width: 130px !important;
+}
+
+.colwidth145 {
+	width: 140px !important;
+}
+
+.colwidth150 {
+	width: 150px !important;
+}
+
+.inputwidth135 {
+	width: 135px !important;
+}
+
+.inputwidth100 {
+	width: 95px !important;
+}
+
+.inputwidth260 {
+	width: 242px !important;
+}
+
+.inputwidth100 {
+	width: 95px !important;
+}
+
+.inputwidth113 {
+	width: 114px !important;
+}
+
+.colwidth100 {
+	width: 100px !important;
+}
+
+.colwidth100a {
+	width: 100px !important;
+	padding-left: 0px;
+}
+
+.colwidth118 {
+	width: 123px !important;
+}
+
+.colwidth110 {
+	width: 110px !important;
+}
+
+.colwidth140 {
+	width: 140px !important;
+}
+
+.colwidth110a {
+	width: 110px !important;
+	padding-left: 9px;
+}
+
+.colwidth115 {
+	width: 115px !important;
+}
+
+.colwidth50 {
+	width: 50px !important;
+}
+
+.colwidth85 {
+	width: 85px !important;
+}
+
+.colwidth120 {
+	width: 120px !important;
+}
+
+.combowidth100 {
+	width: 100px !important;
+}
+
+.combowidth120 {
+	width: 170px !important;
+}
+
+.combowidth140 {
+	width: 140px !important;
+}
+
+.combowidth113 {
+	width: 118px !important;
+}
+
+.imagenSortNeutral {
+	background-image:
+		url("/BBVA_CE_CTACTE_Administracion/javax.faces.resource/themes/sam/images/ui-icons_454545_256x240.png.jsf?ln=primefaces&amp;v=3.0.M3")
+		/*{iconsHover}*/  
+	 background-position :     -128px 0;
+	display: block;
+	text-indent: -99999px;
+	overflow: hidden;
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	float: right;
+}
+
+.imagenSortAsc {
+	background-image:
+		url("/BBVA_CE_CTACTE_Administracion/javax.faces.resource/themes/sam/images/ui-icons_454545_256x240.png.jsf?ln=primefaces&amp;v=3.0.M3")
+		/*{iconsHover}*/  
+	  background-position :     0 -16px;
+}
+
+.imagenSortDsc {
+	background-image:
+		url("/BBVA_CE_CTACTE_Administracion/javax.faces.resource/themes/sam/images/ui-icons_454545_256x240.png.jsf?ln=primefaces&amp;v=3.0.M3")
+		/*{iconsHover}*/  
+	  background-position :     -64px -16px;
+}
+
+.superIndice {
+	vertical-align: super;
+	font-size: smaller;
+}
+
+.ui-datatable-odd {
+    background: none repeat scroll 0 0 #F2F5F9;
+}
+
+.table {
+	font: 12px/24px Verdana, Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	width: 750px;
+	text-align: center;
+	}
+
+.columnaCodTarea {
+	width: 50px !important;
+}
+.columnaNomTarea {
+	width: 140px !important;
+}
+.columnaFeAsig {
+	width: 143px !important;
+}
+.columnaDscEstTarea {
+	width: 98px !important;
+}
+.columnaCodSemaforo {
+	width: 38px !important;
+}
+.columnaFeAten {
+	width: 130px !important;
+}
+.columnaResponsable {
+	width: 95px !important;
+}
+.columnaOficinaTarea {
+	width: 55px !important;
+}
+.columnaTerritorioTarea {
+	width: 80px !important;
+}
+.columnaExpediente {
+	width: 85px !important;
+}
+.columnaOperacion {
+	width: 80px !important;
+}
+.columnaDscCliente {
+	width: 130px !important;
+}
+.columnaFechaInicio {
+	width: 130px !important;
+}
+.columnaDscEstadoExp {
+	width: 135px !important;
+}
+.columnaFechaTermino {
+	width: 130px !important;
+}
+.columnaAbogadoEstudio {
+	width: 80px !important;
+}
+.columnaEstudio {
+	width: 80px !important;
+}
+.colorLink {
+  color: #0000FF !important;  
+}
+
+
+.etiquetaBsqTarea {
+	width: 110px !important;
+}
+.campoBsqTarea {
+	width: 246px !important;
+}
+.etiquetaBsqEstTarea {
+	width: 120px !important;
+}
+.campoBsqEstTarea {
+	width: 100px !important;
+}
+.etiquetaBsqNroExp {
+	width: 105px !important;
+}
+.campoBsqNroExp {
+	width: 80px !important;
+}
+.etiquetaBsqEstExp {
+	width: 145px !important;
+}
+.campoBsqEstExp {
+	width: 80px !important;
+}
+
+
+.etiquetaBsqNomTarea {
+	width: 110px !important;
+}
+.campoBsqNomTarea {
+	width: 270px !important;
+}
+.etiquetaBsqCodCentral {
+	width: 96px !important;
+}
+.campoBsqCodCentral {
+	width: 90px !important;
+}
+.etiquetaBsqCodOperacion {
+	width: 105px !important;
+}
+.campoBsqCodOperacion {
+	width: 200px !important;
+}
+
+
+.etiquetaBsqFecAsigDel {
+	width: 155px !important;
+}
+.campoBsqFecAsigDel input{
+	width: 80px !important;
+}
+.etiquetaBsqFecAsigAl {
+	width: 15px !important;
+}
+.campoBsqFecAsigAl input{
+	width: 80px !important;
+}
+.etiquetaBsqNroDOI {
+	width: 118px !important;
+}
+.campoBsqNroDOI {
+	width: 97px !important;
+}
+.etiquetaBsqRazSocial {
+	width: 104px !important;
+}
+.campoBsqRazSocial {
+	width: 100px !important;
+}
+
+
+.etiquetaBsqFecAtenDel {
+	width: 155px !important;
+}
+.campoBsqFecAtenDel input{
+	width: 80px !important;
+}
+.etiquetaBsqFecAtenAl {
+	width: 15px !important;
+}
+.campoBsqFecAtenAl input{
+	width: 80px !important;
+}
+.etiquetaBsqGestor {
+	width: 100px !important;
+}
+.campoBsqGestor {
+	width: 100px !important;
+}
+.etiquetaBsqTerritorio {
+	width: 60px !important;
+}
+.campoBsqTerritorio {
+	width: 100px !important;
+}
+.etiquetaBsqOficina {
+	width: 30px !important;
+}
+.campoBsqOficina {
+	width: 165px !important;
+}
+
+
+.etiquetaBsqResponsable {
+	width: 80px !important;
+}
+.campoBsqResponsable {
+	width: 100px !important;
+}
+.etiquetaBsqAns {
+	width: 30px !important;
+}
+.campoBsqAns {
+	width: 250px !important;
+}
+.etiquetaBsqFecIniDel {
+	width: 122px !important;
+}
+.campoBsqFecIniDel input{
+	width: 80px !important;
+}
+.etiquetaBsqFecIniAl {
+	width: 15px !important;
+}
+.campoBsqFecIniAl input{
+	width: 80px !important;
+}
+.etiquetaBsqEstudio {
+	width: 58px !important;
+}
+.campoBsqEstudio{
+	width: 165px !important;
+}
+
+
+.etiquetaBsqTerritorioTarea {
+	width: 60px !important;
+}
+.campoBsqTerritorioTarea {
+	width: 100px !important;
+}
+.etiquetaBsqOficinaTarea {
+	width: 30px !important;
+}
+.campoBsqOficinaTarea {
+	width: 165px !important;
+}
+.etiquetaBsqFecTerDel {
+	width: 135px !important;
+}
+.campoBsqFecTerDel input{
+	width: 80px !important;
+}
+.etiquetaBsqFecTerAl {
+	width: 15px !important;
+}
+.campoBsqFecTerAl input{
+	width: 80px !important;
+}
+.etiquetaBsqAbogado {
+	width: 57px !important;
+}
+.campoBsqAbogado{
+	width: 165px !important;
+}
+.ui-datatable-scrollable-body {
+   overflow-x: scroll !important; 
+   overflow-y: hidden !important;
+}
+
+.ui-datatable .ui-paginator-top {
+    border-bottom: 0 none;
+}
+.ui-datatable .ui-paginator-bottom {
+    border-top: 0 none;
+}
+.ui-datatable .ui-paginator {
+    margin: 0;
+    padding: 2px;
+    text-align: center;
+}
+.ui-paginator {
+    display: block;
+    margin: 6px 0;
+    white-space: nowrap;
+}
+.ui-paginator-current, .ui-paginator-rpp-options {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+.ui-paginator-page, .ui-paginator-pages, .ui-paginator-next, .ui-paginator-last, .ui-paginator-first, .ui-paginator-previous, .ui-paginator-current {
+    display: inline-block;
+    margin-left: 1px;
+    margin-right: 1px;
+    outline: medium none;
+    padding: 2px 6px;
+    text-decoration: none;
+}
+.ui-paginator-next .ui-icon, .ui-paginator-previous .ui-icon, .ui-paginator-first .ui-icon, .ui-paginator-last .ui-icon {
+    height: auto;
+    overflow: inherit;
+}
+.ui-datatable table, table.ui-datatable {
+    border-collapse: collapse;
+}
+.ui-datatable th, .ui-datatable td {
+    overflow: hidden;
+    padding: 4px 10px;
+}
+.ui-datatable td {
+    border-color: #AAAAAA;
+    border-style: solid;
+    border-width: 1px;
+    margin: 0;
+}
+.ui-datatable th.columna-bandeja, .ui-datatable td.columna-bandeja {
+	width: 0;
+	padding: 0;
+}
+table.ui-datatable-empty tbody td {
+	border: 0;
+	padding: 0;
+	height: 0;
+}
+table.ui-datatable-not-empty tfoot td {
+	border: 0;
+	padding: 0;
+	height: 0;
+}
+.originalTextareaInfo {
+	color: black;
+    text-align: right;
+}
+.warningTextareaInfo {
+	color: black;
+    text-align: right;
+}

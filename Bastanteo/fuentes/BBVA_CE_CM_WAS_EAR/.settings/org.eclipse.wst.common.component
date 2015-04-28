@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="BBVA_CE_CM_WAS_EAR">
+        <wb-resource deploy-path="/" source-path="/" tag="defaultRootSource"/>
+        <dependent-module archiveName="BBVA_CE_CM_WAS.war" deploy-path="/" handle="module:/resource/BBVA_CE_CM_WAS/BBVA_CE_CM_WAS">
+            <dependent-object>Module_1397601290903</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>

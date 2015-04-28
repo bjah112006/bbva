@@ -1,0 +1,61 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+	
+	<custom:tabView id="idDatosCliente">
+			
+		<custom:tab title="Datos del cliente">
+
+			<table border="0"  width="100%">
+				<tr>
+					<td width="16%"></td>
+					<td width="17%"></td>
+					<td width="16%"></td>
+					<td width="18%"></td>
+					<td width="16%"></td>
+					<td width="17%"></td>
+				</tr>
+				<tr>
+					<td align="right">
+						<h:outputText style="font-weight:bold;align:rigth" value="Código central:"/>
+					</td>
+					<td>					
+						<h:outputText style="width:100%" value="#{datosCliente.cliente.codigoCentral}"/>
+					</td>
+					<td align="right">
+			        	<h:outputText style="font-weight:bold;align:rigth" value="Tipo DOI:" />
+					</td>
+					<td>		
+			        	<h:outputText style="width:100%" value="#{datosCliente.cliente.tipoDoiDes}" />
+					</td>
+					<td align="right">				        
+			        	<h:outputText style="font-weight:bold;align:rigth" value="Número DOI:" />
+			        </td>
+					<td>
+			        	<h:outputText style="width:100%" value="#{datosCliente.cliente.numeroDoi}" />
+			        </td>
+			    </tr>
+				<tr>
+					<td align="right">
+		        		<h:outputText style="font-weight:bold;align:rigth" value="Razón Social:" />
+					</td>
+					<td>			        		  
+		        		<h:outputText style="width:100%" value="#{datosCliente.cliente.razonSocial}" />
+					</td>
+					<td align="right">			        		
+			        	<h:outputText style="font-weight:bold;align:rigth" value="Tipo de PJ:" />
+					</td>
+					<td colspan="3">				        	  
+		        		<h:outputText style="width:100%" value="#{datosCliente.tipoPJ}" />
+			        </td>
+			    </tr>	
+			</table>	        		
+		
+		</custom:tab>
+	</custom:tabView>
+
+</ui:composition>
+
+

@@ -1,0 +1,107 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+
+	<ui:define name="title">Reenvio de Documentos</ui:define>
+
+	<ui:define name="content">
+		<f:verbatim>
+			<script type="text/javascript">
+				/* <![CDATA[ */
+				var ventanaSubir;
+				$(document).ready(function(){
+					if ($("[id='form:idFlagConsultarApplet']").val() == '1') {
+						var lista = applet("appletVisor").obtenerListaDocsBackup();
+						if (lista == '') {
+							alert("No se encontraron documentos para ese número de expediente.");
+						} else {
+							cargarTablaDocumentos ({"listaDocumentos":lista});
+						}
+					}
+					$("[id='form:idNumExp']").keydown(function(event) {
+						// Allow: backspace, delete, tab, escape, and enter
+						if ($.inArray(event.keyCode,[46,8,9,27,13]) !== -1 ||
+							// Allow: Ctrl+A
+							(event.keyCode == 65 && event.ctrlKey === true) ||
+							// Allow: home, end, left, right
+							(event.keyCode >= 35 && event.keyCode <= 39)) {
+							// let it happen, don't do anything
+							return;
+						} else {
+							// Ensure that it is a number and stop the keypress
+							if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+								event.preventDefault();
+							}
+						}
+					});
+				});
+				function abrirDocumentoApplet(nombreDoc) {
+					applet("appletVisor").abrirDocumentoBackup(nombreDoc);
+					return false;
+				}
+				/* ]]> */
+			</script>
+		</f:verbatim>
+		
+		<custom:remoteCommand name="cargarTablaDocumentos" process="@form" update="form:tablaDocumentos"
+			actionListener="#{reenvioDocumentosMB.cargarTablaDocumentos}" />
+		
+		<h:panelGroup id="idBuscarExpediente">
+			<h:panelGroup layout="block" style="display:none;">
+				<h:inputText /><!-- Bug de IE : form con un solo input no hace submit con Enter -->
+				<h:inputHidden id="idFlagConsultarApplet" value="#{reenvioDocumentosMB.flagConsultarApplet}" />
+			</h:panelGroup>
+			<h:panelGrid border="1" cellpadding="12" cellspacing="0">
+				<h:panelGroup layout="block">
+					<h:panelGrid columns="3">
+						<h:outputText value="Número Expediente:" />
+						<h:inputText id="idNumExp" value="#{reenvioDocumentosMB.numeroExpediente}" />
+						<h:commandButton value="Buscar" id="idBuscar" action="#{reenvioDocumentosMB.buscar}" />
+					</h:panelGrid>
+					<h:message for="idNumExp" errorClass="mensaje-error" />
+				</h:panelGroup>
+				<h:panelGrid layout="block" rendered="#{reenvioDocumentosMB.visibleApplet}">
+					<h:panelGroup id="tablaDocumentos" layout="block">
+						<h:dataTable border="1" cellpadding="2" cellspacing="1"
+							rendered="#{reenvioDocumentosMB.visibleTabla}"
+							value="#{reenvioDocumentosMB.listaDocumentos}" var="item"
+							styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+							footerClass="footerClass" columnClasses="" width="300">
+							<f:facet name="header">
+								<h:outputText value="Lista de Documentos" style="font-weight:bold;"/>
+							</f:facet>
+							<h:column nowrap="true" align="left">
+								<h:commandLink value="#{item}"
+									onclick="return abrirDocumentoApplet('#{item}');" />
+							</h:column>
+						</h:dataTable>
+					</h:panelGroup>
+					<applet name="appletVisor" id="appletVisor"
+							code="com.ibm.bbva.ctacte.applet.ReenvioDocumentosFTP"
+							archive="../applet/appCtaCte.jar" width="300px" height="70px"
+							mayscript="mayscript">
+						<param name="host" value="#{reenvioDocumentosMB.servidorFTP}" />
+						<param name="user" value="#{reenvioDocumentosMB.usuarioFTP}" />
+						<param name="password" value="#{reenvioDocumentosMB.passwordFTP}" />
+						<param name="periodo" value="#{reenvioDocumentosMB.periodoTranfFTP}" />
+						<param name="tasaKBytes" value="#{reenvioDocumentosMB.tasaKBytes}" />
+						<param name="escaneosPath" value="#{reenvioDocumentosMB.transferencias}" />
+						<param name="prefix" value="#{reenvioDocumentosMB.numeroExpediente}" />
+						<param name="servidorServWeb" value="#{reenvioDocumentosMB.servidorServWeb}" />
+						<param name="puertoServWeb" value="#{reenvioDocumentosMB.puertoServWeb}" />
+						<param name="servidorConvPDF" value="#{reenvioDocumentosMB.servidorConvPDF}" />
+						<param name="puertoConvPDF" value="#{reenvioDocumentosMB.puertoConvPDF}" />
+						<param name="descargados" value="#{reenvioDocumentosMB.descargados}" />
+						<param name="transferencias" value="#{reenvioDocumentosMB.transferencias}" />
+						<param name="log" value="#{reenvioDocumentosMB.log}" />
+						<param name="carpetaFTP" value="#{reenvioDocumentosMB.carpetaFTP}" />
+					</applet>
+				</h:panelGrid>
+			</h:panelGrid>
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>

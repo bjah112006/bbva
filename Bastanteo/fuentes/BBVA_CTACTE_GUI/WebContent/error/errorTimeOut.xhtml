@@ -1,0 +1,16 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:view>
+    <html>
+	<head></head>
+	<body>
+	   <h:form id="frmErrorTimeOut">
+	        <h:outputText value="Ha expirado la sesión. "></h:outputText>
+	        <h:commandLink value="Ir a Login" actionListener="#{menu.timeOutWAS}"/>
+	   </h:form>
+	</body>
+	</html>
+</f:view>
+</ui:composition>

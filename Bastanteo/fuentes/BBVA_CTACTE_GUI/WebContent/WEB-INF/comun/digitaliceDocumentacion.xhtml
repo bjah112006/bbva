@@ -1,0 +1,323 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	xmlns:util="http://java.sun.com/jsf/composite/util">
+
+	<f:verbatim>
+		<script type="text/javascript">
+			function abrirDocumento (obj, opcion){
+				if (opcion==1) {				   
+					var rutaCM = valorHidden(obj, "rutaCM");
+					openArchivoCMBasico(rutaCM, obj);
+				} else if (opcion==2) {
+				    var rutaCM = valorHidden(obj, "rutaCM");
+					var pId = valorHidden(obj, "pidCM");
+					var codDoc = valorHidden(obj, "codDoc");
+					var tramaPar = valorHidden(obj, "tramaParam");
+				    var rutaCMFinal = rutaCM + pId + tramaPar + codDoc;
+					
+					//alert(rutaCMFinal);
+					openArchivoCMAvanzado(rutaCMFinal);					
+				} else if (opcion==3) {
+					var codDoc = valorHidden(obj, "codDoc");
+					applet("appletVisor").abrirDocumento(codDoc);
+				}
+				return false;
+			}
+			function eliminarDocumento (obj, opcion){
+				if (confirm('¿Desea eliminar el documento escaneado?')) {
+					var codDoc = valorHidden(obj, "codDoc");
+					if (opcion==3) {
+						applet("appletVisor").eliminarDocumento(codDoc);
+					} else {
+						confirmaEliminaDocumento (codDoc);
+					}
+				}
+				return false;
+			}
+			function confirmaEliminaDocumento (codDoc){
+				eliminarDocServidor ({"codigoDocumento":codDoc});
+			}
+			function valorHidden (obj, nombHidden) {
+				var lista = $(obj).parent().find("input");
+				for (var i=0; i &lt; lista.size(); i++) {
+					var idComp = lista.eq(i).attr("name");
+					if (idComp.match(nombHidden+"$")==nombHidden) {
+						return lista.eq(i).val();
+					}
+				}
+				return null;
+			}
+			$(document).ready(function(){
+				$("#form\\:idDigDoc\\:idTipoPJ").bind("change", function(){
+					selectTipoPJ ({"idTipoPJ":$(this).val()});
+				});
+			});
+			function openArchivoCMBasico(rutaCM, obj){
+				var indice = $(obj).parent().parent().index();
+				var params = { url: rutaCM };
+				if ($.browser.msie) {
+					winCM=window.open('../pdfContent/abrirPDF.faces?'+$.param(params),'winDocCM'+indice,'width=850,height=450,resizable=yes');
+				} else {
+					winCM=window.open(rutaCM,'winDocCM'+indice,'width=850,height=450,resizable=yes');
+				}
+				return false;
+			}
+			function openArchivoCMAvanzado(pId){
+				myWindow=window.open(pId,'','width=850,height=450,resizable=yes');
+			}
+			
+			function openArchivoCMBasicoHist(obj, rutaCM){
+				var indice1 = $(obj).parent().parent().parent().parent().parent().parent().index();
+				var indice2 = $(obj).parent().parent().index();
+				var params = { url: rutaCM };
+				if ($.browser.msie) {
+					winCM=window.open('../pdfContent/abrirPDF.faces?'+$.param(params),'winDocCMH'+indice1+''+indice2,'width=850,height=450,resizable=yes');
+				} else {
+					winCM=window.open(rutaCM,'winDocCMH'+indice1+''+indice2,'width=850,height=450,resizable=yes');
+				}
+				return false;
+			}
+			
+			function eliminaGlobos(data) {
+				if (data.status == 'begin') {
+					$( ".balloon" ).remove();
+				}
+			}
+		</script>
+	</f:verbatim>
+
+	<custom:remoteCommand name="eliminarDocServidor" update="@form" process="@form"
+			actionListener="#{digitaliceDocumentacion.eliminarDocumento}" />
+
+	<custom:tabView id="idDigDoc" rendered="#{digitaliceDocumentacion.mostrar}">
+		<custom:tab title="Paso 2: Digitalice la Documentación">
+		
+			<table width="750px" border="0" cellpadding="5">
+		     <tr>
+			  <td align="right">
+			   <h:commandLink  style="color:#0000FF;" rendered="#{digitaliceDocumentacion.disLinkVistaUnica}"
+           	      value="Vista Unica" 
+			      onclick="window.open('../vistaUnica/vistaUnicaListaPopUp.faces?parametros=#{digitaliceDocumentacion.expediente.cliente.codigoCentral};#{digitaliceDocumentacion.expediente.cliente.numeroDoi};#{digitaliceDocumentacion.expediente.cliente.razonSocial}', 
+	              'WindowName', 'dependent=yes, menubar=no, height=650,width=750, toolbar=no, resizable=yes, scrollbars=yes'); return false;">
+		       </h:commandLink>
+		      </td>
+			 </tr>
+	        </table>
+		
+			<h:panelGrid columns="3"
+				rendered="#{digitaliceDocumentacion.mostRegMod}">
+				<h:outputText value="Tipo de PJ:" style="width: 125px; display: block;" />
+				<h:selectOneMenu value="#{digitaliceDocumentacion.selTipoPJ}"
+					readonly="#{digitaliceDocumentacion.soloLectTipoPJ}" 
+					disabled="#{digitaliceDocumentacion.soloLectTipoPJ}" id="idTipoPJ">
+					<f:selectItems value="#{digitaliceDocumentacion.listaTipoPJ}" />
+				</h:selectOneMenu>
+			</h:panelGrid>
+			<custom:remoteCommand name="selectTipoPJ" update=":form:idDigDoc:idCasoNegocioPnl :form:idDigDoc:idListDocExp :form:idDigDoc:idVisorApplet :form:idFinaliceSol" 
+					process="@form" actionListener="#{digitaliceDocumentacion.seleccionarTipoPJ}" />
+			<h:message for="idTipoPJ" errorClass="mensaje-error" />
+			
+			<h:panelGroup id="idCasoNegocioPnl">
+				<h:panelGrid columns="3"
+					rendered="#{digitaliceDocumentacion.mostRegMod and digitaliceDocumentacion.mostCasoNegocio}">
+					<h:outputText value="Caso de negocio:" style="width: 125px; display: block;" />
+					<h:selectOneMenu value="#{digitaliceDocumentacion.selCasoNegocio}" id="idCasoNegocio"
+						readonly="#{digitaliceDocumentacion.soloLectCasoNegocio}" 
+						disabled="#{digitaliceDocumentacion.soloLectCasoNegocio}"
+						valueChangeListener="#{digitaliceDocumentacion.seleccionarCasoNegocioListener}">
+						<f:selectItems value="#{digitaliceDocumentacion.listaCasoNegocio}" />
+						<f:ajax event="change" render=":form:idDigDoc:idCasoNegocioAyuda :form:idDigDoc:idListDocExp :form:idDigDoc:idVisorApplet :form:idFinaliceSol" onevent="eliminaGlobos" />
+					</h:selectOneMenu>
+					<h:panelGroup id="idCasoNegocioAyuda">
+						<util:tooltipAyuda rendered="#{not empty digitaliceDocumentacion.casoNegocioTextoAyuda}" contenido="#{digitaliceDocumentacion.casoNegocioTextoAyuda}" />
+					</h:panelGroup>
+				</h:panelGrid>
+				<h:message for="idCasoNegocio" errorClass="mensaje-error" />
+			</h:panelGroup>
+			
+			<h:dataTable id="idListDocExp" var="documentoExpSub" width="800" 
+					columnClasses="columna-align-left,columna-align-center,columna-align-center,columna-align-left,columna-align-left,columna-align-left,columna-align-center"
+					value="#{digitaliceDocumentacion.listaDocumentoExp}">
+				<h:column id="modelHeader">
+					<f:facet name="header">
+						<h:outputText value="Tipo Doc." />
+					</f:facet>
+					<h:outputText
+						value="#{documentoExpSub.documentoExp.documento.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="¿Obligatorio?" />
+					</f:facet>
+					<h:selectBooleanCheckbox disabled="true"
+						value="#{documentoExpSub.documentoExp.flagObligatorio=='1' ? true : false}" >
+						<f:ajax event="change"
+							render="@none"
+							listener="#{digitaliceDocumentacion.hayEscaneoMetodo}" />
+					</h:selectBooleanCheckbox><!-- el render era idMotivo que no existe y causaba problemas -->
+				</h:column>
+				<h:column rendered="#{digitaliceDocumentacion.mostEscaneado}">
+					<f:facet name="header">
+						<h:outputText value="¿Requiere escaneo?" />
+					</f:facet>
+					<h:selectBooleanCheckbox disabled="#{documentoExpSub.disReqEscaneo}"
+						readonly="#{documentoExpSub.disReqEscaneo}"
+						value="#{documentoExpSub.reqEscaneo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Archivo escaneado" />
+					</f:facet>
+					<!--h:commandLink styleClass="abrirDocumento" disabled="#{digitaliceDocumentacion.modoConsulta}"
+						value="#{documentoExpSub.documentoExp.nombreArchivo}"
+						onclick="return abrirDocumento (this, #{documentoExpSub.tipoVisor});">
+					</h:commandLink-->
+					<h:outputLink styleClass="abrirDocumento" disabled="#{digitaliceDocumentacion.modoConsulta}"
+						value="#"
+						onclick="return abrirDocumento (this, #{documentoExpSub.tipoVisor});">
+						<h:outputText value="#{documentoExpSub.documentoExp.nombreArchivo}"/>
+					</h:outputLink>
+					<h:outputLink rendered="#{documentoExpSub.documentoExp.flagEscaneado=='1' and digitaliceDocumentacion.mostImagen and not documentoExpSub.disEliminarDoc}"
+						disabled="#{digitaliceDocumentacion.modoConsulta}"					
+						onclick="return eliminarDocumento (this, #{documentoExpSub.tipoVisor});"
+						value="javascript:void(0);">
+						<h:graphicImage value="#{resource['imagenes:eliminar.png']}" style="width: 18px;"/>
+					</h:outputLink>
+					<h:inputHidden id="pidCM" value="#{documentoExpSub.documentoExp.pidCM}" />
+					<h:inputHidden id="rutaCM" value="#{documentoExpSub.rutaCM}" />
+					<h:inputHidden id="codDoc" value="#{documentoExpSub.documentoExp.documento.codigoDocumento}" />
+					<h:inputHidden id="tramaParam" value="#{digitaliceDocumentacion.tramaParametrosApplet}" />	
+				</h:column>
+				<h:column rendered="#{digitaliceDocumentacion.mostObservaciones}">
+					<f:facet name="header">
+						<h:outputText value="Observaciones" />
+					</f:facet>
+					<h:outputText id="idObservaciones"
+						value="#{documentoExpSub.documentoExp.motivo.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Versiones en file electrónico" />
+					</f:facet>
+					<h:dataTable id="tablaDocumentosHist" var="documentoHist"
+						value="#{documentoExpSub.arrayDocumentoCM}">
+						<h:column>
+							<h:outputLink styleClass="abrirDocumento" disabled="#{digitaliceDocumentacion.modoConsulta}"
+				            	onclick="return openArchivoCMBasicoHist (this, '#{documentoHist.urlContent}');" value="#">  
+				  				<h:outputText value="#{documentoHist.nombreArchivo}" />
+				  			</h:outputLink>
+						</h:column>
+					</h:dataTable>
+				</h:column>
+				<h:column rendered="#{digitaliceDocumentacion.mostNroPagina}">
+					<f:facet name="header">
+						<h:outputText value="Número Página" />
+					</f:facet>
+					<h:outputText id="idNroPagina"
+						title="Última página registrada para este documento"
+						style="cursor:help;"
+						value="#{documentoExpSub.nroPagina}" />
+				</h:column>
+			</h:dataTable>
+			<h:message for="idListDocExp" errorClass="mensaje-error" />
+			<h:panelGrid rendered="#{digitaliceDocumentacion.mostObsGen}">
+				<h:outputText value="Observaciones Generales: " />
+				<h:outputText
+					value="#{digitaliceDocumentacion.expediente.observaciones} "
+					rendered="#{not empty digitaliceDocumentacion.expediente.observaciones}" />
+				<h:outputText
+					value="#{digitaliceDocumentacion.strObservacionesHistorial} "
+					rendered="#{empty digitaliceDocumentacion.expediente.observaciones}" />
+				<h:outputText value=" " />
+			</h:panelGrid>
+			<h:panelGrid rendered="#{digitaliceDocumentacion.mostFirmas}">
+				<h:outputText styleClass="titulo-bold" value="Personas con firma observada: " />
+				<h:dataTable width="300" id="idListDocRevoc" var="listaFirma"
+					value="#{digitaliceDocumentacion.listaFirmaObservada}">
+					<h:column  id="idTipoDoi">
+						<f:facet name="header">
+							<h:outputText value="Tipo DOI" />
+						</f:facet>
+						<h:outputText value="#{listaFirma.tipoDoiDes}" />
+					</h:column>
+					<h:column id="idnumeroDOI">
+						<f:facet name="header">
+							<h:outputText value="Número DOI" />
+						</f:facet>
+						<h:outputText value="#{listaFirma.numeroDoi}" />
+					</h:column>
+					<h:column id="idNombre">
+						<f:facet name="header">
+							<h:outputText value="Participe " />
+						</f:facet>
+						<h:outputText value="#{listaFirma.nombre} #{listaFirma.apellidoPaterno} #{listaFirma.apellidoMaterno}"/>
+					</h:column>
+								
+				</h:dataTable>
+			</h:panelGrid>
+			<!--h:panelGroup id="idVisorApplet" rendered="#{!digitaliceDocumentacion.modoConsulta}"-->
+			<h:panelGroup id="idVisorApplet">
+				<script type="text/javascript" language="javascript">
+						function actualizarDocumentos (codigoDoc) {
+							$("#"+this.form.name+"\\:idDigDoc\\:idDocumentos").val(codigoDoc);
+							actDocumentos();
+						}
+						function confirmarInicioApplet () {
+							$("#"+this.form.name+"\\:idDigDoc\\:iniciarApplet").val(false);
+						}
+						function confirmarEliminaArchivo () {
+							$("#"+this.form.name+"\\:idDigDoc\\:eliminarArchivo").val("");
+						}
+				</script>
+				<h:inputHidden id="iniciarApplet"
+					value="#{digitaliceDocumentacion.iniciarApplet}" />
+				<applet name="appletVisor" id="appletVisor"
+					code="com.ibm.bbva.ctacte.applet.AgregarDocumentos"
+					archive="../applet/appCtaCte.jar" width="#{digitaliceDocumentacion.mostApplet ? '800px' : '1px'}"
+					height="#{digitaliceDocumentacion.mostApplet ? '120px' : '1px'}"
+					mayscript="mayscript">
+					<param name="servidorServWeb"
+						value="#{digitaliceDocumentacion.servidorServWeb}" />
+					<param name="puertoServWeb"
+						value="#{digitaliceDocumentacion.puertoServWeb}" />
+					<param name="descargados"
+						value="#{digitaliceDocumentacion.descargados}" />
+					<param name="transferencias"
+						value="#{digitaliceDocumentacion.transferencias}" />
+					<param name="tramaDescarga"
+						value="#{digitaliceDocumentacion.tramaDescarga}" />
+					<param name="idExpediente"
+						value="#{digitaliceDocumentacion.idExpediente}" />
+					<param name="iniciarApplet"
+						value="#{digitaliceDocumentacion.iniciarApplet}" />
+					<param name="log" value="#{digitaliceDocumentacion.log}" />
+					
+					<param name="tramaDocumentos"
+						value="#{digitaliceDocumentacion.tramaDocumentos}" />
+						
+					<param name="urlEscaneoWeb"
+						value="#{digitaliceDocumentacion.urlEscaneoWeb}" />
+					<param name="idEmpresaEscaneoWeb"
+						value="#{digitaliceDocumentacion.escaneoWeb.id_empresa}" />
+					<param name="idSistemaEscaneoWeb"
+						value="#{digitaliceDocumentacion.escaneoWeb.id_sistema}" />
+						
+					<param name="codigoEmpleadoEscaneoWeb"
+						value="#{digitaliceDocumentacion.empleado.codigo}" />
+					<param name="flagEscaneoWeb"
+						value="#{digitaliceDocumentacion.empleado.oficina.flagEscaneoWeb}" />
+					<param name="tamanoMaxPDF" value="#{digitaliceDocumentacion.tamanoMaxPDF}" />
+					<param name="cleanTransferDir" value="#{digitaliceDocumentacion.cleanTransferDir}" />
+				</applet>
+			</h:panelGroup>
+			<h:inputHidden id="idDocumentos"
+				value="#{digitaliceDocumentacion.listaDocumentos}" />
+			<custom:remoteCommand name="actDocumentos" update="@form" process="@form"
+				actionListener="#{digitaliceDocumentacion.actualizarDocumentos}" />
+		</custom:tab>
+	</custom:tabView>
+
+</ui:composition>

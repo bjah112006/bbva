@@ -1,0 +1,165 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+
+	<f:verbatim>
+		<script type="text/javascript">
+			function show_Reenviar(){
+				return confirm("¿Desea enviar el expediente?");
+			}				
+			function show_Cancelar(){
+				return confirm("¿Desea continuar con la tarea mas adelante?");
+			}
+			function mensajeCancelado (data) {
+				if (data.status == 'success') {
+					var args = getCallbackParams(data);
+					alert (args.mensaje);
+					redireccionar();
+				}
+			}
+			$(document).ready(function(){
+				$(".soloNumeros").keypress(function (event) {
+					if (event.which &gt; 31) { 
+						if (event.which &lt; 48 || event.which &gt; 57) {
+							event.preventDefault();
+						}
+					}
+				});
+			});
+		</script>
+	</f:verbatim>
+
+	<custom:remoteCommand name="redireccionar"
+			actionListener="#{finaliceSolicitud1.redireccionar}"/>
+
+	<custom:tabView id="idFinaliceSol" styleClass="chkSel" rendered="#{finaliceSolicitud1.mostrar}">
+		<custom:tab id="idTab1" title="Paso 3: Finalice la solicitud">
+			<h:panelGrid columns="3" id="idPanelColumnas">
+				<h:panelGroup>
+					<h:panelGrid columns="2">
+						<h:selectBooleanCheckbox
+							disabled="#{finaliceSolicitud1.modoConsulta}}"
+							value="#{finaliceSolicitud1.chkIndAdicionales}">
+							<f:ajax event="change" render="idIndAdCont idGrabar"
+								listener="#{finaliceSolicitud1.selecIndAdicionales}" />
+						</h:selectBooleanCheckbox>
+						<h:outputText value="Indicaciones adicionales" />
+					</h:panelGrid>
+					<h:panelGroup id="idIndAdCont">
+						<h:inputTextarea rows="5" cols="55"
+							value="#{finaliceSolicitud1.indicAdicionales}"
+							disabled="#{!finaliceSolicitud1.chkIndAdicionales}" id="idIndAd">						
+						</h:inputTextarea>
+						<custom:textAreaCounter for="idIndAd" maxCharacterSize="3000" />
+					</h:panelGroup>
+					<h:message for="idIndAd" errorClass="mensaje-error" />
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:panelGrid columns="2">
+						<h:selectBooleanCheckbox
+							value="#{finaliceSolicitud1.chkEnviarSMS}">
+							<f:ajax event="change" render="idSms1 idSms2 idGrabar"
+								listener="#{finaliceSolicitud1.selecEnviarSMS}" />
+						</h:selectBooleanCheckbox>
+						<h:outputText styleClass="titulo-bold" value="¿Enviar SMS?" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" id="idSms">
+						<h:inputText id="idSms1" size="25" styleClass="soloNumeros"
+							value="#{finaliceSolicitud1.sms1}" maxlength="14"
+							disabled="#{!finaliceSolicitud1.chkEnviarSMS or finaliceSolicitud1.modoConsulta}">
+							<f:ajax event="keyup" render="idGrabar"
+								listener="#{finaliceSolicitud1.cambiarSms1}" />
+						</h:inputText>
+						<h:inputText id="idSms2" size="25" styleClass="soloNumeros"
+							value="#{finaliceSolicitud1.sms2}" maxlength="14"
+							disabled="#{!finaliceSolicitud1.chkEnviarSMS or finaliceSolicitud1.modoConsulta}">
+							<f:ajax event="keyup" render="idGrabar"
+								listener="#{finaliceSolicitud1.cambiarSms2}" />
+						</h:inputText>
+					</h:panelGrid>
+					<h:message for="idSms" errorClass="mensaje-error" />
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:panelGrid columns="2">
+						<h:selectBooleanCheckbox
+							value="#{finaliceSolicitud1.chkEnviarNotifMail}">
+							<f:ajax event="change" render="idMail1 idMail2 idGrabar"
+								listener="#{finaliceSolicitud1.selecEnviarNotifMail}" />
+						</h:selectBooleanCheckbox>
+						<h:outputText styleClass="titulo-bold"
+							value="¿Enviar Notificación email?" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" id="idMail">
+						<h:inputText id="idMail1" size="25" maxlength="50"
+							value="#{finaliceSolicitud1.mail1}"
+							disabled="#{!finaliceSolicitud1.chkEnviarNotifMail or finaliceSolicitud1.modoConsulta}">
+							<f:ajax event="keyup" render="idGrabar"
+								listener="#{finaliceSolicitud1.cambiarMail1}" />
+						</h:inputText>
+						<h:inputText id="idMail2" size="25" maxlength="50"
+							value="#{finaliceSolicitud1.mail2}"
+							disabled="#{!finaliceSolicitud1.chkEnviarNotifMail or finaliceSolicitud1.modoConsulta}">
+							<f:ajax event="keyup" render="idGrabar"
+								listener="#{finaliceSolicitud1.cambiarMail2}" />
+						</h:inputText>
+					</h:panelGrid>
+					<h:message for="idMail" errorClass="mensaje-error" />
+				</h:panelGroup>
+			</h:panelGrid>
+			<h:panelGrid columns="2" rendered="#{finaliceSolicitud1.mostRegMod}">
+				<h:commandButton value="Generar pre-registro"
+					rendered="#{finaliceSolicitud1.mostBtnPreR}"
+					action="#{finaliceSolicitud1.generarPreRegistro}"
+					disabled="#{finaliceSolicitud1.disGenerarPreReg || finaliceSolicitud1.modoConsulta}"
+					onclick="return confirm('Se generará el Pre registro del expediente. ¿Desea continuar?');" />
+				<h:commandButton value="Registrar y enviar expediente"
+					disabled="#{finaliceSolicitud1.disRegEnvExp || finaliceSolicitud1.modoConsulta}"
+					action="#{finaliceSolicitud1.registrarExpediente}"
+					onclick="return confirm('Se registrará el expediente. ¿Desea continuar?');" />
+				<h:commandButton value="Cancelar"
+					rendered="#{finaliceSolicitud1.mostBtnCanc}"
+					disabled="#{finaliceSolicitud1.modoConsulta}"
+					actionListener="#{finaliceSolicitud1.cancelarExpediente}"
+					onclick="return confirm('Se cancelará el expediente. ¿Desea continuar?');" />
+			</h:panelGrid>
+			<h:panelGrid columns="2" rendered="#{finaliceSolicitud1.mostSubDoc}">
+				<h:commandButton id="idReenviar" value="Re-enviar expediente" disabled="#{finaliceSolicitud1.modoConsulta || finaliceSolicitud1.disRegEnvExp}"
+					onclick="return confirm('¿Desea enviar el expediente?');"
+					actionListener="#{finaliceSolicitud1.reenviarExpediente}" />
+				<h:commandButton value="Cancelar" disabled="#{finaliceSolicitud1.modoConsulta}"
+					onclick="return confirm('¿Desea continuar con la tarea mas adelante?');"
+					actionListener="#{finaliceSolicitud1.cancelarExpediente}" />
+			</h:panelGrid>
+			<h:panelGrid columns="3" rendered="#{finaliceSolicitud1.mostPreReg}">
+				<h:commandButton value="Cancelar Proceso"
+					disabled="#{finaliceSolicitud1.disCancProc || finaliceSolicitud1.modoConsulta}"
+					onclick="return confirm('¿Desea cancelar el expediente?')">
+						<f:ajax event="click" render=":form:idFinaliceSol:idMotivos" execute="@form"
+							listener="#{finaliceSolicitud1.cancelarProceso}"/>
+				</h:commandButton>
+				<h:commandButton value="Grabar"
+					disabled="#{finaliceSolicitud1.disGrabar || finaliceSolicitud1.modoConsulta}" id="idGrabar"
+					onclick="return confirm('¿Desea continuar con la tarea mas adelante?');"
+					action="#{finaliceSolicitud1.generarPreRegistro}" />
+				<h:commandButton value="Registrar y enviar expediente"
+					disabled="#{finaliceSolicitud1.disRegEnvExp || finaliceSolicitud1.modoConsulta}"
+					action="#{finaliceSolicitud1.registrarExpediente}"
+					onclick="return confirm('Se registrará el expediente. ¿Desea continuar?');"/>
+			</h:panelGrid>
+			<h:panelGroup id="idMotivos">
+				<h:panelGrid columns="2" rendered="#{finaliceSolicitud1.mostMotCanc}">
+					<h:outputText value="Motivo Cancelación:" />
+					<h:selectOneMenu value="#{finaliceSolicitud1.idMotivo}">
+						<f:selectItems value="#{finaliceSolicitud1.listaMotivos}" />
+						<f:ajax event="change" execute="@form"
+							listener="#{finaliceSolicitud1.seleccionarMotivo}"
+							onevent="mensajeCancelado" />
+					</h:selectOneMenu>
+				</h:panelGrid>
+			</h:panelGroup>
+		</custom:tab>
+	</custom:tabView>
+
+</ui:composition>

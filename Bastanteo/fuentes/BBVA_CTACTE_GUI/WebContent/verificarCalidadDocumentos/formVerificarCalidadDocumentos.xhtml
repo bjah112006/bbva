@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/plantillas/paginaTarea.xhtml">
+
+	<ui:define name="title">Verificar Calidad de Documento</ui:define>
+	
+	<ui:define name="content">	
+		<h:panelGrid width="1000px">
+			<ui:include src="/WEB-INF/comun/reasignacionExpediente.xhtml"/>
+			<ui:include src="../verificarCalidadDocumentos/datosGenerales.xhtml"/>
+			<ui:include src="../verificarCalidadDocumentos/datosCliente.xhtml"/>
+			<h:panelGrid rendered="#{!reasignacionExpediente.modoConsulta}">
+				<ui:include width="100%" src="../verificarCalidadDocumentos/documentacionDigitalizada.xhtml"/>
+			</h:panelGrid >
+			<h:panelGrid rendered="#{reasignacionExpediente.modoConsulta}">
+				<ui:include width="100%" src="../verificarCalidadDocumentos/documentacionDigitalizadaReadOnly.xhtml"/>
+			</h:panelGrid >
+			<h:panelGrid rendered="#{!reasignacionExpediente.modoConsulta}">
+				<ui:include src="../verificarCalidadDocumentos/resultadoRevision.xhtml"/>
+			</h:panelGrid >
+		</h:panelGrid>
+	</ui:define>
+
+</ui:composition>

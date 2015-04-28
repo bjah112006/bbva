@@ -1,0 +1,172 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+	
+	<ui:define name="content">
+		<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+		
+		<f:verbatim>
+		<script type="text/javascript" language="javascript">
+			var compSel = null;
+			var sel = null;
+			function cambiarEstado (comp) {			    
+				if ($(comp).is(':checked')) {
+					if (compSel!=null) {
+						$(compSel).attr('checked', false);
+					}
+					compSel = comp;
+				} else {
+					compSel = null;
+				}
+			}
+			
+			function confirmarElimina(comp) {
+			  var filas = document.getElementById("form:registrosCarterizacionDTB").rows.length - 1;
+			  var ok, resultado=false;
+			  for (i=0; filas>i; i++) {			      
+			      ok=document.getElementById("form:registrosCarterizacionDTB:"+i+":rowSelect1").checked;
+			      if(ok){
+			        resultado = confirm('¿Está seguro que desea eliminar el elemento seleccionado?');
+			        break;
+			      }			    
+			  }		  
+			 return resultado;
+			}
+		</script>
+	    </f:verbatim>
+	    
+		<h:panelGrid styleClass="bloque">
+			<h:panelGroup styleClass="titulo">
+				<h:outputText id="nombreCarterizacionOTX"
+					value="Mantenimiento - Carterización" />
+				<h:outputText value=" " />
+			</h:panelGroup>			
+			
+			<h:panelGroup>
+				<h:panelGrid width="100%" border="0" align="center" cellspacing="0" >
+					<!--table width="100%" border="0" align="center" cellspacing="0">
+						<tr rendered="#{actualizarCarterizacion.botonBuscar}">
+							<td valign="top"-->
+								<table width="100%">
+									<tr>
+										<td align="left" valign="top" width="100%">
+											
+											<h:panelGrid columns="6">																						
+												<h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}" />
+												<h:outputLabel style="width:150px;"
+													value="Producto"
+													styleClass="etiqueta" />
+												<h:selectOneMenu id="idProducto"
+													value="#{actualizarCarterizacion.carterizacionVO.strProducto}" 
+													disabled="#{actualizarCarterizacion.idCarterizacion != null}"
+													styleClass="select">
+													<f:selectItems value="#{actualizarCarterizacion.productos}" />
+												</h:selectOneMenu>
+												<h:message for="idProducto" errorClass="mensaje-error"/>
+												<h:outputLabel value=" " />	
+												<h:outputLabel value=" " />	
+											<!-- 
+											</h:panelGrid>
+											<h:panelGrid columns="4"> -->												
+												<h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}" />
+												<h:outputLabel style="width:150px;"
+													value="Territorio"
+													styleClass="etiqueta" />
+												<h:selectOneMenu id="idTerritorio"
+													value="#{actualizarCarterizacion.carterizacionVO.strTerritorio}" 
+													disabled="#{actualizarCarterizacion.idCarterizacion != null}"
+													styleClass="select">
+													<f:selectItems value="#{actualizarCarterizacion.territorios}" />
+												</h:selectOneMenu>
+												<h:message for="idTerritorio" errorClass="mensaje-error"/>
+												<h:outputLabel value=" " />
+												<h:outputLabel value=" " />	
+											<!-- 
+											</h:panelGrid>
+											<h:panelGrid columns="4"> -->
+												<h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}" />
+												<h:outputLabel style="width:150px;"
+													value="Empleado"
+													styleClass="etiqueta" />
+												<h:inputText id="codigoEmpleado" style="width:100px" styleClass="caja-texto"
+													size="10" maxlength="10" 
+													disabled="#{actualizarCarterizacion.idCarterizacion != null}"
+													value="#{actualizarCarterizacion.carterizacionVO.codigoEmpleado}" >
+												</h:inputText>	
+												<h:commandButton id="buscarEmpleado" value="Buscar" styleClass="boton" 
+												disabled="#{actualizarCarterizacion.idCarterizacion != null}" >
+													<f:ajax event="click" listener="#{actualizarCarterizacion.buscarEmpleado}"
+														render="@form" execute="@form" />
+												</h:commandButton>
+												<h:outputLabel value="#{actualizarCarterizacion.carterizacionVO.nombreEmpleado}" height="8" width="200"
+													styleClass="titulo" />												
+												<h:message for="codigoEmpleado" errorClass="mensaje-error"/>
+											<!-- 
+											</h:panelGrid>
+											<h:panelGrid columns="4"> -->
+																												
+												<h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}" />
+												<h:outputLabel style="width:150px;"
+													value="Código"
+													styleClass="etiqueta" />
+												<h:inputText id="codigoCarterizacion" style="width:100px" styleClass="caja-texto"
+													size="10" maxlength="10"
+													value="#{actualizarCarterizacion.carterizacionVO.codigo}" >
+												</h:inputText>
+												<h:message for="codigoCarterizacion" errorClass="mensaje-error"/>
+												<h:outputLabel value=" " />	
+											<!-- 
+											</h:panelGrid>
+											<h:panelGrid columns="4"> -->	
+												<h:outputLabel value=" " />																						
+												<h:graphicImage height="8" width="8"
+												value="#{resource['imagenes:mandatorio.gif']}" />
+												<h:outputLabel style="width:150px;"
+													value="Descripción"
+													styleClass="etiqueta" />
+												<h:inputText id="descripcionCarterizacion" style="width:300px" styleClass="caja-texto"
+													size="50" maxlength="50" 
+													value="#{actualizarCarterizacion.carterizacionVO.descripcion}" >
+												</h:inputText>
+												<h:message for="descripcionCarterizacion" errorClass="mensaje-error"/>
+												<h:outputLabel value=" " />
+												<h:outputLabel value=" " />
+											</h:panelGrid>
+										</td>
+									</tr>
+			
+			                        <h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+									   <h:outputText value=" " />
+									   <tr>
+										  <td align="left">
+										   	<h:commandButton
+												value="Guardar" id="botonGuardar" styleClass="boton"
+												action="#{actualizarCarterizacion.guardar}" >
+											</h:commandButton>
+											<h:commandButton immediate="true" id="cancelar"
+												action="#{actualizarCarterizacion.cancelar}" value="Cancelar"
+												styleClass="boton" />
+										  </td>
+									   </tr>
+									   <h:outputText value=" " />
+									</h:panelGroup>
+			
+								</table>
+							<!--/td>
+						</tr>
+					</table-->
+				</h:panelGrid>
+				
+			</h:panelGroup>
+
+			<h:messages globalOnly="true" errorClass="mensaje-error"/>
+		</h:panelGrid>
+		
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	xmlns:util="http://java.sun.com/jsf/composite/util">
+
+	
+
+	<h:panelGrid columns="3">
+		<h:panelGroup>			
+			<custom:tabView>
+				<custom:tab id="TabInstrucciones" title="Resultado">
+					<util:editor id="editor" value="#{pieEjecutarRevocatoria.value}"
+						width="400" disabled="#{pieEjecutarRevocatoria.modoConsulta}"/>
+					<!--p:dialog header="Content" widgetVar="dlg" showEffect="fade"
+						hideEffect="fade" modal="true">
+						<h:outputText id="display" value="#{pieEjecutarRevocatoria.value}"
+							escape="false" />
+					</p:dialog-->
+				</custom:tab>
+			</custom:tabView>
+		</h:panelGroup>
+		<h:panelGroup>
+			<h:panelGrid columns="1">
+				<h:outputText value="Resultado"></h:outputText>
+			</h:panelGrid>
+			<h:panelGrid >
+				<h:selectOneRadio  layout="pageDirection"  disabled="#{pieEjecutarRevocatoria.modoConsulta}"
+					value="#{pieEjecutarRevocatoria.strResultado}" id="idOpResultado"
+					valueChangeListener="#{pieEjecutarRevocatoria.habilitarBoton}">
+					<f:selectItem itemLabel="Aprobado" itemValue="Aprobado" />
+					<f:selectItem itemLabel="Rechazado" itemValue="Rechazado" />
+					<f:ajax event="click" execute="@form" render="idFinRevocatoria" />
+				</h:selectOneRadio>
+			</h:panelGrid>			
+			<h:commandButton id="idFinRevocatoria" value="Finalizar Revocatoria"
+				disabled="#{pieEjecutarRevocatoria.habilitarFinalizar and pieEjecutarRevocatoria.modoConsulta}"
+				actionListener="#{pieEjecutarRevocatoria.finalizarRevocatoria}"
+				onclick="return confirm('¿Desea finalizar la tarea?');" />				 
+		</h:panelGroup>
+	</h:panelGrid>
+</ui:composition>

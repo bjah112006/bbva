@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<h:panelGroup id="ayudaMemoria">
+	    <h:dataTable var="ayudaMemoriaVar"
+	    		value="#{datosAyudaMemoria.listaAyudaMemoriaBean}"
+	    		styleClass="ui-datatable ui-widget #{empty datosAyudaMemoria.listaAyudaMemoriaBean ? 'ui-datatable-empty' : 'ui-datatable-not-empty'}"
+	    		headerClass="ui-state-default"
+				rowClasses="ui-widget-content"
+				footerClass="ui-widget-content">  
+			<h:column>
+				<f:facet name="header">Registro</f:facet>
+				<h:outputText value="#{ayudaMemoriaVar.empleado.codigo}"/>
+	        </h:column>
+	        <h:column>
+	        	<f:facet name="header">Usuario</f:facet>
+				<h:outputText value="#{ayudaMemoriaVar.perfil.descripcion}"/>
+	        </h:column>
+	        <h:column>
+	        	<f:facet name="header">Responsable</f:facet>
+				<h:outputText value="#{ayudaMemoriaVar.empleado.nombresCompletos}"/>
+	        </h:column>
+	        <h:column>
+	        	<f:facet name="header">Fecha y Hora</f:facet>  
+				<h:outputText value="#{ayudaMemoriaVar.fechaRegistro}"/>
+	        </h:column>
+	        <h:column>
+	        	<f:facet name="header">Comentario</f:facet>
+				<h:outputText value="#{ayudaMemoriaVar.comentario}"/>
+	        </h:column>
+	        <f:facet name="footer">
+	        	<h:outputText value="No se encontró registros" rendered="#{empty datosAyudaMemoria.listaAyudaMemoriaBean}"/>
+	        </f:facet>
+	    </h:dataTable>
+		
+		<h:panelGrid columns="1" style="vertical-align:top" width="100%">
+			<h:outputText style="font-size:13px;font-weight:bold" value="Ingrese Ayuda Memoria"/>
+			<h:inputTextarea value="#{datosAyudaMemoria.ayudaMemoriaBean.comentario}" disabled="#{datosAyudaMemoria.habilitaGrabacion}" rows="4" cols="100"/>
+		</h:panelGrid>
+	</h:panelGroup>
+	
+	<table width="100%" border="0" style="align:right">
+		<tr style="align:right">
+			<td width="65%"></td>
+			<td width="35%">
+				<h:commandButton value="Agregar" disabled="#{datosAyudaMemoria.habilitaGrabacion}">
+					<f:ajax event="click" render=":form:ayudaMemoria" execute="@form"
+						listener="#{datosAyudaMemoria.guardarAyudaMemoria}"/>
+				</h:commandButton>
+			</td>
+		</tr>			
+	</table>
+		
+</ui:composition>
+
+

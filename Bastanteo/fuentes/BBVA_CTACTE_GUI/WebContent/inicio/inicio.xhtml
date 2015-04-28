@@ -1,0 +1,20 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+
+	<ui:define name="title">Inicio</ui:define>
+	<h:panelGroup>
+		<h:panelGrid columns="1">
+			<h:outputText value="#{ErrorMessageMB.mensajeError}"  id="idNumError" disabled="true">
+			</h:outputText>
+		</h:panelGrid>
+	 </h:panelGroup>
+	<ui:define name="content">
+		<h:panelGroup layout="block" style="text-align: center; vertical-align: middle;">
+			<h:graphicImage value="#{resource['imagenes:ce_bienvenida.jpg']}" />
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>

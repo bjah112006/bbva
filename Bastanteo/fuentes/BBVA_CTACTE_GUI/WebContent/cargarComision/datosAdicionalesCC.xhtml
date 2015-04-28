@@ -1,0 +1,144 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+	
+	<f:verbatim>
+		<script type="text/javascript" language="javascript">
+		
+			function confirmarCancelacion () {
+				var conf = confirm ("¿Desea cancelar el expediente? Seleccione [Aceptar] para aceptar, seleccione [Cancelar] para retornar a la pantalla");
+				if (conf){ // cancelando el proceso
+					dlg.dialog('open');//dlg.show();
+					return false;
+				}							
+			}
+			
+			function closeWindow(){
+				dlg.dialog('close');//dlg.hide();
+			}
+			
+			function validaBorrado (data) {
+				if (data.status == 'success') {
+					var args = getCallbackParams(data);
+					if (args.motivoValido){
+						if(args.terminoBorrado) {
+							alert("Se ha cancelado el expediente con el código: " + args.codigoExp );
+							
+						}else{
+							alert("Problemas al borrar los archivos del expediente: " + args.codigoExp);
+						}
+						dlg.dialog('close');//dlg.hide();
+					}
+				}
+			}
+			
+		</script>
+	</f:verbatim>
+
+	
+<custom:tabView id="idAdicionalesCobroC">
+
+	<custom:tab title="Datos Adicionales">
+		<table border="0" width="80%">
+			<tr>
+				<td width="21%">
+					<h:outputText style="font-weight:bold" value="Indicaciones Adicionales: "></h:outputText>
+				</td>
+				<td width="39%">
+					<h:outputText value="#{datosCargoComision.expediente.observaciones}" />
+				</td>
+				<td width="15%">
+					<h:commandButton value="Cancelar proceso" disabled="#{datosCargoComision.modoConsulta}" onclick= "confirmarCancelacion()" type="button" />
+				</td>
+				<td width="25%">
+					<h:commandButton id="btnReintentarCobro"
+						value="Reintentar Cobro de comisión"
+						disabled="#{datosCargoComision.modoConsulta}"
+						action="#{datosCargoComision.reintentarCobroComision}"
+						onclick="return confirm('Se reintentará el cobro de comisión. ¿Desea continuar?');" />
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td colspan="2">
+					<h:message for="btnReintentarCobro" id="idMsgReintentarCobro" errorClass="mensaje-error" />
+				</td>
+			</tr>
+		</table>
+		
+		<table border="0" width="40%" >
+			<tr>
+				<td width="30%"></td>
+				<td width="20%"></td>
+				<td width="30%"></td>
+				<td width="20%"></td>
+			</tr>
+			<tr>
+				<td>
+					<h:outputText style="font-weight:bold" value="¿Enviar SMS?: "/>
+				</td>
+				<td>
+					<h:outputText value="#{datosCargoComision.tieneTelefono}"/>
+				</td>
+				<td>
+					<h:outputText style="font-weight:bold" value="¿Enviar correo?: "/>
+				</td>
+				<td>
+					<h:outputText value="#{datosCargoComision.tieneCorreo}"/>
+				</td>
+				<td>
+					<h:outputText value="   "/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<h:outputText value="#{datosCargoComision.expediente.cliente.numeroCelular1}"/>
+				</td>
+				<td colspan="2">				
+					<h:outputText value="#{datosCargoComision.expediente.cliente.correoElectronico1}"/>
+				</td>
+				<td>	
+					<h:outputText value="  "/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">	
+					<h:outputText value="#{datosCargoComision.expediente.cliente.numeroCelular2}"/>
+				</td>
+				<td colspan="2">				
+					<h:outputText value="#{datosCargoComision.expediente.cliente.correoElectronico2}"></h:outputText>
+				</td>
+				<td>					
+					<h:outputText value="  "/>
+				</td>
+			</tr>
+		</table>
+		
+	
+	</custom:tab>
+</custom:tabView>
+	
+
+		<custom:dialog id="dialog" header="Motivo de cancelación" widgetVar="dlg" resizable="false">  
+			 	<h:outputText value="Seleccione un motivo:"></h:outputText>
+				<h:message for=":form:dialog"  id="idMessageError" errorClass="mensaje-error"/>
+				<h:panelGrid columns="2" style="margin-bottom:10px">  
+				    <h:selectOneMenu id="idMotivo" value="#{datosCargoComision.expediente.motivo.id}">
+	            		<f:selectItems value="#{datosCargoComision.listaSelectMotivoC}" />  
+					</h:selectOneMenu>
+					<h:outputText value="   "></h:outputText>
+					<h:commandButton id="IdBotonAceptar" value="Aceptar" actionListener="#{datosCargoComision.cancelarProceso}" >
+						<f:ajax execute="@form" event="click" render=":form:idMessageError" 
+				             onevent="validaBorrado" />
+					</h:commandButton>
+					<h:commandButton id="IdBotonCancelar" value="Cancelar" onclick= "closeWindow()"
+					 actionListener="#{datosCargoComision.cerrarPopup}" >
+						<f:ajax execute="@form" event="click" render=":form:idMessageError" />
+					 </h:commandButton>
+				</h:panelGrid>  
+				
+		</custom:dialog> 		
+</ui:composition>

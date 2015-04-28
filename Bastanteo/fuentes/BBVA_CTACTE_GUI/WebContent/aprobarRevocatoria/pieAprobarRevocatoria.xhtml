@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	xmlns:util="http://java.sun.com/jsf/composite/util">
+
+	<h:panelGrid columns="3">
+		<h:panelGroup>
+			<h:panelGrid columns="1" >
+			<custom:tabView id="idTabResultado">
+				<custom:tab title="Resultado">
+					<util:editor id="idEditor" value="#{pieAprobarRevocatoria.valor}"
+						width="350" disabled="#{pieAprobarRevocatoria.disTab || pieAprobarRevocatoria.modoConsulta}" />
+					<!--p:dialog header="Content" widgetVar="dlg" showEffect="fade"
+						hideEffect="fade" modal="true">
+						<h:outputText id="idDisplay" value="{pieAprobarRevocatoria.valor}"
+							escape="false" />
+					</p:dialog-->
+				</custom:tab>
+			</custom:tabView>
+			</h:panelGrid> 
+		</h:panelGroup>		
+		<h:message for="idTabIngresarResultado" errorClass="mensaje-error" />
+		<h:panelGroup>
+			<h:panelGrid columns="1" id="idReasignarExpediente">
+				<h:outputText styleClass="titulo-bold" value="Abogado de Bastanteo"></h:outputText>
+				<h:selectOneMenu id="idAbogados" style="width:323px"
+					value="#{pieAprobarRevocatoria.idAbogado}" disabled="#{pieAprobarRevocatoria.modoConsulta}"
+					valueChangeListener="#{pieAprobarRevocatoria.habilitarControles}">
+					<f:ajax event="change" execute="@form"
+						render="idReasignados idObservacionesCont idReasignar idResultado idFinalizar" />
+					<f:selectItems value="#{pieAprobarRevocatoria.abogadosExternos}" />
+				</h:selectOneMenu>
+				<h:selectOneMenu id="idReasignados" style="widht:100px"
+					value="#{pieAprobarRevocatoria.expediente.motivo.id}"
+					disabled="#{pieAprobarRevocatoria.reasignados1 || pieAprobarRevocatoria.modoConsulta}">
+					<f:selectItems value="#{pieAprobarRevocatoria.motivosReasignados}" />
+				</h:selectOneMenu>
+				<h:panelGroup id="idObservacionesCont">
+					<h:inputTextarea id="idObservaciones"  rows="5" cols="30"
+						value="#{pieAprobarRevocatoria.strObservaciones}"
+						disabled="#{pieAprobarRevocatoria.strObservaciones || pieAprobarRevocatoria.modoConsulta}" />
+					<custom:textAreaCounter for="idObservaciones" maxCharacterSize="3000" />
+				</h:panelGroup>
+				<h:message for="idObservaciones" errorClass="mensaje-error" />
+				<h:commandButton id="idReasignar" value="Reasignar Expediente"
+					actionListener="#{pieAprobarRevocatoria.reasignarExpediente}"
+					disabled="#{pieAprobarRevocatoria.botonReasignar || pieAprobarRevocatoria.modoConsulta}"
+					onclick="return confirm('¿Desea enviar el expediente?');" />
+				<h:outputText value="Resultado"></h:outputText>
+				<h:selectOneRadio layout="pageDirection"
+					value="#{pieAprobarRevocatoria.strResultado}" id="idResultado"
+					valueChangeListener="#{pieAprobarRevocatoria.habilitarEditor}"
+					disabled="#{pieAprobarRevocatoria.habilitarOpciones || pieAprobarRevocatoria.modoConsulta}">
+					<f:selectItem
+						itemDisabled="#{pieAprobarRevocatoria.habilitarAprobado}"
+						itemLabel="Aprobado" itemValue="Aprobado" />
+					<f:selectItem
+						itemDisabled="#{pieAprobarRevocatoria.habilitarRechazado}"
+						itemLabel="Rechazado" itemValue="Rechazado" />
+					<f:ajax event="click" execute="@form"
+						render="idResultado idTabResultado:idEditor" />
+				</h:selectOneRadio>
+				<h:message for=":form:idTabResultado:idEditor" errorClass="mensaje-error" />
+				<h:commandButton id="idFinalizar" value="Finalizar Revocatoria"
+					disabled="#{pieAprobarRevocatoria.botonFinalizar || pieAprobarRevocatoria.modoConsulta}"
+					actionListener="#{pieAprobarRevocatoria.finalizarRevocatoria}"
+					onclick="return confirm('¿Desea finalizar la tarea?');" />
+			</h:panelGrid>
+		</h:panelGroup>
+	</h:panelGrid>
+</ui:composition>

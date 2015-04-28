@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	xmlns:util="http://java.sun.com/jsf/composite/util">
+
+
+
+	<custom:tabView style="width:700px" id="idTVDocumentos1">
+		<custom:tab id="idTabInstrucciones" title="Instrucciones">
+			<util:editor id="idInstrucciones1"
+				value="#{pieEjecutar.strInstrucciones}" width="600"
+				disabled="#{pieEjecutar.disInstrucciones and pieEjecutar.modoConsulta}" />
+			<!--p:dialog header="Content" widgetVar="dlg" showEffect="fade"
+				hideEffect="fade" modal="true">
+				<h:outputText id="idInstrucciones2"
+					value="#{pieEjecutar.strInstrucciones}" escape="false" />
+			</p:dialog-->
+		</custom:tab>
+	</custom:tabView>
+
+	<!-- Parece que ya no se usa -->
+	<!--p:growl id="growl" showDetail="true" sticky="true" /-->
+
+	<h:panelGrid width="450" columns="2">
+		<h:panelGrid columns="1">
+			<h:panelGrid columns="2">
+				<h:outputText value="Indicaciones Adicionales" />				
+				<h:selectBooleanCheckbox id="idIndicaciones" disabled="#{pieEjecutar.modoConsulta}"								
+					value="#{pieEjecutar.boolIndicaciones}">
+					<f:ajax event="change"
+						render="idInputArea1Cont motivos idDevInstruccion"/>
+				</h:selectBooleanCheckbox>
+			</h:panelGrid>
+			<h:panelGroup id="idInputArea1Cont">
+				<h:inputTextarea id="idInputArea1" rows="5" cols="30"
+					value="#{pieEjecutar.indicaciones}"
+					disabled="#{!pieEjecutar.boolIndicaciones || pieEjecutar.modoConsulta}" />
+				<custom:textAreaCounter for="idInputArea1" maxCharacterSize="3000" />
+			</h:panelGroup>
+			<h:commandButton value="Terminar atención conforme"
+				id="idTerminarAtencion" disabled="#{pieEjecutar.disTerminarAccion || pieEjecutar.modoConsulta}"
+				onclick="return confirm('¿Desea enviar el expediente?')"
+				actionListener="#{pieEjecutar.accionConforme}">
+				<!--f:ajax event="click" render="grow1"/-->
+			</h:commandButton>
+		</h:panelGrid>
+		<h:panelGrid columns="1">
+			<h:selectOneMenu id="motivos" style="width:300px" disabled="#{pieEjecutar.modoConsulta}"
+				value="#{pieEjecutar.expediente.motivo.id}">
+				<f:selectItems value="#{pieEjecutar.listaMotivo}" />
+				<f:ajax event="change" render="idTerminarAtencion idDevInstruccion"
+					listener="#{pieEjecutar.habilitarBotones}" />
+			</h:selectOneMenu>
+			<h:commandButton value="Devolver instrucción" id="idDevInstruccion"
+				disabled="#{pieEjecutar.disBotonInstruccion || pieEjecutar.modoConsulta}"
+				actionListener="#{pieEjecutar.accionBotonDevolver}"
+				onclick="return confirm('¿Desea enviar el expediente?');"></h:commandButton>
+		</h:panelGrid>
+	</h:panelGrid>
+</ui:composition>

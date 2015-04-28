@@ -1,0 +1,114 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+	
+	<ui:define name="content">
+		<f:verbatim>
+			<script type="text/javascript">
+				function soloNumeros(e){
+				 if(window.event) // IE
+				    {
+				        charCode = e.keyCode;
+				        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
+				            window.event.returnValue=0;
+				        }
+				    }
+				    else if(e.which) // Netscape/Firefox/Opera
+				    {
+				        charCode = e.which;
+				        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
+				            e.preventDefault();
+				        }
+				    }
+				}
+			</script>
+		</f:verbatim>
+		<table class="bloque">
+			<tr>
+				<td>
+					<table width="100%" border="0" align="center" cellspacing="0">
+						<tr>
+							<td valign="top">
+								<table width="100%">
+									<tr>
+										<td>
+											<table width="100%" border="0" cellpadding="0" cellspacing="0">
+												<tbody>
+													<tr>
+														<td>
+															<h:outputText styleClass="titulo" value="Actualizar Partícipes x Expediente" />
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td width="100%" valign="top" align="left"></td>
+									</tr>
+									<tr>
+										<td align="left" valign="top" width="100%">
+											<table>
+												<tr>
+													<td></td>
+													<td>
+														<h:outputLabel style="width:150px;" for="idExpediente" value="Nro. Expediente:" styleClass="etiqueta" />
+													</td>
+													<td style="text-align: left;">
+														<h:inputText id="idExpediente"
+															onkeypress="soloNumeros(event);" size="39"
+															value="#{obtenerParticipes.idExpediente}"
+															styleClass="caja-texto" />
+													</td>
+													<td>
+														<h:message for="idExpediente" styleClass="mensaje-error" />
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td>&#160;</td>
+									</tr>
+									<tr>
+										<td>
+											<table width="100%" border="0" cellpadding="0" cellspacing="0">
+												<tr>
+													<td align="center">
+														<h:commandButton id="guardar"
+															value="Actualizar partícipes"
+															onclick="return confirm('¿Desea actualizar los partícipes?')"
+															styleClass="boton">
+															<f:ajax event="action" listener="#{obtenerParticipes.actualizarParticipes}" render="@form" execute="@form" />
+														</h:commandButton>
+														<h:commandButton immediate="true" id="cancelar"
+															action="#{obtenerParticipes.cancelar}" value="Cancelar"
+															styleClass="boton" />
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div style="margin-bottom:10px;" class="etiqueta">
+												<h:outputText value=" " />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<h:message for="guardar" errorClass="mensaje-error" infoClass="mensaje-info" />
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:bbva="http://java.sun.com/jsf/composite/components/bbva"
+	xmlns:util="http://java.sun.com/jsf/composite/util">
+
+	<f:verbatim>
+		<script type="text/javascript">
+				var myWindow;
+				var i=0;
+				var timeInMilliseconds = 2000;
+				var url="http://9.6.98.185:9080/webservices_firmas/jsp/bastanteo/lectorparametros.jsp?r=jcisneros&amp;e=3168";
+	
+	
+	
+		function f_OpenSFP(){
+			/*var idExpediente=document.getElementById("form:idExpedienteOculto").value;		
+			alert(idExpediente);	
+			var url="http://9.6.98.185:9080/webservices_firmas/jsp/bastanteo/lectorparametros.jsp?r=jcisneros&amp;e="+idExpediente;*/
+			var url="http://9.6.98.185:9080/webservices_firmas/jsp/bastanteo/lectorparametros.jsp?r=jcisneros&amp;e=3149";			
+			myWindow=window.open(url,'myWindow','width=650,height=550,resizable=1,scrollbars=1');
+			/*document.getElementById("btnCerrar").disabled = true;*/
+		}
+	
+		
+		</script>
+	</f:verbatim>
+
+
+	<h:panelGrid columns="4" styleClass="datos-cabecera" width="800px">
+		<h:panelGroup styleClass="dato">
+			<h:outputText value="Participes" />
+		</h:panelGroup>
+	</h:panelGrid>
+
+	<h:panelGroup id="tablaContainer" layout="block" style="width: 750px; margin-bottom: 10px;">
+	
+		<bbva:paginator container=":form:tablaContainer" managedBean="#{participeVerificarResultado}" position="top" style="margin: 0; text-align: center;" />
+		
+		<div>
+			<h:dataTable columnClasses="columna-align-center,columna-align-left,columna-align-center,columna-align-left,columna-align-left,columna-align-center" var="item" width="750px"
+				rows="#{participeVerificarResultado.rowsPerPage}" first="#{participeVerificarResultado.first}"
+				value="#{participeVerificarResultado.listaParticipe}"
+				id="idDtParticipes" headerClass="cabecera-tabla">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Cód. Central" />
+					</f:facet>
+					<h:outputText value="#{item.codigoCentral}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Tipo DOI" />
+					</f:facet>
+					<h:outputText value="#{item.tipoDoiDes}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Nro. DOI" />
+					</f:facet>
+					<h:outputText value="#{item.numeroDoi}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Nombre" />
+					</f:facet>
+					<h:outputText value="#{item.nombre}" />
+					<h:outputText value=" " />
+					<h:outputText value="#{item.apellidoPaterno}" />
+					<h:outputText value=" " />
+					<h:outputText value="#{item.apellidoMaterno}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Número de cuenta" />
+					</f:facet>
+					<h:outputText value="#{item.cuenta.numeroContrato}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="¿Tiene Firmas?" />
+						<util:tooltipAyuda contenido="#{participeVerificarResultado.textoAyudaTieneFirmas}" rendered="#{not empty participeVerificarResultado.textoAyudaTieneFirmas}" />
+					</f:facet>
+					<h:outputText value="#{item.flagFirmaActiva=='1'? 'SI':'NO'}"></h:outputText>
+				</h:column>
+			</h:dataTable>
+		</div>
+	
+		<bbva:paginator container=":form:tablaContainer" managedBean="#{participeVerificarResultado}" position="bottom" style="margin: 0; text-align: center;	" />
+	</h:panelGroup>
+	
+	<!-- <h:panelGrid columns="1">
+		<p:commandLink value="Ver Bastanteo" onclick="f_OpenSFP()" />
+	</h:panelGrid> -->
+</ui:composition>

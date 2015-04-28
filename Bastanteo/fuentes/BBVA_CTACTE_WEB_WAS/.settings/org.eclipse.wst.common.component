@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="BBVA_CTACTE_WEB_WAS">
+        <wb-resource deploy-path="/" source-path="/" tag="defaultRootSource"/>
+        <dependent-module archiveName="BBVA_CTACTE_JPA.jar" deploy-path="/" handle="module:/resource/BBVA_CTACTE_JPA/BBVA_CTACTE_JPA">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_CTACTE_EJB.jar" deploy-path="/" handle="module:/resource/BBVA_CTACTE_EJB/BBVA_CTACTE_EJB">
+            <dependent-object>Module_1390404672317</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_CTACTE_EJBClient.jar" deploy-path="/" handle="module:/resource/BBVA_CTACTE_EJBClient/BBVA_CTACTE_EJBClient">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_CTACTE_ClienteWS.jar" deploy-path="/" handle="module:/resource/BBVA_CTACTE_ClienteWS/BBVA_CTACTE_ClienteWS">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_CTACTE_Comun.jar" deploy-path="/" handle="module:/resource/BBVA_CTACTE_Comun/BBVA_CTACTE_Comun">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_CTACTE_GUI.war" deploy-path="/" handle="module:/resource/BBVA_CTACTE_GUI/BBVA_CTACTE_GUI">
+            <dependent-object>Module_1394203922724</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_CTACTE_Servicio.war" deploy-path="/" handle="module:/resource/BBVA_CTACTE_Servicio/BBVA_CTACTE_Servicio">
+            <dependent-object>Module_1394203931803</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_RestServiceforBPD.jar" deploy-path="/" handle="module:/resource/BBVA_RestServiceforBPD/BBVA_RestServiceforBPD">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="BBVA_CTACTE_LDAP_CARGA.war" deploy-path="/" handle="module:/resource/BBVA_CTACTE_LDAP_CARGA/BBVA_CTACTE_LDAP_CARGA">
+            <dependent-object>Module_1416584600336</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>

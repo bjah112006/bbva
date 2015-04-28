@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<f:verbatim>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				if($("#form\\:usrNoRegSistem").val()=='true') {
+					alert ("Usuario no registrado en el sistema");
+				}
+			});			
+		</script>
+	</f:verbatim>
+	
+	<h:inputHidden id="usrNoRegSistem" value="#{cabecera.usrNoRegSistem}"/>
+	
+	<h:panelGrid columns="4" styleClass="datos-cabecera" width="1105px">
+		<f:facet name="header">
+			<h:outputText styleClass="titulo" value="Sistema de Contratación Sencilla"/>
+		</f:facet>
+		<h:panelGroup styleClass="dato">
+			<h:outputText value="Oficina: #{cabecera.oficina.descripcion}"/>
+		</h:panelGroup>
+		<h:panelGroup styleClass="dato">
+			<h:outputText value="Usuario: #{cabecera.empleado.nombres} #{cabecera.empleado.apepat} #{cabecera.empleado.apemat}"/>
+		</h:panelGroup>
+		<h:panelGroup styleClass="dato">
+			<h:outputText value="Código: #{cabecera.empleado.codigo}"/>
+		</h:panelGroup>
+		<h:panelGroup styleClass="dato">
+			<h:outputText value="Perfil: #{cabecera.empleado.perfil.descripcion}"/>
+		</h:panelGroup>
+		<h:panelGroup styleClass="dato" rendered="#{cabecera.mostrarManualUsuario}"></h:panelGroup>
+		<h:panelGroup styleClass="dato" rendered="#{cabecera.mostrarManualUsuario}"></h:panelGroup>
+		<h:panelGroup styleClass="dato" rendered="#{cabecera.mostrarManualUsuario}"></h:panelGroup>
+		<h:panelGroup styleClass="dato" rendered="#{cabecera.mostrarManualUsuario}">
+			<h:outputLink value="#" onclick="javascript:window.open('#{cabecera.urlManualUsuario}', this.target, 'width=750,height=650');" style="color: white;">
+				<h:outputText value="Manual de Usuario"/>
+			</h:outputLink>
+		</h:panelGroup>
+	</h:panelGrid>
+	
+</ui:composition>

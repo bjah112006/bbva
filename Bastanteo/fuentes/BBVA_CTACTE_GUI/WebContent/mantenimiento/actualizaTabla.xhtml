@@ -1,0 +1,171 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+
+	<ui:define name="content">
+	
+	<h:outputStylesheet library="css/cleditor" name="jquery.cleditor.css" target="head"/>
+	<h:outputScript library="javascript" name="jquery-1.8.2.min.js" target="head"/>
+	<h:outputScript library="javascript" name="jquery.cleditor.min.js" target="head"/>
+	
+	<f:verbatim>
+		<script type="text/javascript">
+		String.prototype.trim = function() {return this.replace(/^\s+|\s+$/g,"")};
+
+		function soloNumeros(e){
+		 if(window.event) // IE
+		    {
+		        charCode = e.keyCode;
+		        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
+		            window.event.returnValue=0;
+		            e.preventDefault();
+		        }
+		    }
+		    else if(e.which) // Netscape/Firefox/Opera
+		    {
+		        charCode = e.which;
+		        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
+		            e.preventDefault();
+		        }
+		    }
+		}
+		function soloNumerosConDecimales(e)
+		{
+		    if(window.event) // IE
+		    {
+		        charCode = e.keyCode;
+		
+		        if (charCode!=46 &#38;&#38; charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
+		            window.event.returnValue=0;
+		            e.preventDefault();
+		        }
+		    }
+		    else if(e.which) // Netscape/Firefox/Opera
+		    {
+		        charCode = e.which;
+		        if (charCode!=46 &#38;&#38; charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
+		            e.preventDefault();
+		        }
+		    }
+		}
+		function validaInputText(e, row) {
+			var tipoDato = $("[id='form:columnasTablaParametricaDTB:"+row+":tipoDatoOculto']").val();
+			if (tipoDato=="STRING") {
+			} else if (tipoDato=="INTEGER" || tipoDato=="SHORT" || tipoDato=="LONG") {
+				soloNumeros(e);
+			} else if(tipoDato=="DOUBLE" || tipoDato=="FLOAT") {
+				soloNumerosConDecimales(e);
+			}
+		}
+		</script>
+	</f:verbatim>
+
+	<h:panelGrid styleClass="bloque" columns="1">
+		<h:panelGrid align="center" border="0" cellspacing="0" width="100%" columns="1">
+			<h:panelGrid width="100%" columns="1">
+				<h:panelGrid width="100%" border="0" cellpadding="0" cellspacing="0" columns="1">
+					<h:outputText id="nombreTablaOTX" styleClass="titulo"
+						value="Mantenimiento - #{consultarTabla.tablaParametricaVO.tablaVO.nombreMostrar}" />
+				</h:panelGrid>
+				<h:outputText value="" />
+				<h:dataTable id="columnasTablaParametricaDTB"
+					value="#{consultarTabla.tablaParametricaVO.columnasVO}"
+					binding="#{consultarTabla.tablaBinding2}"
+					var="col">
+					<h:column>
+						<h:graphicImage height="8" width="8"
+							value="#{resource['imagenes:mandatorio.gif']}"
+							rendered="#{(col.tipoCampoLBL and col.esRequerido)}" />
+					</h:column>
+				
+					<h:column>
+						<h:panelGrid columns="1">
+							<h:outputLabel style="width:150px;"
+								value="#{col.nombreMostrar}"
+								rendered="#{(col.tipoCampoLBL || consultarTabla.tablaParametricaVO.tablaVO.id==33)}"
+								styleClass="etiqueta" />
+						</h:panelGrid>
+					</h:column>
+				
+					<h:column style="text-align: left;">
+						<h:outputText id="valorRegistro1"
+							value="#{col.valorRegistro}" rendered="#{col.tipoCampoOT}"
+							readonly="#{col.esLlavePrimaria and consultarTabla.modoActualizar}" 
+							disabled="#{col.esLlavePrimaria and consultarTabla.modoActualizar}" ></h:outputText>
+						<h:inputText onkeypress="validaInputText(event, #{consultarTabla.tablaBinding2.rowIndex});" size="39"
+							maxlength="#{(col.longitudMaxima == null || col.longitudMaxima == 0)? 524288 : col.longitudMaxima}" id="valorRegistro2"
+							value="#{col.valorRegistro}" rendered="#{col.tipoCampoIT}"
+							styleClass="caja-texto"
+							readonly="#{col.esLlavePrimaria and consultarTabla.modoActualizar}" 
+							disabled="#{col.esLlavePrimaria and consultarTabla.modoActualizar}" ></h:inputText>
+						<h:inputTextarea rows="4" cols="30" id="valorRegistro3"
+							value="#{col.valorRegistro}" rendered="#{col.tipoCampoITA}"
+							styleClass="caja-texto"
+							readonly="#{col.esLlavePrimaria and consultarTabla.modoActualizar}" 
+							disabled="#{col.esLlavePrimaria and consultarTabla.modoActualizar}" ></h:inputTextarea>
+						<h:selectOneMenu id="valorRegistro4"
+							value="#{col.valorRegistro}" rendered="#{col.tipoCampoSOM}"
+							styleClass="select" 
+							readonly="#{col.esLlavePrimaria and consultarTabla.modoActualizar}" 
+							disabled="#{col.esLlavePrimaria and consultarTabla.modoActualizar}" >
+							<f:selectItems value="#{col.posiblesValoresSI}" />
+						</h:selectOneMenu>
+						<h:selectBooleanCheckbox id="valorRegistro5"
+							value="#{col.valorMostrarValorCheck}"
+							rendered="#{col.tipoCampoCHK}" 
+							readonly="#{col.esLlavePrimaria and consultarTabla.modoActualizar}" 
+							disabled="#{col.esLlavePrimaria and consultarTabla.modoActualizar}" />
+						<!-- El componente "util:editor" causaba problemas cuando se agregaba un mensaje global de error -->
+						<h:inputTextarea id="valorRegistro6" width="350"
+							rendered="#{col.tipoCampoEDI}"
+							value="#{col.valorRegistro}" />
+						<h:outputScript rendered="#{col.tipoCampoEDI}">
+							$(function() {
+								$("[id='form:columnasTablaParametricaDTB:#{consultarTabla.tablaBinding2.rowIndex}:valorRegistro6']").cleditor({
+									width: 350,
+									height: 250
+								})[0].disable(#{col.esLlavePrimaria and consultarTabla.modoActualizar});
+							});
+						</h:outputScript>
+					</h:column>
+				
+					<h:column>
+						<h:message for="valorRegistro1" styleClass="mensaje-error"></h:message>
+						<h:message for="valorRegistro2" styleClass="mensaje-error"></h:message>
+						<h:message for="valorRegistro3" styleClass="mensaje-error"></h:message>
+						<h:message for="valorRegistro4" styleClass="mensaje-error"></h:message>
+						<h:message for="valorRegistro5" styleClass="mensaje-error"></h:message>
+						<h:message for="valorRegistro6" styleClass="mensaje-error"></h:message>
+					</h:column>
+				
+					<h:column>
+						<h:inputHidden id="tipoDatoOculto" value="#{col.tipoDato}" />
+					</h:column>
+				
+				</h:dataTable>
+				<h:outputText value="" />
+				<h:outputText>&#160;</h:outputText>
+				<h:panelGrid width="100%" border="0" cellpadding="0" cellspacing="0" columns="1" style="text-align: center;">
+					<h:panelGroup>
+						<h:commandButton id="guardar"
+							action="#{consultarTabla.guardarRegistro}" value="Guardar"
+							styleClass="boton" />
+						<h:commandButton immediate="true" id="cancelar"
+							action="#{consultarTabla.cancelar}" value="Cancelar"
+							styleClass="boton" />
+					</h:panelGroup>
+				</h:panelGrid>
+				<h:panelGroup layout="block" styleClass="etiqueta" style="margin-bottom:10px;"></h:panelGroup>
+				<h:outputText value="" />
+				<h:outputText value="" />
+				<h:outputText value="" />
+				<h:messages globalOnly="true" styleClass="mensaje-error"></h:messages>
+				<h:outputText value="" />
+			</h:panelGrid>
+		</h:panelGrid>
+	</h:panelGrid>
+
+	</ui:define>
+</ui:composition>

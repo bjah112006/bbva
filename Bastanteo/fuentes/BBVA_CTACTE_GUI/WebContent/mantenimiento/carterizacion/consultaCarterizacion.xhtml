@@ -1,0 +1,208 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+	
+	<ui:define name="content">
+		<f:verbatim>
+		<script type="text/javascript" language="javascript">
+			var compSel = null;
+			var sel = null;
+			function cambiarEstado (comp) {			    
+				if ($(comp).is(':checked')) {
+					if (compSel!=null) {
+						$(compSel).attr('checked', false);
+					}
+					compSel = comp;
+				} else {
+					compSel = null;
+				}
+			}
+			
+			function confirmarElimina(comp) {
+			  var filas = document.getElementById("form:idTablaCarterizaccion").rows.length - 1;
+			  var ok, resultado=false;
+			  for (i=0; filas>i; i++) {			      
+			      ok=document.getElementById("form:idTablaCarterizaccion:"+i+":idSelect").checked;
+			      if(ok){
+			        resultado = confirm('¿Está seguro que desea eliminar el elemento seleccionado?');
+			        break;
+			      }			    
+			  }		  
+			 return resultado;
+			}
+		</script>
+	    </f:verbatim>
+	    
+		<h:panelGrid styleClass="bloque">
+			<h:panelGroup styleClass="titulo">
+				<h:outputText id="nombreCarterizacionOTX"  
+					value="Mantenimiento - Carterización" />			
+				<h:outputText value=" " />
+			</h:panelGroup>			
+			<!--  <ui:include src="/mantenimiento/consultarCarterizacion.xhtml" />-->
+			<h:panelGroup>
+				<h:panelGrid width="100%" border="0" align="center" cellspacing="0"  >
+					<table width="100%">
+						<tr>
+							<td align="left" valign="top" width="100%">
+								
+								<h:panelGrid columns="2">
+									<h:outputLabel style="width:150px;" for="idProducto"
+										value="Producto"
+										styleClass="etiqueta" />
+									<h:selectOneMenu id="idProducto"
+										value="#{consultarCarterizacion.productoSeleccionado}" 
+										styleClass="select">
+										<f:selectItems value="#{consultarCarterizacion.productos}" />
+									</h:selectOneMenu>
+									
+								<!-- </h:panelGrid>
+								<h:panelGrid columns="2"> -->
+									<h:outputLabel style="width:150px;" for="idTerritorio"
+										value="Territorio"
+										styleClass="etiqueta" />
+									<h:selectOneMenu id="idTerritorio"
+										value="#{consultarCarterizacion.territorioSeleccionado}" 
+										styleClass="select">
+										<f:selectItems value="#{consultarCarterizacion.territorios}" />
+									</h:selectOneMenu>
+								<!-- </h:panelGrid>
+								<h:panelGrid columns="2"> -->
+									<h:outputLabel style="width:150px;" for="codigoEmpleado"
+										value="Cod. Empleado"
+										styleClass="etiqueta" />
+									<h:inputText id="codigoEmpleado" style="width:100px" styleClass="soloNumeros"
+										value="#{consultarCarterizacion.codigoEmpleadoSeleccionado}" >
+									</h:inputText>												
+								<!-- </h:panelGrid>
+								<h:panelGrid columns="2"> -->
+									<h:outputLabel style="width:150px;" for="codigoCarterizacion"
+										value="Codigo de Categorización"
+										styleClass="etiqueta" />
+									<h:selectOneMenu id="codigoCarterizacion"
+										value="#{consultarCarterizacion.codigoCarterizacionSeleccionado}" 
+										styleClass="select">
+										<f:selectItems value="#{consultarCarterizacion.codigosCarterizacion}" />
+									</h:selectOneMenu>
+								</h:panelGrid>
+								
+							</td>
+						</tr>
+
+                        <h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+						   <h:outputText value=" " />
+						   <tr>
+							  <td align="left">
+							   	<h:commandButton
+									value="Buscar" id="buscar" styleClass="boton"
+									action="#{consultarCarterizacion.buscarCarterizaciones}" >
+								</h:commandButton>
+								<h:commandButton
+									value="Limpiar" id="limpiar" styleClass="boton"
+									action="#{consultarCarterizacion.limpiar}" >
+								</h:commandButton>
+							  </td>
+						   </tr>
+						   <h:outputText value=" " />
+						</h:panelGroup>
+
+					</table>
+				</h:panelGrid>
+			</h:panelGroup>
+
+			
+			<!-- <div style="width: 800px; overflow-x: auto; overflow-y: scroll;"> -->
+			<h:panelGroup id="panelConsultaCarterizaccion" style="overflow-x: auto; width: 750px;height: 440px">
+				<h:panelGrid width="100%" border="0" align="center" cellspacing="0"  >
+				<h:dataTable border="1" styleClass="tablaTask" style="border-collapse:collapse;" 
+					columnClasses="text,text,text" headerClass="headerClass headerTabla1" rendered="true" 
+					rowClasses="uno,dos" id="idTablaCarterizaccion" 
+					value="#{consultarCarterizacion.listaCarterizacion}" var="item" footerClass="fondo"
+					rows="#{consultarCarterizacion.numeroRegistro}" binding="#{consultarCarterizacion.dataTable}" >					
+					<h:column align="center">
+						<f:facet name="header">
+							<h:outputText value="Seleccionar"></h:outputText>
+						</f:facet>
+						<!--<h:selectBooleanCheckbox id="idSelect" value="#{item.seleccion}" onchange="cambiarEstado(this);">  
+							<f:ajax event="click" execute="@form" render="btnActualizar btnEliminar"
+								listener="#{consultarCarterizacion.cargarCarterizacion(item.idProducto, item.idTerritorio, item.idEmpleado, item.seleccion)}" />
+						</h:selectBooleanCheckbox>-->
+						<h:selectBooleanCheckbox id="idSelect" value="#{item.seleccion}" onchange="cambiarEstado(this);">  
+							<f:ajax event="click" execute="@form" render="btnActualizar btnEliminar"
+								listener="#{consultarCarterizacion.cargarCarterizacion}" />
+						</h:selectBooleanCheckbox>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText
+								value="Producto"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.strProducto}" styleClass="tabla-campo-texto"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText
+								value="Territorio"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.strTerritorio}" styleClass="tabla-campo-texto"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText
+								value="Empleado"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.strEmpleado}" styleClass="tabla-campo-texto"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText
+								value="Código"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.codigo}" styleClass="tabla-campo-texto"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText
+								value="Descripción"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.descripcion}" styleClass="tabla-campo-texto"/>
+					</h:column>
+				    <f:facet name="footer">
+			            <div class="espacios-etiqueta2">
+			                <span class="columna" style="width:150px">			
+								<h:panelGroup layout="block" style="padding:5px 10px;">
+									<h:commandButton value="Agregar"
+										action="#{consultarCarterizacion.agregar}"  styleClass="boton"/>
+									<h:commandButton value="Actualizar"
+										action="#{consultarCarterizacion.actualizar}"  styleClass="boton" id="btnActualizar"/>
+									<h:commandButton value="Eliminar"
+										onclick="return confirmarElimina(this);"
+										action="#{consultarCarterizacion.eliminar}"  styleClass="boton" id="btnEliminar"/>
+									<h:commandButton value="Cancelar"
+										action="#{consultarCarterizacion.cancelar}"  styleClass="boton"/>
+									<h:commandButton value="Anterior"
+										actionListener="#{consultarCarterizacion.pagePrevious}"  styleClass="boton"
+										disabled="#{consultarCarterizacion.dataTable.first == 0}" />
+									<h:commandButton value="Siguiente"
+										actionListener="#{consultarCarterizacion.pageNext}"  styleClass="boton"
+										disabled="#{consultarCarterizacion.dataTable.first + consultarCarterizacion.dataTable.rows >= consultarCarterizacion.dataTable.rowCount}" />							
+								</h:panelGroup>
+			                </span>                              
+			            </div>				
+					</f:facet>
+				</h:dataTable>
+				</h:panelGrid>
+			</h:panelGroup>
+			<h:message for="idTablaCarterizaccion" errorClass="mensaje-error"/>
+		<!-- </div> -->
+	</h:panelGrid>
+		
+	</ui:define>
+</ui:composition>
