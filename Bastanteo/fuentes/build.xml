@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="BBVA_CE_AppletViewer" default="default">
+
+	<property name="build.dir" value="bin" />
+	<property name="src.dir" value="src" />
+	<property name="lib.dir" value="lib" />
+	<property name="jar.dir" value="dist" />
+	<property name="jar.file" value="${jar.dir}/AppletViewer.jar" />
+	<property name="genkey.alias" value="ibm-bbva-applet" />
+	<property name="genkey.store" value="${jar.dir}/ibm-bbva-kystr" />
+	<property name="genkey.storepass" value="I8M7c3sB8V4" />
+	<property name="genkey.validity" value="365" />
+	<property name="genkey.certfile" value="${jar.dir}/ibm-bbva-cert" />
+	<property name="deploy.dir" value="../BBVA_CE_CM_WAS/WebContent" />
+	<property name="deploy.file" value="${deploy.dir}/AppletViewer.jar" />
+
+	<target name="createJar">
+		<echo message="Creando archivo JAR..." />
+		<delete file="${jar.file}" failonerror="false" />
+		<jar destfile="${jar.file}">
+			<fileset dir="${build.dir}" />
+			<zipfileset src="${lib.dir}/cmbview81.jar" excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />
+			<zipfileset src="${lib.dir}/cmb81.jar" excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />
+			<zipfileset src="${lib.dir}/itext-2.1.7.jar" excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />
+			<manifest>
+				<attribute name="Application-Name" value="AppletViewer" />
+				<attribute name="Permissions" value="all-permissions" />
+				<attribute name="Codebase" value="*" />
+				<attribute name="Trusted-Library" value="true" />
+				<attribute name="Caller-Allowable-Codebase" value="*" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="generateKey">
+		<echo message="Creando certificado de seguridad..." />
+		<delete file="${genkey.store}" failonerror="false" />
+		<genkey alias="${genkey.alias}" storepass="${genkey.storepass}"
+			keystore="${genkey.store}" validity="${genkey.validity}">
+			<dname>
+				<param name="CN" value="IBM-BBVA" />
+				<param name="OU" value="IBM" />
+				<param name="O" value="ibm.com" />
+				<param name="C" value="PE" />
+			</dname>
+		</genkey>
+	</target>
+
+	<target name="signJar">
+		<echo message="Firmando el archivo JAR..." />
+		<signjar jar="${jar.file}" alias="${genkey.alias}" storepass="${genkey.storepass}"
+			keystore="${genkey.store}" />
+	</target>
+	
+	<target name="exportCertificate">
+		<echo message="Exportando llave publica del certificado..." />
+		<delete file="${genkey.certfile}" failonerror="false" />
+		<exec executable="keytool.exe">
+			<arg value="-exportcert" />
+			<arg value="-keystore" />
+			<arg path="${genkey.store}" />
+			<arg value="-alias" />
+			<arg value="${genkey.alias}" />
+			<arg value="-file" />
+			<arg path="${genkey.certfile}" />
+		</exec>
+	</target>
+	
+	<target name="deploy">
+		<echo message="Copiando JAR en carpeta del Proyecto Web..." />
+		<delete file="${deploy.file}" failonerror="false" />
+		<copy file="${jar.file}" todir="${deploy.dir}"/>
+	</target>
+
+	<target name="all" depends="createJar, generateKey, signJar, exportCertificate, deploy">
+		<echo message="Se ha firmado el JAR con un nuevo certificado." />
+	</target>
+	<target name="default" depends="createJar, signJar, deploy">
+		<echo message="Se ha firmado el JAR reusando el certificado anterior." />
+	</target>
+
+</project>
