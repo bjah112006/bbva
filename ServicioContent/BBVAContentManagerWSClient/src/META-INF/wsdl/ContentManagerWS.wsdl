@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="ContentManagerWS" 
+	targetNamespace="http://www.example.org/ContentManagerWS/" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:tns="http://www.example.org/ContentManagerWS/" 
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.example.org/ContentManagerWS/">
+            <xsd:element name="obtenerRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="body" type="tns:ObtenerRequestBody"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="obtenerResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+          	<xsd:element name="header" type="tns:ResponseHeader" />
+          	<xsd:element name="body" type="tns:ResponseBody"></xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    
+      <xsd:complexType name="ResponseHeader">
+      	<xsd:sequence>
+      		<xsd:element name="codigoEstado" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+      		<xsd:element name="mensaje" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+      	</xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="ObtenerRequestBody">
+      	<xsd:sequence>
+      		<xsd:element name="documento"
+      			type="tns:ObtenerDocumentoRequest" maxOccurs="unbounded" minOccurs="1">
+      		</xsd:element>
+      	</xsd:sequence>
+      </xsd:complexType>
+
+    
+    
+      <xsd:complexType name="RequestBody">
+      	<xsd:sequence>			<xsd:element name="documento" type="tns:DocumentoRequest" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+		</xsd:sequence>
+      </xsd:complexType>
+    
+
+      <xsd:complexType name="ObtenerDocumentoRequest">
+      	<xsd:sequence>
+      		<xsd:element name="id" type="xsd:long" maxOccurs="1" minOccurs="0"></xsd:element>
+      		<xsd:element name="tipo" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+      		<xsd:element name="mandatorio" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+      		<xsd:element name="tipoDOI" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+      		<xsd:element name="numDOI" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+      		<xsd:element name="codigoCliente" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+            <xsd:element name="nombreArchivo" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+            <xsd:element name="origen" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+      	</xsd:sequence>
+      </xsd:complexType>
+    
+      <xsd:complexType name="DocumentoRequest">
+      	<xsd:sequence>
+      		<xsd:element name="id" type="xsd:long" maxOccurs="1" minOccurs="1"></xsd:element>
+      		<xsd:element name="tipo" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+      		<xsd:element name="mandatorio" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+      		<xsd:element name="tipoDOI" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+      		<xsd:element name="numDOI" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+      		<xsd:element name="codigoCliente" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+            <xsd:element name="nombreArchivo" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+            <xsd:element name="origen" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+            <xsd:element name="fechaCreacion" type="xsd:dateTime" maxOccurs="1" minOccurs="0"></xsd:element>
+            <xsd:element name="fechaExpiracion" type="xsd:dateTime" maxOccurs="1" minOccurs="0"></xsd:element>
+      		<xsd:element name="contenido" type="xsd:base64Binary" maxOccurs="1" minOccurs="0"></xsd:element>
+      	</xsd:sequence>
+      </xsd:complexType>
+    
+      <xsd:complexType name="ResponseBody">
+      	<xsd:sequence>
+      		<xsd:element name="documentos" type="tns:DocumentoResponse" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      	</xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="insertarRequest">
+      	<xsd:complexType>
+      		<xsd:sequence>
+      			<xsd:element name="body" type="tns:RequestBody"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="insertarResponse">
+      	<xsd:complexType>
+      		<xsd:sequence>
+      			<xsd:element name="header"
+      				type="tns:ResponseHeader">
+      			</xsd:element>
+
+      			<xsd:element name="body" type="tns:ResponseBody"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="actualizarRequest">
+      	<xsd:complexType>
+      		<xsd:sequence>
+      			<xsd:element name="body" type="tns:RequestBody"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="actualizarResponse">
+      	<xsd:complexType>
+      		<xsd:sequence>
+      			<xsd:element name="header"
+      				type="tns:ResponseHeader">
+      			</xsd:element>
+
+      			<xsd:element name="body" type="tns:ResponseBody"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="eliminarRequest">
+      	<xsd:complexType>
+      		<xsd:sequence>
+      			<xsd:element name="body" type="tns:RequestBody"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="eliminarResponse">
+      	<xsd:complexType>
+      		<xsd:sequence>
+      			<xsd:element name="header" type="tns:ResponseHeader"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+    
+      <xsd:complexType name="DocumentoResponse">
+      	<xsd:sequence>
+      	    <xsd:element name="id" type="xsd:long" maxOccurs="1" minOccurs="0"></xsd:element>
+      		<xsd:element name="tipo" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+      		<xsd:element name="mandatorio" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+      		<xsd:element name="tipoDOI" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+      		<xsd:element name="numDOI" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+      		<xsd:element name="codigoCliente" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+            <xsd:element name="nombreArchivo" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+            <xsd:element name="origen" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+            <xsd:element name="fechaCreacion" type="xsd:dateTime" maxOccurs="1" minOccurs="0"></xsd:element>
+            <xsd:element name="fechaExpiracion" type="xsd:dateTime" maxOccurs="1" minOccurs="0"></xsd:element>
+      		<xsd:element name="urlContent" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+      	</xsd:sequence>
+      </xsd:complexType>
+
+    
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="obtenerRequest">
+    <wsdl:part element="tns:obtenerRequest" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="obtenerResponse">
+    <wsdl:part element="tns:obtenerResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="insertarRequest">
+  	<wsdl:part name="parameters" element="tns:insertarRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="insertarResponse">
+  	<wsdl:part name="parameters" element="tns:insertarResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="actualizarRequest">
+  	<wsdl:part name="parameters" element="tns:actualizarRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="actualizarResponse">
+  	<wsdl:part name="parameters" element="tns:actualizarResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="eliminarRequest">
+  	<wsdl:part name="parameters" element="tns:eliminarRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="eliminarResponse">
+  	<wsdl:part name="parameters" element="tns:eliminarResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ContentManagerWS">
+    <wsdl:operation name="obtener">
+      <wsdl:input message="tns:obtenerRequest"/>
+      <wsdl:output message="tns:obtenerResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="insertar">
+    	<wsdl:input message="tns:insertarRequest"></wsdl:input>
+    	<wsdl:output message="tns:insertarResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="actualizar">
+    	<wsdl:input message="tns:actualizarRequest"></wsdl:input>
+    	<wsdl:output message="tns:actualizarResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="eliminar">
+    	<wsdl:input message="tns:eliminarRequest"></wsdl:input>
+    	<wsdl:output message="tns:eliminarResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ContentManagerWSSOAP" type="tns:ContentManagerWS">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="obtener">
+      <soap:operation soapAction="http://www.example.org/ContentManagerWS/obtener"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+     </wsdl:operation>
+     <wsdl:operation name="insertar">
+      <soap:operation soapAction="http://www.example.org/ContentManagerWS/insertar"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="actualizar">
+      <soap:operation soapAction="http://www.example.org/ContentManagerWS/actualizar"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="eliminar">
+      <soap:operation soapAction="http://www.example.org/ContentManagerWS/eliminar"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ContentManagerWS">
+    <wsdl:port binding="tns:ContentManagerWSSOAP" name="ContentManagerWSSOAP">
+      <soap:address location="http://www.example.org/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

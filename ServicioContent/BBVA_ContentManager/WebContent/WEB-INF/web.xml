@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	<display-name>BBVA_ContentManager</display-name>
+	<listener>
+		<description>Este listener inicia la ejecucion del demonio en cuanto el contexto del proyecto es levantado.</description>
+		<display-name>DaemonListener</display-name>
+		<listener-class>com.bbva.content.manager.listener.DaemonListener</listener-class>
+	</listener>
+	<servlet>
+		<description />
+		<display-name>Applet Controller</display-name>
+		<icon>
+			<small-icon />
+			<large-icon />
+		</icon>
+		<servlet-name>AppletController</servlet-name>
+		<servlet-class>com.ibm.bbva.applet.servlet.AppletController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AppletController</servlet-name>
+		<url-pattern>/AppletController</url-pattern>
+	</servlet-mapping>
+</web-app>
