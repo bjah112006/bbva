@@ -255,7 +255,7 @@ public class RegistrarNuevoBastanteoMB extends AbstractMBean
 			LOG.info("FlagEnvioContent: " + expedienteCC.getDatosFlujoCtaCte().getFlagEnvioContent());
 			// Exonerado cobro comision
 			// [Begin]-[15.04.06]-[Exoneracion cobro de comision por tipo de subproducto, cuando es un nuevo bastanteo]
-			if (ConstantesBusiness.CODIGO_NUEVO_BASTANTEO.equals(expediente.getOperacion().getCodigoOperacion())) {
+			if (ConstantesBusiness.CODIGO_NUEVO_BASTANTEO.equals(expediente.getOperacion().getCodigoOperacion()) && expediente.getProducto()!= null) {
 				LOG.info("Codigo Producto " + expediente.getProducto().getCodigo());
 				LOG.info("Codigo Sub Producto " + identifiquePJOperacion1.getCodigoSubProducto());
 				MultiTabla multiTabla = null;
