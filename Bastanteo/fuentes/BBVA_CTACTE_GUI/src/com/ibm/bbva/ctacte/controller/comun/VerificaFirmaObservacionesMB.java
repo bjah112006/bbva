@@ -20,19 +20,19 @@ import com.ibm.bbva.ctacte.bean.EstadoExpediente;
 import com.ibm.bbva.ctacte.bean.EstadoTarea;
 import com.ibm.bbva.ctacte.bean.Expediente;
 import com.ibm.bbva.ctacte.bean.ExpedienteTarea;
-import com.ibm.bbva.ctacte.bean.MultiTabla;
 import com.ibm.bbva.ctacte.bean.ParametrosConf;
 import com.ibm.bbva.ctacte.bean.Participe;
 import com.ibm.bbva.ctacte.bean.Tarea;
+import com.ibm.bbva.ctacte.bean.servicio.sfp.DatosClientePJSFP;
 import com.ibm.bbva.ctacte.constantes.ConstantesBusiness;
 import com.ibm.bbva.ctacte.controller.AbstractMBean;
 import com.ibm.bbva.ctacte.controller.ConstantesAdmin;
 import com.ibm.bbva.ctacte.controller.comun.interf.IVerificaFirmaObservaciones;
 import com.ibm.bbva.ctacte.controller.form.VerificarCalidadFirmasMB;
 import com.ibm.bbva.ctacte.dao.ExpedienteDAO;
-import com.ibm.bbva.ctacte.dao.MultiTablaDAO;
 import com.ibm.bbva.ctacte.dao.ParametrosConfDAO;
 import com.ibm.bbva.ctacte.dao.ParticipeDAO;
+import com.ibm.bbva.ctacte.dao.servicio.SistemaFirmasPoderesDAO;
 import com.ibm.bbva.ctacte.util.AyudaExpedienteCC;
 import com.ibm.bbva.ctacte.util.Util;
 import com.ibm.bbva.ctacte.wrapper.DocumentoExpWrapper;
@@ -88,11 +88,18 @@ public class VerificaFirmaObservacionesMB extends AbstractMBean{
 		//iVerificarFirmaObservaciones.habilitarBotonRechazar(blnRechazar);
 		
 		// Habilitación del botón Terminar Vinculación según configuración
+		// flagTerminarVinculacion = 1, Pide verificación de SFP
+		// flagTerminarVinculacion = 0, Pide verificación de SFP excepto cuando es una Modificatoria y es un cliente no migrado
 		// [Begin]-[15.04.08]-[Habilitación del botón Terminar Vinculación según configuración]
 		ParametrosConf parametro = null;
 		try {
 			parametro = parametrosConfDAO.obtener(ConstantesBusiness.CODIGO_MODULO_CONF, ConstantesBusiness.CODIGO_FLAG_HABILITAR_TERMINAR_VINCULACION);
-			blnTerminar=!"0".equalsIgnoreCase(parametro.getValorVariable());
+			
+			blnTerminar = "0".equalsIgnoreCase(parametro.getValorVariable()); // Flag Habilitado
+			blnTerminar = blnTerminar && ("0".equalsIgnoreCase(expediente.getCliente().getFlagOrigenSFP())); // Cliente No Esta Migrado
+			blnTerminar = blnTerminar && ConstantesBusiness.CODIGO_MODIFICATORIA_BASTANTEO.equals(expediente.getOperacion().getCodigoOperacion()); // Modificatoria
+			blnTerminar = !blnTerminar;
+			
 			LOG.info(parametro.toString());
 		} catch(Exception e) {
 			LOG.info("Error multitabla", e);
@@ -166,17 +173,8 @@ public class VerificaFirmaObservacionesMB extends AbstractMBean{
 		redirectAction("../bandeja/bandeja");
 	}
 	
-	public void  abrirFirmasNoAsociadas(){
-		// [Begin]-[15.04.08]-[Habilitación del botón Terminar Vinculación según configuración]
-		ParametrosConf parametro = null;
-		try {
-			parametro = parametrosConfDAO.obtener(ConstantesBusiness.CODIGO_MODULO_CONF, ConstantesBusiness.CODIGO_FLAG_HABILITAR_TERMINAR_VINCULACION);
-			LOG.info(parametro.toString());
-		} catch(Exception e) {
-			LOG.info("Error multitabla", e);
-		}
-			
-		if(parametro != null && "1".equalsIgnoreCase(parametro.getValorVariable())) {
+	public void  abrirFirmasNoAsociadas(){	
+		if(blnTerminar) {
 			LOG.info("abrirFirmasNoAsociadas()");
 			
 			List<Participe> lista = participeDAO.findByExpedienteParticipesUnicos(expediente.getId());
@@ -198,8 +196,6 @@ public class VerificaFirmaObservacionesMB extends AbstractMBean{
 				}
 				verificaDocumentacionDigitalizada.setListaDocExpedienteW(listDocExpW);
 			}
-		} else {
-			blnTerminar = false;
 		}
 //		if(existeFirmaNoAsociada.equalsIgnoreCase(ConstantesBusiness.EXISTE_FIRMA_NO_ASOCIADA)) {
 //	    	//boton rechazar habilitar

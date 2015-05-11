@@ -99,6 +99,9 @@ public class Cliente implements java.io.Serializable {
 	@Column(name = "FLAG_EXP_MIGRADO", length = 1)
 	private String flagExpMigrado;
 
+	@Column(name = "FLAG_ORIGEN_SFP", length = 1)
+	private String flagOrigenSFP;
+	
 	public Cliente() {
 	}
 
@@ -292,6 +295,14 @@ public class Cliente implements java.io.Serializable {
 
 	public void setFlagExpMigrado(String flagExpMigrado) {
 		this.flagExpMigrado = flagExpMigrado;
+	}
+
+	public String getFlagOrigenSFP() {
+		return flagOrigenSFP;
+	}
+
+	public void setFlagOrigenSFP(String flagOrigenSFP) {
+		this.flagOrigenSFP = flagOrigenSFP;
 	}
 
 }
