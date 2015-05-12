@@ -699,12 +699,15 @@ public class IdentifiquePJOperacion1MB extends AbstractMBean {
 		
 		// Se está usando el campo "fechaEscritura" del servicio de SFP para saber si el cliente ya fue migrado o no
 		String flagExpMigrado;
-		if (clientePJ.getDatosSFP().getFechaEscritura() != null && !clientePJ.getDatosSFP().getFechaEscritura().trim().equals("")) {
+		if (clientePJ.getDatosSFP().getFechaEscritura() != null
+				&& !clientePJ.getDatosSFP().getFechaEscritura().trim()
+						.equals("")) {
 			flagExpMigrado = "1";
 		} else {
 			flagExpMigrado = "0";
 		}
-		// TODO: Cambio por el campo tipo de persona: Nulo = No Migrado || !Nulo = Migrado 
+		cliente.setFlagExpMigrado(flagExpMigrado);
+		// TODO: Cambio por el campo tipo de persona: Nulo = No Migrado || !Nulo = Migrado
 		cliente.setFlagOrigenSFP(clientePJ.getDatosSFP().getTipoPJ() == null || clientePJ.getDatosSFP().getTipoPJ().isEmpty() ? "0" : "1");
 		
 		expediente.setCliente(cliente);
