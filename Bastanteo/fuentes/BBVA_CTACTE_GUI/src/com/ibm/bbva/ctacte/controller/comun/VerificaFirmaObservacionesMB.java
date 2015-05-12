@@ -153,7 +153,11 @@ public class VerificaFirmaObservacionesMB extends AbstractMBean{
 				existeFirmaNoAsociada = ConstantesBusiness.EXISTE_FIRMA_NO_ASOCIADA;
 			}
 		}
-		expedienteCC.getDatosFlujoCtaCte().setFlagExisteFirmaAsociada(existeFirmaAsociada);
+		if(!blnTerminar) {
+			expedienteCC.getDatosFlujoCtaCte().setFlagExisteFirmaAsociada(ConstantesBusiness.EXISTE_FIRMA_ASOCIADA);	
+		} else {
+			expedienteCC.getDatosFlujoCtaCte().setFlagExisteFirmaAsociada(existeFirmaAsociada);	
+		}
 //		expedienteCC.getDatosFlujoCtaCte().setFlagExisteFirmaNoAsociada(existeFirmaNoAsociada);
 //		expedienteCC.getDatosFlujoCtaCte().setFlagExisteFirmaAsociada(ConstantesBusiness.NO_EXISTE_FIRMA_ASOCIADA);
 		expedienteCC.getDatosFlujoCtaCte().setFlagExisteFirmaNoAsociada(ConstantesBusiness.NO_EXISTE_FIRMA_NO_ASOCIADA);
@@ -192,7 +196,7 @@ public class VerificaFirmaObservacionesMB extends AbstractMBean{
 				List<DocumentoExpWrapper> listDocExpW = new ArrayList<DocumentoExpWrapper>();
 				for ( DocumentoExpWrapper vlde : verificaDocumentacionDigitalizada.getListaDocExpedienteW()) {				
 					vlde.setFlagComboRechazadoFirmas(false);
-					listDocExpW.add(vlde);				
+					listDocExpW.add(vlde);
 				}
 				verificaDocumentacionDigitalizada.setListaDocExpedienteW(listDocExpW);
 			}
