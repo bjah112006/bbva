@@ -153,7 +153,10 @@ public class VerificaFirmaObservacionesMB extends AbstractMBean{
 				existeFirmaNoAsociada = ConstantesBusiness.EXISTE_FIRMA_NO_ASOCIADA;
 			}
 		}
+
+		// Si blnTerminar es TRUE indica que es un cliente no migrado, el expediente es de tipo modificatoria y el flag del rol migrador es 0
 		if(!blnTerminar) {
+			// Al no estar migrado, se asume por defecto que tiene firmas asociadas
 			expedienteCC.getDatosFlujoCtaCte().setFlagExisteFirmaAsociada(ConstantesBusiness.EXISTE_FIRMA_ASOCIADA);	
 		} else {
 			expedienteCC.getDatosFlujoCtaCte().setFlagExisteFirmaAsociada(existeFirmaAsociada);	
