@@ -81,8 +81,8 @@ public class PieVerificarRealizarBastanteoMB extends AbstractMBean {
 		}
 		iPieVerificarRealizarBastanteo.setVerificarRealizarBastanteo(this);
 		crearListaDevolucion();
-		controlesAlInicio();		
 		expediente=(Expediente)Util.getObjectSession(ConstantesAdmin.EXPEDIENTE_SESION);
+		controlesAlInicio();
 		empleado=(Empleado) Util.getObjectSession(ConstantesAdmin.EMPLEADO_SESION);
 		Motivo motivo=new Motivo();
 		expediente.setMotivo(motivo);
@@ -108,12 +108,22 @@ public class PieVerificarRealizarBastanteoMB extends AbstractMBean {
 		boolDevolver=false;
 		
 		// Habilitación del botón Finalizar Proceso según configuración
+		// flagFinalizarBastanteo = 1, Pide verificación de SFP
+		// flagFinalizarBastanteo = 0, Pide verificación de SFP excepto cuando es una Modificatoria y es un cliente no migrado
 		// [Begin]-[15.04.08]-[Habilitación del botón Finalizar Proceso según configuración]
 		finalizaBastanteo=true;
 		ParametrosConf parametro = null;
 		try {
 			parametro = parametroConfDAO.obtener(ConstantesBusiness.CODIGO_MODULO_CONF, ConstantesBusiness.CODIGO_FLAG_HABILITAR_FINALIZAR_BASTANTEO);
-			finalizaBastanteo = !"0".equalsIgnoreCase(parametro.getValorVariable());
+			
+			finalizaBastanteo = "0".equalsIgnoreCase(parametro.getValorVariable()); // Flag Habilitado
+			finalizaBastanteo = finalizaBastanteo && ("0".equalsIgnoreCase(expediente.getCliente().getFlagOrigenSFP())); // Cliente No Esta Migrado
+			finalizaBastanteo = finalizaBastanteo && ConstantesBusiness.CODIGO_MODIFICATORIA_BASTANTEO.equals(expediente.getOperacion().getCodigoOperacion()); // Modificatoria
+			finalizaBastanteo = !finalizaBastanteo;
+			LOG.info("PARAMETRO = " + parametro.getValorVariable());
+			LOG.info("EXPEDIENTE = " + expediente.getOperacion().getCodigoOperacion());
+			LOG.info("FLAG FINALIZA BASTANTEO = " + finalizaBastanteo);
+			
 			LOG.info(parametro.toString());
 		} catch(Exception e) {
 			LOG.info("Error multitabla", e);
@@ -368,18 +378,10 @@ public class PieVerificarRealizarBastanteoMB extends AbstractMBean {
 	public void  verificarFacultadesEspeciales(ActionEvent event){
 		// Habilitación del botón Finalizar Proceso según configuración
 		// [Begin]-[15.04.08]-[Habilitación del botón Finalizar Proceso según configuración]
-		finalizaBastanteo = true;
-		ParametrosConf parametro = null;
-		try {
-			parametro = parametroConfDAO.obtener(ConstantesBusiness.CODIGO_MODULO_CONF, ConstantesBusiness.CODIGO_FLAG_HABILITAR_FINALIZAR_BASTANTEO);
-			LOG.info(parametro.toString());
-		} catch(Exception e) {
-			LOG.info("Error multitabla", e);
-		}
-		
-		if(parametro != null && "1".equalsIgnoreCase(parametro.getValorVariable())) {
+	
+		if(finalizaBastanteo) {
 			LOG.info("verificarFacultadesEspeciales()");
-			finalizaBastanteo = true;	
+			// finalizaBastanteo = true;	
 			exitoOperacionSFP = false;
 			existeFacultadesEspeciales = ConstantesBusiness.NO_EXISTE_FACULTADES_ESPECIALES;
 			
@@ -397,8 +399,6 @@ public class PieVerificarRealizarBastanteoMB extends AbstractMBean {
 			
 			LOG.info("finalizaBastanteo: " + finalizaBastanteo);
 			LOG.info("existeFacultadesEspeciales: " + existeFacultadesEspeciales);
-		} else {
-			finalizaBastanteo = false;
 		}
 		// [End]-[15.04.08]-[Habilitación del botón Finalizar Proceso según configuración]
 	}
