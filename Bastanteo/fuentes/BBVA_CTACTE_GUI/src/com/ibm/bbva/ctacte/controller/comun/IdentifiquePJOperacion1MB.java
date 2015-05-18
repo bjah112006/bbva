@@ -1,9 +1,11 @@
 package com.ibm.bbva.ctacte.controller.comun;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -20,14 +22,20 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pe.ibm.bean.ConsultaCC;
+import pe.ibm.bean.ExpedienteCC;
+import pe.ibm.bpd.RemoteUtils;
+
 import com.ibm.bbva.cm.service.Documento;
 import com.ibm.bbva.ctacte.bean.Campania;
 import com.ibm.bbva.ctacte.bean.Cliente;
 import com.ibm.bbva.ctacte.bean.Cuenta;
 import com.ibm.bbva.ctacte.bean.Empleado;
 import com.ibm.bbva.ctacte.bean.Expediente;
+import com.ibm.bbva.ctacte.bean.ExpedienteTarea;
 import com.ibm.bbva.ctacte.bean.Operacion;
 import com.ibm.bbva.ctacte.bean.Participe;
+import com.ibm.bbva.ctacte.bean.Tarea;
 import com.ibm.bbva.ctacte.bean.servicio.core.ClientePJCore;
 import com.ibm.bbva.ctacte.bean.servicio.core.DatosClientePJCore;
 import com.ibm.bbva.ctacte.business.ClienteBusiness;
@@ -42,6 +50,7 @@ import com.ibm.bbva.ctacte.dao.CampaniaDAO;
 import com.ibm.bbva.ctacte.dao.ExpedienteDAO;
 import com.ibm.bbva.ctacte.dao.OperacionDAO;
 import com.ibm.bbva.ctacte.dao.ProductoDAO;
+import com.ibm.bbva.ctacte.dao.TareaDAO;
 import com.ibm.bbva.ctacte.exepciones.ConexionServicioException;
 import com.ibm.bbva.ctacte.exepciones.ErrorObteniendoDatosException;
 import com.ibm.bbva.ctacte.exepciones.ParametroIlegalException;
@@ -92,6 +101,7 @@ public class IdentifiquePJOperacion1MB extends AbstractMBean {
 	private boolean mostrarSubTabla;
 	private List<Participe> participes;
 	private Expediente ultimExpBast;
+	private List<ExpedienteCC> expedientesPorCerrar;
 	private String codigoSubProducto;
 	@EJB
 	private ClienteBusiness clienteBusiness;
@@ -105,6 +115,8 @@ public class IdentifiquePJOperacion1MB extends AbstractMBean {
 	private ExpedienteDAO expedienteDAO;
 	@EJB
 	private ProductoDAO productoDAO;
+	@EJB
+	private TareaDAO tareaDAO;
 
 	@PostConstruct
 	public void iniciar () {
@@ -128,6 +140,7 @@ public class IdentifiquePJOperacion1MB extends AbstractMBean {
 		managedBean.ocultarSecciones();
 		mostrarSubTabla = false;
 		mostrarTablaBast = false;
+		expedientesPorCerrar = Collections.EMPTY_LIST;
 	}
 
 	private void mostrarTabla(boolean mostrar) {
@@ -247,15 +260,40 @@ public class IdentifiquePJOperacion1MB extends AbstractMBean {
 
 	private void crearListaOperaciones(ClientePJCore clientePJCore) {
 		LOG.info("crearListaOperaciones (ClientePJCore clientePJCore)");
+		expedientesPorCerrar = Collections.EMPTY_LIST;
 		try {
 			if (!clienteBusiness.esValidoExpediente(clientePJCore)) {
 				mensajeErrorPrincipal("idIdenPJOp:dtClientes", 
 						"El cliente tiene un expediente en Nuevo Bastanteo.");
 				mostrarDatosCliente(false);
 				mostrarComision(false);
-				mostrarTabla (false);
+				mostrarTabla(false);
 				managedBean.ocultarSecciones();
 				return;
+			} else {
+				// consultar si el empleado tiene expedientes por cerrar del mismo cliente 
+				Empleado empleado = (Empleado) Util.getObjectSession(ConstantesAdmin.EMPLEADO_SESION);
+				RemoteUtils bandejaTareasBDelegate = new RemoteUtils();
+				ConsultaCC consulta = new ConsultaCC();
+				consulta.setNumeroTarea(Integer.toString(ConstantesBusiness.ID_TAREA_VERIFICAR_RESULTADO_TRAMITE));
+				consulta.setCodCentralCliente(clientePJCore.getCodigoCentral());
+				consulta.setCodUsuarioActual(empleado.getCodigo());
+				consulta.setConsiderarUsuarios(false);
+				
+				expedientesPorCerrar = bandejaTareasBDelegate.obtenerInstanciasTareasPorUsuarioCC(consulta);
+				if (expedientesPorCerrar != null && expedientesPorCerrar.size() > 0) {
+					String mensaje;
+					if (expedientesPorCerrar.size() == 1)
+						mensaje = "Antes de registrar un nuevo expediente, debe cerrar el siguiente expediente:";
+					else
+						mensaje = "Antes de registrar un nuevo expediente, debe cerrar los siguientes expedientes:";
+					mensajeErrorPrincipal("idIdenPJOp:dtClientes", mensaje);
+					mostrarDatosCliente(false);
+					mostrarComision(false);
+					mostrarTabla(false);
+					managedBean.ocultarSecciones();
+					return;
+				}
 			}
 			
 			List<Operacion> operaciones = clienteBusiness.listaOperaciones(clientePJCore);
@@ -733,6 +771,47 @@ public class IdentifiquePJOperacion1MB extends AbstractMBean {
 		LOG.info("expediente cliente "+expediente.getCliente());
 	}
 	
+	public void irACerrarExpdiente() {
+		LOG.info("irACerrarExpdiente");
+		
+		FacesContext context = FacesContext.getCurrentInstance();
+		Map requestMap = context.getExternalContext().getRequestParameterMap();
+		String codExpediente = (String) requestMap.get("codExpediente");
+		String codResponsable = (String) requestMap.get("codResponsable");
+
+		LOG.info("***********codExpediente*********"+codExpediente);
+		LOG.info("***********codResponsable*********"+codResponsable);
+		
+		ExpedienteCC expedienteCC = null;
+		for (ExpedienteCC obj : expedientesPorCerrar) {
+			if (obj.getCodigoExpediente().equals(codExpediente)) {
+				expedienteCC = obj;
+				break;
+			}
+		}
+		if (expedienteCC != null) {
+			Expediente expediente = expedienteDAO.load(Integer.parseInt(expedienteCC.getCodigoExpediente()));
+			expediente.setNumTerminal(Util.obtenerIp());
+			expediente.setFechaEnvio(expedienteCC.getActivado().getTime());
+			Tarea tarea = tareaDAO.load(Integer.valueOf(expedienteCC.getDatosFlujoCtaCte().getIdTarea()));
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(expediente.getFechaEnvio());
+			calendar.add(Calendar.MINUTE, tarea.getVerdeMinutos());
+			expediente.setFechaProgramada(calendar.getTime());
+			
+			ExpedienteTarea expedienteTarea = expediente.getExpedienteTareas().iterator().next();
+			expedienteTarea.setTarea(tarea);
+			String pagina = "../" + tarea.getNombrePagina();
+			LOG.info("redirect : {}", pagina);
+			
+			Util.addObjectSession(ConstantesAdmin.EXPEDIENTE_PROCESO_SESION, expedienteCC);
+			Util.addObjectSession(ConstantesAdmin.EXPEDIENTE_SESION, expediente);		
+			Util.addObjectSession(ConstantesAdmin.RESPONSABLE_SESION, codResponsable);
+			
+			redirectAction(pagina);
+		}
+	}
+	
 	public String getCodigoCentral() {
 		return codigoCentral; 
 	}
@@ -959,6 +1038,14 @@ public class IdentifiquePJOperacion1MB extends AbstractMBean {
 
 	public String getUrlInstMod() {
 		return urlInstMod;
+	}
+
+	public List<ExpedienteCC> getExpedientesPorCerrar() {
+		return expedientesPorCerrar;
+	}
+
+	public void setExpedientesPorCerrar(List<ExpedienteCC> expedientesPorCerrar) {
+		this.expedientesPorCerrar = expedientesPorCerrar;
 	}
 
 	public String getCodigoSubProducto() {

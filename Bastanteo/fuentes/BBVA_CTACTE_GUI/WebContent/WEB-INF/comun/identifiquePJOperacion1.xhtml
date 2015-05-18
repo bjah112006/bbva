@@ -139,6 +139,23 @@
 			
 			<h:message for="dtClientes" id="idMsgValidacion" errorClass="mensaje-error" />
 			
+			<h:panelGrid columns="1" rendered="#{not empty identifiquePJOperacion1.expedientesPorCerrar}">
+				<h:panelGroup>
+					<ul style="margin: 0px; padding-top: 0px; padding-bottom: 0px;">
+						<ui:repeat value="#{identifiquePJOperacion1.expedientesPorCerrar}" var="item">
+						<li>
+							<h:commandLink styleClass="colorLink"
+				            	    value="#{item.codigoExpediente}"
+				            	    actionListener="#{identifiquePJOperacion1.irACerrarExpdiente}">			       
+							        <f:param name="codExpediente" value="#{item.codigoExpediente}" />
+							        <f:param name="codResponsable" value="#{bandeja.codResponsable}" />
+							</h:commandLink>
+						</li>
+						</ui:repeat>
+					</ul>
+				</h:panelGroup>
+			</h:panelGrid>
+			
 			<h:panelGrid columns="2">
 				<h:outputText value="Operación:" rendered="#{identifiquePJOperacion1.mostrarOperacion}"/>
 				<h:selectOneMenu value="#{identifiquePJOperacion1.operacion}" id="idOperacion"

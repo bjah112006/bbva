@@ -52,7 +52,6 @@ import com.ibm.bbva.ctacte.dao.ExpedienteTareaDAO;
 import com.ibm.bbva.ctacte.dao.HistorialDAO;
 import com.ibm.bbva.ctacte.dao.OficinaDAO;
 import com.ibm.bbva.ctacte.dao.OperacionDAO;
-import com.ibm.bbva.ctacte.dao.PerfilDAO;
 import com.ibm.bbva.ctacte.dao.TareaDAO;
 import com.ibm.bbva.ctacte.dao.TerritorioDAO;
 import com.ibm.bbva.ctacte.util.AyudaHorario;
@@ -128,8 +127,6 @@ public class BandejaMB extends AbstractTablaMBean {
 	@EJB
 	private ExpedienteDAO expedienteDAO;
 	@EJB
-	private PerfilDAO perfilDAO;
-	@EJB
 	private TareaDAO tareaDAO;
 	@EJB
 	private EstadoTareaDAO estadoTareaDAO;
@@ -204,7 +201,7 @@ public class BandejaMB extends AbstractTablaMBean {
 		List<ExpedienteCC> expedientes = null;
 		ConsultaCC c = new ConsultaCC(); 
 		//+POR SOLICITUD BBVA+LOG.info("*********************isSupervisor(): "+isSupervisor());	
-		if (isSupervisor()) {			
+		if (isSupervisor()) {
 			List<Empleado> empleadosList = getUsuariosVistosPorPerfil();
 			for (Empleado e : empleadosList) {
 				usuarios.add(e.getCodigo());
@@ -218,19 +215,21 @@ public class BandejaMB extends AbstractTablaMBean {
 			} catch (RuntimeException e) {
 				LOG.error("Error al obtener las tareas", e);
 				expedientes = Collections.EMPTY_LIST;
+				mensajeErrorPrincipal("tablaTask", ConstantesAdmin.MSG_ERROR_CONSULTA_REST_PROCESS);
 			}
-		} else {			
-			c.setConsiderarUsuarios(true);
+		} else {
 			if (empleado.getPerfil().getCodigo().equals(ConstantesBusiness.CODIGO_PERFIL_GESTOR)){
-				List<Empleado> listEmp = empleadoDAO.getEmpleadosPorPerfilOficina(empleado.getPerfil().getId(), empleado.getOficina().getId());				
-				//+POR SOLICITUD BBVA+LOG.info("******************listEmp : "+listEmp.size());				
+				List<Empleado> listEmp = empleadoDAO.getEmpleadosPorPerfilOficina(empleado.getPerfil().getId(), empleado.getOficina().getId());
+				//+POR SOLICITUD BBVA+LOG.info("******************listEmp : "+listEmp.size());
 				for (Empleado e : listEmp) {
 					usuarios.add(e.getCodigo());
 				}
+				c.setConsiderarUsuarios(true);
 				c.setUsuarios(usuarios);
 			}else{
-				//+POR SOLICITUD BBVA+LOG.info("******************c.setCodUsuarioActual(empleado.getCodigo()) : "+c.getCodUsuarioActual());	
+				//+POR SOLICITUD BBVA+LOG.info("******************c.setCodUsuarioActual(empleado.getCodigo()) : "+c.getCodUsuarioActual());
 				c.setCodUsuarioActual(empleado.getCodigo());
+				c.setConsiderarUsuarios(false); // para que no filtre en java el usuario
 			}
 			
 			try {				
@@ -262,23 +261,10 @@ public class BandejaMB extends AbstractTablaMBean {
 		}
 
 		if (isSupervisor() || empleado.getPerfil().getCodigo().equals(ConstantesBusiness.CODIGO_PERFIL_GESTOR)) {
+			LOG.info("Agrega Lista de Pre-registros a la bandeja para todos los gestores y supervisores");
 			for (String codUsuario : usuarios) { // por cada codigo de usuario
 													// supervisado
 				List<Expediente> listaExpe = expedienteDAO.findByEstado(codUsuario,ConstantesBusiness.ID_ESTADO_EXPEDIENTE_PREREGISTRO);
-				for (Expediente e : listaExpe) {
-					listaTareasBase.add(transformExpediente(e));
-				}
-			}
-		} else {
-			List<Empleado> listEmp = empleadoDAO.getEmpleadosPorPerfil(empleado.getPerfil().getId());
-			usuarios.clear();
-			LOG.info("Agrega Lista de Preregistros a la bandeja parea todos los gestores");
-			for (Empleado e : listEmp) {
-				usuarios.add(e.getCodigo());
-			}
-			c.setUsuarios(usuarios);
-			for (String codUsuario : usuarios) {
-				List<Expediente> listaExpe = expedienteDAO.findByEstado(codUsuario,/*empleado.getCodigo()*/ConstantesBusiness.ID_ESTADO_EXPEDIENTE_PREREGISTRO);
 				for (Expediente e : listaExpe) {
 					listaTareasBase.add(transformExpediente(e));
 				}
@@ -1431,8 +1417,7 @@ public class BandejaMB extends AbstractTablaMBean {
 			LOG.info ("getExpediente: "+tareaBandejaVO.getExpediente());
 			
 		}catch(Exception e){
-			e.printStackTrace();
-			LOG.info("**********cacth dblTareaSeleccionada()************");
+			LOG.error("**********cacth dblTareaSeleccionada()************", e);
 			return;
 		}	
 
@@ -1559,8 +1544,7 @@ public class BandejaMB extends AbstractTablaMBean {
 			}
 			return TareaBanVOaux;
 		}catch(Exception ex){
-			ex.printStackTrace();
-			LOG.info("*********CATCH-buscarExpedienteCC(String idExpTar)*********");
+			LOG.error("*********CATCH-buscarExpedienteCC(String idExpTar)*********", ex);
 			return TareaBanVOaux;
 			//throw new Exception();
 		}
