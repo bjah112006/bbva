@@ -1,0 +1,55 @@
+#header #menu > div > ul.dropdownmenu.notCustom > li a.bbva-reporte {
+    background: url("reporte_16.png") no-repeat scroll 15px center transparent !important;
+}
+
+#bbva-panel .popupframe {
+    top: 100px;
+}
+
+#bbva-panel .page {
+    padding: 20px;
+}
+
+#bbva-panel .itemlistingpage .tables_panel .table .thead {
+    margin-bottom: 3px;
+}
+
+#bbva-panel .itemlistingpage .tables_panel .table .thead .tr {
+    padding-top: 10px;
+    padding-bottom: 5px;
+    margin-bottom: 0px;
+    min-height: 24px;
+    /*
+    position: fixed;
+    width: 438px;
+    */
+}
+
+#bbva-panel .itemlistingpage .tables_panel .table .thead .tr .th {
+    text-align: center;
+}
+
+#bbva-panel .itemlistingpage .tables_panel .table .tbody .tr {
+    padding-top: 5px;
+    margin-bottom: 2px;
+    min-height: 26px;
+}
+
+#bbva-panel .itemlistingpage .tables_panel .table {
+    overflow: scroll;
+    height: 385px;
+}
+
+#bbva-panel .itemlistingpage .tables_panel {
+    padding: 5px 0 5px 5px;
+}
+
+#bbva-panel .td_reporte,
+#bbva-panel .th_reporte {
+    width: 330px;
+}
+
+#bbva-panel .td_fecha,
+#bbva-panel .th_fecha {
+    width: 50px;
+}
