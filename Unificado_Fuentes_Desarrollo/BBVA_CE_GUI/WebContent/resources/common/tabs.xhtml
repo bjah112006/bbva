@@ -1,0 +1,59 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+	<script type="text/javascript">
+	/* <![CDATA[ */
+			function accionExpediente () {
+				accion("tab-expediente", "tabExp");
+			}
+			function accionAyudaMemoria () {
+				accion("tab-ayuda-memoria", "tabAyu");
+			}
+			function accionHistorial () {
+				accion("tab-historial", "tabHis");
+			}
+			function accionObservaciones () {
+				accion("tab-observaciones", "tabObs");
+			}
+			function accionLog () {
+				accion("tab-log", "tabLog");
+			}
+			function accion (panelTab, claseTab) {
+				$(".tab-item").hide();
+				$("."+panelTab).show();
+				
+				var desactivado = $(".desactivado");
+				$(desactivado).removeClass("desactivado");
+				$(desactivado).addClass("activado");
+				
+				var tab = $("."+claseTab);
+				$(tab).removeClass("activado");
+				$(tab).addClass("desactivado");
+				
+				$("applet").find("param:eq(8)").val(0);
+			}
+	/* ]]> */
+    </script>
+<div class="tabs">
+	<h:outputLink class="desactivado tabExp" value="javascript:accionExpediente ();">
+		<h:outputText value="#{msg['com.ibm.bbva.common.tabs.expediente']}" />
+	</h:outputLink>
+	<h:outputLink class="activado tabAyu" value="javascript:accionAyudaMemoria ();">
+		<h:outputText value="#{msg['com.ibm.bbva.common.tabs.memoria']}" />
+	</h:outputLink>
+    <h:outputLink class="activado tabHis" value="javascript:accionHistorial ();">
+		<h:outputText value="#{msg['com.ibm.bbva.common.tabs.historial']}" />
+	</h:outputLink> 
+	<h:outputLink class="activado tabObs" value="javascript:accionObservaciones ();">
+		<h:outputText value="#{msg['com.ibm.bbva.common.tabs.observaciones']}" />
+	</h:outputLink> 
+	<h:outputLink class="activado tabLog" value="javascript:accionLog ();" id="descPerfilTabs" style="display: none;">
+		<h:outputText value="#{msg['com.ibm.bbva.common.tabs.log']}" />
+	</h:outputLink>
+</div>
+
+</ui:composition>

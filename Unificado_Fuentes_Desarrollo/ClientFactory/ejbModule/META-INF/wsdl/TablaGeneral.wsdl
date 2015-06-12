@@ -1,0 +1,707 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions targetNamespace="http://service.general.bbva.com" xmlns:impl="http://service.general.bbva.com" xmlns:intf="http://service.general.bbva.com" xmlns:tns2="http://entities.general.bbva.com" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <schema targetNamespace="http://service.general.bbva.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://entities.general.bbva.com"/>
+   <element name="getOficinasResponse">
+    <complexType>
+     <sequence>
+      <element name="getOficinasReturn" nillable="true" type="impl:ArrayOf_tns2_nillable_Oficina"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getCentroCostosPorTerritorio">
+    <complexType>
+     <sequence>
+      <element name="codTerritorio" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getCentroCostosPorTerritorioResponse">
+    <complexType>
+     <sequence>
+      <element name="getCentroCostosPorTerritorioReturn" nillable="true" type="impl:ArrayOf_xsd_nillable_string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getProductoListado">
+    <complexType>
+     <sequence>
+      <element name="productoId" nillable="true" type="xsd:string"/>
+      <element name="subProductoId" nillable="true" type="xsd:string"/>
+      <element name="productoNombre" nillable="true" type="xsd:string"/>
+      <element name="subProductoNombre" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getProductoListadoResponse">
+    <complexType>
+     <sequence>
+      <element name="getProductoListadoReturn" nillable="true" type="impl:ArrayOf_tns2_nillable_Producto"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTerritorio">
+    <complexType>
+     <sequence>
+      <element name="codOficina" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTerritorioResponse">
+    <complexType>
+     <sequence>
+      <element name="getTerritorioReturn" nillable="true" type="tns2:Territorio"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getProvinciaListado">
+    <complexType>
+     <sequence/>
+    </complexType>
+   </element>
+   <element name="getProvinciaListadoResponse">
+    <complexType>
+     <sequence>
+      <element name="getProvinciaListadoReturn" nillable="true" type="impl:ArrayOf_tns2_nillable_Ubigeo"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getCentroSuperior">
+    <complexType>
+     <sequence>
+      <element name="codigoOficina" nillable="true" type="xsd:string"/>
+      <element name="codigoAgrupacion" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getCentroSuperiorResponse">
+    <complexType>
+     <sequence>
+      <element name="getCentroSuperiorReturn" nillable="true" type="impl:ArrayOf_tns2_nillable_CentroSuperior"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getDistritoListado">
+    <complexType>
+     <sequence/>
+    </complexType>
+   </element>
+   <element name="getDistritoListadoResponse">
+    <complexType>
+     <sequence>
+      <element name="getDistritoListadoReturn" nillable="true" type="impl:ArrayOf_tns2_nillable_Ubigeo"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getCentroCosto">
+    <complexType>
+     <sequence>
+      <element name="codOficina" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getCentroCostoResponse">
+    <complexType>
+     <sequence>
+      <element name="getCentroCostoReturn" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getProvincia">
+    <complexType>
+     <sequence>
+      <element name="IDUbigeo" nillable="true" type="xsd:string"/>
+      <element name="descripcion" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getProvinciaResponse">
+    <complexType>
+     <sequence>
+      <element name="getProvinciaReturn" nillable="true" type="impl:ArrayOf_tns2_nillable_Ubigeo"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getFeriadoListado">
+    <complexType>
+     <sequence/>
+    </complexType>
+   </element>
+   <element name="getFeriadoListadoResponse">
+    <complexType>
+     <sequence>
+      <element name="getFeriadoListadoReturn" nillable="true" type="impl:ArrayOf_tns2_nillable_Feriado"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getCentroListado">
+    <complexType>
+     <sequence>
+      <element name="codigoOficina" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getCentroListadoResponse">
+    <complexType>
+     <sequence>
+      <element name="getCentroListadoReturn" nillable="true" type="impl:ArrayOf_tns2_nillable_Centro"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getProducto">
+    <complexType>
+     <sequence>
+      <element name="productoId" nillable="true" type="xsd:string"/>
+      <element name="subProductoId" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getProductoResponse">
+    <complexType>
+     <sequence>
+      <element name="getProductoReturn" nillable="true" type="tns2:Producto"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTerritorioListado">
+    <complexType>
+     <sequence/>
+    </complexType>
+   </element>
+   <element name="getTerritorioListadoResponse">
+    <complexType>
+     <sequence>
+      <element name="getTerritorioListadoReturn" nillable="true" type="impl:ArrayOf_tns2_nillable_Territorio"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getDepartamentoListado">
+    <complexType>
+     <sequence/>
+    </complexType>
+   </element>
+   <element name="getDepartamentoListadoResponse">
+    <complexType>
+     <sequence>
+      <element name="getDepartamentoListadoReturn" nillable="true" type="impl:ArrayOf_tns2_nillable_Ubigeo"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getDepartamento">
+    <complexType>
+     <sequence>
+      <element name="descripcion" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getDepartamentoResponse">
+    <complexType>
+     <sequence>
+      <element name="getDepartamentoReturn" nillable="true" type="impl:ArrayOf_tns2_nillable_Ubigeo"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getDistrito">
+    <complexType>
+     <sequence>
+      <element name="IDUbigeo" nillable="true" type="xsd:string"/>
+      <element name="descripcion" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getDistritoResponse">
+    <complexType>
+     <sequence>
+      <element name="getDistritoReturn" nillable="true" type="impl:ArrayOf_tns2_nillable_Ubigeo"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTipoCambio">
+    <complexType>
+     <sequence>
+      <element name="fecha" nillable="true" type="xsd:string"/>
+      <element name="tipo" nillable="true" type="xsd:string"/>
+      <element name="divisa" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTipoCambioResponse">
+    <complexType>
+     <sequence>
+      <element name="getTipoCambioReturn" nillable="true" type="tns2:Tipo_Cambio"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getOficinas">
+    <complexType>
+     <sequence>
+      <element name="codOficina" nillable="true" type="xsd:string"/>
+      <element name="descOficina" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <complexType name="ArrayOf_tns2_nillable_Oficina">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="Oficina" nillable="true" type="tns2:Oficina"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOf_xsd_nillable_string">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="string" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOf_tns2_nillable_Producto">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="Producto" nillable="true" type="tns2:Producto"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOf_tns2_nillable_Ubigeo">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="Ubigeo" nillable="true" type="tns2:Ubigeo"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOf_tns2_nillable_CentroSuperior">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="CentroSuperior" nillable="true" type="tns2:CentroSuperior"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOf_tns2_nillable_Feriado">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="Feriado" nillable="true" type="tns2:Feriado"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOf_tns2_nillable_Centro">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="Centro" nillable="true" type="tns2:Centro"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOf_tns2_nillable_Territorio">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="Territorio" nillable="true" type="tns2:Territorio"/>
+    </sequence>
+   </complexType>
+  </schema>
+    <schema targetNamespace="http://entities.general.bbva.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <complexType name="Oficina">
+    <sequence>
+     <element name="nombre" nillable="true" type="xsd:string"/>
+     <element name="estado" nillable="true" type="xsd:string"/>
+     <element name="departamento" nillable="true" type="tns2:Ubigeo"/>
+     <element name="provincia" nillable="true" type="tns2:Ubigeo"/>
+     <element name="distrito" nillable="true" type="tns2:Ubigeo"/>
+     <element name="territorio" nillable="true" type="tns2:Territorio"/>
+     <element name="direccion" nillable="true" type="xsd:string"/>
+     <element name="codEstado" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="Ubigeo">
+    <sequence>
+     <element name="IDUbigeo" nillable="true" type="xsd:string"/>
+     <element name="descripcion" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="Territorio">
+    <sequence>
+     <element name="codigoTerritorio" nillable="true" type="xsd:string"/>
+     <element name="descripcionTerritorio" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="Producto">
+    <sequence>
+     <element name="productoId" nillable="true" type="xsd:string"/>
+     <element name="subProductoId" nillable="true" type="xsd:string"/>
+     <element name="productoNombre" nillable="true" type="xsd:string"/>
+     <element name="subProductoNombre" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="CentroSuperior">
+    <sequence>
+     <element name="codigoCentroSuperior" nillable="true" type="xsd:string"/>
+     <element name="codigoAgrupacion" nillable="true" type="xsd:string"/>
+     <element name="codigoNivel" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="Feriado">
+    <sequence>
+     <element name="fecha" nillable="true" type="xsd:dateTime"/>
+     <element name="descripcion" nillable="true" type="xsd:string"/>
+     <element name="indicador" nillable="true" type="xsd:string"/>
+     <element name="ubigeo" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="Centro">
+    <sequence>
+     <element name="codigoOficina" nillable="true" type="xsd:string"/>
+     <element name="nombre" nillable="true" type="xsd:string"/>
+     <element name="oficinaBaja" nillable="true" type="xsd:boolean"/>
+     <element name="departamento" nillable="true" type="tns2:Ubigeo"/>
+     <element name="provincia" nillable="true" type="tns2:Ubigeo"/>
+     <element name="distrito" nillable="true" type="tns2:Ubigeo"/>
+     <element name="territorio" nillable="true" type="tns2:Territorio"/>
+     <element name="tipoVia" nillable="true" type="xsd:string"/>
+     <element name="nombreVia" nillable="true" type="xsd:string"/>
+     <element name="numeroInterior" nillable="true" type="xsd:string"/>
+     <element name="numeroExterior" nillable="true" type="xsd:string"/>
+     <element name="tipZona" nillable="true" type="xsd:string"/>
+     <element name="nombreZona" nillable="true" type="xsd:string"/>
+     <element name="prefijoTelefono" nillable="true" type="xsd:string"/>
+     <element name="telefono1" nillable="true" type="xsd:string"/>
+     <element name="telefono2" nillable="true" type="xsd:string"/>
+     <element name="numeroFax" nillable="true" type="xsd:string"/>
+     <element name="fechaApertura" nillable="true" type="xsd:dateTime"/>
+     <element name="fechaBaja" nillable="true" type="xsd:dateTime"/>
+     <element name="fechaAltaCentro" nillable="true" type="xsd:dateTime"/>
+     <element name="tipoOficina" nillable="true" type="xsd:string"/>
+     <element name="tipoOficinaCentro" nillable="true" type="xsd:string"/>
+     <element name="centroSuperiores" nillable="true" type="tns2:ArrayOfCentroSuperior"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOfCentroSuperior">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="CentroSuperior" nillable="true" type="tns2:CentroSuperior"/>
+    </sequence>
+   </complexType>
+   <complexType name="Tipo_Cambio">
+    <sequence>
+     <element name="tcMin" nillable="true" type="xsd:string"/>
+     <element name="tcMax" nillable="true" type="xsd:string"/>
+     <element name="tcPromedio" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+  </wsdl:types>
+  <wsdl:message name="getFeriadoListadoRequest">
+    <wsdl:part element="intf:getFeriadoListado" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getProvinciaResponse">
+    <wsdl:part element="intf:getProvinciaResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getProductoListadoResponse">
+    <wsdl:part element="intf:getProductoListadoResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getTerritorioResponse">
+    <wsdl:part element="intf:getTerritorioResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getProvinciaRequest">
+    <wsdl:part element="intf:getProvincia" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getTerritorioListadoRequest">
+    <wsdl:part element="intf:getTerritorioListado" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getCentroListadoRequest">
+    <wsdl:part element="intf:getCentroListado" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getDistritoListadoResponse">
+    <wsdl:part element="intf:getDistritoListadoResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getOficinasRequest">
+    <wsdl:part element="intf:getOficinas" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getDepartamentoRequest">
+    <wsdl:part element="intf:getDepartamento" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getProvinciaListadoRequest">
+    <wsdl:part element="intf:getProvinciaListado" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getCentroSuperiorResponse">
+    <wsdl:part element="intf:getCentroSuperiorResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getTipoCambioResponse">
+    <wsdl:part element="intf:getTipoCambioResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getCentroCostosPorTerritorioResponse">
+    <wsdl:part element="intf:getCentroCostosPorTerritorioResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getProductoListadoRequest">
+    <wsdl:part element="intf:getProductoListado" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getDepartamentoResponse">
+    <wsdl:part element="intf:getDepartamentoResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getDepartamentoListadoRequest">
+    <wsdl:part element="intf:getDepartamentoListado" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getProductoRequest">
+    <wsdl:part element="intf:getProducto" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getDistritoResponse">
+    <wsdl:part element="intf:getDistritoResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getCentroSuperiorRequest">
+    <wsdl:part element="intf:getCentroSuperior" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getTerritorioListadoResponse">
+    <wsdl:part element="intf:getTerritorioListadoResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getCentroCostosPorTerritorioRequest">
+    <wsdl:part element="intf:getCentroCostosPorTerritorio" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getDepartamentoListadoResponse">
+    <wsdl:part element="intf:getDepartamentoListadoResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getProductoResponse">
+    <wsdl:part element="intf:getProductoResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getProvinciaListadoResponse">
+    <wsdl:part element="intf:getProvinciaListadoResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getOficinasResponse">
+    <wsdl:part element="intf:getOficinasResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getTipoCambioRequest">
+    <wsdl:part element="intf:getTipoCambio" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getFeriadoListadoResponse">
+    <wsdl:part element="intf:getFeriadoListadoResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getCentroCostoResponse">
+    <wsdl:part element="intf:getCentroCostoResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getDistritoRequest">
+    <wsdl:part element="intf:getDistrito" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getCentroListadoResponse">
+    <wsdl:part element="intf:getCentroListadoResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getTerritorioRequest">
+    <wsdl:part element="intf:getTerritorio" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getDistritoListadoRequest">
+    <wsdl:part element="intf:getDistritoListado" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getCentroCostoRequest">
+    <wsdl:part element="intf:getCentroCosto" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="TablaGeneral">
+    <wsdl:operation name="getOficinas">
+      <wsdl:input message="intf:getOficinasRequest" name="getOficinasRequest"/>
+      <wsdl:output message="intf:getOficinasResponse" name="getOficinasResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getCentroCostosPorTerritorio">
+      <wsdl:input message="intf:getCentroCostosPorTerritorioRequest" name="getCentroCostosPorTerritorioRequest"/>
+      <wsdl:output message="intf:getCentroCostosPorTerritorioResponse" name="getCentroCostosPorTerritorioResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getProductoListado">
+      <wsdl:input message="intf:getProductoListadoRequest" name="getProductoListadoRequest"/>
+      <wsdl:output message="intf:getProductoListadoResponse" name="getProductoListadoResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getTerritorio">
+      <wsdl:input message="intf:getTerritorioRequest" name="getTerritorioRequest"/>
+      <wsdl:output message="intf:getTerritorioResponse" name="getTerritorioResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getProvinciaListado">
+      <wsdl:input message="intf:getProvinciaListadoRequest" name="getProvinciaListadoRequest"/>
+      <wsdl:output message="intf:getProvinciaListadoResponse" name="getProvinciaListadoResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getCentroSuperior">
+      <wsdl:input message="intf:getCentroSuperiorRequest" name="getCentroSuperiorRequest"/>
+      <wsdl:output message="intf:getCentroSuperiorResponse" name="getCentroSuperiorResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getDistritoListado">
+      <wsdl:input message="intf:getDistritoListadoRequest" name="getDistritoListadoRequest"/>
+      <wsdl:output message="intf:getDistritoListadoResponse" name="getDistritoListadoResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getCentroCosto">
+      <wsdl:input message="intf:getCentroCostoRequest" name="getCentroCostoRequest"/>
+      <wsdl:output message="intf:getCentroCostoResponse" name="getCentroCostoResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getProvincia">
+      <wsdl:input message="intf:getProvinciaRequest" name="getProvinciaRequest"/>
+      <wsdl:output message="intf:getProvinciaResponse" name="getProvinciaResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getFeriadoListado">
+      <wsdl:input message="intf:getFeriadoListadoRequest" name="getFeriadoListadoRequest"/>
+      <wsdl:output message="intf:getFeriadoListadoResponse" name="getFeriadoListadoResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getCentroListado">
+      <wsdl:input message="intf:getCentroListadoRequest" name="getCentroListadoRequest"/>
+      <wsdl:output message="intf:getCentroListadoResponse" name="getCentroListadoResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getProducto">
+      <wsdl:input message="intf:getProductoRequest" name="getProductoRequest"/>
+      <wsdl:output message="intf:getProductoResponse" name="getProductoResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getTerritorioListado">
+      <wsdl:input message="intf:getTerritorioListadoRequest" name="getTerritorioListadoRequest"/>
+      <wsdl:output message="intf:getTerritorioListadoResponse" name="getTerritorioListadoResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getDepartamentoListado">
+      <wsdl:input message="intf:getDepartamentoListadoRequest" name="getDepartamentoListadoRequest"/>
+      <wsdl:output message="intf:getDepartamentoListadoResponse" name="getDepartamentoListadoResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getDepartamento">
+      <wsdl:input message="intf:getDepartamentoRequest" name="getDepartamentoRequest"/>
+      <wsdl:output message="intf:getDepartamentoResponse" name="getDepartamentoResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getDistrito">
+      <wsdl:input message="intf:getDistritoRequest" name="getDistritoRequest"/>
+      <wsdl:output message="intf:getDistritoResponse" name="getDistritoResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getTipoCambio">
+      <wsdl:input message="intf:getTipoCambioRequest" name="getTipoCambioRequest"/>
+      <wsdl:output message="intf:getTipoCambioResponse" name="getTipoCambioResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TablaGeneralSoapBinding" type="intf:TablaGeneral">
+<wsaw:UsingAddressing wsdl:required="false"/>
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getOficinas">
+      <wsdlsoap:operation soapAction="getOficinas"/>
+      <wsdl:input name="getOficinasRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getOficinasResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCentroCostosPorTerritorio">
+      <wsdlsoap:operation soapAction="getCentroCostosPorTerritorio"/>
+      <wsdl:input name="getCentroCostosPorTerritorioRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getCentroCostosPorTerritorioResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductoListado">
+      <wsdlsoap:operation soapAction="getProductoListado"/>
+      <wsdl:input name="getProductoListadoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getProductoListadoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTerritorio">
+      <wsdlsoap:operation soapAction="getTerritorio"/>
+      <wsdl:input name="getTerritorioRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getTerritorioResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProvinciaListado">
+      <wsdlsoap:operation soapAction="getProvinciaListado"/>
+      <wsdl:input name="getProvinciaListadoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getProvinciaListadoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCentroSuperior">
+      <wsdlsoap:operation soapAction="getCentroSuperior"/>
+      <wsdl:input name="getCentroSuperiorRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getCentroSuperiorResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDistritoListado">
+      <wsdlsoap:operation soapAction="getDistritoListado"/>
+      <wsdl:input name="getDistritoListadoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDistritoListadoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCentroCosto">
+      <wsdlsoap:operation soapAction="getCentroCosto"/>
+      <wsdl:input name="getCentroCostoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getCentroCostoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProvincia">
+      <wsdlsoap:operation soapAction="getProvincia"/>
+      <wsdl:input name="getProvinciaRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getProvinciaResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getFeriadoListado">
+      <wsdlsoap:operation soapAction="getFeriadoListado"/>
+      <wsdl:input name="getFeriadoListadoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getFeriadoListadoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCentroListado">
+      <wsdlsoap:operation soapAction="getCentroListado"/>
+      <wsdl:input name="getCentroListadoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getCentroListadoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProducto">
+      <wsdlsoap:operation soapAction="getProducto"/>
+      <wsdl:input name="getProductoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getProductoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTerritorioListado">
+      <wsdlsoap:operation soapAction="getTerritorioListado"/>
+      <wsdl:input name="getTerritorioListadoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getTerritorioListadoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDepartamentoListado">
+      <wsdlsoap:operation soapAction="getDepartamentoListado"/>
+      <wsdl:input name="getDepartamentoListadoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDepartamentoListadoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDepartamento">
+      <wsdlsoap:operation soapAction="getDepartamento"/>
+      <wsdl:input name="getDepartamentoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDepartamentoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDistrito">
+      <wsdlsoap:operation soapAction="getDistrito"/>
+      <wsdl:input name="getDistritoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDistritoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTipoCambio">
+      <wsdlsoap:operation soapAction="getTipoCambio"/>
+      <wsdl:input name="getTipoCambioRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getTipoCambioResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TablaGeneralService">
+    <wsdl:port binding="intf:TablaGeneralSoapBinding" name="TablaGeneral">
+      <wsdlsoap:address location="http://118.180.36.123:80/general/services/TablaGeneral"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

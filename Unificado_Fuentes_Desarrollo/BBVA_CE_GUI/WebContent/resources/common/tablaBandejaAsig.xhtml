@@ -1,0 +1,465 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg" />
+
+ <script type="text/javascript"> 
+     /* <![CDATA[ */
+	$(document).ready(function(){
+		
+		eventoMenu();
+	
+		var idDblClick = $("input:hidden").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:idDblClick$/);
+			        });
+		$(".dataTableEx tbody:first tr").mouseover(function () {
+			$(this).addClass("sombraFila");
+			$(this).css('cursor', 'pointer');
+		});
+		$(".dataTableEx tbody:first tr").mouseout(function () {
+        	$(this).removeClass("sombraFila");
+        	$(this).css('cursor', 'default');
+        });
+		$(".dataTableEx tbody:first tr").click(function(event){
+			// "event.target" es el elemento que recibió click y "this" es la fila (tr).
+			if ($(event.target).attr("class") == "checkReasignar") {
+				$(this).children("td").children("a")[1].onclick();
+			} else {
+				$(this).children("td").children("a")[0].onclick();
+			}
+			/* if ($(idDblClick).val()=="true") {
+				$(this).children("td").children("a")[0].onclick();
+			} */
+		});
+		/* $(".botonReasignar").click(function(){
+		    var index = $(".botonReasignar").index(this);
+		    var rol = $("#frmBandejaReasigTareas\\:tablaBandejaAsig\\:"+index+"\\:idRol").text();
+
+			for (i=0; i<$(".dataTableEx tr").length; i++) {
+			    var rolfilas = $("#frmBandejaReasigTareas\\:tablaBandejaAsig\\:"+i+"\\:idRol").text();
+			    var check = $("#frmBandejaReasigTareas\\:tablaBandejaAsig\\:"+i+"\\:idSelect").is(":checked");
+			    if (check) {
+			      if (rol != rolfilas) {
+			          $("#frmBandejaReasigTareas\\:tablaBandejaAsig\\:"+index+"\\:idSelect").attr('checked', false);
+			          break;
+			      }
+			    }
+			}
+		});
+		$(".botonRetraer").click(function(event){
+		     event.stopPropagation();
+		     var index = $(".botonRetraer").index(this);
+			$(".linkRetraer").parent().children("a")[index].onclick();
+		}); */
+	});
+     
+	var docsObs = "";
+	var idcmObs = "";
+	function checkObsClick(check, usr, selecc, exp) {//check, usr, seleccio, exp
+		
+		var idcmObs = $("#frmBandejaReasigTareas\\:idExpSelcc").val();
+		var chkObs = $("input").filter(function() {
+	        	var txtIds = $(this).attr("name");
+	        	return txtIds.match(/^.*\:idSelect$/);
+	        });
+	        
+	   
+	    if(check.checked){
+	    	idcmObs = idcmObs + exp + ',';
+	    }
+	    else{
+		    if(idcmObs != null && idcmObs != "undefined" && idcmObs != ""){
+				idcmObs = idcmObs.replace(exp + ',', '');
+		    }
+		}
+		
+		if(idcmObs != null && idcmObs != "undefined" && idcmObs != "" && idcmObs.lenght > 1){
+			document.getElementById('frmBandejaReasigTareas:asigForm').disabled = false;
+    		idcmObs = idcmObs.substring(0, idcmObs.lenght - 1);
+		}else
+			document.getElementById('frmBandejaReasigTareas:asigForm').disabled = true;
+		
+		
+		$("#frmBandejaReasigTareas\\:idExpSelcc").val(idcmObs); 
+		$("#frmBandejaReasigTareas\\:idActionCheck").val('1'); 
+
+	}     
+		
+     /* ]]> */
+    </script>
+    
+
+<h:inputHidden id="idDblClick" value="#{tablaBandejaAsig.ejecDblClick}"/>
+<h:inputHidden id="idExpSelcc" value="#{tablaBandejaAsig.cadExpSelecc}"/>
+<h:inputHidden id="idActionCheck" value="#{tablaBandejaAsig.actionCheck}"/>
+
+
+<div id="divBloque4_2" class="grilla">
+	<h:panelGroup id="panelTablaBp">
+		<h:dataTable  border="1" cellpadding="0" cellspacing="0" 
+			rendered="true" id="tablaBandejaAsig"
+			value="#{tablaBandejaAsig.listTabla}" var="item"
+			styleClass="dataTableEx tablesorter" headerClass="headerClass"
+			footerClass="footerClass" rows="#{tablaBandejaPend.numeroRegistro}" binding="#{tablaBandejaAsig.dataTable}" >
+			   
+            <h:column style="display:none;">
+               <h:commandLink id="idSeleccionFila" immediate="false" value="sel"
+					action="#{tablaBandejaAsig.seleccionaFila}" style="display:none;">
+					<f:param value="#{item.codigo}" name="codigo" />
+					<f:param value="#{item.taskID}" name="taskID" />
+					<f:param value="#{item.nombreNavegacionWeb}" name="nombreNavegacionWeb" />
+					<f:param value="#{item.fechaActivado}" name="activado"/>
+				</h:commandLink>
+				<h:commandLink id="idSeleccionCheck" immediate="false" value="sel" style="display:none;">
+					<f:ajax event="click" render=":frmBandejaReasigTareas:idAsignarUsuario frmBandejaReasigTareas:asigForm" execute="@form" listener="#{tablaBandejaAsig.checkReasignar}"/>
+				</h:commandLink>
+		     </h:column>	     		     	     
+			 	
+            <h:column rendered="#{tablaBandejaAsig.renderedRa}"> 
+			
+                <f:facet name="header">
+					<h:selectBooleanCheckbox id="idSelectAllExp" value="#{tablaBandejaAsig.seleccionarTodos}">
+						<f:ajax event="click" onevent="myFuncion" render="frmBandejaReasigTareas" execute="@form" listener="#{tablaBandejaAsig.seleccionarExpedientes}"/>
+					</h:selectBooleanCheckbox>
+				</f:facet>				
+				
+			<h:selectBooleanCheckbox id="idSelect" value="#{item.seleccion}" styleClass="checkReasignar" 
+					disabled="#{tablaBandejaAsig.seleccionado}" rendered="true" >
+            	 <!-- 
+            		<f:ajax event="change" render="frmBandejaReasigTareas:idAsignarUsuario frmBandejaReasigTareas:asigForm" execute="@form"
+				           listener="#{tablaBandejaAsig.cargaUsuariosAsignar}"/>
+					<f:param value="#{item.codigoUsuarioActual}" name="codigoUsuarioActual" />
+					<f:param value="#{item.seleccion}" name="seleccion" />            	 
+            	  -->
+
+            	 
+				</h:selectBooleanCheckbox>
+							
+			</h:column>
+            
+			<h:column nowrap="true" align="center" width="10%">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('alerta')}">
+						<f:attribute name="sortField" value="alerta" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.alerta']}"></h:outputText>
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('alerta')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:graphicImage value="#{item.urlColor}"/>
+			</h:column>
+			<h:column style="white-space : normal ; word-wrap: break-word; " align="center" nowrap="true" width="75px">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('fechaRegistro')}">
+						<f:attribute name="sortField" value="fechaRegistro" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.fechaRegistro']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('fechaRegistro')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.fechaActivado}"></h:outputText>
+			</h:column>			
+			<h:column nowrap="true" align="center" width="6%">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('codigo')}">
+						<f:attribute name="sortField" value="codigo" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.codigo']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('codigo')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.codigo}"></h:outputText>
+			</h:column>
+			<h:column style="white-space : normal ; word-wrap: break-word; " align="center" nowrap="true" width="65px">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('estado')}">
+						<f:attribute name="sortField" value="estado" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.estado']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('estado')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.estado}"></h:outputText>
+			</h:column>
+			<h:column style="white-space : normal ; word-wrap: break-word; " nowrap="true" width="93px" rendered="#{tablaBandejaAsig.renderedRol}">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('rol')}">
+						<f:attribute name="sortField" value="rol" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.rol']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('rol')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText id="idRol" value="#{item.perfilUsuarioActual}"></h:outputText>
+			</h:column>
+			 
+			<h:column style="white-space : normal ; word-wrap: break-word; " align="center" nowrap="true" width="60px" >
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('usuario')}">
+						<f:attribute name="sortField" value="usuario" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.registro']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('usuario')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.codigoUsuarioActual}"></h:outputText>
+			</h:column>			
+		
+			<h:column style="white-space : normal ; word-wrap: break-word; " nowrap="true" width="100px" >
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('nomUsuario')}">
+						<f:attribute name="sortField" value="nomUsuario" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.usuario']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('nomUsuario')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.nombreCompletoUsuarioActual}"></h:outputText>
+			</h:column>
+			
+					
+			<h:column nowrap="true" width="40px" align="center">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('moneda')}">
+						<f:attribute name="sortField" value="moneda" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaPend.moneda']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('moneda')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.moneda}"></h:outputText>
+			</h:column>
+						
+			<h:column style="white-space : normal ; word-wrap: break-word; " nowrap="true" width="70px" align="center" >
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('lineaCredito')}">
+						<f:attribute name="sortField" value="lineaCredito" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaPend.montoSol']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('lineaCredito')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.lineaCredito}"></h:outputText>
+			</h:column>			
+			<h:column style="white-space : normal ; word-wrap: break-word; " align="center" nowrap="true" width="80px">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('segmento')}">
+						<f:attribute name="sortField" value="segmento" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.segmento']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('segmento')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.segmento}"></h:outputText>
+			</h:column>
+			<h:column style="white-space : normal ; word-wrap: break-word; " align="center" nowrap="true" width="68px">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('tipoOferta')}">
+						<f:attribute name="sortField" value="tipoOferta" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.tipoOferta']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('tipoOferta')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.tipoOferta}"></h:outputText>
+			</h:column>
+			<h:column style="white-space : normal ; word-wrap: break-word; " nowrap="true" width="120px">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('tipoDoi')}">
+						<f:attribute name="sortField" value="tipoDoi" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.tipoDoi']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('tipoDoi')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.cliente.tipoDOI}"></h:outputText>
+			</h:column>
+			<h:column nowrap="true" width="60px">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('doi')}">
+						<f:attribute name="sortField" value="doi" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.doi']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('doi')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.cliente.numeroDOI}"></h:outputText>
+			</h:column>
+			<h:column style="white-space : normal ; word-wrap: break-word; " nowrap="true" width="100px" >
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('oficina')}">
+						<f:attribute name="sortField" value="oficina" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaPend.oficina']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('oficina')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.oficina}"></h:outputText>
+			</h:column>						
+			
+			<h:column style="white-space : normal ; word-wrap: break-word; " nowrap="true" width="100px" >
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('territorio')}">
+						<f:attribute name="sortField" value="territorio" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaPend.territotio']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('territorio')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.territorio}"></h:outputText>
+			</h:column>				
+			<h:column style="white-space : normal ; word-wrap: break-word; " nowrap="true" width="80px">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('apPaterno')}">
+						<f:attribute name="sortField" value="apPaterno" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.apPaterno']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('apPaterno')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.cliente.apPaterno}"></h:outputText>
+			</h:column>
+			<h:column style="white-space : normal ; word-wrap: break-word; " nowrap="true" width="80px">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('apMaterno')}">
+						<f:attribute name="sortField" value="apMaterno" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.apMaterno']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('apMaterno')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.cliente.apMaterno}"></h:outputText>
+			</h:column>
+			<h:column style="white-space : normal ; word-wrap: break-word; " nowrap="true" width="80px">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('nombres')}">
+						<f:attribute name="sortField" value="nombres" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.nombres']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('nombres')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.cliente.nombre}"></h:outputText>
+			</h:column>
+			<h:column style="white-space : normal ; word-wrap: break-word; " nowrap="true" width="150px" >
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('producto')}">
+						<f:attribute name="sortField" value="producto" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.producto']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('producto')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.producto.producto}"></h:outputText>
+			</h:column>
+			<h:column style="white-space : normal ; word-wrap: break-word; " nowrap="true" width="180px" >
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('subProducto')}">
+						<f:attribute name="sortField" value="subProducto" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.subProducto']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('subProducto')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.producto.subProducto}"></h:outputText>
+			</h:column>
+			<!-- 
+			<h:column nowrap="true" align="center" width="15%" rendered="#{tablaBandejaAsig.renderedMon}">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('moneda')}">
+						<f:attribute name="sortField" value="moneda" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.moneda']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('moneda')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.moneda}"></h:outputText>
+			</h:column>			
+			 -->
+
+			<h:column nowrap="true" align="center" width="15%">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('estadoTarjeta')}">
+						<f:attribute name="sortField" value="estadoTarjeta" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.estadoTarjeta']}"/>
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('estadoTarjeta')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.estadoTarjeta}" rendered="#{item.renderEstadoTarea}"></h:outputText>
+			</h:column>
+			<h:column nowrap="true" align="center" width="20%">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('estadoArchivos')}">
+						<f:attribute name="sortField" value="estadoArchivos" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.estadoArchivos']}"/>
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('estadoArchivos')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.errorArchivos']}" rendered="#{item.tarea28}"></h:outputText>
+			</h:column>
+			<h:column nowrap="true" align="center" width="20%" rendered="#{tablaBandejaAsig.renderedDevoluciones}">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('devoluciones')}">
+						<f:attribute name="sortField" value="devoluciones" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.devoluciones']}"/>
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaAsig.obtenerEstiloColumnaImg('devoluciones')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.nroDevoluciones}"></h:outputText>
+			</h:column>
+			<!-- 
+			<f:facet name="footer">
+				<h:panelGroup layout="block" style="padding:5px 10px;">
+					<h:commandButton value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.btnPrimero']}"
+						actionListener="#{tablaBandejaAsig.pageFirst}"
+						disabled="#{tablaBandejaAsig.dataTable.first == 0}" />
+					<h:commandButton value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.btnAnterior']}"
+						actionListener="#{tablaBandejaAsig.pagePrevious}"
+						disabled="#{tablaBandejaAsig.dataTable.first == 0}" />
+					<h:panelGroup style="padding: 0px 10px;">
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.pagina']} #{tablaBandejaAsig.currentPage} #{msg['com.ibm.bbva.common.tablaBandejaAsig.de']} #{tablaBandejaAsig.totalPages}" />
+					</h:panelGroup>
+					<h:commandButton value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.btnSiguiente']}"
+						actionListener="#{tablaBandejaAsig.pageNext}"
+						disabled="#{tablaBandejaAsig.dataTable.first + tablaBandejaAsig.dataTable.rows >= tablaBandejaAsig.dataTable.rowCount}" />
+					<h:commandButton value="#{msg['com.ibm.bbva.common.tablaBandejaAsig.btnUltimo']}"
+						actionListener="#{tablaBandejaAsig.pageLast}"
+						disabled="#{tablaBandejaAsig.dataTable.first + tablaBandejaAsig.dataTable.rows >= tablaBandejaAsig.dataTable.rowCount}" />
+				</h:panelGroup>
+			</f:facet>			
+			 -->
+			
+			<f:facet name="footer">
+			
+            <div class="espacios-etiqueta2">
+                <span class="columna" style="width:150px">
+                	<h:panelGroup layout="block" style="padding:5px 10px;">
+                   		<h:outputText value="#{tablaBandejaAsig.numRegistros}" styleClass="etiqueta"/>
+                   	</h:panelGroup>	
+                </span>
+                <span class="columna" style="width:150px">			
+					<h:panelGroup layout="block" style="padding:5px 10px;">
+						<h:commandButton value="#{msg['com.ibm.bbva.common.tablaBandejaPend.btnPrimero']}"
+							actionListener="#{tablaBandejaAsig.pageFirst}"
+							disabled="#{tablaBandejaAsig.dataTable.first == 0}" />
+						<h:commandButton value="#{msg['com.ibm.bbva.common.tablaBandejaPend.btnAnterior']}"
+							actionListener="#{tablaBandejaAsig.pagePrevious}"
+							disabled="#{tablaBandejaAsig.dataTable.first == 0}" />
+						<h:panelGroup style="padding: 0px 10px;">
+							<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaPend.pagina']} #{tablaBandejaAsig.currentPage} #{msg['com.ibm.bbva.common.tablaBandejaPend.de']} #{tablaBandejaAsig.totalPages}" />
+						</h:panelGroup>
+						<h:commandButton value="#{msg['com.ibm.bbva.common.tablaBandejaPend.btnSiguiente']}"
+							actionListener="#{tablaBandejaAsig.pageNext}"
+							disabled="#{tablaBandejaAsig.dataTable.first + tablaBandejaAsig.dataTable.rows >= tablaBandejaAsig.dataTable.rowCount}" />
+						<h:commandButton value="#{msg['com.ibm.bbva.common.tablaBandejaPend.btnUltimo']}"
+							actionListener="#{tablaBandejaAsig.pageLast}"
+							disabled="#{tablaBandejaAsig.dataTable.first + tablaBandejaAsig.dataTable.rows >= tablaBandejaAsig.dataTable.rowCount}" />
+					 
+					  <h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaPend.lblRegistros']}:" styleClass="etiqueta"/>
+						<h:selectOneMenu value="#{tablaBandejaAsig.numeroRegistro}" required="true"
+						 	 onchange="submit()"
+							 valueChangeListener="#{tablaBandejaAsig.cambiarPaginacion}" id="idPaginacion" 
+							 styleClass="valor-componente" immediate="true">
+					        <f:selectItem id="item2" itemLabel="10" itemValue="10" />
+					        <f:selectItem id="item3" itemLabel="20" itemValue="20" />
+					        <f:selectItem id="item4" itemLabel="30" itemValue="30" />
+					        <f:selectItem id="item5" itemLabel="Todos" itemValue="-1" />					        
+					    </h:selectOneMenu>
+	             
+					</h:panelGroup>
+                </span>                              
+            </div>				
+			</f:facet>
+						
+		</h:dataTable>
+		<h:inputHidden id="codUsuario" name="codUsuario" value="#{tablaBandejaAsig.codUsuario}" class="usuarioSelected"/>
+		<h:inputHidden id="seleccionado" name="seleccionado" value="#{tablaBandejaAsig.seleccionado}" class="selected"/>
+		<h:inputHidden id="codExpediente" name="codExpediente" value="#{tablaBandejaAsig.codExpediente}" class="expedienteSelected"/>
+		<h:inputHidden value="#{tablaBandejaAsig.sortField}" />
+		<h:inputHidden value="#{tablaBandejaAsig.sortAscending}" />
+	</h:panelGroup>
+</div>
+</ui:composition>

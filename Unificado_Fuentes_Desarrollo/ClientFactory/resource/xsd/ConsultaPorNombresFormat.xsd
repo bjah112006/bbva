@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SIR: Sistema Integración Reniec -->
+<xsd:schema attributeFormDefault="unqualified"
+    elementFormDefault="unqualified"
+	targetNamespace="http://pe.grupobbva.com/SIR/ents/body/consultaPorNombres"
+	xmlns:tns="http://pe.grupobbva.com/SIR/ents/body/consultaPorNombres" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	
+    <xsd:element name="consultaPorNombresRequest" type="tns:ConsultaPorNombresRequest" />
+	<xsd:element name="consultaPorNombresResponse" type="tns:ConsultaPorNombresResponse" />	
+	<xsd:complexType name="ConsultaPorNombresRequest">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="centroCostos" type="xsd:string" />
+			<xsd:element minOccurs="0" name="hostSolicitante" type="xsd:string" />					
+			<xsd:element minOccurs="0" name="tipoAplicacion" type="xsd:string" />
+			<xsd:element minOccurs="0" name="numeroDNISolicitante" type="xsd:string" />
+			<xsd:element minOccurs="0" name="registroCodUsuario" type="xsd:string" />					
+			<xsd:element minOccurs="0" name="numeroCoincidenciasSolicitadas" type="xsd:string" />					
+			<xsd:element minOccurs="0" name="inicioGrupo" type="xsd:string" />					
+			<xsd:element minOccurs="0" name="apellidoPaterno" type="xsd:string" />
+			<xsd:element minOccurs="0" name="apellidoMaterno" type="xsd:string" />
+			<xsd:element minOccurs="0" name="preNombres" type="xsd:string" />					
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="ConsultaPorNombresResponse">
+		<xsd:sequence>
+			<xsd:element name="numTotalCoindicencias" type="xsd:string" minOccurs="0" maxOccurs="1"/>					   		
+			<xsd:element name="listaDatosPersona" type="tns:ListaDatosPersona" minOccurs="0" maxOccurs="1"/>
+    	</xsd:sequence>
+	</xsd:complexType>	
+	
+	<xsd:complexType name="ListaDatosPersona">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" maxOccurs="unbounded" name="datosPersona" type="tns:DatosPersona" />								
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="DatosPersona">
+		<xsd:sequence>			
+			<xsd:element minOccurs="0" name="numeroDNIConsultado" type="xsd:string" />							
+			<xsd:element minOccurs="0" name="caracterVerificacion" type="xsd:string" />							
+			<xsd:element minOccurs="0" name="tipoFichaRegistral" type="xsd:string" />										
+			<xsd:element minOccurs="0" name="apellidoPaterno" type="xsd:string" />										
+			<xsd:element minOccurs="0" name="apellidoMaterno" type="xsd:string" />										
+			<xsd:element minOccurs="0" name="preNombres" type="xsd:string" />										
+			<xsd:element minOccurs="0" name="indDatos" type="xsd:string" />										
+			<xsd:element minOccurs="0" name="indImagen" type="xsd:string" />																			
+		</xsd:sequence>
+	</xsd:complexType>
+								
+</xsd:schema>

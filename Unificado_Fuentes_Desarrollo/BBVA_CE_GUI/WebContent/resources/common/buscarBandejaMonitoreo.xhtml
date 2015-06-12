@@ -1,0 +1,129 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<div class="bloque">
+	<div class="contenido-bloque">
+		<span class="columna" style="width:400px">
+			<div class="campo-espaciado">
+				<h:selectOneRadio value="#{buscarBandejaMonitoreo.tipoBusqueda}" id="tipoBusqueda">
+	   	            <f:selectItem itemValue="3" itemLabel="Content" />
+	   	            <f:selectItem itemValue="2" itemLabel="Process" />
+	   	            <f:selectItem itemValue="1" itemLabel="Log de Errores"/>
+	            </h:selectOneRadio>
+	            <h:message for="tipoBusqueda" errorClass="mensaje-error"/>   
+	    	</div>
+		</span>
+	</div>
+</div>
+
+<div class="bloque">   
+    <div class="contenido-bloque">
+        <span class="columna" style="width:125px">               
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.bandejaMonitoreo.formBandejaMonitoreo.fechaInicio']}:" styleClass="etiqueta"/>                
+            </div> 
+        </span>
+        <span class="columna" style="width:245px">               
+            <div class="campo-espaciado">
+               <h:inputText id="fechaInicio" value="#{buscarBandejaMonitoreo.fechaInicio}" style="width:80px;" styleClass="valor formatoFecha" maxlength="10"
+               		onkeypress="eventoEnter(event);">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+               </h:inputText>
+            </div>
+        </span>        
+        <span class="columna" style="width:125px">               
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.bandejaMonitoreo.formBandejaMonitoreo.fechaFin']}:" styleClass="etiqueta"/>                
+            </div>
+        </span>            
+        <span class="columna" style="width:175px">
+            <div class="campo-espaciado">
+               <h:inputText id="fechaFin" value="#{buscarBandejaMonitoreo.fechaFin}" style="width:80px;" styleClass="valor formatoFecha" maxlength="10"
+               		onkeypress="eventoEnter(event);">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+               </h:inputText>
+            </div>
+        </span>        
+    </div>
+</div>
+
+<div class="bloque">    
+    <div class="contenido-bloque">    
+       <span class="columna" style="width:120px">
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.bandejaMonitoreo.formBandejaMonitoreo.rol']}:" styleClass="etiqueta"/>                              
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.bandejaMonitoreo.formBandejaMonitoreo.tarea']}:" styleClass="etiqueta"/>
+            </div>
+       </span>
+       <span class="columna" style="width:250px">
+            <div class="campo-espaciado">
+                <h:selectOneMenu value="#{buscarBandejaMonitoreo.rolSeleccionado}" required="true"
+            		             style ="width:205px;" styleClass="valor-componente" immediate="true"
+            		             id="idRol" onkeypress="eventoEnter(event);">
+				    <f:selectItems value="#{buscarBandejaMonitoreo.roles}"/>
+                </h:selectOneMenu>      
+                <h:message for="idRol" errorClass="mensaje-error"/>        
+            </div>
+            <div class="campo-espaciado">
+                <h:selectOneMenu value="#{buscarBandejaMonitoreo.tareaSeleccionada}" required="true"
+            		             style ="width:205px;" styleClass="valor-componente" immediate="true"
+            		             id="idTarea" onkeypress="eventoEnter(event);">
+				    <f:selectItems value="#{buscarBandejaMonitoreo.tareas}"/>
+                </h:selectOneMenu>      
+                <h:message for="idTarea" errorClass="mensaje-error"/>        
+            </div>            
+       </span>
+       <span class="columna" style="width:120px;">
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.bandejaMonitoreo.formBandejaMonitoreo.usuario']}:" styleClass="etiqueta"/>                              
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.bandejaMonitoreo.formBandejaMonitoreo.estado']}:" styleClass="etiqueta"/>
+            </div>
+        </span>
+        <span class="columna" style="width:250px;">
+            <div class="campo-espaciado">
+            
+                <h:inputText id="idUsuario" value="#{buscarBandejaMonitoreo.usuarioSeleccionado}" style="width:80px;" styleClass="valor-componente" 
+               		onkeypress="eventoEnter(event);">
+               </h:inputText>
+                
+                <h:message for="idUsuario" errorClass="mensaje-error"/>        
+            </div>
+            <div class="campo-espaciado">
+                <h:selectOneMenu value="#{buscarBandejaMonitoreo.estadoSeleccionado}" required="true"
+            		             style ="width:205px;" styleClass="valor-componente" immediate="true"
+            		             id="idEstado" onkeypress="eventoEnter(event);">
+				    <f:selectItems value="#{buscarBandejaMonitoreo.estados}"/>
+                </h:selectOneMenu>      
+                <h:message for="idEstado" errorClass="mensaje-error"/>        
+            </div>       
+        </span>        
+    </div>
+</div>
+
+<div class="bloque">   
+    <div class="contenido-bloque">
+        <span class="columna" style="width:125px">               
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.bandejaMonitoreo.formBandejaMonitoreo.expediente']}:" styleClass="etiqueta"/>                
+            </div> 
+        </span>
+        <span class="columna" style="width:245px">               
+            <div class="campo-espaciado">
+               <h:inputText id="idExpediente" value="#{buscarBandejaMonitoreo.codigoExpediente}" style="width:80px;" styleClass="valor-componente" 
+               		onkeypress="eventoEnter(event);">
+               </h:inputText>
+            </div>
+        </span>       
+    </div>
+</div>
+
+</ui:composition>

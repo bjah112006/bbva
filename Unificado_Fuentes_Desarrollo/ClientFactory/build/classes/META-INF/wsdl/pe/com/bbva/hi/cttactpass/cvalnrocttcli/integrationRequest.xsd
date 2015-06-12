@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema targetNamespace="http://cttactpass.hi.bbva.com.pe/cvalnrocttcli/" xmlns:Q3="http://cttactpass.hi.bbva.com.pe/cabecera/" xmlns:tns="http://cttactpass.hi.bbva.com.pe/cvalnrocttcli/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="http://cttactpass.hi.bbva.com.pe/cabecera/" schemaLocation="../cabecera/RequestHeader.xsd">
+    </xsd:import>
+        
+    <xsd:complexType name="integrationRequest">
+    	<xsd:sequence>
+    		<xsd:element maxOccurs="1" minOccurs="0" name="requestHeader" type="Q3:RequestHeader"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="tipoDocumento" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="numDocumento" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="numContrato" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="usuario" type="xsd:string"/>
+    	</xsd:sequence>
+    </xsd:complexType>
+  
+    <xsd:element name="integrationRequest" type="tns:integrationRequest">
+  </xsd:element>
+</xsd:schema>

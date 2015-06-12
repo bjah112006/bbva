@@ -1,0 +1,374 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<div class="bloque">
+    <h:inputText style="display:none;" styleClass="claseVerLab" value="#{verificarAprobar2.veriResObs}"></h:inputText>    
+    <script type="text/javascript"> 
+       /* <![CDATA[ */
+        $(document).ready(function(){
+            var verResObs = $(".claseVerLab").val();  
+                                 
+            var chkVl2 = $("input:checkbox").filter(function() {                
+		        var chkIds = $(this).attr("name");		        
+		        return chkIds.match(/^.*\:selectedItemVl2$/);
+		    }); 
+		    var selVl2 = $("select").filter(function() {                
+		        var selIds = $(this).attr("name");		        
+		        return selIds.match(/^.*\:selectVerifLab2$/);
+		    });  
+		    var chkVl3 = $("input:checkbox").filter(function() {                
+		        var chkIds = $(this).attr("name");		        
+		        return chkIds.match(/^.*\:selectedItemVl3$/);
+		    }); 
+		    var selVl3 = $("select").filter(function() {                
+		        var selIds = $(this).attr("name");		        
+		        return selIds.match(/^.*\:selectVerifLab3$/);
+		    });
+		    
+		    var chkVd2 = $("input:checkbox").filter(function() {                
+		        var chkIds = $(this).attr("name");		        
+		        return chkIds.match(/^.*\:selectedItemVd2$/);
+		    }); 
+		    var selVd2 = $("select").filter(function() {                
+		        var selIds = $(this).attr("name");		        
+		        return selIds.match(/^.*\:selectVerifDom2$/);
+		    });  
+		    var chkVd3 = $("input:checkbox").filter(function() {                
+		        var chkIds = $(this).attr("name");		        
+		        return chkIds.match(/^.*\:selectedItemVd3$/);
+		    }); 
+		    var selVd3 = $("select").filter(function() {                
+		        var selIds = $(this).attr("name");		        
+		        return selIds.match(/^.*\:selectVerifDom3$/);
+		    });
+		    var chkVdps2 = $("input:checkbox").filter(function() {
+		    	var chkIds = $(this).attr("name");
+		    	return chkIds.match(/^.*\:selectedItemVdps2$/);
+		    });
+			var selVdps2 = $("select").filter(function() {
+				var selIds = $(this).attr("name");
+				return selIds.match(/^.*\:selectVerifDps2$/);
+			});
+			var chkVdps3 = $("input:checkbox").filter(function() {
+		    	var chkIds = $(this).attr("name");
+		    	return chkIds.match(/^.*\:selectedItemVdps3$/);
+		    });
+			var selVdps3 = $("select").filter(function() {
+				var selIds = $(this).attr("name");
+				return selIds.match(/^.*\:selectVerifDps3$/);
+			});	    
+
+		    
+		                  
+		    $(".claseSelectV").change(function () {		        
+		       	if ($(this).val() == verResObs) {		       	
+		       	   if ($(this).attr("name").match(/^.*\:selectVerifLab1$/)){
+		       	       $(chkVl2).attr("checked",true);		       	             		  
+		       		   $(chkVl2).removeAttr("disabled");		       		        			       		
+		       	   }
+		       	   if ($(this).attr("name").match(/^.*\:selectVerifLab2$/)){		       	             		  
+		       		   $(chkVl3).removeAttr("disabled");
+		       		   $(chkVl3).attr("checked",true);		       		        			       		
+		       	   }
+
+		       	   if ($(this).attr("name").match(/^.*\:selectVerifDom1$/)){		       	             		  
+		       		   $(chkVd2).removeAttr("disabled");
+		       		   $(chkVd2).attr("checked",true);     			       		
+		       	   }
+		       	   if ($(this).attr("name").match(/^.*\:selectVerifDom2$/)){		       	             		  
+		       		   $(chkVd3).removeAttr("disabled");
+		       		   $(chkVd3).attr("checked",true);     			       		
+		       	   }
+		       	   if ($(this).attr("name").match(/^.*\:selectVerifDps1$/)){
+		       	   	   $(chkVdps2).removeAttr("disabled");
+		       	   	   $(chkVdps2).attr("checked",true);
+		       	   }
+		       	   if ($(this).attr("name").match(/^.*\:selectVerifDps2$/)){
+		       	   	   $(chkVdps3).removeAttr("disabled");
+		       	   	   $(chkVdps3).attr("checked",true);
+		       	   }		       	   		       	   
+		       	}else{
+		       	   if ($(this).attr("name").match(/^.*\:selectVerifLab1$/)){
+		       	       $(chkVl2).attr("checked",false);
+		       	       $(chkVl2).attr("disabled","disabled");
+		       	   }
+		       	   if ($(this).attr("name").match(/^.*\:selectVerifLab2$/)){		       	       		       		   
+		       		   $(chkVl3).attr("checked",false);		       		    
+		       		   $(chkVl3).attr("disabled","disabled");		       		   	    			       		
+		       	   }
+
+		       	   if ($(this).attr("name").match(/^.*\:selectVerifDom1$/)){		       	       		       		   
+		       		   $(chkVd2).attr("checked",false);		       		    
+		       		   $(chkVd2).attr("disabled","disabled");	      			       		
+		       	   }
+		       	   if ($(this).attr("name").match(/^.*\:selectVerifDom2$/)){
+		       	       $(chkVd3).attr("checked",false);
+		       	       $(chkVd3).attr("disabled","disabled");			       		         			       		
+		       	   }
+		       	   if ($(this).attr("name").match(/^.*\:selectVerifDps1$/)){
+		       	   	   $(chkVdps2).attr("checked",false);
+		       	   	   $(chkVdps2).attr("disabled","disabled");
+		       	   }
+		       	   if ($(this).attr("name").match(/^.*\:selectVerifDps2$/)){
+		       	   	   $(chkVdsp3).attr("checked",false);
+		       	   	   $(chkVdsp3).attr("disabled","disabled");
+		       	   }	       	   
+		       	}		        
+	        });         				  
+	    });
+        /* ]]> */	
+    </script>
+    <div class="contenido-bloque">   
+                             
+         <span class="columna" style="width: 784px;">
+                <div class="titulo titulo-espaciado">
+    	            <h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar2.titulo']}:"/>
+                </div>
+                
+                   <div style="width:125px; margin-rigth: 10px;">          
+                       <h:selectBooleanCheckbox value="#{verificarAprobar2.selectedItemZp}"/>
+                       <h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar2.zonaPeligrosa']}" styleClass="etiqueta"/>
+                   </div>
+                                   
+                <span class="columna" style="width:250px; margin-top: -9px;">
+                   <div class="datos-cabecera-muestra">
+                      <div class="titulo titulo-espaciado" style="margin-bottom: -5px;">
+    	                <h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar2.verificacionLaboral']}:"/>
+                      </div>
+                      <div></div>
+                   </div>                                      
+                   <span class="datos-cabecera-muestra">
+	                   <div>
+	                      <span style="width:100px;">          
+	                         <h:selectBooleanCheckbox value="#{verificarAprobar2.selectedItemVl1}" id="selectedItemVl1" readonly="#{verificarAprobar2.habCheckVl1}" disabled="#{verificarAprobar2.habCheckVl1}">
+	                         	<f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{verificarAprobar2.cambiarVerLaboral}"/>
+	                         </h:selectBooleanCheckbox>	
+	                         <span class="columna" style="width:90px">
+	                            <h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar2.verificacionLaboral1']}" styleClass="etiqueta"/>
+	                         </span> 
+	                      </span>                    
+	                      <span class="columna" style="width:130px">                                                        
+	                         <h:selectOneMenu value="#{verificarAprobar2.selectedItemsResultVl1}" required="true"
+	            		                      style ="width:120px;" styleClass="valor-componente claseSelectV"
+	            		                      id="selectVerifLab1" immediate="true"            		                             		                      
+	            		                      readonly="#{verificarAprobar2.habSelVl1}" disabled="#{verificarAprobar2.habSelVl1}">
+					              <f:selectItems value="#{verificarAprobar2.listaResultadoVerificacion}"/>
+	                         </h:selectOneMenu>                              
+	                      </span>
+	                      <h:message for="selectedItemVl1" errorClass="mensaje-error"/>                     
+	                   </div>                    
+                   </span> 
+                   <span class="datos-cabecera-muestra">
+	                   <div>
+	                      <span style="width:100px;">          
+	                         <h:selectBooleanCheckbox value="#{verificarAprobar2.selectedItemVl2}" id="selectedItemVl2" readonly="#{verificarAprobar2.habCheckVl2}" disabled="#{verificarAprobar2.habCheckVl2}">
+	                         	<f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{verificarAprobar2.cambiarVerLaboral}"/>
+	                         </h:selectBooleanCheckbox>
+	                         <span class="columna" style="width:90px">
+	                            <h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar2.verificacionLaboral2']}" styleClass="etiqueta"/>
+	                         </span>   
+	                      </span>                      
+	                      <span class="columna" style="width:130px">                                                        
+	                         <h:selectOneMenu value="#{verificarAprobar2.selectedItemsResultVl2}" required="true"
+	            		                      style ="width:120px;" styleClass="valor-componente claseSelectV" 
+	            		                      id="selectVerifLab2" immediate="true"
+	            		                      readonly="#{verificarAprobar2.habSelVl2}" disabled="#{verificarAprobar2.habSelVl2}">
+					              <f:selectItems value="#{verificarAprobar2.listaResultadoVerificacion}"/>
+	                         </h:selectOneMenu>                              
+	                      </span> 
+	                      <h:message for="selectedItemVl2" errorClass="mensaje-error"/>                    
+	                   </div>
+                   </span> 
+                   <span class="datos-cabecera-muestra">
+	                   <div>
+	                      <span style="width:100px;">          
+	                         <h:selectBooleanCheckbox value="#{verificarAprobar2.selectedItemVl3}" id="selectedItemVl3" readonly="#{verificarAprobar2.habCheckVl3}" disabled="#{verificarAprobar2.habCheckVl3}">
+	                         	<f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{verificarAprobar2.cambiarVerLaboral}"/>
+	                         </h:selectBooleanCheckbox>
+	                         <span class="columna" style="width:90px">
+	                            <h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar2.verificacionLaboral3']}" styleClass="etiqueta"/>
+	                        </span>    
+	                      </span>                      
+	                      <span class="columna" style="width:130px">                                                        
+	                         <h:selectOneMenu value="#{verificarAprobar2.selectedItemsResultVl3}" 
+	            		                      style ="width:120px;" styleClass="valor-componente claseSelectV"
+	            		                      id="selectVerifLab3" 
+	            		                      readonly="#{verificarAprobar2.habSelVl3}" disabled="#{verificarAprobar2.habSelVl3}">
+					              <f:selectItems value="#{verificarAprobar2.listaResultadoVerificacion}"/>
+					              
+					              <f:ajax event="change" render="idBtnVerificacionDom" execute="@form" listener="#{verificarAprobar2.ocultaBotones}"/>
+					              
+	                         </h:selectOneMenu>                              
+	                      </span>   
+	                      <h:message for="selectedItemVl3" errorClass="mensaje-error"/>                    
+	                   </div>
+                   </span>                   
+                </span>
+                
+                <span class="columna" style="width:250px; margin-top: -9px;">
+                   <div class="datos-cabecera-muestra">
+                      <div class="titulo titulo-espaciado" style="margin-bottom: -5px;">
+    	                <h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar2.verificacionDomiciliaria']}:"/>
+                      </div>
+                      <div></div>                                           
+                   </div>                      
+                   <span class="datos-cabecera-muestra">
+	                   <div>
+	                      <span style="width:100px;">          
+	                         <h:selectBooleanCheckbox value="#{verificarAprobar2.selectedItemVd1}" id="selectedItemVd1" readonly="#{verificarAprobar2.habCheckVd1}" disabled="#{verificarAprobar2.habCheckVd1}">
+	                         	<f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{verificarAprobar2.cambiarVerDomiciliaria}"/>
+	                         </h:selectBooleanCheckbox>
+	                         <span class="columna" style="width:90px">
+	                            <h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar2.verificacionDomiciliaria1']}" styleClass="etiqueta"/>
+	                         </span>
+	                      </span>                      
+	                      <span class="columna" style="width:130px">                                                        
+	                         <h:selectOneMenu value="#{verificarAprobar2.selectedItemsResultVd1}" required="true"
+	            		                      style ="width:120px;" styleClass="valor-componente claseSelectV"
+	            		                      id="selectVerifDom1" immediate="true"
+	            		                      readonly="#{verificarAprobar2.habSelVd1}" disabled="#{verificarAprobar2.habSelVd1}">
+					              <f:selectItems value="#{verificarAprobar2.listaResultadoVerificacion}"/>
+	                         </h:selectOneMenu>                              
+	                      </span> 
+	                      <h:message for="selectedItemVd1" errorClass="mensaje-error"/>                   
+	                   </div>                                          
+                   </span> 
+                   <span class="datos-cabecera-muestra">
+	                   <div>
+	                      <span style="width:100px;">          
+	                         <h:selectBooleanCheckbox value="#{verificarAprobar2.selectedItemVd2}" id="selectedItemVd2" readonly="#{verificarAprobar2.habCheckVd2}" disabled="#{verificarAprobar2.habCheckVd2}">
+	                         	<f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{verificarAprobar2.cambiarVerDomiciliaria}"/>
+	                         </h:selectBooleanCheckbox>
+	                         <span class="columna" style="width:90px">
+	                            <h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar2.verificacionDomiciliaria2']}" styleClass="etiqueta"/>
+	                         </span>
+	                      </span>                      
+	                      <span class="columna" style="width:130px">                                                        
+	                         <h:selectOneMenu value="#{verificarAprobar2.selectedItemsResultVd2}" required="true"
+	            		                      style ="width:120px;" styleClass="valor-componente claseSelectV"
+	            		                      id="selectVerifDom2" immediate="true"
+	            		                      readonly="#{verificarAprobar2.habSelVd2}" disabled="#{verificarAprobar2.habSelVd2}">
+					              <f:selectItems value="#{verificarAprobar2.listaResultadoVerificacion}"/>
+	                         </h:selectOneMenu>                              
+	                      </span>  
+	                      <h:message for="selectedItemVd2" errorClass="mensaje-error"/>                    
+	                   </div>
+                   </span> 
+                   <span class="datos-cabecera-muestra">
+                   <div>
+                      <span style="width:100px;">          
+                         <h:selectBooleanCheckbox value="#{verificarAprobar2.selectedItemVd3}" id="selectedItemVd3" readonly="#{verificarAprobar2.habCheckVd3}" disabled="#{verificarAprobar2.habCheckVd3}">
+                         	<f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{verificarAprobar2.cambiarVerDomiciliaria}"/>
+                         </h:selectBooleanCheckbox>
+                         <span class="columna" style="width:90px">
+                         	<h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar2.verificacionDomiciliaria3']}" styleClass="etiqueta"/>
+                         </span>
+                      </span>                      
+                      <span class="columna" style="width:130px">                                                        
+                         <h:selectOneMenu value="#{verificarAprobar2.selectedItemsResultVd3}"
+            		                      style ="width:120px;" styleClass="valor-componente claseSelectV"
+            		                      id="selectVerifDom3"
+            		                      readonly="#{verificarAprobar2.habSelVd3}" disabled="#{verificarAprobar2.habSelVd3}">
+				              <f:selectItems value="#{verificarAprobar2.listaResultadoVerificacion}"/>
+				              
+				              <f:ajax event="change" render="idBtnVerificacionDom" execute="@form" listener="#{verificarAprobar2.ocultaBotones}"/>
+				              
+                         </h:selectOneMenu>                              
+                      </span> 
+                      <h:message for="selectedItemVd3" errorClass="mensaje-error"/>                    
+                   </div>
+                                          
+                   </span>                   
+                </span>
+                
+                <span class="columna" style="width:250px; margin-top: -9px;"> 
+
+                   <div style="#{verificarAprobar2.isProductoPld()==true? '':'display:none;'}">
+	                   <div class="datos-cabecera-muestra">
+	                   		<div class="titulo titulo-espaciado" style="margin-bottom: -5px;">
+	                			<h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar2.verificacionDps']}:" />
+	                		</div>
+	                		<div></div>
+	                   </div>
+	                   <span class="datos-cabecera-muestra">
+		                   <div>
+		                		<span style="width:100px">
+		                			<h:selectBooleanCheckbox value="#{verificarAprobar2.selectedItemVdps1}" id="selectedItemVdps1" readonly="#{verificarAprobar2.habCheckVdps1}" disabled="#{verificarAprobar2.habCheckVdps1}" >
+		                				<f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{verificarAprobar2.cambiarVerDps}"/>
+		                			</h:selectBooleanCheckbox>
+		                			<span class="columna" style="width:90px">
+		                				<h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar2.verificacionDps1']}" styleClass="etiqueta" />	                		 
+									</span>
+		                		</span>
+		                		<span class="columna" style="width: 130px">
+		                			<h:selectOneMenu value="#{verificarAprobar2.selectedItemsResultVdps1}" required="true"
+		                							  style ="width:120px;" styleClass="valor-componente claseSelectV"
+		                							  id="selectVerifDps1" immediate="true"
+		                							  readonly="#{verificarAprobar2.habSelVdps1}" disabled="#{verificarAprobar2.habSelVdps1}">
+		                				<f:selectItems value="#{verificarAprobar2.listaResultadoVerificacion}" >
+		                				</f:selectItems>
+		                			</h:selectOneMenu>
+		                		</span>
+		                		<h:message for="selectedItemVdps1" errorClass="mensaje-error"/>	                   
+		                   </div>
+	                	</span>
+	                   <span class="datos-cabecera-muestra">
+		                   <div>
+		                		<span style="width:100px">
+		                			<h:selectBooleanCheckbox value="#{verificarAprobar2.selectedItemVdps2}" id="selectedItemVdps2" readonly="#{verificarAprobar2.habCheckVdps2}" disabled="#{verificarAprobar2.habCheckVdps2}" >
+		                				<f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{verificarAprobar2.cambiarVerDps}"/>
+		                			</h:selectBooleanCheckbox>
+		                			<span class="columna" style="width:90px">
+		                				<h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar2.verificacionDps2']}" styleClass="etiqueta" />
+		                			</span>		                		 
+		                		</span>
+		                		<span class="columna" style="width: 130px">
+		                			<h:selectOneMenu value="#{verificarAprobar2.selectedItemsResultVdps2}" required="true"
+		                							 style ="width:120px;" styleClass="valor-componente claseSelectV"
+		                							 id="selectVerifDps2" immediate="true"
+		                							 readonly="#{verificarAprobar2.habSelVdps2}" disabled="#{verificarAprobar2.habSelVdps2}">
+		                				<f:selectItems value="#{verificarAprobar2.listaResultadoVerificacion}">
+		                				</f:selectItems>
+		                			</h:selectOneMenu>
+		                		</span>
+		                		<h:message for="selectedItemVdps2" errorClass="mensaje-error"/>	                   
+		                   </div>
+	                	</span>
+	                   <span class="datos-cabecera-muestra">
+	                   <div>
+	                		<span style="width:100px;">
+	                			<h:selectBooleanCheckbox value="#{verificarAprobar2.selectedItemVdps3}" id="selectedItemVdps3" readonly="#{verificarAprobar2.habCheckVdps3}" disabled="#{verificarAprobar2.habCheckVdps3}" >
+	                				<f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{verificarAprobar2.cambiarVerDps}"/>
+	                			</h:selectBooleanCheckbox>
+	                			<span class="columna" style="width:90px">
+	                				<h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar2.verificacionDps3']}" styleClass="etiqueta" />
+	                			</span>	
+	                		</span>
+	                		<span class="columna" style="width: 130px;">
+	                			<h:selectOneMenu value="#{verificarAprobar2.selectedItemsResultVdps3}"
+	                							 style ="width:120px;" styleClass="valor-componente claseSelectV"
+	                							 id="selectVerifDps3"
+	                							 readonly="#{verificarAprobar2.habSelVdps3}" disabled="#{verificarAprobar2.habSelVdps3}">
+	                				<f:selectItems value="#{verificarAprobar2.listaResultadoVerificacion}">
+	                				</f:selectItems>
+	                				
+	                				<f:ajax event="change" render="idBtnVerificacionDom" execute="@form" listener="#{verificarAprobar2.ocultaBotones}"/>
+	                				
+	                			</h:selectOneMenu>
+	                		</span>
+	                		<h:message for="selectedItemVdps3" errorClass="mensaje-error"/>	                   
+	                   </div>
+
+                	</span>
+                   </div>
+                                   
+                </span>
+        </span>
+    </div>
+</div>
+</ui:composition>

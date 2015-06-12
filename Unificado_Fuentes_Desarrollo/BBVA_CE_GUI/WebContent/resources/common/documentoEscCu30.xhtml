@@ -1,0 +1,86 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<h:outputScript library="js" name="scan_fin2.js" target="head"/>
+<script type="text/javascript">
+    /* <![CDATA[ */  
+    var formulario; 
+    var valor;
+    function activarEscaner(form) {
+		var id = form.id;
+		var comando = document.getElementById(id+':comandoSesionCu30').value;
+		var parametros = document.getElementById(id+':parametroSesionCu30').value;
+		return inicializarEscaner(comando, parametros);
+	}
+	
+    function showArchivos(archivos) {
+        var id = formulario.id;        
+		document.getElementById(id+':retornaDocEscAppletCu30').value = archivos ;		
+		if (valor == "ok") {		
+		    document.getElementById(id+':btnClickActDocCu30').click();
+		}
+    }
+    
+    function verificar(form) {
+        var id = form.id;
+        var result= document.appletBrowserCu30.verificarCompleto();
+        document.getElementById(id+':idValidaGuiaEscCu30').value = result;	
+        var valGuia = document.appletBrowserCu30.obtenerGuiaDoc();   
+        document.getElementById(id+':valGuiaDocCu30').value = valGuia;   
+        var ok= document.appletBrowserCu30.existenTransferencias();
+        document.getElementById(id+':existenTransferenciasCu30').value = ok;          
+	}
+    /* ]]> */
+</script>
+<h:inputHidden id="comandoSesionCu30" value="#{documentosEscaneados.comandoSesion}" />
+<h:inputHidden id="parametroSesionCu30" value="#{documentosEscaneados.parametroSesion}"/>
+<h:inputHidden id="retornaDocEscAppletCu30"  value="#{documentosEscaneados.docEscApplet}" />
+<h:inputHidden id="idValidaGuiaEscCu30" value="#{documentosEscaneados.validaGuiaEscaneada}"/>
+<h:inputHidden id="valGuiaDocCu30" value="#{documentosEscaneados.strGuiaDoc}" />
+<h:inputHidden id="tipoGuiaDocCu30" value="#{documentosEscaneados.strTiposDocs}" />
+<h:inputHidden id="docsFaltantesCu30" value="#{documentosEscaneados.documentosFaltantes}" />
+<h:inputHidden id="reutilizablesCu30" value="#{documentosEscaneados.documentosReutilizables}" />
+<h:inputHidden id="existenTransferenciasCu30" value="#{documentosEscaneados.existenTransferencias}" />
+<div class="bloque">  
+
+    <div id="appletContentCu30" class="contenido-bloque"> 	
+        <applet 
+            name    = "appletBrowserCu30" 
+	        code    = "bbvaappletftp.FileBrowser.class"	        
+	        archive = "../applet/BBVAAppletFTP.jar"
+	        width   = "700"
+	        height  = "300"
+	        hspace  = "0"
+	        vspace  = "0"
+	        align   = "middle"  
+	      >
+	      <param name="target" value="#{documentosEscaneados.rutaParam}"/>
+	      <param name="downloadtarget" value="#{documentosEscaneados.rutaParamBajada}"/>
+	      <param name="tipovisualizacion" value="#{documentosEscaneados.strTipoVisualizacion}"/>
+          <param name="expe" value="#{documentosEscaneados.strIdExpediente}"/>
+          <param name="guiadoc" value="#{documentosEscaneados.strGuiaDoc}"/>
+          <param name="tiposdoc" value="#{documentosEscaneados.strTiposDocs}"/>
+          <param name="hostws" value="#{documentosEscaneados.strHostWs}"/>
+          <param name="reutilizables" value="#{documentosEscaneados.documentosReutilizables}"/>
+          <param name="cleanTransferDir" value="#{documentosEscaneados.cleanTransferDir}"/>
+          <param name="pathLog" value="#{documentosEscaneados.pathLog}"/>
+          <param name="pipe" value="#{documentosEscaneados.pipe}"/>
+          <param name="pathapiescaneo" value="#{documentosEscaneados.pathapiescaneo}"/>
+          <param name="pathmdb" value="#{documentosEscaneados.pathmdb}"/>
+          <param name="pathescaneo" value="#{documentosEscaneados.pathescaneo}"/>  
+          
+          <param name="paginaEscaneoWeb" value="#{documentosEscaneados.paginaEscaneoWeb}"/>
+	      <param name="idEmpresa" value="#{documentosEscaneados.idEmpresa}"/>
+	      <param name="idSistema" value="#{documentosEscaneados.idSistema}"/>
+	      <param name="flagEscaneoWeb" value="#{documentosEscaneados.empleado.oficina.flagEscaneoWeb}"/>
+	      <param name="codigoEmpleadoEscaneoWeb" value="#{documentosEscaneados.empleado.codigo}"/>        
+	    </applet>
+ 	</div>
+
+</div>
+</ui:composition>

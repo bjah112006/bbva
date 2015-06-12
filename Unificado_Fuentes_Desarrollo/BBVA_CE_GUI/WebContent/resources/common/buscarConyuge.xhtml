@@ -1,0 +1,73 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<div class="bloque">
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	
+	function eventoEnterConyuge(e) {
+		e = e || window.event;
+		tecla = (document.all) ? e.keyCode : e.which;
+		if (tecla == 13) {
+			var idFormPadre = "";
+			if (e.target) {
+				idFormPadre = e.target.form.id;
+			} else { // IE8
+				idFormPadre = e.srcElement.form.id;
+			}
+			var btn = document.getElementById(idFormPadre+':btnBuscarConyuge');
+			if (e.preventDefault) {
+				e.preventDefault();
+			} else {
+				e.returnValue = false;
+			}
+			if (btn != null) {
+				btn.click();
+				//event.keyCode = 0
+			}
+		}
+	}
+	
+	/* ]]> */
+	</script>
+    <div class="titulo-borde2">
+    	<h:outputText value="#{msg['com.ibm.bbva.common.buscarConyuge.tituloBorde']}"/>
+    </div>
+    <div class="contenido-bloque" style="margin-top: 8px;">     
+     <h:panelGroup id="idBsqConyuge">
+        <span class="columna" style="width:400px">
+        	<h:outputText value="#{msg['com.ibm.bbva.common.buscarConyuge.tipoDOI']}:" 
+            		styleClass="etiqueta" />
+            		<!-- immediate="true" -->
+            <h:selectOneMenu value="#{buscarConyuge.tipoDOISeleccionado}" required="true"
+            		style ="width:205px;" styleClass="txt-resaltado-2 valor-componente"
+            		id="selectTipoDOIC" >
+				<f:selectItems value="#{buscarConyuge.tiposDOI}"/>
+                <f:ajax event="change" render="idPanelConyuge" 
+                    execute="@form" listener="#{buscarConyuge.actSizeTipoDOIConyuge}"/>					
+            </h:selectOneMenu>
+            <h:message for="selectTipoDOIC" errorClass="mensaje-error"/>
+        </span>
+        <span class="columna">
+	        <h:outputText value="#{msg['com.ibm.bbva.common.buscarConyuge.numeroDOI']}:"
+	        		styleClass="etiqueta valor-componente soloNumeros"/>
+	        <h:inputText id="numeroDOIC" value="#{buscarConyuge.numeroDOI}"
+	        		maxlength="#{buscarConyuge.sizeNumeroDOI}" onkeypress="eventoEnterConyuge(event);"
+	        		styleClass="etiqueta soloNumeros"/>
+	        <h:message for="numeroDOIC" errorClass="mensaje-error"/>
+	    </span>
+      </h:panelGroup>  
+        <div>
+            <h:commandButton value="#{msg['com.ibm.bbva.common.buscarConyuge.buscar']}"  id="btnBuscarConyuge">
+               <f:ajax onevent="mostrarProcesando" execute="idBsqConyuge" render="idPanelDatosConyuge idBsqConyuge" listener="#{buscarConyuge.buscar}"/>
+            </h:commandButton>
+        </div>
+    </div>
+</div>
+
+</ui:composition>

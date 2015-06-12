@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+		<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+        <h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="style.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+        <h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+        <h:outputScript library="js" name="jquery-ui.js" target="head"/>
+        <h:outputScript library="js" name="autoNumeric-1.7.4-B.js" target="head"/>
+        <h:outputScript library="js" name="funciones.js" target="head"/>
+        <h:outputScript target="head">
+		/* <![CDATA[ */           
+        	$(document).ready(function(){
+        	    if($("#frmAprobarExpediente\\:idMsgGuiaDoc").val() == "true") {
+	        	   var msg = $("#frmAprobarExpediente\\:msgGuiaDoc").text();
+	        	   var docsPendientes = $("#frmAprobarExpediente\\:idValidaGuiaEsc").val();
+				   alert(msg + ":\n" + docsPendientes);
+	        	   $("#frmAprobarExpediente\\:idMsgGuiaDoc").val("false");
+	            }
+	            
+	            	if($("#frmAprobarExpediente\\:idMsgOperacion292").val() == "true") {
+		        	var msg = $("#frmAprobarExpediente\\:msgOperacion292").text();
+		        	alert(msg);
+		        	$("#frmAprobarExpediente\\:idMsgOperacion292").val("false");
+	            }
+	            
+	          if($("#frmAprobarExpediente\\:idMsgOperacion").val() == "true") {
+	        	var msg = $("#frmAprobarExpediente\\:msgOperacion").text();
+	        	alert(msg);
+	        	$("#frmAprobarExpediente\\:idMsgOperacion").val("false");
+	          }else{
+		          if($("#frmAprobarExpediente\\:idMsgOperacionOf").val() == "true") {
+		        	var msg = $("#frmAprobarExpediente\\:msgOperacionOf").text();
+		        	alert(msg);
+		        	$("#frmAprobarExpediente\\:idMsgOperacionOf").val("false");
+		          } 	          
+	           }
+	          
+				/* acciones para habilitar el boton aprobar con el check de 
+				 * Exclusión de la delegación del JSP datosProducto3
+				 */
+		        var chkExclDeleg = $("input:checkbox").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:exclDeleg$/);
+			        });
+			    var btnAcep = $("input:button").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:btnAceptar$/);
+			        });
+			    var envRiesgos = $("input:button").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:envRiesgos$/);
+			        });
+			    var activoEnvRies = $("input:hidden").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:activoEnvRies$/);
+			        });
+			    var activoAceptar = $("input:hidden").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:activoAceptar$/);
+			        });
+			});
+        	function confAceptar (form) {
+        		var msg = $("#frmAprobarExpediente\\:confirmacion").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+		        var msgDocsObs = '';
+		        docsObs = $.trim(docsObs);
+		        if(docsObs != ''){
+		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+		        }
+        		var op = confirm(msg);
+        		if (op) {
+        			clickAceptar(form);
+        		}
+        		return op;
+        	}
+        	function confDevolver () {
+        		var msg = $("#frmAprobarExpediente\\:devolver").text();
+        		return confirm(msg);
+        	}
+        	function confDenegar () {
+        		var msg = $("#frmAprobarExpediente\\:denegar").text();
+        		return confirm(msg);
+        	}  
+        	function confEnviarRiesgo () {
+        		var msg = $("#frmAprobarExpediente\\:enviarRiesgo").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+		        var msgDocsObs = '';
+		        docsObs = $.trim(docsObs);
+		        if(docsObs != ''){
+		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+		        }
+        		var op = confirm(msg);
+        		if (op) {
+        			$("#frmAprobarExpediente\\:btnEnvRiesgos").click();
+        		}
+        		return op;
+        	}
+        	function confDevolverGestor () {
+        		var msg = $("#frmAprobarExpediente\\:devolverGestor").text();
+        		return confirm(msg);
+        	}
+        	function confEnviarRiesgo () {
+        		var msg = $("#frmAprobarExpediente\\:enviarRiesgo").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+		        var msgDocsObs = '';
+		        docsObs = $.trim(docsObs);
+		        if(docsObs != ''){
+		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+		        }
+        		var op = confirm(msg);
+        		if (op) {
+        			$("#frmAprobarExpediente\\:btnEnvRiesgos").click();
+        		}
+        		return op;
+        	}
+        	
+        	function confActScoring () {
+        		var msg = $("#frmAprobarExpediente\\:actScoring").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+		        var msgDocsObs = '';
+		        docsObs = $.trim(docsObs);
+		        if(docsObs != ''){
+		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+		        }
+        		return confirm(msg);
+        	}  
+        	
+        	function confAproConObs () {
+        		var msg = $("#frmAprobarExpediente\\:aproConObs").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+		        var msgDocsObs = '';
+		        docsObs = $.trim(docsObs);
+		        if(docsObs != ''){
+		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+		        }
+        		return confirm(msg);
+        	}
+        	   	         	  
+           /* ]]> */
+		</h:outputScript>
+		<script type="text/javascript">
+	        function checkClick2(check) {
+	            document.getElementById('frmAprobarExpediente:idValorTasaEsp3').disabled = !check.checked; 
+	            document.getElementById('frmAprobarExpediente:idValorTasaEsp3').value = "0.00"; 
+	        }
+	        function mostrarTabLogPorPerfil(){
+	        	var perfil = $("#frmAprobarExpediente\\:descPerfilPage").val();
+	        	var descAdmin = $("#frmAprobarExpediente\\:descPerfilFiltro").val();
+	        	perfil = (perfil == "")?$("#frmAprobarExpediente\\:descPerfilPage").text():perfil;
+	        	descAdmin = (descAdmin == "")?$("#frmAprobarExpediente\\:descPerfilFiltro").text():descAdmin;
+	        	if (perfil == descAdmin) {
+	        		$("#frmAprobarExpediente\\:descPerfilTabs").show();
+	        	} else {
+	        		$("#frmAprobarExpediente\\:descPerfilTabs").hide();
+	        	}
+	        }
+		</script>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+        <title><h:outputText value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.titulo']}"/></title>
+    </h:head>
+    <h:body onload="mostrarTabLogPorPerfil()">
+    <h:form id="frmAprobarExpediente">
+    	<h:inputHidden id="idMsgOperacion292" value="#{datosProducto3.msjOperacionBol292}"></h:inputHidden>
+			<h:outputText value="#{datosProducto3.msjOperacion292}" id="msgOperacion292" style="display:none;" />
+    	<h:inputHidden value="#{detalleExpediente.clienteNatural.estadoCivil.codigo}"  id="datoCivil"></h:inputHidden> 
+		<h:inputHidden value="#{datosConyuge.mensajeOperacion}" id="msjObservacion" />	
+		<h:inputHidden value="#{datosProducto3.expediente.expedienteTC.tipoOferta.codigo}" id="idTipoOferta"/>
+		    
+    	<h:inputHidden value="#{aprobarExpediente.accion}"/>
+    	<h:inputHidden value="#{aprobarExpediente.estado}"/>
+    	<h:inputHidden id="idMsgGuiaDoc" value="#{aprobarExpediente.msgGuiaDocumentaria}"></h:inputHidden>
+    	<h:outputText value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.aprobar.confirm']}"
+    			id="confirmacion" style="display:none;"/>    			
+    	<h:outputText value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.devolver.confirm']}"
+    			id="devolver" style="display:none;"/>
+    	<h:outputText value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.denegar.confirm']}"
+    			id="denegar" style="display:none;"/>
+    	<h:outputText value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.enviarRiesgo.confirm']}"
+    			id="enviarRiesgo" style="display:none;"/>
+    	<h:outputText value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.devolverGestor.confirm']}"
+    			id="devolverGestor" style="display:none;"/>    			
+    	<h:outputText value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.actScoring']}"
+    			id="actScoring" style="display:none;"/>
+        <h:outputText value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.msgGuiaDoc']}"
+    			id="msgGuiaDoc" style="display:none;"/>	
+    	<h:outputText value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.aproConObs.confirm']}"
+    			id="aproConObs" style="display:none;"/>				
+    			    			    			    			    			
+        <div class="contenido">
+            <div class="cabecera">
+                <ui:include src="/resources/common/cabecera.xhtml" />
+                <h:outputText id="descPerfilPage"  value="#{datosCabecera.empleado.perfil.descripcion}" style="display:none;"/>
+                <h:outputText id="descPerfilFiltro"  value="#{msg['com.ibm.bbva.common.perfil.administrador']}" style="display:none;"/>
+            </div>
+            <div class="cuerpo">
+                <div class="menu">
+                    <ui:include src="/resources/common/menu.xhtml" />
+                </div>
+                <div class="datos">
+                	<ui:include src="/resources/common/tabs.xhtml" />
+                	<div class="tab-expediente tab-item">
+                	 <ui:include src="/resources/common/datosGestor.xhtml" /> 
+	                	
+						<ui:include src="/resources/common/estadoAnterior.xhtml" />
+						<ui:include src="/resources/common/detalleExpediente.xhtml" />
+						<h:panelGroup id="idPanelDatosConyuge" 
+							style="#{datosConyuge.mostrarDatosConyuge ? '':'display:none;'}" >
+								<ui:include src="/resources/common/datosConyugue.xhtml" />
+						</h:panelGroup>				
+						<ui:include src="/resources/common/datosProducto3.xhtml" />
+						<ui:include src="/resources/common/verificacionApr.xhtml" />
+						
+						<h:panelGroup id="idDocumentosReutilizables"/>
+						
+						<h:panelGroup layout="block" styleClass="bloque">
+							<h:panelGroup id="appletContentRefresh">
+								<ui:include src="/resources/common/documentoEsc.xhtml" />
+							</h:panelGroup>
+							<h:panelGroup id="idPanelDocumentos">
+								<ui:include src="/resources/common/panelDocumentos.xhtml" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<ui:include src="/resources/common/comentarios.xhtml" />
+						<ui:include src="/resources/common/observacionRechazo.xhtml" />
+						<!-- TODO
+						<ui:include src="/resources/common/tipoResolucion.xhtml" />
+						-->
+						<ui:include src="/resources/common/observacion.xhtml" />
+						<div class="column boton-principal" style="widht:50px;">
+						    <h:commandButton value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.aprobar']}"
+	            		                     onclick="return confAceptar(this.form);" type="button" id="btnAceptar"
+	            		                     disabled="#{aprobarExpediente.activoAprOperacion}" />
+							
+							<h:commandButton value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.devolver']}"
+	            		                     action="#{aprobarExpediente.devolver}"
+	            		                     onclick="return confDevolver();" 
+                                             disabled="#{aprobarExpediente.activoDevolver}" />
+                                               
+						    <h:commandButton value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.denegar']}"
+	            		                     action="#{aprobarExpediente.denegar}"
+                                             onclick="return confDenegar();"
+                                             disabled="#{aprobarExpediente.activoRecExpediente}" />		                     					
+											
+						    <h:commandButton value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.actScoring']}"
+						                     action="#{aprobarExpediente.actualizaScoring}" 
+						                     onclick="return confActScoring();"
+						                     disabled="#{aprobarExpediente.activoActScoring}" />
+                                             		
+						    <h:commandButton value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.aprobarConModificacion']}"
+	            		                     action="#{aprobarExpediente.aprobarConModificacion}"
+                                             onclick="return confDevolverGestor();"
+                                             disabled="#{aprobarExpediente.activoAproModificacion}" />
+                                                                                          											
+						    <h:commandButton value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.enviarRiesgo']}"
+	            		                     onclick="return confEnviarRiesgo();" type="button" id="envRiesgos"
+	            		                     disabled="#{aprobarExpediente.activoEleRies}" />             		                     					
+
+						    <!--<h:commandButton value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.aprobarConObservacion']}"
+	            		                     action="#{aprobarExpediente.aprobarConObservacion}"
+                                             onclick="return confAproConObs();"
+                                              />-->
+                                             
+				<!-- 
+						    <h:commandButton value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.aprobarConObservacion']}"
+	            		                     action="#{aprobarExpediente.aprobarConObservacion}"
+                                             onclick="return confAproConObs();"
+                                             disabled="#{aprobarExpediente.activoAproObservacion}" />
+                                             				 -->                                             
+                                             
+	            		    <h:commandLink id="btnEjecutaApplet" 
+		    	                           action="#{aprobarExpediente.aprobar}" 
+		    	                           style="display:none">
+		    	            </h:commandLink>
+		    	            <h:commandLink id="btnEnvRiesgos"
+		    	            				action="#{aprobarExpediente.enviarRiesgo}"
+		    	            				style="display:none">
+		    	            </h:commandLink>		    	      
+		    	            
+		    	            <h:inputHidden value="#{aprobarExpediente.activoEleRies}" id="activoEnvRies"/>                                                    		                     					
+						</div>
+					</div>
+					<div class="tab-ayuda-memoria tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />		
+	               		<ui:include src="/resources/common/tablaAyudaMemoria.xhtml" />
+					</div>
+					<div class="tab-historial tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />	
+               			<ui:include src="/resources/common/tablaHistorial.xhtml" />
+					</div>
+					<div class="tab-observaciones tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />
+						<ui:include src="/resources/common/tablaObservaciones.xhtml" />
+					</div>
+					<div class="tab-log tab-item" style="display:none;">
+	               		<ui:include src="/resources/common/datosHistorico.xhtml" />	
+	               		<ui:include src="/resources/common/tablaLog.xhtml" />
+					</div>
+				</div>
+            </div>
+        </div>
+    </h:form>
+    </h:body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+        <h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+		<h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="style.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+		<h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+		<h:outputScript target="head">   
+		/* <![CDATA[ */
+	        function accionCerrar() {
+	        	 window.opener.cerrarMensajeSubirArchivos();
+	             window.close();
+	         }        	      	
+		/* ]]> */
+		</h:outputScript>
+		<script type="text/javascript">
+      		function cerrarVentana() {
+      			window.opener.cerrarMensajeSubirArchivos();
+      		}
+        </script>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+		<title><h:outputText value="#{msg['com.ibm.bbva.applet.avisoMoverArchivos.titulo']}" /></title>		
+	</h:head>
+		<h:body onunload="cerrarVentana()">
+			<div style="width:400px;">
+				<div id="appletContent" class="contenido-bloque">
+					<applet code="com.ibm.bbva.app.applet.FTP"
+						        archive="BBVAAppletFTP.jar" 
+						        width="400" 
+						        height="80"
+						        hspace="0"
+						        vspace="0" 
+						        align="middle">
+						<param name="host" value="#{avisoMoverArchivos.hostParam}" />
+						<param name="user" value="#{avisoMoverArchivos.userParam}" />
+						<param name="password" value="#{avisoMoverArchivos.passwordParam}" />
+						<param name="periodo" value="#{avisoMoverArchivos.periodoParam}" />
+						<param name="tasaKBytes" value="#{avisoMoverArchivos.tasaKBytesParam}" />
+						<param name="escaneosPath" value="#{avisoMoverArchivos.escaneosPathParam}" />
+						<param name="prefix" value="#{avisoMoverArchivos.prefixParam}" />
+						<param name="hostws" value="#{avisoMoverArchivos.strHostWs}"/>
+						<param name="log" value="#{avisoMoverArchivos.pathLog}"/>
+						<param name="carpetaFTP" value="#{avisoMoverArchivos.carpetaFTP}"/>
+						<param name="descargados" value="#{avisoMoverArchivos.pathDescargados}" />
+						<param name="transferencias" value="#{avisoMoverArchivos.escaneosPathParam}" />
+						<param name="listaDocumentosAdjuntos" value="#{avisoMoverArchivos.listaDocumentosAdjuntos}" />
+					</applet>
+				</div>
+			    <div class="titulo1">
+	                <h:outputText value="#{msg['com.ibm.bbva.applet.avisoMoverArchivos.mensaje']}"/>			
+                </div>
+			</div>
+    </h:body>
+</html>

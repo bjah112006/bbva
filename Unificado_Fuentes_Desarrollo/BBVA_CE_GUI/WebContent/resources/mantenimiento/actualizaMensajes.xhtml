@@ -1,0 +1,56 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:util="http://java.sun.com/jsf/composite/util">
+   
+<div class="bloque">	
+	<div class="contenido-bloque">    
+        <span class="columna" style="width:750px" >
+        	<div class="titulo titulo-espaciado">            
+    	        <h:outputText value="#{msg['com.ibm.bbva.common.Mensajes.tituloMensajes']}"/>    	        
+            </div> 
+            <div class="campo-espaciado espacios-etiqueta">
+            	<span class="columna" style="width:8px;">
+        			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+				</span>			
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.Mensajes.descripcion']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:125px;">
+	                <h:inputTextarea value="#{actualizaMensajes.strDescripcion}" style="width:300px;" 
+                			rows="5" id="txtDescripcion"/>
+				</span>
+				<h:message for="txtDescripcion" errorClass="mensaje-error"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+	            	<span class="columna" style="width:8px;"/>
+	            	<span class="columna" style="width:160px;">
+	                     <h:outputText value="#{msg['com.ibm.bbva.common.Mensajes.contenido']}:" styleClass="etiqueta"/>
+	                </span>
+	                <span class="columna" style="width:300px;">
+	                	 <util:editor id="idContenido" value="#{actualizaMensajes.strContenido}"
+						width="500"/>  
+	               	</span>
+	               	<h:message for="idContenido" errorClass="mensaje-error"/>
+              </div>  
+        </span>
+     </div>
+     <div class="contenido-bloque" align="center">
+        <span class="columna" style="width:290px">
+        	<h:commandButton id="grabarbr" 
+				value="#{msg['com.ibm.bbva.common.Mensajes.Grabar']}"
+				onclick="return confirm('¿Desea Grabar el Registro?');"
+				action="#{actualizaMensajes.grabar}" />
+			<h:commandButton id="cancelarbr"
+				value="#{msg['com.ibm.bbva.common.Mensajes.Cancelar']}"
+				styleClass="boton" action="#{actualizaMensajes.cancelar}"/>
+        </span>
+        <h:message for="grabarbr" errorClass="mensaje-error"/>
+     </div>
+</div>
+
+</ui:composition>

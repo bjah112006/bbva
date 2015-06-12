@@ -1,0 +1,265 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<h:outputScript library="js" name="funciones.js" target="head"/>
+
+<script type="text/javascript">
+    /* <![CDATA[ */  
+	function seleccionarDocumentoCambio(radio) {
+		var id = radio.name.substring(radio.name.lastIndexOf(':'));
+		var el = radio.form.elements;
+		
+		for (var i = 0; i < el.length; i++) {
+			if (el[i].name.substring(el[i].name.lastIndexOf(':')) == id) {
+				el[i].checked = false;
+			}
+		}
+		radio.checked = true;
+		$("[id='#{paneldocumentos.htmlTramaDocumentoCambio.clientId}']").val($(radio).val());
+		habilitarTipoDocumentoApplet(); 
+	}
+	
+	function applet(idApplet) {
+		if (navigator.userAgent.indexOf('MSIE') != -1) {
+			return document[idApplet];
+		} else {
+			return document.getElementById(idApplet);
+		}
+	}
+	function actualizarPanelDocumentos(listaDocs) {	
+		//alert("actualizarPanelDocumentos con parametros:"+listaDocs);	
+		$("[id='#{paneldocumentos.htmlListaDocsTransferencias.clientId}']").val(listaDocs);
+		$("[id='#{paneldocumentos.btnActualizaPanelDocumentos.clientId}']").click();
+	}
+	/*function actualizarPanelDocumentos() {
+		alert("actualizarPanelDocumentos sin parametros");		
+		$("[id='#{paneldocumentos.htmlListaDocsTransferencias.clientId}']").val('');
+		$("[id='#{paneldocumentos.btnActualizaPanelDocumentos.clientId}']").click();
+	}*/
+	function actualizarAppletYPanelDocumentos(listaDocs) {
+		var lista = '';
+		if (typeof listaDocs != "undefined" && listaDocs != null && listaDocs != "undefined"){
+		    lista = listaDocs;
+		}
+		//alert("actualizarAppletYPanelDocumentos con parametros:"+listaDocs);
+		$("[id='#{paneldocumentos.htmlListaDocsTransferencias.clientId}']").val(lista);
+		$("[id='#{paneldocumentos.btnActualizaAppletYPanelDocumentos.clientId}']").click();
+	}
+	/*function actualizarAppletYPanelDocumentos() {
+		alert("actualizarAppletYPanelDocumentos sin parametros");
+		$("[id='#{paneldocumentos.htmlListaDocsTransferencias.clientId}']").val('');
+		$("[id='#{paneldocumentos.btnActualizaAppletYPanelDocumentos.clientId}']").click();
+	}*/
+	function abrirDocumentoBrowser(idCm, codigoTipoDoc) {
+		if ($.browser.msie) {
+			winCM=window.open('../pdfContent/abrirPDF.faces?idcm='+idCm+'&codtipodoc'+codigoTipoDoc+'&redirect=0', '_blank','width=850,height=450,resizable=yes');
+		} else {
+			winCM=window.open('../pdfContent/abrirPDF.faces?idcm='+idCm+'&codtipodoc'+codigoTipoDoc+'&redirect=1', '_blank','width=850,height=450,resizable=yes');
+		}
+		return false;
+	}
+	function abrirDocumentoApplet(codigoTipoDoc) {
+		applet("appletBrowser").abrirDocumento(codigoTipoDoc);
+		return false;
+	}
+	function habilitarTipoDocumentoApplet() {
+		applet("appletBrowser").habilitarTipoDocumento();
+		return false;
+	}
+	function eliminarDocumentoContent(codigoTipoDoc, desTipoDoc) {
+		if (confirm('¿Desea eliminar el documento escaneado ' + desTipoDoc + '?')) {
+			$("[id='#{paneldocumentos.htmlCodigoTipoDocEliminar.clientId}']").val(codigoTipoDoc);
+			$("[id='#{paneldocumentos.btnEliminarDocumentoContent.clientId}']").click();
+		}
+		return false;
+	}
+	function eliminarDocumentoApplet(codigoTipoDoc, desTipoDoc) {
+		if (confirm('¿Desea eliminar el documento escaneado ' + desTipoDoc + '?')) {
+			applet("appletBrowser").eliminarDocumento(codigoTipoDoc);
+		}
+		return false;
+	}
+	function obtenerTramaDocumentoCambio() {
+		return $("[id='#{paneldocumentos.htmlTramaDocumentoCambio.clientId}']").val();
+	}
+	function modificarDocumentoContent(codigoTipoDocs) {
+		$("[id='#{paneldocumentos.htmlCodigoTipoDocsModificar.clientId}']").val(codigoTipoDocs);
+		$("[id='#{paneldocumentos.btnModificarDocumentoContent.clientId}']").click();
+	}
+	
+	var docsObs = "";
+	var idcmObs = "";
+	function checkObsClick(check, idCm, tipoDoc) {
+		$("[id='#{paneldocumentos.htmlIdCmObs.clientId}']").val(idCm);
+		//$('#idCheckDocAdjObs').change();
+		var chkObs = $("input").filter(function() {
+	        	var txtIds = $(this).attr("name");
+	        	return txtIds.match(/^.*\:idCheckDocAdjObs$/);
+	        });
+	    $("[id='#{paneldocumentos.htmlValIdCmObs.clientId}']").val(check.checked);
+	    
+	    /*var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+	    if(docsObs != null && docsObs != "undefined" && docsObs != ""){
+	    	if(!check.checked){
+	    		docsObs = docsObs.replace(tipoDoc+', ', '');
+	    	}
+	    }
+	    $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val(docsObs);*/
+	    
+	    var idcmTmp = $("[id='#{paneldocumentos.htmlListaIdcmDocsObservados.clientId}']").val();
+		if(idcmTmp != null && idcmTmp != 'undefined' && idcmTmp != ''){
+		    idcmObs = idcmTmp;
+		}
+	    
+	    if(check.checked){
+	    	//docsObs = docsObs + tipoDoc + ', ';
+	    	idcmObs = idcmObs + idCm + ',';
+	    }
+	    else{
+		    if(idcmObs != null && idcmObs != "undefined" && idcmObs != ""){
+				//docsObs = docsObs.replace(tipoDoc + ', ', '');
+				idcmObs = idcmObs.replace(idCm + ',', '');
+		    }
+		}
+		
+		/*if(docsObs != null && docsObs != "undefined" && docsObs != "" && docsObs.lenght > 2){
+    		docsObs = docsObs.substring(0, docsObs.lenght - 2);
+		}*/
+		if(idcmObs != null && idcmObs != "undefined" && idcmObs != "" && idcmObs.lenght > 1){
+    		idcmObs = idcmObs.substring(0, idcmObs.lenght - 1);
+		}
+		
+		//$("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val(docsObs);
+	    $("[id='#{paneldocumentos.htmlListaIdcmDocsObservados.clientId}']").val(idcmObs);
+	    //$(chkObs).change();
+	}
+	/* ]]> */
+</script>
+	
+	<h:inputText id="idCmObs" value="#{paneldocumentos.strIdCmObs}" binding="#{paneldocumentos.htmlIdCmObs}" style="display:none;" />
+	<h:inputText id="valIdCmObs" value="#{paneldocumentos.strValIdCmObs}" binding="#{paneldocumentos.htmlValIdCmObs}" style="display:none;" />
+	<h:inputText id="listaDocsTransferencias" value="#{paneldocumentos.strListaDocsTransferencias}" binding="#{paneldocumentos.htmlListaDocsTransferencias}" style="display:none;" />
+	<h:inputText id="listaDocsObservados" value="#{paneldocumentos.strListaDocsObservados}" binding="#{paneldocumentos.htmlListaDocsObservados}" style="display:none;" />
+	<h:inputText id="listaIdcmDocsObservados" value="#{paneldocumentos.strListaIdcmDocsObservados}" binding="#{paneldocumentos.htmlListaIdcmDocsObservados}" style="display:none;" />
+	<h:commandButton id="btnActualizaPanelDocumentos" binding="#{paneldocumentos.btnActualizaPanelDocumentos}" style="display:none">
+		<f:ajax onevent="mostrarProcesando" event="click" render="appletContentRefresh idPanelDocumentos idDocumentosReutilizables" execute="@form" listener="#{paneldocumentos.cargarDocumentosPanel}"/>
+	</h:commandButton>
+	<h:commandButton id="btnActualizaAppletYPanelDocumentos" binding="#{paneldocumentos.btnActualizaAppletYPanelDocumentos}" style="display:none">
+		<f:ajax onevent="mostrarProcesando" event="click" render="appletContentRefresh idPanelDocumentos idDocumentosReutilizables" execute="@form" listener="#{paneldocumentos.cargarDocumentosPanel}"/>
+	</h:commandButton>
+	<h:inputText id="codigoTipoDocEliminar" value="#{paneldocumentos.strCodigoTipoDocEliminar}" binding="#{paneldocumentos.htmlCodigoTipoDocEliminar}" style="display:none;" />
+	<h:commandButton id="btnEliminarDocumentoContent" binding="#{paneldocumentos.btnEliminarDocumentoContent}" style="display:none">
+		<f:ajax onevent="mostrarProcesando" event="click" render="appletContentRefresh idPanelDocumentos idDocumentosReutilizables" execute="@form" listener="#{paneldocumentos.eliminarDocumentoContent}" />
+	</h:commandButton>
+	<h:inputText id="tramaDocumentoCambio" value="#{paneldocumentos.strTramaDocumentoCambio}" binding="#{paneldocumentos.htmlTramaDocumentoCambio}" style="display:none;" />
+	<h:inputText id="codigoTipoDocsModificar" value="#{paneldocumentos.strCodigoTipoDocsModificar}" binding="#{paneldocumentos.htmlCodigoTipoDocsModificar}" style="display:none;" />
+	<h:commandButton id="btnModificarDocumentoContent" binding="#{paneldocumentos.btnModificarDocumentoContent}" style="display:none">
+		<f:ajax onevent="mostrarProcesando" event="click" render="appletContentRefresh idPanelDocumentos idDocumentosReutilizables" execute="@form" listener="#{paneldocumentos.modificarDocumentoContent}" />
+	</h:commandButton>
+
+	<div class="contenido-bloque">
+		<span class="columna" style="width: 730px; margin-left: 5px; margin-top: 5px;">
+        
+		<h:panelGroup layout="block" rendered="#{paneldocumentos.contlista}">
+			
+			<h:dataTable border="1" cellpadding="0" cellspacing="0" rendered="true" style="border-collapse: collapse;"
+                            id="tablaDocumentosCU28Agr" value="#{paneldocumentos.lstPersonaPDs}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" >
+				<f:facet name="header">
+					<h:outputText value="#{msg['com.ibm.bbva.common.documentoEscaneado.tituloTabla']}" style="font-weight: bold;"/><br/>
+					<h:outputText value="_________" style="wi: 70px; background-color: white;" />
+					<h:outputText value="#{paneldocumentos.pantallaConsulta ? '_______________________________________________________________________' : '_________________________________________________________'}" style="#{paneldocumentos.pantallaConsulta ? 'width: 500px; background-color: white;' : 'width: 400px; background-color: white;'}"/>
+					<h:outputText value="#{msg['com.ibm.bbva.common.documentoEscaneado.tituloObligatorio']}" style="width: 18px; background-color: white; color: black;" rendered="#{paneldocumentos.opObligatorio}"/>
+					<h:outputText value="#{msg['com.ibm.bbva.common.documentoEscaneado.tituloObservado']}" style="width: 30px; background-color: white; color: black;"  rendered="#{paneldocumentos.opObservar}"/>
+					<h:outputText value="_________________" style="width: 110px; background-color: white; "/>
+					<h:outputText value="______" style="width: 30px; background-color: white;" rendered="#{paneldocumentos.opEliminar}"></h:outputText>
+					<h:outputText value="#{msg['com.ibm.bbva.common.documentoEscaneado.tituloModTipDoc']}" style="width: 30px; background-color: white; color: black;" rendered="#{paneldocumentos.opModificar}"/>
+				</f:facet>
+
+                <h:column nowrap="true" align="left" width="70">
+	                <h:outputText value="#{item.persona.descripcion}"/>
+	            </h:column>
+	            <h:column>
+	                <h:dataTable value="#{item.lstTipoDocumentoPDs}" var="tipodoc" border="1" cellpadding="0" cellspacing="0" rendered="true" style="border-collapse: collapse; border-style: hidden;">
+	                    <h:column nowrap="true" style="#{paneldocumentos.pantallaConsulta ? 'width: 500px; white-space: normal; word-wrap: break-word; text-align: left;' : 'width: 400px; white-space: normal; word-wrap: break-word; text-align: left;'}">
+	                        <h:outputText value="#{tipodoc.tipoDocumento.descripcion}"/>
+	                    </h:column>
+	                    <h:column>
+	                        <h:dataTable value="#{tipodoc.lstAyudaPanelDocumentos}" var="itemdoc" border="1" cellpadding="3" cellspacing="0" rendered="true" style="border-collapse: collapse; border-style: hidden;">
+			                   <h:column nowrap="true" align="left" width="18" rendered="#{paneldocumentos.opObligatorio}">
+				                    <h:graphicImage value="#{resource['images:1d.png']}" rendered="#{!itemdoc.std and itemdoc.docGuia}"/>  
+				                    <h:graphicImage value="#{resource['images:1e.png']}" rendered="#{itemdoc.std and itemdoc.docGuia}" />
+				                </h:column>
+				                
+			                    <h:column nowrap="true" align="center" width="30" rendered="#{paneldocumentos.opObservar}">
+									<h:selectBooleanCheckbox id="idCheckDocAdjObs" value="#{itemdoc.colObservar}" disabled="#{!itemdoc.visOpObservar}" 
+										rendered="#{paneldocumentos.opObservar and itemdoc.docEscaneado}" onclick="checkObsClick(this,'#{itemdoc.idCm}','#{tipodoc.tipoDocumento.descripcion}')">
+										<!--
+										<f:ajax event="change" execute="@form" listener="#{paneldocumentos.observarDocAdjuntado}"/>
+										-->
+									</h:selectBooleanCheckbox>
+								</h:column>
+								
+								<h:column nowrap="true" width="110" style="white-space: normal; word-wrap: break-word;">
+									<h:outputText value="#{itemdoc.codigoTipoDoc}"
+										rendered="#{itemdoc.docTransferencias and itemdoc.docEscaneado}"/>
+									
+									<h:outputLink value="#"
+										rendered="#{itemdoc.docEscaneado and itemdoc.idCm != '0'}"
+										onclick="return abrirDocumentoBrowser(#{itemdoc.idCm}, '#{itemdoc.codigoTipoDoc}')">
+										<h:outputText value="#{itemdoc.feRegistro}">
+											<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+										</h:outputText>
+									</h:outputLink>
+									
+									<h:commandLink value="#{itemdoc.codigoTipoDoc}"
+				                    	rendered="#{itemdoc.docTransferencias}"
+										onclick="return abrirDocumentoApplet('#{itemdoc.codigoTipoDoc}');" />
+										
+									<h:outputText value="#{msg['com.ibm.bbva.visualizarExpediente.formVisualizarExpediente.mensajeDocumentoSubidoError']}" rendered="#{itemdoc.flagEscaneado == '1' and itemdoc.idCm == '0' and paneldocumentos.pantallaConsulta and !paneldocumentos.expedienteEnProceso}"></h:outputText>				                	
+				                	<h:outputText value="#{msg['com.ibm.bbva.visualizarExpediente.formVisualizarExpediente.mensajeDocumentoEnProceso']}" rendered="#{itemdoc.flagEscaneado == '1' and itemdoc.idCm == '0' and paneldocumentos.pantallaConsulta and paneldocumentos.expedienteEnProceso}"></h:outputText>
+				                	
+				                	<h:outputText value="#{msg['com.ibm.bbva.visualizarExpediente.formVisualizarExpediente.mensajeDocumentoNoSubido']}" rendered="#{itemdoc.flagEscaneado == '0' and paneldocumentos.pantallaConsulta}"></h:outputText>
+				                	
+				                </h:column>
+				                
+                				<h:column nowrap="true" align="center" width="30" rendered="#{paneldocumentos.opEliminar}">
+				                    <h:outputText value="#{itemdoc.colEliminar}" class="#{itemdoc.std ? 'titulo titulo-espaciado':''}"
+				                    	rendered="#{paneldocumentos.opEliminar and itemdoc.std}" />
+									<h:commandButton styleClass="boton"
+										image="#{resource['images:action_remove.gif']}"
+										rendered="#{paneldocumentos.opEliminar and itemdoc.docEscaneado and itemdoc.visOpElimina}"
+										onclick="return eliminarDocumentoContent('#{itemdoc.idCm}', '#{tipodoc.tipoDocumento.descripcion}');"/>
+									<h:commandButton styleClass="boton"
+										image="#{resource['images:action_remove.gif']}"
+										rendered="#{paneldocumentos.opEliminar and itemdoc.docTransferencias and itemdoc.visOpElimina}"
+										onclick="return eliminarDocumentoApplet('#{itemdoc.codigoTipoDoc}', '#{tipodoc.tipoDocumento.descripcion}');" />
+								</h:column>
+								
+								<h:column nowrap="true" align="center" width="30" rendered="#{paneldocumentos.opModificar}">
+									<h:outputText value="#{itemdoc.colModificar}" class="#{itemdoc.std ? 'titulo titulo-espaciado':''}"
+										rendered="#{paneldocumentos.opModificar and itemdoc.std}" />
+									<h:selectOneRadio onclick="seleccionarDocumentoCambio(this)"
+										value=""
+										rendered="#{paneldocumentos.opModificar and itemdoc.docEscaneado}">
+										<f:selectItem itemValue="#{itemdoc.tramaDocumentoCambio}" itemLabel="" />
+									</h:selectOneRadio>
+								</h:column>
+			                </h:dataTable>
+	                    </h:column>
+	                </h:dataTable>
+	            </h:column>
+	        </h:dataTable>
+			
+		</h:panelGroup>
+		
+		</span>
+    </div>
+    
+</ui:composition>

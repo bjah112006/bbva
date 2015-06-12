@@ -1,0 +1,82 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg" />
+
+<script type="text/javascript">
+/* <![CDATA[ */
+		$(document).ready(function(){
+			var valCorr = $("input:hidden").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:repDatCorr$/);
+			        });
+			var valFecInicio = $("input:text").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:fecInicio$/);
+			        });
+			var valFechaFin = $("input:text").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:fecFin$/);
+			        });
+			var valSelProducto = $("select").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:selProducto$/);
+			        });
+			if ($(valCorr).val()=='true') {
+				var urlRep = "../ReporteCVSServlet?fecInicio=" + $(valFecInicio).val() +
+					"&fecFin=" + $(valFechaFin).val() +
+					"&selProducto=" + $(valSelProducto).val();
+				document.location.href = urlRep;
+			}
+		});
+/* ]]> */
+</script>
+
+<h:inputHidden value="#{reporteCSV.datosCorrectos}" id="repDatCorr"></h:inputHidden>
+<div class="bloque">
+	<div class="contenido-bloque">
+		<span class="columna" style="width:290px;">
+			<div class="campo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.common.reporteCSV.oficina']}" styleClass="etiqueta"/>
+				<h:selectOneMenu value="#{reporteCSV.oficinaSeleccionada}" style="margin-left: 15px; width:160px;" 
+						styleClass="txt-resaltado-2" id="selProducto" immediate="true">
+                    <f:selectItems value="#{reporteCSV.oficinas}"/>
+                </h:selectOneMenu>
+                <h:message for="selProducto" errorClass="mensaje-error"/>
+			</div>
+		</span>
+		<span class="columna" style="width:240px;">
+			<div class="campo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.common.reporteCSV.fechaInicio']}" styleClass="etiqueta"/>
+				<h:inputText id="fecInicio" value="#{reporteCSV.fechaInicio}"
+					style="width:80px;" styleClass="valor  formatoFecha">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+					
+				</h:inputText>
+                <h:message for="fecInicio" errorClass="mensaje-error"/>
+			</div>
+		</span>
+		<span class="columna" style="width:240px;">
+			<div class="campo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.common.reporteCSV.fechaFin']}" styleClass="etiqueta"/>
+				<h:inputText id="fecFin" value="#{reporteCSV.fechaFin}"
+					style="width:80px;" styleClass="valor  formatoFecha">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+					
+				</h:inputText>
+                <h:message for="fecFin" errorClass="mensaje-error"/>
+			</div>
+		</span>
+	</div>
+	<div class="contenido-bloque">
+        <h:message id="fechas" for="fechas" errorClass="mensaje-error"/>
+		<span class="columna" style="width:250px;">
+			<h:commandButton value="Crear Reporte" actionListener="#{reporteCSV.crearReporte}"></h:commandButton>
+		</span>
+	</div>
+</div>
+
+</ui:composition>

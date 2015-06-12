@@ -1,0 +1,33 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+<div>
+	<span class="titulo1">
+		<h:outputText value="#{msg['com.ibm.bbva.common.datosGestor.titulo']}" />
+	</span>
+	   <span style="width: 330px; text-align: right;float:right">	
+	    <h:outputText value="#{msg['com.ibm.bbva.common.datosGestor.estado']}:" styleClass="titulo"/>	
+	    <h:outputText value="#{datosGestor.estado.descripcion}" styleClass="titulo valor" />		
+   </span>
+</div>
+
+<div class="bloque datos-cabecera-muestra">
+  <span style="width: 220px;display:inline-block"> 
+	<h:outputText value="#{msg['com.ibm.bbva.common.datosGestor.codigo']}:"	styleClass="titulo" /> 				
+    <h:outputText value="#{datosGestor.empleado.codigo}" styleClass="etiqueta valor" />
+  </span>  
+  <span style="width: 220px;display:inline-block">
+	<h:outputText value="#{msg['com.ibm.bbva.common.datosGestor.oficina']}:" styleClass="titulo" />
+	<h:outputText value="#{datosGestor.oficina.codigo} - #{datosGestor.oficina.descripcion}" styleClass="etiqueta valor" />
+  </span>	
+  <span style="width: 240px;display:inline-block">
+	<h:outputText value="#{msg['com.ibm.bbva.common.datosGestor.usuario']}:" styleClass="titulo" />
+	<h:outputText value="#{datosGestor.empleado.nombresCompletos}" styleClass="etiqueta valor" />
+  </span>	
+</div>
+
+</ui:composition>

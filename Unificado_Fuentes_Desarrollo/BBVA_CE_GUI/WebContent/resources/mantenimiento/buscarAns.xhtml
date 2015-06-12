@@ -1,0 +1,225 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	<f:verbatim>
+		<script type="text/javascript" language="javascript">
+			var compSel = null;
+			var sel = null;
+			function cambiarEstado (comp) {			    
+				if ($(comp).is(':checked')) {
+					if (compSel!=null) {
+						$(compSel).attr('checked', false);
+					}
+					compSel = comp;
+				} else {
+					compSel = null;
+				}
+			}
+			
+			function confirmarElimina(comp) {
+			  var filas = document.getElementById("formManAns:idTablaAns").rows.length - 1;
+			  var ok, resultado=false;
+			  for (i=0; filas>i; i++) {			      
+			      ok=document.getElementById("formManAns:idTablaAns:"+i+":idSelect").checked;
+			      if(ok){
+			        resultado = confirm('Está seguro que desea eliminar el elemento seleccionado?');
+			        break;
+			      }			    
+			  }		  
+			 return resultado;
+			}
+		</script>
+	</f:verbatim>
+
+	<table class="bloque">
+		<tbody>
+			<!-- TITULO -->
+			<tr>
+				<td>
+					<h:panelGroup styleClass="titulo">
+						<h:outputText value="Mantenimiento - Ans" />
+					</h:panelGroup> 
+				</td>
+			</tr>
+			<!-- BUSQUEDA -->
+			<tr>
+				<td>
+					<h:panelGroup>
+						<table width="100%" align="center" cellspacing="0" border="0">
+							<!-- FILTROS -->
+							<tr>
+								<td>
+									<span class="etiqueta" style="margin-bottom:10px;"></span>
+									<table width="100%">
+										<tr>
+											<td width="100%" valign="top" align="left">
+												<table>
+													<tr>
+														<td>
+															<h:outputLabel styleClass="etiqueta" for="idTarea"
+																style="width:150px;" value="Tarea" />
+														</td>
+														<td>
+															<h:selectOneMenu id="idTarea"
+																value="#{buscarAns.tareaSeleccionada}"
+																styleClass="select">
+																<f:selectItems value="#{buscarAns.tareas}" />
+															</h:selectOneMenu>
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<!-- BOTONES BUSCAR Y LIMPIAR -->
+							<tr>
+								<td align="left">
+									<h:commandButton value="Buscar" id="buscar" styleClass="boton"
+										action="#{buscarAns.buscar}">
+									</h:commandButton>
+									<h:commandButton value="Limpiar" id="limpiar" styleClass="boton"
+										action="#{buscarAns.limpiar}">
+									</h:commandButton>
+								</td>
+							</tr>
+						</table>
+					</h:panelGroup> 
+				</td>
+			</tr>
+			<!-- RESULTADOS -->
+			<tr>
+				<td>
+					<h:panelGroup id="panelConsultaAns" style="overflow-x:auto; width:750px; height:440px">
+						<h:dataTable border="1" styleClass="tablaTask" style="border-collapse:collapse;"
+							columnClasses="text" headerClass="headerClass headerTabla1" rendered="true"
+							rowClasses="uno,dos" id="idTablaAns"
+							value="#{buscarAns.listaAns}" var="item" footerClass="fondo"
+							rows="10" binding="#{buscarAns.dataTable}" >
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Sel."/>
+								</f:facet>
+								<h:selectBooleanCheckbox id="idSelect"
+									value="#{item.seleccionado}" styleClass="seleccionar"
+									onclick="cambiarEstadoGuiaDoc(this);"><!-- TODO -->
+								</h:selectBooleanCheckbox>
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Producto"/>
+								</f:facet>
+								<h:outputText style="width:400px" value="#{item.producto.descripcion}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Tarea"/>
+								</f:facet>
+								<h:outputText style="width:400px" value="#{item.tarea.descripcion}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Estado"/>
+								</f:facet>
+								<h:outputText style="width:400px" value="#{item.estadoCE.descripcion}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Tipo Oferta"/>
+								</f:facet>
+								<h:outputText style="width:400px" value="#{item.tipoOferta.descripcion}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Grupo segmento"/>
+								</f:facet>
+								<h:outputText style="width:400px" value="#{item.grupoSegmento.descripcion}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Verde Minutos"/>
+								</f:facet>
+								<h:outputText style="width:400px" value="#{item.verdeMinutos}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Amarillo Minutos"/>
+								</f:facet>
+								<h:outputText style="width:400px" value="#{item.amarilloMinutos}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Flag Activo" />
+								</f:facet>
+								<h:selectBooleanCheckbox value="#{item.flagActivo=='1'?true:false}" disabled="true">
+								</h:selectBooleanCheckbox>
+							</h:column>
+						</h:dataTable>
+					</h:panelGroup>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<span class="etiqueta" style="margin-bottom:10px;"></span>
+				</td>
+			</tr>
+			<!-- BOTONES -->
+			<tr>
+				<td>
+					<table width="100%" cellspacing="0" cellpadding="0" border="0">
+						<tr>
+							<td align="left">
+								<h:commandButton value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Agregar']}"
+										action="#{buscarAns.agregar}"  styleClass="boton"/>
+								<h:commandButton value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Actualizar']}"
+									action="#{buscarAns.actualizar}"  styleClass="boton" id="btnActualizar"/>
+								<h:commandButton value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Eliminar']}"
+									onclick="return confirmarElimina(this);"
+									action="#{buscarAns.eliminar}"  styleClass="boton" id="btnEliminar"/>
+								<h:commandButton value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Cancelar']}"
+									action="#{buscarAns.cancelar}"  styleClass="boton"/>
+								<h:commandButton value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.btnAnterior']}"
+									actionListener="#{buscarAns.pagePrevious}"  styleClass="boton"
+									disabled="#{buscarAns.dataTable.first == 0}" />
+								<h:commandButton value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.btnSiguiente']}"
+									actionListener="#{buscarAns.pageNext}"  styleClass="boton"
+									disabled="#{buscarAns.dataTable.first + buscarAns.dataTable.rows >= buscarAns.dataTable.rowCount}" />
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<span class="etiqueta" style="margin-bottom:10px;"></span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<h:outputText
+						value="#{msg['com.ibm.bbva.resources.mantenimiento.menSelect']}"
+						styleClass="mensaje-info"
+						rendered="#{empty buscarAns.listaAns}" />
+					<h:outputText
+						value="Seleccione el registro a actualizar o eliminar, o seleccione la opción Agregar"
+						styleClass="mensaje-info"
+						rendered="#{not empty buscarAns.listaAns}" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<span class="etiqueta" style="margin-bottom:10px;"></span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<h:messages styleClass="mensaje-error" globalOnly="true"></h:messages>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+</ui:composition>

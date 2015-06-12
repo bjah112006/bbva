@@ -1,0 +1,57 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+   <script type="text/javascript"> 
+     /* <![CDATA[ */		
+			var sel = null;
+			
+			function confirmarSel(comp) {
+			   var valor = document.getElementById("fromTablaMaestra:tablasSOM").value;
+			   var resultado=false;
+			   if (valor!=-1) {
+			      resultado=true;
+			   } 
+			 return resultado;
+			}
+			
+			onload = function() {
+                document.getElementById("fromTablaMaestra:tablasSOM").value = -1;
+            }
+	  
+       /* ]]> */
+    </script>
+	
+	<h:panelGrid styleClass="bloque">
+	    <h:panelGroup>
+		  <h:outputText value="Seleccionar:"></h:outputText>
+		  <h:selectOneMenu id="tablasSOM" styleClass="valor-componente"
+			value="#{consultarTabla.codigoTablaSeleccionada}" required="true"				
+			style="width:260px;">
+			<f:selectItem itemLabel="Seleccione" itemValue="-1" />
+			<f:selectItems id="idselecItem1" value="#{seleccionarTabla.tablas}" />				
+		  </h:selectOneMenu>			
+		  <h:message id="tablasMSG" for="tablasSOM" styleClass="localError" />			
+	      <h:outputText value="" styleClass="etiqueta" />
+		</h:panelGroup>
+		<h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+			<h:outputText value=" " />
+		</h:panelGroup>
+		<h:panelGroup>
+			<h:commandButton id="consultar"
+			    onclick="return confirmarSel(this);"
+				action="#{seleccionarTabla.consultar}" value="Consultar"
+				styleClass="boton">
+				<f:param id="tablaSeleccionadaPRM" name="codigotabla"
+					value="#{seleccionarTabla.codigoTablaSeleccionada}">
+				</f:param>
+			</h:commandButton>
+		</h:panelGroup>
+		<h:panelGroup styleClass="globalError">
+			<h:messages globalOnly="true"></h:messages>
+		</h:panelGroup>
+	</h:panelGrid>
+		
+</ui:composition>

@@ -1,0 +1,62 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<div class="datos-cabecera-muestra">
+   <div class="titulo1" style="width: 460px;">	
+	    <h:outputText value="#{datosHistorico.titulo}" />			
+   </div>
+</div>
+<div class="bloque">    
+<div class="contenido-bloque">
+   <span class="columna" style="width:260px">
+             <div class="titulo titulo-espaciado">
+    	        <h:outputText value="#{msg['com.ibm.bbva.common.historialExpediente.titulo']}"/>
+             </div>
+             <div class="campo-espaciado">
+                <h:outputText value="#{msg['com.ibm.bbva.common.historialExpediente.tipoDOI']}" class="etiqueta"/>
+                <h:outputText value="#{datosHistorico.expediente.clienteNatural.numDoi}" rendered="#{not empty datosHistorico.expediente}" class="valor"/>
+             </div>
+             <div class="campo-espaciado">
+                <h:outputText value="#{msg['com.ibm.bbva.common.historialExpediente.nombres']}:" class="etiqueta"/>
+                <h:outputText value="#{datosHistorico.expediente.clienteNatural.nombre}" rendered="#{not empty datosHistorico.expediente}" class="valor"/>
+            </div>
+            <div class="campo-espaciado">
+                <h:outputText value="#{msg['com.ibm.bbva.common.historialExpediente.apePat']}:" class="etiqueta"/>
+                <h:outputText value="#{datosHistorico.expediente.clienteNatural.apePat}" rendered="#{not empty datosHistorico.expediente}" class="valor"/>
+            </div>
+            <div class="campo-espaciado">
+                <h:outputText value="#{msg['com.ibm.bbva.common.historialExpediente.apeMat']}:" class="etiqueta"/>
+                <h:outputText value="#{datosHistorico.expediente.clienteNatural.apeMat}" rendered="#{not empty datosHistorico.expediente}" class="valor"/>
+            </div>
+            <div class="campo-espaciado">
+                <h:outputText value="#{msg['com.ibm.bbva.common.historialExpediente.subrogacion']}:" class="etiqueta"/>
+                <h:selectBooleanCheckbox value="#{datosHistorico.selectedItem}" disabled="true" readonly="true"/>
+            </div>
+        </span>   
+         
+        <span class="columna" style="width:310px">
+            <div class="titulo titulo-espaciado">
+    	        <h:outputText value="#{msg['com.ibm.bbva.common.historialExpediente.titulob']}"/>
+            </div>            
+         	 <div class="campo-espaciado">
+                <h:outputText value="#{msg['com.ibm.bbva.common.historialExpediente.producto']}:" class="etiqueta"/>
+                <h:outputText value="#{datosHistorico.expediente.producto.descripcion}" rendered="#{not empty datosHistorico.expediente}" class="valor"/>
+            </div>
+            <div class="campo-espaciado">
+                <h:outputText value="#{msg['com.ibm.bbva.common.historialExpediente.subProducto']}:" class="etiqueta"/>
+                <h:outputText value="#{datosHistorico.expediente.expedienteTC.subproducto.descripcion}" rendered="#{not empty datosHistorico.expediente}" class="valor"/>
+            </div>
+            <div class="campo-espaciado">
+                <h:outputText value="#{msg['com.ibm.bbva.common.historialExpediente.lincredsol']}:" class="etiqueta"/>
+                <h:outputText value="#{datosHistorico.expediente.expedienteTC.lineaCredSol}" rendered="#{not empty datosHistorico.expediente}" class="valor"/>
+            </div>
+        </span>  
+</div>
+</div>
+
+</ui:composition>

@@ -1,0 +1,479 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg" />
+
+<div class="bloque divProd3Principal">
+   <script type="text/javascript"> 
+     /* <![CDATA[ */  
+        $(document).ready(function(){           
+            var val = $(".divProd3Principal").outerHeight();
+            $(".linea-vertical-producto").css("height",val + "px");
+            
+        	var chkCom = $("input:checkbox").filter(function() {
+		        	var txtIds = $(this).attr("name");
+		        	return txtIds.match(/^.*\:chkTasaEspecial$/);
+		        });
+	        var txtCom = $("input:text").filter(function() {
+		        	var txtIds = $(this).attr("name");
+		        	return txtIds.match(/^.*\:txtTasaEspecial$/);
+		        });		
+            var txtComP = $("input:text").filter(function() {
+		        	var txtIds = $(this).attr("name");
+		        	return txtIds.match(/^.*\:txtTasaEspecialPorc$/);
+		        });				        
+		        		             	        
+		    $(chkCom).click(function () {
+		       	if ($(this).is(":checked")) {		        	
+		       		$(txtCom).addClass("txt-resaltado-2");
+		       		$(txtCom).show();
+		       		$(txtComP).show();		       		
+		       	} else {		        		
+		       		$(txtCom).removeClass("txt-resaltado-2");
+		       		$(txtCom).hide();
+		       		$(txtComP).hide();
+		       	}
+	        });    
+		    $(txtCom).keypress(function(event){
+            	if (!$(chkCom).is(":checked")) {
+					event.preventDefault();
+				}
+			});	
+			$(".cmpNumeroDecimalMill").autoNumeric({aSep: ',', aDec: '.'});	
+			$(".cmpNumeroDecimalDece").autoNumeric({aSep: ',', aDec: '.', vMax:99.99});					  
+	    });
+       /* ]]> */
+    </script>
+    <div class="contenido-bloque">  
+      <span class="columna" style="width:320px">        
+            <div class="titulo titulo-espaciado">            
+    	        <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.titulo1']}"/>    	        
+            </div>             
+            <div class="espacios-etiqueta2">
+                <span class="columna" style="width:150px">
+                   <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.producto']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:150px">
+                   <h:outputText value="#{datosProducto3.producto.descripcion}" styleClass="caja-texto valor-componente"/>
+                </span>               
+            </div>
+            <div class="espacios-etiqueta2">
+                <span class="columna" style="width:150px">
+                   <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.subProducto']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:150px">
+                   <h:outputText value="#{datosProducto3.subProducto.descripcion}" styleClass="caja-texto valor-componente"/>
+                </span>                              
+            </div>
+            <div class="espacios-etiqueta2">
+                <span class="columna" style="width:150px">
+                   <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.lineaCreditoSolicitada']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:150px">
+                   <span class="columna" style="width: 40px;">   
+                      <h:outputText value="#{datosProducto3.tipoMonedaCreSol.descripcion}" styleClass="caja-texto valor-componente" style="width: 40px;"/>
+                   </span>
+                   <span class="columna valorDer" style="width: 100px;"> 
+                      <h:outputText value="#{datosProducto3.expediente.expedienteTC.lineaCredSol}" styleClass="caja-texto" style="width: 98px; text-align: right;">
+                       <f:convertNumber locale="en" pattern="#,##0.00"/>
+                      </h:outputText>
+                   </span>
+                </span>   
+            </div> 
+            <div class="espacios-etiqueta2" style="#{datosProducto3.renderedCredApro and datosProducto3.renderedLineaCredAprob and datosProducto3.renderedLineaCreditoAprobadoMuestra ?'':'display:none'}">
+                <span class="columna" style="width:150px">
+                   <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.lineaCreditoAprobada']}:" 
+                   		styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:150px">
+					<span class="columna" style="width:150px">
+						<span class="columna" style="width: 40px;">
+							<h:selectOneMenu value="#{datosProducto3.tipoMonedaSel}"
+								required="true" style="width: 40px;"
+								styleClass="caja-texto valor-componente" id="selectTipoMoneda"
+								immediate="true" rendered="#{datosProducto3.renderedTMCredApro}"
+								readonly="true"
+								disabled="true">
+								<f:selectItems value="#{datosProducto3.listTipoMoneda}" />
+							</h:selectOneMenu>
+							<h:outputText
+								value="#{datosProducto3.tipoMonedaCreApr.descripcion}"
+								styleClass="caja-texto valor-componente"
+								style="#{!datosProducto3.renderedTMCredApro and datosProducto3.renderedLineaCreditoAprobadoMuestra ? '':'display:none;'} width: 40px;"
+								rendered="#{!datosProducto3.renderedTMCredApro}" />
+						</span>
+						<span class="columna valorDer" style="width: 100px;">
+							<h:inputText value="#{datosProducto3.lineaCreditoAprobado}"
+								styleClass="caja-texto valor-componente cmpNumeroDecimalMill"
+								style="width: 98px;  text-align: right;"
+								rendered="#{datosProducto3.renderedCredApro and datosProducto3.renderedTMCredApro}"
+								readonly="#{!datosProducto3.habCredApro}"
+								disabled="#{!datosProducto3.habCredApro}" id="lineaCredAprob" >
+								<f:convertNumber locale="en" pattern="#,##0.00"/>
+							</h:inputText>
+							<h:outputText value="#{datosProducto3.expediente.expedienteTC.lineaCredAprob}"
+								styleClass="caja-texto valor-componente cmpNumeroDecimalMill"
+								style="#{!datosProducto3.renderedTMCredApro ? '':'display:none;'} width: 98px; text-align: right;"
+								rendered="#{!datosProducto3.renderedTMCredApro and datosProducto3.renderedLineaCreditoAprobadoMuestra}" >
+								<f:convertNumber locale="en" pattern="#,##0.00"/>
+							</h:outputText>
+							<h:outputText value="#{datosProducto3.expediente.expedienteTC.lineaCredAprob}"
+								styleClass="caja-texto valor-componente cmpNumeroDecimalMill"
+								style="#{!datosProducto3.renderedTMCredApro ? '':'display:none;'} width: 98px; text-align: right;"
+								rendered="#{!datosProducto3.renderedTMCredApro and !datosProducto3.renderedLineaCreditoAprobadoMuestra}" >
+								<f:convertNumber locale="en" pattern="#,##0.00"/>
+							</h:outputText>							
+						</span>
+					</span>
+					<h:inputHidden value="#{datosProducto3.lineaCreditoOriginal}"/>
+
+				</span>  
+                <h:message for="selectTipoMoneda" errorClass="mensaje-error"/>
+                <h:message for="lineaCredAprob" errorClass="mensaje-error"/>                   
+            </div>            
+            <div class="espacios-etiqueta2">
+                <span class="columna" style="width:150px">
+                    <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.codPreEvaluador']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:150px">
+                    <h:outputText value="#{datosProducto3.expediente.expedienteTC.codPreEval}" styleClass="caja-texto valor-componente"/>
+                </span>    
+            </div>
+            <div class="espacios-etiqueta2">
+                <span class="columna" style="width:150px">
+                    <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.tipOferta']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:150px">
+                    <h:outputText value="#{datosProducto3.tipoOferta.descripcion}" styleClass="caja-texto valor-componente"/>
+                </span>    
+            </div>
+            <div class="espacios-etiqueta2">
+                <span class="columna" style="width:150px">
+                    <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.envioTarjeta']}:" styleClass="etiqueta" 
+                    rendered="#{datosProducto3.renderedEnvioTarjeta}" />
+                </span>
+                <span class="columna" style="width:150px">
+                    <h:outputText value="#{datosProducto3.tipoEnvio.descripcion}" styleClass="caja-texto valor-componente" 
+                    rendered="#{datosProducto3.renderedEnvioTarjeta}" />
+                </span>    
+            </div>  
+            
+            <div class="espacios-etiqueta2">
+	            <h:panelGroup id="idPanelPlazoSolocLabel3">
+	                <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.plazoSolicitado']}:" styleClass="etiqueta" 
+	                rendered="#{datosProducto3.renderedPlazoSolicitado}" />
+	                <h:panelGroup>
+		                <h:outputText value="#{datosProducto3.expediente.expedienteTC.plazoSolicitado}" 
+		                    		styleClass="valor" rendered="#{datosProducto3.renderedPlazoSolicitado}" /> 
+	               		<h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.simboloTiempo']}" styleClass="etiqueta" 
+	               		rendered="#{datosProducto3.renderedPlazoSolicitado}" />		                
+	                </h:panelGroup>                   		
+	            </h:panelGroup>
+            </div> 
+            <div class="espacios-etiqueta2" style="#{datosProducto3.renderedCredApro and datosProducto3.renderedPlazoSolicitadoApr and datosProducto3.renderedPlazoSolicitadoAprobOk?'':'display:none'}">
+	            <h:panelGroup id="idPanelPlazoSolocAprLabel3">
+	                <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.plazoSolicitadoApr']}:" styleClass="etiqueta" 
+	                rendered="#{datosProducto3.renderedPlazoSolicitadoApr}" />
+	                <h:panelGroup>	                
+	                	<h:inputText value="#{datosProducto3.expediente.expedienteTC.plazoSolicitadoApr}" 
+		                    		styleClass="txt-resaltado-2  campoValor1" maxlength="5"  	
+		                    		style="width: 25px;  text-align: right;"	                    		
+		                    		rendered="#{datosProducto3.renderedCredApro and datosProducto3.renderedPlazoSolicitadoApr and datosProducto3.renderedPlazoSolicitadoAprobEdit}"
+		                    		readonly="#{!datosProducto3.habPlazoSolApr}"
+								    disabled="#{!datosProducto3.habPlazoSolApr}" id="idPlazoSolApr"> 
+		                </h:inputText>  
+		                <!-- style="#{!datosProducto3.renderedCredApro ? '':'display:none;'} width: 25px; text-align: right;" -->
+		                <h:outputText value="#{datosProducto3.expediente.expedienteTC.plazoSolicitadoApr}"
+								styleClass="caja-texto valor-componente"
+								rendered="#{datosProducto3.renderedPlazoSolicitadoApr and !datosProducto3.renderedPlazoSolicitadoAprobEdit}" >
+						</h:outputText>		      
+	               		<h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.simboloTiempo']}" styleClass="etiqueta" 
+	               		rendered="#{datosProducto3.renderedPlazoSolicitadoApr and datosProducto3.renderedPlazoSolicitadoAprobOk}" />		                
+	                </h:panelGroup> 
+	                <h:message for="idPlazoSolApr" errorClass="mensaje-error"/>                    		
+	            </h:panelGroup>
+            </div> 
+            
+			<div class="campo-espaciado">
+					<span class="columna" style="width:150px">
+						<h:outputText
+						value="#{msg['com.ibm.bbva.common.datosProducto3.garantias']}:"
+						styleClass="etiqueta" rendered="#{datosProducto3.renderedGarantia}" />
+					</span>
+					<span class="columna" style="width:150px">
+						<h:outputText
+						value="#{datosProducto3.garantia.descripcion}"
+						styleClass="txt-resaltado-1 valor-componente" rendered="#{datosProducto3.renderedGarantia}" />
+					</span>
+			</div>
+            <div class="campo-espaciado">
+                <h:selectBooleanCheckbox value="#{datosProducto3.selectedItemSc}" rendered="#{datosProducto3.renderedSc}" readonly="#{datosProducto3.habCheckSc}" disabled="#{datosProducto3.habCheckSc}"  styleClass="separaCheck1"/>
+                <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.modifcarScoring']}" styleClass="etiqueta" rendered="#{datosProducto3.renderedSc}"/>  
+            </div>
+            				  
+            <div class="titulo titulo-espaciado" style="margin-top: 14px;">
+            	<h:panelGroup id="idPanelTasaEspecialTituloLabel2">
+               		<h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.tituloVerifAprob']}" styleClass="etiqueta" 
+               		rendered="#{datosProducto3.renderedSolicitudTasaEsp}" />
+                </h:panelGroup>              
+            </div> 		       	       
+            <div class="datos-cabecera-muestra">
+	            <h:panelGroup id="idPanelTasaEspecialCheck3">
+	                <h:selectBooleanCheckbox value="#{datosProducto3.selectedItemTe}" rendered="#{datosProducto3.renderedSolicitudTasaEsp}" disabled="#{datosProducto3.disabledSolicitudTasaEsp}" onclick="checkClick2(this)">
+	                	<f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{datosProducto3.cambiarTasaEspecial}"/>
+	                </h:selectBooleanCheckbox>
+	                <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.solicitaTasaEspecial']}" class="etiqueta" 
+	                	rendered="#{datosProducto3.renderedSolicitudTasaEsp}"/>
+	            </h:panelGroup>    
+	            <h:panelGroup id="idPanelTasaEspecialValor3">
+	                <h:inputText value="#{datosProducto3.expediente.expedienteTC.tasaEsp}" 
+	                    		styleClass="clsTasa txt-resaltado-2 campoValor1 cmpNumeroDecimalMill" id="idValorTasaEsp3" 
+	                    		rendered="#{datosProducto3.renderedSolicitudTasaEsp}" disabled="#{datosProducto3.disabledSolicitudTasaEsp}" > 
+	                      <f:convertNumber locale="en" pattern="#,##0.00"/>
+	                </h:inputText>
+					<h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.simboloPorcentaje']}" styleClass="etiqueta" 
+               		rendered="#{datosProducto3.renderedSolicitudTasaEsp}" />	                    	                    		
+	                <h:message for="idValorTasaEsp3" errorClass="mensaje-error"/> 	 		
+	            </h:panelGroup>
+	             	                           
+            </div>
+            
+            <!-- 
+            <div class="datos-cabecera-muestra">
+                <span class="columna" style="width:150px;">
+                   <h:selectBooleanCheckbox value="#{datosProducto3.selectedItemTe}" rendered="#{datosProducto3.renderedTe}" id="chkTasaEspecial" readonly="#{datosProducto3.habCheckTe}" disabled="#{datosProducto3.habCheckTe}" styleClass="separaCheck1" />                
+                   <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.solicitaTasaEspecial']}" styleClass="etiqueta" rendered="#{datosProducto3.renderedTe}"/>
+                </span>
+                <span class="columna" style="width:160px;" >
+                  <h:inputText value="#{datosProducto3.tasaEsp}" styleClass="#{datosProducto3.selectedItemTe ? 'txt-resaltado-2 ':' '} valor-componente numLineaCredSol cmpNumeroDecimalDece" style="#{datosProducto3.selectedItemTe ? '':'display:none;'}width: 40px; text-align:right;" maxlength="6" id="txtTasaEspecial"/>                   
+                  <h:inputText value="%" style="#{datosProducto3.selectedItemTe ? '':'display:none;'}width: 10px; text-align:left; border-width:0;" readonly="true" id="txtTasaEspecialPorc"/>                                      
+                </span>
+                <h:message for="chkTasaEspecial" errorClass="mensaje-error"/>                
+            </div>            
+             -->				                       
+            
+
+            <div class="campo-espaciado" style="#{datosProducto3.renderedDe ? '':'display:none;'}">
+                <h:selectBooleanCheckbox value="#{datosProducto3.selectedItemDe}" rendered="#{datosProducto3.renderedDe}"  id="exclDeleg" readonly="#{datosProducto3.habCheckDe}" disabled="#{datosProducto3.habCheckDe}"/>
+                <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.exclusionDelegacion']}" styleClass="etiqueta" rendered="#{datosProducto3.renderedDe}"/>  
+            </div>
+            <h:panelGroup id="idPanelNumeroContrato">
+	            <div class="campo-espaciado" style="#{datosProducto3.renderedNumContr ? '':'display:none;'}">
+	               <span class="columna" style="#{datosProducto3.renderedNumContrT ? '':'display:none;'} width:150px;">               
+	                   <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.numContrato']}:" styleClass="etiqueta" 
+	                   rendered="#{datosProducto3.renderedNumContrT}"/>
+	               </span>    
+	               <span class="columna" style="#{datosProducto3.renderedAdicional ? '':'display:none;'} width:150px;">               
+	                   <h:outputText value="#{datosProducto3.expediente.expedienteTC.nroContrato}" styleClass="etiqueta" 
+	                   rendered="#{datosProducto3.renderedNumContrT}"/>
+	               </span> 	                          
+	               <span class="columna" style="#{datosProducto3.renderedNumContr and !datosProducto3.renderedAdicional ? '':'display:none;'} width:150px;">                           
+	                   <h:inputText value="#{datosProducto3.expediente.expedienteTC.nroContrato}" styleClass="txt-resaltado-2 campoValor2" 
+	                   rendered="#{datosProducto3.renderedNumContr}" id="numContrato" maxlength="20" style="width:150px;"/>                    
+	                </span>
+	               <span class="columna campoValor2" style="#{!datosProducto3.renderedNumContr ? '':'display:none;'} width: 150px;">
+	                   <h:outputText value="#{datosProducto3.expediente.expedienteTC.nroContrato}" 
+	                   styleClass="caja-texto valor-componente" style="width: 160px; text-align: left;" 
+	                   rendered="#{!datosProducto3.renderedNumContr}"/>  
+	               </span>                
+	                <h:message for="numContrato" errorClass="mensaje-error"/>
+	            </div>
+            </h:panelGroup>
+            <div class="campo-espaciado" style="#{datosProducto3.renderedNumTarjeta ? '':'display:none;'}">
+               <span class="columna" style="#{datosProducto3.renderedNumTarjetaT ? '':'display:none;'} width:150px; ">               
+                   <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.numTarjeta']}:" styleClass="etiqueta" 
+                   rendered="#{datosProducto3.renderedNumTarjetaT}"/>
+               </span>          
+	               <span class="columna" style="#{datosProducto3.renderedAdicional ? '':'display:none;'} width:150px;">               
+	                   <h:outputText value="#{datosProducto3.expediente.expedienteTC.numTarjeta}" styleClass="etiqueta" 
+	                   rendered="#{datosProducto3.renderedNumContrT}"/>
+	               </span> 	                                      
+               <span class="columna" style="#{datosProducto3.renderedNumTarjeta and !datosProducto3.renderedAdicional? '':'display:none;'} width:150px;">                           
+                   <h:inputText value="#{datosProducto3.expediente.expedienteTC.numTarjeta}" 
+                   styleClass="txt-resaltado-2 campoValor2 soloNumeros" rendered="#{datosProducto3.renderedNumTarjeta and !datosProducto3.renderedAdicional}" 
+                   id="numTarjeta" maxlength="4" style="width:35px;"/>                    
+               </span>
+               <span class="columna campoValor2" style="#{!datosProducto3.renderedNumTarjeta ? '':'display:none;'} width: 150px;" 
+               rendered="#{!datosProducto3.renderedNumTarjeta}">
+                   <h:outputText value="#{datosProducto3.expediente.expedienteTC.numTarjeta}" 
+                   styleClass="caja-texto valor-componente" style="width: 160px; text-align: left;" 
+                   rendered="#{!datosProducto3.renderedNumTarjeta}"/>  
+               </span>
+               <span class="columna" style="#{datosProducto3.renderedNumTarjetaT ? '':'display:none;'} width:150px;">               
+                   <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.digitos']}" styleClass="etiqueta" 
+                   rendered="#{datosProducto3.renderedNumTarjetaT}"/>
+               </span>               
+               <h:message for="numTarjeta" errorClass="mensaje-error"/>
+            </div>    
+                    
+            <div class="campo-espaciado" style="#{datosProducto3.renderedWfTc ? '':'display:none;'}">
+               <span class="columna" style="width:150px;">               
+                  <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.estadoEnvioWfTc']}:" styleClass="etiqueta" 
+                  rendered="#{datosProducto3.renderedWfTc}"/>
+               </span>            
+               <span class="columna" style="width:150px;">                 
+                  <h:outputText value="#{datosProducto3.estado.descripcion}" styleClass="caja-texto valor-componente" 
+                  rendered="#{datosProducto3.renderedWfTc}"/>
+               </span>
+            </div>        
+      </span>
+            
+      <span class="columna linea-vertical-producto"></span>       
+      <span class="columna" style="width:250px">    
+          <div class="titulo titulo-espaciado">
+  	        <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.titulo2']}"/>
+          </div> 
+          <div class="espacios-etiqueta2">
+              <span class="columna" style="width:150px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.lineaConsumo']}:" styleClass="etiqueta"/>
+              </span>
+              <span class="columna" style="width:78px">
+	              <h:outputText value="#{datosProducto3.expediente.expedienteTC.lineaConsumo}" styleClass="caja-texto">
+	               		<f:convertNumber locale="en" pattern="#,##0.00"/>
+	              </h:outputText>    
+              </span>    
+          </div>       
+          <div class="espacios-etiqueta2">
+              <span class="columna" style="width:150px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.endeudamiento']}:" styleClass="etiqueta"/>
+              </span>
+              <span class="columna" style="width:78px">
+	              <h:outputText value="#{datosProducto3.expediente.expedienteTC.porcentajeEndeudamiento}" styleClass="caja-texto">
+	                 <f:convertNumber locale="en" pattern="#,##0.00"/>               
+	              </h:outputText>              
+	              <h:outputText value="%" styleClass="caja-texto valor-componente"/>
+              </span>    
+          </div>  
+          <div class="espacios-etiqueta2">
+              <span class="columna" style="width:150px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.riesgoCliGrp']}:" styleClass="etiqueta"/>
+              </span>
+              <span class="columna" style="width:78px">
+	              <h:outputText value="#{datosProducto3.expediente.expedienteTC.riesgoCliente}" styleClass="caja-texto">
+	                <f:convertNumber locale="en" pattern="#,##0.00"/>
+	              </h:outputText>   
+              </span>    
+          </div>   
+          <div class="espacios-etiqueta2">
+              <span class="columna" style="width:150px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.rvgl']}:" styleClass="etiqueta"/>
+              </span>
+              <span class="columna" style="width:78px">
+                  <h:outputText value="#{datosProducto3.expediente.expedienteTC.rvgl}" styleClass="caja-texto"/>
+              </span>    
+          </div> 
+          <div class="espacios-etiqueta2">
+              <span class="columna" style="width:150px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.ingNetoMensual']}:" styleClass="etiqueta"/>
+              </span>
+              <span class="columna" style="width:78px">
+	              <h:outputText value="#{datosProducto3.clienteNatural.ingNetoMensual}" styleClass="caja-texto">
+	                <f:convertNumber locale="en" pattern="#,##0.00"/>
+	              </h:outputText>      
+              </span>    
+          </div>          
+          <div class="espacios-etiqueta2">
+              <span class="columna" style="width:150px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.codigoBuro']}:" styleClass="etiqueta"/>
+              </span>
+              <span class="columna" style="width:78px">
+                  <h:outputText value="#{datosProducto3.tipoBuro.descripcion}" styleClass="caja-texto"/>
+              </span>    
+          </div>
+          <div class="espacios-etiqueta2">
+              <span class="columna" style="width:150px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.numeroCuenta']}:" styleClass="etiqueta"/>
+              </span>
+              <span class="columna" style="width:180px">
+                  <h:outputText value="#{datosProducto3.numTarjeta}" styleClass="caja-texto"/>
+              </span>    
+          </div>                             
+          <!-- 
+          <div class="espacios-etiqueta2">
+              <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.lineaConsumo']}:" styleClass="etiqueta"/>
+          </div>
+          <div class="espacios-etiqueta2">
+              <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.endeudamiento']}:" styleClass="etiqueta"/>
+           </div>
+          <div class="espacios-etiqueta2">
+              <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.riesgoCliGrp']}:" styleClass="etiqueta"/>
+          </div>     
+          
+          <div class="espacios-etiqueta2">
+              <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.rvgl']}:" styleClass="etiqueta"/>
+          </div>
+          <div class="espacios-etiqueta2">
+              <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.ingNetoMensual']}:" styleClass="etiqueta"/>
+          </div>
+            <div class="espacios-etiqueta2">
+              <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.numeroCuenta']}:" styleClass="etiqueta"/>
+          </div>          
+           <div class="espacios-etiqueta2">
+              <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.codigoBuro']}:" styleClass="etiqueta"/>
+          </div>                  
+           -->                                     
+
+                    
+      </span> 
+      
+     
+      <span class="columna" style="width:150px; margin-top: 25px;">
+            <div class="espacios-etiqueta2">            
+    	        <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.clasificacionSbs']}:" styleClass="etiqueta"/>    	        
+            </div>             
+            <div class="espacios-etiqueta2">
+                <span class="columna" style="width:78px">
+                   <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.sbsTitular']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:68px">
+                   	<h:outputText value="#{datosProducto3.expediente.expedienteTC.clasificacionSbs}" styleClass="caja-texto valor-componente">
+	                <f:convertNumber locale="en" pattern="#,##0.00"/>
+	              </h:outputText>
+	              <h:outputText value="%" styleClass="caja-texto valor-componente"/>
+                </span>               
+            </div>
+            <div class="espacios-etiqueta2">
+                <span class="columna" style="width:78px">
+                   <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.sbsConyuge']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:68px">
+	              <h:outputText value="#{datosProducto3.expediente.expedienteTC.sbsConyuge}" styleClass="caja-texto valor-componente">
+	                <f:convertNumber locale="en" pattern="#,##0.00"/>
+	              </h:outputText>  
+	              <h:outputText value="%" styleClass="caja-texto valor-componente"/>
+                </span>               
+            </div>                  
+            <div class="espacios-etiqueta2">            
+    	        <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.clasificacionBanco']}:" styleClass="etiqueta"/>    	        
+            </div>
+            <div class="espacios-etiqueta2">
+                <span class="columna" style="width:78px">
+                   <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.bancoTitular']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:68px">
+	              <h:outputText value="#{datosProducto3.expediente.expedienteTC.clasificacionBanco==null?'':datosProducto3.expediente.expedienteTC.clasificacionBanco.descripcion}" styleClass="caja-texto valor-componente"/>
+                </span>               
+            </div> 
+            <div class="espacios-etiqueta2">
+                <span class="columna" style="width:78px">
+                   <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.bancoConyuge']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:68px">
+	              <h:outputText value="#{datosProducto3.expediente.expedienteTC.bancoConyuge==null?'':datosProducto3.expediente.expedienteTC.bancoConyuge.descripcion}" styleClass="caja-texto valor-componente"/>
+                </span>               
+            </div> 
+            <div class="espacios-etiqueta2">
+                <span class="columna" style="width:78px">
+                   <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.scoring']}:" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:68px">
+	              <h:outputText value="#{datosProducto3.tipoScoring.descripcion}" styleClass="caja-texto valor-componente" style="50px;"/>
+                </span>               
+            </div>              
+        </span>
+               
+    </div>
+</div>
+</ui:composition>

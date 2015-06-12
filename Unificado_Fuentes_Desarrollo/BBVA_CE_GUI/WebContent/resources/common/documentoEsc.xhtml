@@ -1,0 +1,176 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+<h:outputScript library="js" name="scan_fin2.js" target="head"/>
+
+<script type="text/javascript">
+    /* <![CDATA[ */  
+    var formulario;  
+    var valor;    
+    function activarEscaner(form) {
+	   	var id = form.id;
+		var comando = document.getElementById(id+':comandoSesion').value;
+		var parametros = document.getElementById(id+':parametroSesion').value;
+		return inicializarEscaner(comando, parametros);
+	}
+	
+    function showArchivos(archivos) {        
+        var id = formulario.id;        
+		document.getElementById(id+':retornaDocEscApplet').value = archivos ;
+		if (valor == "ok") { 
+		    document.getElementById(id+':btnClickActDoc').click();
+		}
+    } 
+    
+    function verificar(form) {
+        var id = form.id;
+        //var result= document.appletBrowser.verificarCompleto();
+        if(applet("appletBrowser") != null && applet("appletBrowser") != "undefined"){
+	        var result= applet("appletBrowser").verificarCompleto(document.getElementById(id+':idDocsCargados').value);
+	        document.getElementById(id+':idValidaGuiaEsc').value = result;
+        }
+        else{
+        	document.getElementById(id+':idValidaGuiaEsc').value = '1';
+        }
+        /*var valGuia = document.appletBrowser.obtenerGuiaDoc();   
+        document.getElementById(id+':valGuiaDoc').value = valGuia;   
+        var ok= document.appletBrowser.existenTransferencias();
+        document.getElementById(id+':existenTransferencias').value = ok;*/    
+	}
+    /* ]]> */	
+ </script>
+<!--
+<h:inputHidden id="comandoSesion" value="#{documentosEscaneados.comandoSesion}" />
+<h:inputHidden id="parametroSesion" value="#{documentosEscaneados.parametroSesion}"/>
+<h:inputHidden id="retornaDocEscApplet"  value="#{documentosEscaneados.docEscApplet}" />
+-->
+<h:inputHidden id="idValidaGuiaEsc" value="#{documentosEscaneados.validaGuiaEscaneada}" />
+<h:inputHidden id="idDocsCargados" value="#{documentosEscaneados.tramaDocumentosCargados}" />
+<!--
+<h:inputHidden id="valGuiaDoc" value="#{documentosEscaneados.strGuiaDoc}" />
+<h:inputHidden id="tipoGuiaDoc" value="#{documentosEscaneados.strTiposDocs}" />
+<h:inputHidden id="docsFaltantes" value="#{documentosEscaneados.documentosFaltantes}" />
+<h:inputHidden id="reutilizables" value="#{documentosEscaneados.documentosReutilizables}" />
+<h:inputHidden id="existenTransferencias" value="#{documentosEscaneados.existenTransferencias}" />
+-->
+   
+    <div class="contenido-bloque"> 
+        <span class="columna" style="width:450px">
+            <div class="titulo titulo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.common.documentoEscaneado.titulo']}"/>
+            </div>
+        </span>
+    </div>
+    <h:panelGroup id="appletContent" layout="block" styleClass="contenido-bloque appletContainerDiv" rendered="#{documentosEscaneados.tipoVisualizacion != '3' and documentosEscaneados.tieneGuiaDocumentaria}">
+    	<!--
+        <applet 
+        	id      = "appletBrowser"
+            name    = "appletBrowser" 
+	        code    = "com.ibm.bbva.app.applet.AgregarDocumentos.class"	        
+	        archive = "../applet/BBVAAppletFTP.jar"
+	        width   = "700"
+	        height  = "160"
+	        hspace  = "0"
+	        vspace  = "0"
+	        align   = "middle"
+	        mayscript="mayscript"
+	      >
+	      <param name="log" value="#{documentosEscaneados.pathLog}"/>
+	      <param name="descargados" value="#{documentosEscaneados.pathEscaneados}"/>
+	      <param name="transferencias" value="#{documentosEscaneados.pathTransferencias}"/>
+	      <param name="tipovisualizacion" value="#{documentosEscaneados.tipoVisualizacion}"/>
+	      <param name="tramaDocumentos" value="#{documentosEscaneados.tramaDocumentos}"/>
+	      <param name="tramaDocumentosReutilizables" value="#{documentosEscaneados.tramaDocumentosReutilizables}"/>
+	      <param name="tramaDocumentosContent" value="#{documentosEscaneados.tramaDocumentosContent}"/>
+	      <param name="cleanTransferDir" value="#{documentosEscaneados.cleanTransferDir}"/>
+	      
+	      <param name="paginaEscaneoWeb" value="#{documentosEscaneados.paginaEscaneoWeb}"/>
+	      <param name="idEmpresa" value="#{documentosEscaneados.idEmpresa}"/>
+	      <param name="idSistema" value="#{documentosEscaneados.idSistema}"/>
+	      <param name="flagEscaneoWeb" value="#{documentosEscaneados.empleado.oficina.flagEscaneoWeb}"/>
+	      <param name="codigoEmpleadoEscaneoWeb" value="#{documentosEscaneados.empleado.codigo}"/>
+	      <param name="tramaTipoDocumentos" value="#{documentosEscaneados.tramaTipoDocumentos}"/>
+	      <param name="tamanoMaxPDF" value="#{documentosEscaneados.tamanoMaxPDF}" />
+	    </applet>
+		<object classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93"
+			width="700" height="160" id="appletBrowser" name="appletBrowser">
+			<param name="code" value="com.ibm.bbva.app.applet.AgregarDocumentos.class" />
+			<param name="archive" value="../applet/BBVAAppletFTP.jar" />
+			<param name="scriptable" value="true" />
+			<param name="mayscript" value="true" />
+			<param name="log" value="#{documentosEscaneados.pathLog}" />
+			<param name="descargados"
+				value="#{documentosEscaneados.pathEscaneados}" />
+			<param name="transferencias"
+				value="#{documentosEscaneados.pathTransferencias}" />
+			<param name="tipovisualizacion"
+				value="#{documentosEscaneados.tipoVisualizacion}" />
+			<param name="tramaDocumentos"
+				value="#{documentosEscaneados.tramaDocumentos}" />
+			<param name="tramaDocumentosReutilizables"
+				value="#{documentosEscaneados.tramaDocumentosReutilizables}" />
+			<param name="tramaDocumentosContent"
+				value="#{documentosEscaneados.tramaDocumentosContent}" />
+			<param name="cleanTransferDir"
+				value="#{documentosEscaneados.cleanTransferDir}" />
+			<param name="paginaEscaneoWeb"
+				value="#{documentosEscaneados.paginaEscaneoWeb}" />
+			<param name="idEmpresa" value="#{documentosEscaneados.idEmpresa}" />
+			<param name="idSistema" value="#{documentosEscaneados.idSistema}" />
+			<param name="flagEscaneoWeb"
+				value="#{documentosEscaneados.empleado.oficina.flagEscaneoWeb}" />
+			<param name="codigoEmpleadoEscaneoWeb"
+				value="#{documentosEscaneados.empleado.codigo}" />
+			<param name="tramaTipoDocumentos"
+				value="#{documentosEscaneados.tramaTipoDocumentos}" />
+			<param name="tamanoMaxPDF"
+				value="#{documentosEscaneados.tamanoMaxPDF}" />
+		</object>
+		-->
+	</h:panelGroup>
+	<h:outputScript rendered="#{documentosEscaneados.tipoVisualizacion != '3' and documentosEscaneados.tieneGuiaDocumentaria}">
+	/* <![CDATA[ */
+	$(document).ready(function() {
+		var strApplet = "";
+		var inicioTag = "";
+		var parametros = ""
+		var finTag = "";
+		if ($.browser.msie) {
+			inicioTag = "<object classid=\"clsid:8AD9C840-044E-11D1-B3E9-00805F499D93\" width=\"700\" height=\"160\" id=\"appletBrowser\" name=\"appletBrowser\">";
+			inicioTag = inicioTag + "<param name=\"code\" value=\"com.ibm.bbva.app.applet.AgregarDocumentos.class\" />";
+			inicioTag = inicioTag + "<param name=\"archive\" value=\"../applet/BBVAAppletFTP.jar\" />";
+			inicioTag = inicioTag + "<param name=\"scriptable\" value=\"true\" />";
+			inicioTag = inicioTag + "<param name=\"mayscript\" value=\"true\" />";
+			finTag = "</object>";
+		} else {
+			inicioTag = "<applet id=\"appletBrowser\" name=\"appletBrowser\" code=\"com.ibm.bbva.app.applet.AgregarDocumentos.class\" archive=\"../applet/BBVAAppletFTP.jar\" width=\"700\" height=\"160\" hspace=\"0\" vspace=\"0\" align=\"middle\" mayscript=\"mayscript\">";
+			finTag = "</applet>";
+		}
+		parametros = parametros + "<param name=\"log\" value=\"#{documentosEscaneados.pathLog}\"/>";
+		parametros = parametros + "<param name=\"descargados\" value=\"#{documentosEscaneados.pathEscaneados}\"/>";
+		parametros = parametros + "<param name=\"transferencias\" value=\"#{documentosEscaneados.pathTransferencias}\"/>";
+		parametros = parametros + "<param name=\"tipovisualizacion\" value=\"#{documentosEscaneados.tipoVisualizacion}\"/>";
+		parametros = parametros + "<param name=\"tramaDocumentos\" value=\"#{documentosEscaneados.tramaDocumentos}\"/>";
+		parametros = parametros + "<param name=\"tramaDocumentosReutilizables\" value=\"#{documentosEscaneados.tramaDocumentosReutilizables}\"/>";
+		parametros = parametros + "<param name=\"tramaDocumentosContent\" value=\"#{documentosEscaneados.tramaDocumentosContent}\"/>";
+		parametros = parametros + "<param name=\"cleanTransferDir\" value=\"#{documentosEscaneados.cleanTransferDir}\"/>";
+		parametros = parametros + "<param name=\"paginaEscaneoWeb\" value=\"#{documentosEscaneados.paginaEscaneoWeb}\"/>";
+		parametros = parametros + "<param name=\"idEmpresa\" value=\"#{documentosEscaneados.idEmpresa}\"/>";
+		parametros = parametros + "<param name=\"idSistema\" value=\"#{documentosEscaneados.idSistema}\"/>";
+		parametros = parametros + "<param name=\"flagEscaneoWeb\" value=\"#{documentosEscaneados.empleado.oficina.flagEscaneoWeb}\"/>";
+		parametros = parametros + "<param name=\"codigoEmpleadoEscaneoWeb\" value=\"#{documentosEscaneados.empleado.codigo}\"/>";
+		parametros = parametros + "<param name=\"tramaTipoDocumentos\" value=\"#{documentosEscaneados.tramaTipoDocumentos}\"/>";
+		parametros = parametros + "<param name=\"tamanoMaxPDF\" value=\"#{documentosEscaneados.tamanoMaxPDF}\" />";
+		strApplet = inicioTag + parametros + finTag;
+		
+		if ($("div.appletContainerDiv").is(":visible")) {
+			$("div.appletContainerDiv").html(strApplet); // la clase "appletContainerDiv" solo debe ser usada en el div que contiene al applet
+		}
+	});
+	/* ]]> */
+	</h:outputScript>
+
+</ui:composition>

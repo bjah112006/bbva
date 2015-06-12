@@ -1,0 +1,484 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+  <f:verbatim>
+		<script type="text/javascript">
+			String.prototype.trim = function() {return this.replace(/^\s+|\s+$/g,"")};
+			var tipoDato="";
+			onload = function() {
+				var msj = document.getElementById('registroTabla:msjOficinaLDAP').value;
+				var valorCodigoBusqueda = document.getElementById('registroTabla:valorCodigoBusqueda');
+				if (valorCodigoBusqueda!=null &#38;&#38; valorCodigoBusqueda!='undefined'){
+					valorCodigoBusqueda.focus();
+				}
+				if(msj!=null &#38;&#38; msj!=""){
+					alert(msj);
+				}
+			}
+			
+			function soloNumeros(e){
+			 if(window.event) // IE
+			    {
+			        charCode = e.keyCode;
+			        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
+			            //window.event.returnValue=0;
+			            e.preventDefault();
+			        }
+			    }
+			    else if(e.which) // Netscape/Firefox/Opera
+			    {
+			        charCode = e.which;
+			        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
+			            e.preventDefault();
+			        }
+			    }
+			}
+			function soloNumerosLetras(e){
+			 if(window.event) // IE
+			    {
+			        charCode = e.keyCode;
+			        if (!((charCode &#62; 47 &#38;&#38; charCode &#60; 58) || (charCode &#62; 64 &#38;&#38; charCode &#60; 91) || (charCode &#62; 96 &#38;&#38; charCode &#60; 123))){
+			            //window.event.returnValue=0;
+			            e.preventDefault();
+			        }
+			    }
+			    else if(e.which) // Netscape/Firefox/Opera
+			    {
+			        charCode = e.which;
+			        if (!((charCode &#62; 47 &#38;&#38; charCode &#60; 58) || (charCode &#62; 64 &#38;&#38; charCode &#60; 91) || (charCode &#62; 96 &#38;&#38; charCode &#60; 123))){
+			            e.preventDefault();
+			        }
+			    }
+			}
+			function soloNumerosLetrasEnter(e){
+			 if(window.event) // IE
+			    {
+			        charCode = e.keyCode;
+			        if (!((charCode &#62; 47 &#38;&#38; charCode &#60; 58) || (charCode &#62; 64 &#38;&#38; charCode &#60; 91) || (charCode &#62; 96 &#38;&#38; charCode &#60; 123) || charCode == 13)){
+			            //window.event.returnValue=0;
+			            e.preventDefault();
+			        }
+			    }
+			    else if(e.which) // Netscape/Firefox/Opera
+			    {
+			        charCode = e.which;
+			        if (!((charCode &#62; 47 &#38;&#38; charCode &#60; 58) || (charCode &#62; 64 &#38;&#38; charCode &#60; 91) || (charCode &#62; 96 &#38;&#38; charCode &#60; 123) || charCode == 13)){
+			            e.preventDefault();
+			        }
+			    }
+			}
+			function soloLetras(e){
+			 if(window.event) // IE
+			    {
+			        charCode = e.keyCode;
+			        if (!((charCode &#62; 64 &#38;&#38; charCode &#60; 91) || (charCode &#62; 96 &#38;&#38; charCode &#60; 123) || charCode == 32 || charCode == 8 || charCode == 46 || charCode == 225 || charCode == 233 || charCode == 237 || charCode == 243 || charCode == 250 || charCode == 193 || charCode == 201 || charCode == 205 || charCode == 211 || charCode == 219)){
+			            //window.event.returnValue=0;
+			            e.preventDefault();
+			        }else{
+			        	var valorApePat = document.getElementById('registroTabla:valorApePat').value;
+			        	var valorApeMat = document.getElementById('registroTabla:valorApeMat').value;
+			        	var valorNombre = document.getElementById('registroTabla:valorNombre').value;
+			        	document.getElementById('registroTabla:valorNombresCompletos').value =  valorApePat + " " + valorApeMat + " " + valorNombre; 
+			        }
+			    }
+			    else if(e.which) // Netscape/Firefox/Opera
+			    {
+			        charCode = e.which;
+			        if (!((charCode &#62; 64 &#38;&#38; charCode &#60; 91) || (charCode &#62; 96 &#38;&#38; charCode &#60; 123) || charCode == 32 || charCode == 8 || charCode == 46 || charCode == 225 || charCode == 233 || charCode == 237 || charCode == 243 || charCode == 250 || charCode == 193 || charCode == 201 || charCode == 205 || charCode == 211 || charCode == 219)){
+			            e.preventDefault();
+			        }else{
+			        	var valorApePat = document.getElementById('registroTabla:valorApePat').value;
+			        	var valorApeMat = document.getElementById('registroTabla:valorApeMat').value;
+			        	var valorNombre = document.getElementById('registroTabla:valorNombre').value;
+			        	document.getElementById('registroTabla:valorNombresCompletos').value =  valorApePat + " " + valorApeMat + " " + valorNombre; 
+			        }
+			    }
+			}
+			function soloNumerosConDecimales(e)
+			{
+			    if(window.event) // IE
+			    {
+			        charCode = e.keyCode;
+			
+			        if (charCode!=46 &#38;&#38; charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
+			            //window.event.returnValue=0;
+			            e.preventDefault();
+			        }
+			    }
+			    else if(e.which) // Netscape/Firefox/Opera
+			    {
+			        charCode = e.which;
+			        if (charCode!=46 &#38;&#38; charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
+			            e.preventDefault();
+			        }
+			    }
+			}
+			function validaInputText(e) {    
+			  if (tipoDato=="STRING") {  
+			  }else if(tipoDato=="INTEGER" || tipoDato=="SHORT" || tipoDato=="LONG") {
+			     soloNumeros(e);
+			  }else if(tipoDato=="DOUBLE" || tipoDato=="FLOAT") {
+			     soloNumerosConDecimales(e);       
+			  }  
+			}
+			function confirmarActualiza(comp) {
+				if(document.getElementById("registroTabla:valorCantidad")!=null){
+					  var cantidadExp = document.getElementById("registroTabla:valorCantidad").value;
+					  var flagActivo = document.getElementById("registroTabla:valorActivo").checked;
+					  var resultado=true;
+					  if(!flagActivo){
+					  	if (cantidadExp>0){
+					  		//resultado = confirm('El Empleado tiene expedientes asignados, está seguro que desea inactivarlo?');
+					  		//return resultado;
+					  		alert('El Empleado tiene expedientes asignados, no se puede inactivar')
+					  	}
+					  }
+				}
+				//resultado = confirm('Está seguro de guardar los datos?');
+				//return resultado;
+			}
+			</script>
+		</f:verbatim>
+    	<div class="bloque">    
+		    <div class="contenido-bloque">  
+		    	<h:outputText id="nombreTablaOTX"  styleClass="titulo"
+						value="Mantenimiento - #{consultarTabla.tablaParametricaVO.tablaVO.nombreMostrar}" />
+				<h:inputHidden id= "msjOficinaLDAP" name="msjOficinaLDAP" value="#{consultarTabla.mensajeOficinaLDAP}"/>
+			</div>
+		</div>
+		<div class="bloque">    
+		    <div class="contenido-bloque">
+		    	<h:panelGrid columns="3">
+			    		<h:panelGroup>
+			    			<div class="campo-espaciado espacios-etiqueta" style="width:250px">
+				    			<h:outputLabel style="width:150px;" for=" "
+									value="Ingresar Registro"
+									rendered="#{consultarTabla.blnmostrarconsultaldap}"
+									styleClass="etiqueta" />
+							</div>
+			    		</h:panelGroup>
+		    		<h:panelGroup>
+		    			<h:inputText onkeypress="soloNumerosLetrasEnter(event);" size="39"
+							maxlength="8" id="valorCodigoBusqueda"
+							value="#{consultarTabla.registro}" rendered="#{consultarTabla.blnmostrarconsultaldap}"
+							styleClass="caja-texto"
+							readonly="false" 
+							disabled="false" ></h:inputText>
+		    		</h:panelGroup>
+		    		<h:panelGroup>
+		    			<h:commandButton id="consultar"
+							action="#{consultarTabla.consultarEmpleadoLDAP}" value="Consultar"
+							rendered="#{consultarTabla.blnmostrarconsultaldap}"
+							styleClass="boton" />
+		    		</h:panelGroup>
+		    	</h:panelGrid>
+		    	<h:panelGrid columns="2">
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado espacios-etiqueta" style="width:250px">
+				    		<h:outputLabel style="width:150px;" for=" "
+									value="Cantidad expedientes en bandeja"
+									rendered="#{!consultarTabla.blnmostrarconsultaldap}"
+									styleClass="etiqueta" />
+						</div>
+		    		</h:panelGroup>
+		    		<h:panelGroup>
+		    			<h:inputText onkeypress="validaInputText(this, event);" size="10"
+							id="valorCantidad"
+							value="#{consultarTabla.cantidadExpedientesEmpleado}" rendered="#{!consultarTabla.blnmostrarconsultaldap}"
+							styleClass="caja-texto"
+							disabled="true"
+							readonly="true"></h:inputText>
+		    		</h:panelGroup>
+		    	</h:panelGrid>   
+		    	<h:panelGrid columns="2">
+		    		<h:panelGroup>
+			    		<div class="campo-espaciado espacios-etiqueta" style="width:250px">
+			       			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+							<h:outputLabel style="width:150px;" for=" "
+								value="Registro"
+								rendered="true"
+								styleClass="etiqueta" />
+			       		</div>
+		       		</h:panelGroup>
+		       		<h:panelGroup>
+		       			<div class="campo-espaciado" >
+						<h:inputText onkeypress="validaInputText(this, event);" size="39"
+							maxlength="8" id="valorCodigo"
+							value="#{consultarTabla.empleadoVO.codigo}" rendered="true"
+							styleClass="caja-texto"
+							disabled="true"
+							readonly="true"></h:inputText>
+					</div>
+		       		</h:panelGroup>
+		    	</h:panelGrid> 
+		    	<h:panelGrid columns="2">
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado espacios-etiqueta" style="width:250px; height:60px;">
+			       			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+							<h:outputLabel style="width:150px;" for=" "
+								value="Nombre"
+								rendered="true"
+								styleClass="etiqueta" />
+		       			</div>
+		    		</h:panelGroup>
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado" >
+							<h:inputTextarea rows="4" cols="30" id="valorNombre"
+								onkeypress="soloLetras(event);"
+								onkeyup="soloLetras(event);"
+								value="#{consultarTabla.empleadoVO.nombres}" rendered="true"
+								styleClass="caja-texto"
+								disabled="#{consultarTabla.blnmodoinactivo}"
+								readonly="#{consultarTabla.blnmodoinactivo}" ></h:inputTextarea>
+						</div>
+		    		</h:panelGroup>
+		    	</h:panelGrid>
+		    	<h:panelGrid columns="2">
+		    		<h:panelGroup>
+			    			<div class="campo-espaciado espacios-etiqueta" style="width:250px">
+				       			<h:graphicImage height="8px;" width="8px;"
+									url="../resources/images/mandatorio.gif"
+									rendered="true" />
+								<h:outputLabel style="width:150px;" for=" "
+									value="Apellido Paterno"
+									rendered="true"
+									styleClass="etiqueta" />
+			       			</div>
+		    		</h:panelGroup>
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado" >
+							<h:inputText onkeypress="return soloLetras(event);" onkeyup="soloLetras(event);" size="39"
+								maxlength="50" id="valorApePat"
+								value="#{consultarTabla.empleadoVO.apepat}" rendered="true"
+								styleClass="caja-texto"
+								disabled="#{consultarTabla.blnmodoinactivo}"
+								readonly="#{consultarTabla.blnmodoinactivo}" ></h:inputText>
+						</div>
+		    		</h:panelGroup>
+		    	</h:panelGrid>
+		    	<h:panelGrid columns="2">
+		    		<h:panelGroup>
+			    		<div class="campo-espaciado espacios-etiqueta" style="width:250px">
+			       			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+							<h:outputLabel style="width:150px;" for=" "
+								value="Apellido Materno"
+								rendered="true"
+								styleClass="etiqueta" />
+			       		</div>
+		    		</h:panelGroup>
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado" >
+							<h:inputText onkeypress="soloLetras(event);" onkeyup="soloLetras(event);" size="39"
+								maxlength="50" id="valorApeMat"
+								value="#{consultarTabla.empleadoVO.apemat}" rendered="true"
+								styleClass="caja-texto"
+								disabled="#{consultarTabla.blnmodoinactivo}"
+								readonly="#{consultarTabla.blnmodoinactivo}"></h:inputText>
+						</div>
+		    		</h:panelGroup>
+		    	</h:panelGrid>
+		    	<h:panelGrid columns="2">
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado espacios-etiqueta" style="width:250px; height:50px;">
+			       			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+							<h:outputLabel style="width:150px;" for=" "
+								value="Nombres Completos"
+								rendered="true"
+								styleClass="etiqueta" />
+		       			</div>
+		    		</h:panelGroup>
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado" >
+							<h:inputTextarea rows="4" cols="30" id="valorNombresCompletos"
+								value="#{consultarTabla.empleadoVO.nombresCompletos}" rendered="true"
+								styleClass="caja-texto"
+								disabled="true"
+								readonly="true"></h:inputTextarea>
+						</div>
+		    		</h:panelGroup>
+		    	</h:panelGrid>
+		    	<h:panelGrid columns="2">
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado espacios-etiqueta" style="width:250px">
+			       			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="false" />
+							<h:outputLabel style="width:150px;" for=" "
+								value="Correo"
+								rendered="true"
+								styleClass="etiqueta" />
+		       			</div>
+		    		</h:panelGroup>
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado" >
+							<h:inputText onkeypress="validaInputText(this, event);" size="39"
+								maxlength="50" id="valorCorreo"
+								value="#{consultarTabla.empleadoVO.correo}" rendered="true"
+								styleClass="caja-texto"
+								disabled="false"
+								readonly="false"></h:inputText>
+						</div>
+		    		</h:panelGroup>
+		    	</h:panelGrid>
+		    	<h:panelGrid columns="2">
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado espacios-etiqueta" style="height:16.85px; width:250px;">
+			       			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+							<h:outputLabel style="width:150px;" for=" "
+								value="Oficina"
+								rendered="true"
+								styleClass="etiqueta" />
+		       			</div>
+		    		</h:panelGroup>
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado" >
+						<h:selectOneMenu id="valorOficina"
+							value="#{consultarTabla.empleadoVO.idOficinaFk}" rendered="true"
+							styleClass="select" 
+							readonly="false" 
+							disabled="false" >
+							<f:selectItems value="#{consultarTabla.listOficina}" />
+						</h:selectOneMenu>
+					</div>
+		    		</h:panelGroup>
+		    	</h:panelGrid>
+		    	<h:panelGrid columns="2">
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado espacios-etiqueta" style="width:250px">
+		       			<h:graphicImage height="8px;" width="8px;"
+							url="../resources/images/mandatorio.gif"
+							rendered="true" />
+						<h:outputLabel style="width:150px;" for=" "
+							value="Perfil"
+							rendered="true"
+							styleClass="etiqueta" />
+		       			</div>
+		    		</h:panelGroup>
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado" >
+							<h:selectOneMenu id="valorPerfil"
+								value="#{consultarTabla.empleadoVO.idPerfilFk}" rendered="true"
+								styleClass="select" 
+								readonly="#{consultarTabla.blnmodoinactivoCantExp}" 
+								disabled="#{consultarTabla.blnmodoinactivoCantExp}" >
+								<f:selectItems value="#{consultarTabla.listPerfil}" />
+							</h:selectOneMenu>
+						</div>
+		    		</h:panelGroup>
+		    	</h:panelGrid>
+		    	<h:panelGrid columns="2">
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado espacios-etiqueta" style="width:250px">
+			       			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+							<h:outputLabel style="width:150px;" for=" "
+								value="Nivel"
+								rendered="true"
+								styleClass="etiqueta" />
+		       			</div>
+		    		</h:panelGroup>
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado" >
+							<h:selectOneMenu id="valorNivel"
+								value="#{consultarTabla.empleadoVO.idNivelFk}" rendered="true"
+								styleClass="select" 
+								readonly="false" 
+								disabled="false" >
+								<f:selectItems value="#{consultarTabla.listNivel}" />
+							</h:selectOneMenu>
+						</div>
+		    		</h:panelGroup>
+		    	</h:panelGrid>
+		    	<h:panelGrid columns="2">
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado espacios-etiqueta" style="width:250px">
+		       			<h:graphicImage height="8px;" width="8px;"
+							url="../resources/images/mandatorio.gif"
+							rendered="true" />
+						<h:outputLabel style="width:150px;" for=" "
+							value="Categoria"
+							rendered="true"
+							styleClass="etiqueta" />
+		       		</div>
+		    		</h:panelGroup>
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado" >
+						<h:selectOneMenu id="valorCategoria"
+							value="#{consultarTabla.empleadoVO.idTipoCategoriaFk}" rendered="true"
+							styleClass="select" 
+							readonly="false" 
+							disabled="false" >
+							<f:selectItems value="#{consultarTabla.listTipoCategoria}" />
+						</h:selectOneMenu>
+					</div>
+		    		</h:panelGroup>
+		    	</h:panelGrid>
+		    	<h:panelGrid columns="2">
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado espacios-etiqueta" style="width:250px">
+			       			<h:graphicImage height="8px;" width="8px;"
+								url="../resources/images/mandatorio.gif"
+								rendered="true" />
+							<h:outputLabel style="width:150px;" for=" "
+								value="Activo"
+								rendered="true"
+								styleClass="etiqueta" />
+		       			</div>
+		    		</h:panelGroup>
+		    		<h:panelGroup>
+		    			<div class="campo-espaciado" >
+							<h:selectBooleanCheckbox id="valorActivo"
+								value="#{consultarTabla.empleadoVO.flagActivo}"
+								rendered="true" 
+								readonly="false" 
+								disabled="false" />
+						</div>
+		    		</h:panelGroup>
+		    	</h:panelGrid>
+		    	<h:panelGrid columns="1">
+		    		<h:panelGroup>
+		    			<div>
+		       			<h:messages globalOnly="true" styleClass="mensaje-error" rendered="true"></h:messages>
+		       			<h:outputText escape="false" value="#{consultarTabla.textoMensajeCartEmp}"/>
+		       			</div>
+		    		</h:panelGroup>
+		    	</h:panelGrid>
+			</div>
+		</div>	
+		<div class="bloque">    
+		    <div class="contenido-bloque">  
+		    	<div class="campo-espaciado" style="text-align:center;">
+			    	<span class="columna" style="width:120px">
+				    	<div class="campo-espaciado" >	
+							<h:commandButton id="guardar"
+								action="#{consultarTabla.guardarRegistro}" value="Guardar"
+								onclick="confirmarActualiza(this);"
+								styleClass="boton" />
+						</div>
+					</span>
+					<span class="columna">
+						<div class="campo-espaciado" >		
+							<h:commandButton immediate="true" id="cancelar"
+								action="#{consultarTabla.cancelar}" value="Cancelar"
+								styleClass="boton" />
+						</div>
+					</span>
+				</div>
+			</div>
+		</div>
+		
+</ui:composition>

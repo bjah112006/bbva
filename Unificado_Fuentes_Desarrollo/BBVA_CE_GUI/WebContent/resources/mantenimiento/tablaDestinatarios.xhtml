@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg" />
+	<table>
+		<tr>
+			<td>
+				<h:outputText value="Rol"  styleClass="etiqueta"/>
+				<h:selectManyListbox id="origen" style="width: 200px; height: 180px;"
+									value="#{tablaDestinatarios.source}">
+   						<f:selectItems value="#{tablaDestinatarios.items}" />
+   					</h:selectManyListbox>
+			</td>
+			<td>
+				<div class="campo-espaciado espacios-etiqueta">
+					<input type="button" id="agregarRol"  onclick=";jMoveToRight(false);"
+							value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.msg.AgregarRol']}"/>
+				</div>
+				<div class="campo-espaciado espacios-etiqueta" style="margin-top:1px;">
+					<input type="button" id="eliminarRol" onclick=";jMoveToLeft(false);"
+							value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.msg.EliminarRol']}"/>
+				</div>
+			</td>
+			<td>
+				<h:outputText value="Destinatarios"  styleClass="etiqueta"/>
+				<h:selectManyListbox id="destino" style="width: 200px; height: 180px;"
+									value="#{tablaDestinatarios.selected}">
+   						<f:selectItems value="#{tablaDestinatarios.destination}" />
+   				</h:selectManyListbox>
+			</td>
+		</tr>
+	</table>
+</ui:composition>

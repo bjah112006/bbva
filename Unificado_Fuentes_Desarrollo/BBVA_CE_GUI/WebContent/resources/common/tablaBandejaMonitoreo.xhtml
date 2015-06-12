@@ -1,0 +1,217 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg" />
+
+<script type="text/javascript"> 
+    /* <![CDATA[ */
+	$(document).ready(function(){
+	
+		var idDblClick = $("input:hidden").filter(function() {
+			        	var txtIds = $(this).attr("name");
+			        	return txtIds.match(/^.*\:idDblClick$/);
+			        });
+		$(".dataTableEx tbody:first tr").mouseover(function () {
+			$(this).addClass("sombraFila");
+			$(this).css('cursor', 'pointer');
+		});
+		$(".dataTableEx tbody:first tr").mouseout(function () {
+        	$(this).removeClass("sombraFila");
+        	$(this).css('cursor', 'default');
+        });
+		$(".dataTableEx tbody:first tr").click(function(event){
+			if(event.target.id.split(":")[3] != "idSelect"){
+				if ($(idDblClick).val()=="true") {
+					$(this).children("td").children("a")[0].onclick();
+				}
+			}
+		});
+	});
+    /* ]]> */
+</script>
+
+<h:inputHidden id="idDblClick" value="#{tablaBandejaMonitoreo.ejecDblClick}"/>
+<h:inputHidden id="idExpSelcc" value="#{tablaBandejaMonitoreo.cadExpSelecc}"/>
+<h:inputHidden id="idActionCheck" value="#{tablaBandejaMonitoreo.actionCheck}"/>
+
+
+<div style=" width:790px; overflow-x:auto; overflow-y:scroll;">
+	<h:panelGroup id="panelTablaBm">
+		<h:dataTable  border="1" cellpadding="0" cellspacing="0"
+			rendered="true" id="tablaBandejaMonitoreo"
+			value="#{tablaBandejaMonitoreo.listTabla}" var="item"
+			styleClass="dataTableEx tablesorter" headerClass="headerClass"
+			footerClass="footerClass" rows="#{tablaBandejaPend.numeroRegistro}" binding="#{tablaBandejaMonitoreo.dataTable}" >
+		     
+            <h:column rendered="#{tablaBandejaMonitoreo.renderedRb}"> 
+                <f:facet name="header">
+					<h:outputText value=""></h:outputText>
+				</f:facet>
+				
+				<h:selectBooleanCheckbox id="idSelect" onchange="javascript: marcarSeleccionados(this, '#{item.codigo}');" />
+			</h:column>
+			
+			<h:column style="display:none;">
+               <h:commandLink id="idSeleccionFila" immediate="false" value="sel"
+					action="#{tablaBandejaMonitoreo.seleccionaFila}" style="display:none;">
+					<f:param value="#{item.codigo}" name="codigo" />
+					<f:param value="#{item.taskID}" name="taskID" />
+					<f:param value="#{item.fechaIncidencia}" name="activado"/>
+					
+				</h:commandLink>
+		     </h:column>
+            
+			<h:column nowrap="true" align="center" width="10%">
+				<f:facet name="header">
+					<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.expediente']}"></h:outputText>
+				</f:facet>
+				
+				<h:outputText value="#{item.codigo}"></h:outputText>
+			</h:column>
+			
+			<h:column nowrap="true" align="center" width="10%">
+				<f:facet name="header">
+					<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.estado']}"></h:outputText>
+				</f:facet>
+				
+				<h:outputText value="#{item.estadoAnterior}"></h:outputText>
+			</h:column>
+			
+			<h:column nowrap="true" align="center" width="10%">
+				<f:facet name="header">
+					<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.rol']}"></h:outputText>
+				</f:facet>
+				
+				<h:outputText value="#{item.perfilUsuarioActual}"></h:outputText>
+			</h:column>
+			
+			<h:column nowrap="true" align="center" width="10%">
+				<f:facet name="header">
+					<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.tarea']}"></h:outputText>
+				</f:facet>
+				
+				<h:outputText value="#{item.desTarea}"></h:outputText>
+			</h:column>
+			
+			<h:column nowrap="true" align="center" width="10%">
+				<f:facet name="header">
+					<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.registro']}"></h:outputText>
+				</f:facet>
+				
+				<h:outputText value="#{item.codigoUsuarioAnterior}"></h:outputText>
+			</h:column>
+			
+			<h:column nowrap="true" align="center" width="10%">
+				<f:facet name="header">
+					<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.usuario']}"></h:outputText>
+				</f:facet>
+				
+				<h:outputText value="#{item.nombreUsuarioActual}"></h:outputText>
+			</h:column>
+			
+			<h:column nowrap="true" align="center" width="10%">
+				<f:facet name="header">
+					<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.fechaIncidente']}"></h:outputText>
+				</f:facet>
+				
+				<h:outputText value="#{item.fechaIncidencia}"></h:outputText>
+			</h:column>
+			
+			<h:column nowrap="true" align="center" width="10%" rendered="#{tablaBandejaMonitoreo.process}">
+				<f:facet name="header">
+					<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.nroReintentos']}"></h:outputText>
+				</f:facet>
+				
+				<h:outputText value="#{item.nroReintentos}"></h:outputText>
+			</h:column>
+			
+			<h:column nowrap="true" align="center" width="10%">
+				<f:facet name="header">
+					<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.tipoError']}"></h:outputText>
+				</f:facet>
+				
+				<h:outputText value="#{item.tipoError}"></h:outputText>
+			</h:column>
+			
+			<h:column nowrap="true" align="center" width="10%" rendered="#{tablaBandejaMonitoreo.process}">
+				<f:facet name="header">
+					<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.descError']}"></h:outputText>
+				</f:facet>
+				
+				<h:outputText value="#{item.descripcionError}"></h:outputText>
+			</h:column>
+			
+			<h:column nowrap="true" align="center" width="10%" rendered="#{tablaBandejaMonitoreo.content}">
+				<f:facet name="header">
+					<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.cantDocumentos']}"></h:outputText>
+				</f:facet>
+				
+				<h:outputText value="#{item.cantDocumentos}"></h:outputText>
+			</h:column>
+			
+			<h:column nowrap="true" align="center" width="10%" rendered="#{tablaBandejaMonitoreo.log}">
+				<f:facet name="header">
+					<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.fechaRestauracion']}"></h:outputText>
+				</f:facet>
+				
+				<h:outputText value="#{item.fechaRestauracion}"></h:outputText>
+			</h:column>
+			
+			<h:column nowrap="true" align="center" width="10%" rendered="#{tablaBandejaMonitoreo.log}">
+				<f:facet name="header">
+					<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.fechaCancelacion']}"></h:outputText>
+				</f:facet>
+				
+				<h:outputText value="#{item.fechaCancelacion}"></h:outputText>
+			</h:column>
+			
+			<f:facet name="footer">
+	            <div class="espacios-etiqueta2">
+	                <span class="columna" style="width:150px">
+	                	<h:panelGroup layout="block" style="padding:5px 10px;">
+	                   		<h:outputText value="#{tablaBandejaMonitoreo.numRegistros}" styleClass="etiqueta"/>
+	                   	</h:panelGroup>	
+	                </span>
+	                <span class="columna" style="width:150px">
+		                <h:panelGroup layout="block" style="padding:5px 10px;">
+							<h:commandButton value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.btnPrimero']}"
+								actionListener="#{tablaBandejaMonitoreo.pageFirst}"
+								disabled="#{tablaBandejaMonitoreo.dataTable.first == 0}" />
+							<h:commandButton value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.btnAnterior']}"
+								actionListener="#{tablaBandejaMonitoreo.pagePrevious}"
+								disabled="#{tablaBandejaMonitoreo.dataTable.first == 0}" />
+							<h:panelGroup style="padding: 0px 10px;">
+								<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.pagina']} #{tablaBandejaMonitoreo.currentPage} #{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.de']} #{tablaBandejaMonitoreo.totalPages}" />
+							</h:panelGroup>
+							<h:commandButton value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.btnSiguiente']}"
+								actionListener="#{tablaBandejaMonitoreo.pageNext}"
+								disabled="#{tablaBandejaMonitoreo.dataTable.first + tablaBandejaMonitoreo.dataTable.rows >= tablaBandejaMonitoreo.dataTable.rowCount}" />
+							<h:commandButton value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.btnUltimo']}"
+								actionListener="#{tablaBandejaMonitoreo.pageLast}"
+								disabled="#{tablaBandejaMonitoreo.dataTable.first + tablaBandejaMonitoreo.dataTable.rows >= tablaBandejaMonitoreo.dataTable.rowCount}" />
+						 
+						  <h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaMonitoreo.lblRegistros']}:" styleClass="etiqueta"/>
+							<h:selectOneMenu value="#{tablaBandejaMonitoreo.numeroRegistro}" required="true"
+							 	 onchange="submit()"
+								 valueChangeListener="#{tablaBandejaMonitoreo.cambiarPaginacion}" id="idPaginacion" 
+								 styleClass="valor-componente" immediate="true">
+						        <f:selectItem id="item2" itemLabel="10" itemValue="10" />
+						        <f:selectItem id="item3" itemLabel="20" itemValue="20" />
+						        <f:selectItem id="item4" itemLabel="30" itemValue="30" />
+						        <f:selectItem id="item5" itemLabel="Todos" itemValue="-1" />
+						    </h:selectOneMenu>
+		             
+						</h:panelGroup>
+	                </span>                              
+	            </div>
+			</f:facet>
+		</h:dataTable>
+		
+		<h:inputHidden value="#{tablaBandejaMonitoreo.sortField}" />
+		<h:inputHidden value="#{tablaBandejaMonitoreo.sortAscending}" />
+	</h:panelGroup>
+</div>
+</ui:composition>

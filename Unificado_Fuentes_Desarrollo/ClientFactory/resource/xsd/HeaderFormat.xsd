@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SIR: Sistema Integración Reniec -->
+<xsd:schema elementFormDefault="unqualified"
+	targetNamespace="http://pe.grupobbva.com/SIR/ents/header"
+	xmlns:tns="http://pe.grupobbva.com/SIR/ents/header" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:element name="requestHeader" type="tns:RequestHeader" />
+	<xsd:element name="responseHeader" type="tns:ResponseHeader" />
+	<xsd:complexType name="RequestHeader">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="canal" type="xsd:string" />
+			<xsd:element minOccurs="0" name="codigoAplicacion" type="xsd:string" />
+			<xsd:element minOccurs="0" name="idEmpresa" type="xsd:string" />
+			<xsd:element minOccurs="0" name="usuario" type="xsd:string" />
+			<xsd:element minOccurs="0" name="fechaHoraEnvio" type="xsd:string" />			
+			<xsd:element minOccurs="0" name="idTransaccion" type="xsd:string" />
+			<xsd:element minOccurs="0" name="codigoInterfaz" type="xsd:string" />			
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="ResponseHeader">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="idTransaccion" type="xsd:string" />
+			<xsd:element minOccurs="0" name="codigoRespuesta" type="xsd:string" />			
+			<xsd:element minOccurs="0" name="mensajeRespuesta" type="xsd:string" />			
+		</xsd:sequence>
+	</xsd:complexType>
+
+</xsd:schema>

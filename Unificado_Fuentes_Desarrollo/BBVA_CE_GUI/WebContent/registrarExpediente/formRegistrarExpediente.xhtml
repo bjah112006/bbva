@@ -1,0 +1,517 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg" />
+	<h:head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+	<meta http-equiv="Pragma" content="no-cache"/>
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+	<meta http-equiv="Expires" content="0"/>
+	<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+	<h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+	<h:outputStylesheet library="css/style" name="style.css" target="head"/>
+	<h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+	<h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+	<h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+	<h:outputScript library="js" name="jquery-ui.js" target="head"/>
+	<h:outputScript library="js" name="jquery.numeric.js" target="head"/>
+	<h:outputScript library="js" name="jquery.mask.min.js" target="head"/>
+	<h:outputScript library="js" name="autoNumeric-1.7.4-B.js" target="head"/>
+	<h:outputScript library="js" name="funciones.js" target="head"/>
+	<h:outputScript target="head">
+	/* <![CDATA[ */
+		var activeElement;
+		var activeElementName;
+		var myVar;
+		var intentosActuales;
+		var procesandoEst;
+		
+		function focusFunc(evento) {
+	 		if(!evento) { // Para IE
+				evento = window.event;
+				activeElement = evento.srcElement;
+			} 
+			else { // Para otros navegadores
+				activeElement = evento.target;
+			}
+			activeElementName = activeElement.name;
+		}
+		
+		$(document).ready(function(){
+			if($("#frmRegistrarExpediente\\:idMsgGuiaDoc").val() == "true") {
+				var msg = $("#frmRegistrarExpediente\\:msgGuiaDoc").text();
+				var docsPendientes = $("#frmRegistrarExpediente\\:idValidaGuiaEsc").val();
+				alert(msg + ":\n" + docsPendientes);
+				$("#frmRegistrarExpediente\\:idMsgGuiaDoc").val("false");
+			} 
+			$("#frmRegistrarExpediente\\:fecVenDoiN").mask("00/00/0000", {
+	 			placeholder: "__/__/____"}
+	 		);
+	 		$("#frmRegistrarExpediente\\:fecVenDoi").mask("00/00/0000", {
+	 			placeholder: "__/__/____"}
+	 		);
+	 		
+	 		/*for (var i = 0; i < document.forms.length; i++) {
+				for(var j = 0; j < document.forms[i].elements.length; j++) {
+					document.forms[i].elements[j].onfocus = focusFunc;
+				}
+			}*/
+	 		
+	 		myVar = setInterval(pinWS, 300000);
+	 		intentosActuales = 1;	 		
+		   	
+		   	// Set focus on DOI element
+	 		
+	 		setTimeout(function() {
+			    $("#frmRegistrarExpediente\\:numeroDOI").blur();
+        		$("#frmRegistrarExpediente\\:numeroDOI").focus();
+			}, 100);
+			
+		});
+		
+		function pinWS(){
+ 			var numeroIntentos = parseInt($("#frmRegistrarExpediente\\:idIntentos").val());
+			$("[id='#{registrarExpediente.btnActualizaWebSeal.clientId}']").click();
+			if(intentosActuales == numeroIntentos ){
+				clearInterval(myVar);
+			}
+			else{
+				intentosActuales++;
+			} 
+		}
+		
+		$(document).on('keydown', function(event) {
+			var okEvent='1';
+			if (procesandoEst != null && typeof procesandoEst != "undefined" && procesandoEst != "undefined"){
+				if(procesandoEst == '1'){
+					okEvent='2';
+				}
+			}
+			
+			if(okEvent == '1'){
+				setTimeout(function(){
+					focusFunc(event);	
+				}, 500);
+			}else
+			event.preventDefault();	
+		});
+
+	
+		$(document).on('click', function (event) {
+			var okEvent='1';
+			if (procesandoEst != null && typeof procesandoEst != "undefined" && procesandoEst != "undefined"){
+				if(procesandoEst == '1'){
+					okEvent='2';
+				}
+			}
+			
+			if(okEvent == '1'){
+				setTimeout(function(){
+					focusFunc(event);	
+				}, 500);				
+			}
+		}); 
+		
+		function confAceptar (form) {
+			var msg = $("#frmRegistrarExpediente\\:registrar").text();
+			var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+	        var msgDocsObs = '';
+	        docsObs = $.trim(docsObs);
+	        if(docsObs != ''){
+	        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+	        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+	        }
+			var op = confirm(msg);
+			if (op) {
+				clickAceptar(form);
+			}
+			return op;
+		}
+		
+		function confGuardar (form) {
+			var msg = $("#frmRegistrarExpediente\\:guardar").text();
+			var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+	        var msgDocsObs = '';
+	        docsObs = $.trim(docsObs);
+	        if(docsObs != ''){
+	        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+	        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+	        }
+			var op = confirm(msg);
+			if (op) {
+				clickGuardar(form);
+			}
+			return op;
+		}
+		
+		function cancOperacion () {
+			var msg = $("#frmRegistrarExpediente\\:operacion").text();
+			return confirm(msg);
+		}
+		
+		function uncheckReutDoc(parmCodigo) {
+			if (parmCodigo == undefined) {
+				return;
+			}
+			var codigo, seleccion;
+			var tabla = document.getElementById("frmRegistrarExpediente:tabla");
+			
+			for (var i=0; i < tabla.rows.length; i++) {
+				codigo = document.getElementById("frmRegistrarExpediente:tabla:"+i+":idCodigoDocumentoReu");
+				seleccion = document.getElementById("frmRegistrarExpediente:tabla:"+i+":idSeleccionReu");
+				if (codigo.value == parmCodigo) {
+					seleccion.checked = false;
+				}
+			}
+		}
+		
+		function validarFormatoFecha(){
+			if($('#frmRegistrarExpediente\\:fecVenDoiN').val().length<10 && $('#frmRegistrarExpediente\\:fecVenDoiN').val().length!=0){
+				alert('El formato de la fecha debe ser dd/MM/yyyy');
+				$('#frmRegistrarExpediente\\:fecVenDoiN').val("");
+				$('#frmRegistrarExpediente\\:fecVenDoiN').focus();
+			}
+		}
+		
+		function validarFecha() {
+		 	if($('#frmRegistrarExpediente\\:fecVenDoiN').val().length!=0){
+		 		var fecha =$("#frmRegistrarExpediente\\:fecVenDoiN").val();
+				if(validate_fecha(fecha)==false){
+	        		alert("La fecha ingresada no es correcta.");
+					$('#frmRegistrarExpediente\\:fecVenDoiN').val("");
+					$('#frmRegistrarExpediente\\:fecVenDoiN').focus();
+	        	}
+			}
+		}
+		
+		function validarFormatoFechaAntiguo(){
+			if($('#frmRegistrarExpediente\\:fecVenDoi').val().length<10 && $('#frmRegistrarExpediente\\:fecVenDoi').val().length!=0){
+				alert('El formato de la fecha debe ser dd/MM/yyyy');
+				$('#frmRegistrarExpediente\\:fecVenDoi').val("");
+				$('#frmRegistrarExpediente\\:fecVenDoi').focus();
+			}
+		}
+		
+		function validarFechaAntiguo() {
+			if($('#frmRegistrarExpediente\\:fecVenDoi').val().length!=0){
+		 		var fecha =$("#frmRegistrarExpediente\\:fecVenDoi").val();
+				if(validate_fecha(fecha)==false){
+	        		alert("La fecha ingresada no es correcta.");
+					$('#frmRegistrarExpediente\\:fecVenDoi').val("");
+					$('#frmRegistrarExpediente\\:fecVenDoi').focus();
+	        	}
+			}
+		}
+		
+	    function validate_fecha(fecha){
+	    	//Obtenemos los valores dia, mes y año:
+		  	//-------------------------------------
+		  	var arrayFecha = fecha.split("/");
+			
+		  	//Comprobamos que se tengan 3 datos (dia, mes y año) no vacios
+		  	if (arrayFecha.length!=3 || arrayFecha[0]=="" || arrayFecha[1]=="" || arrayFecha[2]=="")
+		    	return false;
+		    
+		  	var anyo = parseInt(quitaCeros(arrayFecha[2]));
+		  	//Devuelve el mes numérico o null
+		  	var mes = devuelveMes(quitaCeros(arrayFecha[1]));
+		  	var dia = parseInt(quitaCeros(arrayFecha[0]));
+		  	//-------------------------------------
+			
+		  	//Comprobamos que los valores son numéricos
+		  	if (isNaN(anyo) || isNaN(mes) || isNaN(dia)) 
+		    	return false;
+		
+		  	//Comprobamos valores correctos de dia mes y anyo
+		  	if (dia<1 || dia>31 || mes<1 || mes>12 || anyo<0)
+		    	return false;
+		    		
+		  	//Comprobamos meses de 30 dias
+		  	if ((mes==4 || mes==6 || mes==9 || mes==11) && dia>30)
+		    	return false;
+		    		
+		  	//Comprobamos mes febrero & bisiestos
+		  	if (mes==2 && (dia > 29 || (dia==29 && ((anyo%400!=0) && ((anyo%4!=0) || (anyo%100==0)))) ))
+		    	return false;
+		    		
+			return true;
+		}
+		
+		function quitaCeros(cad){
+			var enc = false;
+		  	var i=0;
+		  	while (i<cad.length && !enc) {
+		  		if (cad.charAt(i)=='0'){
+		  			i++;
+		    	} else{
+		      		enc = true;
+		    	}
+		  	}
+		  	return (cad.substring(i,cad.length));
+		}
+	
+		/* Recibe una cadena con un mes (número o cadena)
+		   y devuelve el número de mes.*/
+		function devuelveMes (mes) {
+			var numMes = null;
+		  	var meses = new Array("jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec");
+			
+		  	if (!isNaN(parseInt(mes))) //Es un número
+		    	numMes = parseInt(mes);
+		  	else {
+		    	var encontrado=false;
+		    	var i=0;
+		    	while (i<meses.length && !encontrado) {
+			      	//Comparamos el mes en minúsculas
+			      	if (mes.toLowerCase()==meses[i]) {
+			        	encontrado=true;
+			        	numMes=i+1;
+			      	}
+			      	i++;
+		    	}
+		  	}
+		  	return numMes;
+		}
+		
+		function validarSoloNumerosYComa(e) {
+			//return (key <= 13 || key==46 || (key >= 38 && key <= 57)); 
+			var key = window.Event ? e.which : e.keyCode ;
+			return (key >= 48 && key <= 57 || key == 44);
+		}
+		
+		function eliminarFormatoTasaEspecial() {
+			if ($('#frmRegistrarExpediente\\:idValorTasaEsp').val() == "0.0") {
+				$('#frmRegistrarExpediente\\:idValorTasaEsp').val("");
+				$('#frmRegistrarExpediente\\:idValorTasaEsp').focus(); 
+			}
+		}
+		
+		function validarFormatoTasaEspecial() {
+			if ($('#frmRegistrarExpediente\\:idValorTasaEsp').val().length != 0) {
+				var tasa =$("#frmRegistrarExpediente\\:idValorTasaEsp").val();
+				if (validate_formato(tasa) == false) {
+					alert("El formato de la tasa es de hasta 3 enteros y un decimal.");
+	        		$('#frmRegistrarExpediente\\:idValorTasaEsp').val("");
+					$('#frmRegistrarExpediente\\:idValorTasaEsp').focus();
+				}
+			}
+		}
+		
+	/* ]]> */
+	</h:outputScript>
+	<script type="text/javascript">
+        function checkClick1(check) {
+            document.getElementById('frmRegistrarExpediente:idValorTasaEsp').disabled = !check.checked;
+            document.getElementById('frmRegistrarExpediente:idValorTasaEsp').value = "0.0"; 
+        }       
+
+        function eventoEnter(e){
+        	var mostrarPanel =$("#frmRegistrarExpediente\\:idHidMostPan").val();
+        	tecla=(document.all) ? e.keyCode : e.which;
+        	if (mostrarPanel==true){
+        		if(tecla==13) return false;
+        	}else{
+        		if (tecla == 13){
+            	var btn = document.getElementById('frmRegistrarExpediente:btnBuscar');
+            	if (btn != null){ 
+                	btn.click();
+                	event.keyCode = 0
+            	}
+        	  }
+        	}
+        }
+        
+        function disableEnterKey(e){
+		     var key;
+		     var okEvent='1';
+		     
+				if (procesandoEst != null){
+					if(procesandoEst == '1'){
+							okEvent='2';
+					}
+
+				}	
+				
+				if(okEvent == '1'){
+					
+				     if(window.event)
+				          key = window.event.keyCode;     //IE
+				     else
+				          key = e.which;     //firefox
+				          
+				     if(key == 13)
+				          return false;
+				     else{
+				    	 return true; 
+				     }
+				       			
+				}else{
+					return false;
+				}
+				   
+		}
+        
+        function mostrarTabLogPorPerfil(){
+        	var perfil = $("#frmRegistrarExpediente\\:descPerfilPage").val();
+        	var descAdmin = $("#frmRegistrarExpediente\\:descPerfilFiltro").val();
+        	perfil = (perfil == "")?$("#frmRegistrarExpediente\\:descPerfilPage").text():perfil;
+        	descAdmin = (descAdmin == "")?$("#frmRegistrarExpediente\\:descPerfilFiltro").text():descAdmin;
+        	if (perfil == descAdmin) {
+        		$("#frmRegistrarExpediente\\:descPerfilTabs").show();
+        	} else {
+        		$("#frmRegistrarExpediente\\:descPerfilTabs").hide();
+        	}
+        }
+        
+		/*function focusOn(e){
+			devolverFocoRegistrarExp();
+		}*/
+	</script>  
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+	<title><h:outputText
+		value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.titulo']}" /></title>
+	</h:head>
+	<!--<h:body onkeypress="return focusOn(event);">-->
+	<h:body onload="mostrarTabLogPorPerfil(); ">
+		<h:form id="frmRegistrarExpediente">
+		    <h:inputHidden id="idMsgGuiaDoc" value="#{registrarExpediente.msgGuiaDocumentaria}"></h:inputHidden>			   		
+			<h:inputHidden id="idHidMostPan" value="#{registrarExpediente.mostrarPaneles}"></h:inputHidden>
+			<h:inputHidden id="idIntentos" value="#{registrarExpediente.numeroIntentos}"></h:inputHidden>
+			<h:commandButton id="btnActualizaWebSeal" binding="#{registrarExpediente.btnActualizaWebSeal}" style="display:none">
+				<f:ajax event="click" execute="@this" listener="#{registrarExpediente.pinWebSeal}"/>
+			</h:commandButton>
+			<h:outputText
+				value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.aceptar.confirm']}"
+				id="registrar" style="display:none;" />
+			<h:outputText
+				value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.guardar.confirm']}"
+				id="guardar" style="display:none;" />				
+			<h:outputText
+				value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.cancelarOperacion.confirm']}"
+				id="operacion" style="display:none;" />
+			<h:outputText value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.msgGuiaDoc']}"
+   			    id="msgGuiaDoc" style="display:none;"/>    		
+			<h:inputHidden value="#{registrarExpediente.editarCliente}" />
+			<h:inputHidden value="#{registrarExpediente.mostrarPaneles}" />
+			<div class="contenido">
+				<div class="cabecera">
+					<ui:include src="/resources/common/cabecera.xhtml" />
+					<h:outputText id="descPerfilPage"  value="#{datosCabecera.empleado.perfil.descripcion}" style="display:none;"/>
+					<h:outputText id="descPerfilFiltro"  value="#{msg['com.ibm.bbva.common.perfil.administrador']}" style="display:none;"/>
+				</div>
+				<div class="cuerpo">
+					<div class="menu">
+						<ui:include src="/resources/common/menu.xhtml" />
+					</div>
+					<div class="datos">
+						<ui:include src="/resources/common/tabs.xhtml" />
+						<div class="tab-expediente tab-item">
+							<h:panelGroup>
+								<ui:include src="/resources/common/buscarCliente.xhtml" />
+							</h:panelGroup>
+							<h:panelGroup id="PanelDOI"
+								style="#{(registrarExpediente.mostrarPaneles and registrarExpediente.editarCliente) ? '':'display:none;'}">
+								<ui:include src="/resources/common/datosClienteNuevo.xhtml" flush="true" />
+							</h:panelGroup>
+							<h:panelGroup
+								style="#{(registrarExpediente.mostrarPaneles and !registrarExpediente.editarCliente) ? '':'display:none;'}">
+								<ui:include src="/resources/common/datosCliente.xhtml" flush="true" />
+							</h:panelGroup>
+							<h:panelGroup style="#{registrarExpediente.mostrarPaneles ? '':'display:none;'}">
+							    <h:panelGroup id="idPanelProductoNuevo">
+								    <ui:include src="/resources/common/productoNuevo.xhtml" flush="true" />
+								</h:panelGroup>    
+								
+								<h:panelGroup id="idPanelConyuge" 
+								style="#{registrarExpediente.mostrarPanelConyuge ? '':'display:none;'}"
+								 >
+								   <h:inputHidden id="idMostrarPanelConyuge" value="#{registrarExpediente.mostrarPanelConyuge}" />
+								   <ui:include src="/resources/common/buscarConyuge.xhtml" flush="true" />
+								</h:panelGroup>
+								<!--  >
+								   <ui:include src="/resources/common/d -->
+								<h:panelGroup id="idPanelDatosConyuge" style="#{datosConyuge.mostrarDatosConyugePrincipal and registrarExpediente.mostrarPanelConyuge ? '':'display:none;'}" >
+								   <ui:include src="/resources/common/datosConyugue.xhtml" flush="true" />
+								</h:panelGroup>
+								
+								<ui:include src="/resources/common/verificacionApr.xhtml" flush="true" />
+								
+								<h:panelGroup id="idDocumentosReutilizables">
+									<ui:include src="/resources/common/documentoReutilizable.xhtml" flush="true" />
+								</h:panelGroup>
+					
+								<h:panelGroup layout="block" styleClass="bloque">
+									<h:panelGroup id="appletContentRefresh">
+										<ui:include src="/resources/common/documentoEsc.xhtml" />
+									</h:panelGroup>
+									
+									<h:panelGroup id="idPanelDocumentos">
+										<ui:include src="/resources/common/panelDocumentos.xhtml" />
+									</h:panelGroup>									
+									 
+								</h:panelGroup>
+								
+								<ui:include src="/resources/common/comentarios.xhtml" flush="true" /> 	
+								<ui:include src="/resources/common/observacionRechazo.xhtml"/>
+								<h:panelGroup id="idPanelBotones">
+									<div class="column boton-principal">
+										
+
+ 									    <h:commandButton
+											value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.aceptar']}"
+											onclick="return confAceptar(this.form);" type="button"
+											disabled="#{!registrarExpediente.activoAceptar}"
+											styleClass="boton-aceptar"
+											accesskey="a" />
+										<!--TODO
+										<h:commandButton
+											value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.grabar']}"
+											action="#{registrarExpediente.grabar}" accesskey="g" />										
+										  -->											
+										<h:commandButton
+											value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.grabar']}"
+											onclick="return confGuardar(this.form);" type="button" 
+											accesskey="g" />
+										<h:commandButton
+											value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.cancelarOperacion']}"
+											onclick="return cancOperacion();"
+											action="#{registrarExpediente.cancelarOperacion}"
+											accesskey="c" />
+										<h:commandLink id="btnEjecutaApplet"
+											action="#{registrarExpediente.aceptar}" style="display:none">
+										</h:commandLink>
+										<h:commandLink id="btnEjecutaAppletGuardar"
+											action="#{registrarExpediente.grabar}" style="display:none">
+										</h:commandLink>										
+									</div>
+								</h:panelGroup>
+							</h:panelGroup>
+						</div>
+						<div class="tab-ayuda-memoria tab-item"
+							style="display:none;">
+							<ui:include src="/resources/common/datosHistorico.xhtml" />
+							<ui:include src="/resources/common/tablaAyudaMemoria.xhtml" />
+						</div>
+						<div class="tab-historial tab-item"
+							style="display:none;">
+							<ui:include src="/resources/common/datosHistorico.xhtml" />
+							<ui:include src="/resources/common/tablaHistorial.xhtml" />
+						</div>
+						<div class="tab-observaciones tab-item"
+							style="display:none;">
+							<ui:include src="/resources/common/datosHistorico.xhtml" />
+							<ui:include src="/resources/common/tablaObservaciones.xhtml" />
+						</div>
+						<div class="tab-log tab-item" style="display:none;">
+							<ui:include src="/resources/common/datosHistorico.xhtml" />
+							<ui:include src="/resources/common/tablaLog.xhtml" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</h:body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+		<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+        <h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="style.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+        <h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+        <h:outputScript library="js" name="jquery-ui.js" target="head"/>
+        <h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+        <h:outputScript library="js" name="autoNumeric-1.7.4-B.js" target="head"/>
+        <h:outputScript library="js" name="funciones.js" target="head"/>
+        <script type="text/javascript">
+	        function mostrarTabLogPorPerfil(){
+	        	var perfil = $("#frmVisualizarExpediente\\:descPerfilPage").val();
+	        	var descAdmin = $("#frmVisualizarExpediente\\:descPerfilFiltro").val();
+	        	perfil = (perfil == "")?$("#frmVisualizarExpediente\\:descPerfilPage").text():perfil;
+	        	descAdmin = (descAdmin == "")?$("#frmVisualizarExpediente\\:descPerfilFiltro").text():descAdmin;
+	        	if (perfil == descAdmin) {
+            		$("#frmVisualizarExpediente\\:descPerfilTabs").show();
+            	} else {
+            		$("#frmVisualizarExpediente\\:descPerfilTabs").hide();
+            	}
+            }
+		</script> 
+        <title><h:outputText value="#{msg['com.ibm.bbva.visualizarExpediente.formVisualizarExpediente.titulo']}"/></title>
+    </h:head>
+    <h:body onload="mostrarTabLogPorPerfil()">
+    <h:form id="frmVisualizarExpediente">    	
+        <div class="contenido">
+            <div class="cabecera">
+                <ui:include src="/resources/common/cabecera.xhtml"/>
+                <h:outputText id="descPerfilPage"  value="#{datosCabecera.empleado.perfil.descripcion}" style="display:none;"/>
+                <h:outputText id="descPerfilFiltro"  value="#{msg['com.ibm.bbva.common.perfil.administrador']}" style="display:none;"/>
+            </div>
+            <div class="cuerpo">
+                <div class="menu">
+                    <ui:include src="/resources/common/menu.xhtml"/>
+                </div>
+                <div class="datos">
+                	<ui:include src="/resources/common/tabs.xhtml"/>
+                	
+                	<h:panelGroup layout="block" rendered="#{visualizarExpediente.mensajeError != null}" class="mensaje-error-bloque">
+                		<h:outputText  value="#{visualizarExpediente.mensajeError}" />
+                	</h:panelGroup>
+                		            
+                	<h:panelGroup layout="block" rendered="#{visualizarExpediente.mensajeEnProceso != null}" class="mensaje-error-bloque">
+                		<h:outputText  value="#{visualizarExpediente.mensajeEnProceso}" />
+                	</h:panelGroup>
+                	    					
+                	<div class="tab-expediente tab-item">
+	                	<ui:include src="/resources/common/datosGestor.xhtml"/>
+						<ui:include src="/resources/common/estadoAnterior.xhtml"/>
+						<ui:include src="/resources/common/detalleExpediente.xhtml"/>
+						<h:panelGroup id="idPanelDatosConyuge"
+							style="#{datosConyuge.mostrarDatosConyugePrincipal ? '':'display:none;'}">
+							<ui:include src="/resources/common/datosConyugue.xhtml" />
+						</h:panelGroup>						
+						<ui:include src="/resources/common/datosProducto3.xhtml"/>
+						<ui:include src="/resources/common/verificacionApr.xhtml"/>
+						
+						<h:panelGroup id="idDocumentosReutilizables"/>
+						
+						<h:panelGroup layout="block" styleClass="bloque">
+							<h:panelGroup id="appletContentRefresh">
+								<ui:include src="/resources/common/documentoEsc.xhtml" />
+							</h:panelGroup>
+							<h:panelGroup id="idPanelDocumentos">
+								<ui:include src="/resources/common/panelDocumentos.xhtml" />
+							</h:panelGroup>
+						</h:panelGroup>
+													
+						<div class="column boton-principal" style="widht:50px;">
+						
+							<h:commandButton value="#{msg['com.ibm.bbva.bandejaMonitoreo.formBandejaMonitoreo.reintentar']}" rendered="#{visualizarExpediente.desdeBandejaMonitoreo and visualizarExpediente.bandejaMonitoreo_tipo == 2}"
+            		                     action="#{visualizarExpediente.reintentar}"/>
+	            		    <h:commandButton value="#{msg['com.ibm.bbva.bandejaMonitoreo.formBandejaMonitoreo.continuar']}" rendered="#{visualizarExpediente.desdeBandejaMonitoreo and visualizarExpediente.bandejaMonitoreo_tipo == 3}"
+            		                     action="#{visualizarExpediente.continuar}"/>
+	            		    <h:commandButton value="#{msg['com.ibm.bbva.bandejaMonitoreo.formBandejaMonitoreo.cancelar']}" rendered="#{visualizarExpediente.desdeBandejaMonitoreo}"
+            		                     action="#{visualizarExpediente.cancelar}"/>
+						    <h:commandButton value="#{msg['com.ibm.bbva.visualizarExpediente.formVisualizarExpediente.salir']}"
+	            		                     action="#{visualizarExpediente.salir}"/>											
+						</div>
+						
+					</div>
+					<div class="tab-ayuda-memoria tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml"/>
+	               		<ui:include src="/resources/common/tablaAyudaMemoria.xhtml"/>
+					</div>
+					<div class="tab-historial tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml"/>
+               			<ui:include src="/resources/common/tablaHistorial.xhtml"/>
+					</div>
+					<div class="tab-observaciones tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml"/>
+						<ui:include src="/resources/common/tablaObservaciones.xhtml"/>
+					</div>
+					<div class="tab-log tab-item" style="display:none;">
+	               		<ui:include src="/resources/common/datosHistorico.xhtml"/>
+	               		<ui:include src="/resources/common/tablaLog.xhtml"/>
+					</div>
+				</div>
+            </div>
+        </div>
+    </h:form>
+    </h:body>
+</html>

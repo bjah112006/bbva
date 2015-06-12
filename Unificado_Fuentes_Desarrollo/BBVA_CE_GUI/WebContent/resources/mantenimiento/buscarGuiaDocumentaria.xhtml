@@ -1,0 +1,372 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+  	<f:verbatim>
+		<script type="text/javascript" language="javascript">
+			/*var compSel = null;
+			var sel = null;*/
+			function cambiarEstadoGuiaDoc (comp) {	
+				var opcion = $(comp).attr('checked');		    
+				/*if ($(comp).is(':checked')) {
+					if (compSel!=null) {
+						$(compSel).attr('checked', false);
+					}
+					compSel = comp;
+				} else {
+					compSel = null;
+				}*/
+				$(".seleccionar").each(function() {
+					$(this).attr('checked', false);
+				});
+			
+				$(comp).attr('checked', opcion);
+			}
+		</script>
+	</f:verbatim>
+
+<div class="bloque">
+		<div class="contenido-bloque">
+			<span class="columna" style="width: 300px"> 
+				<h:panelGroup
+					styleClass="titulo">
+					<h:outputText id="idNombrePagina" value="Mantenimiento - Guia Documentaria" />
+					<h:outputText value=" " />
+				</h:panelGroup> 
+			</span>
+		</div>
+		<div class="contenido-bloque">
+			<h:panelGroup id="panelBusqGuiaDocumentaria">
+				<div class="contenido-bloque">
+					<span class="columna" style="width: 170px"> 
+						<h:outputText
+							value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Tarea']}"
+							styleClass="etiqueta" /> 
+					</span> 
+					<span class="columna" style="width: 150px"> 
+						<h:selectOneMenu id="cmbTarea"
+							value="#{buscarGuia.tareaSeleccionado}" 
+							style="width:250px;" styleClass="valor-componente">
+							<f:selectItems value="#{buscarGuia.tarea}" />
+						</h:selectOneMenu> 
+					</span>
+				</div>
+				<div class="contenido-bloque">
+					<span class="columna" style="width: 170px"> 
+						<h:outputText
+							value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.TipoDocumento']}"
+							styleClass="etiqueta" /> 
+					</span> 
+					<span class="columna" style="width: 150px"> 
+						<h:selectOneMenu id="cmbTipoDocumentos"
+							value="#{buscarGuia.documentosSeleccionado}" 
+							style="width:250px;" styleClass="valor-componente">
+							<f:selectItems value="#{buscarGuia.documentos}" />
+						</h:selectOneMenu> 
+					</span>
+				</div>
+				<div class="contenido-bloque">
+					<span class="columna" style="width: 170px"> 
+						<h:outputText
+							value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Producto']}"
+							styleClass="etiqueta" /> 
+					</span> 
+					<span class="columna" style="width: 150px"> 
+						<h:selectOneMenu id="cmbProducto"
+							value="#{buscarGuia.productoSeleccionado}" 
+							style="width:250px;" styleClass="valor-componente">
+							<f:selectItems value="#{buscarGuia.tiposProducto}" />
+						</h:selectOneMenu> 
+					</span>
+				</div>
+				<div class="contenido-bloque">
+					<span class="columna" style="width: 170px"> 
+						<h:outputText
+							value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.TipoOferta']}"
+							styleClass="etiqueta" /> 
+					</span> 
+					<span class="columna" style="width: 150px"> 
+						<h:selectOneMenu id="cmbTipoOferta"
+							value="#{buscarGuia.tipoOfertaSeleccionado}" 
+							style="width:150px;" styleClass="valor-componente">
+							<f:selectItems value="#{buscarGuia.tiposOferta}" />
+						</h:selectOneMenu> 
+					</span>
+				</div>
+				<div class="contenido-bloque">
+					<span class="columna" style="width: 170px"> 
+						<h:outputText
+							value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.CategoriaRenta']}"
+							styleClass="etiqueta" /> 
+					</span> 
+					<span class="columna" style="width: 150px"> 
+						<h:selectOneMenu id="cmbCategoriaRenta"
+							value="#{buscarGuia.categoriaRentaSeleccionado}" 
+							style="width:150px;" styleClass="valor-componente">
+							<f:selectItems value="#{buscarGuia.categoriaRenta}" />
+						</h:selectOneMenu> 
+					</span>
+				</div>
+				<div class="contenido-bloque">
+					<span class="columna" style="width: 170px"> 
+						<h:outputText
+							value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Persona']}"
+							styleClass="etiqueta" /> 
+					</span> 
+					<span class="columna" style="width: 150px"> 
+						<h:selectOneMenu id="cmbPersona"
+							value="#{buscarGuia.personaSeleccionado}" 
+							style="width:150px;" styleClass="valor-componente">
+							<f:selectItems value="#{buscarGuia.persona}" />
+						</h:selectOneMenu> 
+					</span>
+				</div>
+			</h:panelGroup>
+		</div>
+		<div style="width: 790px; overflow-x: auto;">
+		</div>
+		
+		<div style="width: 790px; overflow-x: auto; ">
+			<h:panelGroup id="panelBotones">
+				<div class="contenido-bloque">
+					<span class="columna" style="width: 62px"> 
+						<h:commandButton id="btnBuscarGuia" action="#{buscarGuia.buscar}"
+							value="Buscar" styleClass="boton"/>
+					</span> 
+					<span class="columna" style="width: 65px"> 
+						<h:commandButton id="btnLimpiarGuia" action="#{buscarGuia.limpiar}"
+							value="Limpiar" styleClass="boton"/>
+					</span>
+				</div>
+			</h:panelGroup>
+		</div>
+		
+		<div style="width: 775px; overflow-x: auto; overflow-y: auto;">
+			<h:panelGroup id="panelConsultaGuiaDocumentaria">
+				<h:dataTable border="1" styleClass="tablaTask" style="border-collapse:collapse;" 
+					columnClasses="text,text,text" headerClass="headerClass headerTabla1" rendered="true" 
+					rowClasses="uno,dos" id="idTablaGuiaDocumentaria" 
+					value="#{buscarGuia.listaGuiaDocumentaria}" var="item" footerClass="fondo"
+					rows="#{buscarGuia.numeroRegistro}" binding="#{buscarGuia.dataTable}" >
+					<h:column align="center">
+						<f:facet name="header">
+							<h:outputText value="Sel."></h:outputText>
+						</f:facet>
+						<h:selectBooleanCheckbox id="idSelect" value="#{item.seleccion}" styleClass="seleccionar" onclick="cambiarEstadoGuiaDoc(this);">  
+							<f:ajax event="click" execute="@form" render="btnActualizar btnEliminar"
+								listener="#{buscarGuia.cargarGuiaDocumentaria(item.id, item.seleccion)}" />
+						</h:selectBooleanCheckbox>
+					</h:column>
+					<h:column width="15%">
+						<f:facet name="header">
+							<h:outputText
+								value="Tarea"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.tarea}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%">
+						<f:facet name="header">
+							<h:outputText
+								value="Tipo Documento"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.tipoDocumento}" styleClass="tabla-campo-texto"/>
+					</h:column>
+					<h:column width="15%" align="center">
+						<f:facet name="header">
+							<h:outputText
+								value="Obligatorio"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:selectBooleanCheckbox id="idObligatorio" value="#{item.obligatorio}" disabled="true">
+						</h:selectBooleanCheckbox>
+					</h:column>
+					<h:column width="15%">
+						<f:facet name="header">
+							<h:outputText
+								value="Producto"
+								styleClass="tabla-titulo"/>
+						</f:facet>
+						<h:outputText value="#{item.producto}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%">
+						<f:facet name="header">
+							<h:outputText
+								value="Tipo Oferta"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.tipoOferta}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%" align="center">
+						<f:facet name="header">
+							<h:outputText
+								value="Cliente"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<!--
+						<h:selectBooleanCheckbox id="idCliente" value="#{item.cliente}" disabled="true">
+						</h:selectBooleanCheckbox>
+						-->
+						<h:outputText value="#{item.cliente}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%" align="center">
+						<f:facet name="header">
+							<h:outputText
+								value="Pago Hab"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<!--
+						<h:selectBooleanCheckbox id="idPagHab" value="#{item.pagoHabiente}" disabled="true">
+						</h:selectBooleanCheckbox>
+						-->
+						<h:outputText value="#{item.pagoHabiente}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%">
+						<f:facet name="header">
+							<h:outputText
+								value="Categoria Renta"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.categoriaRenta}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%">
+						<f:facet name="header">
+							<h:outputText
+								value="Persona"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.persona}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%" align="center">
+						<f:facet name="header">
+							<h:outputText
+								value="Tasa Esp."
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<!--
+						<h:selectBooleanCheckbox id="idTasaEsp" value="#{item.tasaEspecial}" disabled="true">
+						</h:selectBooleanCheckbox>
+						-->
+						<h:outputText value="#{item.tasaEspecial}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%" align="center">
+						<f:facet name="header">
+							<h:outputText
+								value="Verificacion Domiciliaria"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<!--
+						<h:selectBooleanCheckbox id="idVerDomic" value="#{item.verificacionDomiciliaria}" disabled="true">
+						</h:selectBooleanCheckbox>
+						-->
+						<h:outputText value="#{item.verificacionDomiciliaria}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%" align="center">
+						<f:facet name="header">
+							<h:outputText
+								value="Verificacion Laboral"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<!--
+						<h:selectBooleanCheckbox id="idVerLab" value="#{item.verificacionLaboral}" disabled="true">
+						</h:selectBooleanCheckbox>
+						-->
+						<h:outputText value="#{item.verificacionLaboral}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%" align="center">
+						<f:facet name="header">
+							<h:outputText
+								value="Flag Dps"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<!--
+						<h:selectBooleanCheckbox id="idFlagDps" value="#{item.flagDps}" disabled="true">
+						</h:selectBooleanCheckbox>
+						-->
+						<h:outputText value="#{item.flagDps}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="15%" align="center">
+						<f:facet name="header">
+							<h:outputText
+								value="Flag Comite Riesgo"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:selectBooleanCheckbox id="idFlagComiteRiesgo" value="#{item.flagComiteRiesgo}" disabled="true">
+						</h:selectBooleanCheckbox>
+					</h:column>
+					<h:column width="15%">
+						<f:facet name="header">
+							<h:outputText
+								value="Id"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.id}"
+							styleClass="tabla-campo-texto"></h:outputText>
+				    </h:column>
+				    <h:column width="15%">
+						<f:facet name="header">
+							<h:outputText
+								value="Descripcion"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.descripcion}"
+							styleClass="tabla-campo-texto"></h:outputText>
+				    </h:column>
+				    <h:column width="15%" align="center">
+						<f:facet name="header">
+							<h:outputText
+								value="Flag Activo"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:selectBooleanCheckbox id="idFlgActivo" value="#{item.flagActivo}" disabled="true">
+						</h:selectBooleanCheckbox>
+				    </h:column>
+				    <f:facet name="footer">
+			            <div class="espacios-etiqueta2">
+			                <span class="columna" style="width:150px">
+			                	<h:panelGroup layout="block" style="padding:5px 10px;">
+			                   		<h:outputText value="#{buscarGuia.numRegistros}" styleClass="etiqueta"/>
+			                   	</h:panelGroup>	
+			                </span>
+			                <span class="columna" style="width:150px">			
+								<h:panelGroup layout="block" style="padding:5px 10px;">
+									<h:commandButton value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Agregar']}"
+										action="#{buscarGuia.agregar}"  styleClass="boton"/>
+									<h:commandButton value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Actualizar']}"
+										action="#{buscarGuia.actualizar}"  styleClass="boton" id="btnActualizar"/>
+									<h:commandButton value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Eliminar']}" disabled="true"
+										action="#{buscarGuia.eliminar}"  styleClass="boton" id="btnEliminar"/>
+									<h:commandButton value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Cancelar']}"
+										action="#{buscarGuia.cancelar}"  styleClass="boton"/>
+									<h:commandButton value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.btnAnterior']}"
+										actionListener="#{buscarGuia.pagePrevious}"  styleClass="boton"
+										disabled="#{buscarGuia.dataTable.first == 0}" />
+									<h:commandButton value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.btnSiguiente']}"
+										actionListener="#{buscarGuia.pageNext}"  styleClass="boton"
+										disabled="#{buscarGuia.dataTable.first + buscarGuia.dataTable.rows >= buscarGuia.dataTable.rowCount}" />
+								</h:panelGroup>
+			                </span>                              
+			            </div>				
+					</f:facet>
+				</h:dataTable>
+				<br/>
+				<h:message for="idTablaGuiaDocumentaria" errorClass="mensaje-error"/>
+				<br/>
+			</h:panelGroup>
+		</div>
+	</div>
+</ui:composition>

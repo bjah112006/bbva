@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://BBVA_TarjetaCreditoBP_MOD/businessobjects">
+	<xsd:complexType name="Cliente">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="TipoDOI" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="NumeroDOI" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="ApPaterno" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="ApMaterno" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="Nombre" type="xsd:string">
+			</xsd:element>
+			<xsd:element minOccurs="0" name="CodigoCliente" type="xsd:string">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

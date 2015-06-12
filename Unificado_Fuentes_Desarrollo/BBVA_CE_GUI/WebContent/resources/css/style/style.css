@@ -1,0 +1,504 @@
+html {
+    font-family: Verdana, Arial, Helvetica;
+    font-size: 11px;
+}
+
+body {
+    margin: 0px;
+}
+
+.sombraFila {
+    background-color: #5185F0;
+}
+
+.contenido {
+    width: 1000px;
+    position: absolute;
+    left: 50%;
+    margin-left: -500px;
+}
+
+.cabecera, #cuerpo {
+    width: 1000px;
+}
+
+.cuerpo {
+    top: 75px;
+    position: absolute;
+}
+
+.menu {
+    width: 195px;
+}
+
+.datos {
+    min-width: 790px;
+    position: absolute;
+    left: 210px;
+    top: 0px;
+}
+
+.datos1 {
+    min-width: 980px;
+    position: absolute;
+    left: 20px;
+    top: 0px;
+}
+
+/* resaltados de texto */
+.txt-resaltado-1 {
+    background-color:#FFFF00;
+    color:#FF0000 !important;
+    font-size:12px;
+    font-weight:bold;
+}
+
+/* resaltados de texto */
+.txt-resaltado-2 {
+    background-color:#FFFF00;
+    color:#000000 !important;
+    font-size:12px;    
+}
+
+.txt-resaltado-3 {
+    color:#FF0000 !important;
+    font-size:12px;
+    font-weight:bold;
+     vertical-align: middle;
+}
+/* tabs */
+.tabs {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.tabs a {
+    text-decoration: none;
+    font-size: 10pt;
+    width: 130px;
+    height: 20px;
+    border-style:solid;
+    border-width:1px;
+    text-align:center;
+    padding: 5px 0px 0px 0px;
+    display: inline-block;
+}
+
+.tabs a.activado {
+    background-color: #2266BB;
+    color: #FFFFFF;
+    border-color:#FFFFFF;
+}
+
+.tabs a.desactivado {
+    background-color: #FFFFFF;
+    color: #2266BB;
+    border-color:#2266BB;
+}
+
+.tabs a:active {
+    font-weight: bold;
+}
+
+/* bloque */
+.bloque {
+    margin: 7px 0px;
+    border: 1px solid;
+    border-color: #999999;
+    padding: 7px;
+	width: 774px;
+/*    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    behavior: url(/BBVA_Administracion/style/PIE.htc);*/
+}
+
+.bloque .titulo {
+    color:#000000;
+    font-size:12px;
+    font-weight: bold;
+}
+
+.bloque .titulo-borde {
+    color:#999999;
+    font-size:12px;
+    font-weight: bold;
+    margin-top: -15px;
+    padding: 0px 5px;
+    background-color: #FFFFFF;
+    float: left;
+}
+
+.bloque .titulo-borde2 {
+    color:#000000 !important;
+    font-size:12px;
+    font-weight: bold;
+    margin-top: -15px;
+    padding: 0px 5px;
+    background-color: #FFFFFF;
+    float: left;
+}
+
+.bloque .etiqueta {
+    color: #767676;
+    font-weight: bold;
+    text-align: left;  
+    margin-right: 5px; 
+}
+
+.bloque .valor {
+    color: #999999;
+    text-align: left;    
+    font-size:12px;
+}
+.bloque .valorDer {
+    color: #999999;
+    text-align: right;    
+    font-size:12px;
+}
+
+.bloque .valor-componente {    
+    font-size:12px;
+}
+
+.bloque .contenido-bloque {
+    margin: 2px;
+    position: relative;
+}
+
+.bloque .contenido-bloque .columna {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+}
+
+.bloque .contenido-bloque .columna td input {
+	margin: 0px !important;
+}
+
+/* bloque 1 */
+.bloque1 {
+    margin: 7px 0px;
+    border: 1px solid;
+    border-color: #999999;
+    padding: 7px;
+	width: 960px;
+}
+
+.bloque1 .titulo {
+    color:#000000;
+    font-size:12px;
+    font-weight: bold;
+}
+
+.bloque1 .titulo-borde {
+    color:#999999;
+    font-size:12px;
+    font-weight: bold;
+    margin-top: -15px;
+    padding: 0px 5px;
+    background-color: #FFFFFF;
+    float: left;
+}
+
+.bloque1 .titulo-borde2 {
+    color:#000000 !important;
+    font-size:12px;
+    font-weight: bold;
+    margin-top: -15px;
+    padding: 0px 5px;
+    background-color: #FFFFFF;
+    float: left;
+}
+
+.bloque1 .etiqueta {
+    color: #767676;
+    font-weight: bold;
+    text-align: left;  
+    margin-right: 5px; 
+}
+
+.bloque1 .valor {
+    color: #999999;
+    text-align: left;    
+    font-size:12px;
+}
+.bloque1 .valorDer {
+    color: #999999;
+    text-align: right;    
+    font-size:12px;
+}
+
+.bloque1 .valor-componente {    
+    font-size:12px;
+}
+
+.bloque1 .contenido-bloque {
+    margin: 2px;
+    position: relative;
+}
+
+.bloque1 .contenido-bloque .columna {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+}
+
+.bloque1 .contenido-bloque .columna td input {
+	margin: 0px !important;
+}
+
+/* mensajes */
+.mensaje-error {
+	color: #FF0000;
+	display: block;
+	margin-left: 5px;
+}
+
+.mensaje-fatal {
+	color: #FF0000;
+	display: block;
+	margin-left: 5px;
+}
+
+.mensaje-info{
+	color: #0077FF;
+	display: block;
+	margin-left: 5px;
+}
+
+.mensaje-warn {
+	color: #FFDA00;
+	display: block;
+	margin-left: 5px;
+}
+
+.mensaje-error-bloque {
+	color: #FF0000;
+	display: block;
+	width: 100%;
+	font-size: 15px;
+	text-align: center;
+	font-weight: bold;
+	margin-top: -10px;
+	padding-bottom: 5px;
+}
+
+.mensaje-info-bloque {
+	color: #0077FF;
+	display: block;
+	width: 100%;
+	font-size: 15px;
+	text-align: center;
+	font-weight: bold;
+	margin-top: -10px;
+	padding-bottom: 5px;
+}
+
+/* caja de texto */
+.caja-texto {
+	color:#000000;
+	font-size:12px;
+} 
+
+.campoFecha {
+    width: 70px;
+}
+
+.campoValor1 {
+    text-align: right;
+    width:60px;   
+}
+
+.campoValor2 {
+    text-align: left;    
+}
+
+.headerTabla1 {
+    background-color: #2266BB;
+    color: #FFFFFF;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 0px !important;
+    
+}
+
+.sombra-fila {
+    background-color: #5185F0;    
+}
+
+.titulo1 {
+    color:#999999;
+    font-size:12px;
+    font-weight: bold;
+    display: inline; 
+}
+
+.datos-cabecera-muestra div {
+    color: #999999;
+    font-weight: bold;
+    display: inline-table;
+    padding: 0px 0px 5px;
+    margin-top: 10px;
+}
+
+.datos-cabecera-muestra .titulo {
+    color:#000000;
+    font-size:12px;
+    font-weight: bold;
+}
+
+.titulo-espaciado {
+   margin-bottom : 10px;
+}
+
+.campo-espaciado {
+    margin-bottom : 5px;   
+}
+
+.boton-principal {
+    text-align:center
+}
+.titulo-resaltado {
+    color:red;
+    font-size:12px;
+    font-weight: bold;
+    display:inline;
+    float: right;
+}
+.margen_izq_titulo {
+    margin-left: 60px;  
+}
+
+.linea {
+    border-bottom: 1.5px solid;
+}
+.linea-vertical-producto {
+    width: 2px;
+    /*height: 290px;*/
+    margin-top: -7px; 
+    margin-bottom: -10px;
+    margin-right: 5px; 
+    border-right: #999999 1px solid; 
+}
+.espacios-etiqueta {
+    margin-bottom: 11px;
+    margin-top: 5px;
+}
+
+.espacios-etiqueta2 {
+    margin-bottom: 6.5px;
+}
+
+.paginacion {
+	color: #2266BB;
+	float: right;
+	font-size: 10px;
+	font-weight: bold;
+	margin: 10px; 
+}
+.botones-paginacion {
+	left: 50%;
+	margin-top: 10px;
+	margin-left: -100px;
+	position: absolute;
+}
+.botones-paginacion input {
+	width: 50px;
+}
+
+table.separaCheck1 {
+    margin-left: -5px;
+}
+
+table.separaCheck2 td {
+	width: 260px;
+}
+
+.tabla-titulo {
+   text-align:center; 
+}
+.tabla-campo-texto {
+   text-align:left; 
+}
+.tabla-campo-numerico {
+   text-align:right; 
+}
+.tabla-campo-obs { 
+   border:1px;
+   text-align:left; 
+}
+input[disabled]{
+	background-color: #eeeeee;
+}
+.tituloMenu {
+    color:#999999;
+    font-size:12px;
+    font-weight: bold;
+    display: inline; 
+}
+
+/* Para el modal de Procesando */
+#overlay {
+	position:fixed; 
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	background:#000;
+	opacity:0.5;
+	filter:alpha(opacity=50);
+}
+
+#modal {
+	position:absolute;
+	/*background:url(tint20.png) 0 0 repeat;*/
+	background:rgba(0,0,0,0.2);
+	border-radius:14px;
+	padding:8px;
+}
+
+#content {
+	border-radius:8px;
+	background:#fff;
+	padding:20px;
+}
+
+/* grilla */
+
+.grilla {
+    width:790px; 
+    overflow-x:auto; 
+    overflow-y:scroll;
+}
+
+.grilla1 {
+    width:970px; 
+    overflow-x:auto; 
+    overflow-y:scroll;
+}
+
+.grillaHist {
+    overflow-x: auto; 
+    width: 790px;
+    height: 225px;
+    overflow-y:scroll;
+}
+
+.grillaHist1 {
+    overflow-x: auto; 
+    width: 970px;
+    height: 225px;
+    overflow-y:scroll;
+}
+
+/*#close {
+	position:absolute;
+	background:url(close.png) 0 0 no-repeat;
+	width:24px;
+	height:27px;
+	display:block;
+	text-indent:-9999px;
+	top:-7px;
+	right:-7px;
+}*/

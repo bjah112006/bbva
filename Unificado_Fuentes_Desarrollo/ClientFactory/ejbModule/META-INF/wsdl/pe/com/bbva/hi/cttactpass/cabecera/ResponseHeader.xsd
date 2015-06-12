@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema targetNamespace="http://cttactpass.hi.bbva.com.pe/cabecera/" xmlns:tns="http://cttactpass.hi.bbva.com.pe/cabecera/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:complexType name="ResponseHeader">
+    	<xsd:sequence>
+    		<xsd:element maxOccurs="1" minOccurs="0" name="idSesion" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="idPeticionEmpresa" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="idPeticionBanco" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="idOperacion" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="codigoError" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="mensajeError" type="xsd:string"/>
+    	</xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,192 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<div>
+	<div class="titulo1">
+		<h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente1.titulo']} #{detalleExpediente.numeroExpediente}" />
+	</div>
+</div>
+<div class="bloque">    
+    <div class="contenido-bloque">
+        <span class="columna" style="width:280px">
+             <div class="titulo titulo-espaciado">
+    	        <h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente1.titulob']}"/>
+             </div>
+             <div class="campo-espaciado">
+             	<h:panelGrid columns="2">
+            		<h:panelGroup>
+            			<span class="columna" style="width:280px">
+                   			<span class="columna" style="width:120px">
+				                <h:outputText value="#{detalleExpediente1.clienteNatural.tipoDoi.descripcion}:" styleClass="etiqueta"/>
+				            </span>
+				           	<span class="columna" style="width:120px">
+				                <h:outputText value="#{detalleExpediente1.clienteNatural.numDoi}" styleClass="valor"/>
+            				</span>
+            			</span>
+            		</h:panelGroup>
+            	</h:panelGrid>
+            </div>
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2">
+            		<h:panelGroup>
+            			<span class="columna" style="width:280px">
+		                   <span class="columna" style="width:120px">
+				                <h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente1.nombre']}:" styleClass="etiqueta"/>
+				           </span>
+				           	<span class="columna" style="width:120px">
+				                <h:outputText value="#{detalleExpediente1.clienteNatural.nombre}" styleClass="valor"/>
+            				</span>
+            			</span>
+            		</h:panelGroup>
+            	</h:panelGrid>
+            </div>
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2">
+            		<h:panelGroup>
+            			<span class="columna" style="width:280px">
+		                   <span class="columna" style="width:120px">
+				                <h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente1.apPaterno']}:" styleClass="etiqueta"/>
+				           </span>
+				           	<span class="columna" style="width:120px">     
+				                <h:outputText value="#{detalleExpediente1.clienteNatural.apePat}" styleClass="valor"/>
+            				</span>
+            			</span>
+            		</h:panelGroup>
+            	</h:panelGrid>
+            </div>
+            <div class="campo-espaciado" style="margin-top:-8px;">
+            	<h:panelGrid columns="2">
+            		<h:panelGroup>
+            			<span class="columna" style="width:280px">
+		                   <span class="columna" style="width:120px">
+				                <h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente1.apMaterno']}:" styleClass="etiqueta"/>
+				           </span>
+				           	<span class="columna" style="width:120px">
+				                <h:outputText value="#{detalleExpediente1.clienteNatural.apeMat}" styleClass="valor"/>
+            				</span>
+            			</span>
+            		</h:panelGroup>
+            	</h:panelGrid>
+            </div>
+            <div class="campo-espaciado" style="margin-top:-1px;">
+              <span class="columna" style="width:280px">
+                 <span class="columna" style="width:120px">
+                    <h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente1.fechaVencDOI']}:" styleClass="etiqueta "/>
+                 </span>
+                 <span class="columna" style="width:92px">
+                 
+                    <h:outputText value="#{detalleExpediente1.clienteNatural.fecVenDoi}" styleClass="valor" rendered="#{detalleExpediente1.renderedFechaVencimiento}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                 
+                    <h:inputText id="fecVenDoi" value="#{detalleExpediente1.clienteNatural.fecVenDoi}" style="width:66px;" 							 
+                		         styleClass="txt-resaltado-2 formatoFecha" rendered="#{!detalleExpediente1.renderedFechaVencimiento}" maxlength="10" onblur="validarFormatoFecha(); validarFecha();">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>                        
+                    </h:inputText>
+                 </span>
+                 <h:message for="fecVenDoi" errorClass="mensaje-error"/>
+               </span>   
+            </div>
+            
+         
+            <div class="campo-espaciado" style="margin-top:-3px;">
+               <span class="columna" style="width:120px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente1.estadoCivil']}:" styleClass="etiqueta "/>
+               </span>
+               <span class="columna" style="width:90px">
+               
+                  <h:outputText value="#{detalleExpediente1.clienteNatural.estadoCivil.descripcion}" styleClass="valor" rendered="#{detalleExpediente1.renderedEstadoCivil}"/>
+               
+                  <h:selectOneMenu value="#{detalleExpediente1.idEstadoCivil}" style ="width:93px;" 
+                                  styleClass="txt-resaltado-2" id="estadoCivil" rendered="#{!detalleExpediente1.renderedEstadoCivil}">
+                      <f:selectItems value="#{detalleExpediente1.listaEstadoCivil}"/>
+                      <f:ajax event="change" render="idPanelConyuge idPanelDatosConyuge idPanelProductoNuevo" execute="@form" listener="#{detalleExpediente1.cambiarEstadoCivil}"/>
+                  </h:selectOneMenu>
+               </span>
+              <h:message for="estadoCivil" errorClass="mensaje-error"/>
+            </div>   
+            <div class="campo-espaciado" style="margin-top:1px;">
+                <span class="columna" style="width:280px">
+                   <span class="columna" style="width:120px">
+                       <h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente1.correo']}:" class="etiqueta"/>
+                   </span>
+                   <span class="columna" style="width:120px">       
+                       <h:inputText value="#{detalleExpediente1.clienteNatural.correo}" id="dcnCorreoN" 
+                	                class="valor txt-resaltado-2"/>
+                   </span>
+                   <h:message for="dcnCorreoN" errorClass="mensaje-error"/>
+                </span>                
+            </div>
+            <div class="campo-espaciado" style="margin-top:-1px;">
+                <span class="columna" style="width:280px">
+                   <span class="columna" style="width:120px">
+                       <h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente1.celular']}:" class="etiqueta"/>
+                   </span>
+                   <span class="columna" style="width:120px">       
+                       <h:inputText value="#{detalleExpediente1.clienteNatural.celular}" id="dcnCelularN" 
+                	                class="valor txt-resaltado-2 soloNumeros"/>
+                   </span>
+                   <h:message for="dcnCelularN" errorClass="mensaje-error"/>
+                </span>                
+            </div> 
+        </span>   
+        
+        
+        <span class="columna" style="width:320px">
+            <div class="titulo titulo-espaciado" style="margin-top: 24px;">
+    	        <h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente1.tituloc']}"/>
+            </div>            
+            <div class="campo-espaciado">
+                <h:outputText value="#{detalleExpediente1.clienteNatural.tipoCliente.descripcion}" styleClass="txt-resaltado-1 valor-componente"/>
+            </div>
+            <div class="campo-espaciado">
+            	<span class="columna" style="width:280px">
+		                 <span class="columna" style="width:120px">
+			                <h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente1.segmento']}:" styleClass="etiqueta"/>
+			             </span>
+			             <span class="columna" style="width:120px">   
+			                <h:outputText value="#{detalleExpediente1.clienteNatural.segmento.descripcion}" styleClass="valor txt-resaltado-1 valor-componente"/>
+            			 </span>
+            		</span>	 
+            </div>
+            <div class="campo-espaciado">
+            	<span class="columna" style="width:280px">
+		                 <span class="columna" style="width:120px">
+			                <h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente1.codCentral']}:" styleClass="etiqueta"/>
+			             </span>
+			             <span class="columna" style="width:120px">
+			                <h:outputText value="#{detalleExpediente1.clienteNatural.codCliente}" styleClass="valor"/>
+            			</span>			
+            	</span>
+            </div>
+            <div class="campo-espaciado" style="margin-top: 17px;">
+                <h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente1.caracteristicasAd']}:" styleClass="etiqueta"/>
+                <h:selectManyCheckbox value="#{detalleExpediente1.selectedItems}" styleClass="separaCheck1">
+                    <h:inputHidden><f:selectItem itemValue="1" itemLabel="#{msg['com.ibm.bbva.common.detalleExpediente1.caracteristicasAd1']}" itemDisabled="#{detalleExpediente1.disabledFlagPep}"/></h:inputHidden>
+                    <f:selectItem itemValue="2" itemLabel="#{msg['com.ibm.bbva.common.detalleExpediente1.caracteristicasAd2']}" itemDisabled="#{detalleExpediente1.disabledFlagPHabiente}"/>
+                    <h:inputHidden><f:selectItem itemValue="3" itemLabel="#{msg['com.ibm.bbva.common.detalleExpediente1.caracteristicasAd3']}" itemDisabled="#{detalleExpediente1.disabledFlagPAval}"/></h:inputHidden>
+                    <f:selectItem itemValue="4" itemLabel="#{msg['com.ibm.bbva.common.detalleExpediente1.caracteristicasAd4']}" itemDisabled="#{detalleExpediente1.disabledFlagSubRogacion}"/>
+                    <f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" 
+						execute="@form" listener="#{detalleExpediente1.cambiarCaracteristicas1}"/> 
+                </h:selectManyCheckbox>
+            </div>
+        </span>
+        <span class="columna" style="width:160px; margin-top: 24px;">           
+            <div class="campo-espaciado">
+                <h:outputText value="#{msg['com.ibm.bbva.common.detalleExpediente1.categoriasIng']}:" styleClass="etiqueta"/>
+            </div>
+            <span class="columna">
+                <h:selectManyCheckbox value="#{detalleExpediente1.categoriasRenta}" layout="pageDirection" style="margin-bottom: -8px;">
+                    <f:selectItems value="#{detalleExpediente1.listaCategoriaRenta}"/>
+                    <f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{detalleExpediente1.cambiarCategorias1}"/>               
+                </h:selectManyCheckbox>
+            </span>            
+        </span> 
+    </div>
+</div>
+</ui:composition>

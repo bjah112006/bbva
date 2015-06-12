@@ -1,0 +1,108 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+  	<f:verbatim>
+		<script type="text/javascript" language="javascript">
+			function cambiarEstadoMensajes (comp) {	
+				var opcion = $(comp).attr('checked');		    
+				$(".seleccionar").each(function() {
+					$(this).attr('checked', false);
+				});
+			
+				$(comp).attr('checked', opcion);
+			}
+		</script>
+	</f:verbatim>
+
+<div class="bloque">
+		<div class="contenido-bloque">
+			<span class="columna" style="width: 300px"> 
+				<h:panelGroup
+					styleClass="titulo">
+					<h:outputText id="idNombrePagina" value="Mantenimiento - Mensajes" />
+					<h:outputText value=" " />
+				</h:panelGroup> 
+			</span>
+		</div>
+		<div style="width: 790px; overflow-x: auto;">
+		</div>
+		
+		<div style="width: 775px; overflow-x: auto; overflow-y: auto;">
+			<h:panelGroup id="panelConsultaMensajes">
+				<h:dataTable border="1" styleClass="tablaTask" style="border-collapse:collapse;" 
+					columnClasses="text,text,text" headerClass="headerClass headerTabla1" rendered="true" 
+					rowClasses="uno,dos" id="idTablaMensajes" 
+					value="#{buscarMensajes.listaMensajesVO}" var="item" footerClass="fondo"
+					rows="#{buscarMensajes.numeroRegistro}" binding="#{buscarMensajes.dataTable}" >
+					<h:column width="2%">
+						<f:facet name="header">
+							<h:outputText value="Sel."></h:outputText>
+						</f:facet>
+						<h:selectBooleanCheckbox id="idSelect" value="#{item.seleccion}" styleClass="seleccionar" onclick="cambiarEstadoMensajes(this);">  
+							<f:ajax event="click" execute="@form" render="btnActualizar"
+								listener="#{buscarMensajes.cargarMensajes(item.idMensajes, item.seleccion)}" />
+						</h:selectBooleanCheckbox>
+					</h:column>
+					<h:column width="2%">
+						<f:facet name="header">
+							<h:outputText
+								value="Id"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.idMensajes}"
+							styleClass="tabla-campo-texto"></h:outputText>
+					</h:column>
+					<h:column width="10%">
+						<f:facet name="header">
+							<h:outputText
+								value="Descripcion"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.strDescripcion}" styleClass="tabla-campo-texto"/>
+					</h:column>
+					<h:column width="20%">
+						<f:facet name="header">
+							<h:outputText
+								value="Contenido"
+								styleClass="tabla-titulo"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{item.strContenido}" escape="false"/>
+					</h:column>
+				    <f:facet name="footer">
+			            <div class="espacios-etiqueta2">
+			                <span class="columna" style="width:150px">
+			                	<h:panelGroup layout="block" style="padding:5px 10px;">
+			                   		<h:outputText value="#{buscarMensajes.numRegistros}" styleClass="etiqueta"/>
+			                   	</h:panelGroup>	
+			                </span>
+			                <span class="columna" style="width:150px">			
+								<h:panelGroup layout="block" style="padding:5px 10px;">
+									<h:commandButton value="#{msg['com.ibm.bbva.common.Mensajes.Agregar']}" disabled="true"
+										action="#{buscarMensajes.agregar}"  styleClass="boton"/>
+									<h:commandButton value="#{msg['com.ibm.bbva.common.Mensajes.Actualizar']}"
+										action="#{buscarMensajes.actualizar}"  styleClass="boton" id="btnActualizar"/>
+									<h:commandButton value="#{msg['com.ibm.bbva.common.Mensajes.Eliminar']}" disabled="true"
+										action="#{buscarMensajes.eliminar}"  styleClass="boton" id="btnEliminar"/>
+									<h:commandButton value="#{msg['com.ibm.bbva.common.Mensajes.Cancelar']}"
+										action="#{buscarMensajes.cancelar}"  styleClass="boton"/>
+									<h:commandButton value="#{msg['com.ibm.bbva.common.Mensajes.btnAnterior']}"
+										actionListener="#{buscarMensajes.pagePrevious}"  styleClass="boton"
+										disabled="#{buscarMensajes.dataTable.first == 0}" />
+									<h:commandButton value="#{msg['com.ibm.bbva.common.Mensajes.btnSiguiente']}"
+										actionListener="#{buscarMensajes.pageNext}"  styleClass="boton"
+										disabled="#{buscarMensajes.dataTable.first + buscarMensajes.dataTable.rows >= buscarMensajes.dataTable.rowCount}" />
+								</h:panelGroup>
+			                </span>                              
+			            </div>				
+					</f:facet>
+				</h:dataTable>
+				<br/>
+				<h:message for="idTablaMensajes" errorClass="mensaje-error"/>
+				<br/>
+			</h:panelGroup>
+		</div>
+	</div>
+</ui:composition>

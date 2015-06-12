@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Class-Path: BBVA_CE_EJBClient.jar 
+ BBVA_CE_JPA.jar 
+ ClientFactory.jar 
+ BBVA_CE_RESTClient.jar 
+ slf4j-api-1.7.5.jar
+

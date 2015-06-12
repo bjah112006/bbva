@@ -1,0 +1,303 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg" />
+
+ <script type="text/javascript"> 
+     /* <![CDATA[ */
+	$(document).ready(function(){
+		$(".dataTableEx tbody:first tr").mouseover(function () {
+			$(this).addClass("sombraFila");
+			$(this).css('cursor', 'pointer');
+		});
+		$(".dataTableEx tbody:first tr").mouseout(function () {
+        	$(this).removeClass("sombraFila");
+        	$(this).css('cursor', 'default');
+        });
+		$(".dataTableEx tbody:first tr").dblclick(function(){
+			$(this).children("td").children("a")[0].onclick();
+		});
+		$(".chk-excepcion").click (function (){
+			if ($(this).is (":checked")) {
+				$(".campo-todo-dia").show();
+			} else {
+				$(".campo-todo-dia").hide();
+				$(".campo-no-todo-dia").show();
+				$(".chk-todo-dia").attr("checked",false);
+				$(".campo-todo-dia-etiqueta").hide();
+			}
+		});
+		$(".chk-todo-dia").click (function (){
+			if ($(this).is (":checked")) {
+				$(".campo-todo-dia").show();
+				$(".campo-no-todo-dia").hide();
+				$(".campo-todo-dia-etiqueta").show();
+			} else {
+				$(".campo-no-todo-dia").show();
+				$(".campo-todo-dia-etiqueta").hide();
+			}
+		});
+	});
+		
+     /* ]]> */
+    </script>
+
+<h:inputHidden value="#{horarioSemanal.idHorario}"></h:inputHidden>
+<div class="bloque">
+	<div class="contenido-bloque">
+		
+		<span class="columna" style="width:70px;">
+			<div class="campo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.territorio']}:" styleClass="etiqueta"/>
+			</div>
+		</span>
+		
+		<span class="columna" style="width:200px;">
+			<div class="campo-espaciado">
+				<h:selectOneMenu id = "idTerritorioSeleccionada" value="#{horarioSemanal.territorioSeleccionada}" immediate="true"
+				valueChangeListener="#{horarioSemanal.cambiarTerritorio}" onchange="submit();" style="width: 200px;">
+					<f:selectItems value="#{horarioSemanal.territorios}"/>
+				</h:selectOneMenu>
+				<h:message for="idTerritorioSeleccionada" errorClass="mensaje-error"/>       
+			</div>
+		</span>
+		
+		<span class="columna" style="width:50px;">
+			<div class="campo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.oficina']}:" styleClass="etiqueta"/>
+			</div>
+		</span>
+		
+		<span class="columna" style="width:200px;">
+			<div class="campo-espaciado">
+				<h:selectOneMenu id = "idOficinaSeleccionada" value="#{horarioSemanal.oficinaSeleccionada}" immediate="true"
+						valueChangeListener="#{horarioSemanal.cambiarOficina}" onchange="submit();" style="width: 200px;">
+					<f:selectItems value="#{horarioSemanal.oficinas}"/>
+				</h:selectOneMenu>
+				<h:message for="idOficinaSeleccionada" errorClass="mensaje-error"/>       
+			</div>
+		</span>		
+		
+	</div>
+	<div class="contenido-bloque">
+		<span class="columna" style="width:100px;">
+			<div class="campo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.activo']}:" styleClass="etiqueta"/>
+			</div>
+		</span>
+		<span class="columna" style="width:150px;">
+			<div class="campo-espaciado">
+				<h:selectBooleanCheckbox value="#{horarioSemanal.activo}" />
+			</div>
+		</span>
+	</div>
+	<div class="contenido-bloque">
+		<span class="columna" style="width:100px;">
+			<div class="campo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.excepcion']}:" styleClass="etiqueta"/>
+			</div>
+		</span>
+		<span class="columna" style="width:150px;">
+			<div class="campo-espaciado">
+				<h:selectBooleanCheckbox value="#{horarioSemanal.excepcion}" styleClass="chk-excepcion"
+						disabled="#{horarioSemanal.habExepciones and horarioSemanal.todoDia}" 
+						readonly="#{horarioSemanal.habExepciones and horarioSemanal.todoDia}"/>
+			</div>
+		</span>
+	</div>
+	<div class="contenido-bloque campo-todo-dia" style="#{horarioSemanal.excepcion ? '':'display:none;'}">
+		<span class="columna" style="width:100px;">
+			<div class="campo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.todoDia']}:" styleClass="etiqueta"/>
+			</div>
+		</span>
+		<span class="columna" style="width:150px;">
+			<div class="campo-espaciado">
+				<h:selectBooleanCheckbox value="#{horarioSemanal.todoDia}" styleClass="chk-todo-dia"
+						disabled="#{horarioSemanal.habExepciones}" readonly="#{horarioSemanal.habExepciones}"/>
+			</div>
+
+		</span>
+	</div>
+	<div class="contenido-bloque">
+		<span class="columna" style="width:150px;">
+			<div class="campo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.rangoFechas']}" styleClass="etiqueta campo-no-todo-dia" style="#{horarioSemanal.todoDia ? 'display:none;':''}"/>
+				<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.fechas']}:" styleClass="etiqueta campo-todo-dia-etiqueta" style="#{horarioSemanal.excepcion and horarioSemanal.todoDia ? '':'display:none;'}"/>
+			</div>
+		</span>
+		<span class="columna" style="width:200px;">
+			<div class="campo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.fecInicio']}:" styleClass="etiqueta campo-no-todo-dia" style="#{horarioSemanal.todoDia ? 'display:none;':''}"/>
+				<h:inputText value="#{horarioSemanal.fechaInicio}" id="fecIni" 
+				     style="width:80px;" styleClass="valor  formatoFecha" maxlength="10">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+					
+				</h:inputText>
+				<h:message for="fecIni" errorClass="mensaje-error"/>   
+			</div>
+		</span>
+		<span class="columna campo-no-todo-dia" style="width:200px;#{horarioSemanal.excepcion and horarioSemanal.todoDia ? 'display:none;':''}">
+			<div class="campo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.fecFin']}:" styleClass="etiqueta"/>
+				<h:inputText value="#{horarioSemanal.fechaFin}" id="fecFin"
+					style="width:80px;" styleClass="valor  formatoFecha" maxlength="10">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+					
+				</h:inputText>
+				<h:message for="fecFin" errorClass="mensaje-error"/>     
+			</div>
+		</span>
+	</div>
+	<div class="contenido-bloque campo-no-todo-dia" style="#{horarioSemanal.excepcion and horarioSemanal.todoDia ? 'display:none;':''}">
+		<span class="columna" style="width:150px;">
+			<div class="campo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.rangoHoras']}" styleClass="etiqueta"/>
+			</div>
+		</span>
+		<span class="columna" style="width:200px;">
+			<div class="campo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.horInicio']}:" styleClass="etiqueta"/>
+				<h:inputText value="#{horarioSemanal.horaInicio}" id="horaInicio"
+					style="width:80px;" styleClass="valor soloHora" maxlength="5">
+				</h:inputText>
+				<h:message for="horaInicio" errorClass="mensaje-error"/> 
+			</div>
+		</span>
+		<span class="columna" style="width:200px;">
+			<div class="campo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.horFin']}:" styleClass="etiqueta"/>
+				<h:inputText value="#{horarioSemanal.horaFin}" id = "horaFin"
+					style="width:80px;" styleClass="valor soloHora" maxlength="5">
+				</h:inputText>
+				<h:message for="horaFin" errorClass="mensaje-error"/> 
+			</div>
+		</span>
+	</div>
+	<div class="contenido-bloque campo-no-todo-dia" style="#{horarioSemanal.excepcion and horarioSemanal.todoDia ? 'display:none;':''}">
+		<span class="columna" style="width:700px;">
+			<div class="campo-espaciado">
+				<h:selectManyCheckbox value="#{horarioSemanal.diasSeleccionados}" id="idSeleccionadoDias">
+					<f:selectItems value="#{horarioSemanal.dias}"/>
+				</h:selectManyCheckbox>
+				<h:message for="idSeleccionadoDias" errorClass="mensaje-error"/>
+			</div>
+		</span>
+	</div>
+	<div class="contenido-bloque">
+		<h:message id="horarioNormal" for="horarioNormal" errorClass="mensaje-error"/>
+		<span class="columna" style="width:150px;">
+			<h:commandButton value="#{msg['com.ibm.bbva.horario.formHorario.nuevo']}"
+					actionListener="#{horarioSemanal.nuevo}"/>
+		</span>
+		<span class="columna" style="width:150px;">
+			<h:commandButton value="#{horarioSemanal.idHorario==null || horarioSemanal.idHorario==''? 
+					msg['com.ibm.bbva.horario.formHorario.aceptar'] :
+					msg['com.ibm.bbva.horario.formHorario.actualizar']}" 
+					actionListener="#{horarioSemanal.aceptar}" onclick="return confAceptar();"/>
+		</span>
+	</div>
+</div>
+
+<h:dataTable border="1" cellpadding="0" cellspacing="0"
+		rendered="true" id="tablaHorSemanal"
+		value="#{horarioSemanal.listaHorario}" var="item"
+		styleClass="dataTableEx" headerClass="headerClass"
+		footerClass="footerClass" rows="20" >
+
+	<h:column align="center">
+	
+		<h:commandLink actionListener="#{horarioSemanal.editar}" value="sel" immediate="true" style="display:none;">
+			<f:param value="#{item.id}" name="idHorario" />
+		</h:commandLink>
+		
+		<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.excepcion']}"/>
+		</f:facet>
+		<h:graphicImage value="#{item.excepcion=='0' ? '../resources/images/deseleccionado.png':'../resources/images/seleccionado.png'}"/>
+	</h:column>
+	<h:column align="center">
+		<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.todoDia']}"/>
+		</f:facet>
+		<h:graphicImage value="#{item.todoDia=='0' ? '../resources/images/deseleccionado.png':'../resources/images/seleccionado.png'}"/>
+	</h:column>
+	<h:column align="center">
+		<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.activo']}"/>
+		</f:facet>
+		<h:graphicImage value="#{item.activo=='0' ? '../resources/images/deseleccionado.png':'../resources/images/seleccionado.png'}"/>
+	</h:column>
+	<h:column align="center" style="width: 160px;">
+		<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.rangoFechas']}"/>
+		</f:facet>
+		<h:outputText value="#{item.diaInicio}">
+			<f:convertDateTime pattern="dd/MM/yyyy"/>
+		</h:outputText>
+		<h:outputText value=" - " rendered="#{item.diaFin!=null}"/>
+		<h:outputText value="#{item.diaFin}">
+			<f:convertDateTime pattern="dd/MM/yyyy"/>
+		</h:outputText>
+	</h:column>
+	<h:column align="center">
+		<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.rangoHoras']}"/>
+		</f:facet>
+		<h:outputText value="#{item.horaInicio} - #{item.horaFin}" rendered="#{item.horaInicio!=null and item.horaFin!=null}"/>
+	</h:column>
+	<h:column align="center">
+		<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.dom']}"/>
+		</f:facet>
+		<h:graphicImage value="#{item.dom==0 or item.dom==null ? '../resources/images/deseleccionado.png':'../resources/images/seleccionado.png'}"
+				width="13" height="13"/>
+	</h:column>
+	<h:column align="center">
+		<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.lun']}"/>
+		</f:facet>
+		<h:graphicImage value="#{item.lun==0 or item.dom==null ? '../resources/images/deseleccionado.png':'../resources/images/seleccionado.png'}"
+				width="13" height="13"/>
+	</h:column>
+	<h:column align="center">
+		<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.mar']}"/>
+		</f:facet>
+		<h:graphicImage value="#{item.mar==0 or item.dom==null ? '../resources/images/deseleccionado.png':'../resources/images/seleccionado.png'}"
+				width="13" height="13"/>
+	</h:column>
+	<h:column align="center">
+		<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.mie']}"/>
+		</f:facet>
+		<h:graphicImage value="#{item.mie==0 or item.dom==null ? '../resources/images/deseleccionado.png':'../resources/images/seleccionado.png'}"
+				width="13" height="13"/>
+	</h:column>
+	<h:column align="center">
+		<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.jue']}"/>
+		</f:facet>
+		<h:graphicImage value="#{item.jue==0 or item.dom==null ? '../resources/images/deseleccionado.png':'../resources/images/seleccionado.png'}"
+				width="13" height="13"/>
+	</h:column>
+	<h:column align="center">
+		<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.vie']}"/>
+		</f:facet>
+		<h:graphicImage value="#{item.vie==0 or item.dom==null ? '../resources/images/deseleccionado.png':'../resources/images/seleccionado.png'}"
+				width="13" height="13"/>
+	</h:column>
+	<h:column align="center">
+		<f:facet name="header">
+			<h:outputText value="#{msg['com.ibm.bbva.horario.formHorario.sab']}"/>
+		</f:facet>
+		<h:graphicImage value="#{item.sab==0 or item.dom==null ? '../resources/images/deseleccionado.png':'../resources/images/seleccionado.png'}"
+				width="13" height="13"/>
+	</h:column>
+</h:dataTable>
+
+</ui:composition>

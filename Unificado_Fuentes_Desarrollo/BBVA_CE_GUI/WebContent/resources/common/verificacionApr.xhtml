@@ -1,0 +1,51 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<script type="text/javascript">
+	<f:verbatim>
+	$(document).ready(function(){		
+		
+	});
+		
+	</f:verbatim>
+</script>
+
+<div class="bloque">
+	<div class="contenido-bloque">
+		<span class="columna" style="width:769px;">
+			<div class="titulo titulo-espaciado">
+				<h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar.titulo']}"/>
+            </div>
+            <span class="columna" style="width:190px;">
+				<h:selectBooleanCheckbox value="#{verificarAprobar.verLaboral}" disabled="#{verificarAprobar.readOnlyVl}" readonly="#{verificarAprobar.readOnlyVl}">
+                    <f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{verificarAprobar.cambiarVerLaboral}"/>
+                </h:selectBooleanCheckbox>
+                <h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar.verificacionLaboral']}" styleClass="etiqueta"/>
+            </span>
+            <span class="columna" style="width:190px;">
+                <h:selectBooleanCheckbox value="#{verificarAprobar.verDomiciliaria}" disabled="#{verificarAprobar.readOnlyVd}" readonly="#{verificarAprobar.readOnlyVd}">
+                    <f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{verificarAprobar.cambiarVerDomiciliaria}"/>
+                </h:selectBooleanCheckbox>
+                <h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar.verificacionDomiciliaria']}" styleClass="etiqueta"/>
+            </span>
+            <span class="columna" style="width:180px;">
+            	<h:selectBooleanCheckbox value="#{verificarAprobar.verZonaPeligrosa}" disabled="#{verificarAprobar.readOnlyZp}" readonly="#{verificarAprobar.readOnlyZp}"/>
+                <h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar.zonaPeligrosa']}" styleClass="etiqueta"/>
+            </span>
+            <span class="columna" style="width:180px;">
+            	<h:panelGroup id="idPanelVerificacionDPS">
+	            	<h:selectBooleanCheckbox value="#{verificarAprobar.verDPS}" disabled="#{verificarAprobar.readOnlyDPS}" readonly="#{verificarAprobar.readOnlyDPS}" rendered="#{verificarAprobar.renderedDps}">
+	                	<f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{verificarAprobar.cambiarVerDps}"/>
+	                </h:selectBooleanCheckbox>
+	                <h:outputText value="#{msg['com.ibm.bbva.common.verificarAprobar.dps']}" styleClass="etiqueta" rendered="#{verificarAprobar.renderedDps}"/>
+                </h:panelGroup>
+            </span>                  
+        </span>
+    </div>
+</div>
+</ui:composition>

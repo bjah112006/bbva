@@ -1,0 +1,49 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<script type="text/javascript" >
+	$(document).ready(function() {
+		// Modal dialog
+		$("[id='#{elevaSuperior.dialogoModal.clientId}']").dialog({
+			modal: true,
+			draggable: false,
+			resizable: false,
+			dialogClass: "panelDialog",
+			width: 254,
+			minHeight: 100,
+			autoOpen: #{elevaSuperior.mostrarDialogo},
+			title: "#{msg['com.ibm.bbva.common.elevaSuperior.titulo']}"
+		}).parent().appendTo($("[id='#{elevaSuperior.nombreFormPadre}']"));
+	});
+</script>
+<h:panelGroup id="dialogElevaSuperior" binding="#{elevaSuperior.dialogoModal}" layout="block">
+
+	<div class="bloque" style="width:auto;"> 
+	    <div class="campo-espaciado">
+	    	<div class="datos-cabecera-muestra">
+		    	<h:outputText value="#{msg['com.ibm.bbva.common.elevaSuperior.etiqueta']}:" 
+		    			styleClass="etiqueta" />
+		       	<span class="columna">
+		        	<h:selectOneMenu value="#{elevaSuperior.tipoSeleccionado}" id="elevaSuperior" style="width: 130px;">
+		            	<f:selectItems value="#{elevaSuperior.listaTipos}"/>
+		            </h:selectOneMenu>
+				</span>
+	            <h:message for="elevaSuperior" errorClass="mensaje-error"/>
+			</div>
+	        <div class="column boton-principal" style="padding-top: 5px;">					
+				 <h:commandButton value="#{msg['com.ibm.bbva.common.elevaSuperior.aceptar']}"
+	        	                action="#{elevaSuperior.aceptar}"/>                        
+	        	<h:commandButton value="#{msg['com.ibm.bbva.common.elevaSuperior.cancelar']}"
+	            				action="#{elevaSuperior.cancelar}"/>	            		                     					
+			</div>
+	    </div>
+	</div>
+
+</h:panelGroup>
+
+</ui:composition>

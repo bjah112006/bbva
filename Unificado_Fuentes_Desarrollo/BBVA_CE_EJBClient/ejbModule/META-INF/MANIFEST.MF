@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: BBVA_CE_JPA.jar 
+ slf4j-api-1.7.5.jar
+

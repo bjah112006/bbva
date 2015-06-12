@@ -1,0 +1,102 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg" />
+
+<div class="bloque">    
+    <div class="contenido-bloque">
+        <span class="columna" style="width:500px">
+            <div class="titulo titulo-espaciado">
+               <h:outputText value="#{msg['com.ibm.bbva.common.documentoReutilizable.titulo']}"/>
+            </div>            
+            <script type="text/javascript">
+                /* <![CDATA[ */ 
+                $(document).ready(function(){                
+                    $("#pagina1\\:tabla tbody:first tr").mouseover(function () {
+                        $(this).addClass("sombra-fila");
+                    });
+                    $("#pagina1\\:tabla tbody:first tr").mouseout(function () {
+                        $(this).removeClass("sombra-fila");
+                    });            	            
+                });
+                
+                function checkDocReuClick(check, idDocExp, codigoTipoDoc, idExp) {
+                	var seleccionados = "";
+                 	var docreu = check.checked + "-" + idDocExp + "-" + codigoTipoDoc + "-" + idExp;
+                 	var idExp = $("[id='#{documentoReutilizable.htmlIdExpDocReu.clientId}']").val();
+                 	if (idExp != 0) {
+                 		if (check.checked == true) {
+							//seleccionados = seleccionados + codigoTipoDoc + ',';
+							seleccionados = codigoTipoDoc;
+						}
+						else{
+							/*if(seleccionados != null && seleccionados != "undefined" && seleccionados != ""){
+								seleccionados = seleccionados.replace(codigoTipoDoc + ',', '');
+						    }*/
+						    seleccionados = "-" + codigoTipoDoc;
+						}
+						/*if(seleccionados != null && seleccionados != "undefined" && seleccionados != "" && seleccionados.lenght > 1){
+				    		seleccionados = seleccionados.substring(0, seleccionados.lenght - 1);
+						}*/
+						$("[id='#{documentoReutilizable.htmlIdSeleccionados.clientId}']").val(seleccionados);
+                 		docreu = docreu + "-existe";
+						$("[id='#{documentoReutilizable.htmlIdDocReu.clientId}']").val(docreu);
+						$("[id='#{documentoReutilizable.btnReutilizarDocumentoContent.clientId}']").click()	
+					}else{
+						if (check.checked == true) {
+							if (confirm('Para reutilizar el documento \n el expediente debe existir.\n¿Desea guardar el expediente?')) {
+								/*seleccionados = seleccionados + codigoTipoDoc + ',';
+								if(seleccionados != null && seleccionados != "undefined" && seleccionados != "" && seleccionados.lenght > 1){
+						    		seleccionados = seleccionados.substring(0, seleccionados.lenght - 1);
+								}*/
+								seleccionados = codigoTipoDoc;
+								$("[id='#{documentoReutilizable.htmlIdSeleccionados.clientId}']").val(seleccionados);
+								docreu = docreu + "-guardar";
+								$("[id='#{documentoReutilizable.htmlIdDocReu.clientId}']").val(docreu);
+								$("[id='#{documentoReutilizable.btnReutilizarDocumentoContent.clientId}']").click();
+							}
+							else{
+								check.checked == false;
+							}
+						}
+						//return false;
+					}
+					$("[id='#{documentoReutilizable.htmlIdDocReu.clientId}']").val('');
+				}        
+                /* ]]> */         
+            </script>
+            <h:inputText id="idExpDocReu" value="#{documentoReutilizable.strIdExpDocReu}" binding="#{documentoReutilizable.htmlIdExpDocReu}" style="display:none;" />
+            <h:inputText id="idDocReu" value="#{documentoReutilizable.strDocReu}" binding="#{documentoReutilizable.htmlIdDocReu}" style="display:none;" />
+            <h:inputText id="idSeleccionados" value="#{documentoReutilizable.strSeleccionados}" binding="#{documentoReutilizable.htmlIdSeleccionados}" style="display:none;" />
+			<h:commandButton id="btnReutilizarDocumentoContent" binding="#{documentoReutilizable.btnReutilizarDocumentoContent}" style="display:none">
+				<f:ajax onevent="mostrarProcesando" event="click" render="@form" execute="@form" listener="#{documentoReutilizable.reutilizarDocumento}"/>
+			</h:commandButton>
+	
+            <h:dataTable border="0" cellpadding="0" cellspacing="0" rendered="true"
+                            id="tabla" value="#{documentoReutilizable.listaDocumentoReutilizable}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" width="692">
+                <h:column nowrap="true" align="left" width="90%">
+                    <f:facet name="header">
+                        <h:outputText value="Tipo Documento" />
+                    </f:facet>
+                    <h:outputText value="#{item.descripcion}"/>                
+                </h:column>
+                <h:column nowrap="true" align="center" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="¿Usar?"/>
+                    </f:facet>
+                    <h:inputHidden id="idCodigoDocumentoReu" value="#{item.codigoDocumento}"></h:inputHidden>
+                    <h:selectBooleanCheckbox id = "idSeleccionReu" 
+                                             value="#{item.seleccion}"  onclick="checkDocReuClick(this,'#{item.idDocumentoExp}','#{item.codigoDocumento}','#{item.idExpediente}')">
+                    </h:selectBooleanCheckbox>    
+                                                          
+                </h:column>
+            </h:dataTable>
+            <h:outputLabel id="idMensajeDocReu"  value="#{documentoReutilizable.mensaje}" style="color: red;" rendered="#{documentoReutilizable.mostrarMensaje}"/>
+        </span>
+    </div>
+</div>
+</ui:composition>

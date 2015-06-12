@@ -1,0 +1,2585 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg" />
+
+ <script type="text/javascript"> 
+     /* <![CDATA[ */
+
+     /* ]]> */
+ </script>
+
+<div style="overflow-x: auto; width: 790px;height: 400px">
+
+	<!-- Tabla general -->	
+<div class="contenido-bloque" id="tablaGenerarTOE">	
+
+            <div class="titulo titulo-espaciado">
+                <h:outputText value="    "/>
+            </div>
+            
+	<h:panelGroup align="center">
+	    <div class="titulo titulo-espaciado" align="center">
+	    	<h:outputText value="#{msg['com.ibm.bbva.common.reporteTOE.tituloReporteTOE']}" class="etiqueta " />
+	    </div>
+    </h:panelGroup>
+    	
+	<h:panelGroup id="panelTablaGen" style="#{tablaGenerarTOE.viewTablaGeneral and reporteTOE.viewTabla ? '':'display:none;'}">
+	
+
+   <h:panelGroup align="center" rendered="#{tablaGenerarTOE.tabla1}"> 
+            <div class="titulo titulo-espaciado" align="center">
+                <h:outputText value="#{tablaGenerarTOE.tituloTabla1}" escape="false" styleClass="etiqueta"/>
+            </div>      
+   </h:panelGroup> 	
+    	
+		<span class="columna" style="width: 645px;margin-left: 5px;margin-top: 5px;">
+		<h:panelGroup layout="block">
+		
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaRoles1" value="#{tablaGenerarTOE.listaRoles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla1}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;" >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;" >
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;" >
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="450" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;" >
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column>                                                                          
+			</h:dataTable>	
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPerfil1" value="#{tablaGenerarTOE.listaPerfiles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla1}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaTCTE1" value="#{tablaGenerarTOE.cargarCabeceraTiempo}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla1}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>						        
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tabla1" value="#{tablaGenerarTOE.listReport_Prod_1_TipOferta_1_Flujo_1}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla1}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-bottom-width: 0px; border-right-width: 0px; border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column0}"   />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71"
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>	
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPorcentaje1" value="#{tablaGenerarTOE.listPorc_Prod_1_TipOferta_1_Flujo_1}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla1}" >
+                <h:column nowrap="true" align="left" width="100"  
+                style = "padding-left: 3px; border-top: 1px solid; border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>						 
+		
+		<div class="campo-espaciado espacios-etiqueta tablaUnidad-wrapper" style="#{tablaGenerarTOE.tabla1 ? '':'display:none;'}">
+			<div class="tablaUnidad-title">TOE POR UNIDAD</div>
+            
+            <h:dataTable border="1" cellpadding="2" cellspacing="0" 
+                            id="tablaUnidad1" value="#{tablaGenerarTOE.listUnid_Prod_1_TipOferta_1_Flujo_1}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla1}" >               
+                <f:facet name="header">
+        				<h:outputText value="#{tablaGenerarTOE.rangoFechas}"/>
+       			</f:facet> 
+                <h:column nowrap="true" align="left" width="70" >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column>                                                                        
+			</h:dataTable>	
+		</div>
+			
+		</h:panelGroup>			
+		</span>
+		
+            <div class="titulo titulo-espaciado" align="center" rendered="#{tablaGenerarTOE.tabla2}">
+                <h:outputText value="#{tablaGenerarTOE.tituloTabla2}" escape="false" styleClass="etiqueta"/>
+            </div>      
+  
+   		
+		<span class="columna" style="width: 645px;margin-left: 5px;margin-top: 5px;">
+		<h:panelGroup layout="block">
+		
+				<h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaRoles2" value="#{tablaGenerarTOE.listaRoles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla2}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;">
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="450" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column>                                                                        
+			</h:dataTable>	
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPerfil2" value="#{tablaGenerarTOE.listaPerfiles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla2}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>	
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaTCTE2" value="#{tablaGenerarTOE.cargarCabeceraTiempo}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla2}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>					
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tabla2" value="#{tablaGenerarTOE.listReport_Prod_1_TipOferta_1_Flujo_2}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1" rendered="#{tablaGenerarTOE.tabla2}"
+                            footerClass="footerClass" columnClasses="" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-bottom-width: 0px; border-right-width: 0px; border-left: 1px solid; border-top: 1px solid; ">
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPorcentaje2" value="#{tablaGenerarTOE.listPorc_Prod_1_TipOferta_1_Flujo_2}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla2}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-top: 1px solid; border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>						 
+		
+		<div class="campo-espaciado espacios-etiqueta tablaUnidad-wrapper" style="#{tablaGenerarTOE.tabla2 ? '':'display:none;'}">
+			<div class="tablaUnidad-title">TOE POR UNIDAD</div>
+            <h:dataTable border="1" cellpadding="2" cellspacing="0" 
+                            id="tablaUnidad2" value="#{tablaGenerarTOE.listUnid_Prod_1_TipOferta_1_Flujo_2}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla2}" >
+                <f:facet name="header">
+        				<h:outputText value="#{tablaGenerarTOE.rangoFechas}"/>
+       			</f:facet> 
+                <h:column nowrap="true" align="left" width="70" >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column>                                                                        
+			</h:dataTable>	
+		</div>
+							
+		</h:panelGroup>
+		</span>		
+		
+		    <div class="titulo titulo-espaciado">
+                <h:outputText value="    "/>
+            </div>
+            
+   <h:panelGroup align="center" rendered="#{tablaGenerarTOE.tabla3}"> 
+            <div class="titulo titulo-espaciado" align="center">
+                <h:outputText value="#{tablaGenerarTOE.tituloTabla3}" escape="false" styleClass="etiqueta"/>
+            </div>      
+   </h:panelGroup> 
+    	
+		<span class="columna" style="width: 645px;margin-left: 5px;margin-top: 5px;">
+		<h:panelGroup layout="block">
+		
+				<h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaRoles3" value="#{tablaGenerarTOE.listaRoles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla3}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="450" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column>                                                                        
+			</h:dataTable>	
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPerfil3" value="#{tablaGenerarTOE.listaPerfiles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla3}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;">
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>	
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaTCTE3" value="#{tablaGenerarTOE.cargarCabeceraTiempo}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla3}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>					
+
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tabla3" value="#{tablaGenerarTOE.listReport_Prod_1_TipOferta_2_Flujo_1}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla3}" >                            
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-bottom-width: 0px; border-right-width: 0px; border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column0}"   />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71"
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPorcentaje3" value="#{tablaGenerarTOE.listPorc_Prod_1_TipOferta_2_Flujo_1}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla3}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-top: 1px solid; border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>							 
+		
+		<div class="campo-espaciado espacios-etiqueta tablaUnidad-wrapper" style="#{tablaGenerarTOE.tabla3 ? '':'display:none;'}">
+			<div class="tablaUnidad-title">TOE POR UNIDAD</div>
+            <h:dataTable border="1" cellpadding="2" cellspacing="0" 
+                            id="tablaUnidad3" value="#{tablaGenerarTOE.listUnid_Prod_1_TipOferta_2_Flujo_1}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla3}" >
+                <f:facet name="header">
+        				<h:outputText value="#{tablaGenerarTOE.rangoFechas}"/>
+       			</f:facet> 
+                <h:column nowrap="true" align="left" width="70" >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column>                                                                        
+			</h:dataTable>	
+		</div>			
+		</h:panelGroup>
+		</span>
+		
+   <h:panelGroup align="center" rendered="#{tablaGenerarTOE.tabla4}"> 
+            <div class="titulo titulo-espaciado" align="center">
+                <h:outputText value="#{tablaGenerarTOE.tituloTabla4}" escape="false" styleClass="etiqueta"/>
+            </div>      
+   </h:panelGroup> 	
+    	
+		<span class="columna" style="width: 645px;margin-left: 5px;margin-top: 5px;">
+		<h:panelGroup layout="block">		
+				<h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaRoles4" value="#{tablaGenerarTOE.listaRoles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla4}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="450" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column>                                                                        
+			</h:dataTable>
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPerfil4" value="#{tablaGenerarTOE.listaPerfiles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla4}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;">
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>	
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaTCTE4" value="#{tablaGenerarTOE.cargarCabeceraTiempo}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla4}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>			     
+            <h:dataTable border="0" cellpadding="2" cellspacing="0"
+                            id="tabla4" value="#{tablaGenerarTOE.listReport_Prod_1_TipOferta_2_Flujo_2}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1" rendered="#{tablaGenerarTOE.tabla4}"
+                            footerClass="footerClass" columnClasses="" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-bottom-width: 0px; border-right-width: 0px; border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column0}"   />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71"
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPorcentaje4" value="#{tablaGenerarTOE.listPorc_Prod_1_TipOferta_2_Flujo_2}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla4}" >
+                 <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-top: 1px solid; border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>						 
+		
+		<div class="campo-espaciado espacios-etiqueta tablaUnidad-wrapper" style="#{tablaGenerarTOE.tabla4 ? '':'display:none;'}">
+			<div class="tablaUnidad-title">TOE POR UNIDAD</div>
+            <h:dataTable border="1" cellpadding="2" cellspacing="0" 
+                            id="tablaUnidad4" value="#{tablaGenerarTOE.listUnid_Prod_1_TipOferta_2_Flujo_2}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla4}" >
+                <f:facet name="header">
+        				<h:outputText value="#{tablaGenerarTOE.rangoFechas}"/>
+       			</f:facet> 
+                <h:column nowrap="true" align="left" width="70" >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column>                                                                        
+			</h:dataTable>	
+		</div>			
+		</h:panelGroup>
+		</span>  	
+	
+<!-- Producto PLD -->
+
+   <h:panelGroup align="center" rendered="#{tablaGenerarTOE.tabla5}"> 
+            <div class="titulo titulo-espaciado" align="center">
+                <h:outputText value="#{tablaGenerarTOE.tituloTabla5}" escape="false" styleClass="etiqueta"/>
+            </div>      
+   </h:panelGroup> 	
+    	
+		<span class="columna" style="width: 645px;margin-left: 5px;margin-top: 5px;">
+		<h:panelGroup layout="block" class="titulo titulo-espaciado">
+		
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaRoles5" value="#{tablaGenerarTOE.listaRoles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla5}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="450" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column>                                                                        
+			</h:dataTable>
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPerfil5" value="#{tablaGenerarTOE.listaPerfiles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla5}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;">
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>	                                                                                                           
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaTCTE5" value="#{tablaGenerarTOE.cargarCabeceraTiempo}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla5}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>					        
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tabla5" value="#{tablaGenerarTOE.listReport_Prod_2_TipOferta_1_Flujo_1}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla5}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-bottom-width: 0px; border-right-width: 0px; border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column0}"   />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71"
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPorcentaje5" value="#{tablaGenerarTOE.listPorc_Prod_2_TipOferta_1_Flujo_1}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla5}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-top: 1px solid; border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>							 
+		
+		<div class="campo-espaciado espacios-etiqueta tablaUnidad-wrapper" style="#{tablaGenerarTOE.tabla5 ? '':'display:none;'}">
+			<div class="tablaUnidad-title">TOE POR UNIDAD</div>
+            <h:dataTable border="1" cellpadding="2" cellspacing="0" 
+                            id="tablaUnidad5" value="#{tablaGenerarTOE.listUnid_Prod_2_TipOferta_1_Flujo_1}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla5}" >
+                <f:facet name="header">
+        				<h:outputText value="#{tablaGenerarTOE.rangoFechas}"/>
+       			</f:facet> 
+                <h:column nowrap="true" align="left" width="70" >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column>                                                                        
+			</h:dataTable>	
+		</div>						 
+		</h:panelGroup>
+		</span>
+				
+   <h:panelGroup align="center" rendered="#{tablaGenerarTOE.tabla6}"> 
+            <div class="titulo titulo-espaciado" align="center">
+                <h:outputText value="#{tablaGenerarTOE.tituloTabla6}" escape="false" styleClass="etiqueta"/>
+            </div>      
+   </h:panelGroup> 
+    	
+		<span class="columna" style="width: 645px;margin-left: 5px;margin-top: 5px;">
+		<h:panelGroup layout="block">
+		
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaRoles6" value="#{tablaGenerarTOE.listaRoles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla6}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="450" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column>                                                                        
+			</h:dataTable>
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPerfil6" value="#{tablaGenerarTOE.listaPerfiles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla6}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;">
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>	
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaTCTE6" value="#{tablaGenerarTOE.cargarCabeceraTiempo}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla6}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>					        
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tabla6" value="#{tablaGenerarTOE.listReport_Prod_2_TipOferta_1_Flujo_2}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla6}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-bottom-width: 0px; border-right-width: 0px; border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column0}"   />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71"
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPorcentaje6" value="#{tablaGenerarTOE.listPorc_Prod_2_TipOferta_1_Flujo_2}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla6}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-top: 1px solid; border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>					 
+		
+		<div class="campo-espaciado espacios-etiqueta tablaUnidad-wrapper" style="#{tablaGenerarTOE.tabla6 ? '':'display:none;'}">
+			<div class="tablaUnidad-title">TOE POR UNIDAD</div>
+            <h:dataTable border="1" cellpadding="2" cellspacing="0" 
+                            id="tablaUnidad6" value="#{tablaGenerarTOE.listUnid_Prod_2_TipOferta_1_Flujo_2}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla6}" >
+                <f:facet name="header">
+        				<h:outputText value="#{tablaGenerarTOE.rangoFechas}"/>
+       			</f:facet> 
+                <h:column nowrap="true" align="left" width="70" >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column>                                                                        
+			</h:dataTable>	
+		</div>						 
+		</h:panelGroup>
+		</span>		
+		
+   <h:panelGroup align="center" rendered="#{tablaGenerarTOE.tabla7}"> 
+            <div class="titulo titulo-espaciado" align="center">
+                <h:outputText value="#{tablaGenerarTOE.tituloTabla7}" escape="false" styleClass="etiqueta"/>
+            </div>      
+   </h:panelGroup> 
+    	
+		<span class="columna" style="width: 645px;margin-left: 5px;margin-top: 5px;">
+		<h:panelGroup layout="block">
+		
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaRoles7" value="#{tablaGenerarTOE.listaRoles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla7}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="450" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column>                                                                        
+			</h:dataTable>	
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPerfil7" value="#{tablaGenerarTOE.listaPerfiles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla7}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;">
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>	
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaTCTE7" value="#{tablaGenerarTOE.cargarCabeceraTiempo}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla7}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>					        
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tabla7" value="#{tablaGenerarTOE.listReport_Prod_2_TipOferta_2_Flujo_1}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla7}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-bottom-width: 0px; border-right-width: 0px; border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column0}"   />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71"
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPorcentaje7" value="#{tablaGenerarTOE.listPorc_Prod_2_TipOferta_2_Flujo_1}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla7}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-top: 1px solid; border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>						 
+		
+		<div class="campo-espaciado espacios-etiqueta tablaUnidad-wrapper" style="#{tablaGenerarTOE.tabla7 ? '':'display:none;'}">
+			<div class="tablaUnidad-title">TOE POR UNIDAD</div>
+            <h:dataTable border="1" cellpadding="2" cellspacing="0" 
+                            id="tablaUnidad7" value="#{tablaGenerarTOE.listUnid_Prod_2_TipOferta_2_Flujo_1}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla7}" >
+                <f:facet name="header">
+        				<h:outputText value="#{tablaGenerarTOE.rangoFechas}"/>
+       			</f:facet> 
+                <h:column nowrap="true" align="left" width="70" >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column>                                                                        
+			</h:dataTable>	
+		</div>						 
+		</h:panelGroup>
+		</span>			
+		
+		
+   <h:panelGroup align="center" rendered="#{tablaGenerarTOE.tabla8}"> 
+            <div class="titulo titulo-espaciado" align="center">
+                <h:outputText value="#{tablaGenerarTOE.tituloTabla8}" escape="false" styleClass="etiqueta"/>
+            </div>      
+   </h:panelGroup> 
+    	
+		<span class="columna" style="width: 645px;margin-left: 5px;margin-top: 5px;">
+		<h:panelGroup layout="block">
+		
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaRoles8" value="#{tablaGenerarTOE.listaRoles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla8}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="298" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="450" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column>                                                                        
+			</h:dataTable>	
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPerfil8" value="#{tablaGenerarTOE.listaPerfiles}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla8}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;">
+                    <h:outputText value="" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>	
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaTCTE8" value="#{tablaGenerarTOE.cargarCabeceraTiempo}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla8}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 4px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>					        
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tabla8" value="#{tablaGenerarTOE.listReport_Prod_2_TipOferta_2_Flujo_2}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla8}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-bottom-width: 0px; border-right-width: 0px; border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column0}"   />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid; " >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column10}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column11}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column12}" />                
+                </h:column>    
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column13}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column14}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="71" 
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column15}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="71"
+                style = "border-bottom-width: 0px; border-right-width: 0px;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column16}" />                
+                </h:column>  
+                <h:column nowrap="true" align="left" width="70" 
+                style = "border-bottom-width: 0px; border-right: 1px solid;  border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column17}" />                
+                </h:column>                                                                               
+			</h:dataTable>
+            <h:dataTable border="0" cellpadding="2" cellspacing="0" 
+                            id="tablaPorcentaje8" value="#{tablaGenerarTOE.listPorc_Prod_2_TipOferta_2_Flujo_2}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla8}" >
+                <h:column nowrap="true" align="left" width="100" 
+                style = "padding-left: 3px; border-top: 1px solid; border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid;" >
+                    <h:outputText value="#{item.column0}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column3}" />                
+                </h:column>                                 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column4}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column5}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column6}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column7}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="147" 
+                style = "border-right-width: 0px; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column8}" />                
+                </h:column> 
+                <h:column nowrap="true" align="left" width="146" 
+                style = "border-right: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-top: 1px solid;">
+                    <h:outputText value="#{item.column9}" />                
+                </h:column>                                                                                                               
+			</h:dataTable>							 
+		
+		<div class="campo-espaciado espacios-etiqueta tablaUnidad-wrapper" style="#{tablaGenerarTOE.tabla8 ? '':'display:none;'}">
+			<div class="tablaUnidad-title">TOE POR UNIDAD</div>
+            <h:dataTable border="1" cellpadding="2" cellspacing="0" 
+                            id="tablaUnidad8" value="#{tablaGenerarTOE.listUnid_Prod_2_TipOferta_2_Flujo_2}" var="item"                            
+                            styleClass="dataTableEx" headerClass="headerClass headerTabla1"
+                            footerClass="footerClass" columnClasses="" rendered="#{tablaGenerarTOE.tabla8}" >
+                <f:facet name="header">
+        				<h:outputText value="#{tablaGenerarTOE.rangoFechas}"/>
+       			</f:facet> 
+                <h:column nowrap="true" align="left" width="70" >
+                    <h:outputText value="#{item.column1}" />                
+                </h:column>
+                <h:column nowrap="true" align="left" width="70">
+                    <h:outputText value="#{item.column2}" />                
+                </h:column>                                                                        
+			</h:dataTable>	
+		</div>						 
+		</h:panelGroup>
+		</span>		
+		
+</h:panelGroup>
+		
+		
+		
+		
+<!-- Tabla especifica -->
+
+	<h:panelGroup id="panelTablaEsp" style="#{tablaGenerarTOE.viewTablaEspecifica and reporteTOE.viewTabla ? '':'display:none;'}" 
+	align="center" >
+    
+   <h:panelGroup align="center" rendered="#{tablaGenerarTOE.tabla1}"> 
+            <div class="titulo titulo-espaciado" align="center">
+                <h:outputText value="#{tablaGenerarTOE.tituloEspecifico}" styleClass="etiqueta"/>
+            </div>      
+   </h:panelGroup> 	
+    	    <div class="titulo titulo-espaciado">
+                <h:outputText value="#{tablaGenerarTOE.tituloTabla9}" escape="false"/>
+            </div>
+            
+            <div class="titulo titulo-espaciado">
+            	<h:outputText value="#{tablaGenerarTOE.tituloTabla10}" escape="false"/>
+
+            </div>
+            
+			<table id="idTablaEsp" width="40%" border="1" cellpadding="0" cellspacing="0" align="center">
+				<tr>
+					<th colspan="1" rowspan="3" >
+
+					</th>						
+					<td styleClass="textotitulo" colspan="2"  >
+						<h:outputText value="#{tablaGenerarTOE.obtListaEspecifica()}" />
+					</td>																																									
+				</tr>
+				<tr border="0">
+					<th  styleClass="textotitulo" colspan="1" border="0">
+					</th>				
+					<td colspan="2" align="center" border="0" >
+						<h:outputText value="#{tablaGenerarTOE.obtListaPerfilTxt()}" />
+					</td>																																				
+				</tr>
+				<tr border="0">
+					<th styleClass="textotitulo" colspan="1" >
+					</th>				
+					<td colspan="2" align="center" border="0">
+						<h:outputText value="#{tablaGenerarTOE.obtListaEstadoTxt()}" />
+					</td>																																				
+				</tr>				
+				<tr>
+					<th colspan="1" >
+						<h:outputText value="#{tablaGenerarTOE.rangoFechas}"/>	
+					</th>				
+					<td styleClass="textotitulo" align="center"  bgcolor="#206EEB">
+					   <h:outputText value="#{msg['com.ibm.bbva.common.buscarTOE.msg.tc']}" />
+					</td>	
+					<td styleClass="textotitulo" align="center"  bgcolor="#206EEB">
+						<h:outputText value="#{msg['com.ibm.bbva.common.buscarTOE.msg.te']}" />					
+					</td>
+									
+				</tr>				
+				<tr>
+					<td styleClass="textotitulo" colspan="1"  bgcolor="#206EEB">
+										<h:outputText
+						value="T. Objetivo"></h:outputText>
+					</td>				
+					<td styleClass="textotitulo" align="center">
+					   <h:outputText value="#{tablaGenerarTOE.objListaObjTxt('o', 'c')}" />
+					</td>	
+					<td styleClass="textotitulo" align="center" >
+						<h:outputText value="#{tablaGenerarTOE.objListaObjTxt('o', 'e')}" />					
+					</td>
+									
+				</tr>	
+				
+				<tr>
+					<td styleClass="textotitulo" colspan="1"  bgcolor="#206EEB">
+										<h:outputText 
+						value="T. Preliminar"></h:outputText>
+					</td>				
+					<td styleClass="textotitulo" align="center">
+					   <h:outputText value="#{tablaGenerarTOE.objListaObjTxt('p', 'c')}" />
+					</td>	
+					<td styleClass="textotitulo" align="center" >
+						<h:outputText value="#{tablaGenerarTOE.objListaObjTxt('p', 'e')}" />					
+					</td>
+										
+				</tr>	
+				
+				<tr>
+					<td styleClass="textotitulo" colspan="1"  bgcolor="#206EEB" >
+										<h:outputText
+						value="T. Real"></h:outputText>
+					</td>				
+					<td styleClass="textotitulo" align="center">
+					   <h:outputText value="#{tablaGenerarTOE.objListaObjTxt('r', 'c')}" />
+					</td>	
+					<td styleClass="textotitulo" align="center" >
+						<h:outputText value="#{tablaGenerarTOE.objListaObjTxt('r', 'e')}" />					
+					</td>									
+				</tr>				
+				<tr>
+					<td  bgcolor="#206EEB" styleClass="textotitulo" colspan="1" >
+										<h:outputText
+						value="TOE"></h:outputText>
+					</td>				
+					<td styleClass="textotitulo" align="center" colspan="2" >
+					   <h:outputText value="#{tablaGenerarTOE.objListaPorcentaje()}" />
+					</td>									
+				</tr>					
+			</table>
+		</h:panelGroup>	
+		
+   <h:panelGroup align="center" rendered="#{reporteTOE.viewTabla}"> 
+            <div class="titulo titulo-espaciado" align="center">
+                <h:outputText value="#{tablaGenerarTOE.consultaResultado}" styleClass="etiqueta"/>
+            </div>      
+   </h:panelGroup>
+   					
+	</div>
+</div>
+</ui:composition>

@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:impl="http://impl.service.cm.bbva.ibm.com" xmlns:intf="http://impl.service.cm.bbva.ibm.com" xmlns:tns2="http://bean.cm.bbva.ibm.com" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://impl.service.cm.bbva.ibm.com">
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://bean.cm.bbva.ibm.com">
+   <complexType name="Documento">
+    <sequence>
+     <element name="id" nillable="true" type="xsd:int"/>
+     <element name="tipo" nillable="true" type="xsd:string"/>
+     <element name="mandatorio" nillable="true" type="xsd:boolean"/>
+     <element name="contenido" type="xsd:base64Binary"/>
+     <element name="fechaExpiracion" nillable="true" type="xsd:dateTime"/>
+     <element name="tipoDoi" nillable="true" type="xsd:string"/>
+     <element name="numDoi" nillable="true" type="xsd:string"/>
+     <element name="codCliente" nillable="true" type="xsd:string"/>
+     <element name="nombreArchivo" nillable="true" type="xsd:string"/>
+     <element name="origen" nillable="true" type="xsd:string"/>
+     <element name="fechaCreacion" nillable="true" type="xsd:dateTime"/>
+     <element name="urlContent" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://impl.service.cm.bbva.ibm.com">
+   <import namespace="http://bean.cm.bbva.ibm.com"/>
+   <element name="insert_PIDResponse">
+    <complexType>
+     <sequence>
+      <element name="insert_PIDReturn" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="insertAll">
+    <complexType>
+     <sequence>
+      <element name="documentos" nillable="true" type="impl:ArrayOf_1659910637_nillable_Documento"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="insertAllResponse">
+    <complexType>
+     <sequence>
+      <element name="insertAllReturn" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findAll">
+    <complexType>
+     <sequence>
+      <element name="documento" nillable="true" type="tns2:Documento"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findAllResponse">
+    <complexType>
+     <sequence>
+      <element name="findAllReturn" nillable="true" type="impl:ArrayOf_1659910637_nillable_Documento"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="update">
+    <complexType>
+     <sequence>
+      <element name="documento" nillable="true" type="tns2:Documento"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateResponse">
+    <complexType>
+     <sequence>
+      <element name="updateReturn" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="actualizarTipoDoc">
+    <complexType>
+     <sequence>
+      <element name="id" nillable="true" type="xsd:int"/>
+      <element name="tipoDoc" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="actualizarTipoDocResponse">
+    <complexType>
+     <sequence>
+      <element name="actualizarTipoDocReturn" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findAsImage">
+    <complexType>
+     <sequence>
+      <element name="documento" nillable="true" type="tns2:Documento"/>
+      <element name="mimeType" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findAsImageResponse">
+    <complexType>
+     <sequence>
+      <element name="findAsImageReturn" nillable="true" type="tns2:Documento"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="delete">
+    <complexType>
+     <sequence>
+      <element name="documento" nillable="true" type="tns2:Documento"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="deleteResponse">
+    <complexType>
+     <sequence>
+      <element name="deleteReturn" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="deleteAll">
+    <complexType>
+     <sequence>
+      <element name="documentos" nillable="true" type="impl:ArrayOf_1659910637_nillable_Documento"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="deleteAllResponse">
+    <complexType>
+     <sequence>
+      <element name="deleteAllReturn" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="insert">
+    <complexType>
+     <sequence>
+      <element name="documento" nillable="true" type="tns2:Documento"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="insertResponse">
+    <complexType>
+     <sequence>
+      <element name="insertReturn" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="find">
+    <complexType>
+     <sequence>
+      <element name="documento" nillable="true" type="tns2:Documento"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findResponse">
+    <complexType>
+     <sequence>
+      <element name="findReturn" nillable="true" type="tns2:Documento"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="insert_PID">
+    <complexType>
+     <sequence>
+      <element name="documento" nillable="true" type="tns2:Documento"/>
+     </sequence>
+    </complexType>
+   </element>
+   <complexType name="ArrayOf_1659910637_nillable_Documento">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="Documento" nillable="true" type="tns2:Documento"/>
+    </sequence>
+   </complexType>
+  </schema>
+  </wsdl:types>
+  <wsdl:message name="deleteResponse">
+    <wsdl:part element="intf:deleteResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="findAllResponse">
+    <wsdl:part element="intf:findAllResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="insertAllResponse">
+    <wsdl:part element="intf:insertAllResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="updateResponse">
+    <wsdl:part element="intf:updateResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="insert_PIDRequest">
+    <wsdl:part element="intf:insert_PID" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="deleteRequest">
+    <wsdl:part element="intf:delete" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="updateRequest">
+    <wsdl:part element="intf:update" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="insert_PIDResponse">
+    <wsdl:part element="intf:insert_PIDResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="insertAllRequest">
+    <wsdl:part element="intf:insertAll" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="findAllRequest">
+    <wsdl:part element="intf:findAll" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="findAsImageRequest">
+    <wsdl:part element="intf:findAsImage" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="deleteAllRequest">
+    <wsdl:part element="intf:deleteAll" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="findResponse">
+    <wsdl:part element="intf:findResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="insertResponse">
+    <wsdl:part element="intf:insertResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="actualizarTipoDocRequest">
+    <wsdl:part element="intf:actualizarTipoDoc" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="actualizarTipoDocResponse">
+    <wsdl:part element="intf:actualizarTipoDocResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="findRequest">
+    <wsdl:part element="intf:find" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="insertRequest">
+    <wsdl:part element="intf:insert" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="deleteAllResponse">
+    <wsdl:part element="intf:deleteAllResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="findAsImageResponse">
+    <wsdl:part element="intf:findAsImageResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="ContentServiceImpl">
+    <wsdl:operation name="insert_PID">
+      <wsdl:input message="intf:insert_PIDRequest" name="insert_PIDRequest"/>
+      <wsdl:output message="intf:insert_PIDResponse" name="insert_PIDResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="insertAll">
+      <wsdl:input message="intf:insertAllRequest" name="insertAllRequest"/>
+      <wsdl:output message="intf:insertAllResponse" name="insertAllResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="findAll">
+      <wsdl:input message="intf:findAllRequest" name="findAllRequest"/>
+      <wsdl:output message="intf:findAllResponse" name="findAllResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="update">
+      <wsdl:input message="intf:updateRequest" name="updateRequest"/>
+      <wsdl:output message="intf:updateResponse" name="updateResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="actualizarTipoDoc">
+      <wsdl:input message="intf:actualizarTipoDocRequest" name="actualizarTipoDocRequest"/>
+      <wsdl:output message="intf:actualizarTipoDocResponse" name="actualizarTipoDocResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="findAsImage">
+      <wsdl:input message="intf:findAsImageRequest" name="findAsImageRequest"/>
+      <wsdl:output message="intf:findAsImageResponse" name="findAsImageResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="delete">
+      <wsdl:input message="intf:deleteRequest" name="deleteRequest"/>
+      <wsdl:output message="intf:deleteResponse" name="deleteResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="deleteAll">
+      <wsdl:input message="intf:deleteAllRequest" name="deleteAllRequest"/>
+      <wsdl:output message="intf:deleteAllResponse" name="deleteAllResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="insert">
+      <wsdl:input message="intf:insertRequest" name="insertRequest"/>
+      <wsdl:output message="intf:insertResponse" name="insertResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="find">
+      <wsdl:input message="intf:findRequest" name="findRequest"/>
+      <wsdl:output message="intf:findResponse" name="findResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ContentServiceImplSoapBinding" type="intf:ContentServiceImpl">
+<wsaw:UsingAddressing wsdl:required="false"/>
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="insert_PID">
+      <wsdlsoap:operation soapAction="insert_PID"/>
+      <wsdl:input name="insert_PIDRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="insert_PIDResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insertAll">
+      <wsdlsoap:operation soapAction="insertAll"/>
+      <wsdl:input name="insertAllRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="insertAllResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findAll">
+      <wsdlsoap:operation soapAction="findAll"/>
+      <wsdl:input name="findAllRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findAllResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="update">
+      <wsdlsoap:operation soapAction="update"/>
+      <wsdl:input name="updateRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="actualizarTipoDoc">
+      <wsdlsoap:operation soapAction="actualizarTipoDoc"/>
+      <wsdl:input name="actualizarTipoDocRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="actualizarTipoDocResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findAsImage">
+      <wsdlsoap:operation soapAction="findAsImage"/>
+      <wsdl:input name="findAsImageRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findAsImageResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="delete">
+      <wsdlsoap:operation soapAction="delete"/>
+      <wsdl:input name="deleteRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deleteResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteAll">
+      <wsdlsoap:operation soapAction="deleteAll"/>
+      <wsdl:input name="deleteAllRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deleteAllResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insert">
+      <wsdlsoap:operation soapAction="insert"/>
+      <wsdl:input name="insertRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="insertResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="find">
+      <wsdlsoap:operation soapAction="find"/>
+      <wsdl:input name="findRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ContentServiceImplService">
+    <wsdl:port binding="intf:ContentServiceImplSoapBinding" name="ContentServiceImpl">
+      <wsdlsoap:address location="http://9.6.99.60:9080/WEBCM/services/ContentServiceImpl"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

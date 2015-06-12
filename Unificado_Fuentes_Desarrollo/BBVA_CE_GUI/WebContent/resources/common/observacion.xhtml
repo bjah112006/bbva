@@ -1,0 +1,44 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<script type="text/javascript" >
+	$(document).ready(function() {
+		// Modal dialog
+		$("[id='#{observacion.dialogoModal.clientId}']").dialog({
+			modal: true,
+			draggable: false,
+			resizable: false,
+			dialogClass: "panelDialog",
+			width: 378,
+			autoOpen: #{observacion.mostrarDialogo},
+			title: '#{observacion.titulo}'
+		}).parent().appendTo($("[id='#{observacion.nombreFormPadre}']"));
+	});
+</script>
+<h:panelGroup id="dialogObservacion" binding="#{observacion.dialogoModal}" layout="block">
+	<div>
+		<div class="titulo1">
+			<h:outputText value="#{msg['com.ibm.bbva.common.observacion.subTitulo']}" />
+		</div>
+	</div>
+	<div class="bloque" style="width: auto;"> 
+	    <div class="contenido-bloque">
+	        <div>
+	        	<h:inputTextarea value="#{observacion.comentario}" style="width:350px;" rows="5"/>
+	        </div>
+	        <div class="column boton-principal">					
+				<h:commandButton value="#{msg['com.ibm.bbva.common.observacion.aceptar']}"
+	            		action="#{observacion.aceptar}"/>                        
+				<h:commandButton value="#{msg['com.ibm.bbva.common.observacion.cancelar']}"
+	            		action="#{observacion.cancelar}"/>
+			</div>
+	    </div>
+	</div>
+</h:panelGroup>
+
+</ui:composition>

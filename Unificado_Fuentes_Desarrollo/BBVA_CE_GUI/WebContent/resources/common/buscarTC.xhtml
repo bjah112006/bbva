@@ -1,0 +1,170 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<script type="text/javascript">
+/* <![CDATA[ */
+		$(document).ready(function(){
+			var existeError = $("#formGeneraReporteTC\\:existeError").val();
+			if (existeError=='false') {
+				var urlRep ="../ReporteTCCSVServlet?" +
+							"accion=REPORTETC" + 
+							"&fechaInicio="+$("#formGeneraReporteTC\\:fecInicial").val() +
+							"&fechaFin="+$("#formGeneraReporteTC\\:fecFinal").val() +
+							"&codProducto="+$("#formGeneraReporteTC\\:selProducto").val() +
+							"&codPerfil="+$("#formGeneraReporteTC\\:selPerfil").val() +
+							"&codTipoOferta="+$("#formGeneraReporteTC\\:selTipoOferta").val() +
+							"&codEstado="+$("#formGeneraReporteTC\\:selEstado").val() +
+							"&codTerritorio="+$("#formGeneraReporteTC\\:selTerritorio").val() +
+							"&codOficina="+$("#formGeneraReporteTC\\:selOficina").val() +
+							"&tipoReporteTC="+$("#formGeneraReporteTC\\:tipoReporte").val();
+				
+				document.location.href = urlRep;
+			}
+		});
+/* ]]> */
+</script>
+<div class="bloque">
+    <div class="titulo titulo-espaciado">
+    	<h:outputText id="tituloReporte" value="#{buscarTC.tituloReporte}"/>
+    	<h:inputHidden id="tipoReporte" value="#{buscarTC.tipoReporteTC}" /> 
+    	<h:inputHidden id="existeError" value="#{buscarTC.existeError}" />
+    </div>
+    <div class="contenido-bloque">
+        <span class="columna" style="width:350px">
+            <div class="campo-espaciado">
+			 <h:panelGroup id="idFechaInicio">
+              <span class="columna" style="width:280px">
+                 <span class="columna" style="width:130px">
+                    <h:outputText value="#{msg['com.ibm.bbva.common.reporteTC.fechaInicio']}:" class="etiqueta "/>
+                 </span>
+                 <span class="columna" style="width:110px">
+                    <h:inputText id="fecInicial" value="#{buscarTC.fechaInicio}" style="width:80px;" 
+                		         class="txt-resaltado-2 formatoFecha" maxlength="10" onblur="validarFormatoFechaInicio(); validarFechaInicio();">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        <f:ajax event="change" execute="@form" listener="#{buscarTC.actVistaGenerar}"/>
+                    </h:inputText>
+                 </span>
+                 <h:message for="fecInicial" errorClass="mensaje-error"/>
+               </span>  
+               </h:panelGroup> 
+            </div>
+             <div class="campo-espaciado">
+             	<h:panelGroup id="idPanelProducto">
+             		<span class="columna" style="width:130px">
+                  		<h:outputText value="#{msg['com.ibm.bbva.common.reporteTC.producto']}:" class="etiqueta "/>
+               		</span>
+               		<span class="columna" style="width:90px">
+                  		<h:selectOneMenu value="#{buscarTC.codProducto}" style ="width:180px;"
+                                  	styleClass="txt-resaltado-2" id="selProducto"  >
+                      		<f:selectItems value="#{buscarTC.listaProducto}"/>
+                      		<f:ajax event="change" execute="@form" listener="#{buscarTC.actVistaGenerar}"/>
+                  		</h:selectOneMenu>
+                  		<h:message for="selProducto" errorClass="mensaje-error"/>
+               		</span>
+             	</h:panelGroup>
+             </div>
+             <div class="campo-espaciado">
+              <h:panelGroup id="idPanelPerfil">
+               <span class="columna" style="width:130px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.reporteTC.perfil']}:" class="etiqueta "/>
+               </span>
+               <span class="columna" style="width:90px">
+                  <h:selectOneMenu value="#{buscarTC.codPerfil}" style ="width:180px;"
+                                  styleClass="txt-resaltado-2" id="selPerfil"  >
+                      <f:selectItems value="#{buscarTC.listaPerfil}"/>
+                      <f:ajax event="change" render="idEstado idPanelTerritorio idPanelTipoOferta idPanelOficina " execute="@form" listener="#{buscarTC.listarEstados}"/>
+                  </h:selectOneMenu>
+                  <h:message for="selPerfil" errorClass="mensaje-error"/>
+               </span>
+             </h:panelGroup>
+            </div>   
+             <div class="campo-espaciado">
+             <h:panelGroup id="idPanelTipoOferta">
+               <span class="columna" style="width:130px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.reporteTC.tipoOferta']}:" class="etiqueta "/>
+               </span>
+               <span class="columna" style="width:90px">
+                  <h:selectOneMenu value="#{buscarTC.codTipoOferta}" style ="width:180px;"
+                                  class="txt-resaltado-2" id="selTipoOferta"  >
+                      <f:selectItems value="#{buscarTC.listaTipoOferta}"/>
+                      <f:ajax event="change" render="idEstado idPanelTerritorio idPanelTipoOferta idPanelOficina " execute="@form" listener="#{buscarTC.actVistaGenerar}"/>                 
+                  </h:selectOneMenu>
+                 <h:message for="selTipoOferta" errorClass="mensaje-error"/>
+               </span>
+              </h:panelGroup>
+            </div>                     
+                        
+        </span>
+        <span class="columna" style="width:350px">
+            <div class="campo-espaciado">
+              <span class="columna" style="width:280px">
+                 <span class="columna" style="width:100px">
+                    <h:outputText value="#{msg['com.ibm.bbva.common.reporteTC.fechaFin']}:" class="etiqueta "/>
+                 </span>
+                 <span class="columna" style="width:110px">
+                    <h:inputText id="fecFinal" value="#{buscarTC.fechaFin}" style="width:80px;" 
+                		         class="txt-resaltado-2 formatoFecha" maxlength="10"
+                		         onblur="validarFormatoFechaFin(); validarFechaFin();">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        <f:ajax event="change"  execute="@form" listener="#{buscarTC.actVistaGenerar}"/>
+                    </h:inputText>
+                 </span>
+                 <h:message for="fecFinal" errorClass="mensaje-error"/>
+               </span>   
+            </div> 
+            
+             <div class="campo-espaciado">
+	             <h:panelGroup id="idEstado">
+		               <span class="columna" style="width:100px">
+		                  <h:outputText value="#{msg['com.ibm.bbva.common.reporteTC.estado']}:" class="etiqueta "/>
+		               </span>
+		               <span class="columna" style="width:90px">
+		                  <h:selectOneMenu value="#{buscarTC.codEstado}" style ="width:180px;"
+		                                  styleClass="txt-resaltado-2" id="selEstado"  >
+		                      <f:selectItems value="#{buscarTC.listaEstado}"/>
+		                      <f:ajax event="change" render="idEstado idPanelTerritorio idPanelTipoOferta idPanelOficina " execute="@form" listener="#{buscarTC.actVistaGenerar}"/>
+		                  </h:selectOneMenu>
+		                  <h:message for="selEstado" errorClass="mensaje-error"/>
+		               </span>
+		               
+               </h:panelGroup>
+               
+            </div> 
+             <div class="campo-espaciado">
+             <h:panelGroup id="idPanelTerritorio">
+               <span class="columna" style="width:100px">
+                  <h:outputText value="#{msg['com.ibm.bbva.common.reporteTC.territorio']}:" class="etiqueta "/>
+               </span>
+               <span class="columna" style="width:90px">
+                  <h:selectOneMenu value="#{buscarTC.codTerritorio}" style ="width:180px;"
+                                  class="txt-resaltado-2" id="selTerritorio"  >
+                      <f:selectItems value="#{buscarTC.listaTerritorio}"/>
+                      <f:ajax event="change" render="idPanelPerfil idEstado idPanelTipoOferta idPanelOficina " execute="@form" listener="#{buscarTC.listarOficinas}"/>
+                  </h:selectOneMenu>
+                   <h:message for="selTerritorio" errorClass="mensaje-error"/>
+               </span>
+               </h:panelGroup>
+            </div>                        
+           
+           <div class="campo-espaciado">
+           	<h:panelGroup id="idPanelOficina">
+           		<span class="columna" style="width:100px">
+           			<h:outputText value="#{msg['com.ibm.bbva.common.reporteTC.oficina']}:" class="etiqueta "/>
+           		</span>
+           		<span class="columna" style="width:90px">
+                  <h:selectOneMenu value="#{buscarTC.codOficina}" style ="width:180px;"
+                                  class="txt-resaltado-2" id="selOficina"  >
+                      <f:selectItems value="#{buscarTC.listaOficina}"/>
+                      <f:ajax event="change" render="idEstado idPanelTerritorio idPanelTipoOferta idPanelOficina " execute="@form" listener="#{buscarTC.actVistaGenerar}"/>                   
+                  </h:selectOneMenu>
+                   <h:message for="selOficina" errorClass="mensaje-error"/>
+               </span>
+           	</h:panelGroup>
+           </div>
+        </span>
+    </div>
+</div>
+</ui:composition>

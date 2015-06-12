@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+		<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+        <h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="style.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+        <h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+        <h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+		<h:outputScript library="js" name="jquery-ui.js" target="head"/>
+        <h:outputScript library="js" name="autoNumeric-1.7.4-B.js" target="head"/>
+        <h:outputScript library="js" name="funciones.js" target="head"/>
+        <h:outputScript target="head">
+        	$(function(){
+				if($(".clsTasa").val() == "0.00"){
+					$(".clsTasa").attr("disabled","true");
+				}
+			});
+        </h:outputScript>
+        
+        <h:outputScript target="head">
+		/* <![CDATA[ */ 
+            $(document).ready(function(){              
+	          if($("#frmRegistrarAprobResolucion\\:idMsgGuiaDoc").val() == "true") {
+	        	var msg = $("#frmRegistrarAprobResolucion\\:msgGuiaDoc").text();
+	        	var docsPendientes = $("#frmRegistrarAprobResolucion\\:idValidaGuiaEsc").val();
+				alert(msg + ":\n" + docsPendientes);
+	        	$("#frmRegistrarAprobResolucion\\:idMsgGuiaDoc").val("false");
+	          }
+	          
+	          if($("#frmRegistrarAprobResolucion\\:idMsgOperacion").val() == "true") {
+	        	var msg = $("#frmRegistrarAprobResolucion\\:msgOperacion").text();
+	        	alert(msg);
+	        	$("#frmRegistrarAprobResolucion\\:idMsgOperacion").val("false");
+	          }else{
+		          if($("#frmRegistrarAprobResolucion\\:idMsgOperacionOf").val() == "true") {
+		        	var msg = $("#frmRegistrarAprobResolucion\\:msgOperacionOf").text();
+		        	alert(msg);
+		        	$("#frmRegistrarAprobResolucion\\:idMsgOperacionOf").val("false");
+		          }	          
+	          }	 
+	 
+	          
+            });          
+        	function confAceptar (form) {
+        		var msg = $("#frmRegistrarAprobResolucion\\:confirmacion").text();
+        		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
+		        var msgDocsObs = '';
+		        docsObs = $.trim(docsObs);
+		        if(docsObs != ''){
+		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
+		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
+		        }        	
+        		var op = confirm(msg);
+        		if (op) {
+        			clickAceptar(form);
+        		}
+        		return op;        		
+        	}
+        	function confDevolver () {
+        		var msg = $("#frmRegistrarAprobResolucion\\:devolver").text();
+        		return confirm(msg);
+        	}
+        	
+        	function confNoConforme () {
+        		var msg = $("#frmRegistrarAprobResolucion\\:noConforme").text();
+        		return confirm(msg);
+        	}        	
+			        	   	
+            /* ]]> */
+		</h:outputScript>
+		<script type="text/javascript">
+	        function checkClick2(check) {
+	            document.getElementById('frmRegistrarAprobResolucion:idValorTasaEsp3').disabled = !check.checked; 
+	            document.getElementById('frmRegistrarAprobResolucion:idValorTasaEsp3').value = "0.00"; 
+	        }
+	        function mostrarTabLogPorPerfil(){
+	        	var perfil = $("#frmRegistrarAprobResolucion\\:descPerfilPage").val();
+	        	var descAdmin = $("#frmRegistrarAprobResolucion\\:descPerfilFiltro").val();
+	        	perfil = (perfil == "")?$("#frmRegistrarAprobResolucion\\:descPerfilPage").text():perfil;
+	        	descAdmin = (descAdmin == "")?$("#frmRegistrarAprobResolucion\\:descPerfilFiltro").text():descAdmin;
+	        	if (perfil == descAdmin) {
+	        		$("#frmRegistrarAprobResolucion\\:descPerfilTabs").show();
+	        	} else {
+	        		$("#frmRegistrarAprobResolucion\\:descPerfilTabs").hide();
+	        	}
+	        }
+		</script> 
+
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+        <title><h:outputText value="#{msg['com.ibm.bbva.registrarAprobResolucion.formRegistrarAprobResolucion.titulo']}"/></title>
+    </h:head>
+    <h:body onload="mostrarTabLogPorPerfil()">
+    <h:form id="frmRegistrarAprobResolucion">
+	    <h:inputHidden value="#{detalleExpediente.clienteNatural.estadoCivil.codigo}"  id="datoCivil"></h:inputHidden> 
+		<h:inputHidden value="#{datosConyuge.mensajeOperacion}" id="msjObservacion" />	
+		<h:inputHidden value="#{datosProducto3.expediente.expedienteTC.tipoOferta.codigo}" id="idTipoOferta"/>
+		    
+        <h:inputHidden id="idMsgGuiaDoc" value="#{registrarAprobResolucion.msgGuiaDocumentaria}"></h:inputHidden>
+    	<h:outputText value="#{msg['com.ibm.bbva.registrarAprobResolucion.formRegistrarAprobResolucion.aceptar.confirm']}"    	
+    			id="confirmacion" style="display:none;"/>
+    	<h:outputText value="#{msg['com.ibm.bbva.registrarAprobResolucion.formRegistrarAprobResolucion.devolver.confirm']}"
+    			id="devolver" style="display:none;"/>  
+    	<h:outputText value="#{msg['com.ibm.bbva.registrarAprobResolucion.formRegistrarAprobResolucion.noConforme.confirm']}"
+    			id="noConforme" style="display:none;"/>      			
+        <h:outputText value="#{msg['com.ibm.bbva.registrarAprobResolucion.formRegistrarAprobResolucion.msgGuiaDoc']}"
+    			id="msgGuiaDoc" style="display:none;"/>    			  			
+        <div class="contenido">
+            <div class="cabecera">
+                <ui:include src="/resources/common/cabecera.xhtml"  />
+                <h:outputText id="descPerfilPage"  value="#{datosCabecera.empleado.perfil.descripcion}" style="display:none;"/>
+                <h:outputText id="descPerfilFiltro"  value="#{msg['com.ibm.bbva.common.perfil.administrador']}" style="display:none;"/>
+            </div>
+            <div class="cuerpo">
+                <div class="menu">
+                    <ui:include src="/resources/common/menu.xhtml" />
+                </div>
+                <div class="datos">
+                	<ui:include src="/resources/common/tabs.xhtml" />
+                	<div class="tab-expediente tab-item">
+	                	<ui:include src="/resources/common/datosGestor.xhtml" />
+						<ui:include src="/resources/common/estadoAnterior.xhtml" />
+						<ui:include src="/resources/common/detalleExpediente.xhtml" />
+						<h:panelGroup id="idPanelDatosConyuge" 
+							style="#{datosConyuge.mostrarDatosConyuge ? '':'display:none;'}" >
+								<ui:include src="/resources/common/datosConyugue.xhtml" />
+						</h:panelGroup>				
+						<ui:include src="/resources/common/datosProducto3.xhtml" />
+						<ui:include src="/resources/common/verificacionApr.xhtml" />
+						
+						<h:panelGroup id="idDocumentosReutilizables"/>
+						
+                        <h:panelGroup layout="block" styleClass="bloque">
+							<h:panelGroup id="appletContentRefresh">
+								<ui:include src="/resources/common/documentoEsc.xhtml" />
+							</h:panelGroup>
+							<h:panelGroup id="idPanelDocumentos">
+								<ui:include src="/resources/common/panelDocumentos.xhtml" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<ui:include src="/resources/common/comentarios.xhtml" />
+						<ui:include src="/resources/common/observacionRechazo.xhtml" />
+						<div class="column boton-principal">
+
+							<h:commandButton value="#{msg['com.ibm.bbva.registrarAprobResolucion.formRegistrarAprobResolucion.aceptar']}"
+	            		                     onclick="return confAceptar(this.form);" type="button"	            		                     
+	            		                     id="btnAceptar" /> 
+	            		                     	            		                     	
+						    <h:commandButton value="#{msg['com.ibm.bbva.registrarAprobResolucion.formRegistrarAprobResolucion.devolver']}"
+	            		                     action="#{registrarAprobResolucion.devolver}" onclick="return confDevolver();" 
+		            		                 disabled="#{registrarAprobResolucion.renderedNoConforme}" 
+			            		             rendered="#{!registrarAprobResolucion.renderedNoConforme}"
+	            		                     />
+	            		                                    	            		                     
+	            		                     <!-- disabled="#{registrarAprobResolucion.activoDevolver}"  -->
+							<h:commandButton value="#{msg['com.ibm.bbva.registrarAprobResolucion.formRegistrarAprobResolucion.noConforme']}"
+	            		                     action="#{registrarAprobResolucion.noConforme}" onclick="return confNoConforme();" 
+	            		                     disabled="#{!registrarAprobResolucion.renderedNoConforme}" 
+	            		                     rendered="#{registrarAprobResolucion.renderedNoConforme}"
+	            		                    /> 
+	            		                     	            		                     
+                            <h:commandLink id="btnEjecutaApplet" 
+		    	                           action="#{registrarAprobResolucion.aceptar}"
+		    	                           styleClass="display:none">
+		    	            </h:commandLink>
+		    	            </div>  	            		                     
+						</div>
+					
+					<div class="tab-ayuda-memoria tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />		
+	               		<ui:include src="/resources/common/tablaAyudaMemoria.xhtml" />
+					</div>
+					<div class="tab-historial tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />	
+               			<ui:include src="/resources/common/tablaHistorial.xhtml" />
+					</div>
+					<div class="tab-observaciones tab-item" style="display:none;">
+						<ui:include src="/resources/common/datosHistorico.xhtml" />
+						<ui:include src="/resources/common/tablaObservaciones.xhtml" />
+					</div>
+					<div class="tab-log tab-item" style="display:none;">
+	               		<ui:include src="/resources/common/datosHistorico.xhtml" />	
+	               		<ui:include src="/resources/common/tablaLog.xhtml" />
+					</div>
+					</div>
+				</div>
+            </div>
+    </h:form>
+    </h:body>
+</html>

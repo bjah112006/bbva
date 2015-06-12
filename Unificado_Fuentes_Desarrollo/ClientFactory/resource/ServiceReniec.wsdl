@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:impl="http://service.bbva.ibm.com" xmlns:intf="http://service.bbva.ibm.com" xmlns:tns2="http://dto.bbva.ibm.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://service.bbva.ibm.com">
+ <wsdl:types>
+  <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://service.bbva.ibm.com">
+   <import namespace="http://dto.bbva.ibm.com"/>
+   <element name="consultaReniecResponse">
+    <complexType>
+     <sequence>
+      <element name="consultaReniecReturn" nillable="true" type="tns2:ClienteReniecDTO"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="consultaReniec">
+    <complexType>
+     <sequence>
+      <element name="numeroDOI" nillable="true" type="xsd:string"/>
+      <element name="oficina" nillable="true" type="xsd:string"/>
+      <element name="usuario" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+  <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://dto.bbva.ibm.com">
+   <complexType name="ClienteReniecDTO">
+    <complexContent>
+     <extension base="tns2:ObjetoServicioDTO">
+      <sequence>
+       <element name="numDoi" nillable="true" type="xsd:string"/>
+       <element name="nombre" nillable="true" type="xsd:string"/>
+       <element name="apeMat" nillable="true" type="xsd:string"/>
+       <element name="apePat" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="ObjetoServicioDTO">
+    <sequence>
+     <element name="codigoResultado" type="xsd:int"/>
+    </sequence>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="consultaReniecRequest">
+     <wsdl:part element="impl:consultaReniec" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:message name="consultaReniecResponse">
+     <wsdl:part element="impl:consultaReniecResponse" name="parameters"/>
+
+  </wsdl:message>
+
+   <wsdl:portType name="ServiceReniec">
+     <wsdl:operation name="consultaReniec">
+       <wsdl:input message="impl:consultaReniecRequest" name="consultaReniecRequest"/>
+
+       <wsdl:output message="impl:consultaReniecResponse" name="consultaReniecResponse"/>
+
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+   <wsdl:binding name="ServiceReniecSoapBinding" type="impl:ServiceReniec">
+ <wsaw:UsingAddressing xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" wsdl:required="false"/>
+
+     <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+     <wsdl:operation name="consultaReniec">
+       <wsdlsoap:operation soapAction="consultaReniec"/>
+
+       <wsdl:input name="consultaReniecRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="consultaReniecResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+  </wsdl:binding>
+
+   <wsdl:service name="ServiceReniecService">
+     <wsdl:port binding="impl:ServiceReniecSoapBinding" name="ServiceReniec">
+       <wsdlsoap:address location="http://118.180.36.123:9080/BBVA_Reniec/services/ServiceReniec"/>
+
+    </wsdl:port>
+
+  </wsdl:service>
+
+</wsdl:definitions>

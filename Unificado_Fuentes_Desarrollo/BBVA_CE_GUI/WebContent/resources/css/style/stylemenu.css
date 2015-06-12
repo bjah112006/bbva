@@ -1,0 +1,23 @@
+.menu-lista {
+    background-color: #2266BB;
+    padding: 0px 0px 0px 10px;
+}
+
+.menu-lista a {
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 3px 0px;
+    display: block;
+    border: 0px;
+}
+
+.menu-lista a:hover {
+    text-decoration: underline;
+    color: #999999;
+}
+
+.menu-lista a:active {
+    text-decoration: none;
+    color: #999999;
+    font-weight: bold;
+}

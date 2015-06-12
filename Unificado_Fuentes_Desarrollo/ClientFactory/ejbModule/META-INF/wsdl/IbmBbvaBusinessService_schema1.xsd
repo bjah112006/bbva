@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema targetNamespace="http://business.service.bbva.ibm.com/" version="1.0" xmlns:tns="http://business.service.bbva.ibm.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="actualizaEmpleadoExpediente" type="tns:actualizaEmpleadoExpediente"/>
+
+  <xs:element name="actualizaEmpleadoExpedienteResponse" type="tns:actualizaEmpleadoExpedienteResponse"/>
+
+  <xs:element name="actualizarDocumentoExpTC" type="tns:actualizarDocumentoExpTC"/>
+
+  <xs:element name="actualizarDocumentoExpTCResponse" type="tns:actualizarDocumentoExpTCResponse"/>
+
+  <xs:element name="consultarDocumentoExpediente" type="tns:consultarDocumentoExpediente"/>
+
+  <xs:element name="consultarDocumentoExpedienteResponse" type="tns:consultarDocumentoExpedienteResponse"/>
+
+  <xs:element name="delegacionOficinaBD" type="tns:delegacionOficinaBD"/>
+
+  <xs:element name="delegacionOficinaBDResponse" type="tns:delegacionOficinaBDResponse"/>
+
+  <xs:element name="delegacionOficinaMemoria" type="tns:delegacionOficinaMemoria"/>
+
+  <xs:element name="delegacionOficinaMemoriaResponse" type="tns:delegacionOficinaMemoriaResponse"/>
+
+  <xs:element name="delegacionRiesgos" type="tns:delegacionRiesgos"/>
+
+  <xs:element name="delegacionRiesgosResponse" type="tns:delegacionRiesgosResponse"/>
+
+  <xs:element name="distribucionCarga" type="tns:distribucionCarga"/>
+
+  <xs:element name="distribucionCargaResponse" type="tns:distribucionCargaResponse"/>
+
+  <xs:element name="lineaMaximaBD" type="tns:lineaMaximaBD"/>
+
+  <xs:element name="lineaMaximaBDResponse" type="tns:lineaMaximaBDResponse"/>
+
+  <xs:element name="lineaMaximaMemoria" type="tns:lineaMaximaMemoria"/>
+
+  <xs:element name="lineaMaximaMemoriaResponse" type="tns:lineaMaximaMemoriaResponse"/>
+
+  <xs:element name="obtenerUsuario" type="tns:obtenerUsuario"/>
+
+  <xs:element name="obtenerUsuarioResponse" type="tns:obtenerUsuarioResponse"/>
+
+  <xs:element name="pautasClasificacionBD" type="tns:pautasClasificacionBD"/>
+
+  <xs:element name="pautasClasificacionBDResponse" type="tns:pautasClasificacionBDResponse"/>
+
+  <xs:element name="pautasClasificacionMemoria" type="tns:pautasClasificacionMemoria"/>
+
+  <xs:element name="pautasClasificacionMemoriaResponse" type="tns:pautasClasificacionMemoriaResponse"/>
+
+  <xs:element name="retraerTareas" type="tns:retraerTareas"/>
+
+  <xs:element name="retraerTareasResponse" type="tns:retraerTareasResponse"/>
+
+  <xs:complexType name="lineaMaximaMemoria">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="objExpedienteDTO" type="tns:expedienteDTO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="expedienteDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bancoConyuge" type="xs:string"/>
+      <xs:element minOccurs="0" name="clasificacionBanco" type="xs:string"/>
+      <xs:element name="clasificacionSbs" type="xs:double"/>
+      <xs:element minOccurs="0" name="codigoEstadoCivilTitular" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoExpediente" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoNivel" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoProducto" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoTipoMonedaSol" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoTipoScoring" type="xs:long"/>
+      <xs:element name="lineaConsumo" type="xs:double"/>
+      <xs:element name="lineaCredAprob" type="xs:double"/>
+      <xs:element name="lineaCredSol" type="xs:double"/>
+      <xs:element minOccurs="0" name="perExpPub" type="xs:string"/>
+      <xs:element name="porcentajeEndeudamiento" type="xs:double"/>
+      <xs:element name="riesgoCliente" type="xs:double"/>
+      <xs:element name="sbsConyuge" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lineaMaximaMemoriaResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:perfilDTO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="perfilDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigo" type="xs:string"/>
+      <xs:element minOccurs="0" name="descripcion" type="xs:string"/>
+      <xs:element minOccurs="0" name="flagAdministracion" type="xs:string"/>
+      <xs:element minOccurs="0" name="flagAsignacion" type="xs:string"/>
+      <xs:element minOccurs="0" name="flagRegistraAyu" type="xs:string"/>
+      <xs:element minOccurs="0" name="flagRegistraExp" type="xs:string"/>
+      <xs:element name="id" type="xs:long"/>
+      <xs:element name="idPerfil" type="xs:long"/>
+      <xs:element minOccurs="0" name="listaCorreoJefes" type="xs:string"/>
+      <xs:element minOccurs="0" name="nombrePerfil" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actualizarDocumentoExpTC">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="objDocumentoCM" type="tns:documentoCM"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="documentoCM">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codCliente" type="xs:string"/>
+      <xs:element minOccurs="0" name="fechaExpiracion" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fechaRegistro" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="flagCm" type="xs:string"/>
+      <xs:element name="id" type="xs:long"/>
+      <xs:element minOccurs="0" name="idCm" type="xs:decimal"/>
+      <xs:element name="idExpediente" type="xs:long"/>
+      <xs:element name="idTipoDocumento" type="xs:long"/>
+      <xs:element minOccurs="0" name="mandatorio" type="xs:unsignedShort"/>
+      <xs:element minOccurs="0" name="nombreArchivo" type="xs:string"/>
+      <xs:element minOccurs="0" name="numDocumento" type="xs:string"/>
+      <xs:element minOccurs="0" name="pidCm" type="xs:string"/>
+      <xs:element minOccurs="0" name="tipoDoi" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actualizarDocumentoExpTCResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lineaMaximaBD">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lineaMaximaBDResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:perfilDTO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="retraerTareas">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idAccion" type="xs:long"/>
+      <xs:element minOccurs="0" name="salida" type="xs:long"/>
+      <xs:element minOccurs="0" name="llegada" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="retraerTareasResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="delegacionRiesgos">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idTipoCategoria" type="xs:int"/>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="delegacionRiesgosResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="distribucionCarga">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idTerritorio" type="xs:long"/>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="distribucionCargaResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:empleadoDTO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="empleadoDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="apemat" type="xs:string"/>
+      <xs:element minOccurs="0" name="apepat" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigo" type="xs:string"/>
+      <xs:element minOccurs="0" name="correo" type="xs:string"/>
+      <xs:element minOccurs="0" name="fecegr" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fecing" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="flagAbogado" type="xs:string"/>
+      <xs:element minOccurs="0" name="flagActivo" type="xs:string"/>
+      <xs:element minOccurs="0" name="flagAutorizaEjecutivo" type="xs:string"/>
+      <xs:element name="id" type="xs:long"/>
+      <xs:element minOccurs="0" name="idCategoria" type="xs:long"/>
+      <xs:element minOccurs="0" name="idEstudioAbogado" type="xs:long"/>
+      <xs:element minOccurs="0" name="idOficina" type="xs:long"/>
+      <xs:element minOccurs="0" name="idPerfil" type="xs:long"/>
+      <xs:element minOccurs="0" name="nombreCategoria" type="xs:string"/>
+      <xs:element minOccurs="0" name="nombreEstudioAbogado" type="xs:string"/>
+      <xs:element minOccurs="0" name="nombreOficina" type="xs:string"/>
+      <xs:element minOccurs="0" name="nombrePerfil" type="xs:string"/>
+      <xs:element minOccurs="0" name="nombres" type="xs:string"/>
+      <xs:element minOccurs="0" name="nombresCompletos" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="delegacionOficinaMemoria">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="objExpedienteDTO" type="tns:expedienteDTO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="delegacionOficinaMemoriaResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="consultarDocumentoExpediente">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoTipoDoc" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="consultarDocumentoExpedienteResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:documentoCM"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="pautasClasificacionMemoria">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idTipoOferta" type="xs:long"/>
+      <xs:element minOccurs="0" name="idEstadoCivilTitular" type="xs:int"/>
+      <xs:element minOccurs="0" name="idPersonaTitular" type="xs:long"/>
+      <xs:element minOccurs="0" name="idPersonaConyuge" type="xs:long"/>
+      <xs:element minOccurs="0" name="sbsTitular" type="xs:double"/>
+      <xs:element minOccurs="0" name="sbsConyuge" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="pautasClasificacionMemoriaResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerUsuario">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idTerritorio" type="xs:int"/>
+      <xs:element minOccurs="0" name="idProducto" type="xs:int"/>
+      <xs:element minOccurs="0" name="idPerfil" type="xs:int"/>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:long"/>
+      <xs:element minOccurs="0" name="idTarea" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerUsuarioResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:empleadoPerfilVO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="empleadoPerfilVO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="descripcionPerfil" type="xs:string"/>
+      <xs:element minOccurs="0" name="empleadoVO" type="tns:empleadoVO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="empleadoVO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="apemat" type="xs:string"/>
+      <xs:element minOccurs="0" name="apepat" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigo" type="xs:string"/>
+      <xs:element minOccurs="0" name="correo" type="xs:string"/>
+      <xs:element minOccurs="0" name="fecegr" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fecing" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="flagActivo" type="xs:string"/>
+      <xs:element minOccurs="0" name="id" type="xs:long"/>
+      <xs:element minOccurs="0" name="idNivelFk" type="xs:long"/>
+      <xs:element minOccurs="0" name="idOficinaFk" type="xs:long"/>
+      <xs:element minOccurs="0" name="idPerfilFk" type="xs:long"/>
+      <xs:element minOccurs="0" name="idTipoCategoriaFk" type="xs:long"/>
+      <xs:element minOccurs="0" name="nombres" type="xs:string"/>
+      <xs:element minOccurs="0" name="nombresCompletos" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="delegacionOficinaBD">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idNivel" type="xs:int"/>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="delegacionOficinaBDResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="pautasClasificacionBD">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="pautasClasificacionBDResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actualizaEmpleadoExpediente">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idEmpleado" type="xs:long"/>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actualizaEmpleadoExpedienteResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

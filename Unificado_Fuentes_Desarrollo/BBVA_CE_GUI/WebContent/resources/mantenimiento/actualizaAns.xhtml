@@ -1,0 +1,252 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	<table class="bloque">
+		<tbody>
+			<tr>
+				<td>
+					<table width="100%" align="center" cellspacing="0" border="0">
+						<tr>
+							<td valign="top">
+								<table width="100%">
+									<tr>
+										<td>
+											<h:outputText value="Mantenimiento - Ans" styleClass="titulo" />
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td width="100%" valign="top" align="left"></td>
+						</tr>
+						<tr>
+							<td>
+								<table>
+									<tr>
+										<td>
+											<h:graphicImage height="8px;" width="8px;"
+												url="../resources/images/mandatorio.gif" />
+										</td>
+										<td>
+											<h:outputLabel style="width:150px;" for="idProducto"
+												value="Producto"
+												styleClass="etiqueta" />
+										</td>
+										<td>
+											<h:selectOneMenu id="idProducto"
+												value="#{actualizaAns.productoSeleccionado}"
+												disabled="#{not actualizaAns.nuevoRegistro}"
+												readonly="#{not actualizaAns.nuevoRegistro}"
+												converter="javax.faces.Long"
+												styleClass="select">
+												<f:selectItems value="#{actualizaAns.productos}" />
+											</h:selectOneMenu>
+										</td>
+										<td>
+											<h:message styleClass="mensaje-error" for="idProducto" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<h:graphicImage height="8px;" width="8px;"
+												url="../resources/images/mandatorio.gif" />
+										</td>
+										<td>
+											<h:outputLabel style="width:150px;" for="idTarea"
+												value="Tarea"
+												styleClass="etiqueta" />
+										</td>
+										<td>
+											<h:selectOneMenu id="idTarea"
+												value="#{actualizaAns.tareaSeleccionado}"
+												disabled="#{not actualizaAns.nuevoRegistro}"
+												readonly="#{not actualizaAns.nuevoRegistro}"
+												converter="javax.faces.Long"
+												styleClass="select">
+												<f:selectItems value="#{actualizaAns.tareas}" />
+												<f:ajax event="change" execute="idTarea" render="idEstado" listener="#{actualizaAns.cargaEstadosXTarea}" />
+											</h:selectOneMenu>
+										</td>
+										<td>
+											<h:message styleClass="mensaje-error" for="idTarea" />
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>
+											<h:outputLabel style="width:150px;" for="idEstado"
+												value="Estado"
+												styleClass="etiqueta" />
+										</td>
+										<td>
+											<h:selectOneMenu id="idEstado"
+												value="#{actualizaAns.estadoSeleccionado}"
+												disabled="#{not actualizaAns.nuevoRegistro}"
+												readonly="#{not actualizaAns.nuevoRegistro}"
+												converter="javax.faces.Long"
+												styleClass="select">
+												<f:selectItems value="#{actualizaAns.estados}" />
+											</h:selectOneMenu>
+										</td>
+										<td>
+											<h:message styleClass="mensaje-error" for="idEstado" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<h:graphicImage height="8px;" width="8px;"
+												url="../resources/images/mandatorio.gif" />
+										</td>
+										<td>
+											<h:outputLabel style="width:150px;" for="idTipoOferta"
+												value="Tipo Oferta"
+												styleClass="etiqueta" />
+										</td>
+										<td>
+											<h:selectOneMenu id="idTipoOferta"
+												value="#{actualizaAns.tipoOfertaSeleccionado}"
+												disabled="#{not actualizaAns.nuevoRegistro}"
+												readonly="#{not actualizaAns.nuevoRegistro}"
+												converter="javax.faces.Long"
+												styleClass="select">
+												<f:selectItems value="#{actualizaAns.tiposOferta}" />
+											</h:selectOneMenu>
+										</td>
+										<td>
+											<h:message styleClass="mensaje-error" for="idTipoOferta" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<h:graphicImage height="8px;" width="8px;"
+												url="../resources/images/mandatorio.gif" />
+										</td>
+										<td>
+											<h:outputLabel style="width:150px;" for="idGrupoSegmento"
+												value="Grupo segmento"
+												styleClass="etiqueta" />
+										</td>
+										<td>
+											<h:selectOneMenu id="idGrupoSegmento"
+												value="#{actualizaAns.grupoSegmentoSeleccionado}"
+												disabled="#{not actualizaAns.nuevoRegistro}"
+												readonly="#{not actualizaAns.nuevoRegistro}"
+												converter="javax.faces.Long"
+												styleClass="select">
+												<f:selectItems value="#{actualizaAns.gruposSegmento}" />
+											</h:selectOneMenu>
+										</td>
+										<td>
+											<h:message styleClass="mensaje-error" for="idGrupoSegmento" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<h:graphicImage height="8px;" width="8px;"
+												url="../resources/images/mandatorio.gif" />
+										</td>
+										<td>
+											<h:outputLabel style="width:150px;" for="idVerdeMinutos"
+												value="Verde Minutos"
+												styleClass="etiqueta" />
+										</td>
+										<td>
+											<h:inputText id="idVerdeMinutos" styleClass="caja-texto"
+												size="39" maxlength="7" value="#{actualizaAns.verdeMinutos}"
+												converter="javax.faces.BigDecimal" required="true" 
+												converterMessage="El campo Verde Minutos debe ser de tipo Entero" 
+												requiredMessage="El campo Verde Minutos es requerido"
+												onkeydown="soloNumeros(event)" />
+										</td>
+										<td>
+											<h:message styleClass="mensaje-error" for="idVerdeMinutos" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<h:graphicImage height="8px;" width="8px;"
+												url="../resources/images/mandatorio.gif" />
+										</td>
+										<td>
+											<h:outputLabel style="width:150px;" for="idAmarilloMinutos"
+												value="Amarillo Minutos"
+												styleClass="etiqueta" />
+										</td>
+										<td>
+											<h:inputText id="idAmarilloMinutos" styleClass="caja-texto"
+												size="39" maxlength="7" value="#{actualizaAns.amarilloMinutos}"
+												converter="javax.faces.BigDecimal" required="true"
+												converterMessage="El campo Amarillo Minutos debe ser de tipo Entero" 
+												requiredMessage="El campo Amarillo Minutos es requerido"
+												onkeydown="soloNumeros(event)" />
+										</td>
+										<td>
+											<h:message styleClass="mensaje-error" for="idAmarilloMinutos" />
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>
+											<h:outputLabel style="width:150px;" for="idFlagActivo"
+												value="Flag Activo"
+												styleClass="etiqueta" />
+										</td>
+										<td>
+											<h:selectBooleanCheckbox id="idFlagActivo" value="#{actualizaAns.activo}">
+											</h:selectBooleanCheckbox>
+										</td>
+										<td>
+											<h:message styleClass="mensaje-error" for="idFlagActivo" />
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+						</tr>
+						<tr>
+							<td><h:outputText>&#160;</h:outputText></td>
+						</tr>
+						<tr>
+							<td>
+								<table width="100%" cellspacing="0" cellpadding="0" border="0">
+									<tr>
+										<td align="center">
+											<h:commandButton id="guardar" action="#{actualizaAns.guardar}" value="Guardar" styleClass="boton" />
+											<h:commandButton immediate="true" id="cancelar" action="#{actualizaAns.cancelar}" value="Cancelar" styleClass="boton" />
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h:panelGroup layout="block" styleClass="etiqueta" style="margin-bottom:10px;"></h:panelGroup>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+						</tr>
+						<tr>
+							<td><h:messages globalOnly="true" styleClass="mensaje-error"></h:messages></td>
+						</tr>
+						<tr>
+							<td></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+</ui:composition>

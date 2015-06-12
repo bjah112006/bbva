@@ -1,0 +1,215 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+
+<div id="divBloque1_1" class="bloque">    
+    <div class="contenido-bloque">    
+       <span class="columna" style="width:120px">
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.codExpediente']}:" styleClass="etiqueta"/>                              
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.tipoDoi']}:" styleClass="etiqueta"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.apePaterno']}:" styleClass="etiqueta"/>              
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.nombres']}:" styleClass="etiqueta"/>                
+            </div>
+       </span>
+       <span class="columna" style="width:250px">
+            <div class="campo-espaciado" >
+                <h:inputText id="idCodExpediente" value="#{buscarBandeja.codigoExpediente}" styleClass="valor soloNumeros" style="width: 200px;"
+                onkeydown="eventoEnter(event);"/>                
+            </div>
+            <div class="campo-espaciado">
+                <h:selectOneMenu value="#{buscarBandeja.tipoDOISeleccionado}" required="true"
+            		             style ="width:205px;" styleClass="valor-componente" immediate="true"
+            		             id="idTipoDoi" onkeydown="eventoEnter(event);">
+				    <f:selectItems value="#{buscarBandeja.tiposDOI}"/>
+                </h:selectOneMenu>      
+                <h:message for="idTipoDoi" errorClass="mensaje-error"/>        
+            </div>
+            <div class="campo-espaciado">
+                <h:inputText id="idApePaterno" value="#{buscarBandeja.apPaterno}" styleClass="valor" style="width: 200px;"
+                onkeydown="eventoEnter(event);"/>                
+            </div>           
+            <div class="campo-espaciado">
+                <h:inputText id="idNombres" value="#{buscarBandeja.nombres}" styleClass="valor" style="width: 200px;"
+                onkeydown="eventoEnter(event);"/>
+            </div>            
+       </span>
+       
+       <span class="columna" style="width:120px; margin-top:30px;">
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.numDoi']}:" styleClass="etiqueta"/>                
+            </div>       
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.apeMaterno']}:" styleClass="etiqueta"/>                
+            </div>
+        </span>
+        <span class="columna" style="width:250px; margin-top:25px;">
+            <div class="campo-espaciado">
+                <h:inputText id="idNumDoi" value="#{buscarBandeja.numeroDOI}" styleClass="valor" maxlength="11" style="width: 200px;"
+                onkeydown="eventoEnter(event);"/>
+                <h:message for="idNumDoi" errorClass="mensaje-error"/>                
+            </div>
+            <div class="campo-espaciado">
+                <h:inputText id="idApeMaterno" value="#{buscarBandeja.apMaterno}" styleClass="valor" style="width: 200px;"
+                onkeydown="eventoEnter(event);"/>
+            </div>       
+        </span>        
+    </div>
+</div>
+<div id="divBloque1_2" class="bloque">   
+    <div class="contenido-bloque">
+        <span class="columna" style="width:125px">               
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.feInicio']}:" styleClass="etiqueta"/>                
+            </div> 
+        </span>
+        <span class="columna" style="width:245px">               
+            <div class="campo-espaciado">
+               <h:inputText id="fecInicio" value="#{buscarBandeja.fechaInicio}" style="width:80px;" maxlength="10" 
+               onkeydown="eventoEnter(event);" onblur="validarFormatoFechaInicio(); validarFechaInicio();" class="formatoFecha">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+               </h:inputText>
+            </div>
+        </span>        
+        <span class="columna" style="width:125px">               
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.feFin']}:" styleClass="etiqueta"/>                
+            </div>
+        </span>            
+        <span class="columna" style="width:175px">
+            <div class="campo-espaciado">
+               <h:inputText id="fecFin" value="#{buscarBandeja.fechaFin}" style="width:80px;" maxlength="10"
+               onblur="validarFormatoFechaFin(); validarFechaFin();" class="formatoFecha">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+               </h:inputText>
+            </div>
+        </span>        
+    </div>
+</div>
+<div id="divBloque1_3" class="bloque">
+    <div class="contenido-bloque">
+        
+        <span class="columna" style="width:120px">
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.producto']}:" styleClass="etiqueta"/>                                
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.subProducto']}:" styleClass="etiqueta"/>                                
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.segmento']}:" styleClass="etiqueta"/>                                
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.tipoOferta']}:" styleClass="etiqueta"/>                                
+            </div>            
+        </span>
+        
+        <span class="columna" style="width:250px"> 
+            <div class="campo-espaciado">
+                <h:selectOneMenu value="#{buscarBandeja.productoSeleccionado}" required="true"
+                                 onchange="submit()"
+                                 valueChangeListener="#{buscarBandeja.cambiarSubProductos}"
+            		             style ="width:205px;" styleClass="valor-componente" immediate="true"
+            		             id="idProductoSel" onkeydown="eventoEnter(event);">
+				    <f:selectItems value="#{buscarBandeja.productos}"/>
+                </h:selectOneMenu>
+            </div>
+            <div class="campo-espaciado">
+                <h:panelGroup id="idSubProducto">
+                   <h:selectOneMenu value="#{buscarBandeja.subProductoSeleccionado}"
+            		             style ="width:205px;" styleClass="valor-componente"
+            		             id="idSubproductoSel" onkeydown="eventoEnter(event);">
+				      <f:selectItems value="#{buscarBandeja.subProductos}"/>
+                   </h:selectOneMenu>
+                </h:panelGroup>
+            </div>            
+            <div class="campo-espaciado">
+                <h:selectOneMenu value="#{buscarBandeja.segmentoSeleccionado}" required="true"
+            		             style ="width:205px;" styleClass="valor-componente" immediate="true"
+            		             id="idSegmento" onkeydown="eventoEnter(event);">
+				    <f:selectItems value="#{buscarBandeja.segmentos}"/>
+                </h:selectOneMenu>              
+            </div>   
+            <div class="campo-espaciado">
+                <h:selectOneMenu value="#{buscarBandeja.tipoOfertaSeleccionado}" required="true"
+            		             style ="width:205px;" styleClass="valor-componente" immediate="true"
+            		             id="idTipoOferta" onkeydown="eventoEnter(event);">
+				    <f:selectItems value="#{buscarBandeja.tipoOfertas}"/>
+                </h:selectOneMenu>              
+            </div>                        
+        </span>
+        
+        <span class="columna" style="width:150px">
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.territorio']}:" styleClass="etiqueta"/>                              
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.codOficina']}:" styleClass="etiqueta"/>
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.estado']}:" styleClass="etiqueta"/>              
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.numContrato']}:" styleClass="etiqueta"/>                
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.codRvgl']}:" styleClass="etiqueta"/>                
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandeja.codPreEval']}:" styleClass="etiqueta"/>                
+            </div>            
+        </span>
+        
+        <span class="columna" style="width:230px">            
+            <div class="campo-espaciado">
+                <h:selectOneMenu value="#{buscarBandeja.territorioSeleccionado}" required="true"
+                                 onchange="submit()"
+                                 valueChangeListener="#{buscarBandeja.cambiarOficina}"                             
+            		             style ="width:205px;" styleClass="valor-componente" immediate="true"
+            		             id="idTerritorioSel" onkeydown="eventoEnter(event);">
+				    <f:selectItems value="#{buscarBandeja.territorios}"/>
+                </h:selectOneMenu>
+            </div>
+            <div class="campo-espaciado">
+                <h:panelGroup id="idOficina">
+                   <h:selectOneMenu value="#{buscarBandeja.oficinaSeleccionado}"
+            		             style ="width:205px;" styleClass="valor-componente"
+            		             id="idOficinaSel" onkeydown="eventoEnter(event);">
+				      <f:selectItems value="#{buscarBandeja.oficinas}"/>
+                   </h:selectOneMenu>
+                </h:panelGroup>
+            </div>            
+            <div class="campo-espaciado">
+                <h:selectOneMenu value="#{buscarBandeja.estadoSeleccionado}" required="true"
+            		             style ="width:205px;" styleClass="valor-componente" immediate="true"
+            		             id="idEstado" onkeydown="eventoEnter(event);">
+				    <f:selectItems value="#{buscarBandeja.estados}"/>
+                </h:selectOneMenu>              
+            </div>   
+            <div class="campo-espaciado">
+            	<h:inputText id="idNumContrato" value="#{buscarBandeja.numContrato}" styleClass="valor" style="width: 200px;" maxlength="20"
+            	onkeydown="eventoEnter(event);"/>
+            </div> 
+            <div class="campo-espaciado">                
+                <h:inputText id="idRvgl" value="#{buscarBandeja.codigoRVGL}" styleClass="valor soloNumeros" style="width: 200px;" maxlength="50"
+                onkeydown="eventoEnter(event);"/>                
+            </div>
+            <div class="campo-espaciado">                
+                <h:inputText id="idPreEval" value="#{buscarBandeja.codigoPreEvaluador}" styleClass="valor soloNumeros" style="width: 200px;" maxlength="5"
+                onkeydown="eventoEnter(event);"/>                
+            </div>                       
+        </span> 
+    </div>
+</div>
+
+</ui:composition>

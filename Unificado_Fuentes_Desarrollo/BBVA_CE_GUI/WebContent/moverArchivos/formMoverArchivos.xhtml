@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+		<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+        <h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="style.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+		<h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+        <h:outputScript library="js" name="jquery-ui.js" target="head"/>
+		<h:outputScript target="head">
+		/* <![CDATA[ */        	
+        	
+        /* ]]> */
+		</h:outputScript>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+        <title><h:outputText value="#{msg['com.ibm.bbva.mensajes.formMensajes.titulo']}"/></title>
+        <script type="text/javascript">
+	        function accionCerrar() {
+	        	$("#frmMoverArchivos\\:btnRedireccionar").click();
+	         }
+        </script>
+    </h:head>
+    <h:body>
+	    <h:form id="frmMoverArchivos">
+	        <div class="contenido">
+	            <div class="cabecera">
+	                <ui:include src="/resources/common/cabecera.xhtml" />
+	            </div>
+	            <div class="cuerpo">
+	                <div class="datos" align="center">
+		            	<div id="idAnimacion" style="width:410px">
+							<div id="appletContent" class="contenido-bloque">
+								<applet id="idApplet" code="com.ibm.bbva.app.applet.FTP"
+									        archive="../applet/BBVAAppletFTP.jar" 
+									        width="400" 
+									        height="80"
+									        hspace="0"
+									        vspace="10" 
+									        align="middle">
+									<param name="host" value="#{moverArchivos.hostParam}" />
+									<param name="user" value="#{moverArchivos.userParam}" />
+									<param name="password" value="#{moverArchivos.passwordParam}" />
+									<param name="periodo" value="#{moverArchivos.periodoParam}" />
+									<param name="tasaKBytes" value="#{moverArchivos.tasaKBytesParam}" />
+									<param name="escaneosPath" value="#{moverArchivos.escaneosPathParam}" />
+									<param name="prefix" value="#{moverArchivos.prefixParam}" />
+									<param name="hostws" value="#{moverArchivos.strHostWs}"/>
+									<param name="log" value="#{moverArchivos.pathLog}"/>
+									<param name="carpetaFTP" value="#{moverArchivos.carpetaFTP}"/>
+									<param name="descargados" value="#{moverArchivos.pathDescargados}" />
+									<param name="transferencias" value="#{moverArchivos.escaneosPathParam}" />
+									<param name="listaDocumentosAdjuntos" value="#{moverArchivos.listaDocumentosAdjuntos}" />
+								</applet>
+								<div class="titulo1">
+									<h:outputText value="#{msg['com.ibm.bbva.applet.avisoMoverArchivos.mensaje']}"/>
+									<h:commandLink id="btnRedireccionar" action="#{moverArchivos.redireccionar}" style="display:none"></h:commandLink>
+								</div>
+							</div>
+						</div>
+					</div>
+	            </div>
+	        </div>
+	    </h:form>
+    </h:body>
+</html>
