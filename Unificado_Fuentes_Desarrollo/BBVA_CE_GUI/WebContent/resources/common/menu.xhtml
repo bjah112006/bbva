@@ -81,6 +81,10 @@
 		<h:outputText value="Admin Procesos" />
 	</h:commandLink>
 
+	<h:commandLink action="#{menu.descargaLDAP}" immediate="true" rendered="#{menu.habMenuDescargaLDAP}">
+		<h:outputText value="Descarga LDAP" />
+	</h:commandLink>
+	
 	<h:outputLink value="javascript: salir();">
 		<h:outputText value="#{msg['com.ibm.bbva.common.menu.salir']}" />
 	</h:outputLink>
