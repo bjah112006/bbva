@@ -83,7 +83,8 @@ public class Perfil implements Serializable {
 	@Column(name="FLAG_MENU_HORARIO")
 	private String flagMenuHorario;
 	
-	
+	@Column(name="FLAG_MENU_DESCARGA_LDAP")
+	private String flagMenuDescargaLDAP;
 
 	//bi-directional many-to-one association to Empleado
 	@OneToMany(mappedBy="perfil")
@@ -341,5 +342,12 @@ public class Perfil implements Serializable {
 		this.flagMenuHorario = flagMenuHorario;
 	}
 
-	
+	public String getFlagMenuDescargaLDAP() {
+		return flagMenuDescargaLDAP;
+	}
+
+	public void setFlagMenuDescargaLDAP(String flagMenuDescargaLDAP) {
+		this.flagMenuDescargaLDAP = flagMenuDescargaLDAP;
+	}
+
 }
