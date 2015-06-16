@@ -100,7 +100,8 @@ public class MenuMB extends AbstractLinksMBean {
 	private boolean habMenuReporteConsolidado;
 	private boolean habMenuReporteTOE;
 	private boolean habMenuHorario;
-	private boolean habMenuBandejaMonitoreo;
+	private boolean habMenuBandejaMonitoreo;	
+	private boolean habMenuDescargaLDAP;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(MenuMB.class);
 	
@@ -125,6 +126,7 @@ public class MenuMB extends AbstractLinksMBean {
 		this.habMenuReporteTOE = false;
 		this.habMenuHorario = false;
 		this.habMenuBandejaMonitoreo = false;
+		this.habMenuDescargaLDAP = false;
 	}
 	
 	public String nuevoExpediente () {
@@ -485,6 +487,7 @@ public class MenuMB extends AbstractLinksMBean {
 			String flagMenuReporteConsolidado = empleado.getPerfil().getFlagMenuReporteConsolidado();
 			String flagMenuReporteTOE = empleado.getPerfil().getFlagMenuReporteTOE();
 			String flagMenuHorario = empleado.getPerfil().getFlagMenuHorario();
+			String flagMenuDescargaLDAP = empleado.getPerfil().getFlagMenuDescargaLDAP();
 			
 			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuRegistraExpediente)) {
 				habMenuRegistrarExpediente = true;
@@ -524,6 +527,9 @@ public class MenuMB extends AbstractLinksMBean {
 			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuHorario)) {
 				habMenuHorario = true;
 			}	
+			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuDescargaLDAP)) {
+				habMenuDescargaLDAP = true;
+			}
 		}
 		if(getObjectSession(Constantes.USUARIO_AD_SESION) != null){
 			habMenuBandejaMonitoreo = true;
@@ -591,6 +597,10 @@ public class MenuMB extends AbstractLinksMBean {
 		removeObjectSession(Constantes.LISTA_BANDEJA_MONITOREO);
 		removeObjectSession(Constantes.TIPO_BUSQUEDA_BM);
 		return "/bandejaMonitoreo/formBandejaMonitoreo?faces-redirect=true";
+	}
+	
+	public String descargaLDAP () {	
+		return "/descargaLDAP/formManConsultaDescargaLDAP?faces-redirect=true";
 	}
 	
 	public String validaExisteCarterizacion(long idTerritorio) {
@@ -958,5 +968,12 @@ public class MenuMB extends AbstractLinksMBean {
 		this.habMenuBandejaMonitoreo = habMenuBandejaMonitoreo;
 	}
 
+	public boolean isHabMenuDescargaLDAP() {
+		return habMenuDescargaLDAP;
+	}
+
+	public void setHabMenuDescargaLDAP(boolean habMenuDescargaLDAP) {
+		this.habMenuDescargaLDAP = habMenuDescargaLDAP;
+	}
 	
 }
