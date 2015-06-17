@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+    <h:head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+    	<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+        <h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="style.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
+		<h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+		<h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+	    <h:outputScript library="js" name="jquery-ui.js" target="head"/>
+        <h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+        
+		<f:verbatim>
+		<script type="text/javascript">   
+			String.prototype.trim = function() {return this.replace(/^\s+|\s+$/g,"")};
+			var tipoDato="";
+			var plantilla="";
+			onload = function() {
+			    if (!document.getElementsByTagName || !document.createTextNode) return;
+			    var rows = document.getElementById('registroTabla:columnasTablaParametricaDTB').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+			    for (i = 0; i &#60; rows.length; i++) {
+			        rows[i].onclick = function() {            
+			            var row = this.rowIndex;
+			            tipoDato =document.getElementById("registroTabla:columnasTablaParametricaDTB:"+row+":tipoDatoOculto").value;           
+			            plantilla =document.getElementById("registroTabla:columnasTablaParametricaDTB:"+row+":plantillaOculto").value;
+			        }
+			    }
+			}
+			
+		    function soloNumeros(e){	
+			 if(window.event) // IE
+			    {
+			        charCode = e.keyCode;
+			        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
+			            //window.event.returnValue=0;
+			            e.preventDefault();
+			        }
+			    }
+			    else if(e.which) // Netscape/Firefox/Opera
+			    {
+			        charCode = e.which;
+			        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
+			            e.preventDefault();
+			        }
+			    }
+			}
+			function soloNumerosConDecimales(o, e)
+			{  
+			    if(window.event) // IE
+			    {
+			        charCode = e.keyCode;
+			
+			        if (charCode!=46 &#38;&#38; charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
+			            //window.event.returnValue=0;
+			            e.preventDefault();
+			        }
+			        
+			        //if (numeroDeDecimales(o, charCode, 1)==1) {
+			        //if (numeroDeEntDec(o,2,1)==1) {
+			        if (numeroDeEntDecP(o, charCode) ==1) {
+			            //window.event.returnValue=0;
+			            e.preventDefault();
+			        } 
+			    }
+			    else if(e.which) // Netscape/Firefox/Opera
+			    {
+			        charCode = e.which;
+			        if (charCode!=46 &#38;&#38; charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
+			            e.preventDefault();
+			        }
+			        
+			        //if (numeroDeDecimales(o, charCode, 1)==1) {
+			        //if (numeroDeEntDec(o,2,1)==1) {
+			        if (numeroDeEntDecP(o, charCode) ==1) {
+			            e.preventDefault();
+			        }	        
+			    }
+			}
+			
+			function numeroDeDecimales(o, charCode, ndecimal) {
+			   var encontro = o.value.indexOf(".");
+		       if (encontro!=-1) {
+		          if (charCode==46) return 1;
+		          if (o.value.substr(encontro).length &#62; ndecimal) return 1;
+		       }
+			}
+		
+			function numeroDeEntDec(o, nentera, ndecimal) {
+			   var valor = o.value;
+			   var encontro = valor.indexOf(".");
+			   
+			   if (encontro==-1) {
+			      if (valor.length &#62; nentera - 1) {
+			         o.value = valor + '.';
+			         return 1;
+			      }
+			   }else{
+			      if (valor.substr(encontro).length &#62; ndecimal) return 1;
+			   }
+			}
+		
+			function numeroDeEntDecP(o, charCode) {
+			   if (plantilla.length &#62; 0 ) {
+				   var pos = plantilla.indexOf(".");
+				   var nentera = plantilla.substr(0, pos).length;
+				   var ndecimal = plantilla.substr(pos + 1).length;
+				   
+				   var valor = o.value;
+				   var encontro = valor.indexOf(".");
+				   
+				    if (encontro==-1) {
+				      if (valor.length &#62; nentera - 1) {
+				         o.value = valor + '.';
+				         return 1;
+				      }
+				   }else{
+				      if (charCode==46) return 1;
+				      if (valor.substr(encontro).length &#62; ndecimal) return 1;
+				   }
+			   }
+			}
+			
+			function validaInputText(o, e) {
+			  if (tipoDato=="STRING") {  
+			  }else if(tipoDato=="INTEGER" || tipoDato=="SHORT" || tipoDato=="LONG") {
+			     soloNumeros(e);
+			  }else if(tipoDato=="DOUBLE" || tipoDato=="FLOAT") {
+			     soloNumerosConDecimales(o, e);       
+			  }  
+			};
+		      </script>
+		      </f:verbatim>
+			
+	</h:head>
+	<h:body>
+		<h:form id="registroTabla">
+			<div class="contenido">
+				<div class="cabecera">
+					<ui:include src="/resources/common/cabecera.xhtml" />
+				</div>
+				<div class="cuerpo">
+					<div class="menu">
+					   <ui:include src="/resources/common/menu.xhtml" />
+					</div>
+				
+				   <h:panelGroup id="idActualizaTabla" styleClass="datos">							
+				      	<h:panelGrid styleClass="bloque">
+							<table width="100%" border="0" align="center" cellspacing="0">
+								<tr>
+									<td valign="top">
+										<table width="100%">
+											<tr>
+												<td>
+													<table width="100%" border="0" cellpadding="0" cellspacing="0">
+														<tbody>
+															<tr>
+																<td align="center">
+																	<h:outputText id="nombreTablaOTX"  styleClass="titulo"
+																		value="Mantenimiento - Descarga LDAP" />
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+					
+											<tr>
+												<td align="left" valign="top" width="100%">	
+												<h:panelGroup>
+													<table>
+										
+																	<tr>
+																		<td>
+																			<h:graphicImage height="8px;" width="8px;"
+																					url="../resources/images/mandatorio.gif"/>
+																		</td>
+																		<td>
+																			<h:outputText value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.tipo']}:" class="etiqueta"/>
+																		</td>
+																		<td>
+																			<h:selectOneMenu id="cmbFiltroTipo"
+																					value="#{descargaLDAP.edicionTipo}" styleClass="select">																					
+																						<f:selectItems value="#{descargaLDAP.listaTipo}" />																					
+																				</h:selectOneMenu>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>
+																			<h:graphicImage height="8px;" width="8px;"
+																					url="../resources/images/mandatorio.gif"/>
+																		</td>
+																		<td>
+																			<h:outputText value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.codigo']}:" class="etiqueta"/>
+																		</td>
+																		<td>
+																			<h:inputText size="20"
+																				maxlength="100" id="txtFiltroCodigo"
+																				value="#{descargaLDAP.edicionCodigo}" 
+																				styleClass="caja-texto">
+																			</h:inputText>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>
+																			<h:graphicImage height="8px;" width="8px;"
+																					url="../resources/images/mandatorio.gif"/>
+																		</td>
+																		<td>
+																			<h:outputText value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.carterizacion']}:" class="etiqueta"/>
+																		</td>
+																		<td>
+																			Listado Carterización ...
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>
+																			<h:graphicImage height="8px;" width="8px;"
+																					url="../resources/images/mandatorio.gif"/>
+																		</td>
+																		<td>
+																			<h:outputText value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.estado']}:" class="etiqueta"/>
+																		</td>
+																		<td>
+																			<h:selectOneMenu id="cmbFiltroEstado"
+																					value="#{descargaLDAP.edicionEstado}" styleClass="select">																					
+																						<f:selectItems value="#{descargaLDAP.listaEstado}" />																					
+																				</h:selectOneMenu>
+																		</td>
+																	</tr>
+																
+													</table>
+												</h:panelGroup>																																				
+												</td>
+											</tr>
+					
+											<tr>
+												<td>&#160;</td>
+											</tr>
+					                           <h:panelGroup>
+					                           <table width="100%" border="0" cellpadding="0" cellspacing="0">
+											<tr>
+												<td align="center">
+													<h:commandButton id="guardar"
+														action="#{consultarTabla.guardarRegistro}" value="Guardar"
+														styleClass="boton" />
+													<h:commandButton immediate="true" id="cancelar"
+														action="#{descargaLDAP.cancelar}" value="Cancelar"
+														styleClass="boton" />
+												</td>
+											</tr>
+											</table>
+					                           </h:panelGroup>
+											<div style="margin-bottom:10px;" styleClass="etiqueta">
+												<h:outputText value=" " />
+											</div>
+					
+											<tr>
+												<td>
+													<h:messages globalOnly="true" styleClass="mensaje-error"></h:messages>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</h:panelGrid>
+				   </h:panelGroup>					
+					
+				</div>
+       		</div>
+   		</h:form>
+   	</h:body>
+</html>
