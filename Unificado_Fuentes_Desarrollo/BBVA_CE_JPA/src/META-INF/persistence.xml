@@ -86,6 +86,7 @@
 		<class>com.ibm.bbva.entities.TareaAd</class>
 		<class>com.ibm.bbva.entities.VistaBandjCartProd</class>
 		<class>com.ibm.bbva.entities.VistaBanjcartProdPK</class>		
+		<class>com.ibm.bbva.entities.Multitabla</class>
 		<properties>
 			<property name="open.jdbc.Schema" value="CONELE"/>
 			<property name="openjpa.log" value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE"/>
