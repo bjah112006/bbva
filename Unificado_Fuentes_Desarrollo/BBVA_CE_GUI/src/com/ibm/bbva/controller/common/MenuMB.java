@@ -35,6 +35,8 @@ import bbva.ws.api.view.BBVAFacadeLocal;
 
 import com.ibm.bbva.controller.AbstractLinksMBean;
 import com.ibm.bbva.controller.Constantes;
+import com.ibm.bbva.controller.ConstantesAdmin;
+import com.ibm.bbva.controller.mantenimiento.DescargaLDAP;
 import com.ibm.bbva.entities.CartEmpleadoCE;
 import com.ibm.bbva.entities.CartTerritorioCE;
 import com.ibm.bbva.entities.Empleado;
@@ -50,6 +52,7 @@ import com.ibm.bbva.session.ParametrosConfBeanLocal;
 import com.ibm.bbva.session.PerfilBeanLocal;
 import com.ibm.bbva.session.TipoCambioCEBeanLocal;
 import com.ibm.bbva.session.VistaBandjCartProdBeanLocal;
+import com.ibm.bbva.tabla.ejb.impl.TablaFacadeBean;
 import com.ibm.bbva.tabla.util.vo.HistorialDetalle;
 import com.ibm.bbva.util.AyudaExpedienteTC;
 import com.ibm.bbva.util.AyudaExpedienteVO;
@@ -599,8 +602,18 @@ public class MenuMB extends AbstractLinksMBean {
 		return "/bandejaMonitoreo/formBandejaMonitoreo?faces-redirect=true";
 	}
 	
-	public String descargaLDAP () {	
+	public String descargaLDAP () 
+	{	
+		FacesContext ctx = FacesContext.getCurrentInstance();  
+		DescargaLDAP DescargaLDAP_MB = (DescargaLDAP)  
+				 ctx.getApplication().getVariableResolver().resolveVariable(ctx, "descargaLDAP");
+		
+		DescargaLDAP_MB.cargarCarterizacion();
+		DescargaLDAP_MB.cargarTipo();
+		DescargaLDAP_MB.cargarEstado();
+		
 		return "/descargaLDAP/formManConsultaDescargaLDAP?faces-redirect=true";
+				
 	}
 	
 	public String validaExisteCarterizacion(long idTerritorio) {

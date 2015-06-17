@@ -1469,4 +1469,11 @@ public interface Constantes {
 	String LISTA_HORARIO_OFICINA="listHorarioOficinaTmp";
 	String INICIO_BAND_PEND="initBandPend";
 	String NUM_REG_BAND_PEND="numRegBandPend";
+	
+	/**
+	 * Parámetros
+	 */
+	Long PARAMETRO_TIPO_DESCARGA_LDAP = 108L;
+	Long PARAMETRO_ESTADO_DESCARGA_LDAP = 112L;
+	
 }
