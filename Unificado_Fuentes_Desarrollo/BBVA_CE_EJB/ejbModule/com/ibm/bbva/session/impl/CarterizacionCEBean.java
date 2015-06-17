@@ -1,5 +1,7 @@
 package com.ibm.bbva.session.impl;
 
+import java.util.List;
+
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -7,6 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import com.ibm.bbva.entities.CarterizacionCE;
+import com.ibm.bbva.entities.TipoCambioCE;
 import com.ibm.bbva.session.AbstractFacade;
 import com.ibm.bbva.session.CarterizacionCEBeanLocal;
 
@@ -36,6 +39,17 @@ public class CarterizacionCEBean extends AbstractFacade<CarterizacionCE> impleme
 	public CarterizacionCE buscarPorIdProdIdTerrIdPerfil(String codigo) {
 		return (CarterizacionCE) em.createNamedQuery("CarterizacionCE.findByCodigo").setParameter("codigo", codigo).getSingleResult();
 		
+	}
+	
+	@Override
+	public List<CarterizacionCE> buscarTodos() {
+		List<CarterizacionCE> resultList;
+		try {			
+			resultList = em.createNamedQuery("CarterizacionCE.findAll").getResultList();
+			return resultList;
+		} catch (Exception e) {			
+			return null;
+		}
 	}
 	
 /*	@Override
