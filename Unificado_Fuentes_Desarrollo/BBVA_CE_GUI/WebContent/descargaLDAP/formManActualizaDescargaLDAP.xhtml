@@ -174,6 +174,7 @@
 					
 											<tr>
 												<td align="left" valign="top" width="100%">	
+												<h:inputHidden id="hidEdicionId" value="#{descargaLDAP.edicionId}"></h:inputHidden>
 												<h:panelGroup>
 													<table>
 										
@@ -186,7 +187,7 @@
 																			<h:outputText value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.tipo']}:" class="etiqueta"/>
 																		</td>
 																		<td>
-																			<h:selectOneMenu id="cmbFiltroTipo"
+																			<h:selectOneMenu id="cmbEdicionTipo"
 																					value="#{descargaLDAP.edicionTipo}" styleClass="select">																					
 																						<f:selectItems value="#{descargaLDAP.listaTipo}" />																					
 																				</h:selectOneMenu>
@@ -202,22 +203,24 @@
 																		</td>
 																		<td>
 																			<h:inputText size="20"
-																				maxlength="100" id="txtFiltroCodigo"
+																				maxlength="100" id="txtEdicionCodigo"
 																				value="#{descargaLDAP.edicionCodigo}" 
 																				styleClass="caja-texto">
 																			</h:inputText>
 																		</td>
 																	</tr>
 																	<tr>
-																		<td>
+																		<td valign="top">
 																			<h:graphicImage height="8px;" width="8px;"
 																					url="../resources/images/mandatorio.gif"/>
 																		</td>
-																		<td>
+																		<td valign="top">
 																			<h:outputText value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.carterizacion']}:" class="etiqueta"/>
 																		</td>
-																		<td>
-																			Listado Carterización ...
+																		<td valign="top">																		
+																			<h:selectManyCheckbox value="#{descargaLDAP.edicionCarterizacion}" layout="pageDirection">
+																				<f:selectItems value="#{descargaLDAP.listaCarterizacionEdicion}" />	
+																			</h:selectManyCheckbox>																																				
 																		</td>
 																	</tr>
 																	<tr>
@@ -229,7 +232,7 @@
 																			<h:outputText value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.estado']}:" class="etiqueta"/>
 																		</td>
 																		<td>
-																			<h:selectOneMenu id="cmbFiltroEstado"
+																			<h:selectOneMenu id="cmbEdicionEstado"
 																					value="#{descargaLDAP.edicionEstado}" styleClass="select">																					
 																						<f:selectItems value="#{descargaLDAP.listaEstado}" />																					
 																				</h:selectOneMenu>
@@ -249,7 +252,7 @@
 											<tr>
 												<td align="center">
 													<h:commandButton id="guardar"
-														action="#{consultarTabla.guardarRegistro}" value="Guardar"
+														action="#{descargaLDAP.guardarRegistro}" value="Guardar"
 														styleClass="boton" />
 													<h:commandButton immediate="true" id="cancelar"
 														action="#{descargaLDAP.cancelar}" value="Cancelar"
