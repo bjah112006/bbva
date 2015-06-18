@@ -36,7 +36,7 @@ import bbva.ws.api.view.BBVAFacadeLocal;
 import com.ibm.bbva.controller.AbstractLinksMBean;
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.controller.ConstantesAdmin;
-import com.ibm.bbva.controller.mantenimiento.DescargaLDAP;
+import com.ibm.bbva.controller.mantenimiento.DescargaLDAP_UI;
 import com.ibm.bbva.entities.CartEmpleadoCE;
 import com.ibm.bbva.entities.CartTerritorioCE;
 import com.ibm.bbva.entities.Empleado;
@@ -605,7 +605,7 @@ public class MenuMB extends AbstractLinksMBean {
 	public String descargaLDAP () 
 	{	
 		FacesContext ctx = FacesContext.getCurrentInstance();  
-		DescargaLDAP DescargaLDAP_MB = (DescargaLDAP)  
+		DescargaLDAP_UI DescargaLDAP_MB = (DescargaLDAP_UI)  
 				 ctx.getApplication().getVariableResolver().resolveVariable(ctx, "descargaLDAP");
 		
 		DescargaLDAP_MB.cargarCarterizacion();
