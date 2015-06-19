@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="TBL_CE_IBM_DESCARGA_LDAP", schema = "CONELE")
+@NamedQuery(name = "DescargaLDAP.findById", query = "SELECT d FROM DescargaLDAP d LEFT JOIN FETCH d.descargaLDAPCarterizaciones WHERE d.id = :id")
 public class DescargaLDAP implements Serializable 
 {
 	private static final long serialVersionUID = 1L;
