@@ -24,17 +24,15 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<title>JSP Page</title>
 	<script type="text/javascript" language="javascript">
-			var compSel = null;
-			var sel = null;
-			function cambiarEstado (comp) {			    
-				if ($(comp).is(':checked')) {
-					if (compSel!=null) {
-						$(compSel).attr('checked', false);
-					}
-					compSel = comp;
-				} else {
-					compSel = null;
-				}
+
+			function cambiarEstado (comp) 
+			{	
+				var opcion = $(comp).attr('checked'); 		    			
+				$(".seleccionar").each(function() {
+					$(this).attr('checked', false);
+				});
+			
+				$(comp).attr('checked', opcion);			
 			}
 			
 			function confirmarElimina(comp) {
@@ -49,6 +47,7 @@
 			  }		  
 			 return resultado;
 			}
+			
 		</script>
 </h:head>
 <h:body>
@@ -133,7 +132,7 @@
 															   
 																<h:commandButton id="buscar" action="#{descargaLDAP.buscar}"
 																	value="Buscar" styleClass="boton"/>
-																<h:commandButton id="limpiar" action="#{consultarTabla.limpiar}"
+																<h:commandButton id="limpiar" action="#{descargaLDAP.limpiar}" 
 																	value="Limpiar" styleClass="boton"/>
 															   
 															  </td>
@@ -148,12 +147,12 @@
 									</h:panelGroup>
 						</h:panelGroup>
 						<h:panelGroup style="overflow-x: auto; width: 750px;height: 440px">
-							<table width="100%" border="0" cellpadding="0" cellspacing="0">
+							<table width="750px" border="0" cellpadding="0" cellspacing="0">
 								<tr>
 									<td styleClass="textotitulo">
 										<h:dataTable border="1" styleClass="tablaTask" style="border-collapse:collapse;" 
-												columnClasses="text,text,text" headerClass="headerClass headerTabla1" rendered="true" 
-												rowClasses="uno,dos" id="idTablaEnvioCorreo" 
+												columnClasses="text,text,text" headerClass="headerClass headerTabla1"
+												rowClasses="uno,dos" id="idTablaEnvioCorreo" rendered="#{not empty descargaLDAP.listaDescargaLDAP}"
 												value="#{descargaLDAP.listaDescargaLDAP}" var="item" footerClass="fondo"
 												rows="10" binding="#{descargaLDAP.dataTable}" >
 												<h:column width="5%" align="center">
@@ -162,7 +161,48 @@
 													</f:facet>
 													<h:selectBooleanCheckbox id="idSelect" value="#{item.seleccion}" styleClass="seleccionar" onclick="cambiarEstado(this);">											
 													</h:selectBooleanCheckbox>
-												</h:column>																			
+												</h:column>		
+												<h:column width="5%">
+													<f:facet name="header">
+														<h:outputText
+															value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.id']}"
+															styleClass="tabla-titulo"></h:outputText>
+													</f:facet>
+													<h:outputText value="#{item.id}" styleClass="tabla-campo-texto"></h:outputText>
+												</h:column>	
+												<h:column width="15%">
+													<f:facet name="header">
+														<h:outputText
+															value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.tipo']}"
+															styleClass="tabla-titulo"></h:outputText>
+													</f:facet>
+													<h:outputText value="#{item.tipo}" styleClass="tabla-campo-texto"></h:outputText>
+												</h:column>	
+												<h:column width="20%">
+													<f:facet name="header">
+														<h:outputText
+															value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.codigo']}"
+															styleClass="tabla-titulo"></h:outputText>
+													</f:facet>
+													<h:outputText value="#{item.codigo}" styleClass="tabla-campo-texto"></h:outputText>
+												</h:column>		
+												<h:column width="45%">
+													<f:facet name="header">
+														<h:outputText
+															value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.carterizacion']}"
+															styleClass="tabla-titulo"></h:outputText>
+													</f:facet>
+													<h:outputText value="#{item.carterizacion}" styleClass="tabla-campo-texto"></h:outputText>
+												</h:column>	
+												<h:column width="10%" align="center">
+													<f:facet name="header">
+														<h:outputText
+															value="Activo"
+															styleClass="tabla-titulo"></h:outputText>
+													</f:facet>
+													<h:selectBooleanCheckbox value="#{item.flagActivo}" disabled="true">
+													</h:selectBooleanCheckbox>
+											    </h:column>															
 											</h:dataTable>	
 									</td>
 								</tr>
@@ -184,44 +224,24 @@
 						<h:panelGroup>
 							<table width="100%" border="0" cellpadding="0" cellspacing="0">
 								<tr>
-									<td align="left"><h:commandButton id="agregar"
+									<td align="left">
+									<h:commandButton id="agregar"
 											action="#{descargaLDAP.agregar}" value="Agregar"
-											styleClass="boton" /> <h:commandButton id="actualizar"
-											action="#{consultarTabla.editar}" value="Actualizar"
-											styleClass="boton" /> <h:commandButton id="eliminar"
-											action="#{consultarTabla.eliminar}"
-											onclick="return confirmarElimina(this);" value="Eliminar"
 											styleClass="boton" /> 
-											<h:commandButton
-											value="&#60;&#60;anterior" styleClass="boton" id="button112"
-											disabled="#{consultarTabla.tablaBinding.first == 0}"
-											action="#{consultarTabla.pagePrevious}"
-											rendered="#{not empty consultarTabla.tablaParametricaVO.registrosVO}" />
-										<h:commandButton value="siguiente&#62;&#62;"
-											styleClass="boton" id="button221"
-											rendered="#{not empty consultarTabla.tablaParametricaVO.registrosVO}"
-											disabled="#{consultarTabla.tablaBinding.first + consultarTabla.tablaBinding.rows >= consultarTabla.tablaBinding.rowCount}"
-											action="#{consultarTabla.pageNext}" /></td>
+									<h:commandButton id="actualizar"
+											action="#{descargaLDAP.editar}" value="Actualizar"
+											styleClass="boton" /> 
+									<h:commandButton value="&#60;&#60;anterior"
+										actionListener="#{descargaLDAP.pagePrevious}"  styleClass="boton"
+										disabled="#{descargaLDAP.dataTable.first == 0}" />
+									<h:commandButton value="siguiente&#62;&#62;"
+										actionListener="#{descargaLDAP.pageNext}"  styleClass="boton"
+										disabled="#{descargaLDAP.dataTable.first + descargaLDAP.dataTable.rows >= descargaLDAP.dataTable.rowCount}" />
+									</td>
 								</tr>
 							</table>
 						</h:panelGroup>
-
-						<h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
-							<table width="100%" border="0" cellpadding="0" cellspacing="0">
-								<tr>
-									<h:outputText value=" " />
-								</tr>
-							</table>
-						</h:panelGroup>
-
-						<h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
-							<table width="100%" border="0" cellpadding="0" cellspacing="0">
-								<tr>
-									<h:outputText value=" " />
-								</tr>
-							</table>
-						</h:panelGroup>
-
+						
 						<h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
 							<table width="100%" border="0" cellpadding="0" cellspacing="0">
 								<tr>
