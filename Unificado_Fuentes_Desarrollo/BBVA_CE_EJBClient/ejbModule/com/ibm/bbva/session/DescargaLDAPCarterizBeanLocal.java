@@ -12,4 +12,6 @@ public interface DescargaLDAPCarterizBeanLocal
 
 	public DescargaLDAPCarteriz create(DescargaLDAPCarteriz descargaLDAPCarteriz);
 	
+	public void eliminarPorDescargaLDAP(long idDescargaLDAP);
+	
 }

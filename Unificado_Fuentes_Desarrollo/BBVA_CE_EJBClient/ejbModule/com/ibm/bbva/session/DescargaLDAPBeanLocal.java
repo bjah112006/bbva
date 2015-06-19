@@ -5,6 +5,8 @@ import java.util.List;
 import javax.ejb.Local;
 
 import com.ibm.bbva.entities.DescargaLDAP;
+import com.ibm.bbva.entities.DescargaLDAPCarteriz;
+import com.ibm.bbva.entities.Empleado;
 
 @Local
 public interface DescargaLDAPBeanLocal {
@@ -13,6 +15,9 @@ public interface DescargaLDAPBeanLocal {
 	
 	public DescargaLDAP create(DescargaLDAP descargaLDAP);
 	
-	public List<DescargaLDAP> buscar(String tipo, String codigo, int caracterizacion, String estado);
+	public List<DescargaLDAP> buscar(String tipo, String codigo, String caracterizacion, String estado);
+	
+	public DescargaLDAP buscarPorId(long id);
+
 	
 }
