@@ -2,6 +2,7 @@ package com.ibm.bbva.session.impl;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import com.ibm.bbva.entities.DescargaLDAPCarteriz;
@@ -30,6 +31,16 @@ public class DescargaLDAPCarterizBean extends AbstractFacade<DescargaLDAPCarteri
 	@Override
 	public DescargaLDAPCarteriz create(DescargaLDAPCarteriz entity){
 		return super.create(entity);
+	}
+
+	@Override
+	public void eliminarPorDescargaLDAP(long idDescargaLDAP) 
+	{
+		StringBuilder sbQuery = new StringBuilder(" DELETE FROM DescargaLDAPCarteriz dc ");
+		sbQuery.append(" WHERE dc.descargaLDAP.id = :idDescargaLDAP ");		
+		
+		em.createQuery(sbQuery.toString()).setParameter("idDescargaLDAP", idDescargaLDAP).executeUpdate();		
+			
 	}
 	
 }
