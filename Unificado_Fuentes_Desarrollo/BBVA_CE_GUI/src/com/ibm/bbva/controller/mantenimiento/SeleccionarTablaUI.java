@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -13,10 +14,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ibm.bbva.controller.AbstractMBean;
+import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.controller.ConstantesAdmin;
+import com.ibm.bbva.entities.Empleado;
+import com.ibm.bbva.session.PerfilBeanLocal;
 import com.ibm.bbva.tabla.ejb.impl.TablaFacadeBean;
 import com.ibm.bbva.tabla.util.vo.EstadoTarea;
 import com.ibm.bbva.tabla.vo.TablaVO;
+
+import java.lang.reflect.Method;
 
 @ManagedBean (name="seleccionarTabla")
 @SessionScoped
@@ -24,6 +30,9 @@ public class SeleccionarTablaUI extends AbstractMBean{
 	
 	private static final Logger LOG = LoggerFactory.getLogger(SeleccionarTablaUI.class);
 
+	@EJB
+	private PerfilBeanLocal perfilBean;
+	
 	private static final long serialVersionUID = -3113108903719076529L;
 	private TablaFacadeBean tablaFacadeBean = null;
 	private Collection<SelectItem> tablas;
@@ -107,6 +116,8 @@ public class SeleccionarTablaUI extends AbstractMBean{
 				this.tablaFacadeBean = new TablaFacadeBean();
 			}
 			
+			Empleado empleado = (Empleado) getObjectSession(Constantes.USUARIO_SESION);
+								
 			Collection<TablaVO> tablasVO = this.tablaFacadeBean
 			.getTablasParametrizables();
 
@@ -114,11 +125,19 @@ public class SeleccionarTablaUI extends AbstractMBean{
 				for (TablaVO vo : tablasVO) {
 					/*if (tipoTablaMantenimiento!=null && (tipoTablaMantenimiento.equals(vo.getTipo())
 							|| "0".equals(vo.getTipo()))) {*/
-					if (99>=(vo.getId()) && vo.getTipo()!=null) {												
-						SelectItem si = new SelectItem();
-						si.setLabel(vo.getNombreMostrar());
-						si.setValue(vo.getId());
-						this.tablas.add(si);
+					if (99>=(vo.getId()) && vo.getTipo()!=null) 
+					{
+											
+						Class tClass = empleado.getPerfil().getClass();
+						Method metodoFlag = tClass.getMethod("getFlagMenu" + vo.getNombre().replace("TBL_CE_IBM_", ""), new Class[] {});
+						String flag = (String) metodoFlag.invoke(empleado.getPerfil(), new Object[] {});
+						if(Constantes.OPCION_MENU_VISIBLE.equals(flag))
+						{
+							SelectItem si = new SelectItem();
+							si.setLabel(vo.getNombreMostrar());
+							si.setValue(vo.getId());
+							this.tablas.add(si);
+						}										
 					}
 				}
 			}
