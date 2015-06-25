@@ -6,6 +6,7 @@ public class DescargaLDAPVO
 	private String tipo;
 	private String codigo;
 	private String carterizacion;
+	private String perfil;
 	private boolean flagActivo;
 	private boolean seleccion;
 	
@@ -44,6 +45,12 @@ public class DescargaLDAPVO
 	}
 	public void setSeleccion(boolean seleccion) {
 		this.seleccion = seleccion;
+	}
+	public String getPerfil() {
+		return perfil;
+	}
+	public void setPerfil(String perfil) {
+		this.perfil = perfil;
 	}
 		
 }
