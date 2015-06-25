@@ -15,7 +15,7 @@ public interface DescargaLDAPBeanLocal {
 	
 	public DescargaLDAP create(DescargaLDAP descargaLDAP);
 	
-	public List<DescargaLDAP> buscar(String tipo, String codigo, String caracterizacion, String estado);
+	public List<DescargaLDAP> buscar(String tipo, String codigo, String caracterizacion, String estado, String perfil);
 	
 	public DescargaLDAP buscarPorId(long id);
 
