@@ -23,6 +23,10 @@ public class DescargaLDAP implements Serializable
 	@Column(name="CODIGO")
 	private String codigo;
 	
+	@ManyToOne
+	@JoinColumn(name="ID_PERFIL")
+	private Perfil perfil;
+		
 	@Column(name="ESTADO")
 	private String estado;
 
@@ -68,6 +72,14 @@ public class DescargaLDAP implements Serializable
 	public void setDescargaLDAPCarterizaciones(
 			List<DescargaLDAPCarteriz> descargaLDAPCarterizaciones) {
 		this.descargaLDAPCarterizaciones = descargaLDAPCarterizaciones;
+	}
+
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
 	
 }
