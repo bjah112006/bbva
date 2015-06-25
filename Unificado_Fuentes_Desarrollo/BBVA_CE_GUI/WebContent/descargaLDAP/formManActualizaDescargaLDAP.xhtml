@@ -210,6 +210,21 @@
 																		</td>
 																	</tr>
 																	<tr>
+																		<td>
+																			<h:graphicImage height="8px;" width="8px;"
+																					url="../resources/images/mandatorio.gif"/>
+																		</td>
+																		<td>
+																			<h:outputText value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.perfil']}:" class="etiqueta"/>
+																		</td>
+																		<td>
+																			<h:selectOneMenu id="cmbEdicionPerfil"
+																					value="#{descargaLDAP.edicionPerfil}" styleClass="select">																					
+																						<f:selectItems value="#{descargaLDAP.listaPerfil}" />																					
+																				</h:selectOneMenu>
+																		</td>
+																	</tr>
+																	<tr>
 																		<td valign="top">
 																			<h:graphicImage height="8px;" width="8px;"
 																					url="../resources/images/mandatorio.gif"/>
