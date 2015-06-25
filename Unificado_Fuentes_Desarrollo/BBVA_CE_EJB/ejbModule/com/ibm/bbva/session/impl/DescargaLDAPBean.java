@@ -44,12 +44,13 @@ public class DescargaLDAPBean extends AbstractFacade<DescargaLDAP> implements De
 
 	@Override
 	public List<DescargaLDAP> buscar(String tipo, String codigo,
-			String carterizacion, String estado) {
+			String carterizacion, String estado, String perfil) {
 		
 		List<DescargaLDAP> resultList = null;
 		StringBuilder sbQuery = new StringBuilder(" SELECT DISTINCT d FROM DescargaLDAP d ");
+		sbQuery.append(" INNER JOIN d.perfil p ");
 		sbQuery.append(" INNER JOIN d.descargaLDAPCarterizaciones dc ");
-		sbQuery.append(" LEFT JOIN FETCH d.descargaLDAPCarterizaciones ");		
+		sbQuery.append(" LEFT JOIN FETCH d.descargaLDAPCarterizaciones ");			
 		
 		boolean isAnd = false;
 		if(!tipo.equals("-1"))
@@ -77,7 +78,14 @@ public class DescargaLDAPBean extends AbstractFacade<DescargaLDAP> implements De
 		{
 			if(sbQuery.indexOf("WHERE") == -1) { sbQuery.append(" WHERE "); }
 			if(isAnd) { sbQuery.append(" AND "); }
-			sbQuery.append(" d.estado = :estado");
+			sbQuery.append(" d.estado = :estado ");
+			isAnd = true;
+		}
+		if(!perfil.equals("-1"))
+		{
+			if(sbQuery.indexOf("WHERE") == -1) { sbQuery.append(" WHERE "); }
+			if(isAnd) { sbQuery.append(" AND "); }
+			sbQuery.append(" p.id = :perfil ");
 			isAnd = true;
 		}
 		
@@ -102,6 +110,10 @@ public class DescargaLDAPBean extends AbstractFacade<DescargaLDAP> implements De
 			{
 				jpql.setParameter("estado", estado);
 			}
+			if(!perfil.equals("-1"))
+			{
+				jpql.setParameter("perfil", Long.parseLong(perfil));
+			}
 			
 			resultList = jpql.getResultList();	
 						
@@ -121,32 +133,4 @@ public class DescargaLDAPBean extends AbstractFacade<DescargaLDAP> implements De
 		}
 	}
 	
-	/*
-	List<CartEmpleadoCE> resultList;
-	String query="SELECT CAREMP from  CartEmpleadoCE CAREMP " +
-			"INNER JOIN CAREMP.empleado EMP "+
-	        "INNER JOIN CAREMP.carterizacionCE CARTERZ " +
-	        "WHERE CAREMP.carterizacionCE.id=CARTERZ.id AND CAREMP.empleado.id = EMP.id AND " +
-	        "EMP.perfil.id=:idPerfil AND  EMP.oficina.id=:idOficina "+
-	        "AND EMP.id=:idEmpleado AND CAREMP.empleado.perfil.id=:idPerfil AND CAREMP.empleado.oficina.id=:idOficina "+ 
-	        "AND CAREMP.flagActivo = :flagActivo "+
-	        "AND CARTERZ.flagActivo = :flagActivo "+
-	        "AND EMP.flagActivo = :flagActivo  and CARTERZ.id in (SELECT CARTERR.carterizacionCE.id from  CartTerritorioCE CARTERR " +
-	        "Where CARTERR.territorio.id= :idTerritorio AND CARTERR.producto.id= :idProducto)";
-	
-	LOG.info("query = "+query);
-	try{
-		resultList = em.createQuery(query)
-				.setParameter("idPerfil", idPerfil)
-				.setParameter("idOficina", idOficina)
-				.setParameter("idProducto", idProducto)
-				.setParameter("idTerritorio", idTerritorio)
-				.setParameter("idEmpleado", idEmpleado)
-				.setParameter("flagActivo", "1")
-				.getResultList();		
-		return resultList;			
-	}catch (NoResultException e) {
-		return null;
-	}	
-	*/
 }
