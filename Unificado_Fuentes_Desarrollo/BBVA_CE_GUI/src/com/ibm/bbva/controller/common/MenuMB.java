@@ -611,6 +611,7 @@ public class MenuMB extends AbstractLinksMBean {
 		DescargaLDAP_MB.cargarCarterizacion();
 		DescargaLDAP_MB.cargarTipo();
 		DescargaLDAP_MB.cargarEstado();
+		DescargaLDAP_MB.cargarPerfil();
 		
 		return "/descargaLDAP/formManConsultaDescargaLDAP?faces-redirect=true";
 				
