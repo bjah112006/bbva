@@ -25,10 +25,4 @@
 			<context-root>BBVA_CE_CARGA</context-root>
 		</web>
 	</module>
-	<module id="Module_1436215466262">
-		<web>
-			<web-uri>BBVA_CE_PROCESO.war</web-uri>
-			<context-root>BBVA_CE_PROCESO</context-root>
-		</web>
-	</module>
 </application>
