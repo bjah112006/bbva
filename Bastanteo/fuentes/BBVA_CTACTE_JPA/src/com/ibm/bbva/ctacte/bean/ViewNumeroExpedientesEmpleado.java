@@ -36,6 +36,9 @@ public class ViewNumeroExpedientesEmpleado implements java.io.Serializable {
 	@Column(name = "DES_PERFIL", length = 60)
 	private String desPerfil;
 	
+	@Column(name = "ID_ESTUDIO", precision = 5, scale = 0)
+	private Integer idEstudio;
+	
 	@Column(name = "NUM_EXPEDIENTES", precision = 22, scale = 0)
 	private Integer numExpedientesEmpleado;
 	
@@ -104,6 +107,14 @@ public class ViewNumeroExpedientesEmpleado implements java.io.Serializable {
 
 	public void setDesPerfil(String desPerfil) {
 		this.desPerfil = desPerfil;
+	}
+
+	public Integer getIdEstudio() {
+		return idEstudio;
+	}
+
+	public void setIdEstudio(Integer idEstudio) {
+		this.idEstudio = idEstudio;
 	}
 
 	public Integer getNumExpedientesEmpleado() {

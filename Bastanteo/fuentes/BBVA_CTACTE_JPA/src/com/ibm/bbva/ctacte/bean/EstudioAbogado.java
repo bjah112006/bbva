@@ -22,6 +22,9 @@ public class EstudioAbogado implements java.io.Serializable {
 	
 	@Column(name = "DESCRIPCION", length = 30)
 	private String descripcion;
+	
+	@Column(name = "PORCENTAJE_CARGA", precision = 5, scale = 0)
+	private Integer porcentajeCarga;
 
 	public EstudioAbogado() {
 	}
@@ -40,6 +43,14 @@ public class EstudioAbogado implements java.io.Serializable {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public Integer getPorcentajeCarga() {
+		return porcentajeCarga;
+	}
+
+	public void setPorcentajeCarga(Integer porcentajeCarga) {
+		this.porcentajeCarga = porcentajeCarga;
 	}
 
 }

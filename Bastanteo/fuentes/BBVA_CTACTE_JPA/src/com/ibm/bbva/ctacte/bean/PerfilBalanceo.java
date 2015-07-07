@@ -21,6 +21,9 @@ public class PerfilBalanceo implements java.io.Serializable {
 	@Column(name = "ID_TIPO_BALANCEO_FK", length = 5)
 	private Integer idTipoBalanceo;
 	
+	@Column(name = "CONSIDERAR_ESTUDIO", length = 1)
+	private String considerarEstudio;
+	
 	public PerfilBalanceo() {
 	}
 
@@ -46,6 +49,14 @@ public class PerfilBalanceo implements java.io.Serializable {
 
 	public void setIdTipoBalanceo(Integer idTipoBalanceo) {
 		this.idTipoBalanceo = idTipoBalanceo;
+	}
+
+	public String getConsiderarEstudio() {
+		return considerarEstudio;
+	}
+
+	public void setConsiderarEstudio(String considerarEstudio) {
+		this.considerarEstudio = considerarEstudio;
 	}
 	
 }
