@@ -101,3 +101,8 @@
 .headerFiltro{
 	padding: 7px 0 7px 35px;
 }
+
+#header #menu > div > ul.dropdownmenu.notCustom > li.current a.bbva-consulta,
+#header #menu > div > ul.dropdownmenu.notCustom > li.current:hover a.bbva-consulta {
+  background: url("themeResource?theme=portal&location=skin/images/icon-apps-selected.png") transparent no-repeat 15px center !important;
+}

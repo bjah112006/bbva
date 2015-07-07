@@ -84,41 +84,6 @@ DateUtil = {
 buscarArchivo = function() {
 	var fecha = $("#txtFiltroFecha").val();
 	abrirReporte(fecha);
-}
-
-abrirReporte1 = function() {
-	var __xhr = $.ajax({
-        type: "post", 
-        dataType: 'json',
-        cache: false,
-        url: obtenerContexto('listRequest'),
-        data: {"method": "list"},
-        success: function(data) {
-            /*var html = "";
-            var row = "";
-            for(var i=0; i < data.files.length; i++) {
-                row = '<div class="tr tr_' + (i + 1) + ' ' + (i % 2 == 0? 'odd' : 'even') + '">';
-                row += '<div class="td td_reporte td_1 odd even"><a href="' + obtenerContexto('listFile') + '?method=download&file=/' + data.files[i].filename + '">' + data.files[i].filename + '</a></div>';
-                row += '<div class="td td_fecha td_2 td_last odd even">' + DateUtil.toString(DateUtil.longToDate(data.files[i].datecreate), DateUtil.DDMMYYYY) + '</div>';
-                row += '</div>';
-                
-                html += row;
-            }
-            
-            $("#tblReporte").html(html);*/
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            // console.log(xhr);
-            // console.log(ajaxOptions);
-            // console.log(thrownError);
-            alert("Error al descargar el listado de reportes");
-            console.log("xhr: " + xhr);
-            console.log("ajaxOptions: " + ajaxOptions);
-            console.log("thrownError: " + thrownError);
-        }
-    });
-    
-    $('#bbva-panel').css("display", "block");
 },
 
 abrirReporte = function(fecha) {
@@ -223,40 +188,39 @@ abrirConsulta = function() {
 	var body = document.body,
         html = document.documentElement,
         height = Math.max(body.offsetHeight, html.clientHeight, html.offsetHeight) - $("#header").outerHeight() - 35;
-
+	
     var __xhr = $.ajax({
         type: "post", 
         dataType: 'html',
         cache: false,
+        async: false,
         url: obtenerContexto("bbva/consulta.html"),
         success: function(data) {
-            var bodyContent = $("#body").find(".page").find(".body");
-            bodyContent.html(data);
+        	//var bodyContent = $("#body").find(".page").find(".body");
+        	var bodyContent = $("#body");
+        	var menuContent = $("#menu").find("li");
+        	menuContent.each(function (index){
+        		var clase = $(this).attr("class");
+        		if(clase.contains("current")){
+        			var clas = clase.replace("current", "");
+        			$(this).removeClass(clase);
+        			$(this).addClass(clas);
+        		}
+        		if(clase.contains("bbva-consulta")){
+        			$(this).removeClass(clase);
+        			$(this).addClass(clase + " " + "current");
+        		}
+        	});
+        	bodyContent.html(data);
             bodyContent.find("#panelIzq").css("height", height + "px");
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert("Error al abrir pantalla de consulta");
         }
     });
-	/*var body = document.body,
-    html = document.documentElement,
-    height = Math.max(body.offsetHeight, html.clientHeight, html.offsetHeight) - $("#header").outerHeight() - 35;
-
-	var __xhr = $.ajax({
-	    type: "post", 
-	    dataType: 'html',
-	    cache: false,
-	    url: obtenerContexto("homepage") + "?_p=bbva-consulta&_pf=1",
-	    success: function(data) {
-	        var bodyContent = $("#body").find(".page").find(".body");
-	        bodyContent.html(data);
-	        bodyContent.find("#panelIzq").css("height", height + "px");
-	    },
-	    error: function (xhr, ajaxOptions, thrownError) {
-	        alert("Error al abrir pantalla de consulta");
-	    }
-	});*/
 };
+
+
 
 consultarSolicitudes = function () {
 	var filtro = $("#cboFiltro").val();
@@ -266,9 +230,6 @@ consultarSolicitudes = function () {
 		alert("Debe ingresar un valor para el filtro de busqueda");
 	}else{
 		var request = 'listRequest?filtro='+filtro;
-		var linkSolicitud= obtenerContexto('listFile');
-			
-		//var request = "listRequest";
 		var __xhr = $.ajax({
 	        type: "post", 
 	        dataType: 'json',

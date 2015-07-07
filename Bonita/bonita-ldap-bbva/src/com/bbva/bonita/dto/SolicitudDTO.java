@@ -1,9 +1,8 @@
 package com.bbva.bonita.dto;
 
 import java.io.Serializable;
-import java.util.Comparator;
 
-public class SolicitudDTO implements Serializable, Comparator<SolicitudDTO>{
+public class SolicitudDTO implements Serializable, Comparable<SolicitudDTO>{
 	
 	private static final long serialVersionUID = 1L;
 	private String nroSolicitud;
@@ -290,8 +289,8 @@ public class SolicitudDTO implements Serializable, Comparator<SolicitudDTO>{
 		this.idArchivada = idArchivada;
 	}
 
-	@Override
-	public int compare(SolicitudDTO s1, SolicitudDTO s2) {
-		return s2.getNroSolicitud().compareTo(s1.getNroSolicitud());
-	}
+    @Override
+    public int compareTo(SolicitudDTO o) {
+        return o.getNroSolicitud().compareTo(this.getNroSolicitud());
+    }
 }

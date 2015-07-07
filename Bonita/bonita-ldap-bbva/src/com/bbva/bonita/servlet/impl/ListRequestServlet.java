@@ -3,6 +3,7 @@ package com.bbva.bonita.servlet.impl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -72,6 +73,7 @@ public class ListRequestServlet extends HttpServlet {
 			List<ArchivedProcessInstance> listArchivedProcessInstances = archivedProcessInstanceResults.getResult();	
 			
 			List<SolicitudDTO> listaSolicitud = obtenerSolicitudes(listaSolicitudesPendientes, listArchivedProcessInstances, filtro);
+			Collections.sort(listaSolicitud);
 			Integer cantidadSolicitudes = listaSolicitud!=null?listaSolicitud.size():0;
 			logger.log(Level.INFO, "=== CANTIDAD DE SOLICITUDES: " + cantidadSolicitudes);
 			obtenerSalida(listaSolicitud, servletResponse);
@@ -242,7 +244,7 @@ public class ListRequestServlet extends HttpServlet {
 			solicitudDTO.setNroRVGL((valor==null || valor.equals("null"))?"":valor);
 		}else if("producto".compareTo(nombre)==0){
 			solicitudDTO.setProducto((valor==null || valor.equals("null"))?"":valor);
-		}else if("lst_campanias".compareTo(nombre)==0){//campania
+		}else if("campania".compareTo(nombre)==0){//campania lst_campanias
 			solicitudDTO.setCampania((valor==null || valor.equals("null"))?"":valor);
 		}else if("clte_clasificacion".compareTo(nombre)==0){
 			solicitudDTO.setClasificacion_clte((valor==null || valor.equals("null"))?"":valor);
