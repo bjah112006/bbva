@@ -73,9 +73,10 @@ public class RestBPMImpl implements RestBPM{
 		
 		String url = "http://"+HOST+":"+PORT+REST_BPM_WLE_V1_PROCESS +
 				 	  "action=start" +
-				 	  "&bpdId=" + BPD_ID_CUENTA_CORRIENTE_PROCESS +
-				 	  "&snapshotId=" +SNAPSHOP_ID+
-				 	  "&processAppId=" + PROCESS_APP_ID +
+				 	  "&bpdId=" + BPD_ID_CUENTA_CORRIENTE_PROCESS;
+		if (SNAPSHOP_ID != null && !SNAPSHOP_ID.equalsIgnoreCase(""))
+			url = url + "&snapshotId=" +SNAPSHOP_ID;
+		url = url + "&processAppId=" + PROCESS_APP_ID +
 				 	  "&params="+json +
 				 	  "&parts=all"; 
 		
