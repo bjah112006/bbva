@@ -46,4 +46,18 @@ public class ViewPesoDocumentoExpedienteDAOImpl extends GenericDAO<ViewPesoDocum
 		return viewPesoDocumentoExpediente;
 	}
 
+	@Override
+	public List<ViewPesoDocumentoExpediente> findListaPesoDocumentoxExpedientePorEstudio(
+			Integer intIdProducto, Integer intIdTerritorio, Integer intIdTarea,
+			Integer intIdEstudio) {
+		Query query = em.createQuery(
+ 			"select o from ViewPesoDocumentoExpediente o where o.idProducto=:idProd and o.idTerritorio=:idTerr and o.idTarea=:idTar and o.idEstudio=:idEstudio");
+		query.setParameter("idProd", intIdProducto);
+		query.setParameter("idTerr", intIdTerritorio);
+		query.setParameter("idTar", intIdTarea);
+		query.setParameter("idEstudio", intIdEstudio);
+		List<ViewPesoDocumentoExpediente> viewPesoDocumentoExpediente = query.getResultList();
+		return viewPesoDocumentoExpediente;
+	}
+
 }

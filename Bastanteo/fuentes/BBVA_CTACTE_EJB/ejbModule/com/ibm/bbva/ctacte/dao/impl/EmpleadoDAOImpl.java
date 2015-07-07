@@ -80,6 +80,7 @@ public class EmpleadoDAOImpl extends GenericDAO<Empleado, Integer> implements Em
 							"select o from Empleado o where o.codigo = :cod")
 					.setParameter("cod", codigo).getSingleResult();
 		} catch (NoResultException e) {
+			LOG.warn("Empleado con código '"+codigo+"' no existe.");
 			return null;
 		}
 	}
@@ -122,6 +123,22 @@ public class EmpleadoDAOImpl extends GenericDAO<Empleado, Integer> implements Em
 				"and o.id in (select c.id.idEmpleadoFk from Carterizacion c where " +
 				"c.id.idTerritorioFk=:idTerritorio and c.id.idProductoFk=:idProducto) and o.flagActivo = :flagActivo");
 		query.setParameter("idPerfil", idPerfil);
+		query.setParameter("idTerritorio", idTerritorio);
+		query.setParameter("idProducto", idProducto);
+		query.setParameter("flagActivo", "1");
+		List<Empleado> empleados = query.getResultList();
+		return empleados;
+	}
+
+	@Override
+	public List<Empleado> getEmpleadosCarterizacionPorEstudio(int idProducto,
+			int idTerritorio, int idPerfil, int idEstudio) {
+		Query query = em.createQuery("select o from Empleado o where o.perfil.id=:idPerfil " +
+				"and o.estudio.id=:idEstudio " +
+				"and o.id in (select c.id.idEmpleadoFk from Carterizacion c where " +
+				"c.id.idTerritorioFk=:idTerritorio and c.id.idProductoFk=:idProducto) and o.flagActivo = :flagActivo");
+		query.setParameter("idPerfil", idPerfil);
+		query.setParameter("idEstudio", idEstudio);
 		query.setParameter("idTerritorio", idTerritorio);
 		query.setParameter("idProducto", idProducto);
 		query.setParameter("flagActivo", "1");
