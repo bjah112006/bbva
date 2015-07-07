@@ -13,43 +13,7 @@
 	<f:verbatim>
 		<script type="text/javascript">
 		String.prototype.trim = function() {return this.replace(/^\s+|\s+$/g,"")};
-
-		function soloNumeros(e){
-		 if(window.event) // IE
-		    {
-		        charCode = e.keyCode;
-		        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
-		            window.event.returnValue=0;
-		            e.preventDefault();
-		        }
-		    }
-		    else if(e.which) // Netscape/Firefox/Opera
-		    {
-		        charCode = e.which;
-		        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
-		            e.preventDefault();
-		        }
-		    }
-		}
-		function soloNumerosConDecimales(e)
-		{
-		    if(window.event) // IE
-		    {
-		        charCode = e.keyCode;
 		
-		        if (charCode!=46 &#38;&#38; charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
-		            window.event.returnValue=0;
-		            e.preventDefault();
-		        }
-		    }
-		    else if(e.which) // Netscape/Firefox/Opera
-		    {
-		        charCode = e.which;
-		        if (charCode!=46 &#38;&#38; charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
-		            e.preventDefault();
-		        }
-		    }
-		}
 		function validaInputText(e, row) {
 			var tipoDato = $("[id='form:columnasTablaParametricaDTB:"+row+":tipoDatoOculto']").val();
 			if (tipoDato=="STRING") {
@@ -94,7 +58,7 @@
 							value="#{col.valorRegistro}" rendered="#{col.tipoCampoOT}"
 							readonly="#{col.esLlavePrimaria and consultarTabla.modoActualizar}" 
 							disabled="#{col.esLlavePrimaria and consultarTabla.modoActualizar}" ></h:outputText>
-						<h:inputText onkeypress="validaInputText(event, #{consultarTabla.tablaBinding2.rowIndex});" size="39"
+						<h:inputText onkeydown="validaInputText(event, #{consultarTabla.tablaBinding2.rowIndex});" size="39"
 							maxlength="#{(col.longitudMaxima == null || col.longitudMaxima == 0)? 524288 : col.longitudMaxima}" id="valorRegistro2"
 							value="#{col.valorRegistro}" rendered="#{col.tipoCampoIT}"
 							styleClass="caja-texto"

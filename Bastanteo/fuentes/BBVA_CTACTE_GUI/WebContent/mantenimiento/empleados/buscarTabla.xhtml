@@ -3,66 +3,6 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
-		<script type="text/javascript">
-String.prototype.trim = function() {return this.replace(/^\s+|\s+$/g,"")};
-var tipoDato="";
-onload = function() {
-  if (document.getElementById('actualizaTabla:columnasTablaParametricaDTB')!=null){
-    if (!document.getElementsByTagName || !document.createTextNode) return;
-    var rows = document.getElementById('actualizaTabla:columnasTablaParametricaDTB').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-    for (i = 0; i &#60; rows.length; i++) {
-        rows[i].onclick = function() {            
-            var row = this.rowIndex;
-            tipoDato =document.getElementById("actualizaTabla:columnasTablaParametricaDTB:"+row+":tipoDatoOculto").value;           
-            
-        }
-    }
-  }
-}
-function soloNumeros(e){
- if(window.event) // IE
-    {
-        charCode = e.keyCode;
-        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode > 57)) {
-            window.event.returnValue=0;
-        }
-    }
-    else if(e.which) // Netscape/Firefox/Opera
-    {
-        charCode = e.which;
-        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode > 57)) {
-            e.preventDefault();
-        }
-    }
-}
-function soloNumerosConDecimales(e)
-{
-    if(window.event) // IE
-    {
-        charCode = e.keyCode;
-
-        if (charCode!=46 &#38;&#38; charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode > 57)) {
-            window.event.returnValue=0;
-        }
-    }
-    else if(e.which) // Netscape/Firefox/Opera
-    {
-        charCode = e.which;
-        if (charCode!=46 &#38;&#38; charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode > 57)) {
-            e.preventDefault();
-        }
-    }
-}
-function validaInputText(e) {    
-  if (tipoDato=="STRING") {  
-  }else if(tipoDato=="INTEGER" || tipoDato=="SHORT" || tipoDato=="LONG") {
-     soloNumeros(e);
-  }else if(tipoDato=="DOUBLE" || tipoDato=="FLOAT") {
-     soloNumerosConDecimales(e);       
-  }  
-}
-</script>
-
 <h:panelGroup>
 	<h:panelGrid width="100%" border="0" align="center" cellspacing="0">
 		<table width="100%">
@@ -108,7 +48,7 @@ function validaInputText(e) {
 						<h:outputLabel style="width:150px;" for="codEmpleado"
 							value="Cod. Empleado"
 							styleClass="etiqueta" />
-						<h:inputText onkeypress="validaInputText(event);" size="39"
+						<h:inputText size="39"
 							maxlength="7" id="codEmpleado"
 							value="#{buscarEmpleado.codigoEmpleado}"
 							styleClass="caja-texto">

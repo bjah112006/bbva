@@ -81,8 +81,8 @@ public class PieVerificarRealizarBastanteoMB extends AbstractMBean {
 		}
 		iPieVerificarRealizarBastanteo.setVerificarRealizarBastanteo(this);
 		crearListaDevolucion();
+		controlesAlInicio();		
 		expediente=(Expediente)Util.getObjectSession(ConstantesAdmin.EXPEDIENTE_SESION);
-		controlesAlInicio();
 		empleado=(Empleado) Util.getObjectSession(ConstantesAdmin.EMPLEADO_SESION);
 		Motivo motivo=new Motivo();
 		expediente.setMotivo(motivo);

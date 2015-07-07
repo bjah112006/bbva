@@ -1,0 +1,123 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+	
+	<ui:define name="content">
+		<table class="bloque">
+			<tr>
+				<td>
+					<!-- TITULO -->
+					<h:panelGroup styleClass="titulo">
+						<h:outputText value="Asignación de Carga de Estudio de Abogados" /><h:outputText value=" " />
+					</h:panelGroup>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<!-- RESULTADO -->
+					<h:panelGroup style="overflow-x: auto; width: 750px;height: 440px">
+						<table width="100%" border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td class="textotitulo">
+									<h:dataTable border="1" styleClass="tablaTask" style="border-collapse:collapse;" 
+										columnClasses="text,text,text" headerClass="headerClass headerTabla1"
+										rowClasses="uno,dos" id="idTablaEstudioAbogado"
+										value="#{asignarCargaEstudio.lstEstudioAbogado}" var="item" footerClass="fondo">
+										
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="Id" styleClass="tabla-titulo" />
+											</f:facet>
+											<h:outputText value="#{item.id}" styleClass="tabla-campo-texto-padding" />
+										</h:column>
+										
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="Descripción" styleClass="tabla-titulo" />
+											</f:facet>
+											<h:outputText value="#{item.descripcion}" styleClass="tabla-campo-texto-padding" />
+										</h:column>
+										
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="Porcentaje Carga" styleClass="tabla-titulo" />
+											</f:facet>
+											<h:inputText value="#{item.porcentajeCarga}"
+												styleClass="caja-texto" size="10"
+												style="text-align: right;"
+												onkeydown="soloNumeros(event)" />
+											<h:outputText>%</h:outputText>
+										</h:column>
+										
+									</h:dataTable>
+								</td>
+							</tr>
+		
+							<tr>
+								<td class="textotitulo">
+									<h:message for="idTablaEstudioAbogado" />
+								</td>
+							</tr>
+						</table>
+					</h:panelGroup>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<span class="etiqueta" style="margin-bottom:10px;" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<!-- BOTONES -->
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td align="left">
+								<h:commandButton id="guardar" action="#{asignarCargaEstudio.guardar}"
+									value="Guardar" styleClass="boton"
+									disabled="#{empty asignarCargaEstudio.lstEstudioAbogado}" />
+								<h:commandButton id="cancelar" action="#{asignarCargaEstudio.cancelar}"
+									value="Cancelar" styleClass="boton" />
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<!-- MENSAJE -->
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td>
+								<h:outputText
+									value="No existen estudios de abogado registrados."
+									styleClass="mensaje-info"
+									rendered="#{empty asignarCargaEstudio.lstEstudioAbogado}" />
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<!-- MENSAJE ERROR -->
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td>
+								<h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+									<h:messages styleClass="mensaje-error" globalOnly="true" showDetail="true" />
+								</h:panelGroup>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</ui:define>
+</ui:composition>

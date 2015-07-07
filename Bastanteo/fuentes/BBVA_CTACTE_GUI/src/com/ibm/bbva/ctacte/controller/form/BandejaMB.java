@@ -33,6 +33,7 @@ import com.ibm.bbva.ctacte.bean.EstadoTarea;
 import com.ibm.bbva.ctacte.bean.EstudioAbogado;
 import com.ibm.bbva.ctacte.bean.Expediente;
 import com.ibm.bbva.ctacte.bean.ExpedienteTarea;
+import com.ibm.bbva.ctacte.bean.ExpedienteTareaProceso;
 import com.ibm.bbva.ctacte.bean.Historial;
 import com.ibm.bbva.ctacte.bean.Oficina;
 import com.ibm.bbva.ctacte.bean.Operacion;
@@ -49,6 +50,7 @@ import com.ibm.bbva.ctacte.dao.EstadoTareaDAO;
 import com.ibm.bbva.ctacte.dao.EstudioAbogadoDAO;
 import com.ibm.bbva.ctacte.dao.ExpedienteDAO;
 import com.ibm.bbva.ctacte.dao.ExpedienteTareaDAO;
+import com.ibm.bbva.ctacte.dao.ExpedienteTareaProcesoDAO;
 import com.ibm.bbva.ctacte.dao.HistorialDAO;
 import com.ibm.bbva.ctacte.dao.OficinaDAO;
 import com.ibm.bbva.ctacte.dao.OperacionDAO;
@@ -146,6 +148,8 @@ public class BandejaMB extends AbstractTablaMBean {
 	private ClienteDAO clienteDAO;
 	@EJB
 	private ExpedienteTareaDAO expedienteTareaDAO;
+	@EJB
+	private ExpedienteTareaProcesoDAO expTareaProcesoDAO;
 
 	public BandejaMB() {
 	}
@@ -1454,11 +1458,22 @@ public class BandejaMB extends AbstractTablaMBean {
 
 			LOG.info("***********REASIGNAR EXPEDIENTE********");
 			LOG.info("***********EmpleadoDAO().findByCodigo(codUsuario)********");
+			Empleado de = empleadoDAO.findByCodigo(expedienteCC.getCodUsuarioActual());
 			Empleado a = empleadoDAO.findByCodigo(codUsuario);
 			RemoteUtils bandeja = new RemoteUtils();
 			bandeja.transferirTarea(expedienteCC.getCodUsuarioActual(),codUsuario,tkiid);
 			tareaBandejaVO.getExpedienteCC().setCodUsuarioActual(codUsuario);
 			tareaBandejaVO.getExpedienteCC().setNomUsuarioActual(a.getNombres().trim()+" "+a.getApepat().trim()+" "+a.getApemat().trim());
+			
+			// se actualiza la carga de trabajo al nuevo usuario
+			Integer idExpediente = Integer.parseInt(tareaBandejaVO.getExpediente());
+			ExpedienteTareaProceso expTarProc = expTareaProcesoDAO.findExpedienteTareaProceso(idExpediente, de.getId(), idTarea);
+			if (expTarProc != null) {
+				expTarProc.setIdEmpleado(a.getId());
+				expTareaProcesoDAO.update(expTarProc);
+			} else {
+				LOG.warn("No existe carga de trabajo: (idExpediente={}, idEmpleado={}, idTarea={})", new Object[]{idExpediente, de.getId(), idTarea});
+			}
 		}	
 		
 		LOG.info("tareaBandejaVO.getOperacion(): " + tareaBandejaVO.getOperacion());

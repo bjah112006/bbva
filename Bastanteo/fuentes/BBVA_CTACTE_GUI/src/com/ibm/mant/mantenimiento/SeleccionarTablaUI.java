@@ -93,6 +93,8 @@ public class SeleccionarTablaUI extends AbstractMBean{
 				
 				// Retornar vista y terminar método
 				return "asignacionPerfiles/busqueda?faces-redirect=true";
+			} else if (nombreTabla.equals("TBL_CE_IBM_ESTUDIO_ABOGADO_CC_2")) {
+				return "cargaEstudio/asignarCarga?faces-redirect=true";
 			}
 		}
 		

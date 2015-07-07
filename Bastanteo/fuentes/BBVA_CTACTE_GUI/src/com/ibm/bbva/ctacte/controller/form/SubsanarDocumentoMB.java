@@ -149,9 +149,14 @@ public class SubsanarDocumentoMB extends AbstractMBean
 		// Le quito las observaciones y flag rechazado a los documentos antes de reenviar
 		List<DocumentoExp> listaDocs = digitaliceDocumentacion.obtenerDocumentosExpMemoria();
 		for (DocumentoExp de : listaDocs) {
-			de.setMotivo(null);
-			de.setFlagRechazado(null);
-			docdao.update(de);
+			if (de.getDocumento().getCodigoDocumento().equals(ConstantesBusiness.CODIGO_DOCUMENTO_OFICIAL_IDENTIDAD)
+					|| de.getDocumento().getCodigoDocumento().equals(ConstantesBusiness.CODIGO_DOCUMENTO_FICHA_REGISTRO_FIRMAS)) {
+				continue; // los documentos No Jurídicos no deben poder adjuntarse ni eliminarse en Subsanación de Documentos
+			} else {
+				de.setMotivo(null);
+				de.setFlagRechazado(null);
+				docdao.update(de);
+			}
 		}
 		
 		// falta grabar los documentos escaneados

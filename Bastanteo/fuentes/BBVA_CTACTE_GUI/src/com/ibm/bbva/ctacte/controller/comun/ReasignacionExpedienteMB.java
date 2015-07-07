@@ -19,6 +19,7 @@ import pe.ibm.bpd.RemoteUtils;
 
 import com.ibm.bbva.ctacte.bean.Empleado;
 import com.ibm.bbva.ctacte.bean.Expediente;
+import com.ibm.bbva.ctacte.bean.ExpedienteTareaProceso;
 import com.ibm.bbva.ctacte.bean.Motivo;
 import com.ibm.bbva.ctacte.bean.Perfil;
 import com.ibm.bbva.ctacte.bean.Tarea;
@@ -27,6 +28,7 @@ import com.ibm.bbva.ctacte.constantes.ConstantesBusiness;
 import com.ibm.bbva.ctacte.controller.AbstractMBean;
 import com.ibm.bbva.ctacte.controller.ConstantesAdmin;
 import com.ibm.bbva.ctacte.dao.EmpleadoDAO;
+import com.ibm.bbva.ctacte.dao.ExpedienteTareaProcesoDAO;
 import com.ibm.bbva.ctacte.dao.MotivoDAO;
 import com.ibm.bbva.ctacte.dao.TareaDAO;
 import com.ibm.bbva.ctacte.dao.TareasReasigDAO;
@@ -66,6 +68,8 @@ public class ReasignacionExpedienteMB extends AbstractMBean {
 	private TareaDAO tareaDAO;
 	@EJB
 	private TareasReasigDAO tareaReasigDAO;
+	@EJB
+	private ExpedienteTareaProcesoDAO expTareaProcesoDAO;
 
 	public ReasignacionExpedienteMB() {
 	}
@@ -163,13 +167,15 @@ public class ReasignacionExpedienteMB extends AbstractMBean {
 		
 		ExpedienteCC expedienteCC = (ExpedienteCC) Util.getObjectSession(ConstantesAdmin.EXPEDIENTE_PROCESO_SESION);
 		
-		String numeroTarea = (expedienteCC.getNumeroTarea() == null?"0":expedienteCC.getNumeroTarea());
+		//String numeroTarea = (expedienteCC.getNumeroTarea() == null?"0":expedienteCC.getNumeroTarea());
+		String numeroTarea = (expedienteCC.getDatosFlujoCtaCte().getIdTarea() == null?"0":expedienteCC.getDatosFlujoCtaCte().getIdTarea());
 		int idTarea = Integer.parseInt(numeroTarea);
 		Tarea tarea = tareaDAO.findById(idTarea);
 		
 		Expediente expediente = (Expediente) Util.getObjectSession(ConstantesAdmin.EXPEDIENTE_SESION);
 		
-		Empleado de = empleadoDAO.load(expediente.getEmpleado().getId());
+		//Empleado de = empleadoDAO.load(expediente.getEmpleado().getId());
+		Empleado de = empleadoDAO.findByCodigo(expedienteCC.getCodUsuarioActual());
 		//+POR SOLICITUD BBVA+//+POR SOLICITUD BBVA+System.out..println("Usuario de.."+de.getId());
 		Empleado a = empleadoDAO.findByCodigo(codUsuario);
 		//expedienteCC.setIdUsuarioActual(a.getId()+"");
@@ -221,6 +227,16 @@ public class ReasignacionExpedienteMB extends AbstractMBean {
 		tareaReasig.setMotivo(motivo);
 		
 		tareaReasigDAO.save(tareaReasig);
+		
+		// se actualiza la carga de trabajo al nuevo usuario
+		ExpedienteTareaProceso expTarProc = expTareaProcesoDAO.findExpedienteTareaProceso(expediente.getId(), de.getId(), idTarea);
+		if (expTarProc != null) {
+			expTarProc.setIdEmpleado(a.getId());
+			expTareaProcesoDAO.update(expTarProc);
+		} else {
+			LOG.warn("No existe carga de trabajo: (idExpediente={}, idEmpleado={}, idTarea={})", new Object[]{expediente.getId(), de.getId(), idTarea});
+		}
+		
 		//		managedBean.aprobarDocumentacion(accion);
 		redirectAction("../bandeja/bandeja");
 		

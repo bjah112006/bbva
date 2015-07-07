@@ -170,6 +170,7 @@ public class DocumentoExpWrapper1 implements Serializable {
 		boolean esTipoVisorAvanzado = ConstantesBusiness.TIPO_VISOR_AVANZADO.equals(documento.getTipoVisor());
 		boolean estaEscaneado = ConstantesBusiness.FLAG_ESCANEADO.equals(documentoExp.getFlagEscaneado());
 		boolean estaEnContent = documentoCM != null;
+		LOG.info("estaEscaneado : "+estaEscaneado);
 		LOG.info("estaEnContent : "+estaEnContent);
 		LOG.info("esTipoVisorAvanzado : "+esTipoVisorAvanzado);
 		if (estaEnContent && esTipoVisorAvanzado) {

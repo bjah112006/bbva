@@ -5,26 +5,6 @@
 	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
 	
 	<ui:define name="content">
-		<f:verbatim>
-			<script type="text/javascript">
-				function soloNumeros(e){
-				 if(window.event) // IE
-				    {
-				        charCode = e.keyCode;
-				        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
-				            window.event.returnValue=0;
-				        }
-				    }
-				    else if(e.which) // Netscape/Firefox/Opera
-				    {
-				        charCode = e.which;
-				        if (charCode &#62; 31 &#38;&#38; (charCode &#60; 48 || charCode &#62; 57)) {
-				            e.preventDefault();
-				        }
-				    }
-				}
-			</script>
-		</f:verbatim>
 		<table class="bloque">
 			<tr>
 				<td>
@@ -58,7 +38,7 @@
 													</td>
 													<td style="text-align: left;">
 														<h:inputText id="idExpediente"
-															onkeypress="soloNumeros(event);" size="39"
+															onkeydown="soloNumeros(event);" size="39"
 															value="#{obtenerParticipes.idExpediente}"
 															styleClass="caja-texto" />
 													</td>

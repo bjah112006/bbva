@@ -237,7 +237,7 @@ public class DigitaliceDocumentacionMB extends AbstractMBean {
 			mostApplet=true;
 			mostNroPagina=false;
 			
-			// Fix incidencia observación en subsanar documentos
+			// Fix incidencia observación en subsanar firmas
 			Historial historial = historialDAO.findUltimaTarea(expediente.getId(), ConstantesBusiness.ID_TAREA_VERIFICAR_CALIDAD_FIRMAS);
 			if (historial != null) {
 				strObservacionesHistorial = historial.getObservaciones();
@@ -390,7 +390,7 @@ public class DigitaliceDocumentacionMB extends AbstractMBean {
 		} else {
 			soloLectTipoPJ = false;
 		}
-		if ((codTipoPJ == null) || (codProd == null)) {
+		if (codTipoPJ == null) { //codProd puede ser null si la operación es revocatoria, subsanación o cambio de firmas
 			mostCasoNegocio = false;
 			listaDocumentoExp = Collections.EMPTY_LIST;
 			crearTrama();
@@ -577,15 +577,15 @@ public class DigitaliceDocumentacionMB extends AbstractMBean {
 		ejecutoCobroComision = ConstantesBusiness.FLAG_NO_EJECUTO_COBRO_COMISION;
 		int escaneados = 0;
 		for (DocumentoExpWrapper1 dew1 : listaDocumentoExp) {
-			LOG.info("dew1.getDocumentoExp().getFlagEscaneado() : ", dew1.getDocumentoExp().getFlagEscaneado());
-			LOG.info("dew1.getDocumentoExp().getDocumento().getDescripcion() : ", dew1.getDocumentoExp().getDocumento().getDescripcion());
+			LOG.info("dew1.getDocumentoExp().getFlagEscaneado() : "+ dew1.getDocumentoExp().getFlagEscaneado());
+			LOG.info("dew1.getDocumentoExp().getDocumento().getDescripcion() : "+ dew1.getDocumentoExp().getDocumento().getDescripcion());
 			boolean estaEscaneado = ConstantesBusiness.FLAG_ESCANEADO.equals(dew1.getDocumentoExp().getFlagEscaneado());
 			if (estaEscaneado) {
 				if (!esPrimeroD){
 					descarga.append(";");
 				}
 				String codDoc = dew1.getDocumentoExp().getDocumento().getCodigoDocumento();
-				LOG.info("CodigoDocumento : ", codDoc);
+				LOG.info("CodigoDocumento : "+ codDoc);
 				if (ConstantesBusiness.CODIGO_DOCUMENTO_VOUCHER_PAGO_COMISION_BASTANTEO.equals(codDoc)) {
 					ejecutoCobroComision = ConstantesBusiness.FLAG_EJECUTO_COBRO_COMISION;
 				}
@@ -642,8 +642,8 @@ public class DigitaliceDocumentacionMB extends AbstractMBean {
 		ejecutoCobroComision = ConstantesBusiness.FLAG_NO_EJECUTO_COBRO_COMISION;
 		int escaneados = 0;
 		for (DocumentoExpWrapper1 dew1 : listaDocumentoExp) {
-			LOG.info("dew1.getDocumentoExp().getFlagEscaneado() : ", dew1.getDocumentoExp().getFlagEscaneado());
-			LOG.info("dew1.getDocumentoExp().getDocumento().getDescripcion() : ", dew1.getDocumentoExp().getDocumento().getDescripcion());
+			LOG.info("dew1.getDocumentoExp().getFlagEscaneado() : "+ dew1.getDocumentoExp().getFlagEscaneado());
+			LOG.info("dew1.getDocumentoExp().getDocumento().getDescripcion() : "+ dew1.getDocumentoExp().getDocumento().getDescripcion());
 			
 			if (dew1.getDocumentoExp().getDocumento().getCodigoDocumento().equals(ConstantesBusiness.CODIGO_DOCUMENTO_OFICIAL_IDENTIDAD)
 					|| dew1.getDocumentoExp().getDocumento().getCodigoDocumento().equals(ConstantesBusiness.CODIGO_DOCUMENTO_FICHA_REGISTRO_FIRMAS)) {
@@ -666,7 +666,7 @@ public class DigitaliceDocumentacionMB extends AbstractMBean {
 					descarga.append(";");
 				}
 				String codDoc = dew1.getDocumentoExp().getDocumento().getCodigoDocumento();
-				LOG.info("CodigoDocumento : ", codDoc);
+				LOG.info("CodigoDocumento : "+ codDoc);
 				if (ConstantesBusiness.CODIGO_DOCUMENTO_VOUCHER_PAGO_COMISION_BASTANTEO.equals(codDoc)) {
 					ejecutoCobroComision = ConstantesBusiness.FLAG_EJECUTO_COBRO_COMISION;
 				}

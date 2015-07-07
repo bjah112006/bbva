@@ -226,11 +226,7 @@
 			<h:panelGrid rendered="#{digitaliceDocumentacion.mostObsGen}">
 				<h:outputText value="Observaciones Generales: " />
 				<h:outputText
-					value="#{digitaliceDocumentacion.expediente.observaciones} "
-					rendered="#{not empty digitaliceDocumentacion.expediente.observaciones}" />
-				<h:outputText
-					value="#{digitaliceDocumentacion.strObservacionesHistorial} "
-					rendered="#{empty digitaliceDocumentacion.expediente.observaciones}" />
+					value="#{digitaliceDocumentacion.strObservacionesHistorial}" />
 				<h:outputText value=" " />
 			</h:panelGrid>
 			<h:panelGrid rendered="#{digitaliceDocumentacion.mostFirmas}">

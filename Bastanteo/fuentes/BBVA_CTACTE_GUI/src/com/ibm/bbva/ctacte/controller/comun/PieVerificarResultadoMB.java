@@ -28,6 +28,7 @@ import com.ibm.bbva.ctacte.controller.ConstantesAdmin;
 import com.ibm.bbva.ctacte.controller.comun.interf.IPieVerificarResultado;
 import com.ibm.bbva.ctacte.controller.form.VerificarResultadoTramiteMB;
 import com.ibm.bbva.ctacte.dao.ExpedienteDAO;
+import com.ibm.bbva.ctacte.dao.ExpedienteTareaProcesoDAO;
 import com.ibm.bbva.ctacte.util.AyudaExpedienteCC;
 import com.ibm.bbva.ctacte.util.Util;
 
@@ -45,6 +46,8 @@ public class PieVerificarResultadoMB extends AbstractMBean{
 	private String opcionResultado;
 	@EJB
 	private ExpedienteDAO expedienteDAO;
+	@EJB
+	private ExpedienteTareaProcesoDAO expedienteTareaProcesoDAO;
 	
 	@PostConstruct
 	public void iniciar(){
@@ -105,6 +108,7 @@ public class PieVerificarResultadoMB extends AbstractMBean{
 		LOG.info("fecha fin" + expediente.getFechaFin());
 		// fin del seteo de la fecha fin del expediente
 		expediente = expedienteDAO.update(expediente);
+		expedienteTareaProcesoDAO.eliminarAnterioresByIdExp(expediente.getId());
 		
 		AyudaExpedienteCC ayudaExpedienteCC = new AyudaExpedienteCC();
 		ExpedienteCC expedienteCC = ayudaExpedienteCC.copiarDatosGenerico();
@@ -144,6 +148,7 @@ public class PieVerificarResultadoMB extends AbstractMBean{
 		// fin del seteo de la fecha fin del expediente
 		expediente = expedienteDAO.update(expediente);
 		LOG.info("Actualizo expediente");
+		expedienteTareaProcesoDAO.eliminarAnterioresByIdExp(expediente.getId());
 		//+POR SOLICITUD BBVA+//+POR SOLICITUD BBVA+System.out..println("Actualizo expediente");
 		AyudaExpedienteCC ayudaExpedienteCC = new AyudaExpedienteCC();
 		ExpedienteCC expedienteCC = ayudaExpedienteCC.copiarDatosGenerico();

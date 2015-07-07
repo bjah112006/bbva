@@ -26,3 +26,26 @@ function errorAjaxWebSeal(data) {
 		location.href = $("[id='form:paginaInicio']").val();
 	}
 }
+
+function soloNumeros(e) {
+	e = e || window.event;
+	var charCode = (e.which) ? e.which : e.keyCode;
+	if (!((charCode >= 48 && charCode <= 57) || (charCode >= 96 && charCode <= 105) || charCode == 8 || charCode == 9 || charCode == 37 || charCode == 39 || charCode == 46)) {
+		if (e.preventDefault) {
+			e.preventDefault();
+		} else {
+			e.returnValue = false;
+		}
+	}
+}
+function soloNumerosConDecimales(e) {
+	e = e || window.event;
+	var charCode = (e.which) ? e.which : e.keyCode;
+	if (!((charCode >= 48 && charCode <= 57) || (charCode >= 96 && charCode <= 105) || charCode == 190 || charCode == 110 || charCode == 8 || charCode == 9 || charCode == 37 || charCode == 39 || charCode == 46)) {
+		if (e.preventDefault) {
+			e.preventDefault();
+		} else {
+			e.returnValue = false;
+		}
+	}
+}
