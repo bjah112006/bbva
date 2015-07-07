@@ -32,6 +32,7 @@ import com.ibm.bbva.ctacte.bean.AuditoriaCriteriosSupervision;
 import com.ibm.bbva.ctacte.bean.CobroComision;
 import com.ibm.bbva.ctacte.bean.DocumentoExp;
 import com.ibm.bbva.ctacte.bean.Empleado;
+import com.ibm.bbva.ctacte.bean.EstudioAbogado;
 import com.ibm.bbva.ctacte.bean.Expediente;
 import com.ibm.bbva.ctacte.bean.ExpedienteTarea;
 import com.ibm.bbva.ctacte.bean.Participe;
@@ -51,6 +52,7 @@ import com.ibm.bbva.ctacte.dao.DocumentoExpDAO;
 import com.ibm.bbva.ctacte.dao.EmpleadoDAO;
 import com.ibm.bbva.ctacte.dao.EstadoExpedienteDAO;
 import com.ibm.bbva.ctacte.dao.EstadoTareaDAO;
+import com.ibm.bbva.ctacte.dao.EstudioAbogadoDAO;
 import com.ibm.bbva.ctacte.dao.ExpedienteDAO;
 import com.ibm.bbva.ctacte.dao.OperacionDAO;
 import com.ibm.bbva.ctacte.dao.ParticipeDAO;
@@ -88,6 +90,7 @@ public class CEProcessService {
 	private EstadoTareaDAO estadoTareaDAO;
 	private TareaDAO tareaDAO;
 	private DocumentoExpDAO documentoExpDAO;
+	private EstudioAbogadoDAO estudioAbogadoDAO;
 	
 	public CEProcessService() throws NamingException {
 		super();
@@ -109,6 +112,7 @@ public class CEProcessService {
 		estadoTareaDAO = EJBLocator.getEstadoTareaDAO();
 		tareaDAO = EJBLocator.getTareaDAO();
 		documentoExpDAO = EJBLocator.getDocumentoExpDAO();
+		estudioAbogadoDAO = EJBLocator.getEstudioAbogadoDAO();
 	}
 	
 	public Integer dentroPlazoSubsanacion(Date dtFechaRegistroExpediente, Date dtFechaUltimoBastanteo){
@@ -188,19 +192,17 @@ public class CEProcessService {
 	}
 	
 	public EmpleadoCE obtenerEmpleado(Integer intIdExpediente, Integer intIdProducto, Integer intIdTerritorio, Integer intIdTarea){
+		LOG.info("obtenerEmpleado()");
+		LOG.info("IdExpediente: "+intIdExpediente);
+		LOG.info("IdProducto: "+intIdProducto);
+		LOG.info("IdTerritorio: "+intIdTerritorio);
+		LOG.info("IdTarea: "+intIdTarea);
+		
 		// Si la Tarea es "Verificar y Realizar Bastanteo" y es nueva modificatoria se utiliza el perfil "Pool de Migracion". 
 		if (intIdTarea.intValue() == ConstantesBusiness.ID_TAREA_VERIFICAR_REALIZAR_BASTANTEO) {
 			Expediente expediente = expedienteDAO.load(intIdExpediente);
 			LOG.info("CODIGO OPERACION: "+expediente.getOperacion().getCodigoOperacion());
 			if (ConstantesBusiness.CODIGO_MODIFICATORIA_BASTANTEO.equals(expediente.getOperacion().getCodigoOperacion())) {
-//				List<Expediente> lstExpedientesAntiguos = expedienteDAO
-//						.findByCodigoCentralSinIdExpediente(expediente
-//								.getCliente().getCodigoCentral(), expediente
-//								.getId());
-//				LOG.info("# de expedienes: "+lstExpedientesAntiguos.size());
-//				if (lstExpedientesAntiguos == null || lstExpedientesAntiguos.isEmpty()) {
-//					intIdTarea = ConstantesBusiness.ID_TAREA_VERIFICAR_REALIZAR_BASTANTEO_2;
-//				}
 				LOG.info("FLAG_EXP_MIGRADO: "+expediente.getCliente().getFlagExpMigrado());
 				if (!"1".equals(expediente.getCliente().getFlagExpMigrado())) {
 					intIdTarea = ConstantesBusiness.ID_TAREA_VERIFICAR_REALIZAR_BASTANTEO_2;
@@ -209,119 +211,198 @@ public class CEProcessService {
 		}
 		
 		TareaPerfil tareaPerfil = tareaPerfilDAO.findTareaPerfilxTarea(intIdTarea);
-		
 		Integer intIdPerfil = tareaPerfil.getPerfil().getId();
-		//+POR SOLICITUD BBVA+System.out..println("intIdPerfil: " + intIdPerfil);
 		
 		LOG.info("ID PERFIL: "+intIdPerfil);
+		
+		Integer intTipoBalanceo=0;
+		String strConsiderarEstudio;
+		
+		PerfilBalanceo perfilBalanceo = new PerfilBalanceo();
+		perfilBalanceo = perfilBalanceoDAO.findObtenerTipoBalanceo(intIdPerfil);
+		intTipoBalanceo = perfilBalanceo.getIdTipoBalanceo();
+		strConsiderarEstudio = perfilBalanceo.getConsiderarEstudio();
+		
+		LOG.info("intTipoBalanceo: "+intTipoBalanceo);
+		LOG.info("strConsiderarEstudio: "+strConsiderarEstudio);
 		
 		ProcesoUtil procesoUtil = new ProcesoUtil();
 		
 		try{
-			EmpleadoCE empleadoCE = new EmpleadoCE();
-			ViewNumeroExpedientesEmpleado viewNumeroExpedientesEmpleado = new ViewNumeroExpedientesEmpleado();
+			EmpleadoCE empleadoCE = null;
+			Integer intIdEstudio = 0;
 			
-			ViewPesoDocumentoExpediente viewPesoDocumentoExpediente = new ViewPesoDocumentoExpediente();
-	
-			ViewPesoParticipeExpediente viewPesoParticipeExpediente = new ViewPesoParticipeExpediente();
+			//Se obtendrá el Estudio de Abogado de acuerdo a la probabilidad de balanceo
+			if (strConsiderarEstudio != null && strConsiderarEstudio.equals("1")) {
+				List<EstudioAbogado> lstEstudios = estudioAbogadoDAO.findListaEstudiosBalanceo();
+				if (lstEstudios != null && lstEstudios.size() > 0) {
+					Random rand = new Random();
+					Integer p = rand.nextInt(100)+1; // de 1 a 100
+					LOG.info("Número aleatorio obtenido: "+p);
+					Integer probabilidadAcumulada = 0;
+					for (EstudioAbogado obj : lstEstudios) {
+						probabilidadAcumulada += obj.getPorcentajeCarga();
+						if (p <= probabilidadAcumulada) {
+							intIdEstudio = obj.getId();
+							LOG.info("intIdEstudio: "+intIdEstudio);
+							break;
+						}
+					}
+				} else {
+					LOG.warn("No hay estudios de abogado con porcentaje de carga mayor que cero.");
+				}
+			}
 			
-			Integer intTipoBalanceo=0;
+			if (intIdEstudio > 0) {
+				LOG.info("Balanceo tomando en cuenta el estudio del empleado.");
+				//Verificar sin existen empleados sin expedientes asignados	y que pertenezcan al estudio de abogados
+				int intNumEmpleadosSinExpedientes;
+				List<ViewNumeroExpedientesEmpleado> listEmpleadoSinExpedientes = viewNumeroExpedientesEmpleadoDAO.findListaEmpleadosSinExpedientesPorEstudio(intIdProducto, intIdTerritorio, intIdTarea, intIdEstudio);
+				intNumEmpleadosSinExpedientes = listEmpleadoSinExpedientes.size();
+				if (intNumEmpleadosSinExpedientes > 0){
+					Random random = new Random ();
+					int indice = random.nextInt(intNumEmpleadosSinExpedientes);
+					empleadoCE = procesoUtil.copiarEmpleadoCE(listEmpleadoSinExpedientes.get(indice));
+					LOG.info("Se obtuvo empleado aleatorio sin expedientes asignados.");
+				} else {
+					switch (intTipoBalanceo) {
+						case 1: 
+							List<ViewNumeroExpedientesEmpleado> listnumExpedientesxEmpleado = viewNumeroExpedientesEmpleadoDAO.findListaNumeroExpedientesxEmpleadoPorEstudio(intIdProducto, intIdTerritorio, intIdTarea, intIdEstudio);
+							if (listnumExpedientesxEmpleado.size() > 0) {
+								empleadoCE = procesoUtil.copiarEmpleadoCE(listnumExpedientesxEmpleado.get(0));
+								LOG.info("Se obtuvo empleado con menor número de expedientes.");
+							} else {
+								LOG.warn("No se pudo obtener empleado con menor número de expedientes.");
+							}
+							break;
+						case 2:
+							List<ViewPesoDocumentoExpediente> listViewPesoDocumentoExpediente = viewPesoDocumentoExpedienteDAO.findListaPesoDocumentoxExpedientePorEstudio(intIdProducto, intIdTerritorio, intIdTarea, intIdEstudio);
+							if (listViewPesoDocumentoExpediente.size() > 0) {
+								empleadoCE = procesoUtil.copiarEmpleadoCE(listViewPesoDocumentoExpediente.get(0));
+								LOG.info("Se obtuvo empleado con menor peso de documentos.");
+							} else {
+								LOG.warn("No se pudo obtener empleado con menor peso de documentos.");
+							}
+							break;
+						case 3:
+							List<ViewPesoParticipeExpediente> listViewPesoParticipeExpediente = viewPesoParticipeExpedienteDAO.findListaPesoParticipesxExpedientePorEstudio(intIdProducto, intIdTerritorio, intIdTarea, intIdEstudio);
+							if (listViewPesoParticipeExpediente.size() > 0) {
+								empleadoCE = procesoUtil.copiarEmpleadoCE(listViewPesoParticipeExpediente.get(0));
+								LOG.info("Se obtuvo empleado con menor peso de partícipes.");
+							} else {
+								LOG.warn("No se pudo obtener empleado con menor peso de partícipes.");
+							}
+							break;
+						default:
+							LOG.info("El perfil no tiene un tipo de balanceo válido.");
+							break;
+					}
+				}
+				if (empleadoCE == null) {
+					List<Empleado> empleados = empleadoDAO
+							.getEmpleadosCarterizacionPorEstudio(
+									intIdProducto.intValue(),
+									intIdTerritorio.intValue(),
+									intIdPerfil.intValue(),
+									intIdEstudio.intValue());
+					if (empleados.size() > 0) {
+						int numEmp = empleados.size();
+						Random random = new Random ();
+						Empleado empleado = empleados.get(random.nextInt(numEmp));
+						empleadoCE = procesoUtil.copiarEmpleadoCE(empleado, intIdPerfil, intIdProducto, intIdTarea, intIdTerritorio);
+						LOG.info("Se obtuvo empleado aleatorio que está carterizado.");
+					} else {
+						LOG.warn("No se pudo obtener empleado aleatorio que esté carterizado.");
+					}
+				}
+				if (empleadoCE != null) {
+					//Asignar Carga de trabajo
+					LOG.info("empleadoCE.getIdEmpleado(): " + empleadoCE.getIdEmpleado());
+					LOG.info("empleadoCE.getCodEmpleado(): " + empleadoCE.getCodEmpleado());
+					return empleadoCE;
+				} else {
+					LOG.warn("Falló el balanceo considerando el Estudio de Abogado. Se reintentará con el balanceo normal.");
+				}
+			}
 			
-			PerfilBalanceo perfilBalanceo = new PerfilBalanceo();
-			perfilBalanceo = perfilBalanceoDAO.findObtenerTipoBalanceo(intIdPerfil);
-			intTipoBalanceo = perfilBalanceo.getIdTipoBalanceo();
-			
-			//+POR SOLICITUD BBVA+System.out..println("intTipoBalanceo: " + intTipoBalanceo);
-			LOG.info("intTipoBalanceo: "+intTipoBalanceo);
-			
-			//Verificar sin existen empleados sin expedientes asignados		
+			LOG.info("Balanceo normal (sin tomar en cuenta el estudio del empleado).");
+			//Verificar sin existen empleados sin expedientes asignados
 			int intNumEmpleadosSinExpedientes;
 			List<ViewNumeroExpedientesEmpleado> listEmpleadoSinExpedientes = viewNumeroExpedientesEmpleadoDAO.findListaEmpleadosSinExpedientes(intIdProducto, intIdTerritorio, intIdTarea);
 			intNumEmpleadosSinExpedientes = listEmpleadoSinExpedientes.size();
 			if (intNumEmpleadosSinExpedientes > 0){
-				int indice = (int) Math.floor(Math.random()*(intNumEmpleadosSinExpedientes-1));
-				viewNumeroExpedientesEmpleado = listEmpleadoSinExpedientes.get(indice);
-				empleadoCE = procesoUtil.copiarEmpleadoCE(viewNumeroExpedientesEmpleado);
-				//Asignar Carga de trabajo
-				//+POR SOLICITUD BBVA+System.out..println("ObtenerEmpleado");
-				//+POR SOLICITUD BBVA+System.out..println("intIdExpediente: " + intIdExpediente);
-				//+POR SOLICITUD BBVA+System.out..println("empleadoCE.getIdEmpleado(): " + empleadoCE.getIdEmpleado());
-				//+POR SOLICITUD BBVA+System.out..println("intIdTarea: " + intIdTarea);
-				Integer resultado = procesoUtil.grabarEmpleadoExpedienteTareaProceso(intIdExpediente,empleadoCE.getIdEmpleado(),intIdTarea);
-				return empleadoCE;
+				Random random = new Random ();
+				int indice = random.nextInt(intNumEmpleadosSinExpedientes);
+				empleadoCE = procesoUtil.copiarEmpleadoCE(listEmpleadoSinExpedientes.get(indice));
+				LOG.info("Se obtuvo empleado aleatorio sin expedientes asignados.");
+			} else {
+				switch (intTipoBalanceo) {
+					case 1: 
+						List<ViewNumeroExpedientesEmpleado> listnumExpedientesxEmpleado = viewNumeroExpedientesEmpleadoDAO.findListaNumeroExpedientesxEmpleado(intIdProducto, intIdTerritorio, intIdTarea);
+						if (listnumExpedientesxEmpleado.size() > 0) {
+							empleadoCE = procesoUtil.copiarEmpleadoCE(listnumExpedientesxEmpleado.get(0));
+							LOG.info("Se obtuvo empleado con menor número de expedientes.");
+						} else {
+							LOG.warn("No se pudo obtener empleado con menor número de expedientes.");
+						}
+						break;
+					case 2:
+						List<ViewPesoDocumentoExpediente> listViewPesoDocumentoExpediente = viewPesoDocumentoExpedienteDAO.findListaPesoDocumentoxExpediente(intIdProducto, intIdTerritorio, intIdTarea);
+						if (listViewPesoDocumentoExpediente.size() > 0) {
+							empleadoCE = procesoUtil.copiarEmpleadoCE(listViewPesoDocumentoExpediente.get(0));
+							LOG.info("Se obtuvo empleado con menor peso de documentos.");
+						} else {
+							LOG.warn("No se pudo obtener empleado con menor peso de documentos.");
+						}
+						break;
+					case 3:
+						List<ViewPesoParticipeExpediente> listViewPesoParticipeExpediente = viewPesoParticipeExpedienteDAO.findListaPesoParticipesxExpediente(intIdProducto, intIdTerritorio, intIdTarea);
+						if (listViewPesoParticipeExpediente.size() > 0) {
+							empleadoCE = procesoUtil.copiarEmpleadoCE(listViewPesoParticipeExpediente.get(0));
+							LOG.info("Se obtuvo empleado con menor peso de partícipes.");
+						} else {
+							LOG.warn("No se pudo obtener empleado con menor peso de partícipes.");
+						}
+						break;
+					default:
+						LOG.info("El perfil no tiene un tipo de balanceo válido.");
+						break;
+				}
 			}
-			switch (intTipoBalanceo){
-				//Balanceo Por Numero de Expedientes x Empleado
-				case 1: 
-					List<ViewNumeroExpedientesEmpleado> listnumExpedientesxEmpleado = viewNumeroExpedientesEmpleadoDAO.findListaNumeroExpedientesxEmpleado(intIdProducto, intIdTerritorio, intIdTarea);
-					viewNumeroExpedientesEmpleado = listnumExpedientesxEmpleado.get(0);
-				case 2:
-					List<ViewPesoDocumentoExpediente> listViewPesoDocumentoExpediente = viewPesoDocumentoExpedienteDAO.findListaPesoDocumentoxExpediente(intIdProducto, intIdTerritorio, intIdTarea);
-					viewPesoDocumentoExpediente = listViewPesoDocumentoExpediente.get(0);
-					viewNumeroExpedientesEmpleado.setCodEmpleado(viewPesoDocumentoExpediente.getCodEmpleado());
-					viewNumeroExpedientesEmpleado.setNomEmpleado(viewPesoDocumentoExpediente.getNomEmpleado());
-					viewNumeroExpedientesEmpleado.setDesPerfil(viewPesoDocumentoExpediente.getDesPerfil());
-					viewNumeroExpedientesEmpleado.setIdEmpleado(viewPesoDocumentoExpediente.getIdEmpleado());
-					viewNumeroExpedientesEmpleado.setIdPerfil(viewPesoDocumentoExpediente.getIdPerfil());
-					viewNumeroExpedientesEmpleado.setIdProducto(viewPesoDocumentoExpediente.getIdProducto());
-					viewNumeroExpedientesEmpleado.setIdTarea(viewPesoDocumentoExpediente.getIdTarea());
-					viewNumeroExpedientesEmpleado.setIdTerritorio(viewPesoDocumentoExpediente.getIdTerritorio());
-					viewNumeroExpedientesEmpleado.setNumExpedientesEmpleado(viewPesoDocumentoExpediente.getSumPesoDocumentoExpediente());
-				case 3:
-					List<ViewPesoParticipeExpediente> listViewPesoParticipeExpediente = viewPesoParticipeExpedienteDAO.findListaPesoParticipesxExpediente(intIdProducto, intIdTerritorio, intIdTarea);
-					viewPesoParticipeExpediente = listViewPesoParticipeExpediente.get(0);
-					viewNumeroExpedientesEmpleado.setCodEmpleado(viewPesoParticipeExpediente.getCodEmpleado());
-					viewNumeroExpedientesEmpleado.setNomEmpleado(viewPesoParticipeExpediente.getNomEmpleado());
-					viewNumeroExpedientesEmpleado.setDesPerfil(viewPesoParticipeExpediente.getDesPerfil());
-					viewNumeroExpedientesEmpleado.setIdEmpleado(viewPesoParticipeExpediente.getIdEmpleado());
-					viewNumeroExpedientesEmpleado.setIdPerfil(viewPesoParticipeExpediente.getIdPerfil());
-					viewNumeroExpedientesEmpleado.setIdProducto(viewPesoParticipeExpediente.getIdProducto());
-					viewNumeroExpedientesEmpleado.setIdTarea(viewPesoParticipeExpediente.getIdTarea());
-					viewNumeroExpedientesEmpleado.setIdTerritorio(viewPesoParticipeExpediente.getIdTerritorio());
-					viewNumeroExpedientesEmpleado.setNumExpedientesEmpleado(viewPesoParticipeExpediente.getSumPesoParticipeExpediente());
-			}
-			empleadoCE = procesoUtil.copiarEmpleadoCE(viewNumeroExpedientesEmpleado);
-			Integer resultado = procesoUtil.grabarEmpleadoExpedienteTareaProceso(intIdExpediente,empleadoCE.getIdEmpleado(),intIdTarea);
-			return empleadoCE;
-		} catch (Exception ex) {
-			LOG.error("Error obteniendo empleado, se asigna el usuario al azar.", ex);
-			try {
-				List<Empleado> empleados = empleadoDAO.getEmpleadosCarterizacion(intIdProducto.intValue(), 
-						intIdTerritorio.intValue(), intIdPerfil.intValue());
-				EmpleadoCE empleadoCE = new EmpleadoCE();
-				if (empleados.isEmpty()) {
-					String userAdmin = ParametrosSistema.getInstance().getProperties(ParametrosSistema.CONF).getProperty("usuarioAdminProcess");
-					LOG.warn("No se encontró usuario, se usará el usuario por defecto: "+userAdmin);
-					empleadoCE.setCodEmpleado(userAdmin);
-					empleadoCE.setNomEmpleado(userAdmin);
-				} else {
+			if (empleadoCE == null) {
+				List<Empleado> empleados = empleadoDAO
+						.getEmpleadosCarterizacion(intIdProducto.intValue(),
+								intIdTerritorio.intValue(),
+								intIdPerfil.intValue());
+				if (empleados.size() > 0) {
 					int numEmp = empleados.size();
-					//+POR SOLICITUD BBVA+System.out..println("Numero empleados: "+numEmp);
 					Random random = new Random ();
 					Empleado empleado = empleados.get(random.nextInt(numEmp));
-					
-					empleadoCE.setCodEmpleado(empleado.getCodigo());
-					empleadoCE.setDesPerfil(empleado.getPerfil().getDescripcion());
-					empleadoCE.setIdEmpleado(empleado.getId());
-					empleadoCE.setIdPerfil(intIdPerfil);
-					empleadoCE.setIdProducto(intIdProducto);
-					empleadoCE.setIdTarea(intIdTarea);
-					empleadoCE.setIdTerritorio(intIdTerritorio);
-					empleadoCE.setNomEmpleado(empleado.getNombres()+" "+empleado.getApepat()+" "+empleado.getApemat());
-					empleadoCE.setNumExpedientesEmpleado(0);
-					procesoUtil.obtenerDatosAdicionales(empleadoCE, empleado);
-					Integer resultado = procesoUtil.grabarEmpleadoExpedienteTareaProceso(intIdExpediente,empleadoCE.getIdEmpleado(),intIdTarea);
-					return empleadoCE;
+					empleadoCE = procesoUtil.copiarEmpleadoCE(empleado, intIdPerfil, intIdProducto, intIdTarea, intIdTerritorio);
+					LOG.info("Se obtuvo empleado aleatorio que está carterizado.");
+				} else {
+					LOG.warn("No se pudo obtener empleado aleatorio que esté carterizado.");
 				}
-				return empleadoCE;
-			} catch (Exception e) {
+			}
+			if (empleadoCE != null) {
+				//Asignar Carga de trabajo
+				LOG.info("empleadoCE.getIdEmpleado(): " + empleadoCE.getIdEmpleado());
+				LOG.info("empleadoCE.getCodEmpleado(): " + empleadoCE.getCodEmpleado());
+			} else {
 				String userAdmin = ParametrosSistema.getInstance().getProperties(ParametrosSistema.CONF).getProperty("usuarioAdminProcess");
-				LOG.error("Error asignando usuario al azar, se usará el usuario por defecto: "+userAdmin, e);
-				EmpleadoCE empleadoCE = new EmpleadoCE();
+				LOG.warn("No se encontró usuario, se usará el usuario por defecto: "+userAdmin);
+				empleadoCE = new EmpleadoCE();
 				empleadoCE.setCodEmpleado(userAdmin);
 				empleadoCE.setNomEmpleado(userAdmin);
-				return empleadoCE;
 			}
+			return empleadoCE;
+		} catch (Exception e) {
+			String userAdmin = ParametrosSistema.getInstance().getProperties(ParametrosSistema.CONF).getProperty("usuarioAdminProcess");
+			LOG.error("Ocurrió una excepción al obtener al empleado, se usará el usuario por defecto: "+userAdmin, e);
+			EmpleadoCE empleadoCE = new EmpleadoCE();
+			empleadoCE.setCodEmpleado(userAdmin);
+			empleadoCE.setNomEmpleado(userAdmin);
+			return empleadoCE;
 		}
 	}
 	
@@ -755,15 +836,30 @@ public class CEProcessService {
 		return true;
 	}
 	
-	public boolean EliminarEmpleadoExpedienteTareaProceso(Integer idExpediente, Integer idEmpleado, Integer idTarea){
+	public Integer grabarEmpleadoExpedienteTareaProceso(Integer idExpediente, String codEmpleado, Integer idTarea){
+		try{
+			Integer resultado = 0;
+			ProcesoUtil procesoUtil = new ProcesoUtil();
+			LOG.debug("grabarEmpleadoExpedienteTareaProceso");
+			LOG.debug("idExpediente: " + idExpediente);
+			LOG.debug("codEmpleado: " + codEmpleado);
+			LOG.debug("intIdTarea: " + idTarea);
+			resultado = procesoUtil.grabarEmpleadoExpedienteTareaProceso(idExpediente,codEmpleado,idTarea);
+			return resultado;
+		}catch (Exception ex) {
+			return 0;
+		}
+	}
+	
+	public boolean EliminarEmpleadoExpedienteTareaProceso(Integer idExpediente, String codEmpleado, Integer idTarea){
 		try{
 			boolean resultado = true;
 			ProcesoUtil procesoUtil = new ProcesoUtil();
 			LOG.debug("EliminarEmpleadoExpedienteTareaProceso");
 			LOG.debug("idExpediente: " + idExpediente);
-			LOG.debug("idEmpleado: " + idEmpleado);
+			LOG.debug("codEmpleado: " + codEmpleado);
 			LOG.debug("intIdTarea: " + idTarea);
-			resultado = procesoUtil.EliminarEmpleadoExpedienteTareaProceso(idExpediente,idEmpleado,idTarea);
+			resultado = procesoUtil.EliminarEmpleadoExpedienteTareaProceso(idExpediente,codEmpleado,idTarea);
 			return resultado;
 		}catch (Exception ex) {
 			return false;

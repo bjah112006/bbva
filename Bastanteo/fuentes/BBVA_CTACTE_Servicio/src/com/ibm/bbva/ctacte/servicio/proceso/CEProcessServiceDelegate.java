@@ -19,6 +19,7 @@ import com.ibm.bbva.ctacte.bean.AuditoriaCriteriosSupervision;
 import com.ibm.bbva.ctacte.bean.CobroComision;
 import com.ibm.bbva.ctacte.bean.DocumentoExp;
 import com.ibm.bbva.ctacte.bean.Empleado;
+import com.ibm.bbva.ctacte.bean.EstudioAbogado;
 import com.ibm.bbva.ctacte.bean.Expediente;
 import com.ibm.bbva.ctacte.bean.ExpedienteTarea;
 import com.ibm.bbva.ctacte.bean.Participe;
@@ -38,6 +39,7 @@ import com.ibm.bbva.ctacte.dao.DocumentoExpDAO;
 import com.ibm.bbva.ctacte.dao.EmpleadoDAO;
 import com.ibm.bbva.ctacte.dao.EstadoExpedienteDAO;
 import com.ibm.bbva.ctacte.dao.EstadoTareaDAO;
+import com.ibm.bbva.ctacte.dao.EstudioAbogadoDAO;
 import com.ibm.bbva.ctacte.dao.ExpedienteDAO;
 import com.ibm.bbva.ctacte.dao.OperacionDAO;
 import com.ibm.bbva.ctacte.dao.ParticipeDAO;
@@ -52,7 +54,6 @@ import com.ibm.bbva.ctacte.servicio.proceso.util.ProcesoUtil;
 import com.ibm.bbva.ctacte.servicio.util.Constantes;
 import com.ibm.bbva.ctacte.util.EJBLocator;
 import com.ibm.bbva.ctacte.util.ParametrosSistema;
-
 import javax.jws.WebService;
 import javax.jws.WebParam;
 
@@ -113,8 +114,12 @@ public class CEProcessServiceDelegate{
         return _cEProcessService.crearPreRegistroRevocatoria(codigoExpediente);
     }
 
-    public boolean EliminarEmpleadoExpedienteTareaProceso (@WebParam(name="idExpediente") Integer idExpediente, @WebParam(name="idEmpleado") Integer idEmpleado, @WebParam(name="idTarea") Integer idTarea) {
-        return _cEProcessService.EliminarEmpleadoExpedienteTareaProceso(idExpediente,idEmpleado,idTarea);
+    public Integer grabarEmpleadoExpedienteTareaProceso (@WebParam(name="idExpediente") Integer idExpediente, @WebParam(name="codEmpleado") String codEmpleado, @WebParam(name="idTarea") Integer idTarea) {
+        return _cEProcessService.grabarEmpleadoExpedienteTareaProceso(idExpediente,codEmpleado,idTarea);
+    }
+
+    public boolean EliminarEmpleadoExpedienteTareaProceso (@WebParam(name="idExpediente") Integer idExpediente, @WebParam(name="codEmpleado") String codEmpleado, @WebParam(name="idTarea") Integer idTarea) {
+        return _cEProcessService.EliminarEmpleadoExpedienteTareaProceso(idExpediente,codEmpleado,idTarea);
     }
 
     public String eliminarDocumentosCM (@WebParam(name="idExpediente") Integer idExpediente) {
