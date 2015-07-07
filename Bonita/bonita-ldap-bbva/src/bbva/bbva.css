@@ -2,6 +2,10 @@
     background: url("reporte_16.png") no-repeat scroll 15px center transparent !important;
 }
 
+#header #menu > div > ul.dropdownmenu.notCustom > li a.bbva-consulta {
+    background: url("reporte_16.png") no-repeat scroll 15px center transparent !important;
+}
+
 #bbva-panel .popupframe {
     top: 100px;
 }
@@ -52,4 +56,48 @@
 #bbva-panel .td_fecha,
 #bbva-panel .th_fecha {
     width: 50px;
+}
+
+.cabeceraColumna {
+	position: relative;
+	border-left: 1px solid #063873;
+	padding: 0 10px 0 10px;
+	background-color: #063873;
+	color: white;
+	text-align: center;
+}
+
+.fila {
+	margin: 0 0 10px 0;
+	background-color: rgba(0, 0, 0, 0.03);
+}
+
+.tabla td {
+	border-collapse: collapse;
+	border-spacing: 1px;
+	border: 1px solid #000066;
+	vertical-align: middle;
+	width: 100px;
+	text-align: center;
+}
+
+.tabla td a{
+	text-decoration: underline;
+}
+
+.tablaFiltro td {
+	border-collapse: collapse;
+	border-spacing: 1px;
+	border: 1px solid #F5F4F4;
+	vertical-align: middle;
+}
+
+.filtro {
+	position: relative;
+	background-color: #f5f4f4;
+	color: #313433;
+}
+
+.headerFiltro{
+	padding: 7px 0 7px 35px;
 }

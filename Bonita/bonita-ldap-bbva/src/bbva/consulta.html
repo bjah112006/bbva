@@ -1,0 +1,37 @@
+   <link rel='stylesheet' type='text/css' href='bbva/bbva.css' />
+   
+   <div class="section section_filters_panel filters_panel even">
+			<div class="section section_primary_filters even primary_filters">
+				<div id="panelIzq" class="body">
+					<a title="Mostrar un resumen de todos los procesos" class="all current">
+						Consulta
+					</a>
+				</div>
+			</div>
+			<div class="section section_resource_filters odd resource_filters"></div>
+	</div>
+	<div>
+		<br>
+		<div class="headerFiltro">
+			<table class="tablaFiltro">
+					<tr><td class="filtro" height="30px">Filtros</td></tr>
+					<tr>
+						<td height="40px"> Criterio de Consulta &nbsp; 
+							<select style="width: 190px;" id="cboFiltro">
+								<option value="01">Numero Solicitud</option>
+								<option value="02">Numero DOI Cliente</option>
+								<option value="03">Numero RVGL</option>
+								<option value="04">Numero Solicitud Pre-Impreso</option>
+							</select>
+							&nbsp;
+							<input type="text" id="txtFiltro"> &nbsp;
+							<a id="btnConsultar" href="javascript: void(0);" class="btn btn-primary-action" onclick="consultarSolicitudes()">consultar</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+	</div>
+	
+	<div id="divTablaSolicitudes"></div>
+	
+	

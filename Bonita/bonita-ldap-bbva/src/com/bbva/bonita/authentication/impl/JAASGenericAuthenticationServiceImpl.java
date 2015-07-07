@@ -1,14 +1,17 @@
 package com.bbva.bonita.authentication.impl;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 import org.bonitasoft.engine.authentication.AuthenticationConstants;
 import org.bonitasoft.engine.authentication.GenericAuthenticationService;
 import org.bonitasoft.engine.commons.LogUtil;
 import org.bonitasoft.engine.identity.IdentityService;
+import org.bonitasoft.engine.identity.SIdentityException;
 import org.bonitasoft.engine.identity.SUserNotFoundException;
 import org.bonitasoft.engine.identity.model.SUser;
+import org.bonitasoft.engine.identity.model.SUserMembership;
 import org.bonitasoft.engine.log.technical.TechnicalLogSeverity;
 import org.bonitasoft.engine.log.technical.TechnicalLoggerService;
 
@@ -62,7 +65,12 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
             if ("0".equalsIgnoreCase(isValidLDAP)) {
             	isCheckCredentials = identityService.chechCredentials(user, password);
             } else {
-            	isCheckCredentials = LDAPValidate.getInstance(logger).checkCredentials(userName, password);
+            	String userBonitaProfile=getPrincipalUserProfileFromBonita(user.getId());
+            	if(userBonitaProfile.equals("ABN")){
+            		isCheckCredentials = identityService.chechCredentials(user, password);
+            	}else{
+            		isCheckCredentials = LDAPValidate.getInstance(logger).checkCredentials(userName, password);	
+            	}
             }
             
             if (isCheckCredentials) {
@@ -79,5 +87,21 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
         }
         
         return null;
+    }
+    
+    private String getPrincipalUserProfileFromBonita(long userId){
+    	String profile="";
+    	try {
+			List<SUserMembership> lst_membership=identityService.getUserMembershipsOfUser(userId, -1, 3);
+			if(lst_membership!=null){
+				for(SUserMembership membership:lst_membership){
+					profile=membership.getRoleName();
+					break;
+				}
+			}
+		} catch (SIdentityException e) {
+		    logger.log(this.getClass(), TechnicalLogSeverity.ERROR, e);
+		}
+    	return profile;
     }
 }

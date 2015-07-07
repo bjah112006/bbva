@@ -27,6 +27,10 @@ public class DBUtil {
 	    	if(rs.next()) {
 	    		return rs.getString("VAL_COLUMN1");
 	    	}
+	    	
+	    	rs.close();
+	    	ps.close();
+	    	cn.close();
 		} catch(Exception e) {
 			logger.log(Level.SEVERE, "actualizarMembresia", e);
 		}
