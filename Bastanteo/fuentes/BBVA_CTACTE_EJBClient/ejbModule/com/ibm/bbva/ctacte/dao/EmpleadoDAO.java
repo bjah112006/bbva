@@ -14,6 +14,7 @@ public interface EmpleadoDAO extends IGenericDAO<Empleado, Integer> {
 	public List<Empleado> getEmpleadosPorPerfil (int idPerfil);
 	public List<Empleado> getPosiblesOwners (String codUsuario);
 	public List<Empleado> getEmpleadosCarterizacion (int idProducto, int idTerritorio, int idPerfil);
+	public List<Empleado> getEmpleadosCarterizacionPorEstudio (int idProducto, int idTerritorio, int idPerfil, int idEstudio);
 	public List<Empleado> getPosiblesNombres (String nombreCompleto);
 	public List<Empleado> getEmpleadosPorPerfilOficina (int idPerfil, int idOficina);
 	public List<Empleado> getEmpleadosPorPerfiles(List<Integer> idPerfiles);
