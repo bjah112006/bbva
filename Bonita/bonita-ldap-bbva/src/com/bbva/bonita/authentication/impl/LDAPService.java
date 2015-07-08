@@ -192,6 +192,9 @@ public class LDAPService {
 	        	restApiClient.executePostRequest("API/identity/membership", "{\"user_id\":\"" + id + "\",\"group_id\":\"" + rs.getInt("ID_GROUP") + "\",\"role_id\":\"" + rs.getInt("ID_ROLE") + "\"}");
 	    	}
         	
+	    	rs.close();
+	    	ps.close();
+	    	cn.close();
 	    	
 	    	// Request url	http://../API/identity/membership/<the id of the user>/<the id of the group>/<the id of the role>
     		// Request method
