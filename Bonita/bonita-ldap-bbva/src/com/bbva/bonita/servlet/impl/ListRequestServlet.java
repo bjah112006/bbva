@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,6 +31,8 @@ import org.bonitasoft.engine.identity.User;
 import org.bonitasoft.engine.search.SearchOptionsBuilder;
 import org.bonitasoft.engine.search.SearchResult;
 import org.bonitasoft.engine.session.APISession;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import com.bbva.bonita.dto.SolicitudDTO;
 import com.bbva.bonita.util.Constante;
@@ -83,36 +87,39 @@ public class ListRequestServlet extends HttpServlet {
 		}
 	}
 	
-	private void obtenerSalida(List<SolicitudDTO> listaSolicitud, ServletResponse servletResponse) throws IOException{
+	@SuppressWarnings("unchecked")
+	private void obtenerSalida(List<SolicitudDTO> listaSolicitud, ServletResponse servletResponse) throws Exception{
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
-		StringBuilder builder = new StringBuilder();
 		if(listaSolicitud!=null && !listaSolicitud.isEmpty()){
+			JSONObject jsonObject = new JSONObject();
+			JSONArray jsonArray = new JSONArray();
+			
 			for(SolicitudDTO solicitudDTO:listaSolicitud){
-				if(builder.length() > 0) {
-					builder.append(", ");
-				}
-				builder.append("{\"nroSolicitud\":\"" + obtenerCadena(solicitudDTO.getNroSolicitud()) + 
-						"\", \"ruc\":\"" + obtenerCadena(solicitudDTO.getNroDOICliente()) +  
-						"\", \"nombre\":\"" + obtenerCadena(solicitudDTO.getNombreCliente()) + 
-						"\", \"estado\":\"" + obtenerCadena(solicitudDTO.getEstado()) + 
-						"\", \"tipoOferta\":\"" + obtenerCadena(solicitudDTO.getTipoOferta()) + 
-						"\", \"oficina\":\"" + obtenerCadena(solicitudDTO.getOficinaSolicitud()) +
-						"\", \"fechaIngreso\":\"" + obtenerCadena(solicitudDTO.getFechaLlegada()) + 
-						"\", \"usuario\":\"" + obtenerCadena(solicitudDTO.getUsuarioEjecutorTarea()) +
-						"\", \"rvgl\":\"" + obtenerCadena(solicitudDTO.getNroRVGL()) + 
-						"\", \"producto\":\"" + obtenerCadena(solicitudDTO.getProducto()) +
-						"\", \"campania\":\"" + obtenerCadena(solicitudDTO.getCampania()) + 
-						"\", \"clasificacion\":\"" + obtenerCadena(solicitudDTO.getClasificacion_clte()) +
-						"\", \"nombreProceso\":\"" + obtenerCadena(solicitudDTO.getNombreProceso()) +
-						"\", \"version\":\"" + obtenerCadena(solicitudDTO.getVersionProceso()) +
-						"\", \"variable\":\"" + obtenerCadena(solicitudDTO.getVariable()) +
-						"\", \"idArchivada\":\"" + obtenerCadena(solicitudDTO.getIdArchivada()) +
-						"\", \"abnRegistrante\":\"" + obtenerCadena(solicitudDTO.getAbn_registante()) + "\"}");
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("nroSolicitud", obtenerCadena(solicitudDTO.getNroSolicitud()));
+				map.put("ruc", obtenerCadena(solicitudDTO.getNroDOICliente()));
+				map.put("nombre", obtenerCadena(solicitudDTO.getNombreCliente()));
+				map.put("estado", obtenerCadena(solicitudDTO.getEstado()));
+				map.put("tipoOferta", obtenerCadena(solicitudDTO.getTipoOferta()));
+				map.put("oficina", obtenerCadena(solicitudDTO.getOficinaSolicitud()));
+				map.put("fechaIngreso", obtenerCadena(solicitudDTO.getFechaLlegada()));
+				map.put("rvgl", obtenerCadena(solicitudDTO.getNroRVGL()));
+				map.put("producto", obtenerCadena(solicitudDTO.getProducto()));
+				map.put("campania", obtenerCadena(solicitudDTO.getCampania()));
+				map.put("clasificacion", obtenerCadena(solicitudDTO.getClasificacion_clte()));
+				map.put("nombreProceso", obtenerCadena(solicitudDTO.getNombreProceso()));
+				map.put("version", obtenerCadena(solicitudDTO.getVersionProceso()));
+				map.put("variable", obtenerCadena(solicitudDTO.getVariable()));
+				map.put("idArchivada", obtenerCadena(solicitudDTO.getIdArchivada()));
+				map.put("abnRegistrante", obtenerCadena(solicitudDTO.getAbn_registante()));
+				jsonArray.add(map);
 			}
-			//logger.log(Level.INFO, builder.toString());
+			jsonObject.put("solicitudes", jsonArray);
+			 
+			logger.log(Level.INFO, jsonObject.toJSONString());
 			response.setContentType("application/json");
 			PrintWriter out = response.getWriter();
-			out.write("{\"solicitudes\": ["+ builder.toString()+ "]}");
+			out.write(jsonObject.toJSONString());
 			out.close();
 		}
 	}

@@ -264,8 +264,8 @@ consultarSolicitudes = function () {
 	        },
 	        error: function (xhr, ajaxOptions, thrownError) {
 	            /*console.log(xhr);
-	            console.log(ajaxOptions);
-	            console.log(thrownError);*/
+	            console.log(ajaxOptions);*/
+	            console.log(thrownError);
 	            alert("ERROR AL CONSULTAR SOLICITUDES");   
 	        }
 	    });
