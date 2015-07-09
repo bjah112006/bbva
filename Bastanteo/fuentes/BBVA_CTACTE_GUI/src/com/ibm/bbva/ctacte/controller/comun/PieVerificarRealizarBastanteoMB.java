@@ -109,7 +109,7 @@ public class PieVerificarRealizarBastanteoMB extends AbstractMBean {
 		
 		// Habilitación del botón Finalizar Proceso según configuración
 		// flagFinalizarBastanteo = 1, Pide verificación de SFP
-		// flagFinalizarBastanteo = 0, Pide verificación de SFP excepto cuando es una Modificatoria y es un cliente no migrado
+		// flagFinalizarBastanteo = 0, Pide verificación de SFP excepto cuando es una Modificatoria o subsanacion de modificatoria, y es un cliente no migrado
 		// [Begin]-[15.04.08]-[Habilitación del botón Finalizar Proceso según configuración]
 		finalizaBastanteo=true;
 		ParametrosConf parametro = null;
@@ -118,7 +118,7 @@ public class PieVerificarRealizarBastanteoMB extends AbstractMBean {
 			
 			finalizaBastanteo = "0".equalsIgnoreCase(parametro.getValorVariable()); // Flag Habilitado
 			finalizaBastanteo = finalizaBastanteo && ("0".equalsIgnoreCase(expediente.getCliente().getFlagOrigenSFP())); // Cliente No Esta Migrado
-			finalizaBastanteo = finalizaBastanteo && ConstantesBusiness.CODIGO_MODIFICATORIA_BASTANTEO.equals(expediente.getOperacion().getCodigoOperacion()); // Modificatoria
+			finalizaBastanteo = finalizaBastanteo && (ConstantesBusiness.CODIGO_MODIFICATORIA_BASTANTEO.equals(expediente.getOperacion().getCodigoOperacion()) || ConstantesBusiness.CODIGO_SUBSANACION_BASTANTEO.equals(expediente.getOperacion().getCodigoOperacion())); // Modificatoria
 			finalizaBastanteo = !finalizaBastanteo;
 			LOG.info("PARAMETRO = " + parametro.getValorVariable());
 			LOG.info("EXPEDIENTE = " + expediente.getOperacion().getCodigoOperacion());
