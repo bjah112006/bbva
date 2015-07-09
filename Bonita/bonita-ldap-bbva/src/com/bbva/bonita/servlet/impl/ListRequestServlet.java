@@ -25,8 +25,10 @@ import org.bonitasoft.engine.api.TenantAPIAccessor;
 import org.bonitasoft.engine.bpm.data.ArchivedDataInstance;
 import org.bonitasoft.engine.bpm.data.DataInstance;
 import org.bonitasoft.engine.bpm.process.ArchivedProcessInstance;
+import org.bonitasoft.engine.bpm.process.ArchivedProcessInstancesSearchDescriptor;
 import org.bonitasoft.engine.bpm.process.ProcessDefinition;
 import org.bonitasoft.engine.bpm.process.ProcessInstance;
+import org.bonitasoft.engine.bpm.process.ProcessInstanceSearchDescriptor;
 import org.bonitasoft.engine.identity.User;
 import org.bonitasoft.engine.search.SearchOptionsBuilder;
 import org.bonitasoft.engine.search.SearchResult;
@@ -49,12 +51,13 @@ public class ListRequestServlet extends HttpServlet {
 	
 	@Override
 	public void service(ServletRequest servletRequest, ServletResponse servletResponse) throws ServletException, IOException {
-		logger.log(Level.INFO, "=== SERVICE");
+		logger.log(Level.INFO, "====== SERVICE ======");
 		
 		try {
 			HttpServletRequest request = (HttpServletRequest) servletRequest;
-			final HttpServletRequestAccessor requestAccessor = new HttpServletRequestAccessor((HttpServletRequest) servletRequest);
-			final APISession apiSession = requestAccessor.getApiSession();
+			HttpServletRequestAccessor requestAccessor = new HttpServletRequestAccessor((HttpServletRequest) servletRequest);
+			APISession apiSession = requestAccessor.getApiSession();
+			Long tiempoInicio = 0L;
 			
 			setProcessAPI(TenantAPIAccessor.getProcessAPI(apiSession));
 			setIdentityAPI(TenantAPIAccessor.getIdentityAPI(apiSession));
@@ -68,18 +71,32 @@ public class ListRequestServlet extends HttpServlet {
 			
 			//TODO: OBTENEMOS SOLICITUDES PENDIENTES
 			SearchOptionsBuilder builder = new SearchOptionsBuilder(0, 100);
+			if(filtro.getCodigoFiltro().compareTo("01")==0){
+				logger.log(Level.INFO, "=== FILTRO POR NRO. SOLICITUD PENDIENTES: " + filtro.getValorFiltro());
+				builder.filter(ProcessInstanceSearchDescriptor.ID, filtro.getValorFiltro());
+			}
+			tiempoInicio = System.currentTimeMillis();
 			SearchResult<ProcessInstance> processInstanceResults = getProcessAPI().searchOpenProcessInstances(builder.done());
 			List<ProcessInstance> listaSolicitudesPendientes = processInstanceResults.getResult();
+			logger.info("=== TIEMPO RESPUESTA CONSULTA SOLIC. PENDIENTES: " + (System.currentTimeMillis()-tiempoInicio)/1000 + " segundos");
+			logger.info("=== CANTIDAD DE SOLICITUDES PENDIENTES: " + (listaSolicitudesPendientes!=null?listaSolicitudesPendientes.size():0));
 			
 			//TODO: OBTENEMOS SOLICITUDES ARCHIVADAS
 			builder = new SearchOptionsBuilder(0, 100);
+			if(filtro.getCodigoFiltro().compareTo("01")==0){
+				logger.log(Level.INFO, "=== FILTRO POR NRO. SOLICITUD ARCHIVADAS: " + filtro.getValorFiltro());
+				builder.filter(ArchivedProcessInstancesSearchDescriptor.ID, filtro.getValorFiltro());
+			}
+			tiempoInicio = System.currentTimeMillis();
 			SearchResult<ArchivedProcessInstance> archivedProcessInstanceResults = getProcessAPI().searchArchivedProcessInstances(builder.done());
 			List<ArchivedProcessInstance> listArchivedProcessInstances = archivedProcessInstanceResults.getResult();	
+			logger.info("=== TIEMPO RESPUESTA CONSULTA SOLIC. ARCHIVADAS: " + (System.currentTimeMillis()-tiempoInicio)/1000 + " segundos");
+			logger.info("=== CANTIDAD DE SOLICITUDES ARCHIVADAS: " + (listArchivedProcessInstances!=null?listArchivedProcessInstances.size():0));
 			
 			List<SolicitudDTO> listaSolicitud = obtenerSolicitudes(listaSolicitudesPendientes, listArchivedProcessInstances, filtro);
 			Collections.sort(listaSolicitud);
 			Integer cantidadSolicitudes = listaSolicitud!=null?listaSolicitud.size():0;
-			logger.log(Level.INFO, "=== CANTIDAD DE SOLICITUDES: " + cantidadSolicitudes);
+			logger.log(Level.INFO, "=== CANTIDAD DE SOLICITUDES A MOSTRAR EN PANTALLA: " + cantidadSolicitudes);
 			obtenerSalida(listaSolicitud, servletResponse);
 			
 		} catch (Exception e) {
@@ -130,6 +147,7 @@ public class ListRequestServlet extends HttpServlet {
 	
 	private List<SolicitudDTO> obtenerSolicitudes(List<ProcessInstance> listaSolicitudesPendientes, 
 												List<ArchivedProcessInstance> listArchivedProcessInstances, Filtro filtro) throws Exception{
+		Long inicio = System.currentTimeMillis();
 		List<SolicitudDTO> listaSolicitud = new ArrayList<SolicitudDTO>();
 		if(listaSolicitudesPendientes!=null && !listaSolicitudesPendientes.isEmpty()){
 			Iterator<ProcessInstance> itrSolicitudesPendientes = listaSolicitudesPendientes.iterator();
@@ -138,16 +156,20 @@ public class ListRequestServlet extends HttpServlet {
 				SolicitudDTO solicitudDTO = obtenerDatosSolicitudPendiente(elementoSolicitud);
 				listaSolicitud.add(solicitudDTO);
 			}
+			logger.info("=== TIEMPO RESPUESTA MAPEO SOLICITUDES PENDIENTES: " + (System.currentTimeMillis()-inicio)/1000 + " segundos");
 		}
 		List<SolicitudDTO> listaSolicitudArchivadas = obtenerSolicitudesArchivadas(listArchivedProcessInstances, filtro);
 		
 		listaSolicitud.addAll(listaSolicitudArchivadas);
+		inicio = System.currentTimeMillis();
 		listaSolicitud = obtenerSolicitudFiltro(listaSolicitud, filtro);
+		logger.info("=== TIEMPO RESPUESTA FILTRO SOLICITUDES: " + (System.currentTimeMillis()-inicio)/1000 + " segundos");
 		return listaSolicitud;
 	}
 	
 	private List<SolicitudDTO> obtenerSolicitudesArchivadas(List<ArchivedProcessInstance> listArchivedProcessInstances, 
 																						Filtro filtro) throws Exception{
+		Long inicio = System.currentTimeMillis();
 		List<SolicitudDTO> listaSolicitud = new ArrayList<SolicitudDTO>();
 		if(listArchivedProcessInstances!=null && !listArchivedProcessInstances.isEmpty()){
 			Iterator<ArchivedProcessInstance> itrSolicitudesArchivadas = listArchivedProcessInstances.iterator();
@@ -156,6 +178,7 @@ public class ListRequestServlet extends HttpServlet {
 				SolicitudDTO solicitudDTO = obtenerDatosSolicitudArchivada(elementoSolicitud);
 				listaSolicitud.add(solicitudDTO);
 			}
+			logger.info("=== TIEMPO RESPUESTA MAPEO SOLICITUDES ARCHIVADAS: " + (System.currentTimeMillis()-inicio)/1000 + " segundos");
 		}
 		return listaSolicitud;
 	}
