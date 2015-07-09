@@ -89,7 +89,7 @@ public class VerificaFirmaObservacionesMB extends AbstractMBean{
 		
 		// Habilitación del botón Terminar Vinculación según configuración
 		// flagTerminarVinculacion = 1, Pide verificación de SFP
-		// flagTerminarVinculacion = 0, Pide verificación de SFP excepto cuando es una Modificatoria y es un cliente no migrado
+		// flagTerminarVinculacion = 0, Pide verificación de SFP excepto cuando es una Modificatoria o subsanacion; y es un cliente no migrado
 		// [Begin]-[15.04.08]-[Habilitación del botón Terminar Vinculación según configuración]
 		ParametrosConf parametro = null;
 		try {
@@ -97,7 +97,7 @@ public class VerificaFirmaObservacionesMB extends AbstractMBean{
 			
 			blnTerminar = "0".equalsIgnoreCase(parametro.getValorVariable()); // Flag Habilitado
 			blnTerminar = blnTerminar && ("0".equalsIgnoreCase(expediente.getCliente().getFlagOrigenSFP())); // Cliente No Esta Migrado
-			blnTerminar = blnTerminar && ConstantesBusiness.CODIGO_MODIFICATORIA_BASTANTEO.equals(expediente.getOperacion().getCodigoOperacion()); // Modificatoria
+			blnTerminar = blnTerminar && (ConstantesBusiness.CODIGO_MODIFICATORIA_BASTANTEO.equals(expediente.getOperacion().getCodigoOperacion()) || ConstantesBusiness.CODIGO_SUBSANACION_BASTANTEO.equals(expediente.getOperacion().getCodigoOperacion())); // Modificatoria
 			blnTerminar = !blnTerminar;
 			
 			LOG.info(parametro.toString());
