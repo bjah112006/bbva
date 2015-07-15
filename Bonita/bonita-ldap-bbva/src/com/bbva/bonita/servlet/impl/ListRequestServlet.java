@@ -85,7 +85,7 @@ public class ListRequestServlet extends HttpServlet {
 			builder = new SearchOptionsBuilder(0, 100);
 			if(filtro.getCodigoFiltro().compareTo("01")==0){
 				logger.log(Level.INFO, "=== FILTRO POR NRO. SOLICITUD ARCHIVADAS: " + filtro.getValorFiltro());
-				builder.filter(ArchivedProcessInstancesSearchDescriptor.ID, filtro.getValorFiltro());
+				builder.filter(ArchivedProcessInstancesSearchDescriptor.SOURCE_OBJECT_ID, filtro.getValorFiltro());
 			}
 			tiempoInicio = System.currentTimeMillis();
 			SearchResult<ArchivedProcessInstance> archivedProcessInstanceResults = getProcessAPI().searchArchivedProcessInstances(builder.done());
@@ -128,6 +128,7 @@ public class ListRequestServlet extends HttpServlet {
 				map.put("version", obtenerCadena(solicitudDTO.getVersionProceso()));
 				map.put("variable", obtenerCadena(solicitudDTO.getVariable()));
 				map.put("idArchivada", obtenerCadena(solicitudDTO.getIdArchivada()));
+				map.put("usuario", obtenerCadena(solicitudDTO.getUsuarioEjecutorTarea()));
 				map.put("abnRegistrante", obtenerCadena(solicitudDTO.getAbn_registante()));
 				jsonArray.add(map);
 			}
