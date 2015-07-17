@@ -17,15 +17,17 @@ public class DBUtil {
     public static final String HORAS_TRASNCURRIDAS = "003";
 
     public static String obtenerParametro(String key) {
+    	String parametro = "";
+    	
         try {
             InitialContext ic = new InitialContext();
             DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS");
             Connection cn = ds.getConnection();
-            PreparedStatement ps = cn.prepareStatement("SELECT VAL_COLUMN1 FROM PUBLIC.TBL_PYME_PARAMETER WHERE ID_TABLE='10' AND ID_COLUMN='" + key + "'");
+            PreparedStatement ps = cn.prepareStatement("SELECT VAL_COLUMN1 FROM TBL_PYME_PARAMETER WHERE ID_TABLE='10' AND ID_COLUMN='" + key + "'");
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                return rs.getString("VAL_COLUMN1");
+            	parametro = rs.getString("VAL_COLUMN1");
             }
 
             rs.close();
@@ -34,6 +36,6 @@ public class DBUtil {
         } catch (Exception e) {
             logger.log(Level.SEVERE, "obtenerParametro", e);
         }
-        return "";
+        return parametro;
     }
 }
