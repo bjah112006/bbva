@@ -32,7 +32,7 @@ public class DBUtil {
             ps.close();
             cn.close();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "actualizarMembresia", e);
+            logger.log(Level.SEVERE, "obtenerParametro", e);
         }
         return "";
     }
