@@ -186,7 +186,7 @@ public class LDAPService {
             InitialContext ic = new InitialContext();
             DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS");
             Connection cn = ds.getConnection();
-            PreparedStatement ps = cn.prepareStatement("SELECT * FROM PUBLIC.BBVA_PERFIL WHERE PUESTO='" + puesto + "'");
+            PreparedStatement ps = cn.prepareStatement("SELECT * FROM BBVA_PERFIL WHERE PUESTO='" + puesto + "'");
             ResultSet rs = ps.executeQuery();
 
             RestAPIClient restApiClient = new RestAPIClient(server);
