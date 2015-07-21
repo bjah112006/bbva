@@ -38,10 +38,13 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 	
 	public SolicitudDAOImpl(Properties props) throws Exception {	
 		super(props);
+		BonitaClientRest bonitaClientRest = new BonitaClientRest();
 		try {
-			MAX_RESULT_INSTANCES = Integer.parseInt(DBUtil.obtenerParametro(DBUtil.MAX_RESULT_INSTANCES));
-			MAX_RESULT_TASKS = Integer.parseInt(DBUtil.obtenerParametro(DBUtil.MAX_RESULT_TASKS));
-			MAX_TRACE_DAYS = Integer.parseInt(DBUtil.obtenerParametro(DBUtil.MAX_TRACE_DAYS)) * -1;
+			bonitaClientRest.init();
+			MAX_RESULT_INSTANCES = Integer.parseInt(bonitaClientRest.obtainValue(BonitaClientRest.MAX_RESULT_INSTANCES));
+			MAX_RESULT_TASKS = Integer.parseInt(bonitaClientRest.obtainValue(BonitaClientRest.MAX_RESULT_TASKS));
+			MAX_TRACE_DAYS = Integer.parseInt(bonitaClientRest.obtainValue(BonitaClientRest.MAX_TRACE_DAYS)) * -1;
+			bonitaClientRest.logout();
 		} catch (Exception e) {
 			MAX_RESULT_INSTANCES = 10000;
 			MAX_RESULT_TASKS = 100;

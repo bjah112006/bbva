@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pe.bbva.pyme.dao.ISolicitudDAO;
-import com.pe.bbva.pyme.dao.impl.DBUtil;
+import com.pe.bbva.pyme.dao.impl.BonitaClientRest;
 import com.pe.bbva.pyme.dao.impl.SolicitudDAOImpl;
 import com.pe.bbva.pyme.model.Solicitud;
 import com.pe.bbva.pyme.utils.ConstantesEnum;
@@ -105,7 +105,10 @@ public class GenerarReporteJob implements Job {
 
 	private void generarReporteExcel(List<Solicitud> solicitudes, Properties props) throws Exception{
 		//String fileName = props.getProperty(ConstantesEnum.PARAM_RUTA_SALIDA.getNombre()).concat(File.separator).concat(props.getProperty(ConstantesEnum.PARAM_NOMBRE_SALIDA.getNombre())).concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre())).concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
-		String fileName = DBUtil.obtenerParametro(DBUtil.URL_REPORTE_OUTPUT).concat(File.separator).concat(props.getProperty(ConstantesEnum.PARAM_NOMBRE_SALIDA.getNombre())).concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre())).concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
+		BonitaClientRest bonitaClientRest = new BonitaClientRest();
+		String path = bonitaClientRest.obtainValue(BonitaClientRest.URL_REPORTE_OUTPUT);
+		bonitaClientRest.logout();
+		String fileName = path.concat(File.separator).concat(props.getProperty(ConstantesEnum.PARAM_NOMBRE_SALIDA.getNombre())).concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre())).concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheet = workbook.createSheet(ConstantesEnum.NOMBRE_HOJA_EXCEL.getNombre());	
 		int rowIndex = 0;
