@@ -16,14 +16,14 @@ public class DBUtil {
     public static final String URL_LDAP = "002";
     public static final String HORAS_TRASNCURRIDAS = "003";
 
-    public static String obtenerParametro(String key) {
+    public static String obtenerParametro(String table, String key) {
     	String parametro = "";
     	
         try {
             InitialContext ic = new InitialContext();
             DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS");
             Connection cn = ds.getConnection();
-            PreparedStatement ps = cn.prepareStatement("SELECT VAL_COLUMN1 FROM TBL_PYME_PARAMETER WHERE ID_TABLE='10' AND ID_COLUMN='" + key + "'");
+            PreparedStatement ps = cn.prepareStatement("SELECT VAL_COLUMN1 FROM TBL_PYME_PARAMETER WHERE ID_TABLE='" + table + "' AND ID_COLUMN='" + key + "'");
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -37,5 +37,9 @@ public class DBUtil {
             logger.log(Level.SEVERE, "obtenerParametro", e);
         }
         return parametro;
+    }
+    
+    public static String obtenerParametro(String key) {
+        return obtenerParametro("10", key);
     }
 }
