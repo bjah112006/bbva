@@ -1,4 +1,7 @@
+import java.util.logging.Logger
+
 import groovy.json.JsonBuilder
+
 import org.bonitasoft.console.common.server.page.*
 
 import javax.servlet.http.HttpServletRequest
@@ -10,14 +13,23 @@ public class Get implements RestApiController {
     @Override
     RestApiResponse doHandle(HttpServletRequest request, PageResourceProvider pageResourceProvider, PageContext pageContext, RestApiResponseBuilder apiResponseBuilder, RestApiUtil restApiUtil) {
         Map<String, String> response = [:]
-        Object key = request.parameterMap["key"]
+		Logger logger = restApiUtil.logger
+		String key = request.getParameter "key"
+		
+		logger.info "find key: [" + key + "]"
+		
         if(key != null) {
-            response.put "value", DBUtil.obtenerParametro(key.toString())
+			String value = DBUtil.obtenerParametro(key)
+			response.put "key", key
+			response.put "value", value
+			if(value.isEmpty()) {
+				response.put "error", "Valor de clave no registrado en la base de datos"
+			}
         } else {
-            response.put "value", ""        
-            response.put "error", "Parametro no registrado" 
+			response.put "key", ""
+			response.put "value", ""     
+            response.put "error", "Valor de clave invalido" 
         }
-        // response.putAll request.parameterMap
         apiResponseBuilder.with {
             withResponse new JsonBuilder(response).toPrettyString()
             build()
