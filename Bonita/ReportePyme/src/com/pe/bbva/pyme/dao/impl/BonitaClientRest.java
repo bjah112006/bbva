@@ -45,8 +45,11 @@ public class BonitaClientRest {
 	}
 
 	public String obtainValue(String key) throws JsonProcessingException, IOException { 
+		LOG.info("URL =>" + "API/extension/parametro/get?key=" + key);
         HttpResponse response = restApiClient.executeGetRequest("API/extension/parametro/get?key=" + key);
         String result = restApiClient.consumeResponseIfNecessary(response);
+        LOG.info("URL => '" + result + "'");
+        
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonObj = mapper.readTree(result);
 

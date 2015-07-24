@@ -10,8 +10,6 @@ import org.bonitasoft.engine.bpm.data.ArchivedDataInstance;
 import org.bonitasoft.engine.bpm.data.DataInstance;
 import org.bonitasoft.engine.bpm.flownode.ArchivedFlowNodeInstance;
 import org.bonitasoft.engine.bpm.flownode.ArchivedFlowNodeInstanceSearchDescriptor;
-import org.bonitasoft.engine.bpm.flownode.FlowNodeInstance;
-import org.bonitasoft.engine.bpm.flownode.FlowNodeInstanceSearchDescriptor;
 import org.bonitasoft.engine.bpm.process.ArchivedProcessInstance;
 import org.bonitasoft.engine.bpm.process.ProcessInstance;
 import org.bonitasoft.engine.bpm.process.ProcessInstanceSearchDescriptor;
@@ -43,7 +41,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 			bonitaClientRest.init();
 			MAX_RESULT_INSTANCES = Integer.parseInt(bonitaClientRest.obtainValue(BonitaClientRest.MAX_RESULT_INSTANCES));
 			MAX_RESULT_TASKS = Integer.parseInt(bonitaClientRest.obtainValue(BonitaClientRest.MAX_RESULT_TASKS));
-			MAX_TRACE_DAYS = Integer.parseInt(bonitaClientRest.obtainValue(BonitaClientRest.MAX_TRACE_DAYS)) * -1;
+			MAX_TRACE_DAYS = Math.abs(Integer.parseInt(bonitaClientRest.obtainValue(BonitaClientRest.MAX_TRACE_DAYS))) * -1;
 			bonitaClientRest.logout();
 		} catch (Exception e) {
 			MAX_RESULT_INSTANCES = 10000;
@@ -150,6 +148,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 	    return listaSolicitudes;
 	}
 	
+	/***
 	private List<FlowNodeInstance> obtenerListaTareasPendientes(Long idProcesoPrincipal,Long idElemento) throws SearchException{
 		List<FlowNodeInstance> listaTareasPendientes = null;
 		SearchOptionsBuilder builder = new SearchOptionsBuilder(0,MAX_RESULT_TASKS);
@@ -159,6 +158,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 		 listaTareasPendientes = processFlowNodeInstance.getResult();
 		return listaTareasPendientes;
 	}
+	***/
 	
 	private List<ArchivedFlowNodeInstance> obtenerListaTareasHechas(Long idProcesoPrincipal,Long idElemento) throws SearchException{
 		List<ArchivedFlowNodeInstance> listaTareasHechas = null;
@@ -197,6 +197,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 		return listArchivedProcessInstances;
 	}
 	
+	/***
 	private Solicitud setearDatosTrazaTareaPendiente(Solicitud solicitudAux,FlowNodeInstance elementoTareaPendiente) throws Exception{
 		Solicitud solicitudPendiente = new Solicitud(solicitudAux);
 		solicitudPendiente.setNombreTarea(elementoTareaPendiente.getName());
@@ -222,6 +223,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 		
 		return solicitudPendiente;
 	}	
+	***/
 	
 	private Solicitud setearDatosTrazaTareaHecha(Solicitud solicitud_base,ArchivedFlowNodeInstance elementoTareaHecha) throws Exception{
 		Solicitud solicitudHecha = new Solicitud(solicitud_base);

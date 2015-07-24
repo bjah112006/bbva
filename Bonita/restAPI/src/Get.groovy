@@ -1,3 +1,4 @@
+import java.util.logging.Level;
 import java.util.logging.Logger
 
 import groovy.json.JsonBuilder
@@ -16,7 +17,7 @@ public class Get implements RestApiController {
 		Logger logger = restApiUtil.logger
 		String key = request.getParameter "key"
 		
-		logger.info "find key: [" + key + "]"
+		logger.log Level.SEVERE, "find key: [" + key + "]"
 		
         if(key != null) {
 			String value = DBUtil.obtenerParametro(key)
