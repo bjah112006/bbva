@@ -1,0 +1,409 @@
+@font-face {
+    font-family: "BBVA Office Light";
+    src: url("../fonts/bbvaoffice-light.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "BBVA Web Book";
+    src: url("../fonts/bbvaweb-book.eot");
+    src: url("../fonts/bbvaweb-book.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/bbvaweb-book.woff") format("woff"),
+    url("../fonts/bbvaweb-book.ttf") format("truetype"),
+    url("../fonts/bbvaweb-book.svg") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "BBVA Web Light";
+    src: url("../fonts/bbvaweb-light.eot");
+    src: url("../fonts/bbvaweb-light.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/bbvaweb-light.woff") format("woff"),
+    url("../fonts/bbvaweb-light.ttf") format("truetype"),
+    url("../fonts/bbvaweb-light.svg") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "BBVA Web Medium";
+    src: url("../fonts/bbvaweb-medium.eot");
+    src: url("../fonts/bbvaweb-medium.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/bbvaweb-medium.woff") format("woff"),
+    url("../fonts/bbvaweb-medium.ttf") format("truetype"),
+    url("../fonts/bbvaweb-medium.svg") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+html, body {
+    overflow: auto;
+    padding: 0px;
+    margin: 0px;
+    height: 100%;
+}
+
+body {
+    text-align: justify;
+}
+
+#layout {
+    margin: auto;
+    /* width: 960px; */
+    height: 100%;
+    padding: 0px;
+}
+
+#head, #menu, #body, #foot {
+    padding: 0px;
+    margin: 0px;
+}
+
+#menu {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    height: 45px;
+    background: linear-gradient(#0079c1, #00529b) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: rgb(0, 120, 210);
+    border-radius: 5px;
+    font-weight: normal;
+}
+
+#menu .btn-last-child {
+  border-radius: 0px;
+}
+
+#menu .btn {
+	height: 45px;
+	line-height: 28px;
+}
+
+#layout .btn {
+    background: #0079c1;
+    background: linear-gradient(to bottom, #0079c1 0, #00559d 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0079c1', endColorstr='#00559d', GradientType=0);
+    border: 1px solid #00559d;
+    color: #FFF;
+    cursor: pointer;
+    text-align: center;
+    vertical-align: middle;
+    text-shadow: none;
+    -webkit-filter: none;
+    filter: none;
+    box-shadow: none;
+}
+
+#layout .btn:hover,
+#layout .btn:focus,
+#layout .btn:active {
+    background: #0069b1;
+    background: linear-gradient(to bottom, #0069b1 0, #004b8c 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0069b1', endColorstr='#004b8c', GradientType=0);
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .2);
+    border: 1px solid #003c6f;
+    color: #FFF;
+    text-decoration: none;
+    transition: background-position .1s linear;
+}
+
+#layout .active {
+    background: #0079c1;
+    background: -moz-linear-gradient(top, #0079c1 0, #00529b 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #0079c1), color-stop(100%, #00529b));
+    background: -webkit-linear-gradient(top, #0079c1 0, #00529b 100%);
+    background: -o-linear-gradient(top, #0079c1 0, #00529b 100%);
+    background: -ms-linear-gradient(top, #0079c1 0, #00529b 100%);
+    background: linear-gradient(to bottom, #0079c1 0, #00529b 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0079c1, endColorstr=#00529b, GradientType=0);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) inset;
+}
+
+#layout .row {
+  margin-right: 5px;
+  margin-left: 5px;
+  margin-bottom: 10px;
+}
+
+#layout .well {
+  background-color: #fff;
+}
+
+#layout .well h1 {
+    margin-top: 0px;
+    margin-bottom: 20px;
+    color: #0072C9;
+  	font-family: 'BBVA Web Light';
+  	font-size: 25px;
+}
+
+#layout .form-group {
+    margin-bottom: 0px;
+}
+
+#layout fieldset {
+    padding: 0.6em 1em;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    border:1px solid #ccc;
+}
+
+#layout legend {
+    font-size: 12px;
+    font-weight:bold;
+    padding: 0 10px;
+    color:#003D91;
+    border: 0px;
+    width: auto;
+    margin-bottom: 5px;
+}
+
+@media (min-width: 900px) {
+  .container {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 960px;
+  }
+}
+
+#layout .col-md-1,
+#layout .col-md-2,
+#layout .col-md-3,
+#layout .col-md-4,
+#layout .col-md-5,
+#layout .col-md-6,
+#layout .col-md-7,
+#layout .col-md-8,
+#layout .col-md-9,
+#layout .col-md-10,
+#layout .col-md-11,
+#layout .col-md-12 {
+    margin: 0px;
+    padding: 0px;
+}
+
+/*
+#layout .col-md-1,
+#layout .col-md-2,
+#layout .col-md-3,
+#layout .col-md-4,
+#layout .col-md-5,
+#layout .col-md-6,
+#layout .col-md-7,
+#layout .col-md-8,
+#layout .col-md-9,
+#layout .col-md-10,
+#layout .col-md-11,
+#layout .col-md-12,
+#layout .row {
+    border: 1px solid #f00;
+}
+*/
+
+#head {
+    height: 90px;
+}
+
+#foot {
+}
+
+#body {
+    position: relative;
+    overflow: auto;
+}
+
+.panelHead {
+    width: 100%;
+    height: 90px;
+    background: url(../img/marca/logoBBVA.png) no-repeat;
+}
+
+.panelTitle {
+    position: relative;
+    top: 10px;
+    height: 50px;
+    width: 100%;
+    text-align: right;
+    vertical-align: bottom;
+}
+
+.panelTitle span {
+    height: 50px;
+    line-height: 50px;
+    text-align: right;
+    vertical-align: bottom;
+    font-size: 30px;
+    color: rgb(00, 110, 193);
+    font-family: "BBVA Web Light";
+}
+
+.panelUser {
+    padding-top: 10px;
+    padding-right: 0px;
+    width: 100%;
+    text-align: right;
+    line-height: 18px;
+}
+
+.panelUser,
+.panelUser span,
+.panelUser .panelUserBuscar {
+    font-size: 12px;
+    color: rgb(77, 77, 79);
+}
+
+.panelUser .panelUserBuscar {
+    display: inline;
+}
+
+.panelUser .username {
+    color: rgb(00, 158, 229);
+}
+
+.panelUser a,
+.panelUser a:active,
+.panelUser a:hover,
+.panelUser a:visited {
+    color: white;
+    background: rgb(200, 23, 94);
+    border: 0px;
+    padding: 4px 8px;
+    text-decoration: none;
+}
+
+.panelUser a span {
+    color: white;
+    display: inline;
+}
+
+.ui-icon-bbva-close {
+	display: block;
+	text-indent: -99999px;
+	overflow: hidden;
+	background-image: url('../img/logout16x16.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 16px;
+	height: 16px;
+}
+
+.control-label-0 {
+	height: 29px;
+    line-height: 34px;
+    vertical-align: middle;
+	font-weight: normal;
+}
+
+/* Corner radius */
+.ui-corner-all,
+.ui-corner-top,
+.ui-corner-left,
+.ui-corner-tl,
+.ui-corner-tl-bl {
+    border-top-left-radius: 4px;
+}
+.ui-corner-all,
+.ui-corner-top,
+.ui-corner-right,
+.ui-corner-tr,
+.ui-corner-tr-br {
+    border-top-right-radius: 4px;
+}
+.ui-corner-all,
+.ui-corner-bottom,
+.ui-corner-left,
+.ui-corner-bl,
+.ui-corner-tl-bl {
+    border-bottom-left-radius: 4px;
+}
+.ui-corner-all,
+.ui-corner-bottom,
+.ui-corner-right,
+.ui-corner-br,
+.ui-corner-tr-br {
+    border-bottom-right-radius: 4px;
+}
+
+@media (min-width: 1000px) {
+    .ui-corner-tl-bl {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+    .ui-corner-tr-br {
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+    #layout .select2-container .select2-choice {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 0px;
+        border-bottom-left-radius: 4px; 
+        border-bottom-right-radius: 0px;
+    }
+}
+
+.hide {
+	display: none;
+}
+
+/*
+.ag-header,
+.ag-header .ag-header-viewport,
+.ag-header .ag-header-container {
+	height: 30px;
+}
+*/
+
+.ag-header .ag-header-cell {
+ 	text-align: center;
+	background:#f8f8f5;
+	font-weight: bold;
+	font-size: 9px;
+	color:#62676b;
+	line-height: 26px;
+	border: 1px solid #e5e5e5;
+	box-shadow: #fff 0 0 0 2px inset;
+	moz-box-shadow: #fff 0 0 0 2px inset;
+	-o-box-shadow: #fff 0 0 0 2px inset;
+	-moz-box-shadow: #fff 0 0 0 2px inset;
+	-webkit-box-shadow:#fff 0 0 0 2px inset;
+}
+
+.ag-body .ag-row-even {
+	
+}
+
+.ag-body .ag-row-odd {
+	background: #f3fcff;
+}
+
+.ag-body .ag-cell {
+	padding: 0 10px;
+	overflow: hidden;
+	border: none;
+	border-bottom: 1px solid #e5e5e5;
+	font-size: 0.9em;
+	white-space: pre-wrap;
+	line-height: 30px;
+}
+
+.ag-body .cell-col-1,
+.ag-body .cell-col-3,
+.ag-body .cell-col-4,
+.ag-body .cell-col-5 {
+	margin: auto;
+	text-align: center;
+}
+
