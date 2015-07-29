@@ -26,7 +26,7 @@ public class BonitaClientRest {
     public static final String MAX_RESULT_TASKS = "006";
     public static final String MAX_TRACE_DAYS = "007";
     
-	public String getProperty(String key) {
+	public static String getProperty(String key) {
 		String prop = "";
 		try {
 			LOG.info("===>" + System.getProperty("btm.root"));

@@ -1,17 +1,13 @@
 package com.pe.bbva.pyme.jobs;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -41,76 +37,77 @@ public class GenerarReporteJob implements Job {
 		LOG.info("Verificando hora de ejecucion...");
 		try {
 			//1. Leer archivo de configuracion
-			Properties props = leerArchivoConfiguracion();
+			// Properties props = leerArchivoConfiguracion();
 			//2. Verificar si debe lanzarse la tarea programada
-			if(verificarHorarioTareaProgramada(props)){
+			if(verificarHorarioTareaProgramada()){
 				LOG.info("Es hora de generacion de descarga...");
 				//3. Obtener datos del reporte
-				List<Solicitud> solicitudes = obtenerDatosReporte(props);
+				List<Solicitud> solicitudes = obtenerDatosReporte();
 				//4. Generar reporte
-				generarReporteExcel(solicitudes,props);
+				generarReporteExcel(solicitudes);
 				}
 			}catch (Exception e) {
 				LOG.error("Error ejecutando tarea principal:",e);
 			}
 		}
 	
-	private Properties leerArchivoConfiguracion() throws IOException{
-		Properties props = new Properties();
-		String propFileName = ConstantesEnum.NOMBRE_ARCHIVO_CONF.getNombre();		
-	    String propertyHome = System.getenv(ConstantesEnum.CATALINA_HOME.getNombre());
-	    String filePath = propertyHome!=null?propertyHome.concat(File.separator).concat(ConstantesEnum.CARPETA_CONF.getNombre()).concat(File.separator).concat(propFileName):ConstantesEnum.CADENA_VACIA.getNombre();
-	    File archivoConfiguracion = new File(filePath);
-	    if(archivoConfiguracion.exists() && !archivoConfiguracion.isDirectory()) { 
-	    	props.load(new FileInputStream(archivoConfiguracion));
-	    }else{
-	    	InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
-			if (inputStream != null){
-				props.load(inputStream);
-			}
-	    }				
-		return props;
-	}
+//	private Properties leerArchivoConfiguracion() throws IOException{
+//		Properties props = new Properties();
+//		String propFileName = ConstantesEnum.NOMBRE_ARCHIVO_CONF.getNombre();		
+//	    String propertyHome = System.getenv(ConstantesEnum.CATALINA_HOME.getNombre());
+//	    String filePath = propertyHome!=null?propertyHome.concat(File.separator).concat(ConstantesEnum.CARPETA_CONF.getNombre()).concat(File.separator).concat(propFileName):ConstantesEnum.CADENA_VACIA.getNombre();
+//	    File archivoConfiguracion = new File(filePath);
+//	    if(archivoConfiguracion.exists() && !archivoConfiguracion.isDirectory()) { 
+//	    	props.load(new FileInputStream(archivoConfiguracion));
+//	    }else{
+//	    	InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+//			if (inputStream != null){
+//				props.load(inputStream);
+//			}
+//	    }				
+//		return props;
+//	}
 
-	private boolean verificarHorarioTareaProgramada(Properties props) {
-		boolean verificado = false;
-		//1. Obtenemos la frecuencia, dia y hora de ejecucion segun la configuracion.
-		String frecuenciaEjecucion = props.getProperty(ConstantesEnum.PARAM_FRECUENCIA_EJECUCION.getNombre());
-		String diaEjecucion = ConstantesEnum.FRECUENCIA_MENSUAL.getNombre().equalsIgnoreCase(frecuenciaEjecucion)?props.getProperty("dia_ejecucion"):ConstantesEnum.PROCESO_SIN_DIA.getNombre();
-		String horaEjecucion = props.getProperty(ConstantesEnum.PARAM_HORA_EJECUCION.getNombre());		
-		//2. Obtenemos el dia y hora del sistema
-		Date date = new Date();
-		DateFormat dateFormatDia = new SimpleDateFormat(ConstantesEnum.FORMATO_DIA.getNombre());
-		DateFormat dateFormatHora = new SimpleDateFormat(ConstantesEnum.FORMATO_HORA.getNombre());
-		String diaActual = dateFormatDia.format(date);
-		String horaActual = dateFormatHora.format(date);	
-		//3. Se actualiza el dia de ejecucion para casos especiales
-		Integer diasMes = Utils.getDiasMesActual();
-		diaEjecucion = Integer.parseInt(diaEjecucion)>diasMes?diasMes.toString():diaEjecucion;
-		//4. se comparan para saber si debe ejecutar la tarea programada
-		if(ConstantesEnum.FRECUENCIA_DIARIA.getNombre().equalsIgnoreCase(frecuenciaEjecucion)){
-			verificado = horaEjecucion.equals(horaActual);
-		}else{
-			verificado = horaEjecucion.equals(horaActual) && diaEjecucion.equals(diaActual);
-		}
-		return verificado;
-	}
+    private boolean verificarHorarioTareaProgramada() {
+        boolean verificado = false;
+        // 1. Obtenemos la frecuencia, dia y hora de ejecucion segun la
+        // configuracion.
+        String frecuenciaEjecucion = BonitaClientRest.getProperty(ConstantesEnum.PARAM_FRECUENCIA_EJECUCION.getNombre());
+        String diaEjecucion = ConstantesEnum.FRECUENCIA_MENSUAL.getNombre().equalsIgnoreCase(frecuenciaEjecucion) ? BonitaClientRest.getProperty("dia_ejecucion") : ConstantesEnum.PROCESO_SIN_DIA.getNombre();
+        String horaEjecucion = BonitaClientRest.getProperty(ConstantesEnum.PARAM_HORA_EJECUCION.getNombre());
+        // 2. Obtenemos el dia y hora del sistema
+        Date date = new Date();
+        DateFormat dateFormatDia = new SimpleDateFormat(ConstantesEnum.FORMATO_DIA.getNombre());
+        DateFormat dateFormatHora = new SimpleDateFormat(ConstantesEnum.FORMATO_HORA.getNombre());
+        String diaActual = dateFormatDia.format(date);
+        String horaActual = dateFormatHora.format(date);
+        // 3. Se actualiza el dia de ejecucion para casos especiales
+        Integer diasMes = Utils.getDiasMesActual();
+        diaEjecucion = Integer.parseInt(diaEjecucion) > diasMes ? diasMes.toString() : diaEjecucion;
+        // 4. se comparan para saber si debe ejecutar la tarea programada
+        if (ConstantesEnum.FRECUENCIA_DIARIA.getNombre().equalsIgnoreCase(frecuenciaEjecucion)) {
+            verificado = horaEjecucion.equals(horaActual);
+        } else {
+            verificado = horaEjecucion.equals(horaActual) && diaEjecucion.equals(diaActual);
+        }
+        return verificado;
+    }
 
-	private List<Solicitud> obtenerDatosReporte(Properties props) throws Exception {
+	private List<Solicitud> obtenerDatosReporte() throws Exception {
 		List<Solicitud> listaSolicitudes = new ArrayList<Solicitud>();		
-		ISolicitudDAO iSolicitudDAO = new SolicitudDAOImpl(props); 
+		ISolicitudDAO iSolicitudDAO = new SolicitudDAOImpl(); 
 		listaSolicitudes = iSolicitudDAO.listarSolicitudes();				
 		return listaSolicitudes;
 	}
 
-	private void generarReporteExcel(List<Solicitud> solicitudes, Properties props) throws Exception{
+	private void generarReporteExcel(List<Solicitud> solicitudes) throws Exception{
 		//String fileName = props.getProperty(ConstantesEnum.PARAM_RUTA_SALIDA.getNombre()).concat(File.separator).concat(props.getProperty(ConstantesEnum.PARAM_NOMBRE_SALIDA.getNombre())).concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre())).concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
 		BonitaClientRest bonitaClientRest = new BonitaClientRest();
 		bonitaClientRest.init();
 		String path = bonitaClientRest.obtainValue(BonitaClientRest.URL_REPORTE_OUTPUT);
 		bonitaClientRest.logout();
 		
-		String fileName = path.concat(File.separator).concat(props.getProperty(ConstantesEnum.PARAM_NOMBRE_SALIDA.getNombre())).concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre())).concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
+		String fileName = path.concat(File.separator).concat(BonitaClientRest.getProperty(ConstantesEnum.PARAM_NOMBRE_SALIDA.getNombre())).concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre())).concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheet = workbook.createSheet(ConstantesEnum.NOMBRE_HOJA_EXCEL.getNombre());	
 		int rowIndex = 0;
@@ -222,7 +219,6 @@ public class GenerarReporteJob implements Job {
 	    workbook.write(fos);
 	    fos.close();
 	    workbook.close();
-	    LOG.debug(fileName + " escrito satisfactoriamente");
-		    	
-	}	
+	    LOG.debug(fileName + " escrito satisfactoriamente");	    	
+	}
 }

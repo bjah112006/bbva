@@ -2,7 +2,6 @@ package com.pe.bbva.pyme.dao.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.bonitasoft.engine.api.ApiAccessType;
 import org.bonitasoft.engine.api.IdentityAPI;
@@ -36,13 +35,13 @@ public class BonitaDataAccess {
 	private String serverUrl;
 	private String applicationName;
 		
-	public BonitaDataAccess(Properties props) throws Exception{
+	public BonitaDataAccess() throws Exception{
 		super();	
-		this.userName = props.getProperty(ConstantesEnum.PARAM_USER_NAME_BONITA.getNombre());
-		this.password = props.getProperty(ConstantesEnum.PARAM_PASSWORD_BONITA.getNombre());
-		this.idProceso = props.getProperty(ConstantesEnum.PARAM_ID_PROCESO.getNombre());
-		this.serverUrl = props.getProperty(ConstantesEnum.PARAM_SERVER_NAME.getNombre());
-		this.applicationName = props.getProperty(ConstantesEnum.PARAM_APPLICATION_NAME.getNombre());
+		this.userName = BonitaClientRest.getProperty(ConstantesEnum.PARAM_USER_NAME_BONITA.getNombre());
+		this.password = BonitaClientRest.getProperty(ConstantesEnum.PARAM_PASSWORD_BONITA.getNombre());
+		this.idProceso = BonitaClientRest.getProperty(ConstantesEnum.PARAM_ID_PROCESO.getNombre());
+		this.serverUrl = BonitaClientRest.getProperty(ConstantesEnum.PARAM_SERVER_NAME.getNombre());
+		this.applicationName = BonitaClientRest.getProperty(ConstantesEnum.PARAM_APPLICATION_NAME.getNombre());
 		this.setApiSession(obtenerAccesoBonita(this.serverUrl, this.applicationName, this.userName, this.password));
 		this.setProcessAPI(TenantAPIAccessor.getProcessAPI(getApiSession()));
 		this.setIdentityAPI(TenantAPIAccessor.getIdentityAPI(getApiSession()));

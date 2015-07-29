@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import org.bonitasoft.engine.bpm.data.ArchivedDataInstance;
 import org.bonitasoft.engine.bpm.data.DataInstance;
@@ -34,8 +33,8 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 	protected int MAX_RESULT_TASKS;
 	protected int MAX_TRACE_DAYS;
 	
-	public SolicitudDAOImpl(Properties props) throws Exception {	
-		super(props);
+	public SolicitudDAOImpl() throws Exception {	
+		super();
 		BonitaClientRest bonitaClientRest = new BonitaClientRest();
 		try {
 			bonitaClientRest.init();
