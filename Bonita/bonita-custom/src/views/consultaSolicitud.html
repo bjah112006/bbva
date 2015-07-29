@@ -1,0 +1,36 @@
+<div class="form-group">
+	<fieldset>
+		<legend>Criterio de b&uacute;squeda</legend>
+		<div class="row">
+			<div class="col-md-2"><label class="control-label control-label-0">Tipo de documento:</label></div>
+			<div class="col-md-4">
+				<ui-select ng-model="documento.selected" theme="select2" class="form-control" title="Tipo de documento">
+					<ui-select-match placeholder="Seleccione un tipo de documento de la lista...">
+						{{$select.selected.name}}
+					</ui-select-match>
+					<ui-select-choices repeat="item in tiposDocumento | filter: $select.search">
+						<div ng-bind-html="item.name | highlight: $select.search"></div>
+						<!--
+						<small ng-bind-html="item.name | highlight: $select.search"></small>
+						-->
+					</ui-select-choices>
+				</ui-select>
+			</div>
+		    <div class="col-md-3">
+				<input type="text" class="form-control ui-corner-tr-br" style="border-left: 0px;" ng-model="documento.name"/>
+		    </div>
+		    <div class="col-md-1"></div>
+		    <div class="col-md-2">
+				<label class="btn btn-primary" ng-click="buscar()" style="float: right;">Consultar</label>
+		    </div>
+		</div>
+	</fieldset>
+	<div class="row" style="height:20px;">&nbsp;</div>
+	<fieldset>
+		<legend>Resultado</legend>
+		<div class="row">
+			<div style="height: 300px;" ag-grid="gridOptions2"></div>
+			<pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+		</div>
+	</fieldset>
+</div>
