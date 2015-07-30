@@ -18,7 +18,8 @@
 			<div class="headerFiltro">
 				<table class="tablaFiltro">
 						<tr>
-							<td height="50px"> Criterio de Consulta &nbsp; 
+							<td height="50px"> Criterio de Consulta &nbsp; </td> 
+							<td>
 								<select style="width: 190px;" id="cboFiltro">
 									<option value="01">Numero Solicitud</option>
 									<option value="02">Numero DOI Cliente</option>
@@ -29,6 +30,18 @@
 								<input type="text" id="txtFiltro"> &nbsp;
 								<a id="btnConsultar" href="javascript: void(0);" class="btn btn-primary-action" onclick="consultarSolicitudes()">consultar</a>
 							</td>
+						</tr>
+						<tr>
+							<td> Estacion &nbsp; </td>
+							<td>
+								<select style="width: 190px;" id="cboEstacion">
+									<option value="-1">[Seleccione]</option>
+									<option value="001">Oficina</option>
+									<option value="002">Fuvex</option>
+									<option value="003">Mesa Control</option>
+									<option value="004">Riesgo</option>
+									<option value="005">CPM</option>
+								</select>
 						</tr>
 					</table>
 				</div>

@@ -198,7 +198,7 @@ abrirConsulta = function() {
         success: function(data) {
         	//var bodyContent = $("#body").find(".page").find(".body");
         	var bodyContent = $("#body");
-        	var menuContent = $("#menu").find("li");
+        	/*var menuContent = $("#menu").find("li");
         	menuContent.each(function (index){
         		var clase = $(this).attr("class");
         		if(clase.contains("current")){
@@ -210,7 +210,7 @@ abrirConsulta = function() {
         			$(this).removeClass(clase);
         			$(this).addClass(clase + " " + "current");
         		}
-        	});
+        	});*/
         	bodyContent.html(data);
             bodyContent.find("#panelIzq").css("height", height + "px");
         },
@@ -220,16 +220,16 @@ abrirConsulta = function() {
     });
 };
 
-
-
 consultarSolicitudes = function () {
 	var filtro = $("#cboFiltro").val();
 	var valorFiltro = $("#txtFiltro").val();
+	var estacion = $("#cboEstacion").val();
 	
-	if(valorFiltro == ''){
-		alert("Debe ingresar un valor para el filtro de busqueda");
+	if(estacion=='-1' && valorFiltro==''){ //valorFiltro == ''
+		alert("Debe ingresar un valor para los filtros de busqueda");
 	}else{
-		var request = 'listRequest?filtro='+filtro;
+		//var request = 'listRequest?filtro='+filtro;
+		var request = 'listRequest?filtro='+filtro + "&estacion="+estacion;
 		var __xhr = $.ajax({
 	        type: "post", 
 	        dataType: 'json',

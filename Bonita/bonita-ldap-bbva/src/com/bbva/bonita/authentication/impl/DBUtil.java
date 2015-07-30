@@ -39,6 +39,29 @@ public class DBUtil {
         return parametro;
     }
     
+    public static String obtenerParametroDetalle(String table, String key) {
+    	String parametro = "";
+    	
+        try {
+            InitialContext ic = new InitialContext();
+            DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS");
+            Connection cn = ds.getConnection();
+            PreparedStatement ps = cn.prepareStatement("SELECT VAL_COLUMN2 FROM TBL_PYME_PARAMETER WHERE ID_TABLE='" + table + "' AND ID_COLUMN='" + key + "'");
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+            	parametro = rs.getString("VAL_COLUMN2");
+            }
+
+            rs.close();
+            ps.close();
+            cn.close();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "obtenerParametro", e);
+        }
+        return parametro;
+    }
+    
     public static String obtenerParametro(String key) {
         return obtenerParametro("10", key);
     }

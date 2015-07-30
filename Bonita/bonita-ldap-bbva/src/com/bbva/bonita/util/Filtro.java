@@ -4,6 +4,7 @@ public class Filtro {
 
 	private String codigoFiltro;
 	private String valorFiltro;
+	private String estacion;
 	
 	public String getCodigoFiltro() {
 		return codigoFiltro;
@@ -17,6 +18,10 @@ public class Filtro {
 	public void setValorFiltro(String valorFiltro) {
 		this.valorFiltro = valorFiltro;
 	}
-	
-	
+	public String getEstacion() {
+		return estacion;
+	}
+	public void setEstacion(String estacion) {
+		this.estacion = estacion;
+	}
 }

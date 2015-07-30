@@ -24,11 +24,14 @@ import org.bonitasoft.engine.api.ProcessAPI;
 import org.bonitasoft.engine.api.TenantAPIAccessor;
 import org.bonitasoft.engine.bpm.data.ArchivedDataInstance;
 import org.bonitasoft.engine.bpm.data.DataInstance;
+import org.bonitasoft.engine.bpm.flownode.FlowNodeInstance;
+import org.bonitasoft.engine.bpm.flownode.FlowNodeInstanceSearchDescriptor;
 import org.bonitasoft.engine.bpm.process.ArchivedProcessInstance;
 import org.bonitasoft.engine.bpm.process.ArchivedProcessInstancesSearchDescriptor;
 import org.bonitasoft.engine.bpm.process.ProcessDefinition;
 import org.bonitasoft.engine.bpm.process.ProcessInstance;
 import org.bonitasoft.engine.bpm.process.ProcessInstanceSearchDescriptor;
+import org.bonitasoft.engine.exception.SearchException;
 import org.bonitasoft.engine.identity.User;
 import org.bonitasoft.engine.search.SearchOptionsBuilder;
 import org.bonitasoft.engine.search.SearchResult;
@@ -36,6 +39,7 @@ import org.bonitasoft.engine.session.APISession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.bbva.bonita.authentication.impl.DBUtil;
 import com.bbva.bonita.dto.SolicitudDTO;
 import com.bbva.bonita.util.Constante;
 import com.bbva.bonita.util.ConstantesEnum;
@@ -65,35 +69,44 @@ public class ListRequestServlet extends HttpServlet {
 			Filtro filtro = new Filtro();
 			filtro.setCodigoFiltro(request.getParameter("filtro"));
 			filtro.setValorFiltro(request.getParameter("valorFiltro"));
+			filtro.setEstacion(request.getParameter("estacion"));
 			
 			logger.log(Level.INFO, "=== FILTRO: " + filtro.getCodigoFiltro());
 			logger.log(Level.INFO, "=== VALOR FILTRO: " + filtro.getValorFiltro());
+			logger.log(Level.INFO, "=== ESTACION: " + filtro.getEstacion());
 			
-			//TODO: OBTENEMOS SOLICITUDES PENDIENTES
+			List<SolicitudDTO> listaSolicitud = null;
+			List<ArchivedProcessInstance> listArchivedProcessInstances = null;
+		
 			SearchOptionsBuilder builder = new SearchOptionsBuilder(0, 100);
-			if(filtro.getCodigoFiltro().compareTo("01")==0){
+			if(filtro.getCodigoFiltro().compareTo("01")==0 && filtro.getValorFiltro().compareTo("")!=0){
 				logger.log(Level.INFO, "=== FILTRO POR NRO. SOLICITUD PENDIENTES: " + filtro.getValorFiltro());
 				builder.filter(ProcessInstanceSearchDescriptor.ID, filtro.getValorFiltro());
 			}
+			
 			tiempoInicio = System.currentTimeMillis();
 			SearchResult<ProcessInstance> processInstanceResults = getProcessAPI().searchOpenProcessInstances(builder.done());
 			List<ProcessInstance> listaSolicitudesPendientes = processInstanceResults.getResult();
 			logger.info("=== TIEMPO RESPUESTA CONSULTA SOLIC. PENDIENTES: " + (System.currentTimeMillis()-tiempoInicio)/1000 + " segundos");
 			logger.info("=== CANTIDAD DE SOLICITUDES PENDIENTES: " + (listaSolicitudesPendientes!=null?listaSolicitudesPendientes.size():0));
 			
-			//TODO: OBTENEMOS SOLICITUDES ARCHIVADAS
-			builder = new SearchOptionsBuilder(0, 100);
-			if(filtro.getCodigoFiltro().compareTo("01")==0){
-				logger.log(Level.INFO, "=== FILTRO POR NRO. SOLICITUD ARCHIVADAS: " + filtro.getValorFiltro());
-				builder.filter(ArchivedProcessInstancesSearchDescriptor.SOURCE_OBJECT_ID, filtro.getValorFiltro());
+			//TODO: SI LA BUSQUEDA ES POR ESTACION, NO SE BUSCAN LAS SOLICITUDES ARCHIVADAS
+			if(filtro.getEstacion().compareTo("-1")==0){
+				//TODO: OBTENEMOS SOLICITUDES ARCHIVADAS
+				builder = new SearchOptionsBuilder(0, 100);
+				if(filtro.getCodigoFiltro().compareTo("01")==0){
+					logger.log(Level.INFO, "=== FILTRO POR NRO. SOLICITUD ARCHIVADAS: " + filtro.getValorFiltro());
+					builder.filter(ArchivedProcessInstancesSearchDescriptor.SOURCE_OBJECT_ID, filtro.getValorFiltro());
+				}
+				tiempoInicio = System.currentTimeMillis();
+				SearchResult<ArchivedProcessInstance> archivedProcessInstanceResults = getProcessAPI().searchArchivedProcessInstances(builder.done());
+				listArchivedProcessInstances = archivedProcessInstanceResults.getResult();	
+				logger.info("=== TIEMPO RESPUESTA CONSULTA SOLIC. ARCHIVADAS: " + (System.currentTimeMillis()-tiempoInicio)/1000 + " segundos");
+				logger.info("=== CANTIDAD DE SOLICITUDES ARCHIVADAS: " + (listArchivedProcessInstances!=null?listArchivedProcessInstances.size():0));
 			}
-			tiempoInicio = System.currentTimeMillis();
-			SearchResult<ArchivedProcessInstance> archivedProcessInstanceResults = getProcessAPI().searchArchivedProcessInstances(builder.done());
-			List<ArchivedProcessInstance> listArchivedProcessInstances = archivedProcessInstanceResults.getResult();	
-			logger.info("=== TIEMPO RESPUESTA CONSULTA SOLIC. ARCHIVADAS: " + (System.currentTimeMillis()-tiempoInicio)/1000 + " segundos");
-			logger.info("=== CANTIDAD DE SOLICITUDES ARCHIVADAS: " + (listArchivedProcessInstances!=null?listArchivedProcessInstances.size():0));
 			
-			List<SolicitudDTO> listaSolicitud = obtenerSolicitudes(listaSolicitudesPendientes, listArchivedProcessInstances, filtro);
+			//TODO: FILTRAMOS LAS SOLICITUDES
+			listaSolicitud = obtenerSolicitudes(listaSolicitudesPendientes, listArchivedProcessInstances, filtro);
 			Collections.sort(listaSolicitud);
 			Integer cantidadSolicitudes = listaSolicitud!=null?listaSolicitud.size():0;
 			logger.log(Level.INFO, "=== CANTIDAD DE SOLICITUDES A MOSTRAR EN PANTALLA: " + cantidadSolicitudes);
@@ -155,11 +168,19 @@ public class ListRequestServlet extends HttpServlet {
 			while(itrSolicitudesPendientes.hasNext()){
 				ProcessInstance elementoSolicitud = itrSolicitudesPendientes.next();
 				SolicitudDTO solicitudDTO = obtenerDatosSolicitudPendiente(elementoSolicitud);
+				List<FlowNodeInstance> listaTareasPendientes = obtenerListaTareasPendientes(elementoSolicitud.getProcessDefinitionId(), 
+																			elementoSolicitud.getRootProcessInstanceId());
+				Iterator<FlowNodeInstance> itrTareaPendiente = listaTareasPendientes.iterator();
+				while(itrTareaPendiente.hasNext()) {
+					FlowNodeInstance elementoTareaPendiente = (FlowNodeInstance) itrTareaPendiente.next();
+					solicitudDTO = setearDatosTrazaTareaPendiente(solicitudDTO, elementoTareaPendiente);
+				}
+				
 				listaSolicitud.add(solicitudDTO);
 			}
 			logger.info("=== TIEMPO RESPUESTA MAPEO SOLICITUDES PENDIENTES: " + (System.currentTimeMillis()-inicio)/1000 + " segundos");
 		}
-		List<SolicitudDTO> listaSolicitudArchivadas = obtenerSolicitudesArchivadas(listArchivedProcessInstances, filtro);
+		List<SolicitudDTO> listaSolicitudArchivadas = obtenerSolicitudesArchivadas(listArchivedProcessInstances);
 		
 		listaSolicitud.addAll(listaSolicitudArchivadas);
 		inicio = System.currentTimeMillis();
@@ -168,8 +189,33 @@ public class ListRequestServlet extends HttpServlet {
 		return listaSolicitud;
 	}
 	
-	private List<SolicitudDTO> obtenerSolicitudesArchivadas(List<ArchivedProcessInstance> listArchivedProcessInstances, 
-																						Filtro filtro) throws Exception{
+	private SolicitudDTO setearDatosTrazaTareaPendiente(SolicitudDTO solicitud_base, FlowNodeInstance elementoTareaPendiente) throws Exception{
+		List<DataInstance> datosTareaPendiente = getProcessAPI().getActivityDataInstances(elementoTareaPendiente.getId(), 1, 1000);
+		Iterator<DataInstance> itrDataTarea = datosTareaPendiente.iterator();
+		while(itrDataTarea.hasNext()) {
+			DataInstance elementDataCaso = (DataInstance) itrDataTarea.next();
+			String nombre = elementDataCaso.getName();
+			String valor = elementDataCaso.getValue()==null?ConstantesEnum.CADENA_VACIA.getNombre():elementDataCaso.getValue().toString();
+			
+			//TODO: CAPTURAMOS EL ID DEL ROL 
+			if(nombre.compareToIgnoreCase("id_rol_actor")==0){
+				solicitud_base.setRolEjecutorTarea(valor);
+			}
+		}
+		return solicitud_base;
+	}
+	
+	private List<FlowNodeInstance> obtenerListaTareasPendientes(Long idProcesoPrincipal,Long idElemento) throws SearchException{
+		List<FlowNodeInstance> listaTareasPendientes = null;
+		SearchOptionsBuilder builder = new SearchOptionsBuilder(0,100);
+		builder.filter(FlowNodeInstanceSearchDescriptor.PROCESS_DEFINITION_ID, idProcesoPrincipal);
+		builder.filter(FlowNodeInstanceSearchDescriptor.ROOT_PROCESS_INSTANCE_ID,idElemento);
+		final SearchResult<FlowNodeInstance> processFlowNodeInstance = getProcessAPI().searchFlowNodeInstances(builder.done());
+		 listaTareasPendientes = processFlowNodeInstance.getResult();
+		return listaTareasPendientes;
+	}
+	
+	private List<SolicitudDTO> obtenerSolicitudesArchivadas(List<ArchivedProcessInstance> listArchivedProcessInstances) throws Exception{
 		Long inicio = System.currentTimeMillis();
 		List<SolicitudDTO> listaSolicitud = new ArrayList<SolicitudDTO>();
 		if(listArchivedProcessInstances!=null && !listArchivedProcessInstances.isEmpty()){
@@ -186,27 +232,52 @@ public class ListRequestServlet extends HttpServlet {
 	
 	private List<SolicitudDTO> obtenerSolicitudFiltro(List<SolicitudDTO> listaSolicitudes, Filtro filtro){
 		List<SolicitudDTO> listaSolicitud = new ArrayList<SolicitudDTO>();
+		if(filtro.getEstacion().compareTo("-1")==0){
+			for(SolicitudDTO solicitud:listaSolicitudes){
+				switch (Integer.valueOf(filtro.getCodigoFiltro())) {
+				case 1: //TODO: FILTRO POR NRO DE SOLICITUD
+					if(filtro.getValorFiltro().compareTo(solicitud.getNroSolicitud())==0){
+						listaSolicitud.add(solicitud);
+					}
+					break;
+				case 2: //TODO: FILTRO POR DOI DE CLIENTE
+					if(filtro.getValorFiltro().contains(solicitud.getNroDOICliente())){
+						listaSolicitud.add(solicitud);
+					}
+					break;
+				case 3: //TODO: FILTRO POR RVGL
+					if(filtro.getValorFiltro().compareTo(solicitud.getNroRVGL())==0){
+						listaSolicitud.add(solicitud);
+					}
+				case 4: //TODO: FILTRO POR SOLICITUD PRE IMPRESO
+					if(solicitud.getNum_preimpreso()!=null &&
+							filtro.getValorFiltro().compareTo(solicitud.getNum_preimpreso())==0){
+						listaSolicitud.add(solicitud);
+					}
+					break;
+				}
+			}
+		}else{
+			//TODO: FILTRO POR ESTACION
+			obtenerSolicitudesXEstacion(listaSolicitudes, filtro);
+		}
+		return listaSolicitud;
+	}
+	
+	private List<SolicitudDTO> obtenerSolicitudesXEstacion(List<SolicitudDTO> listaSolicitudes, Filtro filtro){
+		List<SolicitudDTO> listaSolicitud = new ArrayList<SolicitudDTO>();
+		String rolIds = DBUtil.obtenerParametroDetalle(Constante.ID_TABLA_ESTACION, filtro.getEstacion());
+		logger.log(Level.INFO, "=== FILTRO POR ROL_ID: " + rolIds);
+		String[] rol_ids = rolIds.split("|");
 		for(SolicitudDTO solicitud:listaSolicitudes){
-			switch (Integer.valueOf(filtro.getCodigoFiltro())) {
-			case 1: //TODO: FILTRO POR NRO DE SOLICITUD
-				if(filtro.getValorFiltro().compareTo(solicitud.getNroSolicitud())==0){
-					listaSolicitud.add(solicitud);
+			if(rol_ids!=null && rol_ids.length>0){
+				for(String rol:rol_ids){
+					if(solicitud.getRolEjecutorTarea()!=null && 
+							rol.compareTo(solicitud.getRolEjecutorTarea())==0){
+						listaSolicitud.add(solicitud);
+					}
 				}
-				break;
-			case 2: //TODO: FILTRO POR DOI DE CLIENTE
-				if(filtro.getValorFiltro().contains(solicitud.getNroDOICliente())){
-					listaSolicitud.add(solicitud);
-				}
-				break;
-			case 3: //TODO: FILTRO POR RVGL
-				if(filtro.getValorFiltro().compareTo(solicitud.getNroRVGL())==0){
-					listaSolicitud.add(solicitud);
-				}
-			case 4: //TODO: FILTRO POR SOLICITUD PRE IMPRESO
-				if(solicitud.getNum_preimpreso()!=null &&
-						filtro.getValorFiltro().compareTo(solicitud.getNum_preimpreso())==0){
-					listaSolicitud.add(solicitud);
-				}
+			}else{
 				break;
 			}
 		}
