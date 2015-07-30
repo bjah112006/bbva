@@ -24,14 +24,11 @@ import org.bonitasoft.engine.api.ProcessAPI;
 import org.bonitasoft.engine.api.TenantAPIAccessor;
 import org.bonitasoft.engine.bpm.data.ArchivedDataInstance;
 import org.bonitasoft.engine.bpm.data.DataInstance;
-import org.bonitasoft.engine.bpm.flownode.FlowNodeInstance;
-import org.bonitasoft.engine.bpm.flownode.FlowNodeInstanceSearchDescriptor;
 import org.bonitasoft.engine.bpm.process.ArchivedProcessInstance;
 import org.bonitasoft.engine.bpm.process.ArchivedProcessInstancesSearchDescriptor;
 import org.bonitasoft.engine.bpm.process.ProcessDefinition;
 import org.bonitasoft.engine.bpm.process.ProcessInstance;
 import org.bonitasoft.engine.bpm.process.ProcessInstanceSearchDescriptor;
-import org.bonitasoft.engine.exception.SearchException;
 import org.bonitasoft.engine.identity.User;
 import org.bonitasoft.engine.search.SearchOptionsBuilder;
 import org.bonitasoft.engine.search.SearchResult;
@@ -39,7 +36,6 @@ import org.bonitasoft.engine.session.APISession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.bbva.bonita.authentication.impl.DBUtil;
 import com.bbva.bonita.dto.SolicitudDTO;
 import com.bbva.bonita.util.Constante;
 import com.bbva.bonita.util.ConstantesEnum;
@@ -168,14 +164,6 @@ public class ListRequestServlet extends HttpServlet {
 			while(itrSolicitudesPendientes.hasNext()){
 				ProcessInstance elementoSolicitud = itrSolicitudesPendientes.next();
 				SolicitudDTO solicitudDTO = obtenerDatosSolicitudPendiente(elementoSolicitud);
-				List<FlowNodeInstance> listaTareasPendientes = obtenerListaTareasPendientes(elementoSolicitud.getProcessDefinitionId(), 
-																			elementoSolicitud.getRootProcessInstanceId());
-				Iterator<FlowNodeInstance> itrTareaPendiente = listaTareasPendientes.iterator();
-				while(itrTareaPendiente.hasNext()) {
-					FlowNodeInstance elementoTareaPendiente = (FlowNodeInstance) itrTareaPendiente.next();
-					solicitudDTO = setearDatosTrazaTareaPendiente(solicitudDTO, elementoTareaPendiente);
-				}
-				
 				listaSolicitud.add(solicitudDTO);
 			}
 			logger.info("=== TIEMPO RESPUESTA MAPEO SOLICITUDES PENDIENTES: " + (System.currentTimeMillis()-inicio)/1000 + " segundos");
@@ -189,7 +177,7 @@ public class ListRequestServlet extends HttpServlet {
 		return listaSolicitud;
 	}
 	
-	private SolicitudDTO setearDatosTrazaTareaPendiente(SolicitudDTO solicitud_base, FlowNodeInstance elementoTareaPendiente) throws Exception{
+	/*private SolicitudDTO setearDatosTrazaTareaPendiente(SolicitudDTO solicitud_base, FlowNodeInstance elementoTareaPendiente) throws Exception{
 		List<DataInstance> datosTareaPendiente = getProcessAPI().getActivityDataInstances(elementoTareaPendiente.getId(), 1, 1000);
 		Iterator<DataInstance> itrDataTarea = datosTareaPendiente.iterator();
 		while(itrDataTarea.hasNext()) {
@@ -203,9 +191,9 @@ public class ListRequestServlet extends HttpServlet {
 			}
 		}
 		return solicitud_base;
-	}
+	}*/
 	
-	private List<FlowNodeInstance> obtenerListaTareasPendientes(Long idProcesoPrincipal,Long idElemento) throws SearchException{
+	/*private List<FlowNodeInstance> obtenerListaTareasPendientes(Long idProcesoPrincipal,Long idElemento) throws SearchException{
 		List<FlowNodeInstance> listaTareasPendientes = null;
 		SearchOptionsBuilder builder = new SearchOptionsBuilder(0,100);
 		builder.filter(FlowNodeInstanceSearchDescriptor.PROCESS_DEFINITION_ID, idProcesoPrincipal);
@@ -213,7 +201,7 @@ public class ListRequestServlet extends HttpServlet {
 		final SearchResult<FlowNodeInstance> processFlowNodeInstance = getProcessAPI().searchFlowNodeInstances(builder.done());
 		 listaTareasPendientes = processFlowNodeInstance.getResult();
 		return listaTareasPendientes;
-	}
+	}*/
 	
 	private List<SolicitudDTO> obtenerSolicitudesArchivadas(List<ArchivedProcessInstance> listArchivedProcessInstances) throws Exception{
 		Long inicio = System.currentTimeMillis();
@@ -266,19 +254,62 @@ public class ListRequestServlet extends HttpServlet {
 	
 	private List<SolicitudDTO> obtenerSolicitudesXEstacion(List<SolicitudDTO> listaSolicitudes, Filtro filtro){
 		List<SolicitudDTO> listaSolicitud = new ArrayList<SolicitudDTO>();
-		String rolIds = DBUtil.obtenerParametroDetalle(Constante.ID_TABLA_ESTACION, filtro.getEstacion());
-		logger.log(Level.INFO, "=== FILTRO POR ROL_ID: " + rolIds);
-		String[] rol_ids = rolIds.split("|");
-		for(SolicitudDTO solicitud:listaSolicitudes){
-			if(rol_ids!=null && rol_ids.length>0){
-				for(String rol:rol_ids){
-					if(solicitud.getRolEjecutorTarea()!=null && 
-							rol.compareTo(solicitud.getRolEjecutorTarea())==0){
-						listaSolicitud.add(solicitud);
+		
+		if(listaSolicitudes!=null){
+			for(SolicitudDTO solicitudDTO:listaSolicitudes){
+				switch (filtro.getEstacion()) {
+				case "001": //TODO: OFICINA
+					if(solicitudDTO.getEstado()!=null
+							&& (solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.DEVUELTO_POR_MESA_CONTROL)==0
+							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.APROBADO_CON_MODIFICACION_POR_CONFIRMAR)==0
+							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.REQUISITO_OBSERVADO)==0)
+							&& (solicitudDTO.getAbn_registante()==null || solicitudDTO.getAbn_registante().compareTo("")==0)){
+						listaSolicitud.add(solicitudDTO);
 					}
+					break;
+					
+				case "002": //TODO: FUVEX
+					if(solicitudDTO.getEstado()!=null
+							&& (solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.DEVUELTO_POR_MESA_CONTROL)==0
+							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.APROBADO_CON_MODIFICACION_POR_CONFIRMAR)==0
+							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.REQUISITO_OBSERVADO)==0)
+							&& (solicitudDTO.getAbn_registante()!=null && solicitudDTO.getAbn_registante().compareTo("")!=0)){
+						listaSolicitud.add(solicitudDTO);
+					}
+					break;
+					
+				case "003": //TODO: MESA
+					if(solicitudDTO.getEstado()!=null 
+							&& solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.ENVIADO_A_MESA_CONTROL)==0){
+						listaSolicitud.add(solicitudDTO);
+					}
+					break;
+				
+				case "004": //TODO: RIESGO
+					if(solicitudDTO.getEstado()!=null
+							&& (solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.ENVIADO_A_EVALUACION)==0
+							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.ENVIADO_ASIGNACION_EVALUADOR)==0
+							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.ENVIADO_A_VISITA_CAMPO)==0
+							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.TRANSFERIDO)==0
+							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.VISITA_DE_CAMPO_REALIZADO)==0
+							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.AUTORIZACION_ESCALADA)==0)){
+						listaSolicitud.add(solicitudDTO);
+					}
+					break;
+					
+				case "005": //TODO: CPM
+					if(solicitudDTO.getEstado()!=null
+							&& (solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.DESEMBOLSADO)==0
+							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.EN_ESPERA_TRAMITE)==0
+							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.APROBADO_CON_MODIFICACION)==0
+							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.APROBADO_SIN_MODIFICACION)==0)){
+						listaSolicitud.add(solicitudDTO);
+					}
+					break;
+					
+				default:
+					break;
 				}
-			}else{
-				break;
 			}
 		}
 		return listaSolicitud;
@@ -352,7 +383,7 @@ public class ListRequestServlet extends HttpServlet {
 			solicitudDTO.setClasificacion_clte((valor==null || valor.equals("null"))?"":valor);
 		}else if("num_tramite".compareTo(nombre)==0){
 			solicitudDTO.setNum_preimpreso((valor==null || valor.equals("null"))?"":valor);
-		}else if("usu_registro".compareTo(nombre)==0){
+		}else if("usu_registrante".compareTo(nombre)==0){ //usu_registro
 			solicitudDTO.setAbn_registante((valor==null || valor.equals("null"))?"":valor);
 		}
 		return solicitudDTO;
