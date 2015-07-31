@@ -33,6 +33,7 @@ public class ListFileServlet extends HttpServlet {
 	static {
 		try {
 			props = new Properties();
+			logger.log(Level.SEVERE, System.getProperty("btm.root").replace("\\", "/") + "/conf/configWFFastPyme.properties");
 			props.load(new FileInputStream(System.getProperty("btm.root").replace("\\", "/") + "/conf/configWFFastPyme.properties"));
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "No found properties", e);
