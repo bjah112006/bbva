@@ -135,7 +135,8 @@ body {
   background-color: #fff;
 }
 
-#layout .well h1 {
+#layout .well h1,
+#layout .well h1 small {
     margin-top: 0px;
     margin-bottom: 20px;
     color: #0072C9;
@@ -148,6 +149,7 @@ body {
 }
 
 #layout fieldset {
+	width: 100%;
     padding: 0.6em 1em;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
