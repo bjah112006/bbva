@@ -42,6 +42,21 @@
 						<div class="campo-espaciado">
 						</div>
 						<div class="campo-espaciado">
+						<h:panelGrid styleClass="bloque" rendered="#{not empty datosCabecera.mensajeAdvertencia}">
+						<h:panelGroup>
+						<table width="100%">
+							<tr>
+								<td width="80px">
+									<h:graphicImage value="#{resource['images:advertencia.png']}"/>
+								</td>
+								<td valign="middle" align="left">
+									<h:outputText styleClass="etiquetaField"
+										value="#{datosCabecera.mensajeAdvertencia}"/>
+								</td>
+							</tr>
+						</table>	
+						</h:panelGroup>											         
+							</h:panelGrid>
 						</div>
 						<div class="campo-espaciado" align="center">
 							<h:graphicImage value="#{resource['images:ce_bienvenida.jpg']}"/>
