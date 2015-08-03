@@ -1,0 +1,329 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg" />
+<h:head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css"
+		target="head" />
+	<h:outputStylesheet library="css/theme" name="stylesheet.css"
+		target="head" />
+	<h:outputStylesheet library="css/style" name="style.css" target="head" />
+	<h:outputStylesheet library="css/style" name="stylecabecera.css"
+		target="head" />
+	<h:outputStylesheet library="css/style" name="stylemenu.css"
+		target="head" />
+	
+	<h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
+    <h:outputScript library="js" name="jquery-ui.js" target="head"/>    
+    <h:outputScript library="js" name="jquery.numeric.js" target="head"/>
+    <h:outputScript library="js" name="autoNumeric-1.7.4-B.js" target="head"/>
+    <h:outputScript library="js" name="funciones.js" target="head"/>
+        
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>JSP Page</title>
+	<script type="text/javascript" language="javascript">
+
+			function cambiarEstado (comp) 
+			{	
+				var opcion = $(comp).attr('checked'); 		    			
+				$(".seleccionar").each(function() {
+					$(this).attr('checked', false);
+				});
+			
+				$(comp).attr('checked', opcion);			
+			}
+			
+			function mostrarTerritorio()
+			{
+			    if($("#consultarTabla\\:cmbFiltroOficina").val() == "-1")
+			    {
+			    	$("#consultarTabla\\:lblFiltroTerritorio").text("");
+			    }
+			    else
+			    {
+			    	$("#consultarTabla\\:lblFiltroTerritorio").text($("#consultarTabla\\:cmbFiltroOficina").val().split("_")[1]);
+			    }				
+			}
+						
+		</script>
+</h:head>
+<h:body onload="mostrarTerritorio()">
+	<h:form id="consultarTabla">
+		<div class="contenido">
+			<div class="cabecera">
+				<ui:include src="/resources/common/cabecera.xhtml" />
+			</div>
+			<div class="cuerpo">
+				<div class="menu">
+					<ui:include src="/resources/common/menu.xhtml" />
+				</div>
+				<div class="datos">
+					<h:panelGrid styleClass="bloque">
+						<h:panelGroup styleClass="titulo">
+							<h:outputText id="nombreTablaOTX"
+								value="Mantenimiento - Oficina Temporal" />
+							<h:outputText value=" " />
+						</h:panelGroup>
+					<h:panelGroup id="idConsultaTabla">		
+								    <h:panelGroup>
+										<table width="100%" border="0" align="center" cellspacing="0">
+											<tr>
+												<td valign="top">
+													<table width="100%">
+														<tr>
+															<td align="left" valign="top" width="100%">
+																<table>																																																			
+																	<tr>
+																		<td>
+																			<h:outputText value="#{msg['com.ibm.bbva.common.oficinaTemporal.msg.oficina']}:" class="etiqueta"/>
+																		</td>
+																		<td>
+																			<h:selectOneMenu id="cmbFiltroOficina" onchange="mostrarTerritorio()"
+																					value="#{oficinaTemporal.filtroSeleccionadoOficina}" styleClass="select">																					
+																						<f:selectItems value="#{oficinaTemporal.listaOficina}" />																					
+																				</h:selectOneMenu>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>
+																			<h:outputText value="#{msg['com.ibm.bbva.common.oficinaTemporal.msg.territorio']}:" class="etiqueta"/>
+																		</td>
+																		<td>
+																			<h:outputText id="lblFiltroTerritorio" class="etiquetaField"/>
+																		</td>
+																	</tr>	
+																	<tr>
+																		<td>
+																			<h:outputText value="#{msg['com.ibm.bbva.common.oficinaTemporal.msg.rango_fecha']}:" class="etiqueta"/>
+																		</td>
+																		<td>
+																			<table>
+																				<tr>
+																					<td>
+																						<h:outputText value="#{msg['com.ibm.bbva.common.oficinaTemporal.msg.inicio']}:" class="etiqueta"/>
+																					</td>
+																					<td width="120px">
+																						<h:inputText value="#{oficinaTemporal.filtroSeleccionadoFechaInicio}" id="txtFiltroFechaInicio" 
+																							     style="width:80px;" styleClass="valor  formatoFecha" maxlength="10">
+																								<f:convertDateTime pattern="dd/MM/yyyy" />																								
+																							</h:inputText>
+																							<h:message for="txtFiltroFechaInicio" errorClass="mensaje-error"/>  
+																					</td>
+																					<td>
+																						<h:outputText value="#{msg['com.ibm.bbva.common.oficinaTemporal.msg.fin']}:" class="etiqueta"/>
+																					</td>
+																					<td>
+																						<h:inputText value="#{oficinaTemporal.filtroSeleccionadoFechaFin}" id="txtFiltroFechaFin" 
+																							     style="width:80px;" styleClass="valor  formatoFecha" maxlength="10">
+																								<f:convertDateTime pattern="dd/MM/yyyy" />																								
+																							</h:inputText>
+																							<h:message for="txtFiltroFechaFin" errorClass="mensaje-error"/>  
+																					</td>
+																				</tr>
+																			</table>
+																		</td>
+																	</tr>	
+																	<tr>
+																		<td>
+																			<h:outputText value="#{msg['com.ibm.bbva.common.oficinaTemporal.msg.rango_horas']}:" class="etiqueta"/>
+																		</td>
+																		<td>
+																			<table>
+																				<tr>
+																					<td>
+																						<h:outputText value="#{msg['com.ibm.bbva.common.oficinaTemporal.msg.inicio']}:" class="etiqueta"/>
+																					</td>
+																					<td width="120px">
+																						<h:inputText value="#{oficinaTemporal.filtroSeleccionadoHoraInicio}" id="txtFiltroHoraInicio"
+																										style="width:80px;" styleClass="valor soloHora" maxlength="5">
+																						</h:inputText>
+																						<h:message for="txtFiltroHoraInicio" errorClass="mensaje-error"/>
+																					</td>
+																					<td>
+																						<h:outputText value="#{msg['com.ibm.bbva.common.oficinaTemporal.msg.fin']}:" class="etiqueta"/>
+																					</td>
+																					<td>
+																						<h:inputText value="#{oficinaTemporal.filtroSeleccionadoHoraFin}" id="txtFiltroHoraFin"
+																										style="width:80px;" styleClass="valor soloHora" maxlength="5">
+																						</h:inputText>
+																						<h:message for="txtFiltroHoraFin" errorClass="mensaje-error"/>
+																					</td>
+																				</tr>
+																			</table>
+																		</td>
+																	</tr>
+																		<tr>
+																		<td>
+																			&nbsp;
+																		</td>
+																		<td>
+																			<table>
+																				<tr>
+																					<td width="170px">
+																						<label class="label">HH:mm (Ejm: 09:00)</label>																						
+																					</td>
+																					<td width="170px">
+																						<label class="label">HH:mm (Ejm: 18:00)</label>
+																					</td>
+																				</tr>
+																			</table>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>
+																			<h:outputText value="#{msg['com.ibm.bbva.common.oficinaTemporal.msg.estado']}:" class="etiqueta"/>
+																		</td>
+																		<td>
+																			<h:selectOneMenu id="cmbFiltroEstado"
+																					value="#{oficinaTemporal.filtroSeleccionadoEstado}" styleClass="select">																					
+																						<f:selectItems value="#{oficinaTemporal.listaEstado}" />																					
+																				</h:selectOneMenu>
+																		</td>
+																	</tr>															
+																</table>
+															</td>
+														</tr>
+									
+									                       <h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+														   <h:outputText value=" " />
+														   <tr>						
+															  <td align="left">
+															   
+																<h:commandButton id="buscar" action="#{oficinaTemporal.buscar}"
+																	value="Buscar" styleClass="boton"/>
+																<h:commandButton id="limpiar" action="#{oficinaTemporal.limpiar}" 
+																	value="Limpiar" styleClass="boton"/>
+															   
+															  </td>
+														   </tr>					
+														   <h:outputText value=" " />	
+														</h:panelGroup>
+									
+													</table>
+												</td>
+											</tr>
+										</table>
+									</h:panelGroup>
+						</h:panelGroup>
+						
+						<h:panelGroup style="overflow-x: auto; width: 750px;height: 440px">
+							<table width="750px" border="0" cellpadding="0" cellspacing="0">
+								<tr>
+									<td styleClass="textotitulo">
+										<h:dataTable border="1" styleClass="tablaTask" style="border-collapse:collapse;" 
+												columnClasses="text,text,text" headerClass="headerClass headerTabla1"
+												rowClasses="uno,dos" id="idTablaEnvioCorreo" rendered="#{not empty oficinaTemporal.listaOficinaTemporal}"
+												value="#{oficinaTemporal.listaOficinaTemporal}" var="item" footerClass="fondo"
+												rows="10" binding="#{oficinaTemporal.dataTable}" >
+												<h:column width="5%" align="center">
+													<f:facet name="header">
+														<h:outputText value="Sel."></h:outputText>
+													</f:facet>
+													<h:selectBooleanCheckbox id="idSelect" value="#{item.seleccion}" styleClass="seleccionar" onclick="cambiarEstado(this);">											
+													</h:selectBooleanCheckbox>
+												</h:column>		
+												<h:column width="5%">
+													<f:facet name="header">
+														<h:outputText
+															value="#{msg['com.ibm.bbva.common.oficinaTemporal.msg.id']}"
+															styleClass="tabla-titulo"></h:outputText>
+													</f:facet>
+													<h:outputText value="#{item.id}" styleClass="tabla-campo-texto"></h:outputText>
+												</h:column>		
+												<h:column width="20%">
+													<f:facet name="header">
+														<h:outputText
+															value="#{msg['com.ibm.bbva.common.oficinaTemporal.msg.oficina']}"
+															styleClass="tabla-titulo"></h:outputText>
+													</f:facet>
+													<h:outputText value="#{item.oficina}" styleClass="tabla-campo-texto"></h:outputText>
+												</h:column>	
+												<h:column width="25%">
+													<f:facet name="header">
+														<h:outputText
+															value="#{msg['com.ibm.bbva.common.oficinaTemporal.msg.territorio']}"
+															styleClass="tabla-titulo"></h:outputText>
+													</f:facet>
+													<h:outputText value="#{item.territorio}" styleClass="tabla-campo-texto"></h:outputText>
+												</h:column>		
+												<h:column width="25%">
+													<f:facet name="header">
+														<h:outputText
+															value="#{msg['com.ibm.bbva.common.oficinaTemporal.msg.rango_fecha']}"
+															styleClass="tabla-titulo"></h:outputText>
+													</f:facet>
+													<h:outputText value="#{item.rangoFechas}" styleClass="tabla-campo-texto"></h:outputText>
+												</h:column>	
+												<h:column width="15%">
+													<f:facet name="header">
+														<h:outputText
+															value="#{msg['com.ibm.bbva.common.oficinaTemporal.msg.expedientes']}"
+															styleClass="tabla-titulo"></h:outputText>
+													</f:facet>
+													<h:outputText value="#{item.expedientes}" styleClass="tabla-campo-texto"></h:outputText>
+												</h:column>	
+												<h:column width="10%" align="center">
+													<f:facet name="header">
+														<h:outputText
+															value="Activo"
+															styleClass="tabla-titulo"></h:outputText>
+													</f:facet>
+													<h:selectBooleanCheckbox value="#{item.flagActivo}" disabled="true">
+													</h:selectBooleanCheckbox>
+											    </h:column>																							
+											</h:dataTable>	
+									</td>
+								</tr>
+							</table>
+						</h:panelGroup>
+
+						<h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+							<table width="100%" border="0" cellpadding="0" cellspacing="0">
+								<tr>
+									<h:outputText value=" " />
+								</tr>
+							</table>
+						</h:panelGroup>
+
+						<h:panelGroup>
+							<table width="100%" border="0" cellpadding="0" cellspacing="0">
+								<tr>
+									<td align="left">
+									<h:commandButton id="agregar"
+											action="#{oficinaTemporal.agregar}" value="Agregar"
+											styleClass="boton" /> 
+									<h:commandButton id="actualizar"
+											action="#{oficinaTemporal.editar}" value="Actualizar"
+											styleClass="boton" /> 
+									<h:commandButton value="&#60;&#60;anterior"
+										actionListener="#{oficinaTemporal.pagePrevious}"  styleClass="boton"
+										disabled="#{oficinaTemporal.dataTable.first == 0}" />
+									<h:commandButton value="siguiente&#62;&#62;"
+										actionListener="#{oficinaTemporal.pageNext}"  styleClass="boton"
+										disabled="#{oficinaTemporal.dataTable.first + oficinaTemporal.dataTable.rows >= oficinaTemporal.dataTable.rowCount}" />
+									</td>
+								</tr>
+							</table>
+						</h:panelGroup>
+						
+						<h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+							<table width="100%" border="0" cellpadding="0" cellspacing="0">
+								<tr>
+									<td><h:messages styleClass="mensaje-error"
+											globalOnly="true"></h:messages></td>
+								</tr>
+							</table>
+						</h:panelGroup>
+					</h:panelGrid>
+				</div>
+			</div>
+		</div>
+	</h:form>
+</h:body>
+</html>
