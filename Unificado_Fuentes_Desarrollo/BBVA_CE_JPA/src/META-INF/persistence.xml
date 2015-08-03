@@ -89,6 +89,10 @@
 		<class>com.ibm.bbva.entities.Multitabla</class>
 		<class>com.ibm.bbva.entities.DescargaLDAP</class>
 		<class>com.ibm.bbva.entities.DescargaLDAPCarteriz</class>
+		<class>com.ibm.bbva.entities.LdapTemp</class>
+		<class>com.ibm.bbva.entities.OficinaTemporal</class>
+		<class>com.ibm.bbva.entities.LogJob</class>
+		<class>com.ibm.bbva.entities.LogJobDet</class>
 		<properties>
 			<property name="open.jdbc.Schema" value="CONELE"/>
 			<property name="openjpa.log" value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE"/>
