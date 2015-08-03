@@ -18,7 +18,8 @@
 			<div class="headerFiltro">
 				<table class="tablaFiltro">
 						<tr>
-							<td height="50px"> Criterio de Consulta &nbsp; </td> 
+							<td height="50px"> 
+								<input type="radio" name="filtro" id="filtro1" onclick="mostrarFiltros()" checked="checked" value="filtro1"> Criterio de Consulta &nbsp; </td>
 							<td>
 								<select style="width: 190px;" id="cboFiltro">
 									<option value="01">Numero Solicitud</option>
@@ -32,9 +33,9 @@
 							</td>
 						</tr>
 						<tr>
-							<td> Estacion &nbsp; </td>
+							<td><input type="radio" name="filtro" id="filtro2" onclick="mostrarFiltros()" value="filtro2"> Estacion &nbsp;</td>
 							<td>
-								<select style="width: 190px;" id="cboEstacion">
+								<select style="width: 190px;" id="cboEstacion" disabled="disabled">
 									<option value="-1">[Seleccione]</option>
 									<option value="001">Oficina</option>
 									<option value="002">Fuvex</option>
@@ -42,6 +43,7 @@
 									<option value="004">Riesgo</option>
 									<option value="005">CPM</option>
 								</select>
+							</td>
 						</tr>
 					</table>
 				</div>

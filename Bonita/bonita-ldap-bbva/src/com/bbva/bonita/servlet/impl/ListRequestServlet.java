@@ -247,7 +247,8 @@ public class ListRequestServlet extends HttpServlet {
 			}
 		}else{
 			//TODO: FILTRO POR ESTACION
-			obtenerSolicitudesXEstacion(listaSolicitudes, filtro);
+			listaSolicitud = obtenerSolicitudesXEstacion(listaSolicitudes, filtro);
+			logger.log(Level.INFO, "CANTIDAD SOLICITUDES X ESTACION: " + listaSolicitud.size());
 		}
 		return listaSolicitud;
 	}
@@ -256,59 +257,63 @@ public class ListRequestServlet extends HttpServlet {
 		List<SolicitudDTO> listaSolicitud = new ArrayList<SolicitudDTO>();
 		
 		if(listaSolicitudes!=null){
+			logger.log(Level.INFO, "Nro. Solicitudes Pendientes: " + listaSolicitudes.size());
 			for(SolicitudDTO solicitudDTO:listaSolicitudes){
-				switch (filtro.getEstacion()) {
-				case "001": //TODO: OFICINA
-					if(solicitudDTO.getEstado()!=null
-							&& (solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.DEVUELTO_POR_MESA_CONTROL)==0
-							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.APROBADO_CON_MODIFICACION_POR_CONFIRMAR)==0
-							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.REQUISITO_OBSERVADO)==0)
-							&& (solicitudDTO.getAbn_registante()==null || solicitudDTO.getAbn_registante().compareTo("")==0)){
-						listaSolicitud.add(solicitudDTO);
-					}
-					break;
-					
-				case "002": //TODO: FUVEX
-					if(solicitudDTO.getEstado()!=null
-							&& (solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.DEVUELTO_POR_MESA_CONTROL)==0
-							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.APROBADO_CON_MODIFICACION_POR_CONFIRMAR)==0
-							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.REQUISITO_OBSERVADO)==0)
-							&& (solicitudDTO.getAbn_registante()!=null && solicitudDTO.getAbn_registante().compareTo("")!=0)){
-						listaSolicitud.add(solicitudDTO);
-					}
-					break;
-					
-				case "003": //TODO: MESA
-					if(solicitudDTO.getEstado()!=null 
-							&& solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.ENVIADO_A_MESA_CONTROL)==0){
-						listaSolicitud.add(solicitudDTO);
-					}
-					break;
+				logger.log(Level.INFO, "=============================================");
+				logger.log(Level.INFO, "Nro. Solicitud: " + solicitudDTO.getNroSolicitud());
+				logger.log(Level.INFO, "Estado Solicitud: " + solicitudDTO.getEstado());
+				logger.log(Level.INFO, "Estacion: " + filtro.getEstacion());
+				logger.log(Level.INFO, "=============================================");
 				
-				case "004": //TODO: RIESGO
-					if(solicitudDTO.getEstado()!=null
-							&& (solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.ENVIADO_A_EVALUACION)==0
-							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.ENVIADO_ASIGNACION_EVALUADOR)==0
-							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.ENVIADO_A_VISITA_CAMPO)==0
-							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.TRANSFERIDO)==0
-							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.VISITA_DE_CAMPO_REALIZADO)==0
-							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.AUTORIZACION_ESCALADA)==0)){
-						listaSolicitud.add(solicitudDTO);
-					}
-					break;
+				switch (filtro.getEstacion()) {
+					case "001": //TODO: OFICINA
+						if(solicitudDTO.getEstado()!=null
+								&& (solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.DEVUELTO_POR_MESA_CONTROL)==0
+								|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.APROBADO_CON_MODIFICACION_POR_CONFIRMAR)==0
+								|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.REQUISITO_OBSERVADO)==0)
+								&& (solicitudDTO.getAbn_registante()==null || solicitudDTO.getAbn_registante().compareTo("")==0)){
+							listaSolicitud.add(solicitudDTO);
+						}
+						break;
+						
+					case "002": //TODO: FUVEX
+						if(solicitudDTO.getEstado()!=null
+								&& (solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.DEVUELTO_POR_MESA_CONTROL)==0
+								|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.APROBADO_CON_MODIFICACION_POR_CONFIRMAR)==0
+								|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.REQUISITO_OBSERVADO)==0)
+								&& (solicitudDTO.getAbn_registante()!=null && solicitudDTO.getAbn_registante().compareTo("")!=0)){
+							listaSolicitud.add(solicitudDTO);
+						}
+						break;
+						
+					case "003": //TODO: MESA
+						if(solicitudDTO.getEstado()!=null 
+								&& solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.ENVIADO_A_MESA_CONTROL)==0){
+							listaSolicitud.add(solicitudDTO);
+						}
+						break;
 					
-				case "005": //TODO: CPM
-					if(solicitudDTO.getEstado()!=null
-							&& (solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.DESEMBOLSADO)==0
-							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.EN_ESPERA_TRAMITE)==0
-							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.APROBADO_CON_MODIFICACION)==0
-							|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.APROBADO_SIN_MODIFICACION)==0)){
-						listaSolicitud.add(solicitudDTO);
-					}
-					break;
-					
-				default:
-					break;
+					case "004": //TODO: RIESGO
+						if(solicitudDTO.getEstado()!=null
+								&& (solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.ENVIADO_A_EVALUACION)==0
+								|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.ENVIADO_ASIGNACION_EVALUADOR)==0
+								|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.ENVIADO_A_VISITA_CAMPO)==0
+								|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.TRANSFERIDO)==0
+								|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.VISITA_DE_CAMPO_REALIZADO)==0
+								|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.AUTORIZACION_ESCALADA)==0)){
+							listaSolicitud.add(solicitudDTO);
+						}
+						break;
+						
+					case "005": //TODO: CPM
+						if(solicitudDTO.getEstado()!=null
+								&& (solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.DESEMBOLSADO)==0
+								|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.EN_ESPERA_TRAMITE)==0
+								|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.APROBADO_CON_MODIFICACION)==0
+								|| solicitudDTO.getEstado().compareToIgnoreCase(Constante.EstadoSolicitud.APROBADO_SIN_MODIFICACION)==0)){
+							listaSolicitud.add(solicitudDTO);
+						}
+						break;
 				}
 			}
 		}
