@@ -37,6 +37,7 @@ import com.ibm.bbva.controller.AbstractLinksMBean;
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.controller.ConstantesAdmin;
 import com.ibm.bbva.controller.mantenimiento.DescargaLDAP_UI;
+import com.ibm.bbva.controller.mantenimiento.OficinaTemporal_UI;
 import com.ibm.bbva.entities.CartEmpleadoCE;
 import com.ibm.bbva.entities.CartTerritorioCE;
 import com.ibm.bbva.entities.Empleado;
@@ -105,6 +106,7 @@ public class MenuMB extends AbstractLinksMBean {
 	private boolean habMenuHorario;
 	private boolean habMenuBandejaMonitoreo;	
 	private boolean habMenuDescargaLDAP;
+	private boolean habMenuOficinaTemporal;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(MenuMB.class);
 	
@@ -130,6 +132,7 @@ public class MenuMB extends AbstractLinksMBean {
 		this.habMenuHorario = false;
 		this.habMenuBandejaMonitoreo = false;
 		this.habMenuDescargaLDAP = false;
+		this.habMenuOficinaTemporal = false;
 	}
 	
 	public String nuevoExpediente () {
@@ -491,6 +494,7 @@ public class MenuMB extends AbstractLinksMBean {
 			String flagMenuReporteTOE = empleado.getPerfil().getFlagMenuReporteTOE();
 			String flagMenuHorario = empleado.getPerfil().getFlagMenuHorario();
 			String flagMenuDescargaLDAP = empleado.getPerfil().getFlagMenuDescargaLDAP();
+			String flagMenuOficinaTemporal = empleado.getPerfil().getFlagMenuOficinaTemporal();
 			
 			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuRegistraExpediente)) {
 				habMenuRegistrarExpediente = true;
@@ -532,6 +536,9 @@ public class MenuMB extends AbstractLinksMBean {
 			}	
 			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuDescargaLDAP)) {
 				habMenuDescargaLDAP = true;
+			}
+			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuOficinaTemporal)) {
+				habMenuOficinaTemporal = true;
 			}
 		}
 		if(getObjectSession(Constantes.USUARIO_AD_SESION) != null){
@@ -612,8 +619,22 @@ public class MenuMB extends AbstractLinksMBean {
 		DescargaLDAP_MB.cargarTipo();
 		DescargaLDAP_MB.cargarEstado();
 		DescargaLDAP_MB.cargarPerfil();
+		DescargaLDAP_MB.cargarOficina();
 		
 		return "/descargaLDAP/formManConsultaDescargaLDAP?faces-redirect=true";
+				
+	}
+	
+	public String oficinaTemporal () 
+	{	
+		FacesContext ctx = FacesContext.getCurrentInstance();  
+		OficinaTemporal_UI OficinaTemporal_MB = (OficinaTemporal_UI)  
+				 ctx.getApplication().getVariableResolver().resolveVariable(ctx, "oficinaTemporal");
+		
+		OficinaTemporal_MB.cargarOficina();
+		OficinaTemporal_MB.cargarEstado();
+		
+		return "/oficinaTemporal/formManConsultaOficinaTemporal?faces-redirect=true";
 				
 	}
 	
@@ -988,6 +1009,14 @@ public class MenuMB extends AbstractLinksMBean {
 
 	public void setHabMenuDescargaLDAP(boolean habMenuDescargaLDAP) {
 		this.habMenuDescargaLDAP = habMenuDescargaLDAP;
+	}
+
+	public boolean isHabMenuOficinaTemporal() {
+		return habMenuOficinaTemporal;
+	}
+
+	public void setHabMenuOficinaTemporal(boolean habMenuOficinaTemporal) {
+		this.habMenuOficinaTemporal = habMenuOficinaTemporal;
 	}
 	
 }
