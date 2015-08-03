@@ -85,6 +85,10 @@
 		<h:outputText value="Descarga LDAP" />
 	</h:commandLink>
 	
+	<h:commandLink action="#{menu.oficinaTemporal}" immediate="true" rendered="#{menu.habMenuOficinaTemporal}">
+		<h:outputText value="Oficina Temporal" />
+	</h:commandLink>
+	
 	<h:outputLink value="javascript: salir();">
 		<h:outputText value="#{msg['com.ibm.bbva.common.menu.salir']}" />
 	</h:outputLink>

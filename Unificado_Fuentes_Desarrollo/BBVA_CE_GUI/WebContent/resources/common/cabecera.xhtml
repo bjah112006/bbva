@@ -75,10 +75,13 @@
     
 	    <div class="datos-sesion">
 	        <span class="columna" style="width: 50px">
-	            <h:outputText value="#{msg['com.ibm.bbva.common.buscarCliente.oficina']}:  " style="font-weight: bold"/>
+	            <h:outputText value="#{msg['com.ibm.bbva.common.buscarCliente.oficina']}:  " style="font-weight: bold"/>		        	           
 	        </span>
-	        <span class="columna" style="width: 30px">
-	        	<h:outputText value="#{datosCabecera.empleado.oficina.codigo}"/>
+	        <span class="columna" style="width: 20px">
+	        	<h:outputText value="#{datosCabecera.empleado.oficina.codigo}"/> 
+	        </span> 
+	        <span class="columna" style="width: 80px">
+	        	<h:outputText value="#{datosCabecera.etiquetaTemporal}" style="font-weight: bold"/> 
 	        </span> 
 	        <span class="columna" style="width: 60px">
 	            <h:outputText value="#{msg['com.ibm.bbva.common.buscarCliente.usuario']}:  " style="font-weight: bold"/>	
@@ -95,7 +98,7 @@
 	        <span class="columna" style="width: 40px">
 	            <h:outputText value="#{msg['com.ibm.bbva.common.buscarCliente.perfil']}:  " style="font-weight: bold"/>
 	        </span>
-	        <span class="columna" style="width: 180px">
+	        <span class="columna" style="width: 100px">
 	        	<h:outputText value="#{datosCabecera.empleado.perfil.descripcion}"/>
 	        </span>
 	    </div>
