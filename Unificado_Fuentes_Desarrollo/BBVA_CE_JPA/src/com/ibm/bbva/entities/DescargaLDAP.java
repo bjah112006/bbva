@@ -33,6 +33,10 @@ public class DescargaLDAP implements Serializable
 	@OneToMany(mappedBy="descargaLDAP")
 	private List<DescargaLDAPCarteriz> descargaLDAPCarterizaciones;
 	
+	@ManyToOne
+	@JoinColumn(name="ID_OFICINA")
+	private Oficina oficina;
+	
 	public long getId() {
 		return id;
 	}
@@ -80,6 +84,14 @@ public class DescargaLDAP implements Serializable
 
 	public void setPerfil(Perfil perfil) {
 		this.perfil = perfil;
+	}
+
+	public Oficina getOficina() {
+		return oficina;
+	}
+
+	public void setOficina(Oficina oficina) {
+		this.oficina = oficina;
 	}
 	
 }

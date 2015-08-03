@@ -8,7 +8,11 @@ import java.util.Date;
 
 @Entity
 @Table(name="TBL_CE_IBM_MULTITABLA", schema = "CONELE")
-@NamedQuery(name="Multitabla.findByPadre", query="SELECT c FROM Multitabla c WHERE c.parametro = :idPadre")
+
+@NamedQueries({
+	@NamedQuery(name="Multitabla.findByPadre", query="SELECT c FROM Multitabla c WHERE c.parametro = :idPadre"),
+	@NamedQuery(name="Multitabla.findById", query="SELECT c FROM Multitabla c WHERE c.id = :id")
+})
 public class Multitabla implements Serializable{
 
 	private static final long serialVersionUID = 1L;

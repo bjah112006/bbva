@@ -37,7 +37,7 @@ public class Empleado implements Serializable {
 	private String codigo;
 
 	private String correo;
-
+	
 	@Temporal(TemporalType.DATE)
 	private Date fecegr;
 
@@ -52,6 +52,17 @@ public class Empleado implements Serializable {
 	@Column(name="NOMBRES_COMPLETOS")
 	private String nombresCompletos;
 
+	@Column(name="COD_CARGO")
+	private String codigoCargo;
+	
+	@Column(name="CARGA_LDAP_COD_CARG_ANT")
+	private String codigoCargoAnterior;
+	
+	//bi-directional many-to-one association to Oficina
+	@ManyToOne
+	@JoinColumn(name="CARGA_LDAP_ID_OFI_ANT")
+	private Oficina oficinaAnterior;
+			
 	//bi-directional many-to-one association to AyudaMemoria
 	@OneToMany(mappedBy="empleado")
 	private List<AyudaMemoria> ayudaMemorias;
@@ -66,6 +77,11 @@ public class Empleado implements Serializable {
 	@JoinColumn(name="ID_OFICINA_FK")
 	private Oficina oficina;
 
+	//bi-directional many-to-one association to Oficina
+	@ManyToOne
+	@JoinColumn(name="ID_OFI_BACKUP")
+	private Oficina oficinaBackup;
+		
 	//bi-directional many-to-one association to Perfil
 	@ManyToOne
 	@JoinColumn(name="ID_PERFIL_FK")
@@ -262,6 +278,38 @@ public class Empleado implements Serializable {
 		expedienteTC.setEmpleado(null);
 
 		return expedienteTC;
+	}
+
+	public String getCodigoCargo() {
+		return codigoCargo;
+	}
+
+	public void setCodigoCargo(String codigoCargo) {
+		this.codigoCargo = codigoCargo;
+	}
+
+	public String getCodigoCargoAnterior() {
+		return codigoCargoAnterior;
+	}
+
+	public void setCodigoCargoAnterior(String codigoCargoAnterior) {
+		this.codigoCargoAnterior = codigoCargoAnterior;
+	}
+
+	public Oficina getOficinaAnterior() {
+		return oficinaAnterior;
+	}
+
+	public void setOficinaAnterior(Oficina oficinaAnterior) {
+		this.oficinaAnterior = oficinaAnterior;
+	}
+
+	public Oficina getOficinaBackup() {
+		return oficinaBackup;
+	}
+
+	public void setOficinaBackup(Oficina oficinaBackup) {
+		this.oficinaBackup = oficinaBackup;
 	}
 	
 }

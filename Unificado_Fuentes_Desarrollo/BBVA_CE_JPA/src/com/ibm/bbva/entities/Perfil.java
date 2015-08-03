@@ -86,6 +86,8 @@ public class Perfil implements Serializable {
 	@Column(name="FLAG_MENU_DESCARGA_LDAP")
 	private String flagMenuDescargaLDAP;
 	
+	@Column(name="FLAG_MENU_OFICINA_TEMP")
+	private String flagMenuOficinaTemporal;
 	
 	@Column(name="FLAG_MENU_TIPO_DOI")
 	private String flagMenuTIPO_DOI;
@@ -780,4 +782,12 @@ public class Perfil implements Serializable {
 		this.flagMenuMENSAJE_CE = flagMenuMENSAJE_CE;
 	}
 
+	public String getFlagMenuOficinaTemporal() {
+		return flagMenuOficinaTemporal;
+	}
+
+	public void setFlagMenuOficinaTemporal(String flagMenuOficinaTemporal) {
+		this.flagMenuOficinaTemporal = flagMenuOficinaTemporal;
+	}
+	
 }

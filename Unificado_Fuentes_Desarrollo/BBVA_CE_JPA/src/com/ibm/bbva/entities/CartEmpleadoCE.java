@@ -35,6 +35,10 @@ public class CartEmpleadoCE implements Serializable {
     @ManyToOne
     @JoinColumn(name = "ID_EMPLEADO_FK")
     private Empleado empleado;
+    
+    @ManyToOne
+    @JoinColumn(name = "ID_OFICINA_FK")
+    private Oficina oficina;
 
     public CartEmpleadoCE() {
     }
@@ -77,6 +81,12 @@ public class CartEmpleadoCE implements Serializable {
 		this.carterizacionCE = carterizacionCE;
 	}
 
-	
+	public Oficina getOficina() {
+		return oficina;
+	}
+
+	public void setOficina(Oficina oficina) {
+		this.oficina = oficina;
+	}
 
 }
