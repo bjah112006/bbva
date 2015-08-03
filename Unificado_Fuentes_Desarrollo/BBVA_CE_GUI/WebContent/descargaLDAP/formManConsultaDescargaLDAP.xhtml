@@ -112,6 +112,17 @@
 																	</tr>
 																	<tr>
 																		<td>
+																			<h:outputText value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.oficina']}:" class="etiqueta"/>
+																		</td>
+																		<td>
+																			<h:selectOneMenu id="cmbFiltroOficina"
+																					value="#{descargaLDAP.filtroSeleccionadoOficina}" styleClass="select">																					
+																						<f:selectItems value="#{descargaLDAP.listaOficina}" />																					
+																				</h:selectOneMenu>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>
 																			<h:outputText value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.carterizacion']}:" class="etiqueta"/>
 																		</td>
 																		<td>
@@ -204,8 +215,16 @@
 															styleClass="tabla-titulo"></h:outputText>
 													</f:facet>
 													<h:outputText value="#{item.perfil}" styleClass="tabla-campo-texto"></h:outputText>
+												</h:column>	
+												<h:column width="15%">
+													<f:facet name="header">
+														<h:outputText
+															value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.oficina']}"
+															styleClass="tabla-titulo"></h:outputText>
+													</f:facet>
+													<h:outputText value="#{item.oficina}" styleClass="tabla-campo-texto"></h:outputText>
 												</h:column>		
-												<h:column width="35%">
+												<h:column width="20%">
 													<f:facet name="header">
 														<h:outputText
 															value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.carterizacion']}"

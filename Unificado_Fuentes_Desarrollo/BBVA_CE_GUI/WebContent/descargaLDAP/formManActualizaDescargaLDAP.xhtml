@@ -136,11 +136,26 @@
 			     soloNumerosConDecimales(o, e);       
 			  }  
 			};
+			
+			function validarSeleccionOficina()
+			{
+				if($("#registroTabla\\:cmbEdicionTipo").val() == "O")
+			    {
+			    	$("#registroTabla\\:cmbEdicionOficina").val("-1");
+			    	$("#registroTabla\\:cmbEdicionOficina").prop('disabled', 'disabled');
+			    }
+			    else
+			    {
+			    	$("#registroTabla\\:cmbEdicionOficina").removeAttr("disabled");
+			    }
+			}
+			
+			
 		      </script>
 		      </f:verbatim>
 			
 	</h:head>
-	<h:body>
+	<h:body onload="validarSeleccionOficina();">
 		<h:form id="registroTabla">
 			<div class="contenido">
 				<div class="cabecera">
@@ -188,7 +203,7 @@
 																		</td>
 																		<td>
 																			<h:selectOneMenu id="cmbEdicionTipo"
-																					value="#{descargaLDAP.edicionTipo}" styleClass="select">																					
+																					value="#{descargaLDAP.edicionTipo}" styleClass="select" onchange="validarSeleccionOficina()">																					
 																						<f:selectItems value="#{descargaLDAP.listaTipo}" />																					
 																				</h:selectOneMenu>
 																		</td>
@@ -221,6 +236,19 @@
 																			<h:selectOneMenu id="cmbEdicionPerfil"
 																					value="#{descargaLDAP.edicionPerfil}" styleClass="select">																					
 																						<f:selectItems value="#{descargaLDAP.listaPerfil}" />																					
+																				</h:selectOneMenu>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>																			
+																		</td>
+																		<td>
+																			<h:outputText value="#{msg['com.ibm.bbva.common.descargaLDAP.msg.oficina']}:" class="etiqueta"/>
+																		</td>
+																		<td>
+																			<h:selectOneMenu id="cmbEdicionOficina"
+																					value="#{descargaLDAP.edicionOficina}" styleClass="select">																					
+																						<f:selectItems value="#{descargaLDAP.listaOficina}" />																					
 																				</h:selectOneMenu>
 																		</td>
 																	</tr>
