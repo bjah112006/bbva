@@ -7,6 +7,7 @@ public class DescargaLDAPVO
 	private String codigo;
 	private String carterizacion;
 	private String perfil;
+	private String oficina;
 	private boolean flagActivo;
 	private boolean seleccion;
 	
@@ -52,5 +53,10 @@ public class DescargaLDAPVO
 	public void setPerfil(String perfil) {
 		this.perfil = perfil;
 	}
-		
+	public String getOficina() {
+		return oficina;
+	}
+	public void setOficina(String oficina) {
+		this.oficina = oficina;
+	}		
 }
