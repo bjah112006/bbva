@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ibm.bbva.entities.CartEmpleadoCE;
+import com.ibm.bbva.entities.DescargaLDAP;
 import com.ibm.bbva.session.AbstractFacade;
 import com.ibm.bbva.session.CartEmpleadoCEBeanLocal;
 
@@ -133,5 +134,11 @@ public class CartEmpleadoCEBean extends AbstractFacade<CartEmpleadoCE> implement
 		}catch (NoResultException e) {
 			return null;
 		}		
-	}		
+	}
+	
+	@Override
+	public void edit(CartEmpleadoCE entity){
+		super.edit(entity);
+	}
+	
 }

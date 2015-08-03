@@ -10,11 +10,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ibm.bbva.entities.Historial;
+import com.ibm.bbva.entities.OficinaTemporal;
 import com.ibm.bbva.session.AbstractFacade;
 import com.ibm.bbva.session.HistorialBeanLocal;
 
@@ -318,6 +320,35 @@ public class HistorialBean extends AbstractFacade<Historial> implements Historia
 		}catch (NoResultException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public int obtenerNumeroRegistradosXTemporalidad(long idEmpleado, long idOficina, Date fechaHoraInicio, Date fechaHoraFin) 
+	{
+		
+		StringBuilder sbQuery = new StringBuilder(" SELECT COUNT(h) FROM Historial h ");
+		sbQuery.append(" INNER JOIN h.empleado e ");
+		sbQuery.append(" INNER JOIN h.oficina o ");
+		sbQuery.append(" LEFT JOIN h.tarea t ");
+		sbQuery.append(" WHERE t.id IS NULL AND ");
+		sbQuery.append(" e.id = :empleado AND ");
+		sbQuery.append(" o.id = :oficina AND ");
+		sbQuery.append(" h.fecRegistro BETWEEN :fechaHoraInicio AND :fechaHoraFin ");
+	
+		try{
+			
+			Query jpql = em.createQuery(sbQuery.toString());
+			jpql.setParameter("empleado", idEmpleado);
+			jpql.setParameter("oficina", idOficina);
+			jpql.setParameter("fechaHoraInicio", fechaHoraInicio, TemporalType.TIMESTAMP);
+			jpql.setParameter("fechaHoraFin", fechaHoraFin, TemporalType.TIMESTAMP);
+			
+			return Integer.parseInt(jpql.getSingleResult().toString());	
+								
+		}catch (NoResultException e) {
+			return 0;
+		}	
+
 	}
 	
 	

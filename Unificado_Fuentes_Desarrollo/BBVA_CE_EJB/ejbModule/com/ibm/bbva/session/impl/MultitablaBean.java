@@ -5,8 +5,10 @@ import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
+import com.ibm.bbva.entities.Empleado;
 import com.ibm.bbva.entities.Multitabla;
 import com.ibm.bbva.session.AbstractFacade;
 import com.ibm.bbva.session.MutitablaBeanLocal;
@@ -41,6 +43,16 @@ public class MultitablaBean extends AbstractFacade<Multitabla> implements Mutita
 							.getResultList();
 			return resultList;
 		} catch (Exception e) {			
+			return null;
+		}
+	}
+
+	@Override
+	public Multitabla buscarPorId(long id) 
+	{
+		try{
+			return (Multitabla) em.createNamedQuery("Multitabla.findById").setParameter("id", id).getSingleResult();		
+		}catch(NoResultException e){
 			return null;
 		}
 	}

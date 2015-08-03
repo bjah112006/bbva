@@ -9,7 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.ibm.bbva.entities.DescargaLDAP;
-import com.ibm.bbva.entities.Empleado;
 import com.ibm.bbva.session.AbstractFacade;
 import com.ibm.bbva.session.DescargaLDAPBeanLocal;
 
@@ -44,12 +43,13 @@ public class DescargaLDAPBean extends AbstractFacade<DescargaLDAP> implements De
 
 	@Override
 	public List<DescargaLDAP> buscar(String tipo, String codigo,
-			String carterizacion, String estado, String perfil) {
+			String carterizacion, String estado, String perfil, String oficina) {
 		
 		List<DescargaLDAP> resultList = null;
 		StringBuilder sbQuery = new StringBuilder(" SELECT DISTINCT d FROM DescargaLDAP d ");
 		sbQuery.append(" INNER JOIN d.perfil p ");
-		sbQuery.append(" INNER JOIN d.descargaLDAPCarterizaciones dc ");
+		sbQuery.append(" LEFT JOIN d.oficina o ");
+		sbQuery.append(" LEFT JOIN d.descargaLDAPCarterizaciones dc ");
 		sbQuery.append(" LEFT JOIN FETCH d.descargaLDAPCarterizaciones ");			
 		
 		boolean isAnd = false;
@@ -88,6 +88,13 @@ public class DescargaLDAPBean extends AbstractFacade<DescargaLDAP> implements De
 			sbQuery.append(" p.id = :perfil ");
 			isAnd = true;
 		}
+		if(!oficina.equals("-1"))
+		{
+			if(sbQuery.indexOf("WHERE") == -1) { sbQuery.append(" WHERE "); }
+			if(isAnd) { sbQuery.append(" AND "); }
+			sbQuery.append(" o.id = :oficina ");
+			isAnd = true;
+		}
 		
 		sbQuery.append(" ORDER BY d.id ");
 		
@@ -114,6 +121,10 @@ public class DescargaLDAPBean extends AbstractFacade<DescargaLDAP> implements De
 			{
 				jpql.setParameter("perfil", Long.parseLong(perfil));
 			}
+			if(!oficina.equals("-1"))
+			{
+				jpql.setParameter("oficina", Long.parseLong(oficina));
+			}
 			
 			resultList = jpql.getResultList();	
 						
@@ -130,6 +141,33 @@ public class DescargaLDAPBean extends AbstractFacade<DescargaLDAP> implements De
 			return (DescargaLDAP) em.createNamedQuery("DescargaLDAP.findById").setParameter("id", id).getSingleResult();			
 		}catch(NoResultException e){
 			return null;
+		}
+	}
+
+	@Override
+	public boolean existeRepetido(long id, String codigo) 
+	{		
+		StringBuilder sbQuery = new StringBuilder(" SELECT COUNT(d) FROM DescargaLDAP d ");
+		sbQuery.append(" WHERE  d.codigo = :codigo ");
+		
+		if(id != 0)
+		{
+			sbQuery.append(" AND d.id <> :id ");
+		}
+				
+		try{
+			
+			Query jpql = em.createQuery(sbQuery.toString());
+			jpql.setParameter("codigo", codigo);
+			if(id != 0)
+			{
+				jpql.setParameter("id", id);
+			}
+									
+			return Integer.parseInt(jpql.getSingleResult().toString()) > 0;	
+									
+		}catch (NoResultException e) {
+			return false;
 		}
 	}
 	
