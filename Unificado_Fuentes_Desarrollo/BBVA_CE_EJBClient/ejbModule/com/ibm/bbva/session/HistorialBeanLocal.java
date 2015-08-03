@@ -38,6 +38,6 @@ public interface HistorialBeanLocal {
 	public List<Historial> buscarXcriterios(Historial h, Date fechaInicio,
 			Date fechaFin, List<Long> list);
 
-
+    public int obtenerNumeroRegistradosXTemporalidad(long idEmpleado, long idOficina, Date fechaHoraInicio, Date fechaHoraFin);
 	
 }

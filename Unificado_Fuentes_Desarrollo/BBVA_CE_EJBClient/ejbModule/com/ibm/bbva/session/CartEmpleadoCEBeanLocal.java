@@ -7,6 +7,7 @@ import com.ibm.bbva.entities.CartEmpleadoCE;
 public interface CartEmpleadoCEBeanLocal {
 	//Emitson 
 	
+	public void edit(CartEmpleadoCE cartEmpleadoCE);
 	
 	//public List<CartEmpleadoCE> buscarPorIdCaract(long idCaract);
 	public List<CartEmpleadoCE> buscarPorIdCaractIdPerfil(long idCaract, long idPerfil);

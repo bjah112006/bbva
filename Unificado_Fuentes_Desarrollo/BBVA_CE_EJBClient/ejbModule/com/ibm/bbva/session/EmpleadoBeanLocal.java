@@ -50,4 +50,9 @@ public interface EmpleadoBeanLocal {
 
 	public List<Empleado> buscarPorPerfilEmpleadoActivo(long idPerfil, long idOficina,
 			List<Long> listIdsProd);
+	
+	public void ejecutarDescargaLDAP(long idLogJob);
+	
+	List<Empleado> buscarDebenReasignarse();
+	
 }

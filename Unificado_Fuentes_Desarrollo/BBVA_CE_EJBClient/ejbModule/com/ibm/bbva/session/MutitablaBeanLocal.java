@@ -8,4 +8,6 @@ public interface MutitablaBeanLocal
 {
 	public List<Multitabla> buscarPorPadre(Long idPadre);
 	
+	public Multitabla buscarPorId(long id);
+	
 }
