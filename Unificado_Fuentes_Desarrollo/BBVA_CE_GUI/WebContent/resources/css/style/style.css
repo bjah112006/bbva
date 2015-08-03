@@ -146,6 +146,21 @@ body {
     margin-right: 5px; 
 }
 
+.bloque .etiquetaField {
+    color: #000000;
+    font-weight: bold;
+    text-align: left;  
+    margin-right: 5px; 
+    font-size: 14px;
+}
+
+.label {
+    color: #000000;
+    font-weight: bold;
+    text-align: left;  
+    margin-right: 5px; 
+    font-size: 13px;
+}
 .bloque .valor {
     color: #999999;
     text-align: left;    
