@@ -23,7 +23,17 @@ import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
 
+import org.quartz.CronScheduleBuilder;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.TriggerKey;
+import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +51,7 @@ import com.ibm.bbva.entities.EstadoTareaCE;
 import com.ibm.bbva.entities.Mensajes;
 import com.ibm.bbva.entities.Perfil;
 import com.ibm.bbva.entities.ToePerfilEstado;
+import com.ibm.bbva.job.JobCargaLDAP;
 import com.ibm.bbva.session.CartEmpleadoCEBeanLocal;
 import com.ibm.bbva.session.EmpleadoBeanLocal;
 import com.ibm.bbva.session.EstadoTareaCEBeanLocal;
@@ -818,6 +829,46 @@ public class ConsultarTablaUI extends AbstractMBean {
 						.getColumnasVO());
 				this.tablaFacadeBean
 						.actualizarRegistroTabla(registroSeleccionado);
+
+				/**
+				 * Reprogramación del JOB de DESCARGA LDAP				
+				 */
+				String nombreTabla = this.tablaParametricaVO.getTablaVO().getNombre();
+				if(nombreTabla.equals(Constantes.TBL_CE_IBM_PARAMETROS_CONF))
+				{
+					if(this.registroSeleccionado.getDatosRegistro().get("NOMBRE_VARIABLE").equals(com.ibm.bbva.controller.Constantes.CRON_SCHEDULE_PROCESO_CARGA_LDAP))
+					{
+						ServletContext ctx = (ServletContext) FacesContext
+						        .getCurrentInstance().getExternalContext().getContext();
+			            StdSchedulerFactory factory = (StdSchedulerFactory) ctx.getAttribute(org.quartz.ee.servlet.QuartzInitializerListener.QUARTZ_FACTORY_KEY);
+			        	Scheduler scheduler = factory.getScheduler();
+			        	
+			        	String CRON_SCHEDULE = this.registroSeleccionado.getDatosRegistro().get("VALOR_VARIABLE").toString();
+			        	
+			        	
+			        	JobKey jobKey = new JobKey(com.ibm.bbva.controller.Constantes.JOB_NAME, com.ibm.bbva.controller.Constantes.GROUP_NAME);
+			        	JobDetail jobDetail = JobBuilder
+			                    .newJob(JobCargaLDAP.class)
+			                    .withIdentity(jobKey)
+			                    .build();
+			        	
+			        	TriggerKey triggerKey = TriggerKey.triggerKey(com.ibm.bbva.controller.Constantes.TRIGGER_NAME, com.ibm.bbva.controller.Constantes.GROUP_NAME);
+			            Trigger cronTrigger = TriggerBuilder
+			                    .newTrigger()
+			                    .withIdentity(triggerKey)
+			                    .startNow()
+			                    .withSchedule(CronScheduleBuilder.cronSchedule(CRON_SCHEDULE))
+			                    .build();
+			                        
+			            if(scheduler.checkExists(jobKey))
+			            {
+			            	scheduler.deleteJob(jobKey);
+			            }            
+			            scheduler.scheduleJob(jobDetail, cronTrigger);
+			            
+					}											
+				}
+				
 			} catch (Exception e) {
 				LOG.error(e.getMessage(), e);
 				// super.addErrorMessage(e);

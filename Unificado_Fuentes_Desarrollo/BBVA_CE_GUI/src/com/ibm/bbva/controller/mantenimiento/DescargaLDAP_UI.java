@@ -12,11 +12,11 @@ import javax.faces.model.SelectItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ibm.bbva.controller.AbstractMBean;
 import com.ibm.bbva.session.CarterizacionCEBeanLocal;
 import com.ibm.bbva.session.DescargaLDAPBeanLocal;
 import com.ibm.bbva.session.DescargaLDAPCarterizBeanLocal;
 import com.ibm.bbva.session.MutitablaBeanLocal;
+import com.ibm.bbva.session.OficinaBeanLocal;
 import com.ibm.bbva.session.PerfilBeanLocal;
 import com.ibm.bbva.tabla.util.vo.DescargaLDAPVO;
 import com.ibm.bbva.util.Util;
@@ -26,6 +26,7 @@ import com.ibm.bbva.entities.CarterizacionCE;
 import com.ibm.bbva.entities.DescargaLDAP;
 import com.ibm.bbva.entities.DescargaLDAPCarteriz;
 import com.ibm.bbva.entities.Perfil;
+import com.ibm.bbva.entities.Oficina;;
 
 
 @ManagedBean(name = "descargaLDAP")
@@ -50,17 +51,22 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 	@EJB
 	private PerfilBeanLocal perfilbean;
 	
+	@EJB
+	private OficinaBeanLocal oficinaBeanLocal;
+	
 	private String filtroSeleccionadoTipo;
 	private String filtroSeleccionadoCodigo;
 	private String filtroSeleccionadoCarterizacion;
 	private String filtroSeleccionadoEstado;
 	private String filtroSeleccionadoPerfil;
+	private String filtroSeleccionadoOficina;
 	
 	private String edicionId;
 	private String edicionTipo;
 	private String edicionCodigo;
 	private String edicionEstado;
 	private String edicionPerfil;
+	private String edicionOficina;
 	private List<String> edicionCarterizacion;
 	
 	private List<SelectItem> listaTipo;
@@ -68,7 +74,7 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 	private List<SelectItem> listaPerfil;
 	private List<SelectItem> listaCarterizacionFiltro;
 	private List<SelectItem> listaCarterizacionEdicion;
-	
+	private List<SelectItem> listaOficina;
 	
 	private List<DescargaLDAPVO> listaDescargaLDAP;
 
@@ -83,6 +89,7 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 		this.setEdicionTipo(null);
 		this.setEdicionCodigo("");
 		this.setEdicionEstado("A");	
+		this.setEdicionOficina(null);
 		this.setEdicionPerfil(null);
 		this.edicionCarterizacion = new ArrayList<String>();
 		return "/descargaLDAP/formManActualizaDescargaLDAP?faces-redirect=true";
@@ -107,11 +114,6 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 				super.addComponentMessage(null, "Seleccione un Perfil");
 				return null;
 			}
-			else if(this.getEdicionCarterizacion().size() == 0)
-			{
-				super.addComponentMessage(null, "Seleccione almenos una carterización");
-				return null;
-			}
 			else if(this.getEdicionEstado().equals("-1"))
 			{
 				super.addComponentMessage(null, "Seleccione un estado");
@@ -120,13 +122,31 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 			
 			if(this.getEdicionId() == null || this.getEdicionId().length() == 0)
 			{
+				
+				if(this.descargaLDAPBeanLocal.existeRepetido(0L, this.getEdicionCodigo().trim()))
+				{
+					super.addComponentMessage(null, "Código ingresado ya existe, ingrese uno diferente");
+					return null;
+				}
+				
 				DescargaLDAP objDescargaLDAP = new DescargaLDAP();
 				objDescargaLDAP.setTipo(this.getEdicionTipo());
-				objDescargaLDAP.setCodigo(this.getEdicionCodigo());
+				objDescargaLDAP.setCodigo(this.getEdicionCodigo().trim());
 				objDescargaLDAP.setEstado(this.getEdicionEstado());
 				Perfil objPerfil = new Perfil();
 				objPerfil.setId(Long.valueOf(this.getEdicionPerfil()));
 				objDescargaLDAP.setPerfil(objPerfil);
+				if(this.getEdicionOficina().equals("-1") || this.getEdicionOficina().length() == 0)
+				{
+					objDescargaLDAP.setOficina(null);
+				}
+				else
+				{
+					Oficina objOficina = new Oficina();
+					objOficina.setId(Long.valueOf(this.getEdicionOficina()));
+					objDescargaLDAP.setOficina(objOficina);
+				}
+								
 				objDescargaLDAP = descargaLDAPBeanLocal.create(objDescargaLDAP);
 				
 				DescargaLDAPCarteriz objDescargaLDAPCarteriz = null;
@@ -143,14 +163,31 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 								
 			}
 			else
-			{			
+			{		
+				
+				if(this.descargaLDAPBeanLocal.existeRepetido(Long.valueOf(edicionId).longValue(), this.getEdicionCodigo().trim()))
+				{
+					super.addComponentMessage(null, "Código ingresado ya existe, ingrese uno diferente");
+					return null;
+				}
+				
 				DescargaLDAP objDescargaLDAP = descargaLDAPBeanLocal.buscarPorId(Long.valueOf(edicionId));							
 				objDescargaLDAP.setTipo(this.getEdicionTipo());
-				objDescargaLDAP.setCodigo(this.getEdicionCodigo());
+				objDescargaLDAP.setCodigo(this.getEdicionCodigo().trim());
 				objDescargaLDAP.setEstado(this.getEdicionEstado());
 				Perfil objPerfil = new Perfil();
 				objPerfil.setId(Long.valueOf(this.getEdicionPerfil()));
 				objDescargaLDAP.setPerfil(objPerfil);
+				if(this.getEdicionOficina().equals("-1") || this.getEdicionOficina().length() == 0)
+				{
+					objDescargaLDAP.setOficina(null);
+				}
+				else
+				{
+					Oficina objOficina = new Oficina();
+					objOficina.setId(Long.valueOf(this.getEdicionOficina()));
+					objDescargaLDAP.setOficina(objOficina);
+				}
 				descargaLDAPBeanLocal.edit(objDescargaLDAP);
 				descargaLDAPCarterizBeanLocal.eliminarPorDescargaLDAP(objDescargaLDAP.getId());
 				
@@ -192,6 +229,7 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 				this.setEdicionCodigo(objDescargaLDAP.getCodigo());
 				this.setEdicionEstado(objDescargaLDAP.getEstado());
 				this.setEdicionPerfil(String.valueOf(objDescargaLDAP.getPerfil().getId()));
+				this.setEdicionOficina(objDescargaLDAP.getOficina() != null ? String.valueOf(objDescargaLDAP.getOficina().getId()) : null);
 				
 				this.edicionCarterizacion = new ArrayList<String>();
 				for(DescargaLDAPCarteriz objDescargaLDAPCarteriz : objDescargaLDAP.getDescargaLDAPCarterizaciones())
@@ -244,6 +282,7 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 		this.setFiltroSeleccionadoEstado(null);
 		this.setFiltroSeleccionadoTipo(null);
 		this.setFiltroSeleccionadoPerfil(null);
+		this.setFiltroSeleccionadoOficina(null);
 		return null;
 	}
 	
@@ -253,7 +292,8 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 																				 this.getFiltroSeleccionadoCodigo(), 
 																				 this.getFiltroSeleccionadoCarterizacion(),
 																				 this.getFiltroSeleccionadoEstado(),
-																				 this.getFiltroSeleccionadoPerfil());
+																				 this.getFiltroSeleccionadoPerfil(),
+																				 this.getFiltroSeleccionadoOficina());
 		this.listaDescargaLDAP = new ArrayList<DescargaLDAPVO>();
 		DescargaLDAPVO objDescargaLDAPVO = null;
 		StringBuilder sbCarterizacion = null;
@@ -285,6 +325,7 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 			objDescargaLDAPVO.setCarterizacion(sbCarterizacion.toString());
 			objDescargaLDAPVO.setFlagActivo(objDescargaLDAP.getEstado().equals("A"));
 			objDescargaLDAPVO.setPerfil(objDescargaLDAP.getPerfil().getDescripcion());
+			objDescargaLDAPVO.setOficina(objDescargaLDAP.getOficina() != null ? objDescargaLDAP.getOficina().getDescripcion() : "");
 			this.listaDescargaLDAP.add(objDescargaLDAPVO);
 		}		
 	}
@@ -318,7 +359,12 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 	
 	public void cargarEstado()
 	{
-		this.listaEstado = Util.crearItems(multitablaBeanLocal.buscarPorPadre(Constantes.PARAMETRO_ESTADO_DESCARGA_LDAP), true, "codigo", "nombre");	
+		this.listaEstado = Util.crearItems(multitablaBeanLocal.buscarPorPadre(Constantes.PARAMETRO_ESTADO_DESCARGA_LDAP), true, "codigo", "nombre");
+	}
+	
+	public void cargarOficina()
+	{
+		this.listaOficina = Util.crearItems(oficinaBeanLocal.buscarTodos(), true, "id", "descripcion"); 		
 	}
 	
 	public void cargarPerfil()
@@ -454,6 +500,14 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 	public void setEdicionPerfil(String edicionPerfil) {
 		this.edicionPerfil = edicionPerfil;
 	}
+	
+	public List<SelectItem> getListaOficina() {
+		return listaOficina;
+	}
+
+	public void setListaOficina(List<SelectItem> listaOficina) {
+		this.listaOficina = listaOficina;
+	}
 
 	@Override
 	public void ordenar(ActionEvent event) {
@@ -465,6 +519,22 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 	public void actualiarAyudaHorario(ActionEvent event) {
 		// TODO Apéndice de método generado automáticamente
 		
+	}
+
+	public String getFiltroSeleccionadoOficina() {
+		return filtroSeleccionadoOficina;
+	}
+
+	public void setFiltroSeleccionadoOficina(String filtroSeleccionadoOficina) {
+		this.filtroSeleccionadoOficina = filtroSeleccionadoOficina;
+	}
+
+	public String getEdicionOficina() {
+		return edicionOficina;
+	}
+
+	public void setEdicionOficina(String edicionOficina) {
+		this.edicionOficina = edicionOficina;
 	}
 		
 }
