@@ -78,20 +78,22 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 	    	  Iterator<ArchivedFlowNodeInstance> itrTareaHecha = listaTareasHechas.iterator();
 	    	  int index_tarea=0;
 		      while(itrTareaHecha.hasNext()) {
-		    	  index_tarea++;
 		    	  ArchivedFlowNodeInstance elementoTareaHecha = (ArchivedFlowNodeInstance) itrTareaHecha.next();
-		    	  Solicitud solicitudHecha = setearDatosTrazaTareaHecha(solicitudAux,elementoTareaHecha);
-//		    	  if(!solicitudHecha.getUsuarioEjecutorTarea().equals(ConstantesEnum.USER_SYSTEM.getNombre())){
-		    		  solicitudHecha.setFechaLlegada(Utils.convertirDateEnCadena(fechaLlegadaAux,ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));
-		    		  listaSolicitudes.add(solicitudHecha);
-		    		  if(index_tarea>2 && index_tarea<=listaTareasHechas.size()){
-		    			  listaSolicitudes.get(listaSolicitudes.size()-2).setEstado(solicitudHecha.getEstado());
-		    		  }
-		    		  if(index_tarea==listaTareasHechas.size()){
-		    			  solicitudHecha.setEstado(solicitudAux.getEstado());
-		    		  }
-			    	  fechaLlegadaAux = elementoTareaHecha.getArchiveDate();  
-//		    	  }
+		    	  if(elementoTareaHecha.getExecutedBy()>0){
+		    		  index_tarea++;
+		    		  Solicitud solicitudHecha = setearDatosTrazaTareaHecha(solicitudAux,elementoTareaHecha);
+//			    	  if(!solicitudHecha.getUsuarioEjecutorTarea().equals(ConstantesEnum.USER_SYSTEM.getNombre())){
+			    		  solicitudHecha.setFechaLlegada(Utils.convertirDateEnCadena(fechaLlegadaAux,ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));
+			    		  listaSolicitudes.add(solicitudHecha);
+			    		  if(index_tarea>2 && index_tarea<=listaTareasHechas.size()){
+			    			  listaSolicitudes.get(listaSolicitudes.size()-2).setEstado(solicitudHecha.getEstado());
+			    		  }
+			    		  if(index_tarea==listaTareasHechas.size()){
+			    			  solicitudHecha.setEstado(solicitudAux.getEstado());
+			    		  }
+				    	  fechaLlegadaAux = elementoTareaHecha.getArchiveDate();  
+//			    	  }  
+		    	  }
 		      }	
 		      /*Iterator<FlowNodeInstance> itrTareaPendiente = listaTareasPendientes.iterator();
 		      while(itrTareaPendiente.hasNext()) {
@@ -117,21 +119,22 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 	    	  Iterator<ArchivedFlowNodeInstance> itrTareaHecha = listaTareasHechas.iterator();
 	    	  int index_tarea=0;
 		      while(itrTareaHecha.hasNext()) {
-		    	  index_tarea++;
 		    	  ArchivedFlowNodeInstance elementoTareaHecha = (ArchivedFlowNodeInstance) itrTareaHecha.next();
-		    	  //Solicitud solicitudHecha = setearDatosTareaHecha(solicitudAux,elementoTareaHecha);
-		    	  Solicitud solicitudHecha = setearDatosTrazaTareaHecha(solicitudAux,elementoTareaHecha);
-//		    	  if(!solicitudHecha.getUsuarioEjecutorTarea().equals(ConstantesEnum.USER_SYSTEM.getNombre())){
-		    		  solicitudHecha.setFechaLlegada(Utils.convertirDateEnCadena(fechaLlegadaAux,ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));
-			    	  listaSolicitudes.add(solicitudHecha);
-			    	  if(index_tarea>2 && index_tarea<=listaTareasHechas.size()){
-		    			  listaSolicitudes.get(listaSolicitudes.size()-2).setEstado(solicitudHecha.getEstado());
-		    		  }
-			    	  if(index_tarea==listaTareasHechas.size()){
-		    			  solicitudHecha.setEstado(solicitudAux.getEstado());
-		    		  }
-			    	  fechaLlegadaAux = elementoTareaHecha.getArchiveDate();  
-//		    	  }
+		    	  if(elementoTareaHecha.getExecutedBy()>0){
+		    		  index_tarea++;
+		    		  Solicitud solicitudHecha = setearDatosTrazaTareaHecha(solicitudAux,elementoTareaHecha);
+//			    	  if(!solicitudHecha.getUsuarioEjecutorTarea().equals(ConstantesEnum.USER_SYSTEM.getNombre())){
+			    		  solicitudHecha.setFechaLlegada(Utils.convertirDateEnCadena(fechaLlegadaAux,ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));
+				    	  listaSolicitudes.add(solicitudHecha);
+				    	  if(index_tarea>2 && index_tarea<=listaTareasHechas.size()){
+			    			  listaSolicitudes.get(listaSolicitudes.size()-2).setEstado(solicitudHecha.getEstado());
+			    		  }
+				    	  if(index_tarea==listaTareasHechas.size()){
+			    			  solicitudHecha.setEstado(solicitudAux.getEstado());
+			    		  }
+				    	  fechaLlegadaAux = elementoTareaHecha.getArchiveDate();  
+//			    	  }  
+		    	  }
 		      }	
 		      /*Iterator<FlowNodeInstance> itrTareaPendiente = listaTareasPendientes.iterator();
 		      while(itrTareaPendiente.hasNext()) {
@@ -243,7 +246,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 		}
 	
 //		solicitudHecha.setFechaLlegada(Utils.convertirDateEnCadena(elementoTareaHecha., ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));
-		List<ArchivedDataInstance> datosTareaArchivada = getProcessAPI().getArchivedActivityDataInstances(elementoTareaHecha.getSourceObjectId(), 1, 1000);
+		List<ArchivedDataInstance> datosTareaArchivada = getProcessAPI().getArchivedActivityDataInstances(elementoTareaHecha.getSourceObjectId(), 1, 100);
 		Iterator<ArchivedDataInstance> itrDataTarea = datosTareaArchivada.iterator();
 		while(itrDataTarea.hasNext()) {
 			ArchivedDataInstance elementDataCaso = (ArchivedDataInstance) itrDataTarea.next();
@@ -258,7 +261,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 		Solicitud solicitudAux = new Solicitud();
 		solicitudAux.setNroSolicitud(String.valueOf(elementoSolicitud.getRootProcessInstanceId()));
 		solicitudAux.setFechaLlegada(Utils.convertirDateEnCadena(elementoSolicitud.getStartDate(), ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));
-		List<ArchivedDataInstance> datosArchivadosAdicionales = getProcessAPI().getArchivedProcessDataInstances(elementoSolicitud.getRootProcessInstanceId(), 1, 1000);
+		List<ArchivedDataInstance> datosArchivadosAdicionales = getProcessAPI().getArchivedProcessDataInstances(elementoSolicitud.getRootProcessInstanceId(), 1, 100);
 		Iterator<ArchivedDataInstance> itrDataCaso = datosArchivadosAdicionales.iterator();
 		while(itrDataCaso.hasNext()) {
 			ArchivedDataInstance elementDataCaso = (ArchivedDataInstance) itrDataCaso.next();
@@ -273,7 +276,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 		Solicitud solicitudAux = new Solicitud();
 		solicitudAux.setNroSolicitud(String.valueOf(elementoSolicitud.getRootProcessInstanceId()));
 		solicitudAux.setFechaLlegada(Utils.convertirDateEnCadena(elementoSolicitud.getStartDate(), ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));
-		List<DataInstance> datosPendientesAdicionales = getProcessAPI().getProcessDataInstances(elementoSolicitud.getRootProcessInstanceId(), 1, 1000);
+		List<DataInstance> datosPendientesAdicionales = getProcessAPI().getProcessDataInstances(elementoSolicitud.getRootProcessInstanceId(), 1, 100);
 		Iterator<DataInstance> itrDataCaso = datosPendientesAdicionales.iterator();
 		while(itrDataCaso.hasNext()) {
 			DataInstance elementDataCaso = (DataInstance) itrDataCaso.next();
