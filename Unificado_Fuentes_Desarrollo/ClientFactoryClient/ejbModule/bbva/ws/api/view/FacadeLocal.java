@@ -9,6 +9,7 @@ import com.ibm.bbva.service.business.client.EmpleadoDTO;
 import com.ibm.bbva.service.business.client.ExpedienteDTO;
 import com.ibm.bbva.service.business.client.PerfilDTO;
 
+
 public interface FacadeLocal {
 
 	String Content_delete(Documento documento);
