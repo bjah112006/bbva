@@ -96,8 +96,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 		if(objOficinaTemporal == null)
 		{
 			if(this.empleado.getOficinaBackup() != null)
-			{
-				/*
+			{				
 				RemoteUtils remoteUtils = new RemoteUtils();
 				long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
 				if(cantexp > 0)
@@ -105,19 +104,17 @@ public class DatosCabeceraMB extends AbstractMBean {
 					this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para la oficina temporal establecida");
 				}
 				else
-				{
-				*/
+				{				
 					this.empleado.setOficina(this.empleado.getOficinaBackup());
 					this.empleado.setOficinaBackup(null);
 					this.empleadobean.edit(this.empleado);
-				//}
+				}
 			}
 		}
 		else
 		{
 			if(this.empleado.getOficinaBackup() == null)
 			{
-				/*
 				RemoteUtils remoteUtils = new RemoteUtils();
 				long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
 				if(cantexp > 0)
@@ -126,11 +123,10 @@ public class DatosCabeceraMB extends AbstractMBean {
 				}
 				else
 				{
-				*/
 					this.empleado.setOficinaBackup(this.empleado.getOficina());
 					this.empleado.setOficina(objOficinaTemporal.getOficina());				
 					this.empleadobean.edit(this.empleado);
-				//}							
+				}							
 			}
 			else
 			{

@@ -104,7 +104,7 @@ public class JobCargaLDAP implements Job{
 			objLogJobDet.setFechaInicio(new Date());
 			objLogJobDet.setLogJob(objLogJob);
 			objLogJobDet = logJobDetBeanLocal.create(objLogJobDet);
-			/*
+			
 			try 
 			{ 				 
 				ldapTempBeanLocal.clean();
@@ -127,7 +127,7 @@ public class JobCargaLDAP implements Job{
 			{
 				e.printStackTrace();
 			}
-			*/
+			
 			
 			objLogJobDet.setFechaFin(new Date());
 			logJobDetBeanLocal.edit(objLogJobDet);
