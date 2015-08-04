@@ -81,6 +81,29 @@ public interface Constantes {
 	 */
 	String EXPEDIENTE_SESION = "expSesion";
 	String LISTA_PEND= "listPendSession";
+	
+	/**
+	 * FIX ERIKA ABREGU
+	 * Objeto de tipo ExpedeinteVO Antiguo almacenado en el ambito de sesion
+	 */
+	String EXPEDIENTE_SESION_ANTIGUO = "expSesionAntiguo";
+	/**
+	 * FIX ERIKA ABREGU
+	 * Indicador si el Historial viene desde el Antiguo o el Unificado
+	 */
+	String EXPEDIENTE_ANTIGUO = "Antigua CS PLD";
+	String EXPEDIENTE_UNIFICADO= "Nueva CS Unificado";
+	
+	/**
+	 * FIX ERIKA ABREGU
+	 * Indicador si el Historial viene desde el Antiguo o el Unificado
+	 */
+	String OTROS_DOCS_SUSTENTATORIOS_ANALISTA_RIESGOS = "36";
+	long CONDICION_IMPORTE = 11;
+	long CONDICION_PLAZO = 12;
+
+	
+	
 	/**
 	 * Objeto de tipo ExpedeinteVO almacenado en el ambito de sesion
 	 */
@@ -97,6 +120,14 @@ public interface Constantes {
 	 * Objeto de tipo ExpedeinteVO. Es el expediente histórico guardado en bd
 	 */
 	String EXPEDIENTE_SESION_HISTORICO = "expSesionHistorico";
+	
+	/**
+	 * FIX ERIKA ABREGU
+	 * Objeto de tipo ExpedeinteVO. Es el expediente antiguo histórico guardado en bd
+	 */
+	String EXPEDIENTE_SESION_HISTORICO_ANTIGUO = "expSesionHistoricoAntiguo";
+	
+	
 	/**
 	 * Nombre de la accion para el boton Aceptar. 
 	 * Se utiliza en el metodo expedienteVO.setAccion
