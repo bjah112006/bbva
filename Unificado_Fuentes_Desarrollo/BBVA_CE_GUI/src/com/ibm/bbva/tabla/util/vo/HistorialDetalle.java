@@ -29,8 +29,18 @@ public class HistorialDetalle {
 	private String fechaRegistro;
     private String correo;
     private String celular;
+    
+    /**FIX ERIKA ABREGU 05/07/2015
+	 */
+    private String origen;
 
 	
+	public String getOrigen() {
+		return origen;
+	}
+	public void setOrigen(String origen) {
+		this.origen = origen;
+	}
 	public Long getId() {
 		return id;
 	}
