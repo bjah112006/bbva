@@ -184,6 +184,11 @@ public class DatosClienteMB extends AbstractMBean {
 			caracAdicionales.add("4");
 		}
 		
+		//fix2 erika abregu
+		if (Constantes.CHECK_SELECCIONADO.equals(clienteNatural.getMonocuota())) {
+			caracAdicionales.add("5");
+		}
+		
 		if(clienteNatural!=null && clienteNatural.getSegmento()!=null && clienteNatural.getSegmento().getId() > 0){			
 			segmento = segmentobean.buscarPorId(clienteNatural.getSegmento().getId());
 		}else{

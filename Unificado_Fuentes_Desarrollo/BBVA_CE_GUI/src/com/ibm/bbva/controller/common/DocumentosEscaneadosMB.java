@@ -18,6 +18,7 @@ import javax.faces.context.FacesContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ibm.bbva.cm.iice.service.ContentServiceImplProxy;
 import com.ibm.bbva.controller.AbstractMBean;
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.entities.DocumentoExpTc;
@@ -28,6 +29,9 @@ import com.ibm.bbva.entities.TipoDocumento;
 import com.ibm.bbva.session.DocumentoExpTcBeanLocal;
 import com.ibm.bbva.session.ParametrosConfBeanLocal;
 import com.ibm.bbva.session.TipoDocumentoBeanLocal;
+import com.ibm.bbva.tabla.dto.DatosDocumentosExpIiceDTO;
+import com.ibm.bbva.tabla.ejb.impl.TablaFacadeBean;
+import com.ibm.bbva.tabla.util.vo.ConvertHistorial;
 import com.ibm.bbva.util.AyudaPanelDocumentos;
 
 @SuppressWarnings("serial")
@@ -67,6 +71,9 @@ public class DocumentosEscaneadosMB extends AbstractMBean {
 	private boolean tieneGuiaDocumentaria = true;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(DocumentosEscaneadosMB.class);
+	
+	/*FIX ERIKA ABREGU 27/06/2015 */
+	private TablaFacadeBean tablaFacadeBean = null;
 	
 	public DocumentosEscaneadosMB() {
 		LOG.info("DocumentosEscaneadosMB");
@@ -409,36 +416,66 @@ public class DocumentosEscaneadosMB extends AbstractMBean {
 	public String getTramaDocumentosCargados() {
 		String trama = "";
 		Expediente expediente = (Expediente) getObjectSession(Constantes.EXPEDIENTE_SESION);
-		List<DocumentoExpTc> listaDocExp = new ArrayList<DocumentoExpTc>();		
-		listaDocExp = documentoExpTcBean.buscarPorExpediente(expediente.getId());
-		if(listaDocExp != null && listaDocExp.size() > 0 /*&& expediente.getAccion().equals(Constantes.ACCION_BOTON_DEVOLVER)*/){
+		List<DocumentoExpTc> listaDocExp = new ArrayList<DocumentoExpTc>();	
+		List<DatosDocumentosExpIiceDTO> listaDocExpDTO = new ArrayList<DatosDocumentosExpIiceDTO> ();
+		
+		
+		/**FIX ERIKA ABREGU 05/07/2015
+		 * ADICIONAR METODOS DE OBTENER DETALLE DE ANTIGUO CS
+		 */
+		if(!Constantes.EXPEDIENTE_ANTIGUO.equals(expediente.getOrigen())){
+			LOG.info("Metodo getTramaDocumentosCargados de DocumentosEscaneados nuevo = "+expediente.getId());
+			listaDocExp = documentoExpTcBean.buscarPorExpediente(expediente.getId());
 			
-			// sublista para determinar los documentos en content que no estan observados
-			//List<DocumentoExpTc> listaDocExpTmp = new ArrayList<DocumentoExpTc>();
-			Set<String> setDocExp = new HashSet<String>();
-			for(DocumentoExpTc documentoExpTc : listaDocExp){
-				if(documentoExpTc.getIdCm() != null){
-					setDocExp.add(documentoExpTc.getTipoDocumento().getCodigo());
-				}
-			}
-			
-			for (String codigo : setDocExp) {
-				/*boolean observado = false;
+			if(listaDocExp != null && listaDocExp.size() > 0 /*&& expediente.getAccion().equals(Constantes.ACCION_BOTON_DEVOLVER)*/){
+				
+				// sublista para determinar los documentos en content que no estan observados
+				//List<DocumentoExpTc> listaDocExpTmp = new ArrayList<DocumentoExpTc>();
+				Set<String> setDocExp = new HashSet<String>();
 				for(DocumentoExpTc documentoExpTc : listaDocExp){
-					if(codigo.equals(documentoExpTc.getTipoDocumento().getCodigo())){
-						String flagObs = documentoExpTc.getFlagObs() == null ? "0" : documentoExpTc.getFlagObs();
-						if("1".equals(flagObs)){
-							observado = true;
-							break;
-						}
+					if(documentoExpTc.getIdCm() != null){
+						setDocExp.add(documentoExpTc.getTipoDocumento().getCodigo());
 					}
 				}
-				if(!observado){
+				
+				for (String codigo : setDocExp) {
+					/*boolean observado = false;
+					for(DocumentoExpTc documentoExpTc : listaDocExp){
+						if(codigo.equals(documentoExpTc.getTipoDocumento().getCodigo())){
+							String flagObs = documentoExpTc.getFlagObs() == null ? "0" : documentoExpTc.getFlagObs();
+							if("1".equals(flagObs)){
+								observado = true;
+								break;
+							}
+						}
+					}
+					if(!observado){
+						trama += codigo + ",";
+					}*/
 					trama += codigo + ",";
-				}*/
-				trama += codigo + ",";
+				}
 			}
+			
+		}else{
+			//preparando parametros
+			//ArrayList<Object> listaParametros = new ArrayList<Object>();
+			//listaParametros.add(new Long(expediente.getId()));
+			
+			//if (this.tablaFacadeBean == null) {
+			//	this.tablaFacadeBean = new TablaFacadeBean();
+			//}
+			
+			//listaDocExpDTO = tablaFacadeBean.getDocumentosPorExpIICE(listaParametros);
+			//if (listaDocExpDTO == null) {
+			//	listaDocExpDTO = new ArrayList<DatosDocumentosExpIiceDTO> ();
+			//}
+			//listaDocExp =  ConvertHistorial.convertToDocumentoExp(listaDocExpDTO);
 		}
+		//FIN DE FIX2 ERIKA ABREGU
+		
+		
+		
+		
 		if(!"".equals(trama) && trama.length() > 1){
 			trama = trama.substring(0, trama.length() - 1);
 		}

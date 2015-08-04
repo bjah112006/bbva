@@ -25,6 +25,8 @@ import bbva.ws.api.view.FacadeLocal;
 import com.ibm.bbva.controller.AbstractMBean;
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.entities.ClienteNatural;
+import com.ibm.bbva.entities.DelegacionRiesgo;
+import com.ibm.bbva.entities.DelegacionRiesgoCondicion;
 import com.ibm.bbva.entities.Empleado;
 import com.ibm.bbva.entities.Estado;
 import com.ibm.bbva.entities.Expediente;
@@ -41,6 +43,8 @@ import com.ibm.bbva.entities.TipoMoneda;
 import com.ibm.bbva.entities.TipoOferta;
 import com.ibm.bbva.entities.TipoScoring;
 import com.ibm.bbva.service.business.client.ExpedienteDTO;
+import com.ibm.bbva.session.DelegacionRiesgoClasificacionBancoBeanLocal;
+import com.ibm.bbva.session.DelegacionRiesgoCondicionBeanLocal;
 import com.ibm.bbva.session.EmpleadoBeanLocal;
 import com.ibm.bbva.session.ExpedienteBeanLocal;
 import com.ibm.bbva.session.MensajesBeanLocal;
@@ -156,6 +160,14 @@ public class DatosProducto3MB extends AbstractMBean {
 	private boolean renderedLineaCredAprob;
 	private boolean renderedPlazoSolicAprob;
 	
+	//FIX2 ERIKA ABREGU
+	private boolean disabledPorsEndeudamiento;
+	private String porcentEndeudaCambiado;
+	//FIN DE FIX2 ERIKA ABREGU
+	
+	//FIX2 ERIKA ABREGU	
+	private DelegacionRiesgoCondicionBeanLocal delegacionRiesgoCondicionBeanLocalBean;
+	
 	private String msgErrorPersonalizado;
 	
 	private String msgPersonalizado;
@@ -170,6 +182,9 @@ public class DatosProducto3MB extends AbstractMBean {
     public void init() {
 		expediente = (Expediente)getObjectSession(Constantes.EXPEDIENTE_SESION);
 		renderedPlazoSolicitadoAprobEdit=false;
+		
+		//FIX2 ERIKA ABREGU
+		disabledPorsEndeudamiento = true;
 		
 		String nombJSP = getNombreJSPPrincipal();
 		
@@ -456,6 +471,8 @@ public class DatosProducto3MB extends AbstractMBean {
 		habCheckSc = true;
 		renderedWfTc = false;
 		renderedPlazoSolicitadoAprobEdit=true;
+		//FIX2 ERIKA ABREGU
+		disabledPorsEndeudamiento = true;
 		
 		/*Obtener datos Empleado*/		
 		Empleado empleado = empleadoBean.buscarPorId(expediente.getEmpleado().getId());
@@ -481,6 +498,8 @@ public class DatosProducto3MB extends AbstractMBean {
 			habTipoMonedaCredApro = true;
 			renderedPlazoSolicitadoApr = true;
 			habPlazoSolApr = true;
+			//FIX2 ERIKA ABREGU
+			disabledPorsEndeudamiento = false;
 			
 			
 			
@@ -491,6 +510,8 @@ public class DatosProducto3MB extends AbstractMBean {
         	habTipoMonedaCredApro = false;
         	renderedPlazoSolicitadoApr = false;
         	habPlazoSolApr = false;
+        	//FIX2 ERIKA ABREGU
+        	disabledPorsEndeudamiento = true;
 		}     
 	}
 	
@@ -1487,7 +1508,7 @@ public class DatosProducto3MB extends AbstractMBean {
 	private boolean validarEvaluarFactibilidadOp() {
 		boolean existeError = false;
 		String formulario = "frmEvaluarFactibilidadOp";
-		
+			
 		if (habCredApro) {			
 			if (tipoMonedaSel == null || Constantes.CODIGO_CODIGO_CAMPO_VACIO.equals(tipoMonedaSel)) {
 				addMessageError(formulario + ":selectTipoMoneda", 
@@ -1505,7 +1526,8 @@ public class DatosProducto3MB extends AbstractMBean {
 						"com.ibm.bbva.common.datosProducto3.msg.linCredAprobMayor", lineaCreditoOriginal);
 				existeError = true;
 			}
-		}
+		}	
+			
 		return existeError;
 	}
 	
@@ -1603,20 +1625,132 @@ public class DatosProducto3MB extends AbstractMBean {
 			
 			 if (accion.equals(Constantes.ACCION_BOTON_APROBADO_CON_MOD_OBS) || accion.equals(Constantes.ACCION_BOTON_APROBAR_OPERACION)){
 				if (plazoSol>0){
-					if(expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")){
-						long plazoSolApr = (expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr()):0);
-						LOG.info("plazoSolApr -> "+plazoSolApr);
-						if(!(plazoSolApr > 0 && plazoSolApr <= plazoSol)){
-							addMessageError(formulario + ":idPlazoSolApr", 
-									"com.ibm.bbva.common.datosProducto3.msg.plazoSolApr", plazoSol);
-							existeError = true;							
+					
+					//FIX2 ERIKA ABREGU
+					DelegacionRiesgoCondicion objDelegacionRiesgoCondPlazo=delegacionRiesgoCondicionBeanLocalBean.buscarPorId(Constantes.CONDICION_PLAZO);
+					
+					if(objDelegacionRiesgoCondPlazo == null || objDelegacionRiesgoCondPlazo.getSimbolo() == null ||
+							"".equals(objDelegacionRiesgoCondPlazo.getSimbolo().getDescripcion())){
+						
+						addMessageError(formulario + ":idPlazoSolApr", 
+								"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprSinCond", plazoSol);
+						existeError = true;
+					}else {
+						
+						if(expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")){
+							long plazoSolApr = (expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr()):0);
+							LOG.info("plazoSolApr -> "+plazoSolApr);
+						
+							if(!"SV".equals(objDelegacionRiesgoCondPlazo.getSimbolo())){
+								String condicion = objDelegacionRiesgoCondPlazo.getSimbolo().getDescripcion();
+								LOG.info("plazoSolApr sin condicion SV -> "+plazoSolApr);
+								if("<=".equals(condicion)){
+									if(!(plazoSolApr > 0 && plazoSolApr <= plazoSol)){
+										LOG.info("plazoSolApr con condicion <=  --> "+plazoSolApr);
+										addMessageError(formulario + ":idPlazoSolApr", 
+												"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprCond", plazoSol);
+										existeError = true;							
+									}
+								}else if(">=".equals(condicion)){
+									if(!(plazoSolApr > 0 && plazoSolApr >= plazoSol)){
+										LOG.info("plazoSolApr con condicion >=  --> "+plazoSolApr);
+										addMessageError(formulario + ":idPlazoSolApr", 
+												"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprCond", plazoSol);
+										existeError = true;							
+									}
+								}else if ("==".equals(condicion)){
+									if(!(plazoSolApr > 0 && plazoSolApr == plazoSol)){
+										LOG.info("plazoSolApr con condicion ==  --> "+plazoSolApr);
+										addMessageError(formulario + ":idPlazoSolApr", 
+												"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprCond", plazoSol);
+										existeError = true;							
+									}
+								}else{
+									LOG.info("plazoSolApr con ninguna condicion -> "+plazoSolApr);
+									addMessageError(formulario + ":idPlazoSolApr", 
+											"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprSinCond", plazoSol);
+									existeError = true;
+								}
+									
+							}else{
+								if(!(plazoSolApr > 0)){
+									addMessageError(formulario + ":idPlazoSolApr", 
+											"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprCero", plazoSol);
+									existeError = true;							
+								}
+							}
+							
 						}
+						
 					}
+			
 				}
 				
 				if(lineaSol>0){
 					LOG.info("lineaCreditoAprobado :::: "+lineaCreditoAprobado);
-					if(lineaCreditoAprobado!=null && !lineaCreditoAprobado.equals("")){
+					
+					//FIX2 ERIKA ABREGU
+					DelegacionRiesgoCondicion objDelegacionRiesgoCondImporte=delegacionRiesgoCondicionBeanLocalBean.buscarPorId(Constantes.CONDICION_IMPORTE);
+					
+					if (objDelegacionRiesgoCondImporte == null || objDelegacionRiesgoCondImporte.getSimbolo() == null ||
+							"".equals(objDelegacionRiesgoCondImporte.getSimbolo().getDescripcion())) {
+							
+						addMessageError(formulario + ":lineaCredAprob", 
+								"com.ibm.bbva.common.datosProducto3.msg.linCredAprobSinCond", lineaSol);
+						existeError = true;
+					
+					}else {
+						
+						if(lineaCreditoAprobado!=null && !lineaCreditoAprobado.equals("")){
+							Double linCredAprob = expediente.getExpedienteTC().getLineaCredAprob();
+							LOG.info("linCredAprob :::: "+linCredAprob);
+						
+							if(!"SV".equals(objDelegacionRiesgoCondImporte.getSimbolo())){
+								LOG.info("linCredAprob sin condicion SV -> "+linCredAprob);
+								String condicion = objDelegacionRiesgoCondImporte.getSimbolo().getDescripcion();
+								
+								if("<=".equals(condicion)){
+									if (!(linCredAprob.doubleValue()>0 && linCredAprob.doubleValue() <= lineaSol )){
+										LOG.info("linCredAprob con condicion <=  :::: "+linCredAprob);
+										addMessageError(formulario + ":lineaCredAprob", 
+												"com.ibm.bbva.common.datosProducto3.msg.linCredAprobCond", lineaSol);
+										existeError = true;
+									}
+								}else if(">=".equals(condicion)){
+									if (!(linCredAprob.doubleValue()>0 && linCredAprob.doubleValue() >= lineaSol )){
+										LOG.info("linCredAprob con condicion >=  :::: "+linCredAprob);
+										addMessageError(formulario + ":lineaCredAprob", 
+												"com.ibm.bbva.common.datosProducto3.msg.linCredAprobCond", lineaSol);
+										existeError = true;
+									}
+								}else if ("==".equals(condicion)){
+									if (!(linCredAprob.doubleValue()>0 && linCredAprob.doubleValue() == lineaSol )){
+										LOG.info("linCredAprob con condicion ==  :::: "+linCredAprob);
+										addMessageError(formulario + ":lineaCredAprob", 
+												"com.ibm.bbva.common.datosProducto3.msg.linCredAprobCond", lineaSol);
+										existeError = true;
+									}
+								}else{
+									LOG.info("linCredAprob con ninguna condicion :::: "+linCredAprob);
+									addMessageError(formulario + ":lineaCredAprob", 
+											"com.ibm.bbva.common.datosProducto3.msg.linCredAprobSinCond", lineaSol);
+									existeError = true;
+								}
+								
+							}else{
+								if (!(linCredAprob.doubleValue()>0)){
+									addMessageError(formulario + ":lineaCredAprob", 
+											"com.ibm.bbva.common.datosProducto3.msg.linCredAprobCero", lineaSol);
+									existeError = true;
+								}
+							}
+							
+						}
+						
+					}
+					
+					//COMENTADO POR ERIKA ABREGU PARA EL CAMBIO DE FIX2
+					/*if(lineaCreditoAprobado!=null && !lineaCreditoAprobado.equals("")){
 						Double linCredAprob = expediente.getExpedienteTC().getLineaCredAprob();
 						LOG.info("linCredAprob :::: "+linCredAprob);
 						if (!(linCredAprob.doubleValue()>0 && linCredAprob.doubleValue()<=lineaSol )){
@@ -1624,7 +1758,7 @@ public class DatosProducto3MB extends AbstractMBean {
 									"com.ibm.bbva.common.datosProducto3.msg.linCredAprobValidacion", lineaSol);
 							existeError = true;
 						}
-					}
+					}*/
 				}
 			}
 			 
@@ -1805,6 +1939,11 @@ public class DatosProducto3MB extends AbstractMBean {
 				tipoMoneda.setId(monApr);
 			    expediente.getExpedienteTC().setTipoMonedaAprob(tipoMoneda);
 			    LOG.info("monto aprobado "+expediente.getExpedienteTC().getLineaCredAprob());
+			}
+			
+			//FIX2 ERIKA ABREGU
+			if(porcentEndeudaCambiado!=null && porcentEndeudaCambiado != Double.toString(expediente.getExpedienteTC().getPorcentajeEndeudamiento())){
+				expediente.getExpedienteTC().setPorcentajeEndeudamiento(Double.parseDouble(porcentEndeudaCambiado));
 			}
 		}else if (jspPrinc.equals("formVerificarResultadoDomiciliaria") ||
 				  jspPrinc.equals("formCambiarSituacionExp") ||
@@ -2170,6 +2309,17 @@ public class DatosProducto3MB extends AbstractMBean {
 		/*Guia Documentaria*/
 		panelDocumento.cargarDocumentosPanel(event);
 	}
+	
+	//FIX2 ERIKA ABREGU
+	public void cambiarDocumentoObligatorio(AjaxBehaviorEvent event) {
+		LOG.info("cambiarTasaEspecial");
+		FacesContext ctx = FacesContext.getCurrentInstance();		
+		PanelDocumentosMB panelDocumento = (PanelDocumentosMB)  
+				ctx.getApplication().getVariableResolver().resolveVariable(ctx, "paneldocumentos");		
+		
+		/*Cambiar en la Guia Documentaria el doc Otros documentos sustentarios – Analista de Riesgos de Opcional a Obligatorio*/
+		panelDocumento.cambiarEstadoObligatorio(event);
+	}
 
 	public String getMsjOperacion292() {
 		return msjOperacion292;
@@ -2266,6 +2416,23 @@ public class DatosProducto3MB extends AbstractMBean {
 	public void setRenderedPlazoSolicitadoAprobEdit(
 			boolean renderedPlazoSolicitadoAprobEdit) {
 		this.renderedPlazoSolicitadoAprobEdit = renderedPlazoSolicitadoAprobEdit;
+	}
+	
+	//fix2 erika abregu
+	public boolean isDisabledPorsEndeudamiento() {
+		return disabledPorsEndeudamiento;
+	}
+
+	public void setDisabledPorsEndeudamiento(boolean disabledPorsEndeudamiento) {
+		this.disabledPorsEndeudamiento = disabledPorsEndeudamiento;
+	}
+
+	public String getPorcentEndeudaCambiado() {
+		return porcentEndeudaCambiado;
+	}
+
+	public void setPorcentEndeudaCambiado(String porcentEndeudaCambiado) {
+		this.porcentEndeudaCambiado = porcentEndeudaCambiado;
 	}
 
 

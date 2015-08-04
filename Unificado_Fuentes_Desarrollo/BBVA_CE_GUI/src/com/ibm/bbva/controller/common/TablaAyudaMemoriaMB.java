@@ -40,6 +40,11 @@ import com.ibm.bbva.entities.TareaPerfil;
 import com.ibm.bbva.session.AyudaMemoriaBeanLocal;
 import com.ibm.bbva.session.EmpleadoBeanLocal;
 import com.ibm.bbva.session.TareaBeanLocal;
+import com.ibm.bbva.tabla.dto.DatosAyudaMemoriaIiceDTO;
+import com.ibm.bbva.tabla.dto.DatosHistAntiguoDTO;
+import com.ibm.bbva.tabla.ejb.impl.TablaFacadeBean;
+import com.ibm.bbva.tabla.util.vo.ConvertExpediente;
+import com.ibm.bbva.tabla.util.vo.ConvertHistorial;
 import com.ibm.bbva.tabla.util.vo.TablaAyudaMemoria;
 import com.ibm.bbva.util.Util;
 import com.ibm.ws.webservices.xml.waswebservices.parameter;
@@ -79,6 +84,10 @@ public class TablaAyudaMemoriaMB extends AbstractTablaMBean {
 	private boolean renderedEditarAyudaMemoria;
 	private String renderedTablaAyudaMemoria;
 	
+	/*FIX ERIKA ABREGU 27/06/2015 */
+	private TablaFacadeBean tablaFacadeBean = null;
+	private List<DatosAyudaMemoriaIiceDTO> listAyudaMemoriaIICE;
+	
 	private static final Logger LOG = LoggerFactory.getLogger(TablaAyudaMemoriaMB.class);
 
 	public TablaAyudaMemoriaMB() {
@@ -112,10 +121,36 @@ public class TablaAyudaMemoriaMB extends AbstractTablaMBean {
 		expediente = (Expediente) getObjectSession(Constantes.EXPEDIENTE_SESION);
 		ayudaMemoria = new AyudaMemoria();
 		listAyudaMemoriaSort = new ArrayList<AyudaMemoria>();
-
+		
 		//Util.initEntityFK(ayudaMemoria,new ArrayList());		
 		if (expediente != null && expediente.getId() > 0) {
-			listAyudaMemoria = ayudaMemoriaBean.buscarPorIdExpediente(expediente.getId());				
+			/**FIX ERIKA ABREGU 05/07/2015
+			 * ADICIONAR METODOS DE OBTENER DETALLE DE ANTIGUO CS
+			 */
+			if(Constantes.EXPEDIENTE_ANTIGUO.equals(expediente.getOrigen())){
+				LOG.info("Metodo obtenerDatos de TablaAyudaMemoriaMB Antiguo = "+expediente.getId());
+				
+				//preparando parametros
+				ArrayList<Object> listaParametros = new ArrayList<Object>();
+				listaParametros.add(new Long(expediente.getId()));
+				
+				
+				if (this.tablaFacadeBean == null) {
+					this.tablaFacadeBean = new TablaFacadeBean();
+				}
+				
+				listAyudaMemoriaIICE = tablaFacadeBean.getGenerarDatosAyudaMemoriaIICE(listaParametros);
+				if (listAyudaMemoriaIICE == null) {
+					listAyudaMemoriaIICE = new ArrayList<DatosAyudaMemoriaIiceDTO> ();
+				}
+				listAyudaMemoria =  ConvertHistorial.convertToAyudaMemoria(listAyudaMemoriaIICE);
+			}else{
+				listAyudaMemoria = ayudaMemoriaBean.buscarPorIdExpediente(expediente.getId());
+			}
+			/**FIX ERIKA ABREGU 05/07/2015
+			 * FIN DE ADICIONAR METODOS DE OBTENER DETALLE DE ANTIGUO CS
+			 */
+			
 			listAyudaMemoriaSort.addAll(listAyudaMemoria);
 			listAyudaMemoria = new ArrayList<AyudaMemoria> ();
 			//Collections.sort(listAyudaMemoriaSort, new ComparadorAyudaMemoria());			

@@ -19,6 +19,10 @@ import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.entities.Expediente;
 import com.ibm.bbva.entities.Historial;
 import com.ibm.bbva.session.HistorialBeanLocal;
+import com.ibm.bbva.tabla.dto.DatosAyudaMemoriaIiceDTO;
+import com.ibm.bbva.tabla.dto.DatosDetalleHistoricoIiceDTO;
+import com.ibm.bbva.tabla.ejb.impl.TablaFacadeBean;
+import com.ibm.bbva.tabla.util.vo.ConvertHistorial;
 import com.ibm.bbva.tabla.util.vo.TablaHistorica;
 
 
@@ -34,6 +38,10 @@ public class TablaHistorialMB extends AbstractTablaMBean {
 	private List<Historial> listHistorial = new ArrayList<Historial>();
 	private HtmlDataTable tablaBinding;
 	private List<TablaHistorica> listTabla;
+	
+	/*FIX ERIKA ABREGU 27/06/2015 */
+	private TablaFacadeBean tablaFacadeBean = null;
+	private List<DatosDetalleHistoricoIiceDTO> listDetalleHistoricoIICE;
 
 	private static final Logger LOG = LoggerFactory.getLogger(TablaHistorialMB.class);
 	
@@ -48,7 +56,33 @@ public class TablaHistorialMB extends AbstractTablaMBean {
 		
 		// lista del historial
 		if (expediente != null && expediente.getId() > 0) {
-			listHistorial = historialBean.buscarPorIdExpediente(expediente.getId());			
+			/**FIX ERIKA ABREGU 05/07/2015
+			 * ADICIONAR METODOS DE OBTENER DETALLE DE ANTIGUO CS
+			 */
+			if(Constantes.EXPEDIENTE_ANTIGUO.equals(expediente.getOrigen())){
+				LOG.info("Metodo obtenerDatos de TablaHistorialMB Antiguo = "+expediente.getId());
+					
+				//preparando parametros
+				ArrayList<Object> listaParametros = new ArrayList<Object>();
+				listaParametros.add(new Long(expediente.getId()));
+					
+					
+				if (this.tablaFacadeBean == null) {
+					this.tablaFacadeBean = new TablaFacadeBean();
+				}
+					
+				listDetalleHistoricoIICE = tablaFacadeBean.getGenerarDetalleHistorialIICE(listaParametros);
+				if (listDetalleHistoricoIICE == null) {
+					listDetalleHistoricoIICE = new ArrayList<DatosDetalleHistoricoIiceDTO> ();
+				}
+				listHistorial =  ConvertHistorial.convertToDetalleHistorial(listDetalleHistoricoIICE);
+			}else{
+				listHistorial = historialBean.buscarPorIdExpediente(expediente.getId());
+			}
+			/**FIX ERIKA ABREGU 05/07/2015
+			 * FIN DE ADICIONAR METODOS DE OBTENER DETALLE DE ANTIGUO CS
+			*/
+						
 			if (listHistorial == null) {
 				listHistorial = new ArrayList<Historial> ();
 			}

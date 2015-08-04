@@ -73,7 +73,15 @@ public class DatosConyugeMB extends AbstractMBean {
 				!expediente.getExpedienteTC().getClienteNaturalConyuge().getNumDoi().trim().equals(""))) {
 			LOG.info("Numero DOI:::"+expediente.getExpedienteTC().getClienteNaturalConyuge().getNumDoi());
 			if(expediente.getExpedienteTC().getClienteNaturalConyuge().getId()>0){
-				this.clienteNatural = clienteNaturalbean.buscarPorId(expediente.getExpedienteTC().getClienteNaturalConyuge().getId());	
+				//FIX ERIKA ABREGU
+				//if(Constantes.EXPEDIENTE_ANTIGUO.equals(expediente.getOrigen())){
+					//LOG.info("Metodo obtenerDatos de DatosConyugeMB Antiguo = "+expediente.getId());
+					//this.clienteNatural = expediente.getExpedienteTC().getClienteNaturalConyuge();
+				//}else{
+					this.clienteNatural = clienteNaturalbean.buscarPorId(expediente.getExpedienteTC().getClienteNaturalConyuge().getId());
+				//}
+				//FIN DE FIX
+					
 				LOG.info("EXISTE ID CONYUGE = "+expediente.getExpedienteTC().getClienteNaturalConyuge().getId());
 				//LOG.info("NUMERO DOI "+expediente.getExpedienteTC().getClienteNaturalConyuge().getNumDoi());
 			}else{

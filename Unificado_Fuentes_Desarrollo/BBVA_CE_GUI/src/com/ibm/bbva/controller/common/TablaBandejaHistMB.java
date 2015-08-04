@@ -26,7 +26,10 @@ import com.ibm.bbva.entities.Expediente;
 import com.ibm.bbva.entities.Historial;
 import com.ibm.bbva.session.ExpedienteBeanLocal;
 import com.ibm.bbva.session.HistorialBeanLocal;
+import com.ibm.bbva.tabla.dto.DatosHistAntiguoDTO;
+import com.ibm.bbva.tabla.ejb.impl.TablaFacadeBean;
 import com.ibm.bbva.tabla.util.vo.ConvertExpediente;
+import com.ibm.bbva.tabla.util.vo.ConvertHistorial;
 import com.ibm.bbva.tabla.util.vo.HistorialDetalle;
 import com.ibm.bbva.util.ComparatorFactory;
 import com.ibm.bbva.util.comparators.ComparatorBase;
@@ -48,6 +51,9 @@ public class TablaBandejaHistMB extends AbstractSortPagDataTableMBean {
 	private List<Documento> listaDocumentosCM;
 	private DocumentoExpTc objDocumentoExpTc;	
 	private String numRegistros;
+	
+	/*FIX ERIKA ABREGU 27/06/2015 */
+	private TablaFacadeBean tablaFacadeBean = null;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(TablaBandejaHistMB.class);
 	
@@ -76,8 +82,11 @@ public class TablaBandejaHistMB extends AbstractSortPagDataTableMBean {
 		eliminarObjetosSession();
 		
 		String idHistorial = getRequestParameter("idHistorial");
+		//FIX ERIKA ABREGU
+		String origen = getRequestParameter("origen");
+		String idExpediente = getRequestParameter("idExpediente");
 		
-		Expediente expediente = obtenerExpediente(idHistorial);
+		Expediente expediente = obtenerExpediente(idHistorial, origen, idExpediente);
 		
 		addObjectSession(Constantes.EXPEDIENTE_SESION, expediente);
 
@@ -183,13 +192,41 @@ public class TablaBandejaHistMB extends AbstractSortPagDataTableMBean {
 		}
 	}
 	
-	private Expediente obtenerExpediente(String historial) {
-		LOG.info("Metodo obtenerExpediente, historial = "+historial);
-		long idHistorial = Long.parseLong(historial);
-//		return ConvertExpediente.convertToExpedienteVO(historialBean.buscarPorId(idHistorial));
-		Historial historialBD = historialBean.buscarPorId(idHistorial);
-		Expediente expedienteBD = expedienteBean.buscarPorId(historialBD.getExpediente().getId());
-		Expediente expedienteHistorico =  ConvertExpediente.convertToExpedienteVO(historialBD, expedienteBD);
+	private Expediente obtenerExpediente(String historial, String origen, String idExpediente) {
+		/**FIX ERIKA ABREGU 05/07/2015
+		 * ADICIONAR METODOS DE OBTENER DETALLE DE ANTIGUO CS
+		 */
+		Expediente expedienteHistorico= null;
+		if(origen.equals(Constantes.EXPEDIENTE_ANTIGUO)){
+			LOG.info("Metodo obtenerExpediente Antiguo, historial = "+historial);
+			long idHistorial = Long.parseLong(historial);
+			//Historial historialBD = historialBean.buscarPorId(idHistorial);
+			//Expediente expedienteBD = expedienteBean.buscarPorId(historialBD.getExpediente().getId());
+			if (this.tablaFacadeBean == null) {
+				this.tablaFacadeBean = new TablaFacadeBean();
+			}
+			DatosHistAntiguoDTO historialBD = tablaFacadeBean.getBuscarHistAntiguoPorId(idExpediente);
+			expedienteHistorico =  ConvertHistorial.convertToExpedienteVO(historialBD);
+			
+		}else{
+			LOG.info("Metodo obtenerExpediente, historial = "+historial);
+			long idHistorial = Long.parseLong(historial);
+			//return ConvertExpediente.convertToExpedienteVO(historialBean.buscarPorId(idHistorial));
+			Historial historialBD = historialBean.buscarPorId(idHistorial);
+			Expediente expedienteBD = expedienteBean.buscarPorId(historialBD.getExpediente().getId());
+			expedienteHistorico =  ConvertExpediente.convertToExpedienteVO(historialBD, expedienteBD);
+			
+			/**FIX ERIKA ABREGU 05/07/2015
+			 * ADICIONAL LA VARIABLE ORIGEN A EXPEDIENTEHISTORICO
+			 */
+			if(expedienteHistorico!=null){
+				expedienteHistorico.setOrigen(origen!=null?origen:null);
+			}
+		}
+		
+		
+		
+		 
 		
 		/**
 		 * Obtiene URL Documento CM - 21 Julio 2014 (Maydeline chanchari)

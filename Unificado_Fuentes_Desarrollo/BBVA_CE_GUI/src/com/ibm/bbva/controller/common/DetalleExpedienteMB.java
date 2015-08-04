@@ -147,7 +147,11 @@ public class DetalleExpedienteMB extends AbstractMBean {
 			}		
 			if (clienteNatural.getSubrog()!=null && clienteNatural.getSubrog().equals(Constantes.CHECK_SELECCIONADO)) {
 				selectedItems.add("4");
-			}			
+			}
+			//fix2 erika abregu 
+			if (clienteNatural.getMonocuota()!=null && clienteNatural.getMonocuota().equals(Constantes.CHECK_SELECCIONADO)) {
+				selectedItems.add("5");
+			}
 		}else{
 			LOG.info("clienteNatural NULL");
 		}

@@ -31,8 +31,14 @@ import com.ibm.bbva.session.MensajesBeanLocal;
 import com.ibm.bbva.session.ProductoBeanLocal;
 import com.ibm.bbva.session.SubproductoBeanLocal;
 import com.ibm.bbva.session.TipoDoiBeanLocal;
+import com.ibm.bbva.tabla.dto.DatosAyudaMemoriaIiceDTO;
+import com.ibm.bbva.tabla.dto.DatosGeneradosHisDTO;
+import com.ibm.bbva.tabla.dto.DatosHistAntiguoDTO;
+import com.ibm.bbva.tabla.util.vo.ConvertHistorial;
 import com.ibm.bbva.tabla.util.vo.HistorialDetalle;
 import com.ibm.bbva.util.Util;
+
+import com.ibm.bbva.tabla.ejb.impl.TablaFacadeBean;
 
 @SuppressWarnings("serial")
 @ManagedBean(name = "buscarBandejaHist")
@@ -50,6 +56,10 @@ public class BuscarBandejaHistMB extends AbstractMBean {
 	@EJB
 	private MensajesBeanLocal mensajeBean;
 	
+	/*FIX ERIKA ABREGU 27/06/2015 */
+	private TablaFacadeBean tablaFacadeBean = null;
+	
+	
 	private List<SelectItem> tiposDOI;
 	private List<SelectItem> productos;
 	private List<SelectItem> subProductos;
@@ -65,6 +75,8 @@ public class BuscarBandejaHistMB extends AbstractMBean {
 	private Date fechaInicio;
 	private Date fechaFin;
 	private String textoMensajeSinFiltro;
+	//FIX ERIKA ABREGU 19/06/2015
+	private boolean habAntiguaCSPLD;
 	
 	private static final int CARACTERES_DNI = 8;
 	private static final int CARACTERES_RUC = 11;
@@ -154,8 +166,109 @@ public class BuscarBandejaHistMB extends AbstractMBean {
 			fechaFin = Util.addDaysToDate(fechaFin, 1);
 		}
 		
-		List<Historial> listaHistorial1 = historialBean.buscarXcriterios(historial, fechaInicio, fechaFin, listIdsEstados);
-
+		
+		/*FIX ERIKA ABREGU 24/06/2015
+		 * */
+		List<Historial> listaHistorial1=null;
+		
+		if(habAntiguaCSPLD){
+			long idExpediente =-1;
+			long idProducto =-1;
+			long idSubProducto =-1;
+			String apePatCliente = "";
+			String apeMatCliente ="";
+			String nombreCliente ="";
+			String numDoi="";
+			long tipDoi=-1;
+			String estado ="";
+			Date fecInicio = new Date();
+			Date fecFin = new Date();
+			String idsEstados ="";
+			ArrayList<Object> listaParametros=null;
+			
+			if(historial.getExpediente() != null && historial.getExpediente().getId()>0){
+				idExpediente = historial.getExpediente().getId();
+			}
+			if(historial.getProducto() != null && historial.getProducto().getId()>0){
+				idProducto = historial.getProducto().getId();
+			}
+			if(historial.getSubproducto() != null && historial.getSubproducto().getId()>0){
+				idSubProducto = historial.getSubproducto().getId();
+			}
+			if(historial.getClienteNatural() != null && historial.getClienteNatural().getApePat()!=null){
+				apePatCliente = String.valueOf(historial.getClienteNatural().getApePat());
+			}
+			if(historial.getClienteNatural() != null && historial.getClienteNatural().getApeMat()!=null){
+				apeMatCliente = String.valueOf(historial.getClienteNatural().getApeMat());
+			}
+			if(historial.getClienteNatural() != null && historial.getClienteNatural().getNombre()!=null){
+				nombreCliente = String.valueOf(historial.getClienteNatural().getNombre());
+			}
+			if(historial.getClienteNatural() != null && historial.getClienteNatural().getNumDoi()!=null){
+				numDoi = String.valueOf(historial.getClienteNatural().getNumDoi());
+			}
+			if(historial.getClienteNatural() != null && historial.getClienteNatural().getTipoDoi()!=null 
+					&& historial.getClienteNatural().getTipoDoi().getId() > 0){
+				tipDoi = historial.getClienteNatural().getTipoDoi().getId();
+			}
+			if(historial.getEstado()!=null && historial.getEstado().getId() > 0 ){
+				estado = String.valueOf(historial.getEstado().getId() );
+			}
+			if(fechaInicio!=null ){
+				fecInicio = fechaInicio;
+			}else{
+				fecInicio = null;
+			}
+			if(fechaFin!=null ){
+				fecFin = fechaFin;
+			}else{
+				fecFin = null;
+			}
+			
+			//Obtener relacion de estados para el filtro
+			int contador=0;
+			for ( Long id:listIdsEstados) {
+				if(id.equals(null)) continue;
+				
+				if(contador==0){
+					idsEstados += id.toString() + "' ";
+				}else{
+					idsEstados += ", '" + id.toString();
+				}
+				contador++;
+			}
+								
+			//preparando parametros
+			listaParametros = new ArrayList<Object>();
+			listaParametros.add(new Long(idExpediente));
+			listaParametros.add(new Long(idProducto));
+			listaParametros.add(new Long(idSubProducto));
+			listaParametros.add(new String(apePatCliente));
+			listaParametros.add(new String(apeMatCliente));
+			listaParametros.add(new String(nombreCliente));
+			listaParametros.add(new String(numDoi));
+			listaParametros.add(new Long(tipDoi));
+			listaParametros.add(new String(estado));
+			
+			//SimpleDateFormat formatoDeFecha = new SimpleDateFormat("dd/MM/yyyy");
+			listaParametros.add(fecInicio);
+			listaParametros.add(fecFin);
+			listaParametros.add(new String(idsEstados));
+			
+			if (this.tablaFacadeBean == null) {
+				this.tablaFacadeBean = new TablaFacadeBean();
+			}
+			List<DatosHistAntiguoDTO> listHistAntiguoDTO=tablaFacadeBean.getGenerarDatosHistAntiguo(listaParametros);
+			if (listHistAntiguoDTO == null) {
+				listHistAntiguoDTO = new ArrayList<DatosHistAntiguoDTO> ();
+			}
+			//pasar datos de listHistAntiguoDTO a listaHistorial1
+			listaHistorial1 = ConvertHistorial.convertToHistorial(listHistAntiguoDTO);
+		}else{
+			listaHistorial1 = historialBean.buscarXcriterios(historial, fechaInicio, fechaFin, listIdsEstados);
+			
+		}
+		
 		/*Estado*/
 		/*Estado estado2 = new Estado();
 		estado2.setId(Constantes.ESTADO_CERRADO_TAREA_11);
@@ -189,17 +302,34 @@ public class BuscarBandejaHistMB extends AbstractMBean {
 			historialDetalle.setLineaCreditoAprobado(hist.getLineaCredAprob());
 			historialDetalle.setCodigoRGVL(hist.getRvgl());
 			historialDetalle.setOficina(hist.getOficina()==null?"":hist.getOficina().getDescripcion());
-			historialDetalle.setTerritorio(hist.getEmpleadoResp()==null?"":hist.getEmpleadoResp().getOficina().getTerritorio().getDescripcion());
+			//FIX ERIKA ABREGU
+			if(Constantes.EXPEDIENTE_ANTIGUO.equals(hist.getExpediente().getOrigen())){
+				historialDetalle.setTerritorio(hist.getOficina().getTerritorio().getDescripcion()==null?"":hist.getOficina().getTerritorio().getDescripcion());
+			}else{
+				historialDetalle.setTerritorio(hist.getEmpleadoResp()==null?"":hist.getEmpleadoResp().getOficina().getTerritorio().getDescripcion());
+			}
+			
 			historialDetalle.setNumeroContrato(hist.getNroContrato());
 			if(hist.getComentario()==null || !hist.getComentario().trim().equals("")){
 				historialDetalle.setObservacion(Constantes.OBSERVACION_NO_REGISTRADA);
 			}else{
 				historialDetalle.setObservacion(Constantes.OBSERVACION_REGISTRADA);
 			}
-			SimpleDateFormat sdf = new SimpleDateFormat ("dd/MM/yyyy hh:mm:ss a"); 
-			historialDetalle.setFechaRegistro(hist.getFecRegistro()!=null? sdf.format(hist.getFecRegistro()) :null );
+			//FIX ERIKA ABREGU
+			if(hist.getExpediente().getOrigen()!=null && (Constantes.EXPEDIENTE_ANTIGUO).equals(hist.getExpediente().getOrigen())){
+				SimpleDateFormat sdf = new SimpleDateFormat ("dd/MM/yyyy"); 
+				historialDetalle.setFechaRegistro(hist.getExpediente().getFecRegistro()!=null? sdf.format(hist.getExpediente().getFecRegistro()) :null );
+			}else{
+				SimpleDateFormat sdf = new SimpleDateFormat ("dd/MM/yyyy hh:mm:ss a"); 
+				historialDetalle.setFechaRegistro(hist.getExpediente().getFecRegistro()!=null? sdf.format(hist.getExpediente().getFecRegistro()) :null );
+			}
+			//FIN DE FIX
 			historialDetalle.setCorreo(hist.getClienteNatural()==null?"":hist.getClienteNatural().getCorreo());		 
 			historialDetalle.setCelular(hist.getClienteNatural()==null?"":hist.getClienteNatural().getCelular());
+			
+			/**FIX ERIKA ABREGU 05/07/2015
+			 */
+			historialDetalle.setOrigen(hist.getExpediente().getOrigen()==null?"Nueva CS Unificado":hist.getExpediente().getOrigen());
 		    listaDet.add(historialDetalle);
 		}
 		return listaDet;
@@ -411,6 +541,14 @@ public class BuscarBandejaHistMB extends AbstractMBean {
 
 	public void setTextoMensajeSinFiltro(String textoMensajeSinFiltro) {
 		this.textoMensajeSinFiltro = textoMensajeSinFiltro;
+	}
+	//FIX ERIKA ABREGU 19/06/2015
+	public boolean isHabAntiguaCSPLD() {
+		return habAntiguaCSPLD;
+	}
+	//FIX ERIKA ABREGU 19/06/2015
+	public void setHabAntiguaCSPLD(boolean habAntiguaCSPLD) {
+		this.habAntiguaCSPLD = habAntiguaCSPLD;
 	}
 	
 	
