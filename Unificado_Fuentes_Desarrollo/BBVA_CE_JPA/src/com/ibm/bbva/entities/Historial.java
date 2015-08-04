@@ -18,6 +18,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 
 /**
@@ -322,7 +323,12 @@ public class Historial implements Serializable {
 	@Column(name="ANS")
 	private int ans;
 	
-
+	/**FIX ERIKA ABREGU 30/06/2015
+	 */
+	@Transient
+	private String origen;
+	/**FIN FIX ERIKA ABREGU 30/06/2015 */
+	
 	public Historial() {
 	}
 
@@ -956,6 +962,17 @@ public class Historial implements Serializable {
 
 	public void setAns(int ans) {
 		this.ans = ans;
-	}	
+	}
+	
+	/**FIX ERIKA ABREGU 30/06/2015
+	 */
+	public String getOrigen() {
+		return origen;
+	}
+
+	public void setOrigen(String origen) {
+		this.origen = origen;
+	}
+	/**FIN FIX ERIKA ABREGU 30/06/2015 */
 	
 }

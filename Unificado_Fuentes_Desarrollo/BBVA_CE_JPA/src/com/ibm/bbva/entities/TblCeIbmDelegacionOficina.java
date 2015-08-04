@@ -83,6 +83,27 @@ public class TblCeIbmDelegacionOficina implements Serializable {
 	@Column(name="SUBLIMITEXPROD")
 	private double limiteProducto;
 	
+	//fix2 erika abregu
+	@Column(name="SUBLIMITXPRODCLIAVAVIP")
+	private double limiteProductoCliAvaVip;
+	
+	@Column(name="PLAZO_MAX_CLIAVAVIP")
+	private String plazoMaxCliAvaVip;
+	
+	@Column(name="SUBLIMITXPRODCLIINGMAYOR")
+	private double limiteProductoCliIngMayor;
+	
+	@Column(name="PLAZO_MAX_CLIINGMAYOR")
+	private String plazoMaxCliIngMayor;
+	
+	@Column(name="SUBLIMITXPRODCLIINGMENOR")
+	private double limiteProductoCliIngMenor;
+	
+	@Column(name="PLAZO_MAX_CLIINGMENOR")
+	private String plazoMaxCliIngMenor;
+	//fin fix2 erika abregu
+	
+	
 	public TblCeIbmDelegacionOficina() {
 	}
 
@@ -213,5 +234,55 @@ public class TblCeIbmDelegacionOficina implements Serializable {
 	public void setLimiteProducto(double limiteProducto) {
 		this.limiteProducto = limiteProducto;
 	}
+
+	//fix2 erika abregu
+	public double getLimiteProductoCliAvaVip() {
+		return limiteProductoCliAvaVip;
+	}
+
+	public void setLimiteProductoCliAvaVip(double limiteProductoCliAvaVip) {
+		this.limiteProductoCliAvaVip = limiteProductoCliAvaVip;
+	}
+
+	public String getPlazoMaxCliAvaVip() {
+		return plazoMaxCliAvaVip;
+	}
+
+	public void setPlazoMaxCliAvaVip(String plazoMaxCliAvaVip) {
+		this.plazoMaxCliAvaVip = plazoMaxCliAvaVip;
+	}
+
+	public double getLimiteProductoCliIngMayor() {
+		return limiteProductoCliIngMayor;
+	}
+
+	public void setLimiteProductoCliIngMayor(double limiteProductoCliIngMayor) {
+		this.limiteProductoCliIngMayor = limiteProductoCliIngMayor;
+	}
+
+	public String getPlazoMaxCliIngMayor() {
+		return plazoMaxCliIngMayor;
+	}
+
+	public void setPlazoMaxCliIngMayor(String plazoMaxCliIngMayor) {
+		this.plazoMaxCliIngMayor = plazoMaxCliIngMayor;
+	}
+
+	public double getLimiteProductoCliIngMenor() {
+		return limiteProductoCliIngMenor;
+	}
+
+	public void setLimiteProductoCliIngMenor(double limiteProductoCliIngMenor) {
+		this.limiteProductoCliIngMenor = limiteProductoCliIngMenor;
+	}
+
+	public String getPlazoMaxCliIngMenor() {
+		return plazoMaxCliIngMenor;
+	}
+
+	public void setPlazoMaxCliIngMenor(String plazoMaxCliIngMenor) {
+		this.plazoMaxCliIngMenor = plazoMaxCliIngMenor;
+	}
+	//fin de fix2 erika abregu
 
 }

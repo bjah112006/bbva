@@ -62,6 +62,21 @@ public class DelegacionRiesgo implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="ID_TIPO_MONEDA_FK")
 	private TipoMoneda tipoMoneda;
+	
+	
+	//FIX2 ERIKA ABREGU
+	@Column(name="ENDEUDAMIENTO_SCOR_APROB")
+	private double endeudamientoScoreAprobado;
+	
+	@Column(name="ENDEUDAMIENTO_SCOR_RECH")
+	private double endeudamientoScoreRechazado;
+	
+	@Column(name="ENDEUDAMIENTO_SCOR_DUDA")
+	private double endeudamientoScoreDuda;
+	
+	@Column(name="MONOCUOTA")
+	private double monocuota;
+	//FIN FIX2 ERIKA ABREGU
 
 	public DelegacionRiesgo() {
 	}
@@ -158,6 +173,33 @@ public class DelegacionRiesgo implements Serializable {
 	}
 	public void setTipoCategoria(TipoCategoria tipoCategoria) {
 		this.tipoCategoria = tipoCategoria;
+	}
+	
+	
+	//FIX2 ERIKA ABREGU
+	public double getEndeudamientoScoreAprobado() {
+		return endeudamientoScoreAprobado;
+	}
+	public void setEndeudamientoScoreAprobado(double endeudamientoScoreAprobado) {
+		this.endeudamientoScoreAprobado = endeudamientoScoreAprobado;
+	}
+	public double getEndeudamientoScoreRechazado() {
+		return endeudamientoScoreRechazado;
+	}
+	public void setEndeudamientoScoreRechazado(double endeudamientoScoreRechazado) {
+		this.endeudamientoScoreRechazado = endeudamientoScoreRechazado;
+	}
+	public double getEndeudamientoScoreDuda() {
+		return endeudamientoScoreDuda;
+	}
+	public void setEndeudamientoScoreDuda(double endeudamientoScoreDuda) {
+		this.endeudamientoScoreDuda = endeudamientoScoreDuda;
+	}
+	public double getMonocuota() {
+		return monocuota;
+	}
+	public void setMonocuota(double monocuota) {
+		this.monocuota = monocuota;
 	}
 
 }

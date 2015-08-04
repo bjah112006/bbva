@@ -78,6 +78,9 @@ public class ClienteNatural implements Serializable {
 	private String perExpPub;
 
 	private String subrog;
+	
+	//FIX2 ERIKA ABREGU
+	private String monocuota;
 
 	//bi-directional many-to-one association to ClienteCatrenta
 	@ManyToMany(fetch = EAGER)
@@ -297,5 +300,16 @@ public class ClienteNatural implements Serializable {
 
 		return expediente;
 	}
+
+	//FIX2 ERIKA ABREGU
+	public String getMonocuota() {
+		return monocuota;
+	}
+
+	public void setMonocuota(String monocuota) {
+		this.monocuota = monocuota;
+	}
+	
+	
 
 }

@@ -115,7 +115,13 @@ public class Expediente implements Serializable {
     private VerificacionExp verificacionExpLab;
 
     @Transient
-    private MotivoDevolucion motivoDevolucion;    
+    private MotivoDevolucion motivoDevolucion;  
+    
+    /**FIX ERIKA ABREGU 30/06/2015
+	 */
+	@Transient
+	private String origen;
+	/**FIN FIX ERIKA ABREGU 30/06/2015 */
     
 	public Expediente() {
 	}
@@ -322,5 +328,16 @@ public class Expediente implements Serializable {
 	public void setFlagActivo(String flagActivo) {
 		this.flagActivo = flagActivo;
 	}
+	
+	/**FIX ERIKA ABREGU 30/06/2015
+	 */
+	public String getOrigen() {
+		return origen;
+	}
+
+	public void setOrigen(String origen) {
+		this.origen = origen;
+	}
+	/**FIN FIX ERIKA ABREGU 30/06/2015 */
 
 }
