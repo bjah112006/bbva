@@ -1,5 +1,6 @@
 package bbva.ws.api;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -35,7 +36,9 @@ public class Facade implements FacadeLocal {
 	private ContentServiceImplPortProxy content;
 	private ParametrosConfBeanLocal parametrosConfBean;
 	private IbmBbvaBusinessPortProxy ibmbbvaPortProxy = null;
-	private String CONTENT_SERVICE_IMPL= "";	
+	private String CONTENT_SERVICE_IMPL= "";
+	
+	
 	public Facade() {
 	}
 
@@ -63,7 +66,9 @@ public class Facade implements FacadeLocal {
 		ibmbbvaPortProxy._getDescriptor().setEndpoint("http://localhost:9080/BBVA_CE_WS/IbmBbvaBusinessService");
 		//BENJAMIN
 		//ibmbbvaPortProxy._getDescriptor().setEndpoint("http://localhost:9084/BBVA_CE_WS/IbmBbvaBusinessService");
+		
 	}
+	
 
 	@Override
 	public boolean ServiceIBMBBVA_delegacionRiesgosWS(Integer idTipoCategoria,
