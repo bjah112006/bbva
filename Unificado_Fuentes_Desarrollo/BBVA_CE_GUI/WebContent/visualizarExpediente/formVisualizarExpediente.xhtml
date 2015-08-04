@@ -35,7 +35,7 @@
         <title><h:outputText value="#{msg['com.ibm.bbva.visualizarExpediente.formVisualizarExpediente.titulo']}"/></title>
     </h:head>
     <h:body onload="mostrarTabLogPorPerfil()">
-    <h:form id="frmVisualizarExpediente">    	
+    <h:form id="frmVisualizarExpediente">   	
         <div class="contenido">
             <div class="cabecera">
                 <ui:include src="/resources/common/cabecera.xhtml"/>
@@ -55,6 +55,10 @@
                 		            
                 	<h:panelGroup layout="block" rendered="#{visualizarExpediente.mensajeEnProceso != null}" class="mensaje-error-bloque">
                 		<h:outputText  value="#{visualizarExpediente.mensajeEnProceso}" />
+                	</h:panelGroup>
+                	
+                	<h:panelGroup layout="block" style="#{visualizarExpediente.origen!=null ? '':'display:none;'}" >
+                		<h:outputText  value="#{visualizarExpediente.origen}" styleClass="txt-resaltado-1 valor-componente"/>
                 	</h:panelGroup>
                 	    					
                 	<div class="tab-expediente tab-item">
@@ -92,6 +96,7 @@
 						</div>
 						
 					</div>
+					
 					<div class="tab-ayuda-memoria tab-item" style="display:none;">
 						<ui:include src="/resources/common/datosHistorico.xhtml"/>
 	               		<ui:include src="/resources/common/tablaAyudaMemoria.xhtml"/>
@@ -108,6 +113,8 @@
 	               		<ui:include src="/resources/common/datosHistorico.xhtml"/>
 	               		<ui:include src="/resources/common/tablaLog.xhtml"/>
 					</div>
+					
+					
 				</div>
             </div>
         </div>
