@@ -93,6 +93,12 @@
 		<class>com.ibm.bbva.entities.OficinaTemporal</class>
 		<class>com.ibm.bbva.entities.LogJob</class>
 		<class>com.ibm.bbva.entities.LogJobDet</class>
+		
+		<!-- FIX2 ERIKA ABREGU -->
+		<class>com.ibm.bbva.entities.DelegacionRiesgoClasificacionBanco</class>
+		<class>com.ibm.bbva.entities.DelegacionRiesgoCondicion</class>
+		<class>com.ibm.bbva.entities.Simbolo</class>
+		
 		<properties>
 			<property name="open.jdbc.Schema" value="CONELE"/>
 			<property name="openjpa.log" value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE"/>
