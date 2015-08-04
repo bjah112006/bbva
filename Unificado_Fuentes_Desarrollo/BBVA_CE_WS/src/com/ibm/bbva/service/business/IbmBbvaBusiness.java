@@ -39,6 +39,7 @@ import com.ibm.bbva.entities.ClienteNatural;
 import com.ibm.bbva.entities.DatosCorreo;
 import com.ibm.bbva.entities.DatosCorreoDestin;
 import com.ibm.bbva.entities.DelegacionRiesgo;
+import com.ibm.bbva.entities.DelegacionRiesgoClasificacionBanco;
 import com.ibm.bbva.entities.DevolucionTarea;
 import com.ibm.bbva.entities.DocumentoExpTc;
 import com.ibm.bbva.entities.Empleado;
@@ -72,6 +73,7 @@ import com.ibm.bbva.session.ClienteNaturalBeanLocal;
 import com.ibm.bbva.session.DatosCorreoBeanLocal;
 import com.ibm.bbva.session.DatosCorreoDestinBeanLocal;
 import com.ibm.bbva.session.DelegacionRiesgoBeanLocal;
+import com.ibm.bbva.session.DelegacionRiesgoClasificacionBancoBeanLocal;
 import com.ibm.bbva.session.DevolucionTareaBeanLocal;
 import com.ibm.bbva.session.DocumentoExpTcBeanLocal;
 import com.ibm.bbva.session.EmpleadoBeanLocal;
@@ -121,6 +123,9 @@ public class IbmBbvaBusiness {
 	private VistaExpedienteCantidadBeanLocal vistaExpedienteCantidadBean;
 	private VistaExpedienteComplejidadBeanLocal vistaExpedienteComplejidadBean;
 	private TipoCambioCEBeanLocal tipoCambioCEBeanLocal;
+	
+	//FIX2 ERIKA ABREGU	
+	private DelegacionRiesgoClasificacionBancoBeanLocal delegacionRiesgoClasifBcoBeanLocalBean;
 	
 	private DatosCorreoBeanLocal datosCorreoBeanLocal;
 	private DatosCorreoDestinBeanLocal datosCorreoDestinBeanLocal;
@@ -217,6 +222,11 @@ public class IbmBbvaBusiness {
 				DelegacionRiesgo objDelegacionRiesgo=delegacionRiesgoBeanLocalBean.buscarPorId(idTipoCategoria, 
 						objExpediente.getProducto().getId(), objExpedienteTC.getTipoMonedaSol().getId());
 				
+				//FIX2 ERIKA ABREGU 22-07-2015
+				DelegacionRiesgoClasificacionBanco objDelegacionRiesgoClasifBco=delegacionRiesgoClasifBcoBeanLocalBean.buscarPorId(idTipoCategoria, 
+						objExpediente.getProducto().getId());
+				
+				
 				if(objDelegacionRiesgo!=null && objExpedienteTC!=null){
 					LOG.info("objDelegacionRiesgo existe!");
 					
@@ -257,51 +267,123 @@ public class IbmBbvaBusiness {
 						objDelegacionRiesgo.setLineaCredAprob(calcularTipoCambio(objDelegacionRiesgo.getLineaCredAprob(), objDelegacionRiesgo.getTipoMoneda(),objTipoCambioCE));
 					}
 					
-					if(lineaCredito!=null && Util.isDouble(""+objDelegacionRiesgo.getLineaCredAprob()) && 
-							objDelegacionRiesgo.getLineaCredAprob() >= lineaCredito){
-						LOG.info("LineaCredAprob es mayor a lineaCredito de exp, lineaCredito de exp= "+lineaCredito);
-						if(Util.isDouble(""+objDelegacionRiesgo.getRiesgoCliente()) && Util.isDouble(""+objExpedienteTC.getRiesgoCliente()) && 
-								objDelegacionRiesgo.getRiesgoCliente() >= objExpedienteTC.getRiesgoCliente()){
-							LOG.info("RiesgoCliente es mayor a RiesgoCliente de exp, RiesgoCliente de exp = "+objExpedienteTC.getRiesgoCliente());
-							if((objDelegacionRiesgo.getTipoBuro()!=null && objExpedienteTC.getTipoBuro()!=null && 
-									objDelegacionRiesgo.getTipoBuroIni().getId() <= objExpedienteTC.getTipoBuro().getId()) && 
-								  (objDelegacionRiesgo.getTipoBuro().getId() >= objExpedienteTC.getTipoBuro().getId())){
-									LOG.info("TipoBuroIni es menor igual a TipoBuro de exp y TipoBuro es mayor igual a TipoBuro de exp. TipoBuro de exp = "+objExpedienteTC.getTipoBuro().getId());
-									ClienteNatural objClienteNatural = objExpediente.getClienteNatural();
-									if(objClienteNatural!=null){
-										LOG.info("objClienteNatural existe!");
-										if(objDelegacionRiesgo.getPep()!=null && objClienteNatural.getPerExpPub()!=null && 
-												objDelegacionRiesgo.getPep().trim().equalsIgnoreCase(objClienteNatural.getPerExpPub().trim())){
-											LOG.info("Pep = Pep de cliente natural, Valor Pep = "+objDelegacionRiesgo.getPep().trim());
-											if(objClienteNatural.getSegmento()!=null && objClienteNatural.getSegmento().getDescripcion()!=null && 
-													objClienteNatural.getSegmento().getDescripcion().trim().equalsIgnoreCase(Constantes.TIPO_SEGMENTO_VIP)){
-													LOG.info("Vip. Descripción de Segmento = "+objClienteNatural.getSegmento().getDescripcion().trim());
-													if(objDelegacionRiesgo.getPrctjeEndeudamientoVipMax() >= objExpedienteTC.getPorcentajeEndeudamiento() && 
-															objDelegacionRiesgo.getPrctjeEndeudamientoVipMin() <= objExpedienteTC.getPorcentajeEndeudamiento()){
-														LOG.info("Validacion por PrctjeEndeudamientoVip. Dentro de delegación");
+					/*
+					 * FIX2 ERIKA ABREGU
+					 * 21-07-2015
+					 */
+					Double lineaCredAprobEnDelegacRiesgo = Util.isDouble(""+objDelegacionRiesgo.getLineaCredAprob()) ? objDelegacionRiesgo.getLineaCredAprob() : null;
+					
+					if(objExpedienteTC.getClasificacionBanco().getId() == Constantes.CODIGO_CLASIF_BANCO_NORMAL_TC || 
+							objExpedienteTC.getClasificacionBanco().getId() == Constantes.CODIGO_CLASIF_BANCO_NORMAL_PLD){
+						
+						lineaCredAprobEnDelegacRiesgo = lineaCredAprobEnDelegacRiesgo*objDelegacionRiesgoClasifBco.getClasifNormal();
+					}
+					else if(objExpedienteTC.getClasificacionBanco().getId() == Constantes.CODIGO_CLASIF_BANCO_CPP_TC || 
+							objExpedienteTC.getClasificacionBanco().getId() == Constantes.CODIGO_CLASIF_BANCO_CPP_PLD){
+						
+						lineaCredAprobEnDelegacRiesgo = lineaCredAprobEnDelegacRiesgo*objDelegacionRiesgoClasifBco.getClasifCpp();
+					}
+					else if(objExpedienteTC.getClasificacionBanco().getId() == Constantes.CODIGO_CLASIF_BANCO_DUDOSO_TC || 
+							objExpedienteTC.getClasificacionBanco().getId() == Constantes.CODIGO_CLASIF_BANCO_DUDOSO_PLD){
+						
+						lineaCredAprobEnDelegacRiesgo = lineaCredAprobEnDelegacRiesgo*objDelegacionRiesgoClasifBco.getClasifDudoso();
+					}
+					else if(objExpedienteTC.getClasificacionBanco().getId() == Constantes.CODIGO_CLASIF_BANCO_DEFIC_TC || 
+							objExpedienteTC.getClasificacionBanco().getId() == Constantes.CODIGO_CLASIF_BANCO_DEFIC_PLD){
+						
+						lineaCredAprobEnDelegacRiesgo = lineaCredAprobEnDelegacRiesgo*objDelegacionRiesgoClasifBco.getClasifDeficiente();
+					}
+					else if(objExpedienteTC.getClasificacionBanco().getId() == Constantes.CODIGO_CLASIF_BANCO_PERDIDA_TC || 
+							objExpedienteTC.getClasificacionBanco().getId() == Constantes.CODIGO_CLASIF_BANCO_PERDIDA_PLD){
+						
+						lineaCredAprobEnDelegacRiesgo = lineaCredAprobEnDelegacRiesgo*objDelegacionRiesgoClasifBco.getClasifPerdida();
+					}
+					//VALIDAR LINEA DE CREDITO RESPECTO A CLASIFICACION BANCO
+					if(lineaCredito!=null && Util.isDouble(""+lineaCredAprobEnDelegacRiesgo) &&
+							lineaCredAprobEnDelegacRiesgo >= lineaCredito){
+						LOG.info("LineaCredAprob respecto a Clasificacion Banco es mayor a lineaCredito de exp, lineaCredito de exp= "+lineaCredito);
+						
+						if(objExpediente.getClienteNatural().getMonocuota() == "1"){
+							lineaCredAprobEnDelegacRiesgo = lineaCredAprobEnDelegacRiesgo*objDelegacionRiesgo.getMonocuota();
+						}
+						
+						//COMENTADO POR ERIKA ABREGU PARA EL CAMBIO DE FIX2
+						//if(lineaCredito!=null && Util.isDouble(""+objDelegacionRiesgo.getLineaCredAprob()) &&
+								//objDelegacionRiesgo.getLineaCredAprob() >= lineaCredito){
+						if(lineaCredito!=null && Util.isDouble(""+lineaCredAprobEnDelegacRiesgo) &&
+								lineaCredAprobEnDelegacRiesgo >= lineaCredito){
+							LOG.info("LineaCredAprob es mayor a lineaCredito de exp, lineaCredito de exp= "+lineaCredito);
+							if(Util.isDouble(""+objDelegacionRiesgo.getRiesgoCliente()) && Util.isDouble(""+objExpedienteTC.getRiesgoCliente()) && 
+									objDelegacionRiesgo.getRiesgoCliente() >= objExpedienteTC.getRiesgoCliente()){
+								LOG.info("RiesgoCliente es mayor a RiesgoCliente de exp, RiesgoCliente de exp = "+objExpedienteTC.getRiesgoCliente());
+								if((objDelegacionRiesgo.getTipoBuro()!=null && objExpedienteTC.getTipoBuro()!=null && 
+										objDelegacionRiesgo.getTipoBuroIni().getId() <= objExpedienteTC.getTipoBuro().getId()) && 
+										(objDelegacionRiesgo.getTipoBuro().getId() >= objExpedienteTC.getTipoBuro().getId())){
+										LOG.info("TipoBuroIni es menor igual a TipoBuro de exp y TipoBuro es mayor igual a TipoBuro de exp. TipoBuro de exp = "+objExpedienteTC.getTipoBuro().getId());
+										ClienteNatural objClienteNatural = objExpediente.getClienteNatural();
+										if(objClienteNatural!=null){
+											LOG.info("objClienteNatural existe!");
+											if(objDelegacionRiesgo.getPep()!=null && objClienteNatural.getPerExpPub()!=null && 
+													objDelegacionRiesgo.getPep().trim().equalsIgnoreCase(objClienteNatural.getPerExpPub().trim())){
+												LOG.info("Pep = Pep de cliente natural, Valor Pep = "+objDelegacionRiesgo.getPep().trim());
+												if(objClienteNatural.getSegmento()!=null && objClienteNatural.getSegmento().getDescripcion()!=null && 
+														objClienteNatural.getSegmento().getDescripcion().trim().equalsIgnoreCase(Constantes.TIPO_SEGMENTO_VIP)){
+														LOG.info("Vip. Descripción de Segmento = "+objClienteNatural.getSegmento().getDescripcion().trim());
+														if(objDelegacionRiesgo.getPrctjeEndeudamientoVipMax() >= objExpedienteTC.getPorcentajeEndeudamiento() && 
+																objDelegacionRiesgo.getPrctjeEndeudamientoVipMin() <= objExpedienteTC.getPorcentajeEndeudamiento()){
+															LOG.info("Validacion por PrctjeEndeudamientoVip. Dentro de delegación");
+															return true;
+														}													
+												}else{
+													LOG.info("No Vip . Descripción de Segmento = "+objClienteNatural.getSegmento().getDescripcion().trim());
+													//COMENTADO POR ERIKA ABREGU PARA EL CAMBIO DE FIX2
+													/*if(objDelegacionRiesgo.getPorcentajeEndeudamientoUd() >= objExpedienteTC.getPorcentajeEndeudamiento()){
+														LOG.info("Validacion por PorcentajeEndeudamientoUd. Dentro de delegación");
 														return true;
+													}*/
+												
+													//FIX2 ERIKA ABREGU --VALIDAR % PORCENTAJE CONTRA SCORING
+													if(objExpedienteTC.getTipoScoring() != null && objExpedienteTC.getTipoScoring().getId() != 0 &&
+														objExpedienteTC.getTipoScoring().getId()== Constantes.CODIGO_TIPO_SCORING_APROBADO){
+													
+														if(objDelegacionRiesgo.getEndeudamientoScoreAprobado() >= objExpedienteTC.getPorcentajeEndeudamiento()){
+															LOG.info("Validacion por PorcentajeEndeudamientoScoreAprobado. Dentro de delegación");
+															return true;
+														}
+													}else if(objExpedienteTC.getTipoScoring() != null && objExpedienteTC.getTipoScoring().getId() != 0 &&
+															objExpedienteTC.getTipoScoring().getId()== Constantes.CODIGO_TIPO_SCORING_RECHAZADO){
+													
+														if(objDelegacionRiesgo.getEndeudamientoScoreRechazado() >= objExpedienteTC.getPorcentajeEndeudamiento()){
+															LOG.info("Validacion por PorcentajeEndeudamientoScoreRechazado. Dentro de delegación");
+															return true;
+														}
+													}else if(objExpedienteTC.getTipoScoring() != null && objExpedienteTC.getTipoScoring().getId() != 0 &&
+															objExpedienteTC.getTipoScoring().getId()== Constantes.CODIGO_TIPO_SCORING_DUDA){
+													
+														if(objDelegacionRiesgo.getEndeudamientoScoreDuda() >= objExpedienteTC.getPorcentajeEndeudamiento()){
+															LOG.info("Validacion por PorcentajeEndeudamientoScoreDuda. Dentro de delegación");
+															return true;
+														}
 													}
-											}else{
-												LOG.info("No Vip . Descripción de Segmento = "+objClienteNatural.getSegmento().getDescripcion().trim());
-												if(objDelegacionRiesgo.getPorcentajeEndeudamientoUd() >= objExpedienteTC.getPorcentajeEndeudamiento()){
-													LOG.info("Validacion por PorcentajeEndeudamientoUd. Dentro de delegación");
-													return true;
-												}
-											}										
+												
+												
+												}										
+											}else
+												LOG.info("Pep <> Pep de cliente natural");
 										}else
-											LOG.info("Pep <> Pep de cliente natural");
+											LOG.info("objClienteNatural es null");
 									}else
-										LOG.info("objClienteNatural es null");
+										LOG.info("TipoBuroIni es menor igual a TipoBuro de exp y/o TipoBuro es mayor igual a TipoBuro de exp");
 								}else
-									LOG.info("TipoBuroIni es menor igual a TipoBuro de exp y/o TipoBuro es mayor igual a TipoBuro de exp");
+									LOG.info("RiesgoCliente no cumple condición");
+							}else
+								LOG.info("lineaCredito es nulo o no cumple condición");
 						}else
-							LOG.info("RiesgoCliente no cumple condición");
-					}else
-						LOG.info("lineaCredito es nulo o no cumple condición");
+							LOG.info("lineaCredito respecto a Clasificacion Banco es nulo o no cumple condición");
 				}else
 					LOG.info("objDelegacionRiesgo es nulo");
 			}else
-			LOG.info("Expediente "+idExpediente+" es nulo");
+				LOG.info("Expediente "+idExpediente+" es nulo");
 		}else
 		LOG.info("Uno de los valores parametros es nulo");	
 
@@ -333,12 +415,101 @@ public class IbmBbvaBusiness {
 								if(Util.isDouble(""+objDelegacionOficina.getClasificacionSbs()) && Util.isDouble(""+objExpedienteTC.getClasificacionSbs()) && 
 										objDelegacionOficina.getClasificacionSbs()==objExpedienteTC.getClasificacionSbs()){
 									LOG.info("continua 4");
+								
+									/*FIX2 ERIKA ABREGU*/
+									//VALIDAR LINEA CONSUMO
 									if(Util.isDouble(""+objDelegacionOficina.getLimiteConsumo()) && Util.isDouble(""+objExpedienteTC.getLineaConsumo()) && 
-											objDelegacionOficina.getLimiteConsumo() >= objExpedienteTC.getLineaConsumo())
+											objDelegacionOficina.getLimiteConsumo() >= objExpedienteTC.getLineaConsumo()){
+										
+										//VALIDAR SUBLIMITE X PROD 
+										if(Util.isDouble(""+objDelegacionOficina.getLimiteProductoCliAvaVip()) && 
+												Util.isDouble(""+objDelegacionOficina.getLimiteProductoCliIngMayor()) &&
+												Util.isDouble(""+objDelegacionOficina.getLimiteProductoCliIngMenor()) &&
+												Util.isDouble(""+objDelegacionOficina.getLimiteProducto())){
+											
+											
+											//VALIDAR SUBLIMITE X PROD -- CLIENTE VIP
+											if(objClienteNatural.getSegmento()!= null && objClienteNatural.getSegmento().getGrupoSegmento()!=null &&
+													objClienteNatural.getSegmento().getGrupoSegmento().getId()==Constantes.CODIGO_GRUPO_SEGMENTO_VIP &&
+													objDelegacionOficina.getLimiteProductoCliAvaVip() < objExpedienteTC.getLineaConsumo()){
+												LOG.info("No cumple la condicion de Cliente VIP");	
+												return false;
+												
+											}
+											
+											//VALIDAR SUBLIMITE X PROD -- CLIENTE INGRESO NETO MENSUAL MAYOR A 1500
+											else if(objExpediente.getClienteNatural().getIngNetoMensual()>= 1500 && 
+													objDelegacionOficina.getLimiteProductoCliIngMayor() < objExpedienteTC.getLineaConsumo()){
+												LOG.info("No cumple la condicion de Cliente Mayor a 1500 ");	
+												return false;
+												
+											}
+											
+											//VALIDAR SUBLIMITE X PROD -- CLIENTE INGRESO NETO MENSUAL MENOR A 1500
+											else if(objExpediente.getClienteNatural().getIngNetoMensual()< 1500 && 
+													objDelegacionOficina.getLimiteProductoCliIngMenor() < objExpedienteTC.getLineaConsumo()){
+												LOG.info("No cumple la condicion de Cliente Menor a 1500 ");	
+												return false;
+												
+											}else{// EL RESTO DE LOS CASOS
+												if(objDelegacionOficina.getLimiteProducto() < objExpedienteTC.getLineaConsumo()){
+													LOG.info("No cumple la condicion de SubLimite x Producto ");	
+													return false;
+												}
+											}
+											
+										}else{
+											LOG.info("No se puede comparar Limite Producto, esta mal parametrizado ");	
+											return false;
+										}
+										
+										//VALIDAR PLAZO MAXIMO
+										if(Util.isDouble(""+objDelegacionOficina.getPlazoMaxCliAvaVip()) && 
+												Util.isDouble(""+objDelegacionOficina.getPlazoMaxCliIngMayor()) &&
+												Util.isDouble(""+objDelegacionOficina.getPlazoMaxCliIngMenor()) &&
+												Util.isDouble(""+objDelegacionOficina.getPlazoMax())){
+											
+											
+											//VALIDAR SUBLIMITE X PROD -- CLIENTE VIP
+											if(objClienteNatural.getSegmento()!= null && objClienteNatural.getSegmento().getGrupoSegmento()!=null &&
+													objClienteNatural.getSegmento().getGrupoSegmento().getId()==Constantes.CODIGO_GRUPO_SEGMENTO_VIP &&
+													Long.parseLong(objDelegacionOficina.getPlazoMaxCliAvaVip()) < Long.parseLong(objExpedienteTC.getPlazoSolicitado())){
+												LOG.info("No cumple la condicion de Cliente VIP (Plazo)");	
+												return false;
+												
+											}
+											
+											//VALIDAR SUBLIMITE X PROD -- CLIENTE INGRESO NETO MENSUAL MAYOR A 1500
+											else if(objExpediente.getClienteNatural().getIngNetoMensual()>= 1500 && 
+													Long.parseLong(objDelegacionOficina.getPlazoMaxCliIngMayor()) < Long.parseLong(objExpedienteTC.getPlazoSolicitado())){
+												LOG.info("No cumple la condicion de Cliente Mayor a 1500 (Plazo) ");	
+												return false;
+												
+											}
+											
+											//VALIDAR SUBLIMITE X PROD -- CLIENTE INGRESO NETO MENSUAL MENOR A 1500
+											else if(objExpediente.getClienteNatural().getIngNetoMensual()< 1500 && 
+													Long.parseLong(objDelegacionOficina.getPlazoMaxCliIngMenor()) < Long.parseLong(objExpedienteTC.getPlazoSolicitado())){
+												LOG.info("No cumple la condicion de Cliente Menor a 1500 (Plazo) ");	
+												return false;
+												
+											}else{// EL RESTO DE LOS CASOS
+												if(Long.parseLong(objDelegacionOficina.getPlazoMax()) < Long.parseLong(objExpedienteTC.getPlazoSolicitado())){
+													LOG.info("No cumple la condicion de Plazo Maximo ");	
+													return false;
+												}
+											}
+											
+										}else{
+											LOG.info("No se puede comparar Plazo Maximo, esta mal parametrizado ");	
+											return false;
+										}
+											
+										
 										if(objDelegacionOficina.getPep()!=null && objClienteNatural.getPerExpPub()!=null && 
 											objDelegacionOficina.getPep().trim().equalsIgnoreCase(objClienteNatural.getPerExpPub().trim()))
 											if(objDelegacionOficina.getTipoScoring()!=null && objExpedienteTC.getTipoScoring()!=null && 
-												objDelegacionOficina.getTipoScoring().getId() == objExpedienteTC.getTipoScoring().getId())
+												objDelegacionOficina.getTipoScoring().getId() == objExpedienteTC.getTipoScoring().getId()){
 												if(Util.isDouble(""+objExpedienteTC.getLineaConsumo()) && ((!Util.isDouble(""+objExpedienteTC.getLineaCredAprob()) || 
 														objExpedienteTC.getLineaCredAprob() == 0) ? objExpedienteTC.getLineaCredSol(): 
 															objExpedienteTC.getLineaCredAprob()) <= objExpedienteTC.getLineaConsumo()){
@@ -353,6 +524,36 @@ public class IbmBbvaBusiness {
 													}else															
 														return true;															
 												}
+											}
+									}
+									
+									/*FIX2 ERIKA ABREGU*/
+					
+									
+									//COMENTADO PARA EL FIX2 DE ERIKA ABREGU
+									/*if(Util.isDouble(""+objDelegacionOficina.getLimiteConsumo()) && Util.isDouble(""+objExpedienteTC.getLineaConsumo()) && 
+											objDelegacionOficina.getLimiteConsumo() >= objExpedienteTC.getLineaConsumo())
+										if(objDelegacionOficina.getPep()!=null && objClienteNatural.getPerExpPub()!=null && 
+											objDelegacionOficina.getPep().trim().equalsIgnoreCase(objClienteNatural.getPerExpPub().trim()))
+											if(objDelegacionOficina.getTipoScoring()!=null && objExpedienteTC.getTipoScoring()!=null && 
+												objDelegacionOficina.getTipoScoring().getId() == objExpedienteTC.getTipoScoring().getId()){
+												if(Util.isDouble(""+objExpedienteTC.getLineaConsumo()) && ((!Util.isDouble(""+objExpedienteTC.getLineaCredAprob()) || 
+														objExpedienteTC.getLineaCredAprob() == 0) ? objExpedienteTC.getLineaCredSol(): 
+															objExpedienteTC.getLineaCredAprob()) <= objExpedienteTC.getLineaConsumo()){
+													LOG.info("continua 2");
+													if(objClienteNatural.getEstadoCivil()!=null && objClienteNatural.getEstadoCivil().getCodigo().equals(Constantes.ESTADO_CIVIL_CASADO)){
+														LOG.info("Cliente casado");
+														if( objDelegacionOficina.getBancoConyuge()!=null && 
+															objDelegacionOficina.getBancoConyuge().getId()==objExpedienteTC.getBancoConyuge().getId())
+															if(Util.isDouble(""+objDelegacionOficina.getSbsConyuge()) && 
+																objDelegacionOficina.getSbsConyuge()==(!Util.isDouble(""+objExpedienteTC.getSbsConyuge())?null:objExpedienteTC.getSbsConyuge()))
+																		return true;					
+													}else															
+														return true;															
+												}
+											}
+									*/
+									
 								}								
 							}
 							
