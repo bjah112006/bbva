@@ -42,6 +42,8 @@
 				<h:commandLink id="idSeleccionFila" immediate="true" value="sel"
 					action="#{tablaBandejaHist.seleccionaFila}" style="display:none;">
 					<f:param value="#{item.id}" name="idHistorial" />
+					<f:param value="#{item.origen}" name="origen" />
+					<f:param value="#{item.idExpediente}" name="idExpediente" />
 				</h:commandLink>
 			</h:column>	
 			<!-- <h:column nowrap="true" align="center" width="10%">	
@@ -51,6 +53,16 @@
 				</f:facet>
 				<h:outputText value=""></h:outputText>
 			</h:column> -->
+			<h:column nowrap="true" align="center" width="6%">
+				<f:facet name="header">
+					<h:commandLink actionListener="#{tablaBandejaHist.ordenar}" styleClass="#{tablaBandejaHist.obtenerEstiloColumna('codigo')}">
+						<f:attribute name="sortField" value="codigo" />
+						<h:outputText value="#{msg['com.ibm.bbva.common.tablaBandejaPend.origen']}" />
+						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaHist.obtenerEstiloColumnaImg('codigo')}"/>
+					</h:commandLink>
+				</f:facet>
+				<h:outputText value="#{item.origen}"></h:outputText>
+			</h:column>
 			<h:column nowrap="true" align="center" width="6%">
 				<f:facet name="header">
 					<h:commandLink actionListener="#{tablaBandejaHist.ordenar}" styleClass="#{tablaBandejaHist.obtenerEstiloColumna('codigo')}">

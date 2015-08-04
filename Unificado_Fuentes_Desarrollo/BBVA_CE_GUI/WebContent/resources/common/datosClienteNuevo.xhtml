@@ -222,12 +222,17 @@
                     <f:selectItem itemValue="4" 
                     		itemLabel="#{msg['com.ibm.bbva.common.datosClienteNuevo.caractAdicionales.subrogacion']}" 
                     		itemDisabled="#{registrarExpediente.itemDisabledSubrogacion }" />
+                    <br></br>		
+                    <f:selectItem itemValue="5"  
+                    		itemLabel="#{msg['com.ibm.bbva.common.datosCliente.caractAdicionales.monocuota']}"/>
+                    				
 					<f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" 
 						execute="@form" listener="#{datosClienteNuevo.cambiarCaracteristicas}"/>                    
                 </h:selectManyCheckbox>            
             </h:panelGroup>
 
             </div>
+            
         </span>
         <span class="columna" style="width:160px">
             <div class="campo-espaciado">

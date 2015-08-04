@@ -339,12 +339,19 @@
               <span class="columna" style="width:150px">
                   <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto3.endeudamiento']}:" styleClass="etiqueta"/>
               </span>
+              
+              
               <span class="columna" style="width:78px">
-	              <h:outputText value="#{datosProducto3.expediente.expedienteTC.porcentajeEndeudamiento}" styleClass="caja-texto">
-	                 <f:convertNumber locale="en" pattern="#,##0.00"/>               
-	              </h:outputText>              
-	              <h:outputText value="%" styleClass="caja-texto valor-componente"/>
-              </span>    
+	              <h:inputText value="#{datosProducto3.expediente.expedienteTC.porcentajeEndeudamiento}" 
+	              		styleClass="txt-resaltado-2 campoValor1 cmpNumeroDecimalMill" id="porcentEndeudaCambiado" 
+	              		onkeypress="return disableEnterKey(event);"  disabled="#{datosProducto3.disabledPorsEndeudamiento}">
+		            <f:convertNumber locale="en" pattern="#,##0.00"/>
+		            <f:ajax event="blur" render="idPanelDocumentos appletContentRefresh" execute="@form" listener="#{datosProducto3.cambiarDocumentoObligatorio}"/>
+		          </h:inputText>
+		          <h:outputText value="%" styleClass="caja-texto valor-componente"/>
+              </span>  
+              
+                
           </div>  
           <div class="espacios-etiqueta2">
               <span class="columna" style="width:150px">

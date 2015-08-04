@@ -27,6 +27,9 @@
             </div>
             <div class="campo-espaciado espacios-etiqueta">
                 <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaHist.feInicio']}:" styleClass="etiqueta"/>                
+            </div>
+            <div class="campo-espaciado espacios-etiqueta">
+                <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaHist.antiguaCSPLD']}:" styleClass="etiqueta"/>                
             </div>   
         </span>
     
@@ -65,7 +68,12 @@
                 maxlength="10" onblur="validarFormatoFechaInicio(); validarFechaInicio();">
                     <f:convertDateTime pattern="dd/MM/yyyy"/>
                </h:inputText>
-            </div>     
+            </div> 
+          
+             <div class="campo-espaciado">
+				<h:selectBooleanCheckbox value="#{buscarBandejaHist.habAntiguaCSPLD}" styleClass="chk-antiguaCSPLD" id="chk-antiguaCSPLD"/>
+			</div>
+			    
         </span>
         
         <span class="columna" style="width:125px">
@@ -84,6 +92,7 @@
             <div class="campo-espaciado espacios-etiqueta">
                 <h:outputText value="#{msg['com.ibm.bbva.common.buscarBandejaHist.feFin']}:" styleClass="etiqueta"/>                                
             </div>
+           
         </span>
         
         <span class="columna" style="width:250px">
@@ -113,7 +122,8 @@
                     <f:convertDateTime pattern="dd/MM/yyyy"/>
                     
                </h:inputText>
-            </div>                       
+            </div>
+                                   
         </span>
  
     </div>
