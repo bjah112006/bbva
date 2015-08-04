@@ -17,6 +17,7 @@ import pe.ibm.bean.ExpedienteTCWPSWeb;
 import com.ibm.bbva.controller.AbstractMBean;
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.controller.common.TablaBandejaMonitoreoMB;
+import com.ibm.bbva.entities.Expediente;
 import com.ibm.bbva.session.ParametrosConfBeanLocal;
 import com.ibm.bbva.util.AyudaExpedienteTC;
 
@@ -32,6 +33,11 @@ public class VisualizarExpedienteMB extends AbstractMBean {
 	
 	private String mensajeError = null;
 	private String mensajeEnProceso = null;
+	/*
+	 * FIX ERIKA ABREGU 07/07/2015
+	*/
+	private Expediente expediente;
+	private String origen= null;
 	
     private ParametrosConfBeanLocal parametrosConfBean;
     
@@ -48,6 +54,21 @@ public class VisualizarExpedienteMB extends AbstractMBean {
 				
 		mensajeError = null;
 		mensajeEnProceso = null;
+		
+		/*
+		 * FIX ERIKA ABREGU 07/07/2015
+		*/
+		origen = null;
+		expediente = (Expediente) getObjectSession(Constantes.EXPEDIENTE_SESION_HISTORICO);
+				
+		if(expediente != null){
+			this.setOrigen(expediente.getOrigen());
+		}
+		/*
+		 * FIN DE FIX ERIKA ABREGU 07/07/2015
+		*/
+		
+		
 		
 		/** Para visualizaciones a partir de la bandeja de monitoreo **/
 		FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -207,5 +228,14 @@ public class VisualizarExpedienteMB extends AbstractMBean {
 	public void setBandejaMonitoreo_tipo(Integer bandejaMonitoreo_tipo) {
 		this.bandejaMonitoreo_tipo = bandejaMonitoreo_tipo;
 	}
+
+	public String getOrigen() {
+		return origen;
+	}
+
+	public void setOrigen(String origen) {
+		this.origen = origen;
+	}
+	
 	
 }

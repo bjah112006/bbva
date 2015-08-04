@@ -121,6 +121,11 @@ public class RegistrarExpedienteMB extends AbstractMBean {
 	private String numeroIntentos;
 	private HtmlCommandButton btnActualizaWebSeal;
 	
+	/*
+	 * FIX2 ERIKA ABREGU 17-07-2015
+	*/
+	//private boolean itemDisabledMonocuota = false;
+	
 	private static final Logger LOG = LoggerFactory.getLogger(RegistrarExpedienteMB.class);
 	
 	public boolean isValidaAprobacion() {
@@ -1315,5 +1320,15 @@ public class RegistrarExpedienteMB extends AbstractMBean {
 		LOG.info("En el metodo pinWebSeal de registrar expediente - UNIFICADO");
 	}
 
+	//FIX2 ERIKA ABREGU
+	/*public boolean isItemDisabledMonocuota() {
+		return itemDisabledMonocuota;
+	}
+
+	public void setItemDisabledMonocuota(boolean itemDisabledMonocuota) {
+		this.itemDisabledMonocuota = itemDisabledMonocuota;
+	}*/
+
+	
 	
 }
