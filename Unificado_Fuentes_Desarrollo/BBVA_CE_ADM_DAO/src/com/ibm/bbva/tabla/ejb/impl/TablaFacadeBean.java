@@ -27,6 +27,7 @@ import com.ibm.bbva.tabla.dao.ColumnaDAO;
 import com.ibm.bbva.tabla.dao.ColumnaDependenciaDAO;
 import com.ibm.bbva.tabla.dao.DatosGeneradosConsDAO;
 import com.ibm.bbva.tabla.dao.DatosGeneradosHisDAO;
+import com.ibm.bbva.tabla.dao.DatosHistAntiguoDAO;
 import com.ibm.bbva.tabla.dao.ParametrosConfDAO;
 import com.ibm.bbva.tabla.dao.PosibleValorDAO;
 import com.ibm.bbva.tabla.dao.RegistroTablaDAO;
@@ -35,8 +36,14 @@ import com.ibm.bbva.tabla.dao.ValorForaneoDAO;
 import com.ibm.bbva.tabla.dao.ValorForaneoDataDAO;
 import com.ibm.bbva.tabla.dto.ColumnaDTO;
 import com.ibm.bbva.tabla.dto.ColumnaDependenciaDTO;
+import com.ibm.bbva.tabla.dto.DatosAyudaMemoriaIiceDTO;
+import com.ibm.bbva.tabla.dto.DatosDetalleHistoricoIiceDTO;
+import com.ibm.bbva.tabla.dto.DatosDetalleObservacionesIiceDTO;
+import com.ibm.bbva.tabla.dto.DatosDetalleLogIiceDTO;
+import com.ibm.bbva.tabla.dto.DatosDocumentosExpIiceDTO;
 import com.ibm.bbva.tabla.dto.DatosGeneradosConsDTO;
 import com.ibm.bbva.tabla.dto.DatosGeneradosHisDTO;
+import com.ibm.bbva.tabla.dto.DatosHistAntiguoDTO;
 import com.ibm.bbva.tabla.dto.ParametrosConfDTO;
 import com.ibm.bbva.tabla.dto.PosibleValorDTO;
 import com.ibm.bbva.tabla.dto.RegistroTablaDTO;
@@ -797,6 +804,117 @@ public class TablaFacadeBean {
 			LOG.error(e.getMessage(), e);
 		}
 		return listDatosGeneradosHis;
+	}
+	
+	
+	/**
+	 * FIX ERIKA ABREGU 27/06/2015
+	 * Metodo generador de datos historicos + antiguos para consulta de Historico
+	 * */
+	public List<DatosHistAntiguoDTO> getGenerarDatosHistAntiguo(ArrayList pParameters){
+		DatosHistAntiguoDAO objDatosHistAntiguoDAO=daoFactory.getDatosHistAntiguoDAO();
+		List<DatosHistAntiguoDTO> listDatosGeneradosHisAntDTO = null;
+		try{
+			listDatosGeneradosHisAntDTO=objDatosHistAntiguoDAO.generarDatosHistAntiguo(pParameters);
+			
+		}catch (DataAccessException e) {
+			LOG.error(e.getMessage(), e);
+		}
+		return listDatosGeneradosHisAntDTO;
+	}
+	
+	/**
+	 * FIX ERIKA ABREGU 27/06/2015
+	 * Metodo generador de datos historicos + antiguos para consulta de Historico solo por Id
+	 * @param <Historial>
+	 * */
+	public DatosHistAntiguoDTO getBuscarHistAntiguoPorId(String idExpediente){
+		DatosHistAntiguoDAO objDatosHistAntiguoDAO=daoFactory.getDatosHistAntiguoDAO();
+		DatosHistAntiguoDTO datosHistAntPorIdDTO = null;
+		try{
+			datosHistAntPorIdDTO=objDatosHistAntiguoDAO.generarDatosHistAntiguoPorId(idExpediente);
+			
+		}catch (DataAccessException e) {
+			LOG.error(e.getMessage(), e);
+		}
+		return datosHistAntPorIdDTO;
+	}
+	
+	/**
+	 * FIX ERIKA ABREGU 27/06/2015
+	 * Metodo generador de datos historicos + antiguos para Ayuda de Memoria para el Historico
+	 * */
+	public List<DatosAyudaMemoriaIiceDTO> getGenerarDatosAyudaMemoriaIICE  (ArrayList pParameters){
+		DatosHistAntiguoDAO objDatosAyudaMemoriaIiceDAO=daoFactory.getDatosHistAntiguoDAO();
+		List<DatosAyudaMemoriaIiceDTO> listDatosAyudaMemoriaDTO = null;
+		try{
+			listDatosAyudaMemoriaDTO=objDatosAyudaMemoriaIiceDAO.generarDatosAyudaMemoriaIICE(pParameters);
+			
+		}catch (DataAccessException e) {
+			LOG.error(e.getMessage(), e);
+		}
+		return listDatosAyudaMemoriaDTO;
+	}
+	/**
+	 * FIX ERIKA ABREGU 27/06/2015
+	 * Metodo generador de datos historicos + antiguos para Detalle del Historial para el Historico
+	 * */
+	public List<DatosDetalleHistoricoIiceDTO> getGenerarDetalleHistorialIICE  (ArrayList pParameters){
+		DatosHistAntiguoDAO objDatosDetalleHistorialIiceDAO=daoFactory.getDatosHistAntiguoDAO();
+		List<DatosDetalleHistoricoIiceDTO> listDatosDetalleHistorialDTO = null;
+		try{
+			listDatosDetalleHistorialDTO=objDatosDetalleHistorialIiceDAO.generarDetalleHistorialIICE(pParameters);
+			
+		}catch (DataAccessException e) {
+			LOG.error(e.getMessage(), e);
+		}
+		return listDatosDetalleHistorialDTO;
+	}
+	/**
+	 * FIX ERIKA ABREGU 27/06/2015
+	 * Metodo generador de datos historicos + antiguos para Detalle de Observaciones para el Historico
+	 * */
+	public List<DatosDetalleObservacionesIiceDTO> getGenerarDetalleObservIICE (ArrayList pParameters){
+		DatosHistAntiguoDAO objDatosDetalleObservIiceDAO=daoFactory.getDatosHistAntiguoDAO();
+		List<DatosDetalleObservacionesIiceDTO> listDatosDetalleObservDTO = null;
+		try{
+			listDatosDetalleObservDTO=objDatosDetalleObservIiceDAO.generarDetalleObservacionesIICE(pParameters);
+			
+		}catch (DataAccessException e) {
+			LOG.error(e.getMessage(), e);
+		}
+		return listDatosDetalleObservDTO;
+	}
+	/**
+	 * FIX ERIKA ABREGU 27/06/2015
+	 * Metodo generador de datos historicos + antiguos para Detalle del Log para el Historico
+	 * */
+	public List<DatosDetalleLogIiceDTO> getGenerarDetalleLogIICE (ArrayList pParameters){
+		DatosHistAntiguoDAO objDatosDetalleLogIiceDAO=daoFactory.getDatosHistAntiguoDAO();
+		List<DatosDetalleLogIiceDTO> listDatosDetalleLogDTO = null;
+		try{
+			listDatosDetalleLogDTO=objDatosDetalleLogIiceDAO.generarDetalleLogIICE(pParameters);
+			
+		}catch (DataAccessException e) {
+			LOG.error(e.getMessage(), e);
+		}
+		return listDatosDetalleLogDTO;
+	}
+	
+	/**
+	 * FIX ERIKA ABREGU 27/06/2015
+	 * Metodo generador de datos historicos + antiguos para Detalle del Log para el Historico
+	 * */
+	public List<DatosDocumentosExpIiceDTO> getDocumentosPorExpIICE (ArrayList pParameters){
+		DatosHistAntiguoDAO objDocExpIiceDAO=daoFactory.getDatosHistAntiguoDAO();
+		List<DatosDocumentosExpIiceDTO> listDocExpIiceDTO = null;
+		try{
+			listDocExpIiceDTO=objDocExpIiceDAO.generarDocumentosPorExpIICE(pParameters);
+			
+		}catch (DataAccessException e) {
+			LOG.error(e.getMessage(), e);
+		}
+		return listDocExpIiceDTO;
 	}
 	
 	private List<DatosGeneradosConsVO> assembleDatosGeneradosCons(List<DatosGeneradosConsDTO> listDatosGeneradosConsDTO) {
