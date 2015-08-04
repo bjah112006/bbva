@@ -110,5 +110,16 @@
 	
 	<listener>
 		<listener-class>com.ibm.bbva.listener.applicationListener</listener-class>
-	</listener>		
+	</listener>
+	<service-ref>
+		<service-ref-name>service/ContentServiceImplService</service-ref-name>
+		<service-interface>com.ibm.bbva.cm.iice.service.ContentServiceImplService</service-interface>
+		<wsdl-file>WEB-INF/wsdl/ContentServiceImpl.wsdl</wsdl-file>
+		<service-qname xmlns:pfx="http://impl.service.cm.bbva.ibm.com">pfx:ContentServiceImplService</service-qname>
+		<port-component-ref>
+			<service-endpoint-interface>com.ibm.bbva.cm.iice.service.ContentServiceImpl</service-endpoint-interface>
+			<enable-mtom>false</enable-mtom>
+		</port-component-ref>
+	</service-ref>
+		
 </web-app>
