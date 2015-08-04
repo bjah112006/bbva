@@ -5,6 +5,7 @@ import com.ibm.bbva.tabla.dao.ColumnaDAO;
 import com.ibm.bbva.tabla.dao.ColumnaDependenciaDAO;
 import com.ibm.bbva.tabla.dao.DatosGeneradosConsDAO;
 import com.ibm.bbva.tabla.dao.DatosGeneradosHisDAO;
+import com.ibm.bbva.tabla.dao.DatosHistAntiguoDAO;
 import com.ibm.bbva.tabla.dao.ParametrosConfDAO;
 import com.ibm.bbva.tabla.dao.PosibleValorDAO;
 import com.ibm.bbva.tabla.dao.RegistroTablaDAO;
@@ -14,6 +15,7 @@ import com.ibm.bbva.tabla.dao.ValorForaneoDataDAO;
 import com.ibm.bbva.tabla.reporte.dao.DatosGeneradosDAO;
 import com.ibm.bbva.tabla.reporte.dao.DatosPorcentajeDAO;
 import com.ibm.bbva.tabla.reporte.dao.DatosUnidadDAO;
+
 
 public abstract class DAOFactory {
 
@@ -59,4 +61,9 @@ public abstract class DAOFactory {
 	public abstract DatosGeneradosConsDAO getDatosGeneradosConsDAO();
 	
 	public abstract DatosGeneradosHisDAO getDatosGeneradosHisDAO();	
+	
+	/* FIX ERIKA ABREGU 27/06/2015
+	 * */
+	public abstract DatosHistAntiguoDAO getDatosHistAntiguoDAO();	
+	 
 }

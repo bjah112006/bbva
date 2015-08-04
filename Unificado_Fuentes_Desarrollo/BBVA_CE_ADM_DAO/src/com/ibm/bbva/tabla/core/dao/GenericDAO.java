@@ -512,6 +512,171 @@ public abstract class GenericDAO {
 		return stmt;
 		
 		}
- 
+    
+    
+    /*FIX ERIKA ABREGU 25/06/2015
+     * 
+     */
+    public CallableStatement getSQLStoredProcedureHistAntiguo(String pStoredProcedure, ArrayList pParameters)
+    		throws DataAccessException {
+
+    	CallableStatement stmt=null;
+    	int numeroParametro = 1;
+    	String paramStore ="?,";
+
+    	try {
+    		if(jdbcConnectionCS==null || jdbcConnectionCS.isClosed()){
+    			LOG.info("jdbcConnection es nulo");
+    			try {
+    				LOG.info("getConnection");
+    				jdbcConnectionCS = getConnection();
+    				LOG.info("setAutoCommit");
+    				jdbcConnectionCS.setAutoCommit(true);
+	
+    			} catch (Exception e){
+    				LOG.info("executeSQLStoredProcedure" + pStoredProcedure + " Error Exception obteniendo la conexion: " + e.getMessage());
+			
+    			}			
+    		}
+    	} catch (SQLException e1) {
+    		LOG.error(e1.getMessage(), e1);
+    	}
+		
+    	if( jdbcConnectionCS != null ){
+    		try {
+    			for(int i = 0; i < pParameters.size(); i++){
+    				paramStore = paramStore + "?,";
+    			}
+    			paramStore = paramStore.substring(0, paramStore.length()-1);
+    			stmt = jdbcConnectionCS.prepareCall("{ call "+pStoredProcedure+"("+paramStore+")}");
+    			LOG.info("stmt: " + "{ call "+pStoredProcedure+"("+paramStore+")}");
+		
+    			stmt.registerOutParameter(1, Constante.ORACLE_TYPES_CURSOR.getValueInt());
+    			numeroParametro = 2;
+		
+    			for (int i = 0; i < pParameters.size(); i++) {
+    				LOG.info("pParameters.get(i):" + pParameters.get(i));
+    				if (pParameters.get(i) instanceof String){
+    					stmt.setString(numeroParametro, (String) pParameters.get(i));
+    				}
+			    
+    				if (pParameters.get(i) instanceof Long){
+    					stmt.setLong(numeroParametro, Long.
+    							parseLong(((Long) pParameters.get(i)).toString()));
+    				}
+		    
+    				if (pParameters.get(i) instanceof Integer){
+    					stmt.setInt(numeroParametro, Integer
+    							.parseInt(((Integer) pParameters.get(i)).toString()));	                	
+    				}		
+            
+    				if (pParameters.get(i) instanceof Date){
+    					Date date=(Date)pParameters.get(i);
+    					java.sql.Date mydate=new java.sql.Date(Long.
+    							parseLong(((Long) date.getTime()).toString()));
+    					stmt.setDate(numeroParametro, mydate);
+    					LOG.info("getTime:" + ((Long) date.getTime()).toString());
+    					LOG.info("mydate:" + mydate);
+    				}
+    				if(i == 9){
+    					if(pParameters.get(i) != null){
+    						Date date=(Date)pParameters.get(i);
+        					java.sql.Date mydate=new java.sql.Date(Long.
+        							parseLong(((Long) date.getTime()).toString()));
+        					stmt.setDate(numeroParametro, mydate);
+        					LOG.info("getTime:" + ((Long) date.getTime()).toString());
+        					LOG.info("mydate:" + mydate);
+    					}else{
+    						Date date = null;
+        					stmt.setDate(numeroParametro, (java.sql.Date) date);
+        					LOG.info("mydate:" + date);
+    					}   				}
+    				
+    				if(i== 10){
+    					if(pParameters.get(i) != null){
+    						Date date=(Date)pParameters.get(i);
+        					java.sql.Date mydate=new java.sql.Date(Long.
+        							parseLong(((Long) date.getTime()).toString()));
+        					stmt.setDate(numeroParametro, mydate);
+        					LOG.info("getTime:" + ((Long) date.getTime()).toString());
+        					LOG.info("mydate:" + mydate);
+    					}else{
+    						Date date = null;
+        					stmt.setDate(numeroParametro, (java.sql.Date) date);
+        					LOG.info("mydate:" + date);
+    					}
+    				}
+		    
+    				numeroParametro += 1;
+		    
+		    
+    			}
+		
+    			LOG.info("fin pasar parametros");
+	
+    		}  	catch (SQLException e) {
+    			BaseLogger.log(this.getClass(), "executeSQLStoredProcedure", BaseLogger.Level.ERROR, "Error SQLException , executeSQLStoredProcedure(query): " + e.getMessage());
+    		} catch (Exception e){
+    			BaseLogger.log(this.getClass(), "executeSQLStoredProcedure", BaseLogger.Level.ERROR, "Error Exception , executeSQLStoredProcedure(query): " + e.getMessage());
+    		}
+    	}
+
+    	return stmt;
+
+    }
+    
+    /*FIX ERIKA ABREGU 25/06/2015
+     * 
+     */
+    public CallableStatement getSQLStoredProcedureHistAntiguoPorId(String pStoredProcedure, String pParameter)
+    		throws DataAccessException {
+
+    	CallableStatement stmt=null;
+    	int numeroParametro = 1;
+    	String paramStore ="?,?";
+
+    	try {
+    		if(jdbcConnectionCS==null || jdbcConnectionCS.isClosed()){
+    			LOG.info("jdbcConnection es nulo");
+    			try {
+    				LOG.info("getConnection");
+    				jdbcConnectionCS = getConnection();
+    				LOG.info("setAutoCommit");
+    				jdbcConnectionCS.setAutoCommit(true);
+	
+    			} catch (Exception e){
+    				LOG.info("executeSQLStoredProcedure" + pStoredProcedure + " Error Exception obteniendo la conexion: " + e.getMessage());
+			
+    			}			
+    		}
+    	} catch (SQLException e1) {
+    		LOG.error(e1.getMessage(), e1);
+    	}
+		
+    	if( jdbcConnectionCS != null ){
+    		try {
+    			
+    			stmt = jdbcConnectionCS.prepareCall("{ call "+pStoredProcedure+"("+paramStore+")}");
+    			LOG.info("stmt: " + "{ call "+pStoredProcedure+"("+paramStore+")}");
+		
+    			stmt.registerOutParameter(1, Constante.ORACLE_TYPES_CURSOR.getValueInt());
+    			numeroParametro = 2;
+    			
+    			LOG.info("pParameter:" + pParameter);
+    			stmt.setLong(numeroParametro, Long.parseLong(pParameter));
+    			    					
+    			LOG.info("fin pasar parametros");
+	
+    		}  	catch (SQLException e) {
+    			BaseLogger.log(this.getClass(), "executeSQLStoredProcedure", BaseLogger.Level.ERROR, "Error SQLException , executeSQLStoredProcedure(query): " + e.getMessage());
+    		} catch (Exception e){
+    			BaseLogger.log(this.getClass(), "executeSQLStoredProcedure", BaseLogger.Level.ERROR, "Error Exception , executeSQLStoredProcedure(query): " + e.getMessage());
+    		}
+    	}
+
+    	return stmt;
+
+    }
+    
 	
 }

@@ -4,6 +4,7 @@ import com.ibm.bbva.tabla.dao.ColumnaDAO;
 import com.ibm.bbva.tabla.dao.ColumnaDependenciaDAO;
 import com.ibm.bbva.tabla.dao.DatosGeneradosConsDAO;
 import com.ibm.bbva.tabla.dao.DatosGeneradosHisDAO;
+import com.ibm.bbva.tabla.dao.DatosHistAntiguoDAO;
 import com.ibm.bbva.tabla.dao.ParametrosConfDAO;
 import com.ibm.bbva.tabla.dao.PosibleValorDAO;
 import com.ibm.bbva.tabla.dao.RegistroTablaDAO;
@@ -73,6 +74,12 @@ public class DefaultDAOFactory extends DAOFactory {
 	
 	public DatosGeneradosHisDAO getDatosGeneradosHisDAO() {
 		return DatosGeneradosHisDAO.getInstance();
+	}
+	
+	/*FIX ERIKA ABREGU 27/06/2015
+	 * */
+	public DatosHistAntiguoDAO getDatosHistAntiguoDAO() {
+		return DatosHistAntiguoDAO.getInstance();
 	}
 	
 }
