@@ -41,6 +41,7 @@ public final class Convertidor {
 	
 	private static final String NODE_NRO_REINTENTO = "nroReintentos";
 	private static final String NODE_DESCRIPCION_ERROR = "descripcionError";
+	private static final String NODE_DESCRIPCION_ERRORUSU = "descripcionErrorUsu";
 	private static final String NODE_EXPEDIENTE = "expediente";
 	private static final String NODE_DESCRIPCION_TAREA_ANT = "desTareaAnterior"; 
 	private static final String NODE_CANT_DOCUMENTOS = "cantDocumentos";
@@ -63,6 +64,7 @@ public final class Convertidor {
 		jsonElement.getAsJsonObject().remove(NODE_EXP_TASK_DES);
 		jsonElement.getAsJsonObject().remove(NODE_NRO_REINTENTO);
 		jsonElement.getAsJsonObject().remove(NODE_DESCRIPCION_ERROR);
+		jsonElement.getAsJsonObject().remove(NODE_DESCRIPCION_ERRORUSU);
 		jsonElement.getAsJsonObject().remove(NODE_DESCRIPCION_TAREA_ANT); 
 		jsonElement.getAsJsonObject().remove(NODE_CANT_DOCUMENTOS);
 		jsonElement.getAsJsonObject().remove(NODE_FECHA_RESTAURACION);
@@ -79,10 +81,13 @@ public final class Convertidor {
 		
 		ExpedienteTCWPS expedienteTCWPS = fromJSONtoExpedienteTC(dato,elementoA,"1");
 		
-		dato = jsonElement.getAsJsonObject().get(NODE_DESCRIPCION_ERROR).toString();
+		dato = jsonElement.getAsJsonObject().get(NODE_DESCRIPCION_ERROR) == null ? "" : jsonElement.getAsJsonObject().get(NODE_DESCRIPCION_ERROR).toString();
 		expedienteTCWPS.setDescripcionError(dato);
 		
-		dato = jsonElement.getAsJsonObject().get(NODE_NRO_REINTENTO).toString();
+		dato = jsonElement.getAsJsonObject().get(NODE_DESCRIPCION_ERRORUSU) == null ? "" : jsonElement.getAsJsonObject().get(NODE_DESCRIPCION_ERRORUSU).toString();
+		expedienteTCWPS.setDescripcionErrorUsu(dato);		
+		
+		dato = jsonElement.getAsJsonObject().get(NODE_NRO_REINTENTO) == null ? "" : jsonElement.getAsJsonObject().get(NODE_NRO_REINTENTO).toString();
 		expedienteTCWPS.setNroReintentos(dato);
 		return expedienteTCWPS;		
 	}

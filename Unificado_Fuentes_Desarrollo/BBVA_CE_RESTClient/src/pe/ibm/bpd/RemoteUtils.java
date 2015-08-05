@@ -149,11 +149,25 @@ public class RemoteUtils {
 
 			LOG.info("tkiid:::"+tkiid);
 			LOG.info("piid:::"+piid);
-
-			String idTarea = !items.get(i).getAsJsonObject().get(NODE_ITEM_ID_TAREA).isJsonNull() ? items.get(i).getAsJsonObject().get(NODE_ITEM_ID_TAREA).getAsString() : "-1";
+			String idTarea=null;
+			String fechaActivacion =null;
+			
+			if(!tkiid.equals("-1")){
+				idTarea = !items.get(i).getAsJsonObject().get(NODE_ITEM_ID_TAREA).isJsonNull() ? items.get(i).getAsJsonObject().get(NODE_ITEM_ID_TAREA).getAsString() : "-1";
+				fechaActivacion = !items.get(i).getAsJsonObject().get(NODE_ITEM_FECHA_ACTIVACION).isJsonNull() ? items.get(i).getAsJsonObject().get(NODE_ITEM_FECHA_ACTIVACION).getAsString() : null;
+			}
+				
 			String coExpediente = !items.get(i).getAsJsonObject().get(NODE_ITEM_COD_EXP).isJsonNull() ? items.get(i).getAsJsonObject().get(NODE_ITEM_COD_EXP).getAsString() : "-1";
-			String fechaActivacion = !items.get(i).getAsJsonObject().get(NODE_ITEM_FECHA_ACTIVACION).isJsonNull() ? items.get(i).getAsJsonObject().get(NODE_ITEM_FECHA_ACTIVACION).getAsString() : null;
-
+			
+			if (idTarea != null) {
+				try {
+					Integer.parseInt(idTarea);
+				} catch (NumberFormatException e) {
+					// los expedientes con error traen data no numérica en idTarea
+					idTarea = "";
+				}
+			}
+			
 			expedienteTC = new ExpedienteTCWPS();
 			expedienteTC.setIdTarea(idTarea);
 			expedienteTC.setCodigo(coExpediente);			
@@ -254,6 +268,15 @@ public class RemoteUtils {
 			String idTarea = !items.get(i).getAsJsonObject().get(NODE_ITEM_ID_TAREA).isJsonNull() ? items.get(i).getAsJsonObject().get(NODE_ITEM_ID_TAREA).getAsString() : "-1";
 			String coExpediente = !items.get(i).getAsJsonObject().get(NODE_ITEM_COD_EXP).isJsonNull() ? items.get(i).getAsJsonObject().get(NODE_ITEM_COD_EXP).getAsString() : "-1";
 			String fechaActivacion = !items.get(i).getAsJsonObject().get(NODE_ITEM_FECHA_ACTIVACION).isJsonNull() ? items.get(i).getAsJsonObject().get(NODE_ITEM_FECHA_ACTIVACION).getAsString() : null;
+			
+			if (idTarea != null) {
+				try {
+					Integer.parseInt(idTarea);
+				} catch (NumberFormatException e) {
+					// los expedientes con error traen data no numérica en idTarea
+					idTarea = "";
+				}
+			}
 
 			expedienteTC = new ExpedienteTCWPS();
 			expedienteTC.setIdTarea(idTarea);

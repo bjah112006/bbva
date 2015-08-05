@@ -61,6 +61,7 @@ public class ExpedienteTCWPS implements Serializable {
 	private String estadoAnterior;	
 	private String nroReintentos; //  ** aplica para tarea: Gestion de servicios web
 	private String descripcionError; // ** aplica para tarea: Gestion de servicios web
+	private String descripcionErrorUsu; // ** aplica para tarea: Gestion de servicios web
 	private String desTareaAnterior; // ** 
 	private String cantDocumentos;
 	
@@ -535,6 +536,14 @@ public class ExpedienteTCWPS implements Serializable {
 
 	public void setFechaIncidencia(String fechaIncidencia) {
 		this.fechaIncidencia = fechaIncidencia;
+	}
+
+	public String getDescripcionErrorUsu() {
+		return descripcionErrorUsu;
+	}
+
+	public void setDescripcionErrorUsu(String descripcionErrorUsu) {
+		this.descripcionErrorUsu = descripcionErrorUsu;
 	}
 
 
