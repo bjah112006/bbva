@@ -14,7 +14,7 @@ import javax.persistence.*;
   @NamedQuery(name = "CartEmpleadoCE.findAll", query = "SELECT e FROM CartEmpleadoCE e"),
   //@NamedQuery(name = "CartEmpleadoCE.findIdCaract", query = "SELECT DISTINCT e.empleado.perfil FROM CartEmpleadoCE e WHERE e.carterizacionCE.id =:idCaract AND e.empleado.perfil.id IN (2,3,5,8,10) AND e.flagActivo=:flagActivo"),
   @NamedQuery(name = "CartEmpleadoCE.findIdCaractIdPerfil", query = "SELECT e FROM CartEmpleadoCE e WHERE e.carterizacionCE.id =:idCaract AND e.empleado.perfil.id =:idPerfil AND e.flagActivo LIKE :flagActivo AND e.empleado.flagActivo LIKE :flagActivo"),
-  @NamedQuery(name = "CartEmpleadoCE.findIdCaractIdEmpl", query = "SELECT e FROM CartEmpleadoCE e WHERE e.carterizacionCE.id =:idCaract AND e.empleado.id =:idEmpleado"),
+  @NamedQuery(name = "CartEmpleadoCE.findIdCaractIdEmpl", query = "SELECT e FROM CartEmpleadoCE e WHERE e.carterizacionCE.id =:idCaract AND e.empleado.id =:idEmpleado AND e.flagActivo LIKE :flagActivo"),
   @NamedQuery(name = "CartEmpleadoCE.findIdEmpl", query = "SELECT e FROM CartEmpleadoCE e WHERE e.empleado.id =:idEmpleado"),
   @NamedQuery(name = "CartEmpleadoCE.findIdEmplActivo", query = "SELECT e FROM CartEmpleadoCE e WHERE e.empleado.id =:idEmpleado AND e.flagActivo = '1'")
 })

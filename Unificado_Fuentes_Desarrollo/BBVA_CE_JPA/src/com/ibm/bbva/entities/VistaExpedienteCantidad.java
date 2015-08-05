@@ -18,6 +18,7 @@ import javax.persistence.Table;
 @NamedQueries({
 	@NamedQuery(name="VistaExpedienteCantidad.findByIdProdIdTerrIdPer", query="SELECT v FROM VistaExpedienteCantidad v WHERE v.idProduto = :idProducto and v.idTerritorio = :idTerritorio and v.idPerfil = :idPerfil"),
 	@NamedQuery(name="VistaExpedienteCantidad.findByIdProdIdPer", query="SELECT v FROM VistaExpedienteCantidad v WHERE v.idProduto = :idProducto and v.idPerfil = :idPerfil"),
+	@NamedQuery(name="VistaExpedienteCantidad.findByIdProdIdTerrIdOfIdPer", query="SELECT v FROM VistaExpedienteCantidad v WHERE v.idProduto = :idProducto and v.idTerritorio = :idTerritorio and v.idOficina = :idOficina and v.idPerfil = :idPerfil"),
 	@NamedQuery(name="VistaExpedienteCantidad.findByIdEmpleado", query="SELECT v FROM VistaExpedienteCantidad v WHERE v.idEmpleado = :idEmpleado"),
 	@NamedQuery(name="VistaExpedienteCantidad.sumExpByIdEmpleado", query="SELECT v.idEmpleado, SUM(v.numExpedientes) FROM VistaExpedienteCantidad v WHERE v.idEmpleado = :idEmpleado GROUP BY v.idEmpleado"),
 	@NamedQuery(name="VistaExpedienteCantidad.sumExpByAllEmpleado", query="SELECT v.idEmpleado, SUM(v.numExpedientes) FROM VistaExpedienteCantidad v GROUP BY v.idEmpleado")
@@ -36,6 +37,8 @@ public class VistaExpedienteCantidad implements Serializable {
 	private long idEmpleado;
 	@Column(name="NUM_EXPEDIENTES")
 	private long numExpedientes;
+	@Column(name="ID_OFICINA")
+	private long idOficina;
 	
 	public VistaExpedienteCantidad(){
 	}
@@ -78,6 +81,14 @@ public class VistaExpedienteCantidad implements Serializable {
 
 	public void setIdPerfil(long idPerfil) {
 		this.idPerfil = idPerfil;
+	}
+
+	public long getIdOficina() {
+		return idOficina;
+	}
+
+	public void setIdOficina(long idOficina) {
+		this.idOficina = idOficina;
 	}
 	
 	
