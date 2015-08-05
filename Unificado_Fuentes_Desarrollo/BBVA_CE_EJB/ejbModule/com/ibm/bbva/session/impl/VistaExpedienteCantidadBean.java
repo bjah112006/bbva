@@ -41,6 +41,18 @@ public class VistaExpedienteCantidadBean extends AbstractFacade<VistaExpedienteC
 				.getResultList();
 		return listVistaExpedienteCantidad;
 	}
+	
+	@Override
+	public List<VistaExpedienteCantidad> buscarPorIdProdIdTerrIdOfIdPer(long idProducto, long idTerritorio, long idOficina, long idPerfil){
+		List<VistaExpedienteCantidad> listVistaExpedienteCantidad = em.createNamedQuery("VistaExpedienteCantidad.findByIdProdIdTerrIdOfIdPer")
+				.setParameter("idProducto", idProducto)
+				.setParameter("idTerritorio", idTerritorio)
+				.setParameter("idOficina", idOficina)
+				.setParameter("idPerfil", idPerfil)
+				.getResultList();
+		return listVistaExpedienteCantidad;
+	}
+	
 	@Override
 	public List<VistaExpedienteCantidad> buscarPorIdProdIdPer(long idProducto, long idPerfil){
 		List<VistaExpedienteCantidad> listVistaExpedienteCantidad = em.createNamedQuery("VistaExpedienteCantidad.findByIdProdIdPer")

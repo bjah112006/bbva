@@ -63,6 +63,7 @@ public class CartEmpleadoCEBean extends AbstractFacade<CartEmpleadoCE> implement
 		List<CartEmpleadoCE> resultList = em.createNamedQuery("CartEmpleadoCE.findIdCaractIdEmpl")
 				.setParameter("idCaract", idCaract)
 				.setParameter("idEmpleado", idEmpleado)
+				.setParameter("flagActivo", "1")
 				.getResultList();
 		return resultList;
 	}	
@@ -110,14 +111,14 @@ public class CartEmpleadoCEBean extends AbstractFacade<CartEmpleadoCE> implement
 	public List<CartEmpleadoCE> verificarCartEmpleado(long idPerfil, long idOficina, long idProducto, long idEmpleado, long idTerritorio) {
 		List<CartEmpleadoCE> resultList;
 		String query="SELECT CAREMP from  CartEmpleadoCE CAREMP " +
-				"INNER JOIN CAREMP.empleado EMP "+
 		        "INNER JOIN CAREMP.carterizacionCE CARTERZ " +
-		        "WHERE CAREMP.carterizacionCE.id=CARTERZ.id AND CAREMP.empleado.id = EMP.id AND " +
-		        "EMP.perfil.id=:idPerfil AND  EMP.oficina.id=:idOficina "+
-		        "AND EMP.id=:idEmpleado AND CAREMP.empleado.perfil.id=:idPerfil AND CAREMP.empleado.oficina.id=:idOficina "+ 
-		        "AND CAREMP.flagActivo = :flagActivo "+
-		        "AND CARTERZ.flagActivo = :flagActivo "+
-		        "AND EMP.flagActivo = :flagActivo  and CARTERZ.id in (SELECT CARTERR.carterizacionCE.id from  CartTerritorioCE CARTERR " +
+		        "WHERE CAREMP.carterizacionCE.id=CARTERZ.id AND " +
+		        "CAREMP.empleado.id in (SELECT EMP.id FROM Empleado EMP " +
+		        			"WHERE EMP.id=:idEmpleado  AND EMP.perfil.id=:idPerfil AND  EMP.oficina.id=:idOficina AND EMP.flagActivo like :flagActivo) " +
+		        "AND CAREMP.flagActivo LIKE :flagActivo "+
+		        "AND CAREMP.empleado.flagActivo LIKE :flagActivo "+
+		        "AND CARTERZ.flagActivo LIKE :flagActivo "+
+		        "AND CARTERZ.id in (SELECT CARTERR.carterizacionCE.id from  CartTerritorioCE CARTERR " +
 		        "Where CARTERR.territorio.id= :idTerritorio AND CARTERR.producto.id= :idProducto)";
 		
 		LOG.info("query = "+query);
@@ -134,7 +135,7 @@ public class CartEmpleadoCEBean extends AbstractFacade<CartEmpleadoCE> implement
 		}catch (NoResultException e) {
 			return null;
 		}		
-	}
+	}	
 	
 	@Override
 	public void edit(CartEmpleadoCE entity){

@@ -134,9 +134,11 @@ public class VistaBandejaExpedienteBean extends AbstractFacade<VistaBandejaExped
 		}
 		
 		//ID USUARIO SESSION 	(0)
-		if(!arrayList.isEmpty() && arrayList.get(0)!=null && !arrayList.get(0).toString().equals(""))
-			queryWhere+=" AND (e.idOficina = :idOficinaPrin OR e.idOficinaPrincipal = :idOficinaPrin ) AND " +
-					" e.flagDesplazada like :activo";
+		if(!arrayList.isEmpty() && arrayList.get(0)!=null && !arrayList.get(0).toString().equals("")){
+			//queryWhere+=" AND (e.idOficina = :idOficinaPrin OR e.idOficinaPrincipal = :idOficinaPrin ) AND e.flagDesplazada like :activo";
+			queryWhere+=" AND (e.idOficina = :idOficinaPrin OR (e.idOficinaPrincipal = :idOficinaPrin AND e.flagDesplazada like :activo) )  ";			
+		}
+
 		
 		String query="SELECT e FROM VistaBandejaExpediente e WHERE e.id in (:listIds) "+queryWhere;
 		LOG.info("query = "+query);
