@@ -25,41 +25,45 @@
     <script type="text/javascript" src="src/lib/ngBonita.js"></script>
     <script type="text/javascript" src="src/js/app.js"></script>
     <script type="text/javascript" src="src/js/controllers/consultaSolicitudController.js"></script>
+    <script type="text/javascript" src="src/js/controllers/cuadroMandoController.js"></script>
+    <script type="text/javascript" src="src/js/controllers/restAPIController.js"></script>
     <script type="text/javascript" src="src/js/directives/loadingDirective.js"></script>
 </head>
 <body>
     <div id="layout" class="container">
-        <div id="head" ng-controller="SessionController">
-            <div class="panelHead">
-                <div class="panelUser">
-                    <div class="panelUserBuscar">
-                        <span>Hola, 
-                            <span class="username">{{userName}}</span>
-                        </span>
-                        <a href="#">
-                            <span>Desconectar</span>&nbsp;
-                            <span class="ui-icon ui-icon-bbva-close">&nbsp;&nbsp;&nbsp;</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="panelTitle"><span>Fast Pyme</span></div>
-            </div>
-        </div>
-        <div id="menu">
-            <div class="btn-group">
-                <label class="btn btn-primary" ng-model="menuModel.consulta" btn-checkbox>Consulta</label>
-                <label class="btn btn-primary btn-last-child" ng-model="menuModel.cuadro" btn-checkbox>Cuadro de Mando</label>
-           </div> 
-        </div>
-        <div class="well well-lg">
-			<div ng-controller="SessionController">
-				<div class="hide" data-loading>
-					<img src="http://www.nasa.gov/multimedia/videogallery/ajax-loader.gif" width="20" height="20" />Cargando...
-				</div>
-				<h1>
-					<small>{{titulo}}</small>
-				</h1>
+    	<div ng-controller="SessionController">
+			<!--
+			<div class="hide" data-loading>
+				<img src="http://www.nasa.gov/multimedia/videogallery/ajax-loader.gif" width="20" height="20" />Cargando...
 			</div>
+			-->
+	        <div id="head">
+	            <div class="panelHead">
+	                <div class="panelUser">
+	                    <div class="panelUserBuscar">
+	                        <span>Hola, 
+	                            <span class="username">{{userName}}</span>
+	                        </span>
+	                        <a href="#">
+	                            <span>Desconectar</span>&nbsp;
+	                            <span class="ui-icon ui-icon-bbva-close">&nbsp;&nbsp;&nbsp;</span>
+	                        </a>
+	                    </div>
+	                </div>
+	                <div class="panelTitle"><span>Fast Pyme</span></div>
+	            </div>
+	        </div>
+	        <div id="menu">
+	            <div class="btn-group">
+					<!--
+	                <label class="btn btn-primary" ng-model="menu" btn-radio="'consulta'">Consulta</label>
+	                <label class="btn btn-primary" ng-model="menu" btn-radio="'cuadromando'">Cuadro de Mando</label>
+					-->
+	                <label class="btn btn-primary btn-last-child" ng-model="menu" btn-radio="'restAPI'">RestAPI</label>
+	           </div> 
+	        </div>
+		</div>
+        <div class="well well-lg">
             <div id="body" ng-view></div>
         </div>
     </div>
