@@ -124,7 +124,7 @@ public class RegistrarExpedienteMB extends AbstractMBean {
 	/*
 	 * FIX2 ERIKA ABREGU 17-07-2015
 	*/
-	//private boolean itemDisabledMonocuota = false;
+	private boolean itemDisabledMonocuota;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(RegistrarExpedienteMB.class);
 	
@@ -197,11 +197,19 @@ public class RegistrarExpedienteMB extends AbstractMBean {
 		
 		if(expediente!=null && expediente.getProducto()!=null && expediente.getProducto().getId()>0){
 			LOG.info("Expediente existe, Producto = "+expediente.getProducto().getId());
-			if(expediente.getProducto().getId()== Constantes.ID_APLICATIVO_PLD)
+			if(expediente.getProducto().getId()== Constantes.ID_APLICATIVO_PLD){
 				itemDisabledSubrogacion=false;
-			else
+				//fix2 erika abregu
+				itemDisabledMonocuota = false;
+				//fin de fix2 erika abregu
+			}else{
 				itemDisabledSubrogacion=true;
-			LOG.info("itemDisabledSubrogacion = "+itemDisabledSubrogacion);
+				LOG.info("itemDisabledSubrogacion = "+itemDisabledSubrogacion);
+				//fix2 erika abregu
+				itemDisabledMonocuota = true;
+				LOG.info("itemDisabledMonocuota = "+itemDisabledMonocuota);
+				//fin de fix2 erika abregu
+			}
 		}
 			
 		
@@ -1327,13 +1335,13 @@ public class RegistrarExpedienteMB extends AbstractMBean {
 	}
 
 	//FIX2 ERIKA ABREGU
-	/*public boolean isItemDisabledMonocuota() {
+	public boolean isItemDisabledMonocuota() {
 		return itemDisabledMonocuota;
 	}
 
 	public void setItemDisabledMonocuota(boolean itemDisabledMonocuota) {
 		this.itemDisabledMonocuota = itemDisabledMonocuota;
-	}*/
+	}
 
 	
 	
