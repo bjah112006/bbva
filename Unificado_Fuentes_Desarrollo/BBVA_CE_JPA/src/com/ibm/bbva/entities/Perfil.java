@@ -206,6 +206,12 @@ public class Perfil implements Serializable {
 	@Column(name="FLAG_MENU_MENSAJE_CE")
 	private String flagMenuMENSAJE_CE;
 	
+	@Column(name="FLAG_MENU_DELEG_RIESG_CLASBCO")
+	private String flagMenuDELEG_RIESG_CLASBCO;
+	
+	@Column(name="FLAG_MENU_DELEG_RIESG_COND")
+	private String flagMenuDELEG_RIESG_COND;
+	
 	//bi-directional many-to-one association to Empleado
 	@OneToMany(mappedBy="perfil")
 	private List<Empleado> empleados;
@@ -788,6 +794,22 @@ public class Perfil implements Serializable {
 
 	public void setFlagMenuOficinaTemporal(String flagMenuOficinaTemporal) {
 		this.flagMenuOficinaTemporal = flagMenuOficinaTemporal;
+	}
+
+	public String getFlagMenuDELEG_RIESG_CLASBCO() {
+		return flagMenuDELEG_RIESG_CLASBCO;
+	}
+
+	public void setFlagMenuDELEG_RIESG_CLASBCO(String flagMenuDELEG_RIESG_CLASBCO) {
+		this.flagMenuDELEG_RIESG_CLASBCO = flagMenuDELEG_RIESG_CLASBCO;
+	}
+
+	public String getFlagMenuDELEG_RIESG_COND() {
+		return flagMenuDELEG_RIESG_COND;
+	}
+
+	public void setFlagMenuDELEG_RIESG_COND(String flagMenuDELEG_RIESG_COND) {
+		this.flagMenuDELEG_RIESG_COND = flagMenuDELEG_RIESG_COND;
 	}
 	
 }
