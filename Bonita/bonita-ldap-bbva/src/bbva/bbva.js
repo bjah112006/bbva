@@ -251,7 +251,7 @@ consultarSolicitudes = function () {
 	
 	if(chk == "filtro1" && valorFiltro == ""){
 		alert("Debe ingresar un valor para los criterios de busqueda");
-	}else if(chk = "filtro2" && estacion == "-1"){
+	}else if(chk == "filtro2" && estacion == "-1"){
 		alert("Debe seleccionar una estacion");
 	}else{
 		buscarSolicitudes(filtro, valorFiltro, estacion);
