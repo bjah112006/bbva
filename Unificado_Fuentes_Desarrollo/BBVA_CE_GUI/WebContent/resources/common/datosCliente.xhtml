@@ -225,7 +225,7 @@
                     <f:selectItem itemValue="4" itemDisabled="#{registrarExpediente.itemDisabledSubrogacion }"  
                     		itemLabel="#{msg['com.ibm.bbva.common.datosCliente.caractAdicionales.subrogacion']}"/>
                  	<br></br>
-                    <f:selectItem itemValue="5"  itemDisabled="true"
+                    <f:selectItem itemValue="5"  itemDisabled="#{registrarExpediente.itemDisabledMonocuota }"
                     		itemLabel="#{msg['com.ibm.bbva.common.datosCliente.caractAdicionales.monocuota']}"/>		
                     		
 					<f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" execute="@form" listener="#{datosCliente.cambiarCaracteristicas}"/>
