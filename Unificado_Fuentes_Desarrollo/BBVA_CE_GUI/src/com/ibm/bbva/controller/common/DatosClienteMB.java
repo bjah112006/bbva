@@ -423,6 +423,10 @@ public class DatosClienteMB extends AbstractMBean {
 		clienteNaturalVO.setAval(seleccion("3"));
 		clienteNaturalVO.setSubrog(seleccion("4"));
 		
+		//fix2 ERIKA ABREGU
+		clienteNaturalVO.setMonocuota(seleccion("5"));
+		//FIN DE FIX2 ERIKA ABREGU
+		
 		clienteNaturalVO.setNombre(clienteNatural.getNombre());
 		clienteNaturalVO.setApePat(clienteNatural.getApePat());
 		clienteNaturalVO.setApeMat(clienteNatural.getApeMat());
