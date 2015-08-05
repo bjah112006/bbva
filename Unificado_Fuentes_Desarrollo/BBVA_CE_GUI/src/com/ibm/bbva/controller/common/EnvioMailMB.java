@@ -1,8 +1,10 @@
 package com.ibm.bbva.controller.common;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -499,6 +501,44 @@ public class EnvioMailMB extends AbstractMBean {
 			}
 		}	
 		original=original.replaceAll("PERFIL_SUPERIOR_RIESGOS","SUPERVISOR RIESGOS");
+		
+		///////INICIO cambios 09-07-205 Generar Tags de Analisis y Alta
+		if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getTipoScoring() != null){
+			original=original.replaceAll("SCORING",String.valueOf(expediente.getExpedienteTC().getTipoScoring().getDescripcion()));
+	}
+	if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getPorcentajeEndeudamiento() > 0){
+		String output = String.format( new Locale("es_PE"),"%.2f", expediente.getExpedienteTC().getPorcentajeEndeudamiento());
+		original=original.replaceAll("PORCENTAJE_ENDEUDAMIENTO",String.valueOf(output)+"%");
+	}else{
+		original=original.replaceAll("PORCENTAJE_ENDEUDAMIENTO",String.valueOf("--"));
+	}
+	if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getRvgl() != null){
+		original=original.replaceAll("RVGL",String.valueOf(expediente.getExpedienteTC().getRvgl()));
+	}
+	if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getTipoBuro() != null){
+		original=original.replaceAll("BURO",String.valueOf(expediente.getExpedienteTC().getTipoBuro().getDescripcion()));
+	}
+	if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getSbsConyuge() > 0){
+		String output = String.format( new Locale("es_PE"),"%.2f", expediente.getExpedienteTC().getSbsConyuge());
+		original=original.replaceAll("SBS_CONYUGE",String.valueOf(output)+"%");
+	}else{
+		original=original.replaceAll("SBS_CONYUGE",String.valueOf("--"));
+	}
+	if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getClasificacionSbs()> 0){
+		String output = String.format( new Locale("es_PE"),"%.2f", expediente.getExpedienteTC().getClasificacionSbs());
+		original=original.replaceAll("SBS_TITULAR",String.valueOf(output)+"%");
+	}else{
+		original=original.replaceAll("SBS_TITULAR",String.valueOf("--"));
+	}
+	if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getBancoConyuge() !=null ){
+		original=original.replaceAll("BANCO_CONYUGE",String.valueOf(expediente.getExpedienteTC().getBancoConyuge().getDescripcion()));
+	}else{
+		original=original.replaceAll("BANCO_CONYUGE",String.valueOf("--"));
+	}
+	if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getClasificacionBanco() !=null ){
+		original=original.replaceAll("BANCO_TITULAR",String.valueOf(expediente.getExpedienteTC().getClasificacionBanco().getDescripcion()));
+	}
+		///////FIN cambios 09-07-205 Generar Tags de Analisis y Alta
 		
 		newOriginal=original;
 		return newOriginal;

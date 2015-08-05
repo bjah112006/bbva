@@ -395,6 +395,9 @@ public class CorregirExpediente33MB extends AbstractMBean {
 			Util.actualizaDevoluciones(expediente);
 		}*/		
 		
+		//Desactivar expediente para bandeja de asignacion no muestre mensaje
+		expediente.setFlagActivo("0");
+		
 		expedienteBean.edit(expediente);			
 		clienteNaturalBean.edit(clienteNatural);
 		

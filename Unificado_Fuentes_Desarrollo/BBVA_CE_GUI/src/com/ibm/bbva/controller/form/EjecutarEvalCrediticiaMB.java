@@ -678,6 +678,10 @@ public class EjecutarEvalCrediticiaMB extends AbstractMBean {
         	empleadoAntiguo = expediente.getEmpleado();
         	expediente.setEmpleado(empleadoNuevo);
         }
+        
+		//Desactivar expediente para bandeja de asignacion no muestre mensaje
+		expediente.setFlagActivo("0");
+		
 		expedienteBean.edit(expediente);
 		
 		//process

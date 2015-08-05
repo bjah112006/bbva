@@ -42,6 +42,7 @@ import com.ibm.bbva.entities.CartEmpleadoCE;
 import com.ibm.bbva.entities.CartTerritorioCE;
 import com.ibm.bbva.entities.Empleado;
 import com.ibm.bbva.entities.Expediente;
+import com.ibm.bbva.entities.Mensajes;
 import com.ibm.bbva.entities.Perfil;
 import com.ibm.bbva.entities.TipoCambioCE;
 import com.ibm.bbva.entities.VistaBandjCartProd;
@@ -49,6 +50,7 @@ import com.ibm.bbva.session.CartEmpleadoCEBeanLocal;
 import com.ibm.bbva.session.CartTerritorioCEBeanLocal;
 import com.ibm.bbva.session.EmpleadoBeanLocal;
 import com.ibm.bbva.session.ExpedienteBeanLocal;
+import com.ibm.bbva.session.MensajesBeanLocal;
 import com.ibm.bbva.session.ParametrosConfBeanLocal;
 import com.ibm.bbva.session.PerfilBeanLocal;
 import com.ibm.bbva.session.TipoCambioCEBeanLocal;
@@ -85,6 +87,8 @@ public class MenuMB extends AbstractLinksMBean {
 	
 	@EJB
 	private VistaBandjCartProdBeanLocal vistaBandjCartProdBeanLocal;
+	@EJB
+	private MensajesBeanLocal mensajesBean;
 	
 	private boolean renderedRegExp;
 	private boolean renderedReasigTareas;
@@ -105,9 +109,10 @@ public class MenuMB extends AbstractLinksMBean {
 	private boolean habMenuReporteTOE;
 	private boolean habMenuHorario;
 	private boolean habMenuBandejaMonitoreo;	
+	private String mensajeUsuarioInactivo;
 	private boolean habMenuDescargaLDAP;
 	private boolean habMenuOficinaTemporal;
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(MenuMB.class);
 	
 	public MenuMB() {
@@ -131,6 +136,7 @@ public class MenuMB extends AbstractLinksMBean {
 		this.habMenuReporteTOE = false;
 		this.habMenuHorario = false;
 		this.habMenuBandejaMonitoreo = false;
+		this.mensajeUsuarioInactivo = null;
 		this.habMenuDescargaLDAP = false;
 		this.habMenuOficinaTemporal = false;
 	}
@@ -462,7 +468,7 @@ public class MenuMB extends AbstractLinksMBean {
 		
 		inicializarOpcionesMenu();
 		Empleado empleado = (Empleado) getObjectSession(Constantes.USUARIO_SESION);
-		if(empleado!=null && empleado.getPerfil()!=null){
+		if(empleado!=null && empleado.getPerfil()!=null && Constantes.FLAG_ACTIVO.equals(empleado.getFlagActivo())){
 			/*
 			String flagRegistraExp = empleado.getPerfil().getFlagRegistraExp();
 			String flagReasigTareas = empleado.getPerfil().getFlagAsignacion();
@@ -540,8 +546,23 @@ public class MenuMB extends AbstractLinksMBean {
 			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuOficinaTemporal)) {
 				habMenuOficinaTemporal = true;
 			}
+		}else { //Usuario inactivo
+			if (mensajesBean == null) {
+				try {
+					mensajesBean = (MensajesBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.MensajesBeanLocal");
+				} catch (Exception e) {
+					LOG.error(e.getMessage(), e);
+				}
+			}
+			Mensajes mensaje = mensajesBean.buscarPorId(Constantes.ID_MENSAJE_USUARIO_INACTIVO);
+			if (mensaje != null && mensaje.getContenido() != null) {
+				mensajeUsuarioInactivo = new String(mensaje.getContenido());
+			} else { // valor por defecto
+				mensajeUsuarioInactivo = "<span style=\"color:red;\">El usuario se encuentra inactivo.</span>";
+			}
 		}
-		if(getObjectSession(Constantes.USUARIO_AD_SESION) != null){
+		Empleado empleadoAD = (Empleado) getObjectSession(Constantes.USUARIO_AD_SESION);
+		if(empleadoAD != null && Constantes.FLAG_ACTIVO.equals(empleadoAD.getFlagActivo())){
 			habMenuBandejaMonitoreo = true;
 		}
 
@@ -813,9 +834,9 @@ public class MenuMB extends AbstractLinksMBean {
 	 * */
 	public void timeOutWAS(){
 		HttpServletResponse response = (HttpServletResponse) getExternalContext().getResponse();
-		HttpServletRequest request = (HttpServletRequest) getExternalContext().getRequest();
-		HttpSession session = request.getSession(false);
-		session.invalidate();
+//		HttpServletRequest request = (HttpServletRequest) getExternalContext().getRequest();
+//		HttpSession session = request.getSession(false);
+//		session.invalidate();
 		try {
 			ParametrosConfBeanLocal parametrosConfBean = (ParametrosConfBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.ParametrosConfBeanLocal");
 			String paginaInicioUN = parametrosConfBean.buscarPorVariable(Constantes.ID_APLICATIVO_TC, Constantes.PAGINA_INICIO_UN).getValorVariable();
@@ -1001,6 +1022,14 @@ public class MenuMB extends AbstractLinksMBean {
 
 	public void setHabMenuBandejaMonitoreo(boolean habMenuBandejaMonitoreo) {
 		this.habMenuBandejaMonitoreo = habMenuBandejaMonitoreo;
+	}
+
+	public String getMensajeUsuarioInactivo() {
+		return mensajeUsuarioInactivo;
+	}
+
+	public void setMensajeUsuarioInactivo(String mensajeUsuarioInactivo) {
+		this.mensajeUsuarioInactivo = mensajeUsuarioInactivo;
 	}
 
 	public boolean isHabMenuDescargaLDAP() {

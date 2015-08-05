@@ -140,13 +140,7 @@ public class BuscarBandejaAsigMB extends AbstractMBean {
 			if(empleado.getPerfil().getFlagAdministracion().equals("1")){
 				roles = Util.crearItems(perfilBean.buscarPorProceso(), true, "id", "descripcion");
 			}else{
-				
-				Long idPerfil = empleado.getPerfil().getId();
-				if(idPerfil == Constantes.PERFIL_GERENTE_OFICINA.longValue())
-				{
-					idPerfil = Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue();					
-				}
-				roles = Util.crearItems(perfilBean.buscarPorIdJefe(idPerfil), true, "id", "descripcion");
+				roles = Util.crearItems(perfilBean.buscarPorIdJefe(empleado.getPerfil().getId()), true, "id", "descripcion");
 			}
 		}
 		
@@ -439,7 +433,7 @@ public class BuscarBandejaAsigMB extends AbstractMBean {
 		 * Cambio 11 Mayo 2015 
 		 * Carterización por Producto
 		 * */
-		
+		/*
 		List<Long> lisIdsprod = (List<Long>) getObjectSession(Constantes.LISTA_CART_X_PRODUCTO_USUARIO_SESION);
 		StringBuilder sb1 = new StringBuilder();
 		if(lisIdsprod!=null && lisIdsprod.size()>0)
@@ -448,7 +442,7 @@ public class BuscarBandejaAsigMB extends AbstractMBean {
 			sb1.append(Long.toString(idProd));
 		}
 		consulta.setIdProducto(sb1.toString());
-		LOG.info("Productos : " + consulta.getIdProducto());
+		LOG.info("Productos : " + consulta.getIdProducto());*/
 		/**
 		 * */
 		
@@ -731,8 +725,7 @@ public class BuscarBandejaAsigMB extends AbstractMBean {
 			 * Combo Usuarios solo debe depender de Perfil cuando el rol seleccionado es diferente de SubGernete y Ejecutivo
 			 * */
 			if(empleado.getPerfil().getFlagAdministracion().equals("1") && 
-				((Long.valueOf(rolSeleccionado) != Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue()) &&
-						(Long.valueOf(rolSeleccionado) != Constantes.PERFIL_GERENTE_OFICINA.longValue()) &&
+				((Long.valueOf(rolSeleccionado) != Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue()) &&  
 						 (Long.valueOf(rolSeleccionado) != Constantes.PERFIL_GESTOR_PLATAFORMA.longValue()))){
 
 					/**
@@ -804,7 +797,6 @@ public class BuscarBandejaAsigMB extends AbstractMBean {
 			if(empleado.getPerfil().getFlagAdministracion().equals("1")){
 				/* Cargar usuarios cuando rol diferente de ejecutivo y subgerente*/
 				if ((Long.valueOf(rolSeleccionado) != Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue())
-						&& (Long.valueOf(rolSeleccionado) != Constantes.PERFIL_GERENTE_OFICINA.longValue())
 						&& (Long.valueOf(rolSeleccionado) != Constantes.PERFIL_GESTOR_PLATAFORMA.longValue())) {
 					
 					/**
@@ -858,7 +850,6 @@ public class BuscarBandejaAsigMB extends AbstractMBean {
 		//addObjectSession(Constantes.LISTA_USUARIOS_TAREA_ASIG, tareas);
 		
 		if ((Long.valueOf(rolSeleccionado) == Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue())
-				|| (Long.valueOf(rolSeleccionado) == Constantes.PERFIL_GERENTE_OFICINA.longValue())
 				|| (Long.valueOf(rolSeleccionado) == Constantes.PERFIL_GESTOR_PLATAFORMA.longValue())) {
 			
 			addObjectSession(Constantes.LISTA_USUARIOS_CARGADOS, listaEmp);
@@ -939,7 +930,6 @@ public class BuscarBandejaAsigMB extends AbstractMBean {
 				
 				/* Cargar usuarios cuando rol diferente de ejecutivo y subgerente*/
 				if ((Long.valueOf(rolSeleccionado) != Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue())
-						&& (Long.valueOf(rolSeleccionado) != Constantes.PERFIL_GERENTE_OFICINA.longValue())
 						&& (Long.valueOf(rolSeleccionado) != Constantes.PERFIL_GESTOR_PLATAFORMA.longValue())) {
 					
 					/**
@@ -969,8 +959,7 @@ public class BuscarBandejaAsigMB extends AbstractMBean {
 				 * Para el Sub Gerente de Oficina lista los empleados de su oficina y rol seleccionado
 				 * para Jefe CPM y Riesgo Superior solo filtra por rol seleccionado
 				 */
-				if (empleado.getPerfil().getId() == Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue()
-						|| empleado.getPerfil().getId() == Constantes.PERFIL_GERENTE_OFICINA.longValue()) {
+				if (empleado.getPerfil().getId() == Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue()) {
 					
 					/**
 					 * Cambio 08 Mayo 2015 

@@ -188,7 +188,11 @@ public class RegistrarAprobResolucionMB extends AbstractMBean {
 		expediente.setAccion(accion);
 		Estado estadoTmp = new Estado();
 		estadoTmp.setId(estado);
-		expediente.setEstado(estadoTmp);	
+		expediente.setEstado(estadoTmp);
+		
+		//Desactivar expediente para bandeja de asignacion no muestre mensaje
+		expediente.setFlagActivo("0");
+		
 		expedienteBean.edit(expediente);
 		
 		if(expediente!=null && expediente.getId()>0)

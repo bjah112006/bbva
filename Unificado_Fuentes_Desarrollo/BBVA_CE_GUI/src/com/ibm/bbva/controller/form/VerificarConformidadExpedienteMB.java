@@ -160,6 +160,8 @@ public class VerificarConformidadExpedienteMB extends AbstractMBean {
 		if (Constantes.ESTADO_EN_REGISTRO_TAREA_2==estado) {
 			Util.actualizaDevoluciones(expediente);
 		}	
+		//Desactivar expediente para bandeja de asignacion no muestre mensaje
+		expediente.setFlagActivo("0");
 		
 		expedienteBean.edit(expediente);		
 

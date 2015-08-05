@@ -93,7 +93,10 @@ public class ExpedienteTCWrapper extends ExpedienteTCWPS implements Serializable
 	}
 	
 	public Timestamp getFechaActivado() {
-		return new Timestamp(expedienteTC.getActivado().getTimeInMillis());
+		if(expedienteTC.getActivado()!=null)
+			return new Timestamp(expedienteTC.getActivado().getTimeInMillis());
+		else
+			return null;
 	}
 	
 	public String getFlRetraer() {
@@ -106,9 +109,23 @@ public class ExpedienteTCWrapper extends ExpedienteTCWPS implements Serializable
 		LOG.info("*********URL COLOR**************");
 		LOG.info("Exp :" + expedienteTC.getCodigo());
 
+		String colorVerde, colorAmarillo;
+		
+		if(expedienteTC.getValorAnsAmarillo()==null || expedienteTC.getValorAnsAmarillo().equals("")){
+			colorAmarillo="0";
+			LOG.info("Amarillo es nulo o vacío");
+		}else
+			colorAmarillo=expedienteTC.getValorAnsAmarillo();
+		
+		if(expedienteTC.getValorAnsVerde()==null || expedienteTC.getValorAnsVerde().equals("")){
+			colorVerde="0";
+			LOG.info("Verde es nulo o vacío");
+		}else
+			colorVerde=expedienteTC.getValorAnsVerde();		
+		
 			tar=new Ans();
-			tar.setAmarilloMinutos(new BigDecimal(expedienteTC.getValorAnsAmarillo()));
-			tar.setVerdeMinutos(new BigDecimal(expedienteTC.getValorAnsVerde()));
+			tar.setAmarilloMinutos(new BigDecimal(colorAmarillo));
+			tar.setVerdeMinutos(new BigDecimal(colorVerde));
 
 			LOG.info("tar-verde :" + tar.getVerdeMinutos());
 			LOG.info("tar-amarillo :" + tar.getAmarilloMinutos());
@@ -118,8 +135,10 @@ public class ExpedienteTCWrapper extends ExpedienteTCWPS implements Serializable
 			if(ayudaHorario!=null && expedienteTC.getActivado()!=null)
 				minutos = ayudaHorario.calcularMinutos(expedienteTC.getActivado(), 
 					Calendar.getInstance());
-
-			LOG.info("Activado "+expedienteTC.getActivado().getTime());
+			if(expedienteTC.getActivado()!=null)
+				LOG.info("Activado "+expedienteTC.getActivado().getTime());
+			else
+				LOG.info("Activado es nulo");
 			LOG.info("Instance "+Calendar.getInstance().getTime());
 			LOG.info("minutos "+minutos);
 			

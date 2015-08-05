@@ -1,40 +1,29 @@
 package com.ibm.bbva.controller.common;
 
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.component.html.HtmlDataTable;
-import javax.faces.component.html.HtmlInputText;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pe.ibm.bean.ExpedienteTCWPS;
-import pe.ibm.bpd.RemoteUtils;
-
+import pe.ibm.bean.ExpedienteTCWPSWeb;
+import pe.ibm.util.Convertidor;
 import bbva.ws.api.view.FacadeLocal;
 
 import com.ibm.bbva.cm.service.impl.Documento;
 import com.ibm.bbva.controller.AbstractSortPagDataTableMBean;
 import com.ibm.bbva.controller.Constantes;
-import com.ibm.bbva.entities.ClienteNatural;
 import com.ibm.bbva.entities.DocumentoExpTc;
 import com.ibm.bbva.entities.Expediente;
-import com.ibm.bbva.entities.Historial;
-import com.ibm.bbva.entities.Tarea;
 import com.ibm.bbva.session.ExpedienteBeanLocal;
 import com.ibm.bbva.session.TareaBeanLocal;
-import com.ibm.bbva.tabla.util.vo.ConvertExpediente;
-import com.ibm.bbva.util.ExpedienteTCWrapper;
-import com.ibm.bbva.util.Util;
 
 @SuppressWarnings("serial")
 @ManagedBean(name = "tablaBandejaMonitoreo")
@@ -142,7 +131,8 @@ public class TablaBandejaMonitoreoMB extends AbstractSortPagDataTableMBean {
 		
 		addObjectSession(Constantes.EXPEDIENTE_SESION, expediente);
 
-		for(ExpedienteTCWPS expedienteTCWPS : listTabla){
+		List<ExpedienteTCWPSWeb> lista = Convertidor.fromExpedienteTCWPSToExpedienteTCWPSWeb(listTabla, "0");
+		for(ExpedienteTCWPSWeb expedienteTCWPS : lista){
 			if(expedienteTCWPS.getCodigo().equals(String.valueOf(expediente.getId()))){
 				addObjectSession(Constantes.EXPEDIENTE_PROCESO_SESION, expedienteTCWPS);
 				break;

@@ -1439,6 +1439,8 @@ public interface Constantes {
 	
 	long PACKPYME_RESPUESTA_ERROR_ACCESO_MSG = 9;
 	
+	long ID_MENSAJE_USUARIO_INACTIVO = 12;
+	
 	
 	/**
 	 * lista de objetos TablaMonitoreo almacenada en el ambito de sesion
@@ -1501,6 +1503,7 @@ public interface Constantes {
 	String INICIO_BAND_PEND="initBandPend";
 	String NUM_REG_BAND_PEND="numRegBandPend";
 	
+	String DESCRIPCION_ERROR="descripErrorObtenerUsu";
 	/**
 	 * Parámetros
 	 */

@@ -2,7 +2,9 @@ package com.ibm.bbva.controller.common;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -28,6 +30,7 @@ import pe.com.grupobbva.sce.tc84.CtBodyRq;
 import pe.com.grupobbva.sce.tc84.CtExtraerTipoCambioRq;
 import pe.com.grupobbva.sce.tc84.CtExtraerTipoCambioRs;
 import pe.com.grupobbva.sce.tc84.CtHeader;
+import pe.ibm.bean.Consulta;
 import pe.ibm.bean.ExpedienteTCWPS;
 import pe.ibm.bean.ExpedienteTCWPSWeb;
 import pe.ibm.bpd.RemoteUtils;
@@ -46,6 +49,7 @@ import com.ibm.bbva.entities.Expediente;
 import com.ibm.bbva.entities.Historial;
 import com.ibm.bbva.entities.Horario;
 import com.ibm.bbva.entities.HorarioOficina;
+import com.ibm.bbva.entities.LogErrores;
 import com.ibm.bbva.entities.RetraccionTarea;
 import com.ibm.bbva.entities.Tarea;
 import com.ibm.bbva.entities.TareaPerfil;
@@ -442,6 +446,26 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 		} else {
 			listTabla=null;
 			//removeObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION);
+			String codigoTarea = getRequestParameter("codTarea");
+			String descripError="";
+			
+			LOG.info("Codigo de tarea:::"+codigoTarea+"::para expediente:::"+expediente.getId());
+			if(codigoTarea.equals("51")){
+				descripError = buscarTareaError(String.valueOf(expediente.getId()));
+			
+				if(descripError!=null && !descripError.equals(""))
+					addObjectSession(Constantes.DESCRIPCION_ERROR, descripError);
+				else{
+					addObjectSession(Constantes.DESCRIPCION_ERROR, "");
+					LOG.info("No hay mensaje para mostrar a usuario");
+				}
+			
+			}else{
+				addObjectSession(Constantes.DESCRIPCION_ERROR, "");
+				LOG.info("No es tarea 51");				
+			}
+				
+
 			removeObjectSession("strListaDocsTransferencias");
 			removeObjectSession("reutilizablesSeleccionados");
 			removeObjectSession("listaDocReuSession");
@@ -449,6 +473,27 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 			return "/visualizarExpediente/formVisualizarExpediente?faces-redirect=true";
 		}
 	}
+	
+	public String buscarTareaError (String codigoExpediente) {
+
+			Consulta consulta = new Consulta();
+			String resultado=null;
+			
+			consulta.setCodigoExpediente(codigoExpediente);
+			consulta.setTipoConsulta(Integer.parseInt("2"));
+			
+			List<ExpedienteTCWPS> listTabla = new ArrayList<ExpedienteTCWPS>();
+			
+			RemoteUtils remoteUtils = new RemoteUtils();
+			listTabla = remoteUtils.obtenerListaTareasGestion(consulta);
+			
+			if(listTabla!=null && listTabla.size()>0){
+				resultado=listTabla.get(0).getDescripcionErrorUsu();
+				LOG.info("resultado:::"+resultado);
+			}
+			
+		return resultado;	
+	}	
 	
 	private void copiarLineaCredito (Expediente expediente) {
 		// si no se tiene la linea de credito se copia de las solicitadas
@@ -468,7 +513,11 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 		LOG.info("codigo : "+codigo);
 		LOG.info("taskID : "+taskID);
 		
-		Timestamp fechaActivado = Timestamp.valueOf(getRequestParameter("activado"));
+		String s=getRequestParameter("activado");
+		Timestamp fechaActivado = null;
+		
+		if(s!=null && !s.trim().equals(""))
+			fechaActivado = Timestamp.valueOf(getRequestParameter("activado"));
 			
 		ExpedienteTCWPSWeb expedienteTC = null;
 
@@ -534,7 +583,11 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 						
 					}else{
 						expediente.getExpedienteTC().setTarea(new Tarea());
-						expediente.getExpedienteTC().getTarea().setId(Long.parseLong(expedienteTC.getIdTarea()));
+						try {
+							expediente.getExpedienteTC().getTarea().setId(Long.parseLong(expedienteTC.getIdTarea()));
+						} catch (NumberFormatException e) {
+							expediente.getExpedienteTC().getTarea().setId(-1);
+						}
 						LOG.info("tarea des:::"+expedienteTC.getDesTarea());
 						expediente.getExpedienteTC().getTarea().setDescripcion(expedienteTC.getDesTarea());
 					}

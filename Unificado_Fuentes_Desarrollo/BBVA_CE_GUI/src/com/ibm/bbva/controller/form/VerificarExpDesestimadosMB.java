@@ -108,6 +108,9 @@ public class VerificarExpDesestimadosMB extends AbstractMBean {
 		estadoTmp.setId(estado.longValue());
 		expediente.setEstado(estadoTmp);
 		
+		//Desactivar expediente para bandeja de asignacion no muestre mensaje
+		expediente.setFlagActivo("0");
+		
 		expedienteBean.edit(expediente);
 		
 		//process

@@ -219,6 +219,10 @@ public class RealizarAltaTarjetaMB extends AbstractMBean {
 		estadoExp.setId(estado.longValue());
 		expediente.setEstado(estadoExp);		
 		
+		
+		//Desactivar expediente para bandeja de asignacion no muestre mensaje
+		expediente.setFlagActivo("0");
+		
 		expedienteBean.edit(expediente);
 		
 		//process

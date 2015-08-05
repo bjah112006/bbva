@@ -33,6 +33,7 @@ public class VisualizarExpedienteMB extends AbstractMBean {
 	
 	private String mensajeError = null;
 	private String mensajeEnProceso = null;
+	private String mensajeErrorBalanceo = null;
 	/*
 	 * FIX ERIKA ABREGU 07/07/2015
 	*/
@@ -51,7 +52,8 @@ public class VisualizarExpedienteMB extends AbstractMBean {
 	public void init() {
 		nombrebandeja = getObjectSession(Constantes.NOMBRE_BANDEJA_SESION).toString();
 		expedienteTCWPS = (ExpedienteTCWPSWeb) getObjectSession(Constantes.EXPEDIENTE_PROCESO_SESION);
-				
+		mensajeErrorBalanceo = (String) getObjectSession(Constantes.DESCRIPCION_ERROR);
+		
 		mensajeError = null;
 		mensajeEnProceso = null;
 		
@@ -227,6 +229,15 @@ public class VisualizarExpedienteMB extends AbstractMBean {
 
 	public void setBandejaMonitoreo_tipo(Integer bandejaMonitoreo_tipo) {
 		this.bandejaMonitoreo_tipo = bandejaMonitoreo_tipo;
+	}
+
+	public String getMensajeErrorBalanceo() {
+		mensajeErrorBalanceo=(mensajeErrorBalanceo==null?"":mensajeErrorBalanceo);
+		return mensajeErrorBalanceo;
+	}
+
+	public void setMensajeErrorBalanceo(String mensajeErrorBalanceo) {
+		this.mensajeErrorBalanceo = mensajeErrorBalanceo;
 	}
 
 	public String getOrigen() {

@@ -773,7 +773,10 @@ public class RegistrarExpedienteMB extends AbstractMBean {
 				expediente = expedienteBean.create(expediente);	
 				LOG.info("Guardar AyudaMemoria");
 				guardarAyudaMemoria(expediente);
-			} else {				
+			} else {
+				//Desactivar expediente para bandeja de asignacion no muestre mensaje
+				expediente.setFlagActivo("0");
+				
 				expedienteBean.edit(expediente);
 			}
 			Historial historialVO = ConvertExpediente.convertToHistorialVO(expediente);			
@@ -892,6 +895,9 @@ public class RegistrarExpedienteMB extends AbstractMBean {
 				
 			} else {
 				LOG.info("exp-edit");
+				//Desactivar expediente para bandeja de asignacion no muestre mensaje
+				expediente.setFlagActivo("0");
+				
 				expedienteBean.edit(expediente);
 				LOG.info("sale-exp-crea: "+expediente.getId());
 			

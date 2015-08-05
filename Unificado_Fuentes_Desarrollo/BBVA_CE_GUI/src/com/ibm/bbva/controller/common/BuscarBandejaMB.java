@@ -3,19 +3,13 @@ package com.ibm.bbva.controller.common;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -23,23 +17,21 @@ import javax.faces.model.SelectItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pe.ibm.bean.Cliente;
 import pe.ibm.bean.Consulta;
-import pe.ibm.bean.ExpedienteTCWPS;
 import pe.ibm.bean.ExpedienteTCWPSWeb;
+import pe.ibm.bean.Producto;
 import pe.ibm.bpd.RemoteUtils;
-
 import bbva.ws.api.view.FacadeLocal;
 
 import com.ibm.bbva.cm.service.impl.Documento;
 import com.ibm.bbva.controller.AbstractMBean;
 import com.ibm.bbva.controller.Constantes;
-import com.ibm.bbva.entities.ClienteNatural;
 import com.ibm.bbva.entities.DocumentoExpTc;
 import com.ibm.bbva.entities.Expediente;
 import com.ibm.bbva.entities.Historial;
 import com.ibm.bbva.entities.Mensajes;
 import com.ibm.bbva.entities.Segmento;
-import com.ibm.bbva.entities.Territorio;
 import com.ibm.bbva.entities.TipoDoi;
 import com.ibm.bbva.session.EstadoCEBeanLocal;
 import com.ibm.bbva.session.ExpedienteBeanLocal;
@@ -330,40 +322,76 @@ public class BuscarBandejaMB extends AbstractMBean {
 		}else
 			LOG.info("lista es nula o vacia");
 		
-		FacesContext ctx = FacesContext.getCurrentInstance();
-		TablaBandejaPendMB tablaBandejaPend = (TablaBandejaPendMB)  
-				ctx.getApplication().getVariableResolver().resolveVariable(ctx, "tablaBandejaPend");
-		tablaBandejaPend.actualizarLista();
-		tablaBandejaPend.ordenarPorDefecto();
-		
 		if (consulta.getCodigoExpediente()!=null){ // solo expediente
 			if (lista.size()==0){
-				lstHistorial = new ArrayList<Historial>();
-				lstHistorial=historialBean.buscarPerfilRecientePorId(Long.valueOf(codigoExpediente));
-				listaDet=obtenerDetalle(lstHistorial);
-				if (listaDet.size()>0){
-					mostrarLinkExp=true;
-					Mensajes mensajesSoloExpediente = new Mensajes();
-					mensajesSoloExpediente=mensajeBean.buscarPorId(Long.valueOf(Constantes.ID_MENSAJES_BUSQUEDA_POR_EXPEDIENTE));
-					if (mensajesSoloExpediente!=null && mensajesSoloExpediente.getContenido()!=null){
-					try{
-						//textoMensajeSoloExpediente = new String(mensajesSoloExpediente.getContenido(), "UTF-8");
-						textoMensajeSoloExpediente = new String(mensajesSoloExpediente.getContenido());
-					}catch(Exception e){
-						LOG.error(e.getMessage(), e);
-						textoMensajeSoloExpediente = null;
-					}
+				Historial hist = historialBean.buscarMasRecienPorId(Long.valueOf(codigoExpediente));
+				if (hist != null){
+					if (hist.getEstado().getId() == Constantes.ESTADO_CERRADO_TAREA_27.longValue()
+							|| hist.getEstado().getId() == Constantes.ESTADO_CERRADO_TAREA_11.longValue()) {
+						mostrarLinkExp=true;
+						Mensajes mensajesSoloExpediente = new Mensajes();
+						mensajesSoloExpediente=mensajeBean.buscarPorId(Long.valueOf(Constantes.ID_MENSAJES_BUSQUEDA_POR_EXPEDIENTE));
+						if (mensajesSoloExpediente!=null && mensajesSoloExpediente.getContenido()!=null){
+							try {
+								textoMensajeSoloExpediente = new String(mensajesSoloExpediente.getContenido());
+							} catch(Exception e) {
+								LOG.error(e.getMessage(), e);
+								textoMensajeSoloExpediente = null;
+							}
+						}
+					} else {
+						mostrarLinkExp=false;
+						LOG.warn("Expediente no existe en Process pero no está Cerrado en BD.");
+						ExpedienteTCWPSWeb objTCWPS = new ExpedienteTCWPSWeb();
+						objTCWPS.setTaskID("-1");
+						objTCWPS.setIdTarea("");
+						objTCWPS.setCodigo(String.valueOf(hist.getExpediente().getId()));
+						objTCWPS.setEstado(hist.getEstado().getDescripcion());
+						objTCWPS.setAccion(hist.getAccion());
+						objTCWPS.setVerificacionDomiciliaria(hist.getVerifDom());
+						objTCWPS.setSegmento(hist.getClienteNatural().getSegmento().getDescripcion());
+						objTCWPS.setIdTipoOferta(String.valueOf(hist.getTipoOferta().getId()));
+						objTCWPS.setTipoOferta(hist.getTipoOferta().getDescripcion());
+						objTCWPS.setCliente(new Cliente());
+						objTCWPS.getCliente().setTipoDOI(hist.getClienteNatural().getTipoDoi().getDescripcion());
+						objTCWPS.getCliente().setNumeroDOI(hist.getClienteNatural().getNumDoi());
+						objTCWPS.getCliente().setApPaterno(hist.getClienteNatural().getApePat());
+						objTCWPS.getCliente().setApMaterno(hist.getClienteNatural().getApeMat());
+						objTCWPS.getCliente().setNombre(hist.getClienteNatural().getNombre());
+						objTCWPS.setProducto(new Producto());
+						objTCWPS.getProducto().setIdProducto(String.valueOf(hist.getProducto().getId()));
+						objTCWPS.getProducto().setProducto(hist.getProducto().getDescripcion());
+						objTCWPS.getProducto().setSubProducto(hist.getSubproducto().getDescripcion());
+						objTCWPS.setMoneda(hist.getTipoMonedaSol().getDescripcion());
+						objTCWPS.setLineaCredito(hist.getLineaCredSol());
+						objTCWPS.setMontoAprobado(hist.getLineaCredAprob());
+						objTCWPS.setDesOficina(hist.getOficina().getDescripcion());
+						objTCWPS.setDesTerritorio(hist.getOficina().getTerritorio().getDescripcion());
+						objTCWPS.setCodigoRVGL(hist.getRvgl());
+						objTCWPS.setNumeroContrato(hist.getNroContrato());
+						objTCWPS.setObservacion(hist.getComentario());
+						objTCWPS.setIdOficina(String.valueOf(hist.getOficina().getId()));
+						objTCWPS.setFlagRetraer(hist.getFlagRetraer());
+						objTCWPS.setIdGrupoSegmento(String.valueOf(hist.getClienteNatural().getSegmento().getGrupoSegmento().getId()));
+						if (hist.getExpediente().getExpedienteTC().getNroDevoluciones() != null) {
+							objTCWPS.setNumeroDevoluciones(hist.getExpediente().getExpedienteTC().getNroDevoluciones().intValue());
+						} else {
+							objTCWPS.setNumeroDevoluciones(0);
+						}
+						lista = new ArrayList<ExpedienteTCWPSWeb>();
+						lista.add(objTCWPS);
+						
+						addObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION, lista);
 					}
 				}
 			}
 		}
 		
-		
-			// busqueda otros criterios.
-			if (consulta.getCodigoExpediente()==null && lista.size()==0){
-				Mensajes mensajesOtrosCriterios = new Mensajes();
-				mensajesOtrosCriterios=mensajeBean.buscarPorId(Long.valueOf(Constantes.ID_MENSAJES_BUSQUEDA_OTROS_CRITERIOS));
-				if (mensajesOtrosCriterios!=null && mensajesOtrosCriterios.getContenido()!=null){
+		// busqueda otros criterios.
+		if (consulta.getCodigoExpediente()==null && lista.size()==0){
+			Mensajes mensajesOtrosCriterios = new Mensajes();
+			mensajesOtrosCriterios=mensajeBean.buscarPorId(Long.valueOf(Constantes.ID_MENSAJES_BUSQUEDA_OTROS_CRITERIOS));
+			if (mensajesOtrosCriterios!=null && mensajesOtrosCriterios.getContenido()!=null){
 				try{
 					//textoMensajeOtrosCriterios = new String(mensajesOtrosCriterios.getContenido(), "UTF-8");
 					textoMensajeOtrosCriterios = new String(mensajesOtrosCriterios.getContenido());
@@ -371,12 +399,14 @@ public class BuscarBandejaMB extends AbstractMBean {
 					LOG.error(e.getMessage(), e);
 					textoMensajeOtrosCriterios = null;
 				}
-				}
 			}
+		}
 		
-		
-		
-		
+		FacesContext ctx = FacesContext.getCurrentInstance();
+		TablaBandejaPendMB tablaBandejaPend = (TablaBandejaPendMB)  
+				ctx.getApplication().getVariableResolver().resolveVariable(ctx, "tablaBandejaPend");
+		tablaBandejaPend.actualizarLista();
+		tablaBandejaPend.ordenarPorDefecto();
 	}
 
 	public boolean valida() {

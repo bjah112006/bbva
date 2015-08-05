@@ -4,12 +4,36 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:util="http://java.sun.com/jsf/composite/util">
-   
+
+<script type="text/javascript">
+	<f:verbatim>
+	 $(function() {
+			$( "#dialog" ).dialog({
+				autoOpen: false,
+				height: 400,
+				width: 300,
+				show: {
+				effect: "blind",
+				},
+				hide: {
+				effect: "blind",
+				}
+			});
+			$( "#idDialogTags" ).click(function() {
+				$( "#dialog" ).dialog( "open" );
+			});
+		});
+       
+	</f:verbatim>
+</script>
+
+
 <div class="bloque">	<div class="contenido-bloque">    
         <span class="columna" style="width:750px" >
         	<div class="titulo titulo-espaciado">            
     	        <h:outputText value="#{msg['com.ibm.bbva.common.TablaEnvioCorreo.tituloCorreo']}"/>    	        
             </div> 
+           
             <div class="campo-espaciado espacios-etiqueta">
             	<span class="columna" style="width:8px;">
         			<h:graphicImage height="8px;" width="8px;"
@@ -100,8 +124,11 @@
 	                </span>
 	                <span class="columna" style="width:300px;">
 	                	 <util:editor id="idCuerpo" value="#{actualizarCorreo.strCuerpo}"
-						width="500"/>  
+						width="500"/>
+						<input type="button" id="idDialogTags"
+							value="Listado de Tags"/>
 	               	</span>
+	               
 	               	<h:message for="idCuerpo" errorClass="mensaje-error"/>
               </div>  
               <div class="campo-espaciado espacios-etiqueta">
@@ -157,6 +184,62 @@
         </span>
         <h:message for="grabarbr" errorClass="mensaje-error"/>
      </div>
-</div>
 
+</div>
+ <div id="dialog" title="Listado de Tags">
+	<table><td><tr>	NRO_EXPEDIENTE	</tr>
+	<tr>	ESTADO_EXPEDIENTE	</tr>
+	<tr>	NOMBRE_CLIENTE	</tr>
+	<tr>	APEPAT_CLIENTE	</tr>
+	<tr>	APEMAT_CLIENTE	</tr>
+	<tr>	TIPO_MONEDA_SOLICITADO	</tr>
+	<tr>	TIPO_MONEDA_APROBADO	</tr>
+	<tr>	LINEA_CREDITO_APROBADA	</tr>
+	<tr>	LINEA_CREDITO_SOLICITADA	</tr>
+	<tr>	LINEA_CREDITO	</tr>
+	<tr>	ULTIMO_EJECUT_HISTORIAL	</tr>
+	<tr>	PERFIL_USUARIO_ORIGEN	</tr>
+	<tr>	PERFIL_USUARIO_DESTINO	</tr>
+	<tr>	COD_OFICINA	</tr>
+	<tr>	NOMBRE_OFICINA	</tr>
+	<tr>	NRO_CUENTA	</tr>
+	<tr>	NRO_CONTRATO	</tr>
+	<tr>	NUM_TARJETA	</tr>
+	<tr>	COMENTARIO	</tr>
+	<tr>	COD_CLIENTE	</tr>
+	<tr>	TIPO_DOI_CONYUGE	</tr>
+	<tr>	NRO_DOI_CONYUGE	</tr>
+	<tr>	NOMBRE_COMPLETO_CONYUGE	</tr>
+	<tr>	TIPO_DOI_CONYUGE	</tr>
+	<tr>	NRO_DOI_CONYUGE	</tr>
+	<tr>	TIPO_DOI	</tr>
+	<tr>	NRO_DOI	</tr>
+	<tr>	FECHA_VEN_DOI	</tr>
+	<tr>	ESTADO_CIVIL	</tr>
+	<tr>	SUB_PRODUCTO	</tr>
+	<tr>	PRODUCTO	</tr>
+	<tr>	TIPO_OFERTA	</tr>
+	<tr>	PLAZO_SOLICITADO	</tr>
+	<tr>	PLAZO_APROBADO	</tr>
+	<tr>	USUARIO_ORIGEN	</tr>
+	<tr>	USUARIO_DESTINO	</tr>
+	<tr>	SEGMENTO	</tr>
+	<tr>	CATEGORIA_RENTA	</tr>
+	<tr>	COD_PRE_EVALUADOR	</tr>
+	<tr>	VERIF_DOMICILIARIA	</tr>
+	<tr>	VERIF_LABORAL	</tr>
+	<tr>	VERIF_DPS	</tr>
+	<tr>	PERFIL_SUPERIOR_RIESGOS	</tr>
+	<tr>	COMENTARIO_RECHAZO	</tr>
+	<tr>	MOTIVO_RECHAZO	</tr>
+	<tr>	SCORING	</tr>
+	<tr>	PORCENTAJE_ENDEUDAMIENTO	</tr>
+	<tr>	RVGL	</tr>
+	<tr>	BURO	</tr>
+	<tr>	SBS_CONYUGE	</tr>
+	<tr>	SBS_TITULAR	</tr>
+	<tr>	BANCO_CONYUGE	</tr>
+	<tr>	BANCO_TITULAR	</tr></td></table>
+
+			</div>
 </ui:composition>

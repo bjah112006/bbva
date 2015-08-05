@@ -525,7 +525,11 @@ public class RevisarRegistrarDictamenMB extends AbstractMBean {
 
         LOG.info("TipoMonedaAprob : "+expediente.getExpedienteTC().getTipoMonedaAprob());
         LOG.info("LineaCredAprob : "+expediente.getExpedienteTC().getLineaCredAprob());
-        LOG.info("PlazoSolicitadoApr : "+expediente.getExpedienteTC().getPlazoSolicitadoApr());		
+        LOG.info("PlazoSolicitadoApr : "+expediente.getExpedienteTC().getPlazoSolicitadoApr());	
+        
+		//Desactivar expediente para bandeja de asignacion no muestre mensaje
+		expediente.setFlagActivo("0");
+		
 		expedienteBean.edit(expediente);
 		
 		//process

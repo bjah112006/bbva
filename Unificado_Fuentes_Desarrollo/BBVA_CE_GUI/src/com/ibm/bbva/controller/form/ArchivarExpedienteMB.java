@@ -125,6 +125,9 @@ public class ArchivarExpedienteMB extends AbstractMBean {
         RemoteUtils objRemoteUtils=new RemoteUtils();
 		
 		expediente.getExpedienteTC().setFechaT3(new Timestamp(objRemoteUtils.obtenerTimestampServidorProcess().getTimeInMillis()));
+
+		//Desactivar expediente para bandeja de asignacion no muestre mensaje
+		expediente.setFlagActivo("0");
 		
 		expedienteBean.edit(expediente);
 		LOG.info(">>>>>>>>>>>>>>> TAREA 27 <<<<<<<<<<<<<<<<<<<<<");

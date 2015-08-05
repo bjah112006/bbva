@@ -267,6 +267,9 @@ public class EvaluarDevolucionRiesgosMB extends AbstractMBean {
 		
 		expediente.getExpedienteTC().setFechaT3(new Timestamp(objRemoteUtils.obtenerTimestampServidorProcess().getTimeInMillis()));
 		
+		//Desactivar expediente para bandeja de asignacion no muestre mensaje
+		expediente.setFlagActivo("0");
+		
 		expedienteBean.edit(expediente);
 
 		//process

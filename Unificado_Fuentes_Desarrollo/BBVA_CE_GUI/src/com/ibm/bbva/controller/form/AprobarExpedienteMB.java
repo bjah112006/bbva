@@ -421,6 +421,9 @@ public class AprobarExpedienteMB extends AbstractMBean {
         LOG.info("LineaCredAprob : "+expediente.getExpedienteTC().getLineaCredAprob());
         LOG.info("PlazoSolicitadoApr : "+expediente.getExpedienteTC().getPlazoSolicitadoApr());
       
+		//Desactivar expediente para bandeja de asignacion no muestre mensaje
+		expediente.setFlagActivo("0");
+		
         expedienteBean.edit(expediente);
 		
 		//process
