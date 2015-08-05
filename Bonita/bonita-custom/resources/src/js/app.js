@@ -2,34 +2,53 @@
 
 var bonitaApp = angular.module('bonitaApp', ['ngRoute', 'ngSanitize', 'ngBonita', 'abstractControllers', 'ui.bootstrap', 'ui.select', 'angularGrid']);
 var abstractControllers = angular.module('abstractControllers', []);
-var SessionController = bonitaApp.controller('SessionController', ['$scope', 'BonitaSession', function SessionController($scope, BonitaSession) {
+var SessionController = bonitaApp.controller('SessionController', ['$scope', 'BonitaSession', 'User', 'bonitaConfig', '$location', '$q', function SessionController($scope, BonitaSession, User, bonitaConfig, $location, $q) {
 	$scope.userName = "Anonimo";
-	/*
+	$scope.menu = 'restAPI';
+	
+	$scope.$watch(function(scope) { return scope.menu }, function(newValue, oldValue) {
+		// console.log(newValue + "-->" + oldValue);
+		$location.path(newValue);
+		$location.replace();
+    });
+	
 	BonitaSession.getCurrent().$promise.then(function (session) {
+		var deferred = $q.defer();
+		
 		if (typeof session.user_id === 'undefined') {
 			deferred.reject('No active session found');
 		} else {
 			// Save basic session data
-			$scope.userName = session.user_name;
-			bonitaConfig.setUsername(session.user_name);
-			bonitaConfig.setUserId(session.user_id);
-			// bonitaAuthentication.isLogged = true;
+			User.get({"id": session.user_id}).$promise.then(function (user) {
+				$scope.userName = user.firstname + " " + user.lastname;
+				bonitaConfig.setUsername(user.firstname + " " + user.lastname);
+				bonitaConfig.setUserId(session.user_id);
+				
+				console.log(bonitaConfig);
+			});
+			
 			deferred.resolve(session);
 		}
 	});
-	*/
-	$scope.menuModel = {
-		consulta : true,
-		cuadro : false
-	};
 
-	$scope.titulo = "Consulta de Solicitudes";
 }]);
 
 bonitaApp.config(function($routeProvider, $httpProvider) {
 	$routeProvider.when('/', {
+		controller : 'RestAPIController',
+		templateUrl : 'src/views/restAPI.html'
+	}).when('/consulta', {
 		controller : 'ConsultaSolicitudController',
 		templateUrl : 'src/views/consultaSolicitud.html'
+	}).when('/cuadromando', {
+		controller : 'CuadroMandoController',
+		templateUrl : 'src/views/cuadroMando.html'
+	}).when('/restAPI', {
+		controller : 'RestAPIController',
+		templateUrl : 'src/views/restAPI.html'
+	}).when('/restAPI/detail/:id', {
+		controller : 'RestAPIDetailController',
+		templateUrl : 'src/views/restAPIDetail.html'
 	});
 	
 	var statusLoad, statusUnload;

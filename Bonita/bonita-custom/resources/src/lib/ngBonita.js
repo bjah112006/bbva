@@ -148,7 +148,7 @@ angular.module('ngBonita').factory('bonitaAuthentication', function ($log, $http
 'use strict';
 
 angular.module('ngBonita').provider('bonitaConfig', function () {
-	var bonitaUrl = 'http://118.180.34.207:8036/bonita';
+	var bonitaUrl = 'http://192.168.238.137:8080/bonita';
 	var defaultPager = {
 		p : 0,
 		c : 10
@@ -488,5 +488,45 @@ angular.module('ngBonita').factory('ProcessInstance', function ($resource, bonit
 angular.module('ngBonita').factory('User', function ($resource, bonitaConfig) {
 	return $resource(bonitaConfig.getBonitaUrl() + '/API/identity/user/:id', {
 		id : '@id'
+	});
+});
+
+
+/************************************************************************************************************************************************
+ * Personalizado                                                                                                                                *
+ ************************************************************************************************************************************************/
+'use strict';
+
+angular.module('ngBonita').factory('HumanTaskAll', function ($resource, bonitaConfig, bonitaUtils) {
+	var data = angular.extend({
+		o : 'priority ASC',
+		p : '@p',
+		c : '@c'
+	}, bonitaConfig.getDefaultPager());
+
+	return $resource(bonitaConfig.getBonitaUrl() + '/API/bpm/humanTask', data, {
+		getAll : {
+			method : 'GET',
+			params : {
+				f : function () {
+					return [ 'state=ready' ];
+				}
+			},
+			transformResponse : bonitaUtils.transformPaginateResponse()
+		}
+	});
+});
+
+angular.module('ngBonita').factory('CaseVariable', function ($resource, bonitaConfig, bonitaUtils) {
+	var data = angular.extend({
+		p : '@p',
+		c : '@c'
+	}, bonitaConfig.getDefaultPager());
+
+	return $resource(bonitaConfig.getBonitaUrl() + '/API/bpm/caseVariable', data, {
+		getVariables : {
+			method : 'GET',
+			transformResponse : bonitaUtils.transformPaginateResponse()
+		}
 	});
 });

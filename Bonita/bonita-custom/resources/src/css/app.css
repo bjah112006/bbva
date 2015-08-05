@@ -399,8 +399,10 @@ body {
 	font-size: 0.9em;
 	white-space: pre-wrap;
 	line-height: 30px;
+	text-align: left;
 }
 
+/*
 .ag-body .cell-col-1,
 .ag-body .cell-col-3,
 .ag-body .cell-col-4,
@@ -408,4 +410,5 @@ body {
 	margin: auto;
 	text-align: center;
 }
+*/
 
