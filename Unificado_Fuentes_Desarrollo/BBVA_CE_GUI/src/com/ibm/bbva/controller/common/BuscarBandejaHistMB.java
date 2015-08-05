@@ -318,6 +318,7 @@ public class BuscarBandejaHistMB extends AbstractMBean {
 			//FIX ERIKA ABREGU
 			if(hist.getExpediente().getOrigen()!=null && (Constantes.EXPEDIENTE_ANTIGUO).equals(hist.getExpediente().getOrigen())){
 				SimpleDateFormat sdf = new SimpleDateFormat ("dd/MM/yyyy"); 
+				LOG.info("hist.getExpediente().getFecRegistro()  "+hist.getExpediente().getFecRegistro());
 				historialDetalle.setFechaRegistro(hist.getExpediente().getFecRegistro()!=null? sdf.format(hist.getExpediente().getFecRegistro()) :null );
 			}else{
 				SimpleDateFormat sdf = new SimpleDateFormat ("dd/MM/yyyy hh:mm:ss a"); 
