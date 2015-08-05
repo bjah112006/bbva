@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -1130,9 +1131,7 @@ public class IbmBbvaBusiness {
 			Empleado objEmpleado=null;
 			List<Historial> listHistorial=null;
 			
-			//if(idPerfil==Constantes.ID_PERFIL_EJECUTIVO){
-				listHistorial=historialBeanLocalBean.buscarXCriterioExpedienteYPerfilEjecutivo(idExpediente, Long.parseLong(idPerfil+""));
-			//}
+			listHistorial=historialBeanLocalBean.buscarXCriterioExpedienteYPerfilEjecutivo(idExpediente, Long.parseLong(idPerfil+""));
 				
 			if(listHistorial!=null && !listHistorial.isEmpty()){
 				LOG.info("listHistorial tamaño:::"+listHistorial.size());
@@ -1174,39 +1173,61 @@ public class IbmBbvaBusiness {
 					}else if (idPerfil.equals(Constantes.ID_PERFIL_SUBGERENTE_OFICINA)) {
 						LOG.info("Subgerente");
 						List<Historial> lisHistorial = historialBeanLocalBean.buscarPorIdExpediente(idExpediente);
-						LOG.info("lisHistorial = "+lisHistorial);					
-						long idOficina = lisHistorial.get(0).getOficina().getId();
-						LOG.info("idOficina = "+idOficina);
-						List<Empleado> empDes = empleadoBeanLocalBean.buscarPorPerfilEmpleadoActivo(Constantes.ID_PERFIL_SUBGERENTE_OFICINA,idOficina);
 						
-						/**
-						 * Cambio 14 Abril 2015 
-						 * Oficinas Desplazadas
-						 * */			
-						if(empDes==null || empDes.size()<1){
-							LOG.info("Verificando si es oficina Desplazada:::: Id oficina::"+idOficina);
-							Oficina objOficina = oficinaBeanLocal.buscarPorId(idOficina);
+						if(lisHistorial!=null && lisHistorial.size()>0){
+							LOG.info("lisHistorial = "+lisHistorial.get(0).getId());
+							List<VistaExpedienteCantidad> listVistaExpedienteCantidad=null;
 							
-							if(objOficina!=null &&  objOficina.getFlagDesplazada()!=null && !objOficina.getFlagDesplazada().trim().equals("") && 
-									objOficina.getFlagDesplazada().trim().equals(Constantes.FLAG_ACTIVO)){
-								LOG.info("Id oficina::"+objOficina.getId()+":::Flag Desplazada:::"+objOficina.getFlagDesplazada());
-								if(objOficina.getOficinaPrincipal()!=null){
-									LOG.info("Id oficina::"+objOficina.getId()+":::tiene como Oficina Principal a Oficina con id:::"+objOficina.getOficinaPrincipal().getId());
-									empDes = empleadoBeanLocalBean.buscarPorPerfilEmpleadoActivo(Constantes.ID_PERFIL_SUBGERENTE_OFICINA,objOficina.getOficinaPrincipal().getId());
-								}else{
-									LOG.info("Id oficina Principal::"+objOficina.getId()+"::: No tiene configurado su Oficina Principal");
-								}
+							long idOficina = lisHistorial.get(0).getOficina().getId();
+							LOG.info("idOficina = "+idOficina);
+							//List<Empleado> empDes = empleadoBeanLocalBean.buscarPorPerfilEmpleadoActivo(Constantes.ID_PERFIL_SUBGERENTE_OFICINA,idOficina);
+							listVistaExpedienteCantidad =vistaExpedienteCantidadBean.buscarPorIdProdIdTerrIdOfIdPer(idProducto, idTerritorio, idOficina, Constantes.ID_PERFIL_SUBGERENTE_OFICINA);
+							/**
+							 * Cambio 14 Abril 2015 
+							 * Oficinas Desplazadas
+							 * */			
+							if(listVistaExpedienteCantidad==null || listVistaExpedienteCantidad.size()<1){
+								LOG.info("Verificando si es oficina Desplazada:::: Id oficina::"+idOficina);
+								Oficina objOficina = oficinaBeanLocal.buscarPorId(idOficina);
 								
-							}else
-								LOG.info("Id oficina::"+objOficina.getId()+":::Flag Desplazada:::"+objOficina.getFlagDesplazada());
+								if(objOficina!=null &&  objOficina.getFlagDesplazada()!=null && !objOficina.getFlagDesplazada().trim().equals("") && 
+										objOficina.getFlagDesplazada().trim().equals(Constantes.FLAG_ACTIVO)){
+									LOG.info("Id oficina::"+objOficina.getId()+":::Flag Desplazada:::"+objOficina.getFlagDesplazada());
+									if(objOficina.getOficinaPrincipal()!=null){
+										LOG.info("Id oficina::"+objOficina.getId()+":::tiene como Oficina Principal a Oficina con id:::"+objOficina.getOficinaPrincipal().getId());
+										//empDes = empleadoBeanLocalBean.buscarPorPerfilEmpleadoActivo(Constantes.ID_PERFIL_SUBGERENTE_OFICINA,objOficina.getOficinaPrincipal().getId());
+										listVistaExpedienteCantidad =vistaExpedienteCantidadBean.buscarPorIdProdIdTerrIdOfIdPer(idProducto, idTerritorio, objOficina.getOficinaPrincipal().getId(), Constantes.ID_PERFIL_SUBGERENTE_OFICINA);
+									}else{
+										LOG.info("Id oficina Principal::"+objOficina.getId()+"::: No tiene configurado su Oficina Principal");
+									}
+									
+								}else
+									LOG.info("Id oficina::"+objOficina.getId()+":::Flag Desplazada:::"+objOficina.getFlagDesplazada());
+							}
+							/**
+							 **/
+							
+							if (listVistaExpedienteCantidad !=null && !listVistaExpedienteCantidad.isEmpty())	{
+								LOG.info("Tamaño de empDes::::"+listVistaExpedienteCantidad.size());
+								idEmpleado = listVistaExpedienteCantidad.get(0).getIdEmpleado();
+							}							
+							
+						}else
+							LOG.info("Expediente no tiene historial");				
+					
+					}else if (idPerfil.equals(Constantes.ID_PERFIL_EJECUTIVO)){
+						LOG.info("Ejecutivo");
+						List<VistaExpedienteCantidad> listVistaExpedienteCantidad=null;
+						if(objEmpleado!=null){
+							LOG.info("Buscando otro ejecutivo en la oficina del ejecutivo anterior, Oficina:"+objEmpleado.getOficina().getId());
+							listVistaExpedienteCantidad =vistaExpedienteCantidadBean.buscarPorIdProdIdTerrIdOfIdPer(idProducto, idTerritorio, objEmpleado.getOficina().getId(), idPerfil);
+						}else{
+							LOG.info("Buscando la oficina del expediente, Oficina:"+objExpediente.getExpedienteTC().getOficina().getId());
+							listVistaExpedienteCantidad =vistaExpedienteCantidadBean.buscarPorIdProdIdTerrIdOfIdPer(idProducto, idTerritorio, objExpediente.getExpedienteTC().getOficina().getId(), idPerfil);
 						}
-						/**
-						 **/
 						
-						if (empDes !=null && !empDes.isEmpty())	{
-							LOG.info("Tamaño de empDes::::"+empDes.size());
-							idEmpleado = empDes.get(0).getId();
-						}					
+						if(listVistaExpedienteCantidad!=null && !listVistaExpedienteCantidad.isEmpty())
+							idEmpleado = listVistaExpedienteCantidad.get(0).getIdEmpleado();						
 					}else{					
 						List<VistaExpedienteCantidad> listVistaExpedienteCantidad = vistaExpedienteCantidadBean.buscarPorIdProdIdPer(idProducto, idPerfil);
 						if(listVistaExpedienteCantidad!=null && !listVistaExpedienteCantidad.isEmpty())
@@ -1214,15 +1235,25 @@ public class IbmBbvaBusiness {
 					}
 					LOG.info("idPerfil::"+idPerfil+" , idEmpleado:::"+idEmpleado);
 					
-					objEmpleado = empleadoBeanLocalBean.buscarPorId(idEmpleado);
+					//objEmpleado = empleadoBeanLocalBean.buscarPorId(idEmpleado);
 			}
+			objEmpleado = empleadoBeanLocalBean.buscarPorId(idEmpleado);
+			
 			actualizaEmpleadoExpediente(idEmpleado, idExpediente);
 			EmpleadoVO empleadoVO =Util.mapearEmpleadoBDAEmpleadoVO(objEmpleado);
-			empleadoPerfilVO.setEmpleadoVO(empleadoVO);
-			String descripcionPerfil = objEmpleado.getPerfil().getDescripcion();
-			LOG.info("Codigo Empleado = "+empleadoVO.getCodigo());
-			LOG.info("Descripción de Perfil = "+descripcionPerfil);
-			empleadoPerfilVO.setDescripcionPerfil(descripcionPerfil);
+			if(empleadoVO!=null){
+				String descripcionPerfil = objEmpleado.getPerfil().getDescripcion();
+				empleadoPerfilVO.setEmpleadoVO(empleadoVO);
+				if(empleadoVO.getId()==1){
+					empleadoPerfilVO.setDescripcionPerfil(objTareaPerfil.getPerfil().getDescripcion());
+					LOG.info("Usuario Administrador, seteamos perfil correcto para mensaje de process al usuario");
+				}else
+					empleadoPerfilVO.setDescripcionPerfil(descripcionPerfil);
+				LOG.info("Codigo Empleado = "+empleadoVO.getCodigo());
+				LOG.info("Descripción de Perfil = "+descripcionPerfil);
+								
+			}
+
 		}
 		LOG.info("antes de enviar el correo");
 		enviarCorreo(idTerritorio,idProducto,idPerfil,idExpediente,idTarea,idAccion,listHistAccion,empleadoPerfilVO,idTareaActual, objExpediente);  
@@ -1708,6 +1739,44 @@ public class IbmBbvaBusiness {
 			}
 		}
 		/*FIN INCIDENCIA 86 06.01.2015*/
+		
+	///////INICIO cambios 09-07-205 Generar Tags de Analisis y Alta
+		if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getTipoScoring() != null){
+				original=original.replaceAll("SCORING",String.valueOf(expediente.getExpedienteTC().getTipoScoring().getDescripcion()));
+		}
+		if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getPorcentajeEndeudamiento() > 0){
+			String output = String.format( new Locale("es_PE"),"%.2f", expediente.getExpedienteTC().getPorcentajeEndeudamiento());
+			original=original.replaceAll("PORCENTAJE_ENDEUDAMIENTO",String.valueOf(output)+"%");
+		}else{
+			original=original.replaceAll("PORCENTAJE_ENDEUDAMIENTO",String.valueOf("--"));
+		}
+		if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getRvgl() != null){
+			original=original.replaceAll("RVGL",String.valueOf(expediente.getExpedienteTC().getRvgl()));
+		}
+		if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getTipoBuro() != null){
+			original=original.replaceAll("BURO",String.valueOf(expediente.getExpedienteTC().getTipoBuro().getDescripcion()));
+		}
+		if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getSbsConyuge() > 0){
+			String output = String.format( new Locale("es_PE"),"%.2f", expediente.getExpedienteTC().getSbsConyuge());
+			original=original.replaceAll("SBS_CONYUGE",String.valueOf(output)+"%");
+		}else{
+			original=original.replaceAll("SBS_CONYUGE",String.valueOf("--"));
+		}
+		if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getClasificacionSbs()> 0){
+			String output = String.format( new Locale("es_PE"),"%.2f", expediente.getExpedienteTC().getClasificacionSbs());
+			original=original.replaceAll("SBS_TITULAR",String.valueOf(output)+"%");
+		}else{
+			original=original.replaceAll("SBS_TITULAR",String.valueOf("--"));
+		}
+		if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getBancoConyuge() !=null ){
+			original=original.replaceAll("BANCO_CONYUGE",String.valueOf(expediente.getExpedienteTC().getBancoConyuge().getDescripcion()));
+		}else{
+			original=original.replaceAll("BANCO_CONYUGE",String.valueOf("--"));
+		}
+		if (expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getClasificacionBanco() !=null ){
+			original=original.replaceAll("BANCO_TITULAR",String.valueOf(expediente.getExpedienteTC().getClasificacionBanco().getDescripcion()));
+		}
+		///////FIN cambios 09-07-205 Generar Tags de Analisis y Alta
 		
 		newOriginal=original;
 		return newOriginal;
