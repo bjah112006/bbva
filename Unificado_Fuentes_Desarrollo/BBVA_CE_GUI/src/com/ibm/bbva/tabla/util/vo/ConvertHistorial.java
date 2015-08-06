@@ -150,17 +150,9 @@ public class ConvertHistorial {
 			hist.getExpediente().setOrigen(histDTO.getOrigen()!=null?histDTO.getOrigen():null);
 			hist.setId(histDTO.getId()!=null?Long.parseLong(histDTO.getId()):0);
 			hist.getExpediente().setId(histDTO.getNroExpediente()!=null?Long.parseLong(histDTO.getNroExpediente()):0);
-			
-			if(histDTO.getOrigen()!=null && Constantes.EXPEDIENTE_ANTIGUO.equals(histDTO.getOrigen())){
-				hist.getExpediente().setFecRegistro(histDTO.getFechaRegistroExp()!=null? convertStringToTimestampIICE(histDTO.getFechaRegistroExp()) :null );
-				hist.getExpediente().setFechaEnvio(histDTO.getFechaEnvioExp()!=null? convertStringToTimestampIICE(histDTO.getFechaEnvioExp()) :null );
-				hist.getExpediente().setFechaFin(histDTO.getFechaFinExp()!=null? convertStringToTimestampIICE(histDTO.getFechaFinExp()) :null);
-			}else{
-				hist.getExpediente().setFecRegistro(histDTO.getFechaRegistroExp()!=null? convertStringToTimestamp(histDTO.getFechaRegistroExp()) :null );
-				hist.getExpediente().setFechaEnvio(histDTO.getFechaEnvioExp()!=null? convertStringToTimestamp(histDTO.getFechaEnvioExp()) :null );
-				hist.getExpediente().setFechaFin(histDTO.getFechaFinExp()!=null? convertStringToTimestamp(histDTO.getFechaFinExp()) :null);
-				
-			}
+			hist.getExpediente().setFecRegistro(histDTO.getFechaRegistroExp()!=null? convertStringToTimestamp(histDTO.getFechaRegistroExp()) :null );
+			hist.getExpediente().setFechaEnvio(histDTO.getFechaEnvioExp()!=null? convertStringToTimestamp(histDTO.getFechaEnvioExp()) :null );
+			hist.getExpediente().setFechaFin(histDTO.getFechaFinExp()!=null? convertStringToTimestamp(histDTO.getFechaFinExp()) :null);
 			hist.getExpediente().setFlagActivo(histDTO.getFlagActivoExp()!=null?histDTO.getFlagActivoExp():null);
 			hist.getExpediente().setFechaProgramada(histDTO.getFechaProgramadaExp()!=null? convertStringToTimestamp(histDTO.getFechaProgramadaExp()) :null);
 			hist.setNumTerminal(histDTO.getNumeroTerminalExp()!=null? histDTO.getNumeroTerminalExp(): null);
@@ -435,27 +427,12 @@ public class ConvertHistorial {
 		}
 		return listaHistorial1;
 	}
-	
-	public static Timestamp convertStringToTimestampIICE(String str_date) {
+		
+	public static Timestamp convertStringToTimestamp(String str_date) {
 	    try {
 	    	LOG.info("str_date  "+str_date);
 	    	DateFormat inputFormat = new SimpleDateFormat("dd-MMM-yy hh.mm.ss aaa");
 	    	//DateFormat inputFormat = new SimpleDateFormat("dd/MM/yy hh:mm:ss");
-	    	Date date = inputFormat.parse(str_date);
-	    	java.sql.Timestamp timeStampDate = new Timestamp(date.getTime());
-	    	
-	    	return timeStampDate;
-	      
-	    } catch (ParseException e) {
-	      System.out.println("Exception :" + e);
-	      return null;
-	    }
-	}
-	
-	public static Timestamp convertStringToTimestamp(String str_date) {
-	    try {
-	    	LOG.info("str_date  "+str_date);
-	    	DateFormat inputFormat = new SimpleDateFormat("dd/MM/yy hh:mm:ss");
 	    	Date date = inputFormat.parse(str_date);
 	    	java.sql.Timestamp timeStampDate = new Timestamp(date.getTime());
 	    	
