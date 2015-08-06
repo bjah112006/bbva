@@ -5593,7 +5593,25 @@ var awk;
     var grid;
     (function (grid) {
         var utils = grid.Utils;
-        var template = '<div class="ag-paging-panel">' + '<span id="pageRowSummaryPanel" class="ag-paging-row-summary-panel">' + '<span id="firstRowOnPage"></span>' + ' [TO] ' + '<span id="lastRowOnPage"></span>' + ' [OF] ' + '<span id="recordCount"></span>' + '</span>' + '<span class="ag-paging-page-summary-panel">' + '<button class="ag-paging-button" id="btFirst">[FIRST]</button>' + '<button class="ag-paging-button" id="btPrevious">[PREVIOUS]</button>' + '[PAGE] ' + '<span id="current"></span>' + ' [OF] ' + '<span id="total"></span>' + '<button class="ag-paging-button" id="btNext">[NEXT]</button>' + '<button class="ag-paging-button" id="btLast">[LAST]</button>' + '</span>' + '</div>';
+        var template = '<div class="ag-paging-panel">' 
++ '<span id="pageRowSummaryPanel" class="ag-paging-row-summary-panel">' 
++ '<span id="firstRowOnPage"></span>' 
++ ' [TO] ' 
++ '<span id="lastRowOnPage"></span>' 
++ ' [OF] ' 
++ '<span id="recordCount"></span>' 
++ '</span>' 
++ '<span class="ag-paging-page-summary-panel">' 
++ '<button class="ag-paging-button" id="btFirst">[FIRST]</button>' 
++ '<button class="ag-paging-button" id="btPrevious">[PREVIOUS]</button>' 
++ '[PAGE] ' 
++ '<span id="current"></span>' 
++ ' [OF] ' 
++ '<span id="total"></span>' 
++ '<button class="ag-paging-button" id="btNext">[NEXT]</button>' 
++ '<button class="ag-paging-button" id="btLast">[LAST]</button>' 
++ '</span>' 
++ '</div>';
         var PaginationController = (function () {
             function PaginationController() {
             }

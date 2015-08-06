@@ -67,7 +67,38 @@ abstractControllers.controller('RestAPIController', ['$scope', '$log', 'HumanTas
         selectionChanged: function(){
 			// console.log('selection changed, ' + $scope.gridHumanTask.selectedRows.length + ' rows selected');
 		},
-		angularCompileRows: true
+		angularCompileRows: true,
+        localeText: {
+            // for filter panel
+            page: 'daPage',
+            more: 'daMore',
+            to: 'daTo',
+            of: 'daOf',
+            next: 'daNexten',
+            last: 'daLasten',
+            first: 'daFirsten',
+            previous: 'daPreviousen',
+            // for set filter
+            selectAll: 'daSelect Allen',
+            searchOoo: 'daSearch...',
+            blanks: 'daBlanc',
+            // for number filter and string filter
+            filterOoo: 'daFilter...',
+            // for number filter
+            equals: 'daEquals',
+            lessThan: 'daLessThan',
+            greaterThan: 'daGreaterThan',
+            // for text filter
+            contains: 'daContains',
+            startsWith: 'daStarts dawith',
+            endsWith: 'daEnds dawith',
+            // tool panel
+            columns: 'laColumns',
+            pivotedColumns: 'laPivot Cols',
+            pivotedColumnsEmptyMessage: 'la please drag cols to here',
+            valueColumns: 'laValue Cols',
+            valueColumnsEmptyMessage: 'la please drag cols to here'
+        }
     };
 
 	function rendererEditar(params) {
