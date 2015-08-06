@@ -51,6 +51,27 @@ select * from public.crosstab(
        tipoDocumentoSolicitante text
 );
 
+create view fastpyme.data_instance as
+select containerid
+, containertype
+, tenantid
+, max(case name when 'tipo_doi_cliente' then value else '' end) tipo_doi_cliente
+, max(case name when 'num_doi_cliente' then value else '' end) num_doi_cliente
+, max(case name when 'nombre_cliente' then value else '' end) nombre_cliente
+, max(case name when 'estado_solicitud' then value else '' end) estado_solicitud
+, max(case name when 'oferta_aprobada' then value else '' end) oferta_aprobada
+, max(case name when 'ofi_registro' then value else '' end) ofi_registro
+, max(case name when 'num_rvgl' then value else '' end) num_rvgl
+, max(case name when 'producto' then value else '' end) producto
+, max(case name when 'campania' then value else '' end) campania
+, max(case name when 'clte_clasificacion' then value else '' end) clte_clasificacion
+, max(case name when 'num_tramite' then value else '' end) num_tramite
+, max(case name when 'usu_registrante' then value else '' end) usu_registrante
+from fastpyme.data_instance_detail
+group by containerid, containertype, tenantid;
+
+
+
 select * from fastpyme.task_pending a
 inner join fastpyme.data_instance b on a.tenantid=b.tenantid and a.rootprocessinstanceid=b.containerid;
 
