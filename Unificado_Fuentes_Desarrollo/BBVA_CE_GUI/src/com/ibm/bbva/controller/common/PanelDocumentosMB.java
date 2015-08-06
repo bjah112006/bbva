@@ -1272,6 +1272,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 					tipoDoc.setCodigo(objAyudaPD.getCodigoTipoDoc()!=null?objAyudaPD.getCodigoTipoDoc():null);
 					tipoDoc.setDescripcion(objAyudaPD.getDescripcionTipoDoc()!=null? objAyudaPD.getDescripcionTipoDoc():null);
 					tipoPersPD.setTipoDocumento(tipoDoc);
+					objAyudaPD.setDocTransferencias(false);
 					lstAyudaPanelDocumentos.add(objAyudaPD);
 					tipoPersPD.setLstAyudaPanelDocumentos(lstAyudaPanelDocumentos);
 					lstTipoDocumentoPDs.add(tipoPersPD);
