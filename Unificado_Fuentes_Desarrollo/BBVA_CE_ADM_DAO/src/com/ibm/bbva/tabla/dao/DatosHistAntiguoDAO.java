@@ -58,6 +58,7 @@ public class DatosHistAntiguoDAO extends BaseDAO{
 	                objDatosGeneradosHisAntDTO.setNroExpediente(results.getString("HIST_ID_EXPEDIENTE_FK"));
 	                objDatosGeneradosHisAntDTO.setId(results.getString("HIST_ID"));
 	            	objDatosGeneradosHisAntDTO.setFechaRegistroExp(results.getString("EXP_FEC_REGISTRO"));
+	            	LOG.info("results.getString(EXP_FEC_REGISTRO)  "+results.getString("EXP_FEC_REGISTRO"));
 	            	objDatosGeneradosHisAntDTO.setFlagActivoExp(results.getString("EXP_FLAG_ACTIVO"));
 	            	objDatosGeneradosHisAntDTO.setFechaEnvioExp(results.getString("EXP_FECHA_ENVIO"));
 	            	objDatosGeneradosHisAntDTO.setFechaFinExp(results.getString("EXP_FECHA_FIN"));
