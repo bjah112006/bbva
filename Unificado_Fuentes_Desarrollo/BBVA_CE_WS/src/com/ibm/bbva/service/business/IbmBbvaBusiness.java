@@ -198,8 +198,12 @@ public class IbmBbvaBusiness {
 		devolucionTareaBeanLocal=(DevolucionTareaBeanLocal) new InitialContext()
 				.lookup("ejblocal:com.ibm.bbva.session.DevolucionTareaBeanLocal");
 		oficinaBeanLocal=(OficinaBeanLocal) new InitialContext()
-				.lookup("ejblocal:com.ibm.bbva.session.OficinaBeanLocal");		
-	
+				.lookup("ejblocal:com.ibm.bbva.session.OficinaBeanLocal");
+		
+		//Fix2 erika abregu
+		delegacionRiesgoClasifBcoBeanLocalBean = (DelegacionRiesgoClasificacionBancoBeanLocal) new InitialContext()
+		.lookup("ejblocal:com.ibm.bbva.session.DelegacionRiesgoClasificacionBancoBeanLocal");
+		
 	}
 	
 	public boolean delegacionRiesgos(Integer idTipoCategoria, Long idExpediente){
