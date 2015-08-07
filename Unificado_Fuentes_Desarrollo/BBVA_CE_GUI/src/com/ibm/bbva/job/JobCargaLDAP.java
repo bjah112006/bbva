@@ -84,7 +84,7 @@ public class JobCargaLDAP implements Job{
 			logJobBeanLocal = (LogJobBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.LogJobBeanLocal");
 			logJobDetBeanLocal = (LogJobDetBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.LogJobDetBeanLocal");
 			
-			if(multitablaBeanLocal.buscarPorId(Constantes.PARAMETRO_JOB_CARGA_HABILITADO).getBooleano().equals("N"))
+			if(parametrosConfBeanLocal.buscarPorVariable(Constantes.CODIGO_APLICATIVO_PROCESO_LDAP, Constantes.JOB_CARGA_LDAP_HABILITADO).equals("N"))
 			{				
 				return;
 			}

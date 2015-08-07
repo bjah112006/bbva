@@ -611,7 +611,12 @@ public class ConsultarTablaUI extends AbstractMBean {
 							super.addComponentMessage(null, "No puede inactivar el empleado, existen expedientes pendientes");
 							return null;
 						}
-
+						else if(empleado.getOficinaBackup() != null)
+						{
+							super.addComponentMessage(null, "No puede modificar el empleado, existe oficina temporal activa");
+							return null;
+						}
+							
 						long count = cantidadEmpleadosCartActivos();
 						// if (!validaEmpleadoActivoCart()) {
 						if (count == 0) {

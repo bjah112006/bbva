@@ -15,8 +15,10 @@ import pe.ibm.bpd.RemoteUtils;
 import com.grupobbva.bc.per.tele.seguridad.ServiciosSeguridadBbva;
 import com.ibm.bbva.controller.AbstractMBean;
 import com.ibm.bbva.controller.Constantes;
+import com.ibm.bbva.entities.CartEmpleadoCE;
 import com.ibm.bbva.entities.Empleado;
 import com.ibm.bbva.entities.OficinaTemporal;
+import com.ibm.bbva.session.CartEmpleadoCEBeanLocal;
 import com.ibm.bbva.session.EmpleadoBeanLocal;
 import com.ibm.bbva.session.OficinaTemporalBeanLocal;
 
@@ -33,6 +35,10 @@ public class DatosCabeceraMB extends AbstractMBean {
 	
 	@EJB
 	private EmpleadoBeanLocal empleadobean;	
+	
+	@EJB
+	private CartEmpleadoCEBeanLocal cartEmpleadoCEBeanLocal;
+	
 	private Empleado empleado;
     
 	@EJB
@@ -101,13 +107,20 @@ public class DatosCabeceraMB extends AbstractMBean {
 				long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
 				if(cantexp > 0)
 				{
-					this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para la oficina temporal establecida");
+					this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para la oficina " + this.empleado.getOficina().getCodigo() + " - " + this.empleado.getOficina().getDescripcion() + " temporal configurada");
 				}
 				else
 				{				
 					this.empleado.setOficina(this.empleado.getOficinaBackup());
 					this.empleado.setOficinaBackup(null);
 					this.empleadobean.edit(this.empleado);
+					
+					List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+					for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+					{
+						objCartEmpleadoCE.setOficina(this.empleado.getOficina());
+						this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+					}
 				}
 			}
 		}
@@ -126,6 +139,13 @@ public class DatosCabeceraMB extends AbstractMBean {
 					this.empleado.setOficinaBackup(this.empleado.getOficina());
 					this.empleado.setOficina(objOficinaTemporal.getOficina());				
 					this.empleadobean.edit(this.empleado);
+					
+					List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+					for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+					{
+						objCartEmpleadoCE.setOficina(this.empleado.getOficina());
+						this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+					}
 				}							
 			}
 			else
@@ -142,6 +162,14 @@ public class DatosCabeceraMB extends AbstractMBean {
 					{
 						this.empleado.setOficina(objOficinaTemporal.getOficina());
 						this.empleadobean.edit(this.empleado);
+						
+						List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+						for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+						{
+							objCartEmpleadoCE.setOficina(this.empleado.getOficina());
+							this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+						}
+						
 					}
 				}
 			}

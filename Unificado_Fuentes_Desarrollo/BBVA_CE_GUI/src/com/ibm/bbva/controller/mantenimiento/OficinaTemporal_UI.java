@@ -288,7 +288,8 @@ public class OficinaTemporal_UI extends AbstractSortPagDataTableMBean
 			
 			String cuerpoCorreo = objMultitabla.getTexto();
 			cuerpoCorreo = cuerpoCorreo.replace("[EMPLEADO]", empleado.getCodigo() + " - " + empleado.getNombresCompletos());
-			cuerpoCorreo = cuerpoCorreo.replace("[OFICINA]", objOficinaTemporal.getOficina().getCodigo() + " - " + objOficinaTemporal.getOficina().getDescripcion());
+			cuerpoCorreo = cuerpoCorreo.replace("[OFICINA_ORIGEN]", empleado.getOficina().getCodigo() + " - " + empleado.getOficina().getDescripcion());
+			cuerpoCorreo = cuerpoCorreo.replace("[OFICINA_DESTINO]", objOficinaTemporal.getOficina().getCodigo() + " - " + objOficinaTemporal.getOficina().getDescripcion());
 			
 			SimpleDateFormat dateformat= new SimpleDateFormat("dd/MM/yyyy");
 			cuerpoCorreo = cuerpoCorreo.replace("[PERIODO]", dateformat.format(objOficinaTemporal.getFechaInicio()) + " " + objOficinaTemporal.getHoraInicio() + 
