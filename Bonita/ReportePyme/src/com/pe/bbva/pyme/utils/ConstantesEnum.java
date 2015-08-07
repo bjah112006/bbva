@@ -53,6 +53,7 @@ public enum ConstantesEnum {
 	ENCABEZADO_COLUM_25(		Integer.valueOf(41),"Monto"),
 	ENCABEZADO_COLUM_26(		Integer.valueOf(41),"Plazo"),
 	ENCABEZADO_COLUM_27(		Integer.valueOf(41),"Tasa"),
+	ENCABEZADO_COLUM_28(		Integer.valueOf(41),"Centro Negocio"),
 	EST_SOL_INICIALIZANDO(		Integer.valueOf(42),"initializing"),
 	EST_SOL_EN_EJECUCION(		Integer.valueOf(43),"executing"),
 	EST_SOL_TERMINADO(			Integer.valueOf(44),"completed"),

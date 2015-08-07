@@ -12,6 +12,7 @@ import org.bonitasoft.engine.bpm.flownode.ArchivedFlowNodeInstanceSearchDescript
 import org.bonitasoft.engine.bpm.process.ArchivedProcessInstance;
 import org.bonitasoft.engine.bpm.process.ProcessInstance;
 import org.bonitasoft.engine.bpm.process.ProcessInstanceSearchDescriptor;
+import org.bonitasoft.engine.search.Order;
 import org.bonitasoft.engine.exception.SearchException;
 import org.bonitasoft.engine.identity.User;
 import org.bonitasoft.engine.identity.UserMembership;
@@ -79,7 +80,8 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 	    	  int index_tarea=0;
 		      while(itrTareaHecha.hasNext()) {
 		    	  ArchivedFlowNodeInstance elementoTareaHecha = (ArchivedFlowNodeInstance) itrTareaHecha.next();
-		    	  if(elementoTareaHecha.getExecutedBy()>0){
+//		    	  LOG.info("elementoTareaHecha.getExecutedBy() "+elementoTareaHecha.getExecutedBy());
+//		    	  if(elementoTareaHecha.getExecutedBy()>0){
 		    		  index_tarea++;
 		    		  Solicitud solicitudHecha = setearDatosTrazaTareaHecha(solicitudAux,elementoTareaHecha);
 //			    	  if(!solicitudHecha.getUsuarioEjecutorTarea().equals(ConstantesEnum.USER_SYSTEM.getNombre())){
@@ -93,7 +95,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 			    		  }
 				    	  fechaLlegadaAux = elementoTareaHecha.getArchiveDate();  
 //			    	  }  
-		    	  }
+//		    	  }
 		      }	
 		      /*Iterator<FlowNodeInstance> itrTareaPendiente = listaTareasPendientes.iterator();
 		      while(itrTareaPendiente.hasNext()) {
@@ -120,7 +122,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 	    	  int index_tarea=0;
 		      while(itrTareaHecha.hasNext()) {
 		    	  ArchivedFlowNodeInstance elementoTareaHecha = (ArchivedFlowNodeInstance) itrTareaHecha.next();
-		    	  if(elementoTareaHecha.getExecutedBy()>0){
+//		    	  if(elementoTareaHecha.getExecutedBy()>0){
 		    		  index_tarea++;
 		    		  Solicitud solicitudHecha = setearDatosTrazaTareaHecha(solicitudAux,elementoTareaHecha);
 //			    	  if(!solicitudHecha.getUsuarioEjecutorTarea().equals(ConstantesEnum.USER_SYSTEM.getNombre())){
@@ -134,7 +136,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 			    		  }
 				    	  fechaLlegadaAux = elementoTareaHecha.getArchiveDate();  
 //			    	  }  
-		    	  }
+//		    	  }
 		      }	
 		      /*Iterator<FlowNodeInstance> itrTareaPendiente = listaTareasPendientes.iterator();
 		      while(itrTareaPendiente.hasNext()) {
@@ -164,15 +166,29 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 	
 	private List<ArchivedFlowNodeInstance> obtenerListaTareasHechas(Long idProcesoPrincipal,Long idElemento) throws SearchException{
 		List<ArchivedFlowNodeInstance> listaTareasHechas = null;
+		List<ArchivedFlowNodeInstance> listaTareasHechas_retorno = null;
 		SearchOptionsBuilder builder = new SearchOptionsBuilder(0, MAX_RESULT_TASKS);
 		builder.filter(ArchivedFlowNodeInstanceSearchDescriptor.PROCESS_DEFINITION_ID, idProcesoPrincipal);
 		builder.filter(ArchivedFlowNodeInstanceSearchDescriptor.ROOT_PROCESS_INSTANCE_ID,idElemento);
 		builder.filter(ArchivedFlowNodeInstanceSearchDescriptor.STATE_NAME,ConstantesEnum.FILTRO_ESTADO_COMPLETADO.getNombre());
 		builder.differentFrom(ArchivedFlowNodeInstanceSearchDescriptor.FLOW_NODE_TYPE, ConstantesEnum.FILTRO_TIPO_NODO_GATE.getNombre());
 		builder.differentFrom(ArchivedFlowNodeInstanceSearchDescriptor.NAME, "Consultar Cliente");
+		builder.sort(ArchivedFlowNodeInstanceSearchDescriptor.ARCHIVE_DATE, Order.ASC);
+//		builder.differentFrom(ArchivedFlowNodeInstanceSearchDescriptor.NAME, "Notificar Resultado Trámite");
+//		builder.differentFrom(ArchivedFlowNodeInstanceSearchDescriptor.NAME, "Notificar Estado Tramite");
 		final SearchResult<ArchivedFlowNodeInstance> processArchivedFlowNodeInstance = getProcessAPI().searchArchivedFlowNodeInstances(builder.done());
 		listaTareasHechas = processArchivedFlowNodeInstance.getResult();
-		return listaTareasHechas;
+		if(listaTareasHechas!=null){
+			listaTareasHechas_retorno=new ArrayList<ArchivedFlowNodeInstance>();
+			Iterator<ArchivedFlowNodeInstance> itrTareaHecha = listaTareasHechas.iterator();
+			while(itrTareaHecha.hasNext()) {
+				ArchivedFlowNodeInstance elementoTareaHecha = (ArchivedFlowNodeInstance) itrTareaHecha.next();
+				if(elementoTareaHecha.getExecutedBy()>0){
+					listaTareasHechas_retorno.add(elementoTareaHecha);
+				}
+			}
+		}
+		return listaTareasHechas_retorno;
 	}
 	
 	private List<ProcessInstance> obtenerListaSolicitudesPendientes(Long idProcesoPrincipal) throws SearchException{
@@ -253,7 +269,8 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 			String nombre = elementDataCaso.getName();
 			String valor = elementDataCaso.getValue()==null?ConstantesEnum.CADENA_VACIA.getNombre():elementDataCaso.getValue().toString();
 			solicitudHecha = setearDetallesTarea(solicitudHecha, nombre, valor);	
-		}			
+		}
+		
 		return solicitudHecha;
 	}
 	
@@ -331,6 +348,8 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 		case "num_tramite": solicitud.setNum_preimpreso(valor);
 		break;
 		case "usu_registrante": solicitud.setAbn_registante(valor);
+		break;
+		case "centro_negocio_origen": solicitud.setCentro_negocio_riesgos(valor);
 		break;
 		default: 
 			break;

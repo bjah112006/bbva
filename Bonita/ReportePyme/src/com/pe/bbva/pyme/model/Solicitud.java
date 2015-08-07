@@ -29,6 +29,7 @@ public class Solicitud {
 	private String tasa;
 	private String abn_registante;
 	private String num_preimpreso;
+	private String centro_negocio_riesgos;
 	
 	public Solicitud() {
 		super();
@@ -63,6 +64,8 @@ public class Solicitud {
 		this.tasa=solicitud.tasa;
 		this.plazo=solicitud.plazo;
 		this.num_preimpreso=solicitud.num_preimpreso;
+		
+		this.centro_negocio_riesgos=solicitud.centro_negocio_riesgos;
 	}
 	
 	public String getNroSolicitud() {
@@ -255,5 +258,12 @@ public class Solicitud {
 	}
 	public void setNum_preimpreso(String num_preimpreso) {
 		this.num_preimpreso = num_preimpreso;
-	}	
+	}
+	
+	public String getCentro_negocio_riesgos() {
+		return centro_negocio_riesgos;
+	}
+	public void setCentro_negocio_riesgos(String centro_negocio_riesgos) {
+		this.centro_negocio_riesgos = centro_negocio_riesgos;
+	}
 }

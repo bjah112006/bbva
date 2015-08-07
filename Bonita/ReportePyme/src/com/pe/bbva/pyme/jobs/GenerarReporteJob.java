@@ -101,13 +101,14 @@ public class GenerarReporteJob implements Job {
 	}
 
 	private void generarReporteExcel(List<Solicitud> solicitudes) throws Exception{
-		//String fileName = props.getProperty(ConstantesEnum.PARAM_RUTA_SALIDA.getNombre()).concat(File.separator).concat(props.getProperty(ConstantesEnum.PARAM_NOMBRE_SALIDA.getNombre())).concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre())).concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
+//		String fileName = props.getProperty(ConstantesEnum.PARAM_RUTA_SALIDA.getNombre()).concat(File.separator).concat(props.getProperty(ConstantesEnum.PARAM_NOMBRE_SALIDA.getNombre())).concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre())).concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
 		BonitaClientRest bonitaClientRest = new BonitaClientRest();
 		bonitaClientRest.init();
 		String path = bonitaClientRest.obtainValue(BonitaClientRest.URL_REPORTE_OUTPUT);
 		bonitaClientRest.logout();
 		
 		String fileName = path.concat(File.separator).concat(BonitaClientRest.getProperty(ConstantesEnum.PARAM_NOMBRE_SALIDA.getNombre())).concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre())).concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
+//		String fileName = "D:\\Reporte_".concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre())).concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheet = workbook.createSheet(ConstantesEnum.NOMBRE_HOJA_EXCEL.getNombre());	
 		int rowIndex = 0;
@@ -120,7 +121,7 @@ public class GenerarReporteJob implements Job {
 	    csBold.setFont(bold);
 	    row = sheet.createRow(rowIndex++);
 	    int[ ] columnWidth = { 5000, 2500, 5000, 8000, 6000, 4000, 4800, 6000, 5000, 5000, 2500, 2500, 2500, 8000, 5000, 8000,
-	    					   4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000};
+	    					   4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000};
 	    String[ ] columnName = { ConstantesEnum.ENCABEZADO_COLUM_01.getNombre(),
 	    		ConstantesEnum.ENCABEZADO_COLUM_02.getNombre(),
 	    		ConstantesEnum.ENCABEZADO_COLUM_03.getNombre(),
@@ -148,7 +149,8 @@ public class GenerarReporteJob implements Job {
 	    		ConstantesEnum.ENCABEZADO_COLUM_24.getNombre(),
 	    		ConstantesEnum.ENCABEZADO_COLUM_25.getNombre(),
 	    		ConstantesEnum.ENCABEZADO_COLUM_26.getNombre(),
-	    		ConstantesEnum.ENCABEZADO_COLUM_27.getNombre()};
+	    		ConstantesEnum.ENCABEZADO_COLUM_27.getNombre(),
+	    		ConstantesEnum.ENCABEZADO_COLUM_28.getNombre()};
 	    for (int i = 0; i < columnWidth.length; i++) {
 	    	sheet.setColumnWidth(i, columnWidth[i]);
 	    	cell = row.createCell(i);
@@ -214,6 +216,9 @@ public class GenerarReporteJob implements Job {
 			cell25.setCellValue(solicitud.getPlazo());
 			Cell cell26 = row.createCell(26);
 			cell26.setCellValue(solicitud.getTasa());
+			
+			Cell cell27 = row.createCell(27);
+			cell27.setCellValue(solicitud.getCentro_negocio_riesgos());
         }
 		FileOutputStream fos = new FileOutputStream(fileName);
 	    workbook.write(fos);
