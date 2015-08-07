@@ -328,6 +328,10 @@ body {
 .campoValor2 {
     text-align: left;    
 }
+.campoValor3 {
+    text-align: right;
+    width:40px;   
+}
 
 .headerTabla1 {
     background-color: #2266BB;
