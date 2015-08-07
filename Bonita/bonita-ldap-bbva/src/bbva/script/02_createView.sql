@@ -1,5 +1,5 @@
 ﻿-- drop extension tablefunc;
-create extension tablefunc schema public version "1.0";
+-- create extension tablefunc schema public version "1.0";
 
 -- drop schema if exists fastpyme;
 create schema fastpyme;
@@ -28,11 +28,17 @@ select
 , c.stateid
 , c.statename
 , c.assigneeid
+, e.firstname
+, e.lastname
 from public.process_definition a
 inner join public.process_instance b on a.tenantid=b.tenantid and a.processid=b.processdefinitionid
 inner join public.flownode_instance c on b.tenantid=c.tenantid and b.rootprocessinstanceid=c.rootcontainerid
-inner join public.actor d on c.tenantid=d.tenantid and c.actorid=d.id;
+inner join public.actor d on c.tenantid=d.tenantid and c.actorid=d.id
+left join public.user_ e on c.tenantid=e.tenantid and c.assigneeid=e.id;
 
+select * from public.user_
+
+/*
 create view fastpyme.data_instance as
 select * from public.crosstab(
   'select containerid, containertype, tenantid, name, "value" from fastpyme.data_instance_detail order by containerid, tenantid',
@@ -50,6 +56,7 @@ select * from public.crosstab(
        tipoDocumentos text,
        tipoDocumentoSolicitante text
 );
+*/
 
 create view fastpyme.data_instance as
 select containerid
@@ -70,10 +77,13 @@ select containerid
 from fastpyme.data_instance_detail
 group by containerid, containertype, tenantid;
 
-
-
 select * from fastpyme.task_pending a
 inner join fastpyme.data_instance b on a.tenantid=b.tenantid and a.rootprocessinstanceid=b.containerid;
+
+rootprocessinstanceid
+num_rvgl
+num_doi_cliente
+num_tramite
 
 /*
 select * from fastpyme.data_instance;

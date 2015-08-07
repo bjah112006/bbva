@@ -35,7 +35,7 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
         
         try {
         	String password = String.valueOf(credentials.get(AuthenticationConstants.BASIC_PASSWORD));
-        	String userName = String.valueOf(credentials.get(AuthenticationConstants.BASIC_USERNAME));
+        	String userName = String.valueOf(credentials.get(AuthenticationConstants.BASIC_USERNAME)).toUpperCase();
             
             if (logger.isLoggable(this.getClass(), TechnicalLogSeverity.TRACE)) {
                 logger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogBeforeMethod(this.getClass(), methodName));
