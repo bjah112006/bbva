@@ -157,6 +157,9 @@
 			
 	</h:head>
 	<h:body onload="mostrarTerritorio()">
+	
+	
+							
 		<h:form id="registroTabla">
 			<div class="contenido">
 				<div class="cabecera">
@@ -167,8 +170,23 @@
 					   <ui:include src="/resources/common/menu.xhtml" />
 					</div>
 				
-				   <h:panelGroup id="idActualizaTabla" styleClass="datos">							
+				   <h:panelGroup id="idActualizaTabla" styleClass="datos">	
+				   <h:panelGrid styleClass="bloque">
+				   <h:panelGroup>
+				   <table width="100%">
+							<tr>
+								<td width="50px">
+									<h:graphicImage value="#{resource['images:advertencia.jpg']}"/>
+								</td>
+								<td valign="middle" align="left">
+									Estimado usuario, tener en cuenta que para que el cambio tenga efecto debe iniciar sesión nuevamente.
+								</td>
+							</tr>
+						</table>
+						</h:panelGroup>					
+						</h:panelGrid>	
 				      	<h:panelGrid styleClass="bloque">
+				      	
 							<table width="100%" border="0" align="center" cellspacing="0">
 								<tr>
 									<td valign="top">
@@ -335,7 +353,7 @@
 												<td align="center">
 													<h:commandButton id="guardar"
 														action="#{oficinaTemporal.guardarRegistro}" value="Guardar"
-														styleClass="boton" />
+														styleClass="boton"/>
 													<h:commandButton immediate="true" id="cancelar"
 														action="#{oficinaTemporal.cancelar}" value="Cancelar"
 														styleClass="boton" />

@@ -111,7 +111,7 @@ public class OficinaTemporalBean extends AbstractFacade<OficinaTemporal> impleme
 			isAnd = true;
 		}
 		
-		sbQuery.append(" ORDER BY o.id ");
+		sbQuery.append(" ORDER BY ot.fechaInicio desc");
 		
 		try{
 			

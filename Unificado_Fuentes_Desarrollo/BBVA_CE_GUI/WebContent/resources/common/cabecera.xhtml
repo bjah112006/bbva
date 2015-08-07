@@ -44,6 +44,12 @@
 		}
 	}
 	
+	$(document).ready(parpadear);
+    function parpadear() 
+    {  $('#lblTemporal').fadeIn(500).delay(250).fadeOut(500, parpadear);
+        
+         }
+    
 	/* ]]> */
 </script>
 
@@ -80,8 +86,8 @@
 	        <span class="columna" style="width: 20px">
 	        	<h:outputText value="#{datosCabecera.empleado.oficina.codigo}"/> 
 	        </span> 
-	        <span class="columna" style="width: 80px">
-	        	<h:outputText value="#{datosCabecera.etiquetaTemporal}" style="font-weight: bold"/> 
+	        <span class="columna" style="width: 80px" id="lblTemporal">	        
+	        	<h:outputText value="#{datosCabecera.etiquetaTemporal}" style="font-weight: bold;color: yellow;"/> 
 	        </span> 
 	        <span class="columna" style="width: 60px">
 	            <h:outputText value="#{msg['com.ibm.bbva.common.buscarCliente.usuario']}:  " style="font-weight: bold"/>	
