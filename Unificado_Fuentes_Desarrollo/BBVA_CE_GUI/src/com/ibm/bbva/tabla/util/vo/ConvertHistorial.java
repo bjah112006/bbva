@@ -431,7 +431,7 @@ public class ConvertHistorial {
 	public static Timestamp convertStringToTimestamp(String str_date) {
 	    try {
 	    	LOG.info("str_date  "+str_date);
-	    	DateFormat inputFormat = new SimpleDateFormat("dd-MMM-yy hh.mm.ss aaa");
+	    	DateFormat inputFormat = new SimpleDateFormat("dd-MMM-yy hh.mm.ss");
 	    	//DateFormat inputFormat = new SimpleDateFormat("dd/MM/yy hh:mm:ss");
 	    	Date date = inputFormat.parse(str_date);
 	    	java.sql.Timestamp timeStampDate = new Timestamp(date.getTime());
