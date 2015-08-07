@@ -1,13 +1,12 @@
 'use strict';
 
-var bonitaApp = angular.module('bonitaApp', ['ngRoute', 'ngSanitize', 'ngBonita', 'abstractControllers', 'ui.bootstrap', 'ui.select', 'angularGrid']);
+var bonitaApp = angular.module('bonitaApp', ['ngRoute', 'ngSanitize', 'ngBonita', 'abstractControllers', 'ui.bootstrap', 'ui.select', 'angularGrid', "chart.js"]);
 var abstractControllers = angular.module('abstractControllers', []);
 var SessionController = bonitaApp.controller('SessionController', ['$scope', 'BonitaSession', 'User', 'bonitaConfig', '$location', '$q', function SessionController($scope, BonitaSession, User, bonitaConfig, $location, $q) {
 	$scope.userName = "Anonimo";
-	$scope.menu = 'restAPI';
+	$scope.menu = 'cuadromando';
 	
 	$scope.$watch(function(scope) { return scope.menu }, function(newValue, oldValue) {
-		// console.log(newValue + "-->" + oldValue);
 		$location.path(newValue);
 		$location.replace();
     });
@@ -23,8 +22,6 @@ var SessionController = bonitaApp.controller('SessionController', ['$scope', 'Bo
 				$scope.userName = user.firstname + " " + user.lastname;
 				bonitaConfig.setUsername(user.firstname + " " + user.lastname);
 				bonitaConfig.setUserId(session.user_id);
-				
-				console.log(bonitaConfig);
 			});
 			
 			deferred.resolve(session);
@@ -35,8 +32,8 @@ var SessionController = bonitaApp.controller('SessionController', ['$scope', 'Bo
 
 bonitaApp.config(function($routeProvider, $httpProvider) {
 	$routeProvider.when('/', {
-		controller : 'RestAPIController',
-		templateUrl : 'src/views/restAPI.html'
+		controller : 'ConsultaSolicitudController',
+		templateUrl : 'src/views/consultaSolicitud.html'
 	}).when('/consulta', {
 		controller : 'ConsultaSolicitudController',
 		templateUrl : 'src/views/consultaSolicitud.html'

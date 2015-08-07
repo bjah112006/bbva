@@ -5602,14 +5602,14 @@ var awk;
 + '<span id="recordCount"></span>' 
 + '</span>' 
 + '<span class="ag-paging-page-summary-panel">' 
-+ '<button class="ag-paging-button" id="btFirst">[FIRST]</button>' 
-+ '<button class="ag-paging-button" id="btPrevious">[PREVIOUS]</button>' 
++ '<label class="btn btn-primary ag-paging-button" id="btFirst">[FIRST]</label>' 
++ '<label class="btn btn-primary ag-paging-button" id="btPrevious">[PREVIOUS]</label>' 
 + '[PAGE] ' 
 + '<span id="current"></span>' 
 + ' [OF] ' 
 + '<span id="total"></span>' 
-+ '<button class="ag-paging-button" id="btNext">[NEXT]</button>' 
-+ '<button class="ag-paging-button" id="btLast">[LAST]</button>' 
++ '<label class="btn btn-primary ag-paging-button" id="btNext">[NEXT]</label>' 
++ '<label class="btn btn-primary ag-paging-button" id="btLast">[LAST]</label>' 
 + '</span>' 
 + '</div>';
         var PaginationController = (function () {
@@ -5755,6 +5755,7 @@ var awk;
                 return versionCopy !== this.callVersion;
             };
             PaginationController.prototype.onBtNext = function () {
+				console.log(this.btLast.disabled);
                 this.currentPage++;
                 this.loadPage();
             };

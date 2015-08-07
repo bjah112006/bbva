@@ -1,41 +1,79 @@
 <div>
-	<h1>
-		<small>Consulta de Solicitudes</small>
-	</h1>
+    <h1>
+        <small>Consulta de Solicitudes</small>
+    </h1>
 </div>
 <div class="form-group">
-	<fieldset>
-		<legend>Criterio de b&uacute;squeda</legend>
-		<div class="row">
-			<div class="col-md-2"><label class="control-label control-label-0">Tipo de documento:</label></div>
-			<div class="col-md-4">
-				<ui-select ng-model="documento.selected" theme="select2" class="form-control" title="Tipo de documento">
-					<ui-select-match placeholder="Seleccione un tipo de documento de la lista...">
-						{{$select.selected.name}}
-					</ui-select-match>
-					<ui-select-choices repeat="item in tiposDocumento | filter: $select.search">
-						<div ng-bind-html="item.name | highlight: $select.search"></div>
-						<!--
-						<small ng-bind-html="item.name | highlight: $select.search"></small>
-						-->
-					</ui-select-choices>
-				</ui-select>
-			</div>
-		    <div class="col-md-3">
-				<input type="text" class="form-control ui-corner-tr-br" style="border-left: 0px;" ng-model="documento.name"/>
-		    </div>
-		    <div class="col-md-1"></div>
-		    <div class="col-md-2">
-				<label class="btn btn-primary" ng-click="buscar()" style="float: right;">Consultar</label>
-		    </div>
-		</div>
-	</fieldset>
-	<div class="row" style="height:20px;">&nbsp;</div>
-	<fieldset>
-		<legend>Resultado</legend>
-		<div class="row">
-			<div style="height: 300px;" ag-grid="gridOptions2"></div>
-			<pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></pagination>
-		</div>
-	</fieldset>
+    <fieldset>
+        <legend>Criterio de b&uacute;squeda</legend>
+        <div class="row">
+            <table style="width: 100%;">
+                <tr><td>
+                    <table>
+                        <tr>
+                            <td><input name="tipoFiltro" type="radio" ng-model="tipoFiltro" btn-radio="'tiposDocumento'" checked>&nbsp;</td>
+                            <td><label class="control-label control-label-0">Criterio de Consulta:&nbsp;</label></td>
+                            <td>
+                                <ui-select 
+                                    ng-model="tipoDocumento"
+                                    ng-disabled="disabled.tipoDocumento"
+                                    theme="select2" 
+                                    style="width: 220px;" 
+                                    class="form-control" 
+                                    title="Tipo de documento">
+                                    <ui-select-match placeholder="Seleccione un tipo de documento de la lista...">
+                                        {{$select.selected.name}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in tiposDocumento | filter: $select.search">
+                                        <div ng-bind-html="item.name | highlight: $select.search"></div>
+                                        <!--
+                                        <small ng-bind-html="item.name | highlight: $select.search"></small>
+                                        -->
+                                    </ui-select-choices>
+                                </ui-select>
+                            </td>
+                            <td>
+                                <input type="text" 
+                                    class="form-control ui-corner-tr-br" 
+                                    style="border-left: 0px;" 
+                                    ng-model="nroDocumento"
+                                    ng-disabled="disabled.tipoDocumento"/>
+                            </td>
+                        </tr>
+                        <tr style="height: 5px;"><td></td>
+                        </tr>
+                        <tr>
+                            <td><input name="tipoFiltro" type="radio" ng-model="tipoFiltro" btn-radio="'estacion'"></td>
+                            <td><label class="control-label control-label-0">Estación:</label></td>
+                            <td>
+                                <ui-select 
+                                    ng-model="estacion"
+                                    ng-disabled="disabled.estacion"
+                                    theme="select2" 
+                                    style="width: 220px;" 
+                                    class="form-control" 
+                                    title="Estación">
+                                    <ui-select-match placeholder="Seleccione una estación...">
+                                        {{$select.selected.name}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in estaciones | filter: $select.search">
+                                        <div ng-bind-html="item.name | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </td>
+                        </tr>
+                    </table>
+                </td><td valign="top">
+                    <label class="btn btn-primary" ng-click="buscar()" style="float: right;">Consultar</label>
+                </td></tr>
+            </table>
+        </div>
+    </fieldset>
+    <div class="row" style="height:20px;">&nbsp;</div>
+    <fieldset>
+        <legend>Resultado</legend>
+        <div class="row">
+            <div style="height: 300px;" ag-grid="gridOptions2"></div>
+        </div>
+    </fieldset>
 </div>
