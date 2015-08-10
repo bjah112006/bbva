@@ -2312,13 +2312,19 @@ public class DatosProducto3MB extends AbstractMBean {
 	
 	//FIX2 ERIKA ABREGU
 	public void cambiarDocumentoObligatorio(AjaxBehaviorEvent event) {
-		LOG.info("cambiarTasaEspecial");
-		FacesContext ctx = FacesContext.getCurrentInstance();		
-		PanelDocumentosMB panelDocumento = (PanelDocumentosMB)  
-				ctx.getApplication().getVariableResolver().resolveVariable(ctx, "paneldocumentos");		
+		LOG.info("DatosProducto3MB -- cambiarDocumentosObligatorios ");
 		
-		/*Cambiar en la Guia Documentaria el doc Otros documentos sustentarios – Analista de Riesgos de Opcional a Obligatorio*/
-		panelDocumento.cambiarEstadoObligatorio(event);
+		if(porcentEndeudaCambiado!=null && porcentEndeudaCambiado != Double.toString(expediente.getExpedienteTC().getPorcentajeEndeudamiento())){
+			FacesContext ctx = FacesContext.getCurrentInstance();		
+			PanelDocumentosMB panelDocumento = (PanelDocumentosMB)  
+					ctx.getApplication().getVariableResolver().resolveVariable(ctx, "paneldocumentos");		
+			
+			/*Cambiar en la Guia Documentaria el doc Otros documentos sustentarios – Analista de Riesgos de Opcional a Obligatorio*/
+			LOG.info("porcentEndeudaCambiado es = " + porcentEndeudaCambiado + "y no es igual a % endeudamiento inicial " + expediente.getExpedienteTC().getPorcentajeEndeudamiento());
+			panelDocumento.cambiarEstadoObligatorio(event);
+			LOG.info("El documento se puso Obligatorio con exito ");
+		}
+		
 	}
 
 	public String getMsjOperacion292() {
