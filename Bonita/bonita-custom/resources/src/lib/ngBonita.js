@@ -530,3 +530,12 @@ angular.module('ngBonita').factory('CaseVariable', function ($resource, bonitaCo
 		}
 	});
 });
+
+angular.module('ngBonita').factory('ConsultaSolicitudes', function ($resource, bonitaConfig, bonitaUtils) {
+	var data = angular.extend({
+		p : '@p',
+		c : '@c'
+	}, bonitaConfig.getDefaultPager());
+
+	return $resource(bonitaConfig.getBonitaUrl() + '/API/extension/consulta', data);
+});

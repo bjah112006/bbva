@@ -1,4 +1,4 @@
-abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http', function ConsultaSolicitudController($scope, $http) {
+abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http', 'ConsultaSolicitudes', 'bonitaConfig', function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaConfig) {
 	$scope.tiposDocumento = [
 		{"id": 1, "name": "Número Solicitud"},
 		{"id": 2, "name": "Número DOI Cliente"},
@@ -6,16 +6,16 @@ abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http'
 		{"id": 4, "name": "Número Solicitud Pre-Impreso"}
 	];
     $scope.estaciones = [
-        {"id": "001", "name": "Oficina"},
-        {"id": "002", "name": "Fuvex"},
-        {"id": "003", "name": "Mesa Control"},
-        {"id": "004", "name": "Riesgo"},
-        {"id": "005", "name": "CPM"}
+        {"id": "OFICINA", "name": "Oficina"},
+        {"id": "FUVEX", "name": "Fuvex"},
+        {"id": "MESA DE CONTROL", "name": "Mesa Control"},
+        {"id": "RIESGO", "name": "Riesgo"},
+        {"id": "CPM", "name": "CPM"}
     ];
     $scope.nroDocumento = '';
     $scope.tipoFiltro = 'tiposDocumento';
-    $scope.tipoDocumento = '';
-    $scope.estacion = '';
+    $scope.tipoDocumento = {};
+    $scope.estacion = {};
     $scope.disabled = {
         tipoDocumento: false,
         estacion: true
@@ -25,188 +25,104 @@ abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http'
         $scope.disabled.tipoDocumento = (newValue == 'estacion');
         $scope.disabled.estacion = (newValue == 'tiposDocumento');
     });
-  
-	$scope.buscar = function(){
-		$http.get("olympicWinners.json")
-        .then(function(result){
-            allOfTheData = result.data;
-            createNewDatasource();
-        });
-		// alert("Hola Mundo");
-	};
-	
-    // TODO: Cambiar
-	var listOfCountries = ['United States','Russia','Australia','Canada','Norway','China','Zimbabwe','Netherlands','South Korea','Croatia',
-        'France','Japan','Hungary','Germany','Poland','South Africa','Sweden','Ukraine','Italy','Czech Republic','Austria','Finland','Romania',
-        'Great Britain','Jamaica','Singapore','Belarus','Chile','Spain','Tunisia','Brazil','Slovakia','Costa Rica','Bulgaria','Switzerland',
-        'New Zealand','Estonia','Kenya','Ethiopia','Trinidad and Tobago','Turkey','Morocco','Bahamas','Slovenia','Armenia','Azerbaijan','India',
-        'Puerto Rico','Egypt','Kazakhstan','Iran','Georgia','Lithuania','Cuba','Colombia','Mongolia','Uzbekistan','North Korea','Tajikistan',
-        'Kyrgyzstan','Greece','Macedonia','Moldova','Chinese Taipei','Indonesia','Thailand','Vietnam','Latvia','Venezuela','Mexico','Nigeria',
-        'Qatar','Serbia','Serbia and Montenegro','Hong Kong','Denmark','Portugal','Argentina','Afghanistan','Gabon','Dominican Republic','Belgium',
-        'Kuwait','United Arab Emirates','Cyprus','Israel','Algeria','Montenegro','Iceland','Paraguay','Cameroon','Saudi Arabia','Ireland','Malaysia',
-        'Uruguay','Togo','Mauritius','Syria','Botswana','Guatemala','Bahrain','Grenada','Uganda','Sudan','Ecuador','Panama','Eritrea','Sri Lanka',
-        'Mozambique','Barbados'];
 
-    var columnDefs = [
-        // this row just shows the row index, doesn't use any data from the row
-        {headerName: "#", width: 50,
-            cellRenderer: function(params) {
-                return params.node.id + 1;
-            },
-            // we don't want to sort by the row index, this doesn't make sense as the point
-            // of the row index is to know the row index in what came back from the server
-            suppressSorting: true,
-            suppressMenu: true },
-        {headerName: "Athlete", field: "athlete", width: 150, suppressMenu: true},
-        {headerName: "Age", field: "age", width: 90, align: "center", filter: 'number', filterParams: {newRowsAction: 'keep'}},
-        {headerName: "Country", field: "country", width: 120, filter: 'set', filterParams: {values: listOfCountries, newRowsAction: 'keep'}},
-        {headerName: "Year", field: "year", width: 90, align: "center", filter: 'set', filterParams: {values: ['2000','2004','2008','2012'], newRowsAction: 'keep'}},
-        {headerName: "Date", field: "date", width: 110, align: "center", suppressMenu: true},
-        {headerName: "Sport", field: "sport", width: 110, suppressMenu: true},
-        {headerName: "Gold", field: "gold", width: 100, suppressMenu: true},
-        {headerName: "Silver", field: "silver", width: 100, suppressMenu: true},
-        {headerName: "Bronze", field: "bronze", width: 100, suppressMenu: true},
-        {headerName: "Total", field: "total", width: 100, suppressMenu: true}
+	var columnDefs = [
+        {headerName: "N° Solicitud", field: "rootprocessinstanceid", width: 80, cellRenderer: function(params) {
+            var resultElement = document.createElement("a");
+			resultElement.href = "#/restAPI/detail/" + params.value;
+			resultElement.innerHTML = params.value;
+            return resultElement;
+        }},
+		{headerName: "RUC", field: "num_doi_cliente", width: 90},
+        {headerName: "Raz\u00F3n Social", field: "nombre_cliente", width: 80},
+        {headerName: "Estado", field: "estado_solicitud", width: 350},
+        {headerName: "Tipo Oferta", field: "oferta_aprobada", width: 160},
+        {headerName: "Oficina", field: "ofi_registro", width: 160},
+        {headerName: "Fecha Ingreso", field: "startdate", width: 160},
+        {headerName: "Usuario", field: "userTask", width: 160},
+        {headerName: "RVGL", field: "num_rvgl", width: 160},
+		{headerName: "Producto", field: "producto", width: 70},
+		{headerName: "Campa\u00F1a", field: "campania", width: 70},
+		{headerName: "Clasif. Cliente", field: "clte_clasificacion", width: 70},
+		{headerName: "ABN. Registrante", field: "usu_registrante", width: 70}
     ];
 
-    //*
-    $scope.pageSize = '5';
-     //*/
-
-    $scope.gridOptions2 = {
-		headerHeight: 30,
-        enableServerSideSorting: true,
-        enableServerSideFilter: true,
-        enableColResize: true,
-        columnDefs: columnDefs,
-        cellFocused: function(focusedCell) {
-        	// focusedCell = { rowIndex: rowIndex, colIndex: colIndex, node: this.rowModel.getVirtualRow(rowIndex) }
-        	console.log(focusedCell);
+	$scope.gridInstances = {
+		columnDefs: columnDefs,
+        rowSelection: 'single',
+        rowSelected: function(row){
+			// console.log(row);
+		},
+        selectionChanged: function(){
+			// console.log('selection changed, ' + $scope.gridHumanTask.selectedRows.length + ' rows selected');
+		},
+		angularCompileRows: true,
+        localeText: {
+            // for filter panel
+            page: 'P\u00E1gina',
+            more: 'm\u00E1s',
+            to: 'a',
+            of: 'de',
+            next: '&rsaquo;',
+            last: '&raquo;',
+            first: '&laquo;',
+            previous: '&lsaquo;',
+            // for set filter
+            selectAll: 'daSelect Allen',
+            searchOoo: 'daSearch...',
+            blanks: 'daBlanc',
+            // for number filter and string filter
+            filterOoo: 'daFilter...',
+            // for number filter
+            equals: 'Igual',
+            lessThan: 'daLessThan',
+            greaterThan: 'daGreaterThan',
+            // for text filter
+            contains: 'Contiene',
+            startsWith: 'Comienza con',
+            endsWith: 'Termina con',
+            // tool panel
+            columns: 'laColumns',
+            pivotedColumns: 'laPivot Cols',
+            pivotedColumnsEmptyMessage: 'la please drag cols to here',
+            valueColumns: 'laValue Cols',
+            valueColumnsEmptyMessage: 'la please drag cols to here'
         }
     };
 
-    //*
-    $scope.onPageSizeChanged = function() {
-        createNewDatasource();
-    };
-    //*/
+	$scope.pageSize = 8;
+	$scope.buscar = function(){
+		var parameters = {
+			p: 0,
+			c: 1,
+			f: "username=" + bonitaConfig.getUsername() + ","
+		};
 
-    // when json gets loaded, it's put here, and  the datasource reads in from here.
-    // in a real application, the page will be got from the server.
-    var allOfTheData;
+		if($scope.tipoFiltro == 'estacion') {
+			parameters.f += "estacion='" + $scope.estacion["select"]["id"] + "'";
+		} else {
 
-    function createNewDatasource() {
-        if (!allOfTheData) {
-            // in case user selected 'onPageSizeChanged()' before the json was loaded
-            return;
-        }
-        var dataSource = {
-            //rowCount: ???, - not setting the row count, infinite paging will be used
-            pageSize: parseInt($scope.pageSize), // changing to number, as scope keeps it as a string
-            getRows: function (params) {
-                // this code should contact the server for rows. however for the purposes of the demo,
-                // the data is generated locally, a timer is used to give the experience of
-                // an asynchronous call
-                console.log('asking for ' + params.startRow + ' to ' + params.endRow);
-                setTimeout( function() {
-                    // take a chunk of the array, matching the start and finish times
-                    var dataAfterSortingAndFiltering = sortAndFilter(params.sortModel, params.filterModel);
-                    var rowsThisPage = dataAfterSortingAndFiltering.slice(params.startRow, params.endRow);
-                    var lastRow = -1;
-                    // see if we have come to the last page, and if so, return it
-                    if (dataAfterSortingAndFiltering.length <= params.endRow) {
-                        lastRow = dataAfterSortingAndFiltering.length;
-                    }
-                    params.successCallback(rowsThisPage, lastRow);
-                }, 500);
-            }
-        };
+	    	$scope.nroDocumento = '';
+    		$scope.tipoDocumento = '';
 
-        $scope.gridOptions2.api.setDatasource(dataSource);
-    }
+			console.log($scope.tipoFiltro + "-->>>>>")
+		}
 
-    function sortAndFilter(sortModel, filterModel) {
-        return sortData(sortModel, filterData(filterModel, allOfTheData))
-    }
+		ConsultaSolicitudes.get(parameters).$promise.then(function(solicitudes){
+			var dataSource = {
+				rowCount: solicitudes.totalSolicitudes,
+				pageSize: $scope.pageSize,
+            	getRows: function (params) {
+					var pag = params.startRow / $scope.pageSize;
+					parameters.p = pag;
+					parameters.c = $scope.pageSize;
+					ConsultaSolicitudes.get(parameters).$promise.then(function(solicitudes){
+						params.successCallback(solicitudes.solicitudes, -1);
+					});
+    	        }
+	        };
 
-    function sortData(sortModel, data) {
-        var sortPresent = sortModel && sortModel.length > 0;
-        if (!sortPresent) {
-            return data;
-        }
-        // do an in memory sort of the data, across all the fields
-        var resultOfSort = data.slice();
-        resultOfSort.sort(function(a,b) {
-            for (var k = 0; k<sortModel.length; k++) {
-                var sortColModel = sortModel[k];
-                var valueA = a[sortColModel.field];
-                var valueB = b[sortColModel.field];
-                // this filter didn't find a difference, move onto the next one
-                if (valueA==valueB) {
-                    continue;
-                }
-                var sortDirection = sortColModel.sort === 'asc' ? 1 : -1;
-                if (valueA > valueB) {
-                    return sortDirection;
-                } else {
-                    return sortDirection * -1;
-                }
-            }
-            // no filters found a difference
-            return 0;
-        });
-        return resultOfSort;
-    }
-
-    function filterData(filterModel, data) {
-        var filterPresent = filterModel && Object.keys(filterModel).length > 0;
-        if (!filterPresent) {
-            return data;
-        }
-
-        var resultOfFilter = [];
-        for (var i = 0; i<data.length; i++) {
-            var item = data[i];
-
-            if (filterModel.age) {
-                var age = item.age;
-                var allowedAge = parseInt(filterModel.age.filter);
-                // EQUALS = 1;
-                // LESS_THAN = 2;
-                // GREATER_THAN = 3;
-                if (filterModel.age.type == 1) {
-                    if (age !== allowedAge) {
-                        continue;
-                    }
-                } else if (filterModel.age.type == 2) {
-                    if (age >= allowedAge) {
-                        continue;
-                    }
-                } else {
-                    if (age <= allowedAge) {
-                        continue;
-                    }
-                }
-            }
-
-            if (filterModel.year) {
-                if (filterModel.year.indexOf(item.year.toString()) < 0) {
-                    // year didn't match, so skip this record
-                    continue;
-                }
-            }
-
-            if (filterModel.country) {
-                if (filterModel.country.indexOf(item.country) < 0) {
-                    // year didn't match, so skip this record
-                    continue;
-                }
-            }
-
-            resultOfFilter.push(item);
-        }
-
-        return resultOfFilter;
-    }
-
+			$scope.gridInstances.api.setDatasource(dataSource);
+		});
+	};
 }]);

@@ -35,8 +35,18 @@
 <body>
     <div id="layout" class="container">
     	<div ng-controller="SessionController">
-			<div class="hide" data-loading>
-				<img src="http://www.nasa.gov/multimedia/videogallery/ajax-loader.gif" width="20" height="20" />Cargando...
+			<div class="ui-widget-overlay-background" data-loading></div>
+			<div class="ui-widget-overlay" data-loading>
+				<div class="loading-center">
+					<center>
+					<div class="loading">
+						<div class="loadingContent">
+							<div class="loadingImage"></div>
+							<span class="loadingText">Cargando...</span>
+						</div>
+					</div>
+					<center>
+				</div>
 			</div>
 	        <div id="head">
 	            <div class="panelHead">

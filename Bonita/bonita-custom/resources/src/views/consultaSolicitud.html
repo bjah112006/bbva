@@ -15,7 +15,7 @@
                             <td><label class="control-label control-label-0">Criterio de Consulta:&nbsp;</label></td>
                             <td>
                                 <ui-select 
-                                    ng-model="tipoDocumento"
+                                    ng-model="tipoDocumento.select"
                                     ng-disabled="disabled.tipoDocumento"
                                     theme="select2" 
                                     style="width: 220px;" 
@@ -47,7 +47,7 @@
                             <td><label class="control-label control-label-0">Estación:</label></td>
                             <td>
                                 <ui-select 
-                                    ng-model="estacion"
+                                    ng-model="estacion.select"
                                     ng-disabled="disabled.estacion"
                                     theme="select2" 
                                     style="width: 220px;" 
@@ -73,7 +73,7 @@
     <fieldset>
         <legend>Resultado</legend>
         <div class="row">
-            <div style="height: 300px;" ag-grid="gridOptions2"></div>
+            <div style="height: 340px;width: 870px;" ag-grid="gridInstances"></div>
         </div>
     </fieldset>
 </div>

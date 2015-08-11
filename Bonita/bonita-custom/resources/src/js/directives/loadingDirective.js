@@ -1,6 +1,6 @@
 'use strict';
 
-bonitaApp.directive('loading', ['$http' ,function ($http) {
+bonitaApp.directive('loading', ['$http', function ($http) {
     return {
         restrict: 'A',
         link: function (scope, elm, attrs) {
