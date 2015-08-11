@@ -207,20 +207,12 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 		listTabla = new ArrayList<ExpedienteTCWrapper> ();
 		
 		List<ExpedienteTCWPSWeb> lista = (List<ExpedienteTCWPSWeb>) getObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION);
-		List<RetraccionTarea> listRetraccionTarea = new ArrayList<RetraccionTarea>();
-		List<TareaPerfil> listTareaPerfil = new ArrayList<TareaPerfil>();
-		Empleado empleado = (Empleado) getObjectSession(Constantes.USUARIO_SESION);
+	//	List<RetraccionTarea> listRetraccionTarea = new ArrayList<RetraccionTarea>();
+	//	List<TareaPerfil> listTareaPerfil = new ArrayList<TareaPerfil>();
+	//	Empleado empleado = (Empleado) getObjectSession(Constantes.USUARIO_SESION);
 		
 		if(lista!=null && lista.size()>0){
 			LOG.info("lista "+lista.size());
-			
-			if (getNombreJSPPrincipal().equals("formBandejaBusqueda")){
-				if(empleado != null && empleado.getPerfil() != null){
-					listTareaPerfil = tareaPerfilBean.buscarPorIdPerfil(empleado.getPerfil().getId());
-					if(listTareaPerfil!=null && listTareaPerfil.size()>0)
-						listRetraccionTarea = retraccionTareaBean.buscarPorFlagRetraerTareaAnt(listTareaPerfil.get(0).getTarea().getId());
-				}				
-			}
 
 			AyudaHorario ayudaHorario=null;
 			
@@ -249,12 +241,12 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 							LOG.info("no mostrar boton retraccion: "+etc.getCodigoUsuarioAnterior() );
 						}*/
 						//verificamos las retracciones que pertencen al usuario.
-						if(etc!=null && etc.getFlagRetraer()!=null && etc.getFlagRetraer().equals(Constantes.FLAGRETRAERUNO)){
+						/*if(etc!=null && etc.getFlagRetraer()!=null && etc.getFlagRetraer().equals(Constantes.FLAGRETRAERUNO)){
 							if(!etc.getCodigoUsuarioAnterior().equalsIgnoreCase(empleado.getCodigo()) ){
 									etc.setFlagRetraer("0");
 								}
 							
-						}
+						}*/
 						
 						/*if(ayudaHorario!=null)
 							listTabla.add(new ExpedienteTCWrapper(etc, ayudaHorario, tareaBean, bbvaFacade,	expedienteBean, tipoClienteBean, ansBean));
@@ -280,11 +272,11 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 				/*El proceso envia el flag de retraer para los perfiles que lo puedan realizar*/
 
 				//if (getNombreJSPPrincipal().equals("formBandejaPendientes")) { //JBTA
-				if (getNombreJSPPrincipal().equals("formBandejaBusqueda")) {
-					if (etc.getFlagRetraer()!=null && etc.getFlagRetraer().equals(Constantes.FLAGRETRAERUNO)) {
+			//	if (getNombreJSPPrincipal().equals("formBandejaBusqueda")) {
+					/*if (etc.getFlagRetraer()!=null && etc.getFlagRetraer().equals(Constantes.FLAGRETRAERUNO)) {
 						//LOG.info("etc es Retraer");
 						//Empleado empleado = (Empleado) getObjectSession(Constantes.USUARIO_SESION);
-						//if(empleado != null && empleado.getPerfil() != null){
+						//if(empleado != null && empleado.getPerfi<<l() != null){
 							//listTareaPerfil = tareaPerfilBean.buscarPorIdPerfil(empleado.getPerfil().getId());
 							//if(listTareaPerfil != null && listTareaPerfil.size() > 0){
 								//LOG.info("Tamaño listTareaPerfil .. "+listTareaPerfil.size());
@@ -305,9 +297,9 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 							//}else
 								//LOG.info("Tamaño listTareaPerfil nulo o vacio.. ");
 						//}
-					}/*else
-						LOG.info("etc no es Retraer");*/
-				}//Fin IF formBandejaBusqueda
+					/*}*/ //else
+						//LOG.info("etc no es Retraer");
+				//}//Fin IF formBandejaBusqueda
 			}//Fin FOR lista			
 			
 		}else
@@ -1187,7 +1179,52 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 					       	  }else
 					       			LOG.info("IdOficinaUsu es vacío");
 
-				        						        	
+
+						      /**
+						       * Modificación Flag Retraer - Visualizarlo
+						       * 04 de Agosto 2015
+						       * */
+						      this.setRenderedRe(false);
+						      
+							 if((Integer.parseInt(obj.getExpedienteTC().getIdTarea())==Constantes.ID_TAREA_5 || 
+									Integer.parseInt(obj.getExpedienteTC().getIdTarea())==Constantes.ID_TAREA_6 || 
+									Integer.parseInt(obj.getExpedienteTC().getIdTarea())==Constantes.ID_TAREA_11)){
+						    		  
+						    		LOG.info("Id tarea:::"+obj.getExpedienteTC().getIdTarea());
+						    		LOG.info("Accion:::"+obj.getExpedienteTC().getAccionExp());	
+						    		if(obj.getExpedienteTC().getAccionExp().equals(Constantes.ACCION_BOTON_APROBAR_OPERACION) || 
+											obj.getExpedienteTC().getAccionExp().equals(Constantes.ACCION_BOTON_RECHAZAR_EXPEDIENTE)){
+									
+						    			if(obj.getExpedienteTC().getFlagRetraer()==null){
+						    				
+						    				List<Historial> listHistorial = historialBean.buscarultimoPorId(Long.parseLong(obj.getExpedienteTC().getCodigo()));
+						    				Historial objHistorial=null;
+						    				if(listHistorial!=null && listHistorial.size()>0){
+						    					objHistorial=listHistorial.get(0);
+								    			LOG.info("Id historico::"+objHistorial.getId()+" - Id tarea Anterior:::"+objHistorial.getTarea().getId()+" - Usuario anterior :"+objHistorial.getEmpleado().getCodigo());
+								    			if(empleado.getId()==objHistorial.getEmpleado().getId()){
+									    			if(objHistorial.getTarea().getId()==Constantes.ID_TAREA_4 || 
+									    					objHistorial.getTarea().getId()==Constantes.ID_TAREA_12 ||
+									    					objHistorial.getTarea().getId()==Constantes.ID_TAREA_19){
+									    				LOG.info("RETRAER!!");
+									    				obj.getExpedienteTC().setFlagRetraer("1");
+									    			}else
+									    				obj.getExpedienteTC().setFlagRetraer("0");									    				
+								    			}else
+								    				LOG.info("usuario no le corresponde retraer!!");
+						    				}else
+						    					LOG.info("no hay data en historico");
+						    			}else
+						    				LOG.info("else flag retraer:::"+obj.getExpedienteTC().getFlagRetraer());
+									}//Fin IF acciones	  
+						    }//Fin IF tareas
+							
+							 if(obj.getExpedienteTC().getFlagRetraer()!=null && obj.getExpedienteTC().getFlagRetraer().equals("1"))
+								 this.setRenderedRe(true);
+						      /**
+						       * Fin / Modificación Flag Retraer - Visualizarlo
+						       * */							 
+						        	
 				        }else{
 				        	if(obj.getAyudaHorario()==null){
 				        		LOG.info("band-pend --> idExpediente : "+obj.getExpedienteTC().getCodigo());

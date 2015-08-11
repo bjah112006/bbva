@@ -92,6 +92,7 @@ public abstract class AbstractSortPagDataTableMBean extends AbstractLinksMBean {
 		}
 		dataTable.setFirst(0);
 		LOG.info("PAGE FIRST-->"+dataTable.getFirst());
+		actualiarAyudaHorario(event);
 	}
 
 	public void pagePrevious(ActionEvent event) {

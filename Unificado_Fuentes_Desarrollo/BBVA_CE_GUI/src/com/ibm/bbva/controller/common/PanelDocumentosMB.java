@@ -500,50 +500,27 @@ public class PanelDocumentosMB extends AbstractMBean {
 		
 	}
 	
-	public void eliminarDocumentoContent(AjaxBehaviorEvent event){
-		LOG.info("codigoTipoDoc="+strCodigoTipoDocEliminar);
-		//DocumentoExpTc docExpTC = documentoExpTcBean.consultarDocumentoExpediente(expediente.getId(), strCodigoTipoDocEliminar);
-		//DocumentoExpTc docExpTC = documentoExpTcBean.buscarPorId(Long.parseLong(strCodigoTipoDocEliminar));//strCodigoTipoDocEliminar recibe ahora el idCM
-		BigDecimal idCm = new BigDecimal(strCodigoTipoDocEliminar);
+public void eliminarDocumentoContent(AjaxBehaviorEvent event){
+		LOG.info("idCm="+strCodigoTipoDocEliminar);
+		BigDecimal idCm = new BigDecimal(strCodigoTipoDocEliminar);//strCodigoTipoDocEliminar recibe ahora el idCM
 		DocumentoExpTc docExpTC = documentoExpTcBean.consultarDocumentoExpediente(expediente.getId(), idCm);
-		
-		DocumentoExpTc docExpTCEliminar = documentoExpTcBean.findByTipoDocisNullCM(expediente.getId(), docExpTC.getTipoDocumento().getId());
-		documentoExpTcBean.remove(docExpTCEliminar);
 
-//		documentoReutilizableMB.setListaDocumentoReutilizable(listaDocReutilizable);
 		try {
-//			String resultado = facade.eliminarDocumentoCM(docExpTC);
-//			if (resultado.equals("OK")) {
-				docExpTC.setIdCm(null);
-				docExpTC.setPidCm(null);
-				docExpTC.setFecReg(null);
-				docExpTC.setFlagCm(null);
-				docExpTC.setNombreArchivo(null);
-				docExpTC.setFlagObs(null);
-				docExpTC.setFlagEscaneado("0");
-				docExpTC.setFlagDocReutilizable("0");
-				
-				documentoExpTcBean.edit(docExpTC);
-//			} else {
-//				LOG.info("No se pudo eliminar el archivo en CM. Resultado = "+resultado);
-//			}
+			docExpTC.setIdCm(null);
+			docExpTC.setPidCm(null);
+			docExpTC.setFecReg(null);
+			docExpTC.setFlagCm(null);
+			docExpTC.setNombreArchivo(null);
+			docExpTC.setFlagObs(null);
+			docExpTC.setFlagEscaneado("0");
+			docExpTC.setFlagDocReutilizable("0");
+			
+			documentoExpTcBean.edit(docExpTC);
 		} catch(Exception e) {
-			LOG.info("No se pudo eliminar el archivo en CM. ExcepciÃ³n.");
+			LOG.info("No se pudo eliminar el archivo en CM. Excepción.");
 			LOG.error(e.getMessage(), e);
 		}
 		
-		/* Para quitar el check de Documento Reutilizable
-		 * */
-		/*FacesContext ctx = FacesContext.getCurrentInstance();
-		DocumentoReutilizableMB documentoReutilizableMB = (DocumentoReutilizableMB)ctx.getApplication().getVariableResolver().resolveVariable(ctx, "documentoReutilizable");
-		documentoReutilizableMB.setListaDocumentoReutilizable( documentoReutilizableMB.desHabilitarDocumentoReutilizable(strCodigoTipoDocEliminar));
-		documentoReutilizableMB.setSeleccion(false);
-		LOG.info("lista:. "+documentoReutilizableMB.getListaDocumentoReutilizable().size());
-		List<DocumentoReutilizable> listaDoc = new ArrayList<DocumentoReutilizable>();
-		listaDoc.addAll(documentoReutilizableMB.getListaDocumentoReutilizable());
-		for(DocumentoReutilizable documento: listaDoc){
-			documento.setSeleccion(false);
-		}*/
 		addObjectSession("codigoTipoEliminarContent",docExpTC.getTipoDocumento().getCodigo());
 		
 		FacesContext ctx = FacesContext.getCurrentInstance();
@@ -551,7 +528,6 @@ public class PanelDocumentosMB extends AbstractMBean {
 		documentoReutilizableMB.eliminarGrillayCargarEnApplet(docExpTC.getTipoDocumento().getCodigo());
 		
 		cargarDocumentosPanel(event);
-	
 	}
 	
 	public void modificarDocumentoContent(AjaxBehaviorEvent event){
