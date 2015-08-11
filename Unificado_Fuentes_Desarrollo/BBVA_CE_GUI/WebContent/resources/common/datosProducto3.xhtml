@@ -343,7 +343,7 @@
               
               <span class="columna" style="width:78px">
 	              <h:inputText value="#{datosProducto3.expediente.expedienteTC.porcentajeEndeudamiento}" 
-	              		styleClass="txt-resaltado-2 campoValor1 cmpNumeroDecimalMill" id="porcentEndeudaCambiado" 
+	              		styleClass="txt-resaltado-2 campoValor3 cmpNumeroDecimalMill" id="porcentEndeudaCambiado" 
 	              		onkeypress="return disableEnterKey(event);"  disabled="#{datosProducto3.disabledPorsEndeudamiento}">
 		            <f:convertNumber locale="en" pattern="#,##0.00"/>
 		            <f:ajax event="blur" render="idPanelDocumentos appletContentRefresh" execute="@form" listener="#{datosProducto3.cambiarDocumentoObligatorio}"/>
