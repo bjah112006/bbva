@@ -1,3 +1,24 @@
+import java.io.ByteArrayInputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
+import org.apache.commons.beanutils.MethodUtils;
+
+import com.everis.core.exception.BussinesException;
+import com.everis.util.DBUtilSpring;
+import com.everis.util.db.Metadata;
+import com.everis.util.db.mapper.RowMapper;
+import com.everis.util.db.mapper.impl.StringMapperImpl;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level
@@ -26,14 +47,13 @@ import com.bbva.bonita.dto.SolicitudDTO;
 import com.bbva.bonita.util.Constante;
 import com.bbva.bonita.util.ConstantesEnum;
 import com.bbva.bonita.util.Utils;
+import com.everis.util.db.SQLUtil;
+import com.everis.util.db.mapper.impl.MapMapperImpl;
 
 public class ConsultaSolicitud implements RestApiController {
 
     Logger logger
-    Map<Long, ProcessDefinition> processDefinitions
-    Map<Long, User> users
     APISession apiSession
-    ProcessAPI processAPI
     IdentityAPI identityAPI
     
     @Override
@@ -42,127 +62,221 @@ public class ConsultaSolicitud implements RestApiController {
         ConsultaResponse response = consultar(request)
 
         apiResponseBuilder.with {
-            withResponse new JsonBuilder(response).toPrettyString()
+            withResponse new JsonBuilder(response).toString()
             build()
         }
     }
 
+    /**
+     *
+     * Formato del filtro (%3d equivale a =)
+     * 
+     * f=campo1%3dvalue1,campo2%3dvalue2
+     * o=campo1 ASC, campo2 ASC
+     * p=pagina
+     * c=cantidad de registros por pagina
+     *
+     **/
     private ConsultaResponse consultar(HttpServletRequest request) {
         ConsultaResponse consultaResponse = new ConsultaResponse();
         HttpServletRequestAccessor requestAccessor = new HttpServletRequestAccessor(request)
-        processDefinitions = new HashMap<Long, ProcessDefinition>()
-        users = new HashMap<Long, User>()
         apiSession = requestAccessor.apiSession
-        processAPI = TenantAPIAccessor.getProcessAPI(apiSession)
         identityAPI = TenantAPIAccessor.getIdentityAPI(apiSession)
 
-        String codigoFiltro = request.getParameter "filtro"
-        String valorFiltro = request.getParameter "valorFiltro"
-        String estacion = request.getParameter "estacion"
-
-        logger.log Level.SEVERE, "=== FILTRO: " + codigoFiltro
-        logger.log Level.SEVERE, "=== VALOR FILTRO: " + valorFiltro
-        logger.log Level.SEVERE, "=== ESTACION: " + estacion
-
-        SearchOptionsBuilder builder = new SearchOptionsBuilder(0, 1)
-        if(codigoFiltro.compareTo("01") == 0 && !valorFiltro.isEmpty()){
-            logger.log Level.SEVERE, "=== FILTRO POR NRO. SOLICITUD PENDIENTES: " + valorFiltro
-            builder.filter ProcessInstanceSearchDescriptor.ID, valorFiltro
+        try {
+            String requestFilter = isNullRequestParam(request, "f") 
+            String[] filters = requestFilter.split(",")
+            String sorts = isNullRequestParam(request, "o")
+            Integer page = Integer.parseInt(isNullRequestParam(request, "p", "0"))
+            Integer rowForPage = Integer.parseInt(isNullRequestParam(request, "c", "10"))
+            String username = isNullRequestParam(request, "u", null)
+            
+            logger.log Level.SEVERE, "===> Filtros: " + filters
+            logger.log Level.SEVERE, "===> Ordenado por: " + sorts
+            logger.log Level.SEVERE, "===> P\u00E1gina: " + page
+            logger.log Level.SEVERE, "===> Filas por p\u00E1gina: " + rowForPage
+    
+            consultaResponse.setStatus("OK")
+            consultaResponse.setError("OK")
+            
+            if(requestFilter.indexOf("rootprocessinstanceid=") > -1) {
+                logger.log Level.SEVERE, "===> Buscando en pendientes"
+                buscarInstancias(filters, sorts, page, rowForPage, username, true, consultaResponse)
+            } else if(requestFilter.indexOf("estacion=") > -1) {
+                logger.log Level.SEVERE, "===> Buscando en pendientes"
+                buscarInstancias(filters, sorts, page, rowForPage, username, true, consultaResponse)
+            } else {
+                logger.log Level.SEVERE, "===> Buscando en pendientes y archivadas"
+                buscarInstancias(filters, sorts, page, rowForPage, username, false, consultaResponse)
+            }
+        } catch(Exception e) {
+            consultaResponse.setStatus("KO")
+            consultaResponse.setError(exceptionToString(e))
+            consultaResponse.setTotalSolicitudes(-1)
+            consultaResponse.setSolicitudes(new ArrayList<Map<String, Object>>())
         }
-
-        SearchResult<ProcessInstance> processInstanceResults = processAPI.searchOpenProcessInstances(builder.done())
-        List<ProcessInstance> processInstance = processInstanceResults.getResult()
-        
-        consultaResponse.solicitudes = new ArrayList<Solicitud>()
-        processInstance.eachWithIndex {instance, index ->
-            consultaResponse.solicitudes.add(obtenerInstancia(instance))
-            logger.log Level.SEVERE, "Obtener instancia: " + instance.getRootProcessInstanceId() + "[$index]"
-        }
-
-        logger.log Level.SEVERE, "Total de elementos encontrados: " + processInstanceResults.getCount()
-        logger.log Level.SEVERE, "Elementos encontrados en la lista: " + (consultaResponse.solicitudes == null ? 0 : consultaResponse.solicitudes.size())
-
-        consultaResponse.solicitudes
         
         return consultaResponse
     }
-
-    private Solicitud obtenerInstancia(ProcessInstance instance) {
-        Solicitud solicitud = new Solicitud()
-        ProcessDefinition processDefinition = obtenerProceso(instance.getProcessDefinitionId())
-        solicitud.setNroSolicitud(String.valueOf(instance.getRootProcessInstanceId()))
-        solicitud.setNombreProceso(processDefinition.getName())
-        solicitud.setVersionProceso(processDefinition.getVersion())
-        solicitud.setVariable(Constante.PARAMETRO_VARIABLE)
-        solicitud.setFechaLlegada(Utils.convertirDateEnCadena(instance.getStartDate(), ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()))
-
-//        User user = getIdentityAPI().getUser(elementoSolicitud.getStartedBy())
-//        solicitudDTO.setUsuarioEjecutorTarea(user.getUserName().concat("-").concat(user.getFirstName()).concat(" " + user.getLastName()))
-        return solicitud
-    }
-
-    private ProcessDefinition obtenerProceso(Long id) {
-        ProcessDefinition processDefinition = processDefinitions[id];
-        if(processDefinition == null) {
-            logger.log Level.SEVERE, "Obteniendo el proceso $id desde la fuente de datos"
-            processDefinition = processAPI.getProcessDefinition(id);
+    
+    private String isNullRequestParam(HttpServletRequest request, String param, String defaultValue) {
+        String value = request.getParameter param
+        if(value == null) {
+            value = defaultValue
         }
         
-        return processDefinition;
+        return value
     }
     
-    private User obtenerUsuario() {
-        return null;
+    private String isNullRequestParam(HttpServletRequest request, String param) {
+        return isNullRequestParam(request, param, "")
     }
     
-    abstract class AbstractSolicitud implements Comparable<AbstractSolicitud> {
-
-        String nroSolicitud
-        String tipoDOICliente
-        String nroDOICliente
-        String nombreCliente
-        String nombreTarea
-        String tipoOferta
-        String oficinaSolicitud
-        String fechaLlegada
-        String rolEjecutorTarea
-        String usuarioEjecutorTarea
-        String fechaEnvio
-        String nroRVGL
-        String nroContrato
-        String nroGarantia
-        String dictamen
-        String estado
-        String producto
-        String campania
-        String causal_clte_cancela
-        String causal_devol_gmc
-        String clasificacion_clte
-        String moneda
-        String monto
-        String plazo
-        String tasa
-        String abn_registante
-        String num_preimpreso
-        String versionProceso
-        String nombreProceso
-        String variable
-        String idArchivada
-
-        @Override
-        public int compareTo(AbstractSolicitud o) {
-            return o.getNroSolicitud().compareTo(this.getNroSolicitud());
-        }        
+    private String createSelect(String prefix) {
+        return """select * from fastpyme.${prefix}instance"""
     }
-
-    class Solicitud extends AbstractSolicitud {
-    }
+    
+    private String createSelect(String prefix, String orderBy, boolean active, boolean rowNum) {
+        String arch = ""
+        String actv = createSelect("")
+        String rowNumber = rowNum ? "row_number() over(order by tenantid, ${orderBy}) row_num, " : ""
         
+        if(!active) {
+            arch =  " union all " + createSelect("arch_")
+        }
+        
+        return "select ${rowNumber}* from (${actv}${arch}) a"
+    }
+    
+    private void buscarInstancias(String[] filters, String sorts, int page, int rowsForPage, String username, boolean active, ConsultaResponse response) {
+        StringBuilder where = new StringBuilder("");
+        StringBuilder orderBy = new StringBuilder("");
+        Integer rowNum = (page * rowsForPage) + 1;
+        
+        filters.eachWithIndex {value, index ->
+            if(index > 0 && where.length() > 0) {
+                where.append(" and ")
+            }
+            if(value.toLowerCase().indexOf("username") == -1) {
+                where.append(value)
+            }
+        }
+        
+        if(sorts.isEmpty()) {
+            orderBy.append("rootprocessinstanceid, actor")
+        } else {
+            orderBy.append(sorts)
+        }
+        
+        String select = createSelect("", orderBy.toString(), active, true)
+        String query = """
+            select * from (
+                ${select}
+                where
+                    ${where}
+            ) b where row_num >= ${rowNum} limit ${rowsForPage}"""
+        logger.log Level.SEVERE, "===> Consulta: " + query
+        
+        response.setSolicitudes(new ArrayList<Map<String, Object>>())
+        response.getSolicitudes().addAll(executeQuery(query))
+        
+        if(response.getSolicitudes().size() < rowsForPage && page == 0) {
+            response.setTotalSolicitudes(response.getSolicitudes().size())
+        } else {
+            select = createSelect("", orderBy.toString(), active, false)
+            query = """
+                    select count(1) totalRows from (
+                        ${select}
+                        where
+                            ${where}
+                    ) b"""
+            logger.log Level.SEVERE, "===> Consulta: " + query
+            List<Map<String, Object>> result = executeQuery(query)
+            response.setTotalSolicitudes(0)
+            if(!result.isEmpty()) {
+                response.setTotalSolicitudes(Long.parseLong(result.get(0).get("totalrows").toString()))
+            }
+        }
+    }
+
+    private List<Metadata> getMetadata(ResultSet result) {
+        List<Metadata> cols = new ArrayList<Metadata>();
+        int i = 0;
+        Metadata o = null;
+        if (result != null) {
+            try {
+                ResultSetMetaData metaData = result.getMetaData();
+                for (i = 1; i <= metaData.getColumnCount(); i++) {
+                    o = new Metadata();
+                    o.setColumnName(metaData.getColumnName(i));
+                    o.setColumnType(metaData.getColumnType(i));
+                    o.setPrecision(metaData.getPrecision(i));
+                    o.setScale(metaData.getScale(i));
+                    cols.add(o);
+                }
+            } catch (SQLException e) {
+                logger.log(Level.SEVERE, "[SQLUtil:getMetadata] initialContext SQLException", e);
+            }
+        }
+
+        return cols;
+    }
+    
+    private List<Map<String, Object>> executeQuery(String query) throws BussinesException {
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+        Map<String, Object> row = null;
+        Connection cn = null
+        PreparedStatement ps = null
+        ResultSet rs = null
+        try {
+            InitialContext ic = new InitialContext()
+            DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS")
+            cn = ds.getConnection()
+            ps = cn.prepareStatement(query);
+            rs = ps.executeQuery();
+            List<Metadata> metadata = getMetadata rs
+            MapMapperImpl mapper = new MapMapperImpl()
+            
+            while (rs.next()) {
+                row = mapper.proccess(rs, metadata)
+                row.put("userTask", row.get("username").toString().trim() + " - " + (row.get("firstname").toString().trim() + " " + row.get("lastname").toString().trim()).trim())
+                result.add row;
+            }
+        } catch (Exception e) {
+            throw new BussinesException(e)
+            // logger.log(Level.SEVERE, "Ejecutando consulta", e);
+        } finally {
+            try {
+                if(rs != null) {
+                    rs.close()
+                }
+                if(ps != null) {
+                    ps.close()
+                }
+                if(cn != null) {
+                    cn.close()
+                }
+            } catch (Exception e) {
+                throw new BussinesException(e)
+                // logger.log(Level.SEVERE, "Cerrando conexiones", e);
+            }
+        }
+        
+        return result;
+    }
+    
+    private String exceptionToString(Exception e) {
+        StringWriter sw = new StringWriter(0)
+        PrintWriter out = new PrintWriter(sw)
+        e.printStackTrace(out)
+        return sw.toString().replace("\"", "'")
+    }
+    
     class ConsultaResponse {
-        List<Solicitud> solicitudes
+        List<Map<String, Object>> solicitudes
+        Long totalSolicitudes
         String error
         String status
     }
-    
-    
+
 }
