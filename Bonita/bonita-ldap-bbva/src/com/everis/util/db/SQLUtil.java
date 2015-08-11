@@ -253,6 +253,7 @@ public class SQLUtil<T> implements Serializable {
             }
 
         } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error en alguna parte", ex);
             throw new BussinesException(ex);
         } finally {
             close(resultSet, "ResultSet executeQuery");

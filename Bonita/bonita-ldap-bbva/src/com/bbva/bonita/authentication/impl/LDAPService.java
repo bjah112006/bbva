@@ -100,20 +100,25 @@ public class LDAPService {
         return result;
     }
 
-    public void crearUsuario(Usuario usuario, String userName) throws JsonProcessingException, IOException {
-        logger.log(Level.SEVERE, "Registrando usuario");
-
-        MessageFormat message = new MessageFormat(
-                "\"enabled\":\"true\", \"userName\":\"{0}\", \"password\":\"123456\", \"password_confirm\":\"123456\", \"firstname\":\"{1}\", \"lastname\":\"{2}\", \"professional_data_email\":\"{3}\"");
-        String[] params = new String[4];
+    private String stringEntity(Usuario usuario, String userName, SUser jefe) {
+        MessageFormat message = new MessageFormat("\"enabled\":\"true\", \"userName\":\"{0}\", \"password\":\"123456\", \"password_confirm\":\"123456\", \"firstname\":\"{1}\", \"lastname\":\"{2}\", \"professional_data_email\":\"{3}\", \"manager_id\":\"{4}\"");
+        String[] params = new String[5];
         params[0] = userName;
         params[1] = (usuario.getPrimerNombre() + " " + (usuario.getSegundoNombre() == null ? "" : usuario.getSegundoNombre())).trim();
         params[2] = (usuario.getPrimerApellido() + " " + usuario.getSegundoApellido()).trim();
         params[3] = usuario.getEMail();
+        params[4] = String.valueOf(jefe.getId());
 
         String entity = "{" + message.format(params) + "}";
         logger.log(Level.SEVERE, entity);
         logger.log(Level.SEVERE, "Puesto: " + usuario.getPuesto().getNombreCargoFuncionalLocal());
+        
+        return entity;
+    }
+    
+    public void crearUsuario(Usuario usuario, String userName, SUser jefe) throws JsonProcessingException, IOException {
+        logger.log(Level.SEVERE, "Registrando usuario");
+        String entity = stringEntity(usuario, userName, jefe);
 
         RestAPIClient restApiClient = new RestAPIClient(server);
         restApiClient.loginAs(user, pwd);
@@ -141,27 +146,18 @@ public class LDAPService {
         }
     }
 
-    public void actualizarUsuario(Usuario usuario, SUser user) {
+    public void actualizarUsuario(Usuario usuario, SUser user, SUser jefe) {
         Date lastConnection = new Date(user.getSUserLogin().getLastConnection());
-        logger.log(Level.SEVERE, "Last Connection: " + lastConnection.toString());
-
         long horasTranscurridas = Long.valueOf(this.horas);
         long diff = diferenciaEnHoras(lastConnection, new Date());
 
+        logger.log(Level.SEVERE, "Last Connection: " + lastConnection.toString());
+        logger.log(Level.SEVERE, "Tiempo transcurrido: " + diff);
+        logger.log(Level.SEVERE, "Tiempo a esperar: " + this.horas);
+        
         if (diff > horasTranscurridas) {
             logger.log(Level.SEVERE, "Actualizando usuario");
-
-            MessageFormat message = new MessageFormat(
-                    "\"enabled\":\"true\", \"userName\":\"{0}\", \"password\":\"123456\", \"password_confirm\":\"123456\", \"firstname\":\"{1}\", \"lastname\":\"{2}\", \"professional_data_email\":\"{3}\"");
-            String[] params = new String[4];
-            params[0] = user.getUserName();
-            params[1] = (usuario.getPrimerNombre() + " " + (usuario.getSegundoNombre() == null ? "" : usuario.getSegundoNombre())).trim();
-            params[2] = (usuario.getPrimerApellido() + " " + usuario.getSegundoApellido()).trim();
-            params[3] = usuario.getEMail();
-
-            String entity = "{" + message.format(params) + "}";
-            logger.log(Level.SEVERE, entity);
-            logger.log(Level.SEVERE, "Puesto: " + usuario.getPuesto().getNombreCargoFuncionalLocal());
+            String entity = stringEntity(usuario, user.getUserName(), jefe);
 
             RestAPIClient restApiClient = new RestAPIClient(server);
             restApiClient.loginAs(this.user, pwd);
@@ -175,6 +171,8 @@ public class LDAPService {
     public void actualizarDatosAdicionales(String id, String key, String value) {
         String entity = "{\"value\":\"" + value + "\"}";
 
+        logger.log(Level.SEVERE, "API/customuserinfo/value/" + id + "/" + key + "==>" + entity);
+        
         RestAPIClient restApiClient = new RestAPIClient(server);
         restApiClient.loginAs(user, pwd);
         restApiClient.executePutRequest("API/customuserinfo/value/" + id + "/" + key, entity);

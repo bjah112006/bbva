@@ -17,7 +17,7 @@ public class MapMapperImpl implements RowMapper<Map<String, Object>> {
         Map<String, Object> val = new LinkedHashMap<String, Object>();
         try {
             for(Metadata m : metadata) {
-                val.put(m.getColumnName(), result.getObject(metadata.get(0).getColumnName()));
+                val.put(m.getColumnName(), result.getObject(m.getColumnName()));
             }
         } catch (SQLException e) {
             throw new BussinesException("Error al obtener el valor", e);

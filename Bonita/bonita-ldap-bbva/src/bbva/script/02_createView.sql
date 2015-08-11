@@ -1,9 +1,10 @@
 ﻿-- drop extension tablefunc;
 -- create extension tablefunc schema public version "1.0";
 
--- drop schema if exists fastpyme;
-create schema fastpyme;
-
+-- drop schema if exists fastpyme cascade;
+create schema fastpyme authorization bonita;
+--ALTER SCHEMA fastpyme OWNER TO bonita;
+    
 -- drop view if exists fastpyme.data_instance_detail;
 create view fastpyme.data_instance_detail as
 select containerid, containertype, tenantid, name,
@@ -11,6 +12,15 @@ case discriminant
 when 'SDateDataInstanceImpl' then longvalue::text
 else clobvalue end "value"
 from public.data_instance
+order by containerid, tenantid;
+
+-- drop view if exists fastpyme.data_instance_detail;
+create view fastpyme.arch_data_instance_detail as
+select containerid, containertype, tenantid, name,
+case discriminant
+when 'SDateDataInstanceImpl' then longvalue::text
+else clobvalue end "value"
+from public.arch_data_instance
 order by containerid, tenantid;
 
 -- drop view if exists fastpyme.task_pending;
@@ -28,15 +38,59 @@ select
 , c.stateid
 , c.statename
 , c.assigneeid
+, e.username
 , e.firstname
 , e.lastname
+, case d.name
+  when 'GBN' then 'OFICINA'
+  when 'ERC' then 'RIESGO'
+  when 'JGR' then 'RIESGO'
+  when 'ERM' then 'RIESGO'
+  when 'GMC' then 'MESA DE CONTROL'
+  when 'CPM' then 'CPM'
+  else '' end estacion
 from public.process_definition a
 inner join public.process_instance b on a.tenantid=b.tenantid and a.processid=b.processdefinitionid
 inner join public.flownode_instance c on b.tenantid=c.tenantid and b.rootprocessinstanceid=c.rootcontainerid
 inner join public.actor d on c.tenantid=d.tenantid and c.actorid=d.id
 left join public.user_ e on c.tenantid=e.tenantid and c.assigneeid=e.id;
 
+-- drop view if exists fastpyme.arch_task_pending;
+create view fastpyme.arch_task_pending as
+select 
+  a.name
+, a.version 
+, b.tenantid
+, b.rootprocessinstanceid
+, b.startdate
+, c.actorid
+, d.name actor
+, c.flownodedefinitionid
+, c.name taskname
+, c.stateid
+, c.statename
+, c.assigneeid
+, e.username
+, e.firstname
+, e.lastname
+, case d.name
+  when 'GBN' then 'OFICINA'
+  when 'ERC' then 'RIESGO'
+  when 'JGR' then 'RIESGO'
+  when 'ERM' then 'RIESGO'
+  when 'GMC' then 'MESA DE CONTROL'
+  when 'CPM' then 'CPM'
+  else '' end estacion
+from public.process_definition a
+inner join public.arch_process_instance b on a.tenantid=b.tenantid and a.processid=b.processdefinitionid
+inner join public.arch_flownode_instance c on b.tenantid=c.tenantid and b.rootprocessinstanceid=c.rootcontainerid
+inner join public.actor d on c.tenantid=d.tenantid and c.actorid=d.id
+left join public.user_ e on c.tenantid=e.tenantid and c.assigneeid=e.id
+where c.stateid not in(4, 32);
+
 select * from public.user_
+select * from public.arch_data_instance
+select * from public.arch_process_instance
 
 /*
 create view fastpyme.data_instance as
@@ -58,6 +112,7 @@ select * from public.crosstab(
 );
 */
 
+drop view if exists fastpyme.data_instance;
 create view fastpyme.data_instance as
 select containerid
 , containertype
@@ -75,15 +130,150 @@ select containerid
 , max(case name when 'num_tramite' then value else '' end) num_tramite
 , max(case name when 'usu_registrante' then value else '' end) usu_registrante
 from fastpyme.data_instance_detail
+where containertype='PROCESS_INSTANCE'
 group by containerid, containertype, tenantid;
 
-select * from fastpyme.task_pending a
-inner join fastpyme.data_instance b on a.tenantid=b.tenantid and a.rootprocessinstanceid=b.containerid;
+drop view if exists fastpyme.arch_data_instance;
+create view fastpyme.arch_data_instance as
+select containerid
+, containertype
+, tenantid
+, max(case name when 'tipo_doi_cliente' then value else '' end) tipo_doi_cliente
+, max(case name when 'num_doi_cliente' then value else '' end) num_doi_cliente
+, max(case name when 'nombre_cliente' then value else '' end) nombre_cliente
+, max(case name when 'estado_solicitud' then value else '' end) estado_solicitud
+, max(case name when 'oferta_aprobada' then value else '' end) oferta_aprobada
+, max(case name when 'ofi_registro' then value else '' end) ofi_registro
+, max(case name when 'num_rvgl' then value else '' end) num_rvgl
+, max(case name when 'producto' then value else '' end) producto
+, max(case name when 'campania' then value else '' end) campania
+, max(case name when 'clte_clasificacion' then value else '' end) clte_clasificacion
+, max(case name when 'num_tramite' then value else '' end) num_tramite
+, max(case name when 'usu_registrante' then value else '' end) usu_registrante
+from fastpyme.arch_data_instance_detail
+where containertype='PROCESS_INSTANCE'
+group by containerid, containertype, tenantid;
 
+create view fastpyme.instance as
+select
+      a.name
+    , a.version 
+    , a.tenantid
+    , a.rootprocessinstanceid
+    , a.startdate
+    , a.actorid
+    , a.actor
+    , a.flownodedefinitionid
+    , a.name taskname
+    , a.stateid
+    , a.statename
+    , a.assigneeid
+    , a.username
+    , a.firstname
+    , a.lastname
+    , case when a.estacion != 'OFICINA' then a.estacion else (case when length(b.usu_registrante) != 0 then 'OFICINA' else 'FUVEX' end) end estacion
+    , b.tipo_doi_cliente
+    , b.num_doi_cliente
+    , b.nombre_cliente
+    , b.estado_solicitud
+    , b.oferta_aprobada
+    , b.ofi_registro
+    , b.num_rvgl
+    , b.producto
+    , b.campania
+    , b.clte_clasificacion
+    , b.num_tramite
+    , b.usu_registrante
+from fastpyme.task_pending a
+inner join fastpyme.data_instance b on 
+a.tenantid=b.tenantid and 
+a.rootprocessinstanceid=b.containerid;
+
+-- drop view if exists fastpyme.arch_instance;
+create view fastpyme.arch_instance as
+select
+      a.name
+    , a.version 
+    , a.tenantid
+    , a.rootprocessinstanceid
+    , a.startdate
+    , a.actorid
+    , a.actor
+    , a.flownodedefinitionid
+    , a.name taskname
+    , a.stateid
+    , a.statename
+    , a.assigneeid
+    , a.username
+    , a.firstname
+    , a.lastname
+    , case when a.estacion != 'OFICINA' then a.estacion else (case when length(b.usu_registrante) != 0 then 'OFICINA' else 'FUVEX' end) end estacion
+    , b.tipo_doi_cliente
+    , b.num_doi_cliente
+    , b.nombre_cliente
+    , b.estado_solicitud
+    , b.oferta_aprobada
+    , b.ofi_registro
+    , b.num_rvgl
+    , b.producto
+    , b.campania
+    , b.clte_clasificacion
+    , b.num_tramite
+    , b.usu_registrante
+from fastpyme.arch_task_pending a
+inner join fastpyme.arch_data_instance b on 
+a.tenantid=b.tenantid and 
+a.rootprocessinstanceid=b.containerid;
+
+alter table fastpyme.arch_data_instance owner to bonita;
+alter table fastpyme.arch_data_instance_detail owner to bonita;
+alter table fastpyme.arch_task_pending owner to bonita;
+alter table fastpyme.arch_instance owner to bonita;
+
+alter table fastpyme.data_instance owner to bonita;
+alter table fastpyme.data_instance_detail owner to bonita;
+alter table fastpyme.task_pending owner to bonita;
+alter table fastpyme.instance owner to bonita;
+
+select *
+from fastpyme.task_pending a
+inner join fastpyme.data_instance b on a.tenantid=b.tenantid and a.rootprocessinstanceid=b.containerid and estacion='OFICINA';
+
+select *
+from fastpyme.arch_task_pending a
+inner join fastpyme.arch_data_instance b on a.tenantid=b.tenantid and a.rootprocessinstanceid=b.containerid;
+
+select row_number() over(order by tenantid, rootprocessinstanceid, actor), *
+from fastpyme.arch_instance;
+
+-- nro
 rootprocessinstanceid
 num_rvgl
 num_doi_cliente
 num_tramite
+
+    	//TODO: CPM
+    	public static final String DESEMBOLSADO = "DESEMBOLSADO";
+    	public static final String EN_ESPERA_TRAMITE = "EN ESPERA TRAMITE";
+    	public static final String APROBADO_CON_MODIFICACION = "APROBADO CON MODIFICACION";
+    	public static final String APROBADO_SIN_MODIFICACION = "APROBADO SIN MODIFICACION";
+    	
+    	//TODO: RIESGOS
+    	public static final String ENVIADO_A_EVALUACION = "ENVIADO A EVALUACION";
+    	public static final String ENVIADO_ASIGNACION_EVALUADOR = "ENVIADO ASIGNACION EVALUADOR";
+    	public static final String ENVIADO_A_VISITA_CAMPO = "ENVIADO A VISITA CAMPO";
+    	public static final String TRANSFERIDO = "TRANSFERIDO";
+    	public static final String VISITA_DE_CAMPO_REALIZADO = "VISITA DE CAMPO REALIZADO";
+    	public static final String AUTORIZACION_ESCALADA = "AUTORIZACION ESCALADA";
+    	
+    	//TODO: MESA CONTROL
+    	public static final String ENVIADO_A_MESA_CONTROL = "ENVIADO A MESA CONTROL";
+    	
+    	//TODO: OFICINA/FUVEX
+    	public static final String DEVUELTO_POR_MESA_CONTROL = "DEVUELTO POR MESA CONTROL";
+    	public static final String APROBADO_CON_MODIFICACION_POR_CONFIRMAR = "APROBADO CON MODIFICACION POR CONFIRMAR";
+    	public static final String REQUISITO_OBSERVADO = "REQUISITO OBSERVADO";
+
 
 /*
 select * from fastpyme.data_instance;

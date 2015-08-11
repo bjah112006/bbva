@@ -21,17 +21,53 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
 
 	private final IdentityService identityService;
 	private final TechnicalLoggerService logger;
+	private final LDAPService ldapService;
 
 	public JAASGenericAuthenticationServiceImpl(final IdentityService identityService, final TechnicalLoggerService logger) {
         this.identityService = identityService;
         this.logger = logger;
+        ldapService = new LDAPService(LDAPValidate.getInstance(logger));
     }
 
+	public SUser modificarUsuario(String userName, Usuario usuario) throws SUserNotFoundException {
+        boolean crear = false;
+        SUser user = null;
+        SUser jefe = null;
+        
+        try {
+            try {
+                jefe = identityService.getUserByUserName(usuario.getRegistroJefe());
+            } catch(final SUserNotFoundException sunfe) {
+                logger.log(this.getClass(), TechnicalLogSeverity.INFO, "Registrando superior ==> " + usuario.getRegistroJefe());
+                Usuario usuarioJefe = LDAPValidate.getInstance(logger).obtenerUsuario(usuario.getRegistroJefe());
+                ldapService.crearUsuario(usuarioJefe, usuario.getRegistroJefe(), null);
+            }
+            
+            try {
+                user = identityService.getUserByUserName(userName);
+            } catch(final SUserNotFoundException sunfe) {
+                logger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogOnExceptionMethod(this.getClass(), "modificarUsuario", sunfe));
+                crear = false;
+            }
+            
+            logger.log(this.getClass(), TechnicalLogSeverity.INFO, "Superior ==> " + jefe.getUserName());
+            if(crear) {
+                ldapService.crearUsuario(usuario, userName, jefe);
+            } else {
+                ldapService.actualizarUsuario(usuario, user, jefe);
+            }
+            
+        } catch (Exception e) {
+            logger.log(this.getClass(), TechnicalLogSeverity.ERROR, e);
+        }
+        
+        return user == null ? identityService.getUserByUserName(userName) : user;
+	}
+	
     @Override
     public String checkUserCredentials(Map<String, Serializable> credentials) {
         String methodName = "checkUserCredentials";
         SUser user = null;
-        LDAPService ldapService = new LDAPService(LDAPValidate.getInstance(logger));
         
         try {
         	String password = String.valueOf(credentials.get(AuthenticationConstants.BASIC_PASSWORD));
@@ -41,22 +77,15 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
                 logger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogBeforeMethod(this.getClass(), methodName));
             }
             
+            Usuario usuario = LDAPValidate.getInstance(logger).obtenerUsuario(userName);
             try {
-            	user = identityService.getUserByUserName(userName);
-            	logger.log(this.getClass(), TechnicalLogSeverity.INFO, user.getFirstName());
-            } catch (final SUserNotFoundException sunfe) {
-				try {
-					Usuario usuario = LDAPValidate.getInstance(logger).obtenerUsuario(userName);
-					ldapService.crearUsuario(usuario, userName);
-				} catch (Exception e) {
-					logger.log(this.getClass(), TechnicalLogSeverity.ERROR, e);
-				}
+            	user = modificarUsuario(userName, usuario);
+            	logger.log(this.getClass(), TechnicalLogSeverity.INFO, user.getFirstName() + " " + user.getLastName());
             } catch (final Exception e) {
             	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Exception generic");
             	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, LogUtil.getLogOnExceptionMethod(this.getClass(), methodName, e));
             }
             
-            user = identityService.getUserByUserName(userName);
             logger.log(this.getClass(), TechnicalLogSeverity.ERROR, user.getUserName());
             
             String isValidLDAP = DBUtil.obtenerParametro(DBUtil.FLAG_ACTIVACION_LDAP); 
