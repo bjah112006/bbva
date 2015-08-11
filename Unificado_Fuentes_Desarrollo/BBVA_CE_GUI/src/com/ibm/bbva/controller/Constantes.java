@@ -705,6 +705,11 @@ public interface Constantes {
 	 * Id de la primera tarea (Registrar Expediente)
 	 */
 	Integer ID_TAREA_6 = 6;		
+	Integer ID_TAREA_11 = 11;
+	Integer ID_TAREA_4 = 4;
+	Integer ID_TAREA_12 = 12;
+	Integer ID_TAREA_19 = 19;
+	
 	/**
 	 * Almacena el id del empleado del que registro el estado anterior
 	 */
