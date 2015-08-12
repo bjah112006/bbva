@@ -40,4 +40,6 @@ public interface HistorialBeanLocal {
 
     public int obtenerNumeroRegistradosXTemporalidad(long idEmpleado, long idOficina, Date fechaHoraInicio, Date fechaHoraFin);
 	
+	public List<Historial> buscarultimoPorId(long idExpediente);
+	
 }
