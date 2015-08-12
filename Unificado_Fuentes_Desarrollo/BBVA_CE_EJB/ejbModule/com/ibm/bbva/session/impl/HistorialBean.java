@@ -350,6 +350,22 @@ public class HistorialBean extends AbstractFacade<Historial> implements Historia
 		}	
 
 	}
+		@Override 
+	public List<Historial> buscarultimoPorId(long idExpediente){
+		String query="SELECT h FROM Historial h "+
+					 "WHERE h.expediente.id= :idExpediente "+
+					 "ORDER BY h.id desc";
+		LOG.info("query = "+query);
+		try{
+			List<Historial> resultList = em.createQuery(query)
+					.setParameter("idExpediente", idExpediente)
+					.getResultList();
+			return resultList;
+		}catch (NoResultException e) {
+			return null;
+		}
+	}
+	
 	
 	
 	
