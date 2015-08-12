@@ -78,6 +78,8 @@ public class VistaBandejaExpediente implements Serializable {
 	private double lineaCredAprob;
 	@Column(name="FLAG_RETRAER")
 	private String flagRetraer;	
+	@Column(name="ACCION")
+	private String accion;	
 	@Column(name="NRO_DEV")
 	private int nroDevoluciones;	
 	
@@ -296,6 +298,13 @@ public class VistaBandejaExpediente implements Serializable {
 		this.flagRetraer = flagRetraer;
 	}
 
+	public String getAccion() {
+		return accion;
+	}
+
+	public void setAccion(String accion) {
+		this.accion = accion;
+	}
 	public String getCodPreEval() {
 		return codPreEval;
 	}
