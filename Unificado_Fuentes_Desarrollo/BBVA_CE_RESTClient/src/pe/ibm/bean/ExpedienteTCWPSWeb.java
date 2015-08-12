@@ -43,6 +43,7 @@ public class ExpedienteTCWPSWeb implements Serializable {
 	private String flagProvincia; 
 	private Integer numeroDevoluciones;  
 	private String flagRetraer; 
+	private String accionExp;
 	private String idPerfilUsuarioAnterior;
 	private String flagSubrogacion;
 	private String idTipoOferta;
@@ -562,6 +563,14 @@ public class ExpedienteTCWPSWeb implements Serializable {
 
 	public void setIdOficinaUsu(String idOficinaUsu) {
 		this.idOficinaUsu = idOficinaUsu;
+	}
+
+	public String getAccionExp() {
+		return accionExp;
+	}
+
+	public void setAccionExp(String accionExp) {
+		this.accionExp = accionExp;
 	}
 
 
