@@ -25,7 +25,6 @@ import bbva.ws.api.view.FacadeLocal;
 import com.ibm.bbva.controller.AbstractMBean;
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.entities.ClienteNatural;
-import com.ibm.bbva.entities.DelegacionRiesgo;
 import com.ibm.bbva.entities.DelegacionRiesgoCondicion;
 import com.ibm.bbva.entities.Empleado;
 import com.ibm.bbva.entities.Estado;
@@ -43,10 +42,10 @@ import com.ibm.bbva.entities.TipoMoneda;
 import com.ibm.bbva.entities.TipoOferta;
 import com.ibm.bbva.entities.TipoScoring;
 import com.ibm.bbva.service.business.client.ExpedienteDTO;
-import com.ibm.bbva.session.DelegacionRiesgoClasificacionBancoBeanLocal;
 import com.ibm.bbva.session.DelegacionRiesgoCondicionBeanLocal;
 import com.ibm.bbva.session.EmpleadoBeanLocal;
 import com.ibm.bbva.session.ExpedienteBeanLocal;
+import com.ibm.bbva.session.HistorialBeanLocal;
 import com.ibm.bbva.session.MensajesBeanLocal;
 import com.ibm.bbva.session.NivelBeanLocal;
 import com.ibm.bbva.session.OficinaBeanLocal;
@@ -166,7 +165,11 @@ public class DatosProducto3MB extends AbstractMBean {
 	//FIN DE FIX2 ERIKA ABREGU
 	
 	//FIX2 ERIKA ABREGU	
-	private DelegacionRiesgoCondicionBeanLocal delegacionRiesgoCondicionBeanLocalBean;
+	//private DelegacionRiesgoCondicion delegacionRiesgoCondicion;
+	//private DelegacionRiesgoCondicionBeanLocal delegacionRiesgoCondicionBeanLocalBean;
+	@EJB
+	DelegacionRiesgoCondicionBeanLocal delegacionRiesgoCondicionBeanLocalBean;
+	
 	
 	private String msgErrorPersonalizado;
 	
@@ -872,6 +875,14 @@ public class DatosProducto3MB extends AbstractMBean {
 		if (expediente.getProducto().getId() != 0) {
 			producto= expediente.getProducto();
 		}*/
+		
+		
+		/**
+		 * Fix2 de Erika Abregu
+		 * */
+		/*Obtiene Porcentaje de Endeudamiento*/
+		porcentEndeudaCambiado = expediente.getExpedienteTC().getPorcentajeEndeudamiento()!=0?Double.toString(expediente.getExpedienteTC().getPorcentajeEndeudamiento()):"";
+		/** FIN de Fix2 de Erika Abregu * */
 		
 		producto= new Producto();
 		if (expediente.getProducto().getId() != 0) {
@@ -1943,7 +1954,7 @@ public class DatosProducto3MB extends AbstractMBean {
 			
 			//FIX2 ERIKA ABREGU
 			if(porcentEndeudaCambiado!=null && porcentEndeudaCambiado != Double.toString(expediente.getExpedienteTC().getPorcentajeEndeudamiento())){
-				expediente.getExpedienteTC().setPorcentajeEndeudamiento(Double.parseDouble(porcentEndeudaCambiado));
+				expediente.getExpedienteTC().setPorcentajeEndeudamiento(Util.convertStringToDouble(porcentEndeudaCambiado));
 			}
 		}else if (jspPrinc.equals("formVerificarResultadoDomiciliaria") ||
 				  jspPrinc.equals("formCambiarSituacionExp") ||
@@ -2313,18 +2324,23 @@ public class DatosProducto3MB extends AbstractMBean {
 	//FIX2 ERIKA ABREGU
 	public void cambiarDocumentoObligatorio(AjaxBehaviorEvent event) {
 		LOG.info("DatosProducto3MB -- cambiarDocumentosObligatorios ");
+		FacesContext ctx = FacesContext.getCurrentInstance();		
+		PanelDocumentosMB panelDocumento = (PanelDocumentosMB)  
+				ctx.getApplication().getVariableResolver().resolveVariable(ctx, "paneldocumentos");
 		
-		if(porcentEndeudaCambiado!=null && porcentEndeudaCambiado != Double.toString(expediente.getExpedienteTC().getPorcentajeEndeudamiento())){
-			FacesContext ctx = FacesContext.getCurrentInstance();		
-			PanelDocumentosMB panelDocumento = (PanelDocumentosMB)  
-					ctx.getApplication().getVariableResolver().resolveVariable(ctx, "paneldocumentos");		
+		if(porcentEndeudaCambiado!=null){
+			if(Util.convertStringToDouble(porcentEndeudaCambiado) != expediente.getExpedienteTC().getPorcentajeEndeudamiento()){
+				/*Cambiar en la Guia Documentaria el doc Otros documentos sustentarios – Analista de Riesgos de Opcional a Obligatorio*/
+				LOG.info("porcentEndeudaCambiado es = " + porcentEndeudaCambiado + "y no es igual a % endeudamiento inicial " + expediente.getExpedienteTC().getPorcentajeEndeudamiento());
+				panelDocumento.cambiarEstadoObligatorio(event, "1");
+				LOG.info("El documento se puso Obligatorio con exito ");
 			
-			/*Cambiar en la Guia Documentaria el doc Otros documentos sustentarios – Analista de Riesgos de Opcional a Obligatorio*/
-			LOG.info("porcentEndeudaCambiado es = " + porcentEndeudaCambiado + "y no es igual a % endeudamiento inicial " + expediente.getExpedienteTC().getPorcentajeEndeudamiento());
-			panelDocumento.cambiarEstadoObligatorio(event);
-			LOG.info("El documento se puso Obligatorio con exito ");
+			}else{
+				LOG.info("porcentEndeudaCambiado es = " + porcentEndeudaCambiado + "y el % endeudamiento inicial es " + expediente.getExpedienteTC().getPorcentajeEndeudamiento());
+				panelDocumento.cambiarEstadoObligatorio(event, "0");
+				LOG.info("El documento se restableció a No Obligatorio con éxito ");
+			}
 		}
-		
 	}
 
 	public String getMsjOperacion292() {
