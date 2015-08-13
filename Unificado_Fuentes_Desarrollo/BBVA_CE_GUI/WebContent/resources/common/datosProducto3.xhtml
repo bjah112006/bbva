@@ -7,7 +7,17 @@
 
 <div class="bloque divProd3Principal">
    <script type="text/javascript"> 
-     /* <![CDATA[ */  
+     /* <![CDATA[ */
+        function myFuncion(event) {
+		    if (event.status == "success") {
+		        $(".soloNumeros").keypress(function (event) {
+       				if (event.which > 31 && (event.which < 48 || event.which > 57)) {
+    	   		event.preventDefault();
+       			}     
+   			});
+		   }
+		   mostrarProcesando(event);
+		}          
         $(document).ready(function(){           
             var val = $(".divProd3Principal").outerHeight();
             $(".linea-vertical-producto").css("height",val + "px");
@@ -342,11 +352,11 @@
               
               
               <span class="columna" style="width:78px">
-	              <h:inputText value="#{datosProducto3.expediente.expedienteTC.porcentajeEndeudamiento}" 
+	              <h:inputText value="#{datosProducto3.porcentEndeudaCambiado}" 
 	              		styleClass="txt-resaltado-2 campoValor3 cmpNumeroDecimalMill" id="porcentEndeudaCambiado" 
 	              		onkeypress="return disableEnterKey(event);"  disabled="#{datosProducto3.disabledPorsEndeudamiento}">
 		            <f:convertNumber locale="en" pattern="#,##0.00"/>
-		            <f:ajax event="blur" render="idPanelDocumentos appletContentRefresh" execute="@form" listener="#{datosProducto3.cambiarDocumentoObligatorio}"/>
+		            <f:ajax onevent="myFuncion" event="blur" render="idPanelDocumentos appletContentRefresh" execute="@form" listener="#{datosProducto3.cambiarDocumentoObligatorio}"/>
 		          </h:inputText>
 		          <h:outputText value="%" styleClass="caja-texto valor-componente"/>
               </span>  
