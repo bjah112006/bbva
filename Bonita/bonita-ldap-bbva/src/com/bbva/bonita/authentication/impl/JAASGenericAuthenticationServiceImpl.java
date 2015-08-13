@@ -9,13 +9,10 @@ import org.bonitasoft.engine.authentication.GenericAuthenticationService;
 import org.bonitasoft.engine.commons.LogUtil;
 import org.bonitasoft.engine.identity.IdentityService;
 import org.bonitasoft.engine.identity.SIdentityException;
-import org.bonitasoft.engine.identity.SUserNotFoundException;
 import org.bonitasoft.engine.identity.model.SUser;
 import org.bonitasoft.engine.identity.model.SUserMembership;
 import org.bonitasoft.engine.log.technical.TechnicalLogSeverity;
 import org.bonitasoft.engine.log.technical.TechnicalLoggerService;
-
-import pe.com.bbva.ws.ldap.servidor.Usuario;
 
 public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticationService {
 
@@ -26,43 +23,8 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
 	public JAASGenericAuthenticationServiceImpl(final IdentityService identityService, final TechnicalLoggerService logger) {
         this.identityService = identityService;
         this.logger = logger;
-        ldapService = new LDAPService(LDAPValidate.getInstance(logger));
+        ldapService = new LDAPService(LDAPValidate.getInstance());
     }
-
-	public SUser modificarUsuario(String userName, Usuario usuario) throws SUserNotFoundException {
-        boolean crear = false;
-        SUser user = null;
-        SUser jefe = null;
-        
-        try {
-            try {
-                jefe = identityService.getUserByUserName(usuario.getRegistroJefe());
-            } catch(final SUserNotFoundException sunfe) {
-                logger.log(this.getClass(), TechnicalLogSeverity.INFO, "Registrando superior ==> " + usuario.getRegistroJefe());
-                Usuario usuarioJefe = LDAPValidate.getInstance(logger).obtenerUsuario(usuario.getRegistroJefe());
-                ldapService.crearUsuario(usuarioJefe, usuario.getRegistroJefe(), null);
-            }
-            
-            try {
-                user = identityService.getUserByUserName(userName);
-            } catch(final SUserNotFoundException sunfe) {
-                logger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogOnExceptionMethod(this.getClass(), "modificarUsuario", sunfe));
-                crear = false;
-            }
-            
-            logger.log(this.getClass(), TechnicalLogSeverity.INFO, "Superior ==> " + jefe.getUserName());
-            if(crear) {
-                ldapService.crearUsuario(usuario, userName, jefe);
-            } else {
-                ldapService.actualizarUsuario(usuario, user, jefe);
-            }
-            
-        } catch (Exception e) {
-            logger.log(this.getClass(), TechnicalLogSeverity.ERROR, e);
-        }
-        
-        return user == null ? identityService.getUserByUserName(userName) : user;
-	}
 	
     @Override
     public String checkUserCredentials(Map<String, Serializable> credentials) {
@@ -77,15 +39,15 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
                 logger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogBeforeMethod(this.getClass(), methodName));
             }
             
-            Usuario usuario = LDAPValidate.getInstance(logger).obtenerUsuario(userName);
             try {
-            	user = modificarUsuario(userName, usuario);
-            	logger.log(this.getClass(), TechnicalLogSeverity.INFO, user.getFirstName() + " " + user.getLastName());
+            	ldapService.verificarUsuario(userName);
+            	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, userName);
             } catch (final Exception e) {
             	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Exception generic");
             	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, LogUtil.getLogOnExceptionMethod(this.getClass(), methodName, e));
             }
             
+            user = identityService.getUserByUserName(userName);
             logger.log(this.getClass(), TechnicalLogSeverity.ERROR, user.getUserName());
             
             String isValidLDAP = DBUtil.obtenerParametro(DBUtil.FLAG_ACTIVACION_LDAP); 
@@ -98,7 +60,7 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
             	if(userBonitaProfile.equals("ABN")){
             		isCheckCredentials = identityService.chechCredentials(user, password);
             	}else{
-            		isCheckCredentials = LDAPValidate.getInstance(logger).checkCredentials(userName, password);	
+            		isCheckCredentials = LDAPValidate.getInstance().checkCredentials(userName, password);	
             	}
             }
             

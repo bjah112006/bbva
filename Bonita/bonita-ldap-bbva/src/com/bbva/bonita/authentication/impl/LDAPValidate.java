@@ -6,20 +6,18 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.naming.AuthenticationException;
 import javax.naming.Context;
 import javax.naming.directory.InitialDirContext;
-
-import org.bonitasoft.engine.log.technical.TechnicalLogSeverity;
-import org.bonitasoft.engine.log.technical.TechnicalLoggerService;
 
 import pe.com.bbva.ws.ldap.servidor.Usuario;
 import pe.com.bbva.ws.ldap.servidor.WSLDAPServiceImplService;
 
 public class LDAPValidate {
 
-	private TechnicalLoggerService logger;
+	private static Logger logger = Logger.getLogger("LDAPValidate");
 	private Properties props;
 	private static LDAPValidate instance;
 
@@ -30,22 +28,14 @@ public class LDAPValidate {
 	public LDAPValidate() {
 	}
 
-	public TechnicalLoggerService getLogger() {
-		return logger;
-	}
-
-	public void setLogger(TechnicalLoggerService logger) {
-		this.logger = logger;
-	}
-
-	public String getProperty(String key) {
+    public String getProperty(String key) {
 		try {
-			logger.log(this.getClass(), TechnicalLogSeverity.INFO, "===>" + System.getProperty("btm.root"));
-			// logger.log(this.getClass(), TechnicalLogSeverity.INFO, "===>" + System.getProperty("bonita.home"));
+			logger.log(Level.INFO, "btm.root ======>" + System.getProperty("btm.root"));
+			logger.log(Level.INFO, "bonita.home ===>" + System.getProperty("bonita.home"));
 			props = new Properties();
 			props.load(new FileInputStream(System.getProperty("btm.root").replace("\\", "/") + "/conf/configWFFastPyme.properties"));
 		} catch (IOException e) {
-			logger.log(this.getClass(), TechnicalLogSeverity.ERROR, e);
+			logger.log(Level.SEVERE, "getProperty", e);
 		}
 		return props.getProperty(key);
 	}
@@ -67,10 +57,8 @@ public class LDAPValidate {
 			ctx.close();
 			
 			isCheck = true;
-		} catch(AuthenticationException e){
-			logger.log(this.getClass(), TechnicalLogSeverity.ERROR, e);
 		} catch(Exception e){
-			logger.log(this.getClass(), TechnicalLogSeverity.ERROR, e);
+			logger.log(Level.SEVERE, "checkCredentials", e);
 		}
 		
 		return isCheck;
@@ -88,15 +76,14 @@ public class LDAPValidate {
         		usuario = usuarios.get(0);
         	}
         } catch (Exception e) {
-        	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, "No se pudo acceder al webservice");
-        	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, e);
+        	logger.log(Level.SEVERE, "obtenerUsuario", "No se pudo acceder al webservice");
+        	logger.log(Level.SEVERE, "obtenerUsuario", e);
         }
         
         return usuario;
 	}
 	
-	public static LDAPValidate getInstance(TechnicalLoggerService logger) {
-		instance.setLogger(logger);
+	public static LDAPValidate getInstance() {
 		return instance;
 	}
 }
