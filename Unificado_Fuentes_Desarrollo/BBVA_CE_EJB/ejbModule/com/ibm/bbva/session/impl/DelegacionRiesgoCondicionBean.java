@@ -33,10 +33,10 @@ public class DelegacionRiesgoCondicionBean extends AbstractFacade<DelegacionRies
 	}
 	
 	@Override
-	public DelegacionRiesgoCondicion buscarPorId(long idDelegRiesgCond) {
+	public DelegacionRiesgoCondicion buscarPorId(long id) {
 		try{
 			return (DelegacionRiesgoCondicion) em.createNamedQuery("DelegacionRiesgoCondicion.findById")
-					.setParameter("id", idDelegRiesgCond)
+					.setParameter("id", id)
 					.getSingleResult();			
 		}catch(NoResultException e){
 			return null;
