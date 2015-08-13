@@ -9,6 +9,8 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -23,6 +25,7 @@ import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.entities.DocumentoExpTc;
 import com.ibm.bbva.entities.Expediente;
 import com.ibm.bbva.entities.TipoDocumento;
+import com.ibm.bbva.session.ParametrosConfBeanLocal;
 import com.ibm.bbva.tabla.ejb.impl.TablaFacadeBean;
 
 @ManagedBean(name = "abrirPDF")
@@ -37,6 +40,8 @@ public class AbrirPdfMB implements Serializable {
 	private Expediente expediente;
 	private ContentServiceImplProxy contentIICE = null;
 	private com.ibm.bbva.cm.iice.service.Documento docIice = null;
+	private String CONTENT_SERVICE_IMPL_IICE= "";
+	private ParametrosConfBeanLocal parametrosConfBean;
 	
 	
 	@EJB
@@ -71,8 +76,20 @@ public class AbrirPdfMB implements Serializable {
 						
 						//consulta a IICE por ws por la url de la ruta del escaneado
 						this.docIice = new com.ibm.bbva.cm.iice.service.Documento();
-						this.docIice.setId(Integer.parseInt(String.valueOf(documentoExp.getIdCm()))); 				 
+						this.docIice.setId(Integer.parseInt(String.valueOf(documentoExp.getIdCm()))); 	
+						
+						try{
+							parametrosConfBean = (ParametrosConfBeanLocal) new InitialContext()
+							.lookup("ejblocal:com.ibm.bbva.session.ParametrosConfBeanLocal");
+							
+							CONTENT_SERVICE_IMPL_IICE = parametrosConfBean.buscarPorVariable(1, "CONTENT_SERVICE_IMPL_IICE").getValorVariable();
+							
+						}catch (NamingException e) {
+							LOG.error(e.getMessage(), e);
+						}
+												
 						this.contentIICE = new com.ibm.bbva.cm.iice.service.ContentServiceImplProxy();
+						this.contentIICE._getDescriptor().setEndpoint(CONTENT_SERVICE_IMPL_IICE);
 						//this.contentIICE._getDescriptor().setEndpoint("http://118.180.60.70:80/PLDWEBCM/services/ContentServiceImpl");
 						this.docIice = this.contentIICE.find(this.docIice);
 						
