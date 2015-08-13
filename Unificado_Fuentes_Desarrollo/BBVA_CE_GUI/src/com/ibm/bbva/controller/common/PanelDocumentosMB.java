@@ -281,7 +281,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 	/**
 	 *FIX2 ERIKA ABREGU 21-07-2015 
 	*/
-	public void cambiarEstadoObligatorio(AjaxBehaviorEvent event){
+	public void cambiarEstadoObligatorio(AjaxBehaviorEvent event, String indicador){
 		LOG.info("cargarDocumentosPanel : entro para cambiar estado obligatorio");
 		
 		List<GuiaDocumentaria> listGuiaDocumentaria = (List<GuiaDocumentaria>) FacesContext
@@ -290,7 +290,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 		
 		for(GuiaDocumentaria guiaDocumentaria:listGuiaDocumentaria){
 			if(String.valueOf(guiaDocumentaria.getTipoDocumento().getId()).equals(Constantes.OTROS_DOCS_SUSTENTATORIOS_ANALISTA_RIESGOS)){
-				guiaDocumentaria.setObligatorio("1");
+				guiaDocumentaria.setObligatorio(indicador);
 			}
 		}
 		
