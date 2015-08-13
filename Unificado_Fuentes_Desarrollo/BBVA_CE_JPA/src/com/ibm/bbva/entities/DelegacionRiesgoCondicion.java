@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name="TBL_CE_IBM_DELEG_RIESG_COND", schema = "CONELE")
 @NamedQueries({	
 	@NamedQuery(name="DelegacionRiesgoCondicion.findAll", query="SELECT d FROM DelegacionRiesgoCondicion d"),
-	@NamedQuery(name = "DelegacionRiesgoCondicion.findById", query = "SELECT e FROM DelegacionRiesgoCondicion e WHERE e.id = :idDelegRiesgCond ")
+	@NamedQuery(name = "DelegacionRiesgoCondicion.findById", query = "SELECT e FROM DelegacionRiesgoCondicion e WHERE e.id = :id ")
 })
 public class DelegacionRiesgoCondicion implements Serializable {
 	private static final long serialVersionUID = 1L;
