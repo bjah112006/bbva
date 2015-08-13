@@ -23,10 +23,10 @@ public class DelegacionRiesgoCondicion implements Serializable {
 	private long id;
 	
 	@Column(name="SOLICITADO")
-	private double solicitado;
+	private String solicitado;
 
 	@Column(name="APROBADO")
-	private double aprobado;
+	private String aprobado;
 
 	
 	//uni-directional many-to-one association to Simbolo
@@ -47,52 +47,33 @@ public class DelegacionRiesgoCondicion implements Serializable {
 	}
 	
 
-
-	public double getSolicitado() {
-		return solicitado;
-	}
-
-
-
-
-
-	public void setSolicitado(double solicitado) {
-		this.solicitado = solicitado;
-	}
-
-
-
-
-
-	public double getAprobado() {
-		return aprobado;
-	}
-
-
-
-
-
-	public void setAprobado(double aprobado) {
-		this.aprobado = aprobado;
-	}
-
-
-
-
-
 	public Simbolo getSimbolo() {
 		return simbolo;
 	}
-
-
-
-
 
 	public void setSimbolo(Simbolo simbolo) {
 		this.simbolo = simbolo;
 	}
 
 
+	public String getSolicitado() {
+		return solicitado;
+	}
+
+
+	public void setSolicitado(String solicitado) {
+		this.solicitado = solicitado;
+	}
+
+
+	public String getAprobado() {
+		return aprobado;
+	}
+
+
+	public void setAprobado(String aprobado) {
+		this.aprobado = aprobado;
+	}
 
 	
 }
