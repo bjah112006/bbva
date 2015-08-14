@@ -13,6 +13,8 @@ public interface EmpleadoBeanLocal {
 	
 	public Empleado buscarPorId(long id);
 	
+	public Empleado obtenerPorId(long id);
+	
 	//public List<Empleado> buscarPorIdTipoCategoria(long idTipoCategoria);
 	
 	public List<Empleado> buscarPorIdPerfil(long idPerfil);
