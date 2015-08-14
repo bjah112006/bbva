@@ -64,6 +64,20 @@ public class EmpleadoBean extends AbstractFacade<Empleado> implements EmpleadoBe
 			return null;
 		}		
 	}
+	
+	@Override
+	public Empleado obtenerPorId(long id) {		
+		String query="SELECT e FROM Empleado e WHERE e.id = :id";
+		LOG.info("query = "+query);
+		try{
+			Empleado resultList = (Empleado) em.createQuery(query)
+					.setParameter("id", id)					
+					.getSingleResult();
+			return resultList;			
+		}catch (NoResultException e) {
+			return null;
+		}		
+	}
 
 	@Override
 	public List<Empleado> buscarPorIdTipoCategoria(long idTipoCategoria, long idPerfil) {
