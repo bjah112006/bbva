@@ -613,7 +613,7 @@ public class ConsultarTablaUI extends AbstractMBean {
 						}
 						else 							
 						{
-							Empleado objEmpleado = empleadobean.buscarPorId(empleado.getId());
+							Empleado objEmpleado = empleadobean.obtenerPorId(empleado.getId());
 							if(objEmpleado.getOficinaBackup() != null)
 							{
 								super.addComponentMessage(null, "No puede modificar el empleado, existe oficina temporal activa");
