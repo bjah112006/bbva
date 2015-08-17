@@ -259,7 +259,10 @@ public class IbmBbvaBusiness {
 					}
 					
 					Double lineaCredito = Util.isDouble(""+objExpedienteTC.getLineaCredAprob()) ? objExpedienteTC.getLineaCredAprob() : null;
-					if (lineaCredito == null) {
+					/*Fix2 de Erika Abregu
+					 * comentado para que valide tanto si la linea Credito no sea null ni 0.00*/
+					if (lineaCredito == null || lineaCredito == 0) {
+					//if (lineaCredito == null) {
 						lineaCredito = Util.isDouble(""+objExpedienteTC.getLineaCredSol()) ? objExpedienteTC.getLineaCredSol() : null;
 						LOG.info("lineaCredito = LineaCredSol = "+lineaCredito);
 					}else
@@ -420,128 +423,12 @@ public class IbmBbvaBusiness {
 								if(Util.isDouble(""+objDelegacionOficina.getClasificacionSbs()) && Util.isDouble(""+objExpedienteTC.getClasificacionSbs()) && 
 										objDelegacionOficina.getClasificacionSbs()==objExpedienteTC.getClasificacionSbs()){
 									LOG.info("continua 4");
-								
-									/*FIX2 ERIKA ABREGU*/
-									//VALIDAR LINEA CONSUMO
 									if(Util.isDouble(""+objDelegacionOficina.getLimiteConsumo()) && Util.isDouble(""+objExpedienteTC.getLineaConsumo()) && 
-											objDelegacionOficina.getLimiteConsumo() >= objExpedienteTC.getLineaConsumo()){
-										
-										//VALIDAR SUBLIMITE X PROD 
-										if(Util.isDouble(""+objDelegacionOficina.getLimiteProductoCliAvaVip()) && 
-												Util.isDouble(""+objDelegacionOficina.getLimiteProductoCliIngMayor()) &&
-												Util.isDouble(""+objDelegacionOficina.getLimiteProductoCliIngMenor()) &&
-												Util.isDouble(""+objDelegacionOficina.getLimiteProducto())){
-											
-											
-											//VALIDAR SUBLIMITE X PROD -- CLIENTE VIP
-											if(objClienteNatural.getSegmento()!= null && objClienteNatural.getSegmento().getGrupoSegmento()!=null &&
-													objClienteNatural.getSegmento().getGrupoSegmento().getId()==Constantes.CODIGO_GRUPO_SEGMENTO_VIP &&
-													objDelegacionOficina.getLimiteProductoCliAvaVip() < objExpedienteTC.getLineaConsumo()){
-												LOG.info("No cumple la condicion de Cliente VIP");	
-												return false;
-												
-											}
-											
-											//VALIDAR SUBLIMITE X PROD -- CLIENTE INGRESO NETO MENSUAL MAYOR A 1500
-											else if(objExpediente.getClienteNatural().getIngNetoMensual()>= 1500 && 
-													objDelegacionOficina.getLimiteProductoCliIngMayor() < objExpedienteTC.getLineaConsumo()){
-												LOG.info("No cumple la condicion de Cliente Mayor a 1500 ");	
-												return false;
-												
-											}
-											
-											//VALIDAR SUBLIMITE X PROD -- CLIENTE INGRESO NETO MENSUAL MENOR A 1500
-											else if(objExpediente.getClienteNatural().getIngNetoMensual()< 1500 && 
-													objDelegacionOficina.getLimiteProductoCliIngMenor() < objExpedienteTC.getLineaConsumo()){
-												LOG.info("No cumple la condicion de Cliente Menor a 1500 ");	
-												return false;
-												
-											}else{// EL RESTO DE LOS CASOS
-												if(objDelegacionOficina.getLimiteProducto() < objExpedienteTC.getLineaConsumo()){
-													LOG.info("No cumple la condicion de SubLimite x Producto ");	
-													return false;
-												}
-											}
-											
-										}else{
-											LOG.info("No se puede comparar Limite Producto, esta mal parametrizado ");	
-											return false;
-										}
-										
-										//VALIDAR PLAZO MAXIMO
-										if(Util.isDouble(""+objDelegacionOficina.getPlazoMaxCliAvaVip()) && 
-												Util.isDouble(""+objDelegacionOficina.getPlazoMaxCliIngMayor()) &&
-												Util.isDouble(""+objDelegacionOficina.getPlazoMaxCliIngMenor()) &&
-												Util.isDouble(""+objDelegacionOficina.getPlazoMax())){
-											
-											
-											//VALIDAR SUBLIMITE X PROD -- CLIENTE VIP
-											if(objClienteNatural.getSegmento()!= null && objClienteNatural.getSegmento().getGrupoSegmento()!=null &&
-													objClienteNatural.getSegmento().getGrupoSegmento().getId()==Constantes.CODIGO_GRUPO_SEGMENTO_VIP &&
-													Long.parseLong(objDelegacionOficina.getPlazoMaxCliAvaVip()) < Long.parseLong(objExpedienteTC.getPlazoSolicitado())){
-												LOG.info("No cumple la condicion de Cliente VIP (Plazo)");	
-												return false;
-												
-											}
-											
-											//VALIDAR SUBLIMITE X PROD -- CLIENTE INGRESO NETO MENSUAL MAYOR A 1500
-											else if(objExpediente.getClienteNatural().getIngNetoMensual()>= 1500 && 
-													Long.parseLong(objDelegacionOficina.getPlazoMaxCliIngMayor()) < Long.parseLong(objExpedienteTC.getPlazoSolicitado())){
-												LOG.info("No cumple la condicion de Cliente Mayor a 1500 (Plazo) ");	
-												return false;
-												
-											}
-											
-											//VALIDAR SUBLIMITE X PROD -- CLIENTE INGRESO NETO MENSUAL MENOR A 1500
-											else if(objExpediente.getClienteNatural().getIngNetoMensual()< 1500 && 
-													Long.parseLong(objDelegacionOficina.getPlazoMaxCliIngMenor()) < Long.parseLong(objExpedienteTC.getPlazoSolicitado())){
-												LOG.info("No cumple la condicion de Cliente Menor a 1500 (Plazo) ");	
-												return false;
-												
-											}else{// EL RESTO DE LOS CASOS
-												if(Long.parseLong(objDelegacionOficina.getPlazoMax()) < Long.parseLong(objExpedienteTC.getPlazoSolicitado())){
-													LOG.info("No cumple la condicion de Plazo Maximo ");	
-													return false;
-												}
-											}
-											
-										}else{
-											LOG.info("No se puede comparar Plazo Maximo, esta mal parametrizado ");	
-											return false;
-										}
-											
-										
-										if(objDelegacionOficina.getPep()!=null && objClienteNatural.getPerExpPub()!=null && 
-											objDelegacionOficina.getPep().trim().equalsIgnoreCase(objClienteNatural.getPerExpPub().trim()))
-											if(objDelegacionOficina.getTipoScoring()!=null && objExpedienteTC.getTipoScoring()!=null && 
-												objDelegacionOficina.getTipoScoring().getId() == objExpedienteTC.getTipoScoring().getId()){
-												if(Util.isDouble(""+objExpedienteTC.getLineaConsumo()) && ((!Util.isDouble(""+objExpedienteTC.getLineaCredAprob()) || 
-														objExpedienteTC.getLineaCredAprob() == 0) ? objExpedienteTC.getLineaCredSol(): 
-															objExpedienteTC.getLineaCredAprob()) <= objExpedienteTC.getLineaConsumo()){
-													LOG.info("continua 2");
-													if(objClienteNatural.getEstadoCivil()!=null && objClienteNatural.getEstadoCivil().getCodigo().equals(Constantes.ESTADO_CIVIL_CASADO)){
-														LOG.info("Cliente casado");
-														if( objDelegacionOficina.getBancoConyuge()!=null && 
-															objDelegacionOficina.getBancoConyuge().getId()==objExpedienteTC.getBancoConyuge().getId())
-															if(Util.isDouble(""+objDelegacionOficina.getSbsConyuge()) && 
-																objDelegacionOficina.getSbsConyuge()==(!Util.isDouble(""+objExpedienteTC.getSbsConyuge())?null:objExpedienteTC.getSbsConyuge()))
-																		return true;					
-													}else															
-														return true;															
-												}
-											}
-									}
-									
-									/*FIX2 ERIKA ABREGU*/
-					
-									
-									//COMENTADO PARA EL FIX2 DE ERIKA ABREGU
-									/*if(Util.isDouble(""+objDelegacionOficina.getLimiteConsumo()) && Util.isDouble(""+objExpedienteTC.getLineaConsumo()) && 
 											objDelegacionOficina.getLimiteConsumo() >= objExpedienteTC.getLineaConsumo())
 										if(objDelegacionOficina.getPep()!=null && objClienteNatural.getPerExpPub()!=null && 
 											objDelegacionOficina.getPep().trim().equalsIgnoreCase(objClienteNatural.getPerExpPub().trim()))
 											if(objDelegacionOficina.getTipoScoring()!=null && objExpedienteTC.getTipoScoring()!=null && 
-												objDelegacionOficina.getTipoScoring().getId() == objExpedienteTC.getTipoScoring().getId()){
+												objDelegacionOficina.getTipoScoring().getId() == objExpedienteTC.getTipoScoring().getId())
 												if(Util.isDouble(""+objExpedienteTC.getLineaConsumo()) && ((!Util.isDouble(""+objExpedienteTC.getLineaCredAprob()) || 
 														objExpedienteTC.getLineaCredAprob() == 0) ? objExpedienteTC.getLineaCredSol(): 
 															objExpedienteTC.getLineaCredAprob()) <= objExpedienteTC.getLineaConsumo()){
@@ -556,9 +443,6 @@ public class IbmBbvaBusiness {
 													}else															
 														return true;															
 												}
-											}
-									*/
-									
 								}								
 							}
 							
@@ -588,7 +472,8 @@ public class IbmBbvaBusiness {
 				Expediente objExpediente = expedienteBeanLocalBean.buscarPorId(objExpedienteDTO.getCodigoExpediente());
 				
 				
-				if(objDelegacionOficina!=null){
+				//if(objDelegacionOficina!=null){
+				if(objDelegacionOficina!=null && objExpediente!=null && objExpediente.getClienteNatural()!=null ){
 					LOG.info("Nivel = "+objDelegacionOficina.getNivel());					
 					if (objExpedienteDTO.getCodigoTipoMonedaSol() != null && objExpedienteDTO.getCodigoTipoMonedaSol().equals(Constantes.CODIGO_TIPO_CAMBIO_DOLARES)) {
 						objTipoCambioCE = obtenerTipoCambioExp(objExpediente.getExpedienteTC(),objExpediente.getEmpleado());
@@ -626,9 +511,12 @@ public class IbmBbvaBusiness {
 																LOG.info("Validación Tipo Scoring OK");
 																LOG.info("Cod. Producto es "+objExpedienteDTO.getCodigoProducto());
 																
-																/**
+																	
+																/** COMENTADO 13/08/2015 POR ERIKA ABREGU PARA FIX2
+																 * SE CAMBIA DEBIDO A QUE SE IMPLEMENTA 3 TIPOS DE PLAZOS MAXIMOS
+																 * PARA CLIENTES VIP ; PARA CLIENNTES QUE GANEN MAYOR A 1500 SOLES ; PARA CLIENTES QUE GANEN MENOR A 1500 SOLES
 																 * Se agrego condicional para la Condicional de Plazo Solicitado
-																 * */
+																 * 
 																if(objExpedienteDTO.getCodigoProducto()==Constantes.ID_APLICATIVO_PLD){
 																	LOG.info("Descrip. Producto es PLD");
 																	
@@ -648,6 +536,81 @@ public class IbmBbvaBusiness {
 																/**
 																 * */
 																
+																
+																/** FIX2 ERIKA ABREGU
+																 * SE CAMBIA DEBIDO A QUE SE IMPLEMENTA 3 TIPOS DE PLAZOS MAXIMOS
+																 * PARA CLIENTES VIP ; PARA CLIENNTES QUE GANEN MAYOR A 1500 SOLES ; PARA CLIENTES QUE GANEN MENOR A 1500 SOLES
+																 * */
+																if(objExpedienteDTO.getCodigoProducto()==Constantes.ID_APLICATIVO_PLD){
+																	LOG.info("Descrip. Producto es PLD");
+																	
+																	LOG.info("objExpedienteDTO.getPlazoSolicitado() = "+objExpedienteDTO.getPlazoSolicitado());
+																	LOG.info("objDelegacionOficina.getPlazoMaxCliAvaVip() = "+objDelegacionOficina.getPlazoMaxCliAvaVip());
+																	LOG.info("objDelegacionOficina.getPlazoMaxCliIngMayor() = "+objDelegacionOficina.getPlazoMaxCliIngMayor());
+																	LOG.info("objDelegacionOficina.getPlazoMaxCliIngMenor() = "+objDelegacionOficina.getPlazoMaxCliIngMenor());
+																	
+//																	long plazoExpDTO=0;
+//																	
+																	if(objExpedienteDTO.getPlazoSolicitado()!=null && !objExpedienteDTO.getPlazoSolicitado().trim().equals("") && 
+																			Util.isLong(objExpedienteDTO.getPlazoSolicitado().trim())){ 
+//																		plazoExpDTO = Long.parseLong(objExpedienteDTO.get.trim());
+//																	}else{
+//																		plazoExpDTO = Long.parseLong(objExpedienteDTO.getPlazoSolicitado().trim());
+//																	}
+																		long plazoExpDTO=0;
+																		plazoExpDTO = ((objExpediente.getExpedienteTC().getPlazoSolicitadoApr()==null) || 
+																				(!Util.isLong(""+objExpediente.getExpedienteTC().getPlazoSolicitadoApr())) ? Long.parseLong(objExpedienteDTO.getPlazoSolicitado().trim()): 
+																					Long.parseLong(objExpediente.getExpedienteTC().getPlazoSolicitadoApr()));
+																		LOG.info("plazoExpDTO = "+plazoExpDTO);
+																		
+																		//VALIDAR PLAZO MAXIMO
+																		if(Util.isLong(""+objDelegacionOficina.getPlazoMaxCliAvaVip()) && 
+																				Util.isLong(""+objDelegacionOficina.getPlazoMaxCliIngMayor()) &&
+																				Util.isLong(""+objDelegacionOficina.getPlazoMaxCliIngMenor())){
+																			LOG.info("Empezando a validar Plazo Máximo...");
+																			
+																			//VALIDAR SUBLIMITE X PROD -- CLIENTE VIP
+																			if(objExpediente.getClienteNatural().getSegmento()!= null && objExpediente.getClienteNatural().getSegmento().getGrupoSegmento()!=null &&
+																					objExpediente.getClienteNatural().getSegmento().getGrupoSegmento().getId()==Constantes.CODIGO_GRUPO_SEGMENTO_VIP &&
+																					Long.parseLong(objDelegacionOficina.getPlazoMaxCliAvaVip()) < Long.parseLong(objExpedienteDTO.getPlazoSolicitado().trim())){
+																				LOG.info("No cumple la condicion de Cliente VIP (Plazo) ");
+																				return false;
+																			}
+																			
+																			//VALIDAR SUBLIMITE X PROD -- CLIENTE INGRESO NETO MENSUAL MAYOR A 1500
+																			if(objExpediente.getClienteNatural().getIngNetoMensual()>= 1500 && 
+																					Long.parseLong(objDelegacionOficina.getPlazoMaxCliIngMayor()) < Long.parseLong(objExpedienteDTO.getPlazoSolicitado().trim())){
+																				LOG.info("No cumple la condicion de Cliente Mayor a 1500 (Plazo)");	
+																				return false;
+																			}
+																			
+																			//VALIDAR SUBLIMITE X PROD -- CLIENTE INGRESO NETO MENSUAL MENOR A 1500
+																			if(objExpediente.getClienteNatural().getIngNetoMensual()< 1500 && 
+																					Long.parseLong(objDelegacionOficina.getPlazoMaxCliIngMenor()) < Long.parseLong(objExpedienteDTO.getPlazoSolicitado().trim())){
+																				LOG.info("No cumple la condicion de Cliente Menor a 1500 (Plazo)");
+																				return false;
+																			}//else{// EL RESTO DE LOS CASOS
+																				//if(Long.parseLong(objDelegacionOficina.getPlazoMax()) < Long.parseLong(objExpedienteTC.getPlazoSolicitado())){
+																				//	LOG.info("No cumple la condicion de Plazo Maximo ");	
+																				//}
+																			//}
+																			
+																		}else{
+																			LOG.info("No se puede comparar Plazo Maximo, esta mal parametrizado ");	
+																			return false;
+																		}
+																			
+																	}else{
+																		LOG.info("Validación Plazo Máximo No OK");
+																		return false;
+																	}
+																}else{
+																	LOG.info("Descrip. Producto es TC");
+																}
+																/**
+																 * */
+													
+																
 																/*LOG.info("objExpedienteDTO.getPlazoSolicitado() = "+objExpedienteDTO.getPlazoSolicitado());
 																LOG.info("objDelegacionOficina.getPlazoMax() = "+objDelegacionOficina.getPlazoMax());
 																if(objExpedienteDTO.getPlazoSolicitado()!=null && !objExpedienteDTO.getPlazoSolicitado().trim().equals("") && 
@@ -658,10 +621,78 @@ public class IbmBbvaBusiness {
 																	LOG.info("objDelegacionOficina.getFinanciamientoMax() = "+objDelegacionOficina.getFinanciamientoMax());
 																	if(Util.isDouble(""+objExpedienteDTO.getLineaCredAprob())){
 																		LOG.info("Validación Financiamiento Máximo OK");
+																		
+																		
+																		/** COMENTADO 13/08/2015 POR ERIKA ABREGU PARA FIX2
+																		 * SE CAMBIA DEBIDO A QUE SE IMPLEMENTA 3 TIPOS DE SUBLIMITE
+																		 * PARA CLIENTES VIP ; PARA CLIENNTES QUE GANEN MAYOR A 1500 SOLES ; PARA CLIENTES QUE GANEN MENOR A 1500 SOLES
+																		 * Se agrego condicional para la Condicional de subproducto Solicitado
+																		 * 
 																		if(Util.isDouble(""+objDelegacionOficina.getLimiteProducto()) && ((!Util.isDouble(""+objExpedienteDTO.getLineaCredAprob()) || 
 																				objExpedienteDTO.getLineaCredAprob() == 0) ? objExpedienteDTO.getLineaCredSol(): 
 																					objExpedienteDTO.getLineaCredAprob()) <= objDelegacionOficina.getLimiteProducto()){
 																			LOG.info("Validación Sublimite OK");
+																		/**
+																		 * */
+																		
+																		/** FIX2 ERIKA ABREGU
+																		 * SE CAMBIA DEBIDO A QUE SE IMPLEMENTA 3 TIPOS DE PLAZOS MAXIMOS
+																		 * PARA CLIENTES VIP ; PARA CLIENNTES QUE GANEN MAYOR A 1500 SOLES ; PARA CLIENTES QUE GANEN MENOR A 1500 SOLES
+																		 * */
+																		LOG.info("objExpedienteDTO.getLineaCredAprob() = "+objExpedienteDTO.getLineaCredAprob());
+																		LOG.info("objExpedienteDTO.getLineaCredSol() = "+objExpedienteDTO.getLineaCredSol());
+																		LOG.info("objDelegacionOficina.getLimiteProductoCliAvaVip() = "+objDelegacionOficina.getLimiteProductoCliAvaVip());
+																		LOG.info("objDelegacionOficina.getLimiteProductoCliIngMayor() = "+objDelegacionOficina.getLimiteProductoCliIngMayor());
+																		LOG.info("objDelegacionOficina.getLimiteProductoCliIngMenor() = "+objDelegacionOficina.getLimiteProductoCliIngMenor());
+																		
+																		if((objExpedienteDTO.getLineaCredSol()!=0 && Util.isDouble(""+objExpedienteDTO.getLineaCredSol())) || 
+																				(objExpedienteDTO.getLineaCredAprob() != 0 && Util.isDouble(""+objExpedienteDTO.getLineaCredAprob()))){
+																																						
+																			double importeExpDTO=0;
+																			importeExpDTO = ((!Util.isDouble(""+objExpedienteDTO.getLineaCredAprob()) || 
+																								objExpedienteDTO.getLineaCredAprob() == 0) ? objExpedienteDTO.getLineaCredSol(): 
+																									objExpedienteDTO.getLineaCredAprob());
+																			LOG.info("plazoExpDTO = "+importeExpDTO);
+																			
+																			//VALIDAR IMPORTE DE SUBPRODUCTO 
+																			if(Util.isDouble(""+objDelegacionOficina.getLimiteProductoCliAvaVip()) && 
+																					Util.isDouble(""+objDelegacionOficina.getLimiteProductoCliIngMayor()) &&
+																					Util.isDouble(""+objDelegacionOficina.getLimiteProductoCliIngMenor())){
+																					
+																				LOG.info("Empezando a validar sublimite por producto");	
+																				//VALIDAR SUBLIMITE X PROD -- CLIENTE VIP
+																				if(objExpediente.getClienteNatural().getSegmento()!= null && objExpediente.getClienteNatural().getSegmento().getGrupoSegmento()!=null &&
+																						objExpediente.getClienteNatural().getSegmento().getGrupoSegmento().getId()==Constantes.CODIGO_GRUPO_SEGMENTO_VIP &&
+																						objDelegacionOficina.getLimiteProductoCliAvaVip() < importeExpDTO){
+																					LOG.info("No cumple la condicion de Cliente VIP (Importe Sublimite)");
+																					return false;
+																				}
+																				
+																				//VALIDAR SUBLIMITE X PROD -- CLIENTE INGRESO NETO MENSUAL MAYOR A 1500
+																				if(objExpediente.getClienteNatural().getIngNetoMensual()>= 1500 && 
+																						objDelegacionOficina.getLimiteProductoCliIngMayor() < importeExpDTO){
+																					LOG.info("No cumple la condicion de Cliente Mayor a 1500 (Importe Sublimite)");
+																					return false;
+																				}
+																				
+																				//VALIDAR SUBLIMITE X PROD -- CLIENTE INGRESO NETO MENSUAL MENOR A 1500
+																				if(objExpediente.getClienteNatural().getIngNetoMensual()< 1500 && 
+																						objDelegacionOficina.getLimiteProductoCliIngMenor() < importeExpDTO){
+																					LOG.info("No cumple la condicion de Cliente Menor a 1500 (Importe Sublimite)");	
+																					return false;
+																				}//else{// EL RESTO DE LOS CASOS
+																					//if(Long.parseLong(objDelegacionOficina.getPlazoMax()) < Long.parseLong(objExpedienteTC.getPlazoSolicitado())){
+																					//	LOG.info("No cumple la condicion de Plazo Maximo ");	
+																					//}
+																				//}
+																					
+																			}else{
+																				LOG.info("No se puede comparar Importe Subproducto Maximo, esta mal parametrizado ");	
+																				return false;
+																			}
+																		/**
+																		 * */	
+																			
 																			if(objExpedienteDTO.getCodigoEstadoCivilTitular()!=null && objExpedienteDTO.getCodigoEstadoCivilTitular().equals(Constantes.ESTADO_CIVIL_CASADO)){
 																				LOG.info("Iniciando Validación Conyuge ... ");
 																				if( objDelegacionOficina.getBancoConyuge()!=null && 
@@ -674,9 +705,12 @@ public class IbmBbvaBusiness {
 																					}
 																				}					
 																			}else															
-																				return true;																
-																		}else
+																				return true;
+																																				
+																		}else{
 																			LOG.info("Validación Sublimite No Ok");
+																			return false;
+																		}	
 																	}else
 																		LOG.info("Validación Financiamiento Máximo No OK");
 															//	}else
@@ -698,7 +732,7 @@ public class IbmBbvaBusiness {
 								}else
 									LOG.info("Validación Tipo Producto No OK");
 							}else
-								LOG.info("objDelegacionOficina es nulo");			
+								LOG.info("objDelegacionOficina o objExpediente o objExpediente.getClienteNatural() es nulo");			
 			}else
 				LOG.info("Valor parametro es nulo");			
 		}else
