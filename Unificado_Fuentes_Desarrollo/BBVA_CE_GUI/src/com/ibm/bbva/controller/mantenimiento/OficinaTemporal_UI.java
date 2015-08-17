@@ -20,8 +20,6 @@ import org.slf4j.LoggerFactory;
 import pe.ibm.bpd.RemoteUtils;
 
 import com.ibm.bbva.controller.*;
-import com.ibm.bbva.entities.DescargaLDAP;
-import com.ibm.bbva.entities.DescargaLDAPCarteriz;
 import com.ibm.bbva.entities.Empleado;
 import com.ibm.bbva.entities.Multitabla;
 import com.ibm.bbva.entities.Oficina;
@@ -31,7 +29,6 @@ import com.ibm.bbva.session.HistorialBeanLocal;
 import com.ibm.bbva.session.MutitablaBeanLocal;
 import com.ibm.bbva.session.OficinaBeanLocal;
 import com.ibm.bbva.session.OficinaTemporalBeanLocal;
-import com.ibm.bbva.tabla.util.vo.DescargaLDAPVO;
 import com.ibm.bbva.tabla.util.vo.OficinaTemporalVO;
 import com.ibm.bbva.util.EnvioMail;
 import com.ibm.bbva.util.Util;
@@ -282,7 +279,8 @@ public class OficinaTemporal_UI extends AbstractSortPagDataTableMBean
 			{
 				listAddresses.add(new InternetAddress(objEmpleado.getCorreo()));
 			}
-						
+				
+			listAddresses.add(new InternetAddress(empleado.getCorreo()));
 			InternetAddress[] arrAddresses = listAddresses.toArray(new InternetAddress[0]);
 			Multitabla objMultitabla = this.multitablaBeanLocal.buscarPorId(Constantes.PARAMETRO_CORREO_OFICINA_TEMPORAL);
 			
