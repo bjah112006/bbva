@@ -2256,3 +2256,15 @@
     vertical-align: bottom;
     width: 16px;
 }
+
+.oddrow{
+	background:none repeat scroll 0 0 #FFFFFFF;
+}
+
+.evenrow{
+    background:none repeat scroll 0 0 #EEEEEE;
+}
+table#panelTablaBp, th, td {
+    border: 1px solid #C6C6C6;
+    border-collapse: collapse;
+}

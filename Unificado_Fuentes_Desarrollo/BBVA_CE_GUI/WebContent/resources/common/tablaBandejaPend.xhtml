@@ -68,11 +68,12 @@
 
 <div id="divBloque1_4" class="grilla">
 	<h:panelGroup id="panelTablaBp">
-		<h:dataTable  border="1" cellpadding="0" cellspacing="0"
+		<h:dataTable  border="0" cellpadding="0" cellspacing="0"
 			rendered="true" id="tablaBandejaPend"
 			value="#{tablaBandejaPend.listTabla}" var="item"
-			styleClass="dataTableEx tablesorter" headerClass="headerClass"
-			footerClass="footerClass" rows="#{tablaBandejaPend.numeroRegistro}" binding="#{tablaBandejaPend.dataTable}" >
+			styleClass="dataTableEx tablesorter" headerClass="ui-widget-header"
+			footerClass="footerClass" rows="#{tablaBandejaPend.numeroRegistro}" binding="#{tablaBandejaPend.dataTable}" 
+			rowClasses="oddrow,evenrow">
 
             <h:column nowrap="true" align="center" width="10%" rendered="#{tablaBandejaPend.renderedRe}">
 			    <f:facet name="header">
@@ -152,7 +153,7 @@
 				</f:facet>
 				<h:outputText id="idRol" value="#{item.perfilUsuarioActual}"></h:outputText>
 			</h:column>
-			<h:column style="white-space : normal ; word-wrap: break-word; " nowrap="true" align="center" width="60px" rendered="#{tablaBandejaPend.renderedUsr}">
+			<h:column style="white-space : normal ; word-wrap: break-word; " nowrap="true" align="center" width="100px" rendered="#{tablaBandejaPend.renderedUsr}">
 				<f:facet name="header">
 					<h:commandLink actionListener="#{tablaBandejaPend.ordenar}" styleClass="#{tablaBandejaPend.obtenerEstiloColumna('usuario')}">
 						<f:attribute name="sortField" value="usuario" />
