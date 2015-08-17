@@ -1652,28 +1652,28 @@ public class DatosProducto3MB extends AbstractMBean {
 							long plazoSolApr = (expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr()):0);
 							LOG.info("plazoSolApr -> "+plazoSolApr);
 						
-							if(!"SV".equals(objDelegacionRiesgoCondPlazo.getSimbolo())){
+							if(!"SV".equals(objDelegacionRiesgoCondPlazo.getSimbolo().getDescripcion())){
 								String condicion = objDelegacionRiesgoCondPlazo.getSimbolo().getDescripcion();
 								LOG.info("plazoSolApr sin condicion SV -> "+plazoSolApr);
 								if("<=".equals(condicion)){
-									if(!(plazoSolApr > 0 && plazoSolApr <= plazoSol)){
+									if(!(plazoSolApr > 0 && plazoSol <= plazoSolApr)){
 										LOG.info("plazoSolApr con condicion <=  --> "+plazoSolApr);
 										addMessageError(formulario + ":idPlazoSolApr", 
-												"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprCond", plazoSol);
+												"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprCond_1", plazoSol);
 										existeError = true;							
 									}
 								}else if(">=".equals(condicion)){
-									if(!(plazoSolApr > 0 && plazoSolApr >= plazoSol)){
+									if(!(plazoSolApr > 0 && plazoSol >= plazoSolApr)){
 										LOG.info("plazoSolApr con condicion >=  --> "+plazoSolApr);
 										addMessageError(formulario + ":idPlazoSolApr", 
-												"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprCond", plazoSol);
+												"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprCond_2", plazoSol);
 										existeError = true;							
 									}
 								}else if ("==".equals(condicion)){
-									if(!(plazoSolApr > 0 && plazoSolApr == plazoSol)){
+									if(!(plazoSolApr > 0 && plazoSol == plazoSolApr)){
 										LOG.info("plazoSolApr con condicion ==  --> "+plazoSolApr);
 										addMessageError(formulario + ":idPlazoSolApr", 
-												"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprCond", plazoSol);
+												"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprCond_3", plazoSol);
 										existeError = true;							
 									}
 								}else{
@@ -1716,29 +1716,29 @@ public class DatosProducto3MB extends AbstractMBean {
 							Double linCredAprob = expediente.getExpedienteTC().getLineaCredAprob();
 							LOG.info("linCredAprob :::: "+linCredAprob);
 						
-							if(!"SV".equals(objDelegacionRiesgoCondImporte.getSimbolo())){
+							if(!"SV".equals(objDelegacionRiesgoCondImporte.getSimbolo().getDescripcion())){
 								LOG.info("linCredAprob sin condicion SV -> "+linCredAprob);
 								String condicion = objDelegacionRiesgoCondImporte.getSimbolo().getDescripcion();
 								
 								if("<=".equals(condicion)){
-									if (!(linCredAprob.doubleValue()>0 && linCredAprob.doubleValue() <= lineaSol )){
+									if (!(linCredAprob.doubleValue()>0 && lineaSol <= linCredAprob.doubleValue() )){
 										LOG.info("linCredAprob con condicion <=  :::: "+linCredAprob);
 										addMessageError(formulario + ":lineaCredAprob", 
-												"com.ibm.bbva.common.datosProducto3.msg.linCredAprobCond", lineaSol);
+												"com.ibm.bbva.common.datosProducto3.msg.linCredAprobCond_1", lineaSol);
 										existeError = true;
 									}
 								}else if(">=".equals(condicion)){
-									if (!(linCredAprob.doubleValue()>0 && linCredAprob.doubleValue() >= lineaSol )){
+									if (!(linCredAprob.doubleValue()>0 && lineaSol >= linCredAprob.doubleValue() )){
 										LOG.info("linCredAprob con condicion >=  :::: "+linCredAprob);
 										addMessageError(formulario + ":lineaCredAprob", 
-												"com.ibm.bbva.common.datosProducto3.msg.linCredAprobCond", lineaSol);
+												"com.ibm.bbva.common.datosProducto3.msg.linCredAprobCond_2", lineaSol);
 										existeError = true;
 									}
 								}else if ("==".equals(condicion)){
-									if (!(linCredAprob.doubleValue()>0 && linCredAprob.doubleValue() == lineaSol )){
+									if (!(linCredAprob.doubleValue()>0 && lineaSol == linCredAprob.doubleValue() )){
 										LOG.info("linCredAprob con condicion ==  :::: "+linCredAprob);
 										addMessageError(formulario + ":lineaCredAprob", 
-												"com.ibm.bbva.common.datosProducto3.msg.linCredAprobCond", lineaSol);
+												"com.ibm.bbva.common.datosProducto3.msg.linCredAprobCond_3", lineaSol);
 										existeError = true;
 									}
 								}else{
