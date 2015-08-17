@@ -85,6 +85,6 @@ This may disable custom JSF extensions, such as factories defined in the project
 	<listener>
 	    <listener-class>com.ibm.bbva.listeners.ApplicationStartupListener</listener-class>
 	</listener>
--->
+ -->
 	
 </web-app>
