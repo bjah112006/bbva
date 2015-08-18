@@ -311,7 +311,7 @@ public class IbmBbvaBusiness {
 							lineaCredAprobEnDelegacRiesgo >= lineaCredito){
 						LOG.info("LineaCredAprob respecto a Clasificacion Banco es mayor a lineaCredito de exp, lineaCredito de exp= "+lineaCredito);
 						
-						if(objExpediente.getClienteNatural().getMonocuota() == "1"){
+						if("1".equals(objExpediente.getClienteNatural().getMonocuota())){
 							lineaCredAprobEnDelegacRiesgo = lineaCredAprobEnDelegacRiesgo*objDelegacionRiesgo.getMonocuota();
 						}
 						
