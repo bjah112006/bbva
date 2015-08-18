@@ -504,6 +504,13 @@ input[disabled]{
     overflow-y:scroll;
 }
 
+.grillaHist_BH {
+    width:790px; 
+    height: 225px;
+    overflow-x:auto; 
+    overflow-y:auto;
+}
+
 .grillaHist1 {
     overflow-x: auto; 
     width: 970px;
