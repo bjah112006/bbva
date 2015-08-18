@@ -44,19 +44,19 @@ public class VistaBandejaExpedienteBean extends AbstractFacade<VistaBandejaExped
 		String queryWhere="";
 		//NUMERO DE CONTRATO 	(0)
 		if(!arrayList.isEmpty() && arrayList.get(0)!=null && !arrayList.get(0).toString().equals(""))
-			queryWhere+=" AND e.nroContrato like :numeroContrato ";
+			queryWhere+=" AND e.nroContrato = :numeroContrato ";
 		
 		//CODIGO RVGL			(1)
 		if(!arrayList.isEmpty() && arrayList.get(1)!=null && !arrayList.get(1).toString().equals(""))
-			queryWhere+=" AND e.rvgl like :codigoRvgl ";
+			queryWhere+=" AND e.rvgl = :codigoRvgl ";
 		
 		//CODIGO PRE EVALUADOR 	(2)
 		if(!arrayList.isEmpty() && arrayList.get(2)!=null && !arrayList.get(2).toString().equals(""))
-			queryWhere+=" AND e.codPreEval like :codigoPreEvaluador";
+			queryWhere+=" AND e.codPreEval = :codigoPreEvaluador";
 		
 		//SEGMENTO 				(3)
 		if(!arrayList.isEmpty() && arrayList.get(3)!=null && !arrayList.get(3).toString().equals(""))
-			queryWhere+=" AND e.desSegmento like :segmento";
+			queryWhere+=" AND e.desSegmento = :segmento";
 		
 		//SUB PRODUCTO 			(4)
 		if(!arrayList.isEmpty() && arrayList.get(4)!=null && !arrayList.get(4).toString().equals(""))
@@ -68,17 +68,27 @@ public class VistaBandejaExpedienteBean extends AbstractFacade<VistaBandejaExped
 		
 		//APELLIDO PATERNO		(6)
 		if(!arrayList.isEmpty() && arrayList.get(6)!=null && !arrayList.get(6).toString().equals(""))
-			queryWhere+=" AND UPPER(e.apePat) like :apePaterno";
+			queryWhere+=" AND UPPER(e.apePat) = :apePaterno";
 		
 		//APELLIDO MATERNO		(7)
 		if(!arrayList.isEmpty() && arrayList.get(7)!=null && !arrayList.get(7).toString().equals(""))
-			queryWhere+=" AND UPPER(e.apeMat) like :apeMaterno";
+			queryWhere+=" AND UPPER(e.apeMat) = :apeMaterno";
 		
 		//NOMBRE				(8)
 		if(!arrayList.isEmpty() && arrayList.get(8)!=null && !arrayList.get(8).toString().equals(""))
-			queryWhere+=" AND UPPER(e.nombre) like :nombreCompl";		
+			queryWhere+=" AND UPPER(e.nombre) = :nombreCompl";	
 		
-		String query="SELECT e FROM VistaBandejaExpediente e WHERE e.id in (:listIds) "+queryWhere;
+		//NUMERO DOI			(9)
+		if(!arrayList.isEmpty() && arrayList.get(9)!=null && !arrayList.get(9).toString().equals(""))
+			queryWhere+=" AND e.numDoi = :numDoi";
+		
+		//TIPO DOI				(10)
+		if(!arrayList.isEmpty() && arrayList.get(10)!=null && !arrayList.get(10).toString().equals("-1") && !arrayList.get(10).toString().equals(""))
+			queryWhere+=" AND e.tipoDoi = :tipoDoi";		
+		
+		queryWhere+=" AND e.id in (:listIds)";
+		
+		String query="SELECT e FROM VistaBandejaExpediente e WHERE 1=1 "+queryWhere;
 		LOG.info("query = "+query);
 		
 		try{
@@ -106,13 +116,19 @@ public class VistaBandejaExpedienteBean extends AbstractFacade<VistaBandejaExped
 					queryExe.setParameter("codigoTipoOferta", Long.parseLong(arrayList.get(5).toString()));
 				//APELLIDO PATERNO 		(6)
 				if(!arrayList.isEmpty() && arrayList.get(6)!=null && !arrayList.get(6).toString().equals(""))				
-					queryExe.setParameter("apePaterno", "%" + arrayList.get(6).toString().trim().toUpperCase() + "%");
+					queryExe.setParameter("apePaterno" , arrayList.get(6).toString().trim().toUpperCase());
 				//APELLIDO MATERNO		(7)
 				if(!arrayList.isEmpty() && arrayList.get(7)!=null && !arrayList.get(7).toString().equals(""))				
-					queryExe.setParameter("apeMaterno", "%" + arrayList.get(7).toString().trim().toUpperCase() + "%");
+					queryExe.setParameter("apeMaterno", arrayList.get(7).toString().trim().toUpperCase());
 				//NOMBRE				(8)
 				if(!arrayList.isEmpty() && arrayList.get(8)!=null && !arrayList.get(8).toString().equals(""))				
-					queryExe.setParameter("nombreCompl", "%" + arrayList.get(8).toString().trim().toUpperCase() + "%");
+					queryExe.setParameter("nombreCompl", arrayList.get(8).toString().trim().toUpperCase());
+				//NUMERO DOI				(9)
+				if(!arrayList.isEmpty() && arrayList.get(9)!=null && !arrayList.get(9).toString().equals(""))				
+					queryExe.setParameter("numDoi", arrayList.get(9).toString().trim());
+				//TIPO DOI				(10)
+				if(!arrayList.isEmpty() && arrayList.get(10)!=null && !arrayList.get(10).toString().equals("-1") && !arrayList.get(10).toString().equals(""))			
+					queryExe.setParameter("tipoDoi",  Long.parseLong(arrayList.get(10).toString()));
 				
 			List<VistaBandejaExpediente> resultList = (List<VistaBandejaExpediente>) queryExe.getResultList();
 							
@@ -130,7 +146,11 @@ public class VistaBandejaExpedienteBean extends AbstractFacade<VistaBandejaExped
 		
 		//CARTERIZACION POR PRODUCTO
 		if(listIdsProd!=null && listIdsProd.size()>0){
-			queryWhere+=" AND e.idProd in (:listIdsProd)";
+			//queryWhere+=" AND e.idProd in (:listIdsProd)";
+			if(listIdsProd.size()==1)
+				queryWhere+=" AND e.idProd = :idProducto";
+			else
+				queryWhere+=" AND (e.idProd = 1 OR e.idProd = 2)";
 		}
 		
 		//ID USUARIO SESSION 	(0)
@@ -139,8 +159,9 @@ public class VistaBandejaExpedienteBean extends AbstractFacade<VistaBandejaExped
 			queryWhere+=" AND (e.idOficina = :idOficinaPrin OR (e.idOficinaPrincipal = :idOficinaPrin AND e.flagDesplazada like :activo) )  ";			
 		}
 
+		queryWhere+=" AND e.id in (:listIds) ";
 		
-		String query="SELECT e FROM VistaBandejaExpediente e WHERE e.id in (:listIds) "+queryWhere;
+		String query="SELECT e FROM VistaBandejaExpediente e WHERE 1=1 "+queryWhere;
 		LOG.info("query = "+query);
 		
 		try{
@@ -148,9 +169,13 @@ public class VistaBandejaExpedienteBean extends AbstractFacade<VistaBandejaExped
 			
 			queryExe.setParameter("listIds", listIds);
 			
-			if(listIdsProd!=null && listIdsProd.size()>0)
-				queryExe.setParameter("listIdsProd", listIdsProd);
-			
+			if(listIdsProd!=null && listIdsProd.size()>0){
+				//queryExe.setParameter("listIdsProd", listIdsProd);
+				if(listIdsProd.size()==1){
+					queryExe.setParameter("idProducto",listIdsProd.get(0).longValue());
+					LOG.info("un solo valor de producto = "+listIdsProd.get(0).longValue());					
+				}
+			}
 			//NUMERO DE CONTRATO 	(0)
 			if(!arrayList.isEmpty() && arrayList.get(0)!=null && !arrayList.get(0).toString().equals("")){					
 				queryExe.setParameter("idOficinaPrin", Long.parseLong(arrayList.get(0).toString().trim()));
