@@ -45,7 +45,9 @@ public class VistaBandejaExpediente implements Serializable {
 	@Column(name="DESCRIP_TIPO_DOC")
 	private String desTipoDoc;
 	@Column(name="NUM_DOI")
-	private String numDoi;	
+	private String numDoi;		
+	@Column(name="ID_TIPO_DOI")
+	private long tipoDoi;	
 	@Column(name="APE_PAT")
 	private String apePat;
 	@Column(name="APE_MAT")
@@ -409,5 +411,12 @@ public class VistaBandejaExpediente implements Serializable {
 		this.idOficinaUsu = idOficinaUsu;
 	}
 
-	
+	public long getTipoDoi() {
+		return tipoDoi;
+	}
+
+	public void setTipoDoi(long tipoDoi) {
+		this.tipoDoi = tipoDoi;
+	}
+
 }
