@@ -17,16 +17,16 @@ public class ExpedienteTCWPS implements Serializable {
 	private String accion;  
 	private String verificacionDomiciliaria;  
 	private String modificacionScoring;  
-	private String scoringAprobado;  
+//	private String scoringAprobado;  
 	private String devueltoPor;  
-	private String segmento; 
+//	private String segmento; 
 	private String tipoOferta; 
-	private Double lineaCredito;  
-	private String moneda;  
+//	private Double lineaCredito;  
+//	private String moneda;  
 	private Cliente cliente;
 	private Producto producto;
-	private String codigoRVGL;
-	private String codigoPreEvaluador;
+//	private String codigoRVGL;
+//	private String codigoPreEvaluador;
 	private String idOficina;
 	private String idTerritorio;
 	private String codigoEmpleadoResponsable;
@@ -36,23 +36,23 @@ public class ExpedienteTCWPS implements Serializable {
 	private String nombreUsuarioAnterior;
 	private String perfilUsuarioAnterior;
 	private String codigoUsuarioAnterior;
-	private String numeroContrato;
+//	private String numeroContrato;
 	
 	private String flagEnvioContent = "0";
 	
-	private String flagProvincia; 
-	private Integer numeroDevoluciones;  
+//	private String flagProvincia; 
+//	private Integer numeroDevoluciones;  
 	private String flagRetraer; 
 	private String idPerfilUsuarioAnterior;
 	private String flagSubrogacion;
 	private String idTipoOferta;
-	private String idGrupoSegmento;
+//	private String idGrupoSegmento;
 	
 	private String desTarea; //
-	private Double montoAprobado; 
-	private String desOficina;
-	private String desTerritorio;
-	private String observacion;
+//	private Double montoAprobado; 
+//	private String desOficina;
+//	private String desTerritorio;
+//	private String observacion;
 	private Date fechaDocumento;
 	private String nombreUsuarioActual;
 	private String flagEnProcesoTimer;
@@ -142,14 +142,6 @@ public class ExpedienteTCWPS implements Serializable {
 		this.idTipoOferta = idTipoOferta;
 	}
 
-	public String getIdGrupoSegmento() {
-		return idGrupoSegmento;
-	}
-
-	public void setIdGrupoSegmento(String idGrupoSegmento) {
-		this.idGrupoSegmento = idGrupoSegmento;
-	}
-	
 	public String getPerfilUsuarioActual() {
 		return perfilUsuarioActual;
 	}
@@ -166,22 +158,6 @@ public class ExpedienteTCWPS implements Serializable {
 		this.flagRetraer = flagRetraer;
 	}
 
-	public Integer getNumeroDevoluciones() {
-		return numeroDevoluciones;
-	}
-
-	public void setNumeroDevoluciones(Integer numeroDevoluciones) {
-		this.numeroDevoluciones = numeroDevoluciones;
-	}
-
-	public String getFlagProvincia() {
-		return flagProvincia;
-	}
-
-	public void setFlagProvincia(String flagProvincia) {
-		this.flagProvincia = flagProvincia;
-	}
-	
 	public String getTaskID() {
 		return taskID;
 	}
@@ -265,17 +241,10 @@ public class ExpedienteTCWPS implements Serializable {
 		this.modificacionScoring = modificacionScoring;
 	}
 
-	public String getScoringAprobado() {
-		return this.scoringAprobado;
-	}
-
 	/**
 	 * CU 3
 	 * @param scoringAprobado
 	 */
-	public void setScoringAprobado(String scoringAprobado) {
-		this.scoringAprobado = scoringAprobado;
-	}
 
 	public String getDevueltoPor() {
 		return devueltoPor;
@@ -289,36 +258,12 @@ public class ExpedienteTCWPS implements Serializable {
 		this.devueltoPor = devueltoPor;
 	}
 
-	public String getSegmento() {
-		return segmento;
-	}
-
-	public void setSegmento(String segmento) {
-		this.segmento = segmento;
-	}
-
 	public String getTipoOferta() {
 		return tipoOferta;
 	}
 
 	public void setTipoOferta(String tipoOferta) {
 		this.tipoOferta = tipoOferta;
-	}
-
-	public Double getLineaCredito() {
-		return lineaCredito;
-	}
-
-	public void setLineaCredito(Double lineaCredito) {
-		this.lineaCredito = lineaCredito;
-	}
-
-	public String getMoneda() {
-		return moneda;
-	}
-
-	public void setMoneda(String moneda) {
-		this.moneda = moneda;
 	}
 
 	public Cliente getCliente() {
@@ -335,22 +280,6 @@ public class ExpedienteTCWPS implements Serializable {
 
 	public void setProducto(Producto producto) {
 		this.producto = producto;
-	}
-
-	public String getCodigoRVGL() {
-		return codigoRVGL;
-	}
-
-	public void setCodigoRVGL(String codigoRVGL) {
-		this.codigoRVGL = codigoRVGL;
-	}
-
-	public String getCodigoPreEvaluador() {
-		return codigoPreEvaluador;
-	}
-
-	public void setCodigoPreEvaluador(String codigoPreEvaluador) {
-		this.codigoPreEvaluador = codigoPreEvaluador;
 	}
 
 	public String getIdOficina() {
@@ -417,14 +346,6 @@ public class ExpedienteTCWPS implements Serializable {
 		this.codigoUsuarioAnterior = codigoUsuarioAnterior;
 	}
 
-	public String getNumeroContrato() {
-		return numeroContrato;
-	}
-
-	public void setNumeroContrato(String numeroContrato) {
-		this.numeroContrato = numeroContrato;
-	}
-
 	/*public String getFlagEnvioContent() {
 		return flagEnvioContent;
 	}
@@ -456,38 +377,6 @@ public class ExpedienteTCWPS implements Serializable {
 
 	public void setDesTarea(String desTarea) {
 		this.desTarea = desTarea;
-	}
-
-	public Double getMontoAprobado() {
-		return montoAprobado;
-	}
-
-	public void setMontoAprobado(Double montoAprobado) {
-		this.montoAprobado = montoAprobado;
-	}
-
-	public String getDesOficina() {
-		return desOficina;
-	}
-
-	public void setDesOficina(String desOficina) {
-		this.desOficina = desOficina;
-	}
-
-	public String getDesTerritorio() {
-		return desTerritorio;
-	}
-
-	public void setDesTerritorio(String desTerritorio) {
-		this.desTerritorio = desTerritorio;
-	}
-
-	public String getObservacion() {
-		return observacion;
-	}
-
-	public void setObservacion(String observacion) {
-		this.observacion = observacion;
 	}
 
 	public Date getFechaDocumento() {

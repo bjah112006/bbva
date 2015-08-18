@@ -23,8 +23,8 @@ public class ExpedienteTCWPSWeb implements Serializable {
 	private String tipoOferta; 
 	private Double lineaCredito;  
 	private String moneda;  
-	private Cliente cliente;
-	private Producto producto;
+	private ClienteWeb cliente;
+	private ProductoWeb producto;
 	private String codigoRVGL;
 	private String codigoPreEvaluador;
 	private String idOficina;
@@ -324,20 +324,12 @@ public class ExpedienteTCWPSWeb implements Serializable {
 		this.moneda = moneda;
 	}
 
-	public Cliente getCliente() {
+	public ClienteWeb getCliente() {
 		return cliente;
 	}
 
-	public void setCliente(Cliente cliente) {
+	public void setCliente(ClienteWeb cliente) {
 		this.cliente = cliente;
-	}
-
-	public Producto getProducto() {
-		return producto;
-	}
-
-	public void setProducto(Producto producto) {
-		this.producto = producto;
 	}
 
 	public String getCodigoRVGL() {
@@ -573,7 +565,13 @@ public class ExpedienteTCWPSWeb implements Serializable {
 		this.accionExp = accionExp;
 	}
 
+	public ProductoWeb getProducto() {
+		return producto;
+	}
 
+	public void setProducto(ProductoWeb producto) {
+		this.producto = producto;
+	}
 	
 	/*	
 	public String getDescTerritorio() {

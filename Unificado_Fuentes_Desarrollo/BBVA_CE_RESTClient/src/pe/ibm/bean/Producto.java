@@ -7,36 +7,20 @@ public class Producto implements Serializable  {
 	private static final long serialVersionUID = -5523136998418632550L;
 
 	private String idProducto;
-	private String producto;
-	private String subProducto;
+//	private String producto;
+//	private String subProducto;
 
 	public Producto() {
 		
 		this.idProducto = "";
-		this.producto = "";
-		this.subProducto = "";
+//		this.producto = "";
+//		this.subProducto = "";
 	}
 	public Producto(String idProducto, String producto, String subProducto) {
 		super();
 		this.idProducto = idProducto;
-		this.producto = producto;
-		this.subProducto = subProducto;
-	}
-
-	public String getProducto() {
-		return producto;
-	}
-
-	public void setProducto(String producto) {
-		this.producto = producto;
-	}
-
-	public String getSubProducto() {
-		return subProducto;
-	}
-
-	public void setSubProducto(String subProducto) {
-		this.subProducto = subProducto;
+//		this.producto = producto;
+//		this.subProducto = subProducto;
 	}
 
 	public String getIdProducto() {

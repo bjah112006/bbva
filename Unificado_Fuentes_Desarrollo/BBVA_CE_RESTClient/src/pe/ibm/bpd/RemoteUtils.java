@@ -20,12 +20,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pe.ibm.bean.Cliente;
+import pe.ibm.bean.ClienteWeb;
 import pe.ibm.bean.Constantes;
 import pe.ibm.bean.Consulta;
 import pe.ibm.bean.ConsultaServicio;
 import pe.ibm.bean.ExpedienteTCWPS;
 import pe.ibm.bean.ExpedienteTCWPSWeb;
 import pe.ibm.bean.Producto;
+import pe.ibm.bean.ProductoWeb;
 import pe.ibm.rest.RestBPM;
 import pe.ibm.rest.RestBPMImpl;
 import pe.ibm.util.Convertidor;
@@ -44,7 +46,7 @@ public class RemoteUtils {
 	private static final Logger LOG = LoggerFactory.getLogger(RemoteUtils.class);
 	
 	private RestBPM restBPM = new RestBPMImpl();
-	private static final String BANDEJA_SEARCH_TEMPLATE_NAME = "BBVA_TC_BANDEJA";
+	//private static final String BANDEJA_SEARCH_TEMPLATE_NAME = "BBVA_TC_BANDEJA";
 	private static final String INICIO_CADENA_JSON = "{\"expediente\":";
 	private static final String INICIO_CONSULTA_JSON = "{\"consulta\":";
 	
@@ -57,7 +59,7 @@ public class RemoteUtils {
 	private static final String NODE_ITEMS = "items";
 	private static final String NODE_RESULTADO = "resultado"; 
 	private static final String NODE_ITEM_IDTASK = "idTask";
-	private static final String NODE_ITEM_ASIGNEDUSER = "asignedUser";
+	//private static final String NODE_ITEM_ASIGNEDUSER = "asignedUser";
 	private static final String NODE_ITEM_APPATERNO = "apPaterno";
 	private static final String NODE_ITEM_APMATERNO = "apMaterno";
 	private static final String NODE_ITEM_NOMBRES = "nombre";
@@ -386,17 +388,30 @@ public class RemoteUtils {
 	 */	
 	public List<ExpedienteTCWPSWeb> actualizarDataBD(List<ExpedienteTCWPSWeb> lista, Consulta consulta){
 		LOG.info("Metodo actualizarDataBD");
-		List<ExpedienteTCWPSWeb> taskListResult = new ArrayList<ExpedienteTCWPSWeb>();
+		List<ExpedienteTCWPSWeb> taskListResult = null;
 		List<Long> listIdsExpediente=new ArrayList<Long>();
 		List<Long> listIdsTareas=new ArrayList<Long>();
 		ArrayList arrayList=filtrosABuscar(consulta);
 		List<VistaBandejaExpediente>  listBandejaExpedientes=null;
+		boolean existeTarea;
 		
 		for(ExpedienteTCWPSWeb obj : lista){
 			if(obj!=null){
 				listIdsExpediente.add(new Long(obj.getCodigo()));
-				if(obj.getIdTarea()!=null && !obj.getIdTarea().equals("") && validarLong(obj.getIdTarea()))
-					listIdsTareas.add(new Long(obj.getIdTarea()));
+				if(obj.getIdTarea()!=null && !obj.getIdTarea().equals("") && validarLong(obj.getIdTarea())){
+					existeTarea=false;
+					for(Long valorTarea : listIdsTareas){
+						if(Long.parseLong(obj.getIdTarea())==valorTarea){
+							existeTarea=true;
+							break;
+						}
+					}
+					if(!existeTarea){
+						LOG.info("Agregando tarea a lista.."+obj.getIdTarea());
+						listIdsTareas.add(new Long(obj.getIdTarea()));
+					}
+				}
+					
 			}
 			
 		}
@@ -434,151 +449,156 @@ public class RemoteUtils {
 				listBandejaExpedientes= vistaExpedienteListLocalBean.buscarPorIdsExpedientes(listIdsExpediente, arrayList);
 		}
 		
-		if(listBandejaExpedientes!=null)
-		for(VistaBandejaExpediente obj : listBandejaExpedientes){
-			//LOG.info(" id:::"+obj.getId());
+		if(listBandejaExpedientes!=null && listBandejaExpedientes.size()>0){
 			
-			for(ExpedienteTCWPSWeb objTCWPS : lista){
-				if(obj.getId()==Long.parseLong(objTCWPS.getCodigo())){
-					LOG.info("OK EXP:"+objTCWPS.getCodigo());
-					objTCWPS.setEstado(obj.getDesEstado());
-					objTCWPS.setSegmento(obj.getDesSegmento());
-					objTCWPS.setIdTipoOferta(String.valueOf(obj.getIdTipoOferta()));
-					objTCWPS.setTipoOferta(obj.getDesTipoOferta());
-					objTCWPS.setCliente(new Cliente());
-					objTCWPS.getCliente().setTipoDOI(obj.getDesTipoDoc());
-					objTCWPS.getCliente().setNumeroDOI(obj.getNumDoi());
-					objTCWPS.getCliente().setApPaterno(obj.getApePat());
-					objTCWPS.getCliente().setApMaterno(obj.getApeMat());
-					objTCWPS.getCliente().setNombre(obj.getNombre());
-					objTCWPS.setProducto(new Producto());
-					objTCWPS.getProducto().setIdProducto(String.valueOf(obj.getIdProd()));
-					objTCWPS.getProducto().setProducto(obj.getDesProducto());
-					objTCWPS.getProducto().setSubProducto(obj.getDesSubProducto());
-					objTCWPS.setMoneda(obj.getDesTipoMoneda());
-					objTCWPS.setLineaCredito(obj.getLineaCredSol());
-					objTCWPS.setMontoAprobado(obj.getLineaCredAprob());
-					objTCWPS.setDesOficina(obj.getDesOficina());
-					objTCWPS.setDesTerritorio(obj.getDesTerritorio());
-					objTCWPS.setCodigoRVGL(obj.getRvgl());
-					objTCWPS.setNumeroContrato(obj.getNroContrato());
-					objTCWPS.setObservacion(obj.getComentario());
-					objTCWPS.setIdOficina(String.valueOf(obj.getIdOficina()));
-					objTCWPS.setFlagRetraer(obj.getFlagRetraer());
-					objTCWPS.setFlagRetraer(null);
-					objTCWPS.setAccionExp(obj.getAccion());
-					objTCWPS.setIdGrupoSegmento(String.valueOf(obj.getIdGrupoSegmento()));
-					objTCWPS.setNumeroDevoluciones(obj.getNroDevoluciones());
-					//objTCWPS.setEstado(String.valueOf(obj.getIdEstado()));
-					//objTCWPS.setDescripEstado(obj.getDesEstado());
-					//objTCWPS.setIdTarea(String.valueOf(obj.getIdTarea()));
-					/**
-					 * Cambio 27 de mayo
-					 * OPTIMIZACION BANDEJA DE ASIGNACION
-					 * */
-					objTCWPS.setPerfilUsuarioActual(obj.getDesPerfil());
-					objTCWPS.setCodigoUsuarioActual(obj.getCodEmpleado());
-					objTCWPS.setNombreUsuarioActual(obj.getNomEmpleado());
-					objTCWPS.setIdOficinaUsu(String.valueOf(obj.getIdOficinaUsu()));
-					
-					if(listAns!=null && listAns.size()>0){
+			taskListResult = new ArrayList<ExpedienteTCWPSWeb>();
+			
+			for(VistaBandejaExpediente obj : listBandejaExpedientes){
+				//LOG.info(" id:::"+obj.getId());
+				
+				for(ExpedienteTCWPSWeb objTCWPS : lista){
+					if(obj.getId()==Long.parseLong(objTCWPS.getCodigo())){
+						LOG.info("OK EXP:"+objTCWPS.getCodigo());
+						objTCWPS.setEstado(obj.getDesEstado());
+						objTCWPS.setSegmento(obj.getDesSegmento());
+						objTCWPS.setIdTipoOferta(String.valueOf(obj.getIdTipoOferta()));
+						objTCWPS.setTipoOferta(obj.getDesTipoOferta());
+						objTCWPS.setCliente(new ClienteWeb());
+						objTCWPS.getCliente().setTipoDOI(obj.getDesTipoDoc());
+						objTCWPS.getCliente().setNumeroDOI(obj.getNumDoi());
+						objTCWPS.getCliente().setApPaterno(obj.getApePat());
+						objTCWPS.getCliente().setApMaterno(obj.getApeMat());
+						objTCWPS.getCliente().setNombre(obj.getNombre());
+						objTCWPS.setProducto(new ProductoWeb());
+						objTCWPS.getProducto().setIdProducto(String.valueOf(obj.getIdProd()));
+						objTCWPS.getProducto().setProducto(obj.getDesProducto());
+						objTCWPS.getProducto().setSubProducto(obj.getDesSubProducto());
+						objTCWPS.setMoneda(obj.getDesTipoMoneda());
+						objTCWPS.setLineaCredito(obj.getLineaCredSol());
+						objTCWPS.setMontoAprobado(obj.getLineaCredAprob());
+						objTCWPS.setDesOficina(obj.getDesOficina());
+						objTCWPS.setDesTerritorio(obj.getDesTerritorio());
+						objTCWPS.setCodigoRVGL(obj.getRvgl());
+						objTCWPS.setNumeroContrato(obj.getNroContrato());
+						objTCWPS.setObservacion(obj.getComentario());
+						objTCWPS.setIdOficina(String.valueOf(obj.getIdOficina()));
+						objTCWPS.setFlagRetraer(obj.getFlagRetraer());
+						objTCWPS.setAccionExp(obj.getAccion());
+						objTCWPS.setIdGrupoSegmento(String.valueOf(obj.getIdGrupoSegmento()));
+						objTCWPS.setNumeroDevoluciones(obj.getNroDevoluciones());
+						//objTCWPS.setEstado(String.valueOf(obj.getIdEstado()));
+						//objTCWPS.setDescripEstado(obj.getDesEstado());
+						//objTCWPS.setIdTarea(String.valueOf(obj.getIdTarea()));
+						/**
+						 * Cambio 27 de mayo
+						 * OPTIMIZACION BANDEJA DE ASIGNACION
+						 * */
+						objTCWPS.setPerfilUsuarioActual(obj.getDesPerfil());
+						objTCWPS.setCodigoUsuarioActual(obj.getCodEmpleado());
+						objTCWPS.setNombreUsuarioActual(obj.getNomEmpleado());
+						objTCWPS.setIdOficinaUsu(String.valueOf(obj.getIdOficinaUsu()));
 						
-						Map<Long, ArrayList<Ans>> mapaTarea= mapaAnsProdTarea.get(Long.parseLong(objTCWPS.getProducto().getIdProducto()));
-						
-						if(mapaTarea!=null && mapaTarea.size()>0){
-							ArrayList<Ans> listAnsTemp= null;
+						if(listAns!=null && listAns.size()>0){
 							
-							if(objTCWPS.getIdTarea()!=null && !objTCWPS.getIdTarea().equals("") && validarLong(objTCWPS.getIdTarea()))
-								listAnsTemp= mapaTarea.get(Long.parseLong(objTCWPS.getIdTarea()));
+							Map<Long, ArrayList<Ans>> mapaTarea= mapaAnsProdTarea.get(Long.parseLong(objTCWPS.getProducto().getIdProducto()));
 							
-							if(listAnsTemp!=null && listAnsTemp.size()>0){
-								LOG.info("Coincidencia con producto:"+objTCWPS.getProducto().getIdProducto()+" y tarea:"+objTCWPS.getIdTarea()+" es:"+listAnsTemp.size());
-								ArrayList<Ans> listAnsTemp2=new ArrayList<Ans>();
+							if(mapaTarea!=null && mapaTarea.size()>0){
+								ArrayList<Ans> listAnsTemp= null;
 								
-								for(Ans objAnsTemp :listAnsTemp){
-									if(objAnsTemp.getTipoOferta()!=null && objAnsTemp.getTipoOferta().getId()==Long.parseLong(objTCWPS.getIdTipoOferta()) && 
-											objAnsTemp.getGrupoSegmento()!=null && objAnsTemp.getGrupoSegmento().getId()==Long.parseLong(objTCWPS.getIdGrupoSegmento())){
-										listAnsTemp2.add(objAnsTemp);
-									}
-								}
-								if(listAnsTemp2!=null && listAnsTemp2.size()>0){
-									//LOG.info("Coincidencia con Tipo Oferta:"+objTCWPS.getIdTipoOferta()+" y grupo segemento:"+objTCWPS.getIdGrupoSegmento()+" es :"+listAnsTemp2.size());
-									boolean band=false;
-									if(listAnsTemp2!=null && listAnsTemp2.size()>1){
-										//LOG.info("Tiene configurado estado, listAnsTemp2:"+listAnsTemp2.size());
-										for(Ans objtTemp2: listAnsTemp2){
-											if(objtTemp2.getEstadoCE()!=null && objtTemp2.getEstadoCE().getId()==obj.getIdEstadoCe()){
-												LOG.info("Estado coincide::::Tar:"+objtTemp2.getId());
-												objTCWPS.setValorAnsAmarillo(objtTemp2.getAmarilloMinutos().toString());
-												objTCWPS.setValorAnsVerde(objtTemp2.getVerdeMinutos().toString());	
-												LOG.info("Tar Amarillo:"+objTCWPS.getValorAnsAmarillo());
-												LOG.info("Tar Verde:"+objTCWPS.getValorAnsVerde());												
-												band=true;
-												break;
-											}
+								if(objTCWPS.getIdTarea()!=null && !objTCWPS.getIdTarea().equals("") && validarLong(objTCWPS.getIdTarea()))
+									listAnsTemp= mapaTarea.get(Long.parseLong(objTCWPS.getIdTarea()));
+								
+								if(listAnsTemp!=null && listAnsTemp.size()>0){
+									LOG.info("Coincidencia con producto:"+objTCWPS.getProducto().getIdProducto()+" y tarea:"+objTCWPS.getIdTarea()+" es:"+listAnsTemp.size());
+									ArrayList<Ans> listAnsTemp2=new ArrayList<Ans>();
+									
+									for(Ans objAnsTemp :listAnsTemp){
+										if(objAnsTemp.getTipoOferta()!=null && objAnsTemp.getTipoOferta().getId()==Long.parseLong(objTCWPS.getIdTipoOferta()) && 
+												objAnsTemp.getGrupoSegmento()!=null && objAnsTemp.getGrupoSegmento().getId()==Long.parseLong(objTCWPS.getIdGrupoSegmento())){
+											listAnsTemp2.add(objAnsTemp);
 										}
-										
-										if(!band){
+									}
+									if(listAnsTemp2!=null && listAnsTemp2.size()>0){
+										//LOG.info("Coincidencia con Tipo Oferta:"+objTCWPS.getIdTipoOferta()+" y grupo segemento:"+objTCWPS.getIdGrupoSegmento()+" es :"+listAnsTemp2.size());
+										boolean band=false;
+										if(listAnsTemp2!=null && listAnsTemp2.size()>1){
+											//LOG.info("Tiene configurado estado, listAnsTemp2:"+listAnsTemp2.size());
 											for(Ans objtTemp2: listAnsTemp2){
-												if(objtTemp2.getEstadoCE()==null){
-													LOG.info("Estado No coincide:::: Tar:"+objtTemp2.getId());
+												if(objtTemp2.getEstadoCE()!=null && objtTemp2.getEstadoCE().getId()==obj.getIdEstadoCe()){
+													LOG.info("Estado coincide::::Tar:"+objtTemp2.getId());
 													objTCWPS.setValorAnsAmarillo(objtTemp2.getAmarilloMinutos().toString());
 													objTCWPS.setValorAnsVerde(objtTemp2.getVerdeMinutos().toString());	
 													LOG.info("Tar Amarillo:"+objTCWPS.getValorAnsAmarillo());
-													LOG.info("Tar Verde:"+objTCWPS.getValorAnsVerde());													
+													LOG.info("Tar Verde:"+objTCWPS.getValorAnsVerde());												
+													band=true;
 													break;
 												}
 											}
-										}
-									}else{
-										LOG.info("Estado CE es null");
-										LOG.info("Tar:"+listAnsTemp2.get(0).getId());
-										objTCWPS.setValorAnsAmarillo(listAnsTemp2.get(0).getAmarilloMinutos().toString());
-										objTCWPS.setValorAnsVerde(listAnsTemp2.get(0).getVerdeMinutos().toString());
-										LOG.info("Tar Amarillo:"+objTCWPS.getValorAnsAmarillo());
-										LOG.info("Tar Verde:"+objTCWPS.getValorAnsVerde());
-									}									
-								}else
-									LOG.info("listAnsTemp2 es vacío");
+											
+											if(!band){
+												for(Ans objtTemp2: listAnsTemp2){
+													if(objtTemp2.getEstadoCE()==null){
+														LOG.info("Estado No coincide:::: Tar:"+objtTemp2.getId());
+														objTCWPS.setValorAnsAmarillo(objtTemp2.getAmarilloMinutos().toString());
+														objTCWPS.setValorAnsVerde(objtTemp2.getVerdeMinutos().toString());	
+														LOG.info("Tar Amarillo:"+objTCWPS.getValorAnsAmarillo());
+														LOG.info("Tar Verde:"+objTCWPS.getValorAnsVerde());													
+														break;
+													}
+												}
+											}
+										}else{
+											LOG.info("Estado CE es null");
+											LOG.info("Tar:"+listAnsTemp2.get(0).getId());
+											objTCWPS.setValorAnsAmarillo(listAnsTemp2.get(0).getAmarilloMinutos().toString());
+											objTCWPS.setValorAnsVerde(listAnsTemp2.get(0).getVerdeMinutos().toString());
+											LOG.info("Tar Amarillo:"+objTCWPS.getValorAnsAmarillo());
+											LOG.info("Tar Verde:"+objTCWPS.getValorAnsVerde());
+										}									
+									}else
+										LOG.info("listAnsTemp2 es vacío");
 
-							}else{
-								if(objTCWPS.getIdTarea()!=null)
-									LOG.info("listAnsTemp es vacío para TAREA:"+objTCWPS.getIdTarea());
-								else
-									LOG.info("listAnsTemp es vacío para TAREA nula");
-								
-								LOG.info("Seteando valores no validos para ANS amarillo y verde");
-								objTCWPS.setValorAnsAmarillo("-1");
-								objTCWPS.setValorAnsVerde("-1");
-								LOG.info("Tar Amarillo:"+objTCWPS.getValorAnsAmarillo());
-								LOG.info("Tar Verde:"+objTCWPS.getValorAnsVerde());								
-							}
+								}else{
+									if(objTCWPS.getIdTarea()!=null)
+										LOG.info("listAnsTemp es vacío para TAREA:"+objTCWPS.getIdTarea());
+									else
+										LOG.info("listAnsTemp es vacío para TAREA nula");
+									
+									LOG.info("Seteando valores no validos para ANS amarillo y verde");
+									objTCWPS.setValorAnsAmarillo("-1");
+									objTCWPS.setValorAnsVerde("-1");
+									LOG.info("Tar Amarillo:"+objTCWPS.getValorAnsAmarillo());
+									LOG.info("Tar Verde:"+objTCWPS.getValorAnsVerde());								
+								}
+							}else
+								LOG.info("mapaTarea es vacío");
+						
 						}else
-							LOG.info("mapaTarea es vacío");
-					
-					}else
-						LOG.info("listAns es vacío");
-					/**
-					 * */
-					
-					Set set = CONSTANTE_TABLA_TAREAS.entrySet(); 
-					Iterator iterator = set.iterator(); 
-					
-					while(iterator.hasNext()) { 
-						Map.Entry me = (Map.Entry)iterator.next(); 
-						if(objTCWPS.getIdTarea()!=null && !objTCWPS.getIdTarea().equals("") && me.getKey().toString().equals(objTCWPS.getIdTarea())){
-							objTCWPS.setNombreNavegacionWeb(me.getValue().toString());
-							break;
+							LOG.info("listAns es vacío");
+						/**
+						 * */
+						
+						Set set = CONSTANTE_TABLA_TAREAS.entrySet(); 
+						Iterator iterator = set.iterator(); 
+						
+						while(iterator.hasNext()) { 
+							Map.Entry me = (Map.Entry)iterator.next(); 
+							if(objTCWPS.getIdTarea()!=null && !objTCWPS.getIdTarea().equals("") && me.getKey().toString().equals(objTCWPS.getIdTarea())){
+								objTCWPS.setNombreNavegacionWeb(me.getValue().toString());
+								break;
+							}
 						}
+						
+						taskListResult.add(objTCWPS);
+						
+						break;
 					}
-					
-					taskListResult.add(objTCWPS);
-					
-					break;
-				}
-			}//Fin FOR list ExpedienteTCWPS
-			
-		}//Fin FOR list VistaBandejaExpediente
+				}//Fin FOR list ExpedienteTCWPS
+				
+			}//Fin FOR list VistaBandejaExpediente			
+		}else
+			LOG.info("Lista de busqueda por filtros es vacío");
+
 		
 		return taskListResult;
 	}
@@ -650,7 +670,21 @@ public class RemoteUtils {
 	        if (campo!=null && !"".equals(campo))
 	        	arrayList.add(campo);									//NOMBRES				(8)
 	        else
-	        	arrayList.add(null);			
+	        	arrayList.add(null);
+	        
+	        campo = consulta.getNumeroDOI();
+	        LOG.info("campo NumeroDOI::::"+campo);
+	        if (campo!=null && !"".equals(campo))
+	        	arrayList.add(campo);									//NUMERO DOI			(9)
+	        else
+	        	arrayList.add(null);
+	        
+	        campo = consulta.getTipoDOI();
+	        LOG.info("campo TipoDOI::::"+campo);
+	        if (campo!=null && !"".equals(campo))
+	        	arrayList.add(campo);									//TIPO DOI			    (10)
+	        else
+	        	arrayList.add(null);	        
 		}else{
 			if(consulta.getTipoConsulta()==Constantes.COD_BAND_ASIGNACION){
 				
@@ -671,7 +705,7 @@ public class RemoteUtils {
         
 	}
 
-	public List<ExpedienteTCWPSWeb> obtenerInstanciasTareasPorUsuario (Consulta consulta){
+/*..	public List<ExpedienteTCWPSWeb> obtenerInstanciasTareasPorUsuario (Consulta consulta){
 		List<ExpedienteTCWPS> taskList = new ArrayList<ExpedienteTCWPS>();
 		List<ExpedienteTCWPSWeb> taskListWeb = new ArrayList<ExpedienteTCWPSWeb>();
 		//String cadenaUsuarios = null;
@@ -839,7 +873,7 @@ public class RemoteUtils {
 		taskList = aplicarAjustes(taskList, consultaServicio);
 		taskListWeb = Convertidor.fromExpedienteTCWPSToExpedienteTCWPSWeb(taskList, "0");
 		return taskListWeb;	
-	}
+	}*/
 
 	public List<ExpedienteTCWPSWeb> listarTareasBandejaAsignacion (Consulta consulta){
 		
@@ -1089,7 +1123,7 @@ public class RemoteUtils {
 		
 		return taskList;
 	}
-	
+	/*..
 	public List<ExpedienteTCWPS> aplicarAjustes(List<ExpedienteTCWPS> taskList, ConsultaServicio consulta){
         
         //numeroContrato = "", codigoRVGL = "", codigoPreEvaluador = ""
@@ -1130,7 +1164,7 @@ public class RemoteUtils {
     }
         LOG.info("tamaño aplicarAjustes::::"+listaResultante.size());
         return listaResultante;
-}
+}*/
 
 
 	public String iniciarInstanciaProceso (String nombreInstanciaProceso, ExpedienteTCWPS expedienteTC){

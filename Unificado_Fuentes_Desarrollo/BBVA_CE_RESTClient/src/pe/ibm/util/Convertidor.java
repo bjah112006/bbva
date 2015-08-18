@@ -11,11 +11,15 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pe.ibm.bean.Cliente;
+import pe.ibm.bean.ClienteWeb;
 import pe.ibm.bean.Consulta;
 import pe.ibm.bean.ConsultaServicio;
 import pe.ibm.bean.ContentManager;
 import pe.ibm.bean.ExpedienteTCWPS;
 import pe.ibm.bean.ExpedienteTCWPSWeb;
+import pe.ibm.bean.Producto;
+import pe.ibm.bean.ProductoWeb;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -358,24 +362,37 @@ public final class Convertidor {
 		return consultaServicio;
 	}
 
+	public static Cliente fromClienteWebToCliente(ClienteWeb cli){
+		Cliente objTemp=new Cliente();
+		objTemp.setTipoDOI(cli.getTipoDOI());
+		objTemp.setNumeroDOI(cli.getNumeroDOI());
+		return objTemp;
+	}
+	
+	public static Producto fromProductoWebToProducto(ProductoWeb pro){
+		Producto objTemp=new Producto();
+		objTemp.setIdProducto(pro.getIdProducto());
+		return objTemp;
+	}
+	
 	public static ExpedienteTCWPS fromExpedienteTCWPSWebToExpedienteTCWPS(ExpedienteTCWPSWeb obj) {
 		ExpedienteTCWPS objTemp = new ExpedienteTCWPS();
 		
 			objTemp.setAccion(obj.getAccion());
 			objTemp.setActivado(obj.getActivado());
 			objTemp.setCantDocumentos(obj.getCantDocumentos());
-			objTemp.setCliente(obj.getCliente());
+			objTemp.setCliente(fromClienteWebToCliente(obj.getCliente()));
 			objTemp.setCodigo(obj.getCodigo());
 			objTemp.setCodigoEmpleadoResponsable(obj.getCodigoEmpleadoResponsable());
-			objTemp.setCodigoPreEvaluador(obj.getCodigoPreEvaluador());
-			objTemp.setCodigoRVGL(obj.getCodigoRVGL());
+		//	objTemp.setCodigoPreEvaluador(obj.getCodigoPreEvaluador());
+		//	objTemp.setCodigoRVGL(obj.getCodigoRVGL());
 			objTemp.setCodigoUsuarioActual(obj.getCodigoUsuarioActual());
 			objTemp.setCodigoUsuarioAnterior(obj.getCodigoUsuarioAnterior());
 			objTemp.setDescripcionError(obj.getDescripcionError());
-			objTemp.setDesOficina(obj.getDesOficina());
+		//	objTemp.setDesOficina(obj.getDesOficina());
 			objTemp.setDesTarea(obj.getDesTarea());
 			objTemp.setDesTareaAnterior(obj.getDesTareaAnterior());
-			objTemp.setDesTerritorio(obj.getDesTerritorio());
+	//		objTemp.setDesTerritorio(obj.getDesTerritorio());
 			objTemp.setDevueltoPor(obj.getDevueltoPor());
 			objTemp.setEstado(obj.getEstado());
 			objTemp.setEstadoAnterior(obj.getEstadoAnterior());
@@ -385,10 +402,10 @@ public final class Convertidor {
 			objTemp.setFechaRestauracion(obj.getFechaRestauracion());
 			objTemp.setFlagEnProcesoTimer(obj.getFlagEnProcesoTimer());
 			objTemp.setFlagEnvioContent(obj.getFlagEnvioContent());
-			objTemp.setFlagProvincia(obj.getFlagProvincia());
+		//	objTemp.setFlagProvincia(obj.getFlagProvincia());
 			objTemp.setFlagRetraer(obj.getFlagRetraer());
 			objTemp.setFlagSubrogacion(obj.getFlagSubrogacion());
-			objTemp.setIdGrupoSegmento(obj.getIdGrupoSegmento());
+	//		objTemp.setIdGrupoSegmento(obj.getIdGrupoSegmento());
 			objTemp.setIdOficina(obj.getIdOficina());
 			objTemp.setIdPerfilUsuarioActual(obj.getIdPerfilUsuarioActual());
 			objTemp.setIdPerfilUsuarioAnterior(obj.getIdPerfilUsuarioAnterior());
@@ -396,22 +413,22 @@ public final class Convertidor {
 			objTemp.setIdTareaAnterior(obj.getIdTareaAnterior());
 			objTemp.setIdTerritorio(obj.getIdTerritorio());
 			objTemp.setIdTipoOferta(obj.getIdTipoOferta());
-			objTemp.setLineaCredito(obj.getLineaCredito()==null?0.0:obj.getLineaCredito());
+		//..	objTemp.setLineaCredito(obj.getLineaCredito()==null?0.0:obj.getLineaCredito());
 			objTemp.setModificacionScoring(obj.getModificacionScoring());
-			objTemp.setMoneda(obj.getMoneda());
-			objTemp.setMontoAprobado(obj.getMontoAprobado());
+	//	..	objTemp.setMoneda(obj.getMoneda());
+	//..		objTemp.setMontoAprobado(obj.getMontoAprobado());
 			objTemp.setNombreNavegacionWeb(obj.getNombreNavegacionWeb());
 			objTemp.setNombreUsuarioActual(obj.getNombreUsuarioActual());
 			objTemp.setNombreUsuarioAnterior(obj.getNombreUsuarioAnterior());
 			objTemp.setNroReintentos(obj.getNroReintentos());
-			objTemp.setNumeroContrato(obj.getNumeroContrato());
-			objTemp.setNumeroDevoluciones(obj.getNumeroDevoluciones());
-			objTemp.setObservacion(obj.getObservacion());
+		//..	objTemp.setNumeroContrato(obj.getNumeroContrato());
+	//..		objTemp.setNumeroDevoluciones(obj.getNumeroDevoluciones());
+	//..		objTemp.setObservacion(obj.getObservacion());
 			objTemp.setPerfilUsuarioActual(obj.getPerfilUsuarioActual());
 			objTemp.setPerfilUsuarioAnterior(obj.getPerfilUsuarioAnterior());
-			objTemp.setProducto(obj.getProducto());
-			objTemp.setScoringAprobado(obj.getScoringAprobado());
-			objTemp.setSegmento(obj.getSegmento());
+			objTemp.setProducto(fromProductoWebToProducto(obj.getProducto()));
+	//..		objTemp.setScoringAprobado(obj.getScoringAprobado());
+	//..		objTemp.setSegmento(obj.getSegmento());
 			objTemp.setTaskID(obj.getTaskID());
 			objTemp.setTipoError(obj.getTipoError());
 			objTemp.setTipoOferta(obj.getTipoOferta());
@@ -430,6 +447,97 @@ public final class Convertidor {
 			return false;
 		}
 	}	
+	
+	public static ClienteWeb fromClienteToClienteWeb(Cliente cli){
+		ClienteWeb objTemp=new ClienteWeb();
+		if(cli!=null){
+		objTemp.setTipoDOI(cli.getTipoDOI());
+		objTemp.setNumeroDOI(cli.getNumeroDOI());
+		}
+		return objTemp;
+	}
+	
+	public static ProductoWeb fromProductoToProductoWeb(Producto pro){
+		ProductoWeb objTemp=new ProductoWeb();
+		if(pro!=null){
+			objTemp.setIdProducto(pro.getIdProducto());
+		}
+		
+		return objTemp;
+	}
+	public static ExpedienteTCWPSWeb fromObjExpedienteTCWPSToObjExpedienteTCWPSWeb(ExpedienteTCWPS obj, String opcion) {
+			if(opcion.equals("1")){
+				if(obj.getIdTarea()!=null && !obj.getIdTarea().equals("") && validarLong(obj.getIdTarea()))
+					LOG.info("Existe tarea");
+				else{
+					LOG.info("isTarea es nula para exp "+obj.getCodigo());
+					
+				}
+			}
+			
+			LOG.info("Pasando valores para exp:"+obj.getCodigo());
+				ExpedienteTCWPSWeb objTemp=new ExpedienteTCWPSWeb();
+				objTemp.setIdTarea(obj.getIdTarea());
+				objTemp.setAccion(obj.getAccion());
+				objTemp.setActivado(obj.getActivado());
+				objTemp.setCantDocumentos(obj.getCantDocumentos());
+				objTemp.setCliente(fromClienteToClienteWeb(obj.getCliente()));
+				objTemp.setCodigo(obj.getCodigo());
+				objTemp.setCodigoEmpleadoResponsable(obj.getCodigoEmpleadoResponsable());
+			//..	objTemp.setCodigoPreEvaluador(obj.getCodigoPreEvaluador());
+		//..		objTemp.setCodigoRVGL(obj.getCodigoRVGL());
+				objTemp.setCodigoUsuarioActual(obj.getCodigoUsuarioActual());
+				objTemp.setCodigoUsuarioAnterior(obj.getCodigoUsuarioAnterior());
+				objTemp.setDescripcionError(obj.getDescripcionError());
+		//..		objTemp.setDesOficina(obj.getDesOficina());
+				objTemp.setDesTarea(obj.getDesTarea());
+				objTemp.setDesTareaAnterior(obj.getDesTareaAnterior());
+		//..		objTemp.setDesTerritorio(obj.getDesTerritorio());
+				objTemp.setDevueltoPor(obj.getDevueltoPor());
+				objTemp.setEstado(obj.getEstado());
+				objTemp.setEstadoAnterior(obj.getEstadoAnterior());
+				objTemp.setFechaCancelacion(obj.getFechaCancelacion());
+				objTemp.setFechaDocumento(obj.getFechaDocumento());
+				objTemp.setFechaIncidencia(obj.getFechaIncidencia());
+				objTemp.setFechaRestauracion(obj.getFechaRestauracion());
+				objTemp.setFlagEnProcesoTimer(obj.getFlagEnProcesoTimer());
+				objTemp.setFlagEnvioContent(obj.getFlagEnvioContent());
+			//..	objTemp.setFlagProvincia(obj.getFlagProvincia());
+				objTemp.setFlagRetraer(obj.getFlagRetraer());
+				objTemp.setFlagSubrogacion(obj.getFlagSubrogacion());
+			//..	objTemp.setIdGrupoSegmento(obj.getIdGrupoSegmento());
+				objTemp.setIdOficina(obj.getIdOficina());
+				objTemp.setIdPerfilUsuarioActual(obj.getIdPerfilUsuarioActual());
+				objTemp.setIdPerfilUsuarioAnterior(obj.getIdPerfilUsuarioAnterior());
+				objTemp.setIdTareaAnterior(obj.getIdTareaAnterior());
+				objTemp.setIdTerritorio(obj.getIdTerritorio());
+				objTemp.setIdTipoOferta(obj.getIdTipoOferta());
+		//..		objTemp.setLineaCredito(obj.getLineaCredito());
+				objTemp.setModificacionScoring(obj.getModificacionScoring());
+		//..		objTemp.setMoneda(obj.getMoneda());
+		//..		objTemp.setMontoAprobado(obj.getMontoAprobado());
+				objTemp.setNombreNavegacionWeb(obj.getNombreNavegacionWeb());
+				objTemp.setNombreUsuarioActual(obj.getNombreUsuarioActual());
+				objTemp.setNombreUsuarioAnterior(obj.getNombreUsuarioAnterior());
+				objTemp.setNroReintentos(obj.getNroReintentos());
+		//..		objTemp.setNumeroContrato(obj.getNumeroContrato());
+		//..		objTemp.setNumeroDevoluciones(obj.getNumeroDevoluciones());
+		//..		objTemp.setObservacion(obj.getObservacion());
+				objTemp.setPerfilUsuarioActual(obj.getPerfilUsuarioActual());
+				objTemp.setPerfilUsuarioAnterior(obj.getPerfilUsuarioAnterior());
+				objTemp.setProducto(fromProductoToProductoWeb(obj.getProducto()));
+		//..		objTemp.setScoringAprobado(obj.getScoringAprobado());
+			//..	objTemp.setSegmento(obj.getSegmento());
+				objTemp.setTaskID(obj.getTaskID());
+				objTemp.setTipoError(obj.getTipoError());
+				objTemp.setTipoOferta(obj.getTipoOferta());
+				objTemp.setVerificacionDomiciliaria(obj.getVerificacionDomiciliaria());	
+				
+
+	
+		return objTemp;
+	}
+	
 	public static List<ExpedienteTCWPSWeb> fromExpedienteTCWPSToExpedienteTCWPSWeb(List<ExpedienteTCWPS> listProcess, String opcion) {
 		List<ExpedienteTCWPSWeb> listWeb = new ArrayList<ExpedienteTCWPSWeb>();
 		
@@ -450,18 +558,18 @@ public final class Convertidor {
 				objTemp.setAccion(obj.getAccion());
 				objTemp.setActivado(obj.getActivado());
 				objTemp.setCantDocumentos(obj.getCantDocumentos());
-				objTemp.setCliente(obj.getCliente());
+				objTemp.setCliente(fromClienteToClienteWeb(obj.getCliente()));
 				objTemp.setCodigo(obj.getCodigo());
 				objTemp.setCodigoEmpleadoResponsable(obj.getCodigoEmpleadoResponsable());
-				objTemp.setCodigoPreEvaluador(obj.getCodigoPreEvaluador());
-				objTemp.setCodigoRVGL(obj.getCodigoRVGL());
+			//..	objTemp.setCodigoPreEvaluador(obj.getCodigoPreEvaluador());
+		//..		objTemp.setCodigoRVGL(obj.getCodigoRVGL());
 				objTemp.setCodigoUsuarioActual(obj.getCodigoUsuarioActual());
 				objTemp.setCodigoUsuarioAnterior(obj.getCodigoUsuarioAnterior());
 				objTemp.setDescripcionError(obj.getDescripcionError());
-				objTemp.setDesOficina(obj.getDesOficina());
+		//..		objTemp.setDesOficina(obj.getDesOficina());
 				objTemp.setDesTarea(obj.getDesTarea());
 				objTemp.setDesTareaAnterior(obj.getDesTareaAnterior());
-				objTemp.setDesTerritorio(obj.getDesTerritorio());
+		//..		objTemp.setDesTerritorio(obj.getDesTerritorio());
 				objTemp.setDevueltoPor(obj.getDevueltoPor());
 				objTemp.setEstado(obj.getEstado());
 				objTemp.setEstadoAnterior(obj.getEstadoAnterior());
@@ -471,32 +579,32 @@ public final class Convertidor {
 				objTemp.setFechaRestauracion(obj.getFechaRestauracion());
 				objTemp.setFlagEnProcesoTimer(obj.getFlagEnProcesoTimer());
 				objTemp.setFlagEnvioContent(obj.getFlagEnvioContent());
-				objTemp.setFlagProvincia(obj.getFlagProvincia());
+			//..	objTemp.setFlagProvincia(obj.getFlagProvincia());
 				objTemp.setFlagRetraer(obj.getFlagRetraer());
 				objTemp.setFlagSubrogacion(obj.getFlagSubrogacion());
-				objTemp.setIdGrupoSegmento(obj.getIdGrupoSegmento());
+			//..	objTemp.setIdGrupoSegmento(obj.getIdGrupoSegmento());
 				objTemp.setIdOficina(obj.getIdOficina());
 				objTemp.setIdPerfilUsuarioActual(obj.getIdPerfilUsuarioActual());
 				objTemp.setIdPerfilUsuarioAnterior(obj.getIdPerfilUsuarioAnterior());
 				objTemp.setIdTareaAnterior(obj.getIdTareaAnterior());
 				objTemp.setIdTerritorio(obj.getIdTerritorio());
 				objTemp.setIdTipoOferta(obj.getIdTipoOferta());
-				objTemp.setLineaCredito(obj.getLineaCredito());
+		//..		objTemp.setLineaCredito(obj.getLineaCredito());
 				objTemp.setModificacionScoring(obj.getModificacionScoring());
-				objTemp.setMoneda(obj.getMoneda());
-				objTemp.setMontoAprobado(obj.getMontoAprobado());
+		//..		objTemp.setMoneda(obj.getMoneda());
+		//..		objTemp.setMontoAprobado(obj.getMontoAprobado());
 				objTemp.setNombreNavegacionWeb(obj.getNombreNavegacionWeb());
 				objTemp.setNombreUsuarioActual(obj.getNombreUsuarioActual());
 				objTemp.setNombreUsuarioAnterior(obj.getNombreUsuarioAnterior());
 				objTemp.setNroReintentos(obj.getNroReintentos());
-				objTemp.setNumeroContrato(obj.getNumeroContrato());
-				objTemp.setNumeroDevoluciones(obj.getNumeroDevoluciones());
-				objTemp.setObservacion(obj.getObservacion());
+		//..		objTemp.setNumeroContrato(obj.getNumeroContrato());
+		//..		objTemp.setNumeroDevoluciones(obj.getNumeroDevoluciones());
+		//..		objTemp.setObservacion(obj.getObservacion());
 				objTemp.setPerfilUsuarioActual(obj.getPerfilUsuarioActual());
 				objTemp.setPerfilUsuarioAnterior(obj.getPerfilUsuarioAnterior());
-				objTemp.setProducto(obj.getProducto());
-				objTemp.setScoringAprobado(obj.getScoringAprobado());
-				objTemp.setSegmento(obj.getSegmento());
+				objTemp.setProducto(fromProductoToProductoWeb(obj.getProducto()));
+		//..		objTemp.setScoringAprobado(obj.getScoringAprobado());
+			//..	objTemp.setSegmento(obj.getSegmento());
 				objTemp.setTaskID(obj.getTaskID());
 				objTemp.setTipoError(obj.getTipoError());
 				objTemp.setTipoOferta(obj.getTipoOferta());
