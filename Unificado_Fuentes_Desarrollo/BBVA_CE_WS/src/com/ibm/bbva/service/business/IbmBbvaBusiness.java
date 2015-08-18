@@ -498,7 +498,9 @@ public class IbmBbvaBusiness {
 										if(objDelegacionOficina.getClasificacionBanco().getId()==objExpedienteDTO.getClasificacionBanco().longValue()){
 											LOG.info("Validación Clasificacion Banco Titular OK");
 											if(Util.isDouble(""+objDelegacionOficina.getClasificacionSbs()) && Util.isDouble(""+objExpedienteDTO.getClasificacionSbs()) && 
-													objDelegacionOficina.getClasificacionSbs()==objExpedienteDTO.getClasificacionSbs()){
+													//objDelegacionOficina.getClasificacionSbs()==objExpedienteDTO.getClasificacionSbs()){
+													//comentado para el fix2 por erika abregu
+													objDelegacionOficina.getClasificacionSbs()>=objExpedienteDTO.getClasificacionSbs()){
 												LOG.info("Validación Clasificacion Sbs Titular OK");
 												if(Util.isDouble(""+objDelegacionOficina.getLimiteConsumo()) && Util.isDouble(""+objExpedienteDTO.getLineaConsumo()) && 
 														objDelegacionOficina.getLimiteConsumo() >= objExpedienteDTO.getLineaConsumo()){
@@ -693,13 +695,19 @@ public class IbmBbvaBusiness {
 																		/**
 																		 * */	
 																			
-																			if(objExpedienteDTO.getCodigoEstadoCivilTitular()!=null && objExpedienteDTO.getCodigoEstadoCivilTitular().equals(Constantes.ESTADO_CIVIL_CASADO)){
+																			//if(objExpedienteDTO.getCodigoEstadoCivilTitular()!=null && objExpedienteDTO.getCodigoEstadoCivilTitular().equals(Constantes.ESTADO_CIVIL_CASADO)){
+																			//comentado para fix2 por erika abregu
+																			if(objExpedienteDTO.getCodigoEstadoCivilTitular()!=null && Long.toString(objExpedienteDTO.getCodigoEstadoCivilTitular()).equals(String.valueOf(Constantes.ESTADO_CIVIL_CASADO))){
 																				LOG.info("Iniciando Validación Conyuge ... ");
-																				if( objDelegacionOficina.getBancoConyuge()!=null && 
-																					objDelegacionOficina.getBancoConyuge().getId()==objExpedienteDTO.getBancoConyuge().longValue()){
+																				if( objDelegacionOficina.getBancoConyuge()!=null && objExpediente.getExpedienteTC().getBancoConyuge() != null && objExpediente.getExpedienteTC().getBancoConyuge().getId() >0 &&
+																					objDelegacionOficina.getBancoConyuge().getId()==objExpediente.getExpedienteTC().getBancoConyuge().getId()){
 																					LOG.info("Validación Clasificacion Banco Conyuge OK");
-																					if(Util.isDouble(""+objDelegacionOficina.getSbsConyuge()) && 
+																					//comentado para el fix2 por erika abregu
+																					/*if(Util.isDouble(""+objDelegacionOficina.getSbsConyuge()) && 
 																							objDelegacionOficina.getSbsConyuge()==(!Util.isDouble(""+objExpedienteDTO.getSbsConyuge())?null:objExpedienteDTO.getSbsConyuge())){
+																					*/		
+																					if(Util.isDouble(""+objDelegacionOficina.getSbsConyuge()) && Util.isDouble(""+objExpediente.getExpedienteTC().getSbsConyuge()) &&  		
+																							objDelegacionOficina.getSbsConyuge()>=objExpediente.getExpedienteTC().getSbsConyuge()){
 																						LOG.info("Validación Clasificacion Sbs Conyuge OK");
 																						return true;
 																					}
