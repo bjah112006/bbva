@@ -163,7 +163,7 @@ public class ConvertHistorial {
 			
 			//Historial
 			/*hist.setOrigen(histDTO.getOrigen()!=null?histDTO.getOrigen():null);*/
-			hist.setClasificacionSbs(histDTO.getClasificacionSBS()!=null?Double.parseDouble(histDTO.getClasificacionSBS()):0);
+			hist.setClasificacionSbs(histDTO.getClasificacionSBS()!=null?Util.convertStringToDouble(histDTO.getClasificacionSBS()):0);
 			hist.setCodPreEval(histDTO.getCodPreEval()!=null?histDTO.getCodPreEval():null);
 			/*hist.setComentarioAyuMem(histDTO.getComentarioAyuMem()!=null?histDTO.getComentarioAyuMem():null);
 			hist.setComentarioAyuMem(histDTO.getComentarioAyuMem()!=null?histDTO.getComentarioAyuMem():null);
@@ -185,8 +185,8 @@ public class ConvertHistorial {
 			hist.setFlagRetraer(histDTO.getFlagRetraer()!=null?histDTO.getFlagRetraer():null);
 			hist.setFlagSolTasaEsp(histDTO.getFlagSolTasaEsp()!=null?histDTO.getFlagSolTasaEsp():null);
 			hist.setLineaConsumo(histDTO.getLineaConsumo()!=null?Double.parseDouble(histDTO.getLineaConsumo()):0);*/
-			hist.setLineaCredAprob(histDTO.getLineaCredAprob()!=null?Double.parseDouble(histDTO.getLineaCredAprob()):0);
-			hist.setLineaCredSol(histDTO.getLineaCredSol()!=null?Double.parseDouble(histDTO.getLineaCredSol()):0);
+			hist.setLineaCredAprob(histDTO.getLineaCredAprob()!=null?Util.convertStringToDouble(histDTO.getLineaCredAprob()):0);
+			hist.setLineaCredSol(histDTO.getLineaCredSol()!=null?Util.convertStringToDouble(histDTO.getLineaCredSol()):0);
 			hist.setNroContrato(histDTO.getNroContrato()!=null?histDTO.getNroContrato():null);
 			/*hist.setNroCta(histDTO.getNroCuenta()!=null?histDTO.getNroCuenta():null);
 			hist.setNumTerminal(histDTO.getNumTerminal()!=null?histDTO.getNumTerminal():null);
@@ -201,7 +201,7 @@ public class ConvertHistorial {
 			hist.setPorcentajeEndeudamiento(histDTO.getPorcentajeEndeudamiento()!=null?Double.parseDouble(histDTO.getPorcentajeEndeudamiento()):0);
 			hist.setRiesgoCliente(histDTO.getRiesgoCliente()!=null?Double.parseDouble(histDTO.getRiesgoCliente()):0);
 			hist.setSbsConyuge(histDTO.getSbsConyugue()!=null?Double.parseDouble(histDTO.getSbsConyugue()):0);*/
-			hist.setTasaEsp(histDTO.getTasaEsp()!=null?Double.parseDouble(histDTO.getTasaEsp()):0);
+			hist.setTasaEsp(histDTO.getTasaEsp()!=null?Util.convertStringToDouble(histDTO.getTasaEsp()):0);
 			/*hist.setTipoResolucion(histDTO.getTipoResolucion()!=null?histDTO.getTipoResolucion():null);
 			hist.setVerifDom(histDTO.getVerifDom()!=null?histDTO.getVerifDom():null);
 			hist.setVerifLab(histDTO.getVerifLab()!=null?histDTO.getVerifLab():null);
@@ -230,7 +230,7 @@ public class ConvertHistorial {
 			hist.getClienteNatural().setSubrog(histDTO.getSubrogCliente()!=null?histDTO.getSubrogCliente():null);
 			hist.getClienteNatural().getEstadoCivil().setId(histDTO.getCodEstCivilCliente()!=null?Long.parseLong(histDTO.getCodEstCivilCliente()):0);
 			hist.getClienteNatural().setNombre(histDTO.getNombreCliente()!=null?histDTO.getNombreCliente():null);
-			hist.getClienteNatural().setIngNetoMensual(histDTO.getIngNetoMensualCliente()!=null?Double.parseDouble(histDTO.getIngNetoMensualCliente()):0);
+			hist.getClienteNatural().setIngNetoMensual(histDTO.getIngNetoMensualCliente()!=null?Util.convertStringToDouble(histDTO.getIngNetoMensualCliente()):0);
 			hist.getClienteNatural().setFecVenDoi(histDTO.getFechaVenDoiCliente()!=null?convertStringToTimestamp(histDTO.getFechaVenDoiCliente()):null);
 			hist.getClienteNatural().setNumDoi(histDTO.getNumDoiCliente()!=null?histDTO.getNumDoiCliente():null);
 			hist.getClienteNatural().setPerExpPub(histDTO.getPerExpPubCliente()!=null? histDTO.getPerExpPubCliente(): null);
@@ -257,7 +257,7 @@ public class ConvertHistorial {
 			hist.getClienteNaturalConyuge().setSubrog(histDTO.getSubrogConyugue()!=null?histDTO.getSubrogConyugue():null);
 			hist.getClienteNaturalConyuge().getEstadoCivil().setId(histDTO.getCodEstCivilConyugue()!=null?Long.parseLong(histDTO.getCodEstCivilConyugue()):0);
 			hist.getClienteNaturalConyuge().setNombre(histDTO.getNombreConyugue()!=null?histDTO.getNombreConyugue():null);
-			hist.getClienteNaturalConyuge().setIngNetoMensual(histDTO.getIngNetoMensualConyugue()!=null?Double.parseDouble(histDTO.getIngNetoMensualConyugue()):0);
+			hist.getClienteNaturalConyuge().setIngNetoMensual(histDTO.getIngNetoMensualConyugue()!=null?Util.convertStringToDouble(histDTO.getIngNetoMensualConyugue()):0);
 			hist.getClienteNaturalConyuge().setFecVenDoi(histDTO.getFechaVenDoiConyugue()!=null?convertStringToTimestamp(histDTO.getFechaVenDoiConyugue()):null);
 			hist.getClienteNaturalConyuge().setNumDoi(histDTO.getNumDoiConyugue()!=null?histDTO.getNumDoiConyugue():null);
 			hist.getClienteNaturalConyuge().setPagoHab(histDTO.getPagoHabConyugue()!=null?histDTO.getPagoHabConyugue():null);
@@ -286,7 +286,7 @@ public class ConvertHistorial {
 			hist.getEmpleado().getOficina().setFlagAreaRiesgo(histDTO.getFlagAreaRiesgoOfiEmpleado()!=null?histDTO.getFlagAreaRiesgoOfiEmpleado():null);
 			hist.getEmpleado().getOficina().setFlagDesplazada(histDTO.getFlagDesplezadaOfiEmpleado()!=null?histDTO.getFlagDesplezadaOfiEmpleado():null);
 			hist.getEmpleado().getOficina().setFlagEscaneoWeb(histDTO.getFlagEscaneoWebOfiEmpleado()!=null?histDTO.getFlagEscaneoWebOfiEmpleado():null);
-			hist.getEmpleado().getOficina().setMontoTope(histDTO.getMontoTopeOfiEmpleado()!=null?Double.parseDouble(histDTO.getMontoTopeOfiEmpleado()):0);
+			hist.getEmpleado().getOficina().setMontoTope(histDTO.getMontoTopeOfiEmpleado()!=null?Util.convertStringToDouble(histDTO.getMontoTopeOfiEmpleado()):0);
 			hist.getEmpleado().getOficina().setTasaTransf(histDTO.getTasaTransOfiEmpleado()!=null?new BigDecimal(histDTO.getTasaTransOfiEmpleado()):null);
 			hist.getEmpleado().getOficina().setFlagActivo(histDTO.getFlagActivoEmpleado()!=null?histDTO.getFlagActivoEmpleado():null);
 			hist.getEmpleado().getOficina().getOficinaPrincipal().setId(histDTO.getCodOfiPrincipalEmpleado()!=null?Long.parseLong(histDTO.getCodOfiPrincipalEmpleado()):0);
@@ -309,7 +309,7 @@ public class ConvertHistorial {
 			hist.getEmpleadoResp().getOficina().setFlagAreaRiesgo(histDTO.getFlagAreaRiesgoOfiEmpleadoResp()!=null?histDTO.getFlagAreaRiesgoOfiEmpleadoResp():null);
 			hist.getEmpleadoResp().getOficina().setFlagDesplazada(histDTO.getFlagDesplezadaOfiEmpleadoResp()!=null?histDTO.getFlagDesplezadaOfiEmpleadoResp():null);
 			hist.getEmpleadoResp().getOficina().setFlagEscaneoWeb(histDTO.getFlagEscaneoWebOfiEmpleadoResp()!=null?histDTO.getFlagEscaneoWebOfiEmpleadoResp():null);
-			hist.getEmpleadoResp().getOficina().setMontoTope(histDTO.getMontoTopeOfiEmpleadoResp()!=null?Double.parseDouble(histDTO.getMontoTopeOfiEmpleadoResp()):0);
+			hist.getEmpleadoResp().getOficina().setMontoTope(histDTO.getMontoTopeOfiEmpleadoResp()!=null?Util.convertStringToDouble(histDTO.getMontoTopeOfiEmpleadoResp()):0);
 			hist.getEmpleadoResp().getOficina().setTasaTransf(histDTO.getTasaTransOfiEmpleadoResp()!=null?new BigDecimal(histDTO.getTasaTransOfiEmpleadoResp()):null);
 			hist.getEmpleadoResp().getOficina().setFlagActivo(histDTO.getFlagActivoEmpleadoResp()!=null?histDTO.getFlagActivoEmpleadoResp():null);
 			hist.getEmpleadoResp().getOficina().getOficinaPrincipal().setId(histDTO.getCodOfiPrincipalEmpleadoResp()!=null?Long.parseLong(histDTO.getCodOfiPrincipalEmpleadoResp()):0);
@@ -345,7 +345,7 @@ public class ConvertHistorial {
 			hist.getOficina().setFlagAreaRiesgo(histDTO.getFlagAreaRiesgoOficina()!=null?histDTO.getFlagAreaRiesgoOficina():null);
 			hist.getOficina().setFlagDesplazada(histDTO.getFlagDesplazadaOficina()!=null?histDTO.getFlagDesplazadaOficina():null);
 			hist.getOficina().setFlagEscaneoWeb(histDTO.getFlagEscaneoWebOficina()!=null?histDTO.getFlagEscaneoWebOficina():null);
-			hist.getOficina().setMontoTope(histDTO.getMontoTopeOficina()!=null?Double.parseDouble(histDTO.getMontoTopeOficina()):0);
+			hist.getOficina().setMontoTope(histDTO.getMontoTopeOficina()!=null?Util.convertStringToDouble(histDTO.getMontoTopeOficina()):0);
 			hist.getOficina().setTasaTransf(histDTO.getTasaTransfOficina()!=null?new BigDecimal(histDTO.getTasaTransfOficina()):null);
 			hist.getOficina().setFlagActivo(histDTO.getFlagActivoOficina()!=null?histDTO.getFlagActivoOficina():null);
 			hist.getOficina().getOficinaPrincipal().setId(histDTO.getCodOfiPrincipalOficina()!=null?Long.parseLong(histDTO.getCodOfiPrincipalOficina()):0);
@@ -532,7 +532,7 @@ public class ConvertHistorial {
 		vo.getExpedienteTC().getTipoOferta().setDescripcion(historial.getNombreTipoOferta() !=null?historial.getNombreTipoOferta(): null);
 		
 		vo.getExpedienteTC().setCodPreEval(historial.getCodigoPreevaluadorExp() !=null?historial.getCodigoPreevaluadorExp(): null);
-		vo.getExpedienteTC().setLineaCredSol(historial.getLineaCredSol()!=null?Double.parseDouble(historial.getLineaCredSol()) :0);
+		vo.getExpedienteTC().setLineaCredSol(historial.getLineaCredSol()!=null?Util.convertStringToDouble(historial.getLineaCredSol()) :0);
 		
 		vo.getExpedienteTC().setSubproducto(new Subproducto());
 		vo.getExpedienteTC().getSubproducto().setId(historial.getCodSubProducto() !=null?Long.parseLong(historial.getCodSubProducto()): 0);
@@ -549,11 +549,11 @@ public class ConvertHistorial {
 		vo.getExpedienteTC().setZonaPel(historial.getZonaPel());
 		vo.getExpedienteTC().setFlagComentario(historial.getFlagComentario());
 		vo.setComentario(historial.getComentario());*/
-		vo.getExpedienteTC().setLineaConsumo(historial.getLineaConsumo()!=null?Double.parseDouble(historial.getLineaConsumo()):0);
-		vo.getExpedienteTC().setPorcentajeEndeudamiento(historial.getPorcentajeEndeudamiento()!=null?Double.parseDouble(historial.getPorcentajeEndeudamiento()):0);
+		vo.getExpedienteTC().setLineaConsumo(historial.getLineaConsumo()!=null?Util.convertStringToDouble(historial.getLineaConsumo()):0);
+		vo.getExpedienteTC().setPorcentajeEndeudamiento(historial.getPorcentajeEndeudamiento()!=null?Util.convertStringToDouble(historial.getPorcentajeEndeudamiento()):0);
 		/*vo.getExpedienteTC().setRiesgoCliente(historial.getRiesgoCliente());*/
-		vo.getExpedienteTC().setClasificacionSbs(historial.getClasificacionSBS()!=null?Double.parseDouble(historial.getClasificacionSBS()):0);
-		vo.getExpedienteTC().setSbsConyuge(historial.getClasifSbsCony() !=null?Double.parseDouble(historial.getClasifSbsCony()):0);
+		vo.getExpedienteTC().setClasificacionSbs(historial.getClasificacionSBS()!=null?Util.convertStringToDouble(historial.getClasificacionSBS()):0);
+		vo.getExpedienteTC().setSbsConyuge(historial.getClasifSbsCony() !=null?Util.convertStringToDouble(historial.getClasifSbsCony()):0);
 		
 		vo.getExpedienteTC().setClasificacionBanco(new ClasifBanco());
 		vo.getExpedienteTC().getClasificacionBanco().setDescripcion(historial.getClasificacionBanco() !=null?historial.getClasificacionBanco():null);
@@ -565,7 +565,7 @@ public class ConvertHistorial {
 		vo.getExpedienteTC().setNroContrato(historial.getNroContrato()!=null?historial.getNroContrato():null);
 		vo.getExpedienteTC().setPlazoSolicitado(historial.getPlazoSolicitadoExp() !=null?historial.getPlazoSolicitadoExp():null);
 		vo.getExpedienteTC().setPlazoSolicitadoApr(historial.getPlazoSolAprob()!=null?historial.getPlazoSolAprob():null);
-		vo.getExpedienteTC().setLineaCredAprob(historial.getLineaCredAprob()!=null?Double.parseDouble(historial.getLineaCredAprob()):0);
+		vo.getExpedienteTC().setLineaCredAprob(historial.getLineaCredAprob()!=null?Util.convertStringToDouble(historial.getLineaCredAprob()):0);
 		vo.getExpedienteTC().setVerifDom(historial.getFlagVerificacionDomExp()!=null?historial.getFlagVerificacionDomExp():null);
 		vo.getExpedienteTC().setVerifLab(historial.getFlagVerificacionLabExp()!=null?historial.getFlagVerificacionLabExp():null);
 		vo.getExpedienteTC().setVerifDps(historial.getVerifDPS()!=null?historial.getVerifDPS():null);
@@ -589,7 +589,7 @@ public class ConvertHistorial {
 		vo.getExpedienteTC().setTipoMonedaAprob(new TipoMoneda());
 		
 		/*vo.getExpedienteTC().setFlagSolTasaEsp(historial.getFlagSolTasaEsp());*/
-		vo.getExpedienteTC().setTasaEsp(historial.getTasaEsp()!=null?Double.parseDouble(historial.getTasaEsp()):0);
+		vo.getExpedienteTC().setTasaEsp(historial.getTasaEsp()!=null?Util.convertStringToDouble(historial.getTasaEsp()):0);
 		vo.getExpedienteTC().setFlagModifScore(historial.getModificarScoring()!=null?historial.getModificarScoring():null);
 		/*vo.getExpedienteTC().setFlagExcDelegacion(historial.getFlagExcDelegacion());
 		vo.getExpedienteTC().setEstadoEnvWorkflowTc(historial.getEstadoEnvWorkflowTc());
@@ -631,7 +631,7 @@ public class ConvertHistorial {
 		vo.getExpedienteTC().getOficina().setCodigo(historial.getCodigoOficina()!=null?historial.getCodigoOficina() :null);
 		vo.getExpedienteTC().getOficina().setDescripcion(historial.getOficina() !=null?historial.getOficina() :null);
 		vo.getExpedienteTC().getOficina().setUbicacion(historial.getUbicacionOficina() !=null?historial.getUbicacionOficina() :null);
-		vo.getExpedienteTC().getOficina().setMontoTope(historial.getMontoTopeOficina() !=null?Double.parseDouble(historial.getMontoTopeOficina()) :0);
+		vo.getExpedienteTC().getOficina().setMontoTope(historial.getMontoTopeOficina() !=null?Util.convertStringToDouble(historial.getMontoTopeOficina()) :0);
 		vo.getExpedienteTC().getOficina().getTerritorio().setId(historial.getCodTerritorioOficina()!=null?Long.parseLong(historial.getCodTerritorioOficina()) :0);
 		vo.getExpedienteTC().getOficina().getTerritorio().setDescripcion(historial.getTerritorioOficina()!=null?historial.getTerritorioOficina() :null);
 		//vo.getExpedienteTC().getOficina().getTerritorio().setFlagProv(historial.getTerritorioOficina()!=null?historial.getTerritorioOficina() :null);
