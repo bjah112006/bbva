@@ -305,7 +305,7 @@ public class TablaBandejaAsigMB extends AbstractSortPagDataTableMBean {
 		if(listTabla!=null && listTabla.size()>0){
 			
 			LOG.info("Ordenando Lista por Código de Expediente");
-			Comparator<ExpedienteTCWPS> comparator = null;
+			Comparator<ExpedienteTCWPSWeb> comparator = null;
 			String orden = ComparatorBase.SORT_ORDER_ASC;
 			
 			comparator = ComparatorFactory.codigo(orden);
@@ -900,7 +900,7 @@ public class TablaBandejaAsigMB extends AbstractSortPagDataTableMBean {
 		String columna = this.sortField;
 		String orden = this.sortAscending ? ComparatorBase.SORT_ORDER_ASC
 				: ComparatorBase.SORT_ORDER_DESC;
-		Comparator<ExpedienteTCWPS> comparator = null;
+		Comparator<ExpedienteTCWPSWeb> comparator = null;
 		if ("estado".equals(columna)) {
 			comparator = ComparatorFactory.estado(orden);
 		} else if ("rol".equals(columna)) {

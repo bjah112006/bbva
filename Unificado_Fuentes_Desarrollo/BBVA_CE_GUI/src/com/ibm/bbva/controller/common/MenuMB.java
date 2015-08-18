@@ -27,10 +27,12 @@ import pe.com.grupobbva.sce.tc84.CtHeader;
 import pe.com.grupobbva.sce.tc84.CtTipoCambio;
 import pe.com.grupobbva.sce.tc84.CtTipos;
 import pe.ibm.bean.Cliente;
+import pe.ibm.bean.ClienteWeb;
 import pe.ibm.bean.Consulta;
 import pe.ibm.bean.ExpedienteTCWPS;
 import pe.ibm.bean.ExpedienteTCWPSWeb;
 import pe.ibm.bean.Producto;
+import pe.ibm.bean.ProductoWeb;
 import bbva.ws.api.view.BBVAFacadeLocal;
 
 import com.ibm.bbva.controller.AbstractLinksMBean;
@@ -162,8 +164,8 @@ public class MenuMB extends AbstractLinksMBean {
 		removeObjectSession(Constantes.LISTA_HORARIO_OFICINA);
 		
 		ExpedienteTCWPSWeb expedienteTC = new ExpedienteTCWPSWeb();
-		expedienteTC.setCliente(new Cliente());
-		expedienteTC.setProducto(new Producto());		
+		expedienteTC.setCliente(new ClienteWeb());
+		expedienteTC.setProducto(new ProductoWeb());		
 		addObjectSession(Constantes.EXPEDIENTE_PROCESO_SESION, expedienteTC);
 
 		//Eliminar estado activo del ultimo expediente trabajado en session

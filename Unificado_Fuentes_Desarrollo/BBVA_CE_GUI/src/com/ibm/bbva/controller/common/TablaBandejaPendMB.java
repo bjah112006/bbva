@@ -321,7 +321,7 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 		if(listTabla!=null && listTabla.size()>0){
 			
 			LOG.info("Ordenando Lista por Código de Expediente");
-			Comparator<ExpedienteTCWPS> comparator = null;
+			Comparator<ExpedienteTCWPSWeb> comparator = null;
 			String orden = ComparatorBase.SORT_ORDER_ASC;
 			
 			comparator = ComparatorFactory.codigo(orden);
@@ -815,7 +815,7 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
         
 		String columna = this.sortField;
 		String orden = this.sortAscending ? ComparatorBase.SORT_ORDER_ASC : ComparatorBase.SORT_ORDER_DESC;
-		Comparator<ExpedienteTCWPS>  comparator = null;
+		Comparator<ExpedienteTCWPSWeb>  comparator = null;
 		if ("estado".equals(columna)) {
 			comparator = ComparatorFactory.estado(orden);
 		} else if ("rol".equals(columna)) {
@@ -1186,38 +1186,40 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 						       * */
 						      this.setRenderedRe(false);
 						      
-							 if((Integer.parseInt(obj.getExpedienteTC().getIdTarea())==Constantes.ID_TAREA_5 || 
-									Integer.parseInt(obj.getExpedienteTC().getIdTarea())==Constantes.ID_TAREA_6 || 
-									Integer.parseInt(obj.getExpedienteTC().getIdTarea())==Constantes.ID_TAREA_11)){
-						    		  
-						    		LOG.info("Id tarea:::"+obj.getExpedienteTC().getIdTarea());
-						    		LOG.info("Accion:::"+obj.getExpedienteTC().getAccionExp());	
-						    		if(obj.getExpedienteTC().getAccionExp().equals(Constantes.ACCION_BOTON_APROBAR_OPERACION) || 
-											obj.getExpedienteTC().getAccionExp().equals(Constantes.ACCION_BOTON_RECHAZAR_EXPEDIENTE)){
-									
-						    			if(obj.getExpedienteTC().getFlagRetraer()==null){
-						    				
-						    				List<Historial> listHistorial = historialBean.buscarultimoPorId(Long.parseLong(obj.getExpedienteTC().getCodigo()));
-						    				Historial objHistorial=null;
-						    				if(listHistorial!=null && listHistorial.size()>0){
-						    					objHistorial=listHistorial.get(0);
-								    			LOG.info("Id historico::"+objHistorial.getId()+" - Id tarea Anterior:::"+objHistorial.getTarea().getId()+" - Usuario anterior :"+objHistorial.getEmpleado().getCodigo());
-								    			if(empleado.getId()==objHistorial.getEmpleado().getId()){
-									    			if(objHistorial.getTarea().getId()==Constantes.ID_TAREA_4 || 
-									    					objHistorial.getTarea().getId()==Constantes.ID_TAREA_12 ||
-									    					objHistorial.getTarea().getId()==Constantes.ID_TAREA_19){
-									    				LOG.info("RETRAER!!");
-									    				obj.getExpedienteTC().setFlagRetraer("1");
-									    			}else
-									    				obj.getExpedienteTC().setFlagRetraer("0");									    				
+						      if(obj.getExpedienteTC().getIdTarea()!=null && !obj.getExpedienteTC().getIdTarea().equals("") &&  
+						    		  !obj.getExpedienteTC().getIdTarea().equals("-1"))
+									 if((Integer.parseInt(obj.getExpedienteTC().getIdTarea())==Constantes.ID_TAREA_5 || 
+											Integer.parseInt(obj.getExpedienteTC().getIdTarea())==Constantes.ID_TAREA_6 || 
+											Integer.parseInt(obj.getExpedienteTC().getIdTarea())==Constantes.ID_TAREA_11)){
+								    		  
+								    		LOG.info("Id tarea:::"+obj.getExpedienteTC().getIdTarea());
+								    		LOG.info("Accion:::"+obj.getExpedienteTC().getAccionExp());	
+								    		if(obj.getExpedienteTC().getAccionExp().equals(Constantes.ACCION_BOTON_APROBAR_OPERACION) || 
+													obj.getExpedienteTC().getAccionExp().equals(Constantes.ACCION_BOTON_RECHAZAR_EXPEDIENTE)){
+											
+								    			if(obj.getExpedienteTC().getFlagRetraer()==null){
+								    				
+								    				List<Historial> listHistorial = historialBean.buscarultimoPorId(Long.parseLong(obj.getExpedienteTC().getCodigo()));
+								    				Historial objHistorial=null;
+								    				if(listHistorial!=null && listHistorial.size()>0){
+								    					objHistorial=listHistorial.get(0);
+										    			LOG.info("Id historico::"+objHistorial.getId()+" - Id tarea Anterior:::"+objHistorial.getTarea().getId()+" - Usuario anterior :"+objHistorial.getEmpleado().getCodigo());
+										    			if(empleado.getId()==objHistorial.getEmpleado().getId()){
+											    			if(objHistorial.getTarea().getId()==Constantes.ID_TAREA_4 || 
+											    					objHistorial.getTarea().getId()==Constantes.ID_TAREA_12 ||
+											    					objHistorial.getTarea().getId()==Constantes.ID_TAREA_19){
+											    				LOG.info("RETRAER!!");
+											    				obj.getExpedienteTC().setFlagRetraer("1");
+											    			}else
+											    				obj.getExpedienteTC().setFlagRetraer("0");									    				
+										    			}else
+										    				LOG.info("usuario no le corresponde retraer!!");
+								    				}else
+								    					LOG.info("no hay data en historico");
 								    			}else
-								    				LOG.info("usuario no le corresponde retraer!!");
-						    				}else
-						    					LOG.info("no hay data en historico");
-						    			}else
-						    				LOG.info("else flag retraer:::"+obj.getExpedienteTC().getFlagRetraer());
-									}//Fin IF acciones	  
-						    }//Fin IF tareas
+								    				LOG.info("else flag retraer:::"+obj.getExpedienteTC().getFlagRetraer());
+											}//Fin IF acciones	  
+								    }//Fin IF tareas
 							
 							 if(obj.getExpedienteTC().getFlagRetraer()!=null && obj.getExpedienteTC().getFlagRetraer().equals("1"))
 								 this.setRenderedRe(true);

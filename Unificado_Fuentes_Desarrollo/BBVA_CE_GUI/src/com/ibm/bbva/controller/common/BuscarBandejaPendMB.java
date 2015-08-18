@@ -371,7 +371,8 @@ public class BuscarBandejaPendMB extends AbstractMBean {
 		consulta.setNombres(Util.validarCampo (nombres));
 		consulta.setCodRVGL(Util.validarCampo (codigoRVGL));
 		consulta.setNumeroDOI(Util.validarCampo (numeroDOI));
-		consulta.setTipoDOI(Util.obtenerDescripcion(tiposDOI, tipoDOISeleccionado));
+		//consulta.setTipoDOI(Util.obtenerDescripcion(tiposDOI, tipoDOISeleccionado));
+		consulta.setTipoDOI(tipoDOISeleccionado);
 		consulta.setIdProducto(Util.validarId(productoSeleccionado));
 		consulta.setSubProducto(Util.obtenerDescripcion(subProductos, subProductoSeleccionado));
 		consulta.setSegmento(Util.obtenerDescripcion(segmentos, segmentoSeleccionado));
@@ -396,8 +397,10 @@ public class BuscarBandejaPendMB extends AbstractMBean {
 		RemoteUtils tareasBDelegate = new RemoteUtils();
 		//List<ExpedienteTCWPS> lista = tareasBDelegate.obtenerInstanciasTareasPorUsuario(consulta);
 		List<ExpedienteTCWPSWeb> lista = tareasBDelegate.obtenerListaTareasBandPendiente(consulta);
-				
-		this.setPendientes(String.valueOf(lista.size()));		
+		if(lista!=null)		
+			this.setPendientes(String.valueOf(lista.size()));	
+		else
+			this.setPendientes("0");
 		addObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION, lista);	
 		addObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION_NUEVO, null);
 		FacesContext ctx = FacesContext.getCurrentInstance();

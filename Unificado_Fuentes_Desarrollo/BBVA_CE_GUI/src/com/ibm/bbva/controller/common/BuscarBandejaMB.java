@@ -18,9 +18,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pe.ibm.bean.Cliente;
+import pe.ibm.bean.ClienteWeb;
 import pe.ibm.bean.Consulta;
 import pe.ibm.bean.ExpedienteTCWPSWeb;
 import pe.ibm.bean.Producto;
+import pe.ibm.bean.ProductoWeb;
 import pe.ibm.bpd.RemoteUtils;
 import bbva.ws.api.view.FacadeLocal;
 
@@ -264,7 +266,8 @@ public class BuscarBandejaMB extends AbstractMBean {
 		consulta.setNumeroDOI(Util.validarCampo (numeroDOI));
 		consulta.setCodPreEvaluador(Util.validarCampo (codigoPreEvaluador));
 		consulta.setNumeroContrato(Util.validarCampo (numContrato));
-		consulta.setTipoDOI(Util.obtenerDescripcion(tiposDOI, tipoDOISeleccionado));
+		//consulta.setTipoDOI(Util.obtenerDescripcion(tiposDOI, tipoDOISeleccionado));
+		consulta.setTipoDOI(tipoDOISeleccionado);
 		consulta.setIdProducto(Util.validarId(productoSeleccionado));
 		consulta.setSubProducto(Util.obtenerDescripcion(subProductos, subProductoSeleccionado));
 		//consulta.setTipoOferta(Util.obtenerDescripcion(tipoOfertas, tipoOfertaSeleccionado));
@@ -323,7 +326,7 @@ public class BuscarBandejaMB extends AbstractMBean {
 			LOG.info("lista es nula o vacia");
 		
 		if (consulta.getCodigoExpediente()!=null){ // solo expediente
-			if (lista.size()==0){
+			if (lista!=null && lista.size()==0){
 				Historial hist = historialBean.buscarMasRecienPorId(Long.valueOf(codigoExpediente));
 				if (hist != null){
 					if (hist.getEstado().getId() == Constantes.ESTADO_CERRADO_TAREA_27.longValue()
@@ -352,17 +355,17 @@ public class BuscarBandejaMB extends AbstractMBean {
 						objTCWPS.setSegmento(hist.getClienteNatural().getSegmento().getDescripcion());
 						objTCWPS.setIdTipoOferta(String.valueOf(hist.getTipoOferta().getId()));
 						objTCWPS.setTipoOferta(hist.getTipoOferta().getDescripcion());
-						objTCWPS.setCliente(new Cliente());
+						objTCWPS.setCliente(new ClienteWeb());
 						objTCWPS.getCliente().setTipoDOI(hist.getClienteNatural().getTipoDoi().getDescripcion());
 						objTCWPS.getCliente().setNumeroDOI(hist.getClienteNatural().getNumDoi());
 						objTCWPS.getCliente().setApPaterno(hist.getClienteNatural().getApePat());
 						objTCWPS.getCliente().setApMaterno(hist.getClienteNatural().getApeMat());
 						objTCWPS.getCliente().setNombre(hist.getClienteNatural().getNombre());
-						objTCWPS.setProducto(new Producto());
+						objTCWPS.setProducto(new ProductoWeb());
 						objTCWPS.getProducto().setIdProducto(String.valueOf(hist.getProducto().getId()));
 						objTCWPS.getProducto().setProducto(hist.getProducto().getDescripcion());
 						objTCWPS.getProducto().setSubProducto(hist.getSubproducto().getDescripcion());
-						objTCWPS.setMoneda(hist.getTipoMonedaSol().getDescripcion());
+				    	objTCWPS.setMoneda(hist.getTipoMonedaSol().getDescripcion());
 						objTCWPS.setLineaCredito(hist.getLineaCredSol());
 						objTCWPS.setMontoAprobado(hist.getLineaCredAprob());
 						objTCWPS.setDesOficina(hist.getOficina().getDescripcion());
@@ -388,7 +391,7 @@ public class BuscarBandejaMB extends AbstractMBean {
 		}
 		
 		// busqueda otros criterios.
-		if (consulta.getCodigoExpediente()==null && lista.size()==0){
+		if (consulta.getCodigoExpediente()==null && (lista==null || lista.size()==0)){
 			Mensajes mensajesOtrosCriterios = new Mensajes();
 			mensajesOtrosCriterios=mensajeBean.buscarPorId(Long.valueOf(Constantes.ID_MENSAJES_BUSQUEDA_OTROS_CRITERIOS));
 			if (mensajesOtrosCriterios!=null && mensajesOtrosCriterios.getContenido()!=null){
