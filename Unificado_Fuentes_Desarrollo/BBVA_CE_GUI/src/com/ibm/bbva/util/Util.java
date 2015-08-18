@@ -496,12 +496,12 @@ try {
 	
 	public static String obtenerDescripcion (List<SelectItem> lista, String valor) {
 		if (valor != null && !Constantes.CODIGO_CODIGO_CAMPO_VACIO.equals(valor)) {
-			LOG.info("Tamaño de usuario="+lista.size());
-			LOG.info("valor="+valor);
+			//LOG.info("Tamaño de usuario="+lista.size());
+			//LOG.info("valor="+valor);
 			for (SelectItem si : lista) {
-				LOG.info("si="+si.getValue().toString());
+				//LOG.info("si="+si.getValue().toString());
 				if (valor.equals(si.getValue())) {
-					LOG.info("OK");
+					//LOG.info("OK");
 					return si.getLabel();
 				}
 			}

@@ -12,10 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pe.ibm.bean.Cliente;
+import pe.ibm.bean.ClienteWeb;
 import pe.ibm.bean.Consulta;
 import pe.ibm.bean.ExpedienteTCWPS;
 import pe.ibm.bean.ExpedienteTCWPSWeb;
 import pe.ibm.bean.Producto;
+import pe.ibm.bean.ProductoWeb;
 import pe.ibm.bpd.RemoteUtils;
 
 import com.ibm.bbva.controller.AbstractMBean;
@@ -138,8 +140,8 @@ public class AyudaExpedienteTC extends AbstractMBean{
 		//+++++++++++++++++++++
 		expedienteTCWPS.setDevueltoPor("");
 		expedienteTCWPS.setModificacionScoring("");
-		expedienteTCWPS.setScoringAprobado("");
-		expedienteTCWPS.setCodigoRVGL("");
+//..		expedienteTCWPS.setScoringAprobado("");
+//..		expedienteTCWPS.setCodigoRVGL("");
 		expedienteTCWPS.setFlagRetraer("0");
 		//expedienteTCWPS.setCodigoUsuarioActual("");	
 		expedienteTCWPS.setPerfilUsuarioActual("");
@@ -151,17 +153,17 @@ public class AyudaExpedienteTC extends AbstractMBean{
 		//VERIFICA SI EXPEDIENTE Y EXPEDIENTETC NO ES NULO
 		if(expediente!=null && expediente.getExpedienteTC()!=null){
 			
-			if(expediente.getExpedienteTC().getTipoMonedaSol()!=null){
+		/*..	if(expediente.getExpedienteTC().getTipoMonedaSol()!=null){
 				expedienteTCWPS.setMoneda(expediente.getExpedienteTC().getTipoMonedaSol().getDescripcion());
-			}
+			}*/
 			
 			expedienteTCWPS.setIdTarea(expediente.getExpedienteTC().getTarea()==null?"":expediente.getExpedienteTC().getTarea().getCodigo());
 			
-			expedienteTCWPS.setLineaCredito(expediente.getExpedienteTC().getLineaCredSol());
+	/*..		expedienteTCWPS.setLineaCredito(expediente.getExpedienteTC().getLineaCredSol());
 			expedienteTCWPS.setMontoAprobado(expediente.getExpedienteTC().getLineaCredAprob());
 			expedienteTCWPS.setCodigoPreEvaluador(expediente.getExpedienteTC().getCodPreEval()==null?"":expediente.getExpedienteTC().getCodPreEval());
 			expedienteTCWPS.setNumeroContrato(expediente.getExpedienteTC().getNroContrato()==null?"":expediente.getExpedienteTC().getNroContrato());
-			expedienteTCWPS.setObservacion(expediente.getComentario());
+			expedienteTCWPS.setObservacion(expediente.getComentario());*/
 			LOG.info("Observacion -> "+expediente.getComentario());
 			
 			Calendar c=Calendar.getInstance();
@@ -190,15 +192,15 @@ public class AyudaExpedienteTC extends AbstractMBean{
 			
 
 			//if(estado!=null && estado.equals(Constantes.ESTADO_APROBADO_TAREA_3)){
-				expedienteTCWPS.setCodigoRVGL(expediente.getExpedienteTC().getRvgl()==null?"":expediente.getExpedienteTC().getRvgl());
+	//..			expedienteTCWPS.setCodigoRVGL(expediente.getExpedienteTC().getRvgl()==null?"":expediente.getExpedienteTC().getRvgl());
 				
 				expedienteTCWPS.setModificacionScoring(expediente.getExpedienteTC().getFlagModifScore()==null?"":expediente.getExpedienteTC().getFlagModifScore());
 				
-				if(expediente.getExpedienteTC().getTipoScoring()!=null && tipoScoringBean!=null){
+		/*..		if(expediente.getExpedienteTC().getTipoScoring()!=null && tipoScoringBean!=null){
 						TipoScoring objTipoScoring=tipoScoringBean.buscarPorId(expediente.getExpedienteTC().getTipoScoring().getId());
 						expedienteTCWPS.setScoringAprobado(objTipoScoring.getDescripcion()==null?"":objTipoScoring.getDescripcion());
 				}else
-					expedienteTCWPS.setScoringAprobado("");
+					expedienteTCWPS.setScoringAprobado("");*/
 			//}	
 			
 			if(expediente.getExpedienteTC().getOficina()!=null){
@@ -206,12 +208,12 @@ public class AyudaExpedienteTC extends AbstractMBean{
 				Oficina objOficina=expediente.getExpedienteTC().getOficina();
 				if(objOficina!=null && expedienteTCWPS!=null){
 					expedienteTCWPS.setIdOficina(Util.validarCampoLong(""+objOficina.getId())==null?"":""+objOficina.getId());
-					expedienteTCWPS.setDesOficina(objOficina.getId()>0?objOficina.getDescripcion():"");
+				//..	expedienteTCWPS.setDesOficina(objOficina.getId()>0?objOficina.getDescripcion():"");
 				}
 
 				if(objOficina!=null && objOficina.getTerritorio()!=null){
 					expedienteTCWPS.setIdTerritorio(String.valueOf(objOficina.getTerritorio().getId()));
-					expedienteTCWPS.setDesTerritorio(objOficina.getTerritorio().getId()>0?objOficina.getTerritorio().getDescripcion():"");
+				//..	expedienteTCWPS.setDesTerritorio(objOficina.getTerritorio().getId()>0?objOficina.getTerritorio().getDescripcion():"");
 				}
 								
 			}
@@ -232,13 +234,13 @@ public class AyudaExpedienteTC extends AbstractMBean{
 			LOG.info("");
 			if(expediente.getProducto()!=null){
 				expedienteTCWPS.setProducto(new Producto());
-				expedienteTCWPS.getProducto().setProducto(expediente.getProducto().getDescripcion()==null?"":expediente.getProducto().getDescripcion());
+				//..expedienteTCWPS.getProducto().setProducto(expediente.getProducto().getDescripcion()==null?"":expediente.getProducto().getDescripcion());
 				expedienteTCWPS.getProducto().setIdProducto(String.valueOf(expediente.getProducto().getId()));
 			}
-				
+			/*..	
 			if(expediente.getExpedienteTC().getSubproducto()!=null)
 				expedienteTCWPS.getProducto().setSubProducto(expediente.getExpedienteTC().getSubproducto().getDescripcion()==null?"":expediente.getExpedienteTC().getSubproducto().getDescripcion());
-					
+			*/		
 			expediente.getExpedienteTC().setVerifDom(expediente.getExpedienteTC().getVerifDom()==null?Constantes.CHECK_NO_SELECCIONADO:expediente.getExpedienteTC().getVerifDom());
 			expediente.getExpedienteTC().setVerifLab(expediente.getExpedienteTC().getVerifLab()==null?Constantes.CHECK_NO_SELECCIONADO:expediente.getExpedienteTC().getVerifLab());
 			expediente.getExpedienteTC().setVerifDps(expediente.getExpedienteTC().getVerifDps()==null?Constantes.CHECK_NO_SELECCIONADO:expediente.getExpedienteTC().getVerifDps());
@@ -264,7 +266,7 @@ public class AyudaExpedienteTC extends AbstractMBean{
 		
 		if(clienteNatural!=null){
 			Cliente cliente	=new Cliente();
-			cliente.setApMaterno(clienteNatural.getApeMat()==null?"":clienteNatural.getApeMat());
+			/*..cliente.setApMaterno(clienteNatural.getApeMat()==null?"":clienteNatural.getApeMat());
 			cliente.setApPaterno(clienteNatural.getApePat()==null?"":clienteNatural.getApePat());
 			cliente.setNombre(clienteNatural.getNombre()==null?"":clienteNatural.getNombre());
 
@@ -282,9 +284,9 @@ public class AyudaExpedienteTC extends AbstractMBean{
 			}
 			if(clienteNatural.getCelular()!=null){	
 				cliente.setNroCelular(clienteNatural.getCelular());
-			}
+			}*/
 			 
-			if(clienteNatural.getTipoDoi().getDescripcion()!=null){				
+			/*if(clienteNatural.getTipoDoi().getDescripcion()!=null){				
 				cliente.setTipoDOI(clienteNatural.getTipoDoi().getDescripcion()==null?"":clienteNatural.getTipoDoi().getDescripcion());	
 			}else
 				if(tipoDoiBeanLocalBean!=null){
@@ -292,11 +294,11 @@ public class AyudaExpedienteTC extends AbstractMBean{
 					TipoDoi objTipoDoi=tipoDoiBeanLocalBean.buscarPorId(clienteNatural.getTipoDoi().getId());
 					cliente.setTipoDOI(objTipoDoi.getDescripcion()==null?"":objTipoDoi.getDescripcion());
 				}else
-					cliente.setTipoDOI("");
+					cliente.setTipoDOI("");*/
 			
 			expedienteTCWPS.setCliente(cliente);// AGREGADOOO	
 			
-			if(clienteNatural.getSegmento()!=null){
+		/*..	if(clienteNatural.getSegmento()!=null){
 				expedienteTCWPS.setSegmento(clienteNatural.getSegmento().getDescripcion()==null?"":clienteNatural.getSegmento().getDescripcion());
 				LOG.info("clienteNatural.getSegmento().getDescripcion() : "+clienteNatural.getSegmento().getDescripcion());
 				if (clienteNatural.getSegmento().getGrupoSegmento()!=null) {
@@ -304,7 +306,7 @@ public class AyudaExpedienteTC extends AbstractMBean{
 				    expedienteTCWPS.setIdGrupoSegmento(Util.validarCampoLong(""+clienteNatural.getSegmento().getGrupoSegmento().getId())==null?"":""+clienteNatural.getSegmento().getGrupoSegmento().getId());
 				    LOG.info("IdGrupoSegmento ::::: "+expedienteTCWPS.getIdGrupoSegmento());
 				}				
-			}				
+			}	*/			
 
 		}
 		
@@ -355,12 +357,12 @@ public class AyudaExpedienteTC extends AbstractMBean{
 					expedienteTCWPS.setNombreUsuarioActual(empleado.getNombresCompletos()==null?"":empleado.getNombresCompletos());					
 				}
 				LOG.info("PerfilUsuarioActual : "+expedienteTCWPS.getPerfilUsuarioActual());
-				expedienteTCWPS.setFlagProvincia(empleado.getOficina().getTerritorio().getFlagProv());
+			//..	expedienteTCWPS.setFlagProvincia(empleado.getOficina().getTerritorio().getFlagProv());
 			}
 				
-			if(empleado.getOficina()!=null && empleado.getOficina().getTerritorio()!=null)
+		/*..	if(empleado.getOficina()!=null && empleado.getOficina().getTerritorio()!=null)
 				expedienteTCWPS.setFlagProvincia(empleado.getOficina().getTerritorio().getFlagProv()==null?"":empleado.getOficina().getTerritorio().getFlagProv());
-			
+			*/
 			if (expedienteTCWPS.getCodigoEmpleadoResponsable()==null) {
 				expedienteTCWPS.setCodigoEmpleadoResponsable(codigoUsuario);
 				
@@ -406,24 +408,38 @@ public class AyudaExpedienteTC extends AbstractMBean{
 		return consulta;
 	}
 	
+	public Cliente fromClienteWebToCliente(ClienteWeb cli){
+		Cliente objTemp=new Cliente();
+		objTemp.setTipoDOI(cli.getTipoDOI());
+		objTemp.setNumeroDOI(cli.getNumeroDOI());
+		return objTemp;
+	}
+	
+	public Producto fromProductoWebToProducto(ProductoWeb pro){
+		Producto objTemp=new Producto();
+		objTemp.setIdProducto(pro.getIdProducto());
+		return objTemp;
+	}
+	
 	public ExpedienteTCWPS fromExpedienteTCWPSWebToExpedienteTCWPS(ExpedienteTCWPSWeb obj) {
 		ExpedienteTCWPS objTemp = new ExpedienteTCWPS();
 		
 			objTemp.setAccion(obj.getAccion());
 			objTemp.setActivado(obj.getActivado());
 			objTemp.setCantDocumentos(obj.getCantDocumentos());
-			objTemp.setCliente(obj.getCliente());
+			//objTemp.setCliente(obj.getCliente());
+			objTemp.setCliente(fromClienteWebToCliente(obj.getCliente()));
 			objTemp.setCodigo(obj.getCodigo());
 			objTemp.setCodigoEmpleadoResponsable(obj.getCodigoEmpleadoResponsable());
-			objTemp.setCodigoPreEvaluador(obj.getCodigoPreEvaluador());
-			objTemp.setCodigoRVGL(obj.getCodigoRVGL());
+	//		objTemp.setCodigoPreEvaluador(obj.getCodigoPreEvaluador());
+	//		objTemp.setCodigoRVGL(obj.getCodigoRVGL());
 			objTemp.setCodigoUsuarioActual(obj.getCodigoUsuarioActual());
 			objTemp.setCodigoUsuarioAnterior(obj.getCodigoUsuarioAnterior());
 			objTemp.setDescripcionError(obj.getDescripcionError());
-			objTemp.setDesOficina(obj.getDesOficina());
+	//		objTemp.setDesOficina(obj.getDesOficina());
 			objTemp.setDesTarea(obj.getDesTarea());
 			objTemp.setDesTareaAnterior(obj.getDesTareaAnterior());
-			objTemp.setDesTerritorio(obj.getDesTerritorio());
+	//		objTemp.setDesTerritorio(obj.getDesTerritorio());
 			objTemp.setDevueltoPor(obj.getDevueltoPor());
 			objTemp.setEstado(obj.getEstado());
 			objTemp.setEstadoAnterior(obj.getEstadoAnterior());
@@ -433,10 +449,10 @@ public class AyudaExpedienteTC extends AbstractMBean{
 			objTemp.setFechaRestauracion(obj.getFechaRestauracion());
 			objTemp.setFlagEnProcesoTimer(obj.getFlagEnProcesoTimer());
 			objTemp.setFlagEnvioContent(obj.getFlagEnvioContent());
-			objTemp.setFlagProvincia(obj.getFlagProvincia());
+		//	objTemp.setFlagProvincia(obj.getFlagProvincia());
 			objTemp.setFlagRetraer(obj.getFlagRetraer());
 			objTemp.setFlagSubrogacion(obj.getFlagSubrogacion());
-			objTemp.setIdGrupoSegmento(obj.getIdGrupoSegmento());
+		//	objTemp.setIdGrupoSegmento(obj.getIdGrupoSegmento());
 			objTemp.setIdOficina(obj.getIdOficina());
 			objTemp.setIdPerfilUsuarioActual(obj.getIdPerfilUsuarioActual());
 			objTemp.setIdPerfilUsuarioAnterior(obj.getIdPerfilUsuarioAnterior());
@@ -444,22 +460,23 @@ public class AyudaExpedienteTC extends AbstractMBean{
 			objTemp.setIdTareaAnterior(obj.getIdTareaAnterior());
 			objTemp.setIdTerritorio(obj.getIdTerritorio());
 			objTemp.setIdTipoOferta(obj.getIdTipoOferta());
-			objTemp.setLineaCredito(obj.getLineaCredito()==null?0.0:obj.getLineaCredito());
+	//		objTemp.setLineaCredito(obj.getLineaCredito()==null?0.0:obj.getLineaCredito());
 			objTemp.setModificacionScoring(obj.getModificacionScoring());
-			objTemp.setMoneda(obj.getMoneda());
-			objTemp.setMontoAprobado(obj.getMontoAprobado());
+	//		objTemp.setMoneda(obj.getMoneda());
+	//		objTemp.setMontoAprobado(obj.getMontoAprobado());
 			objTemp.setNombreNavegacionWeb(obj.getNombreNavegacionWeb());
 			objTemp.setNombreUsuarioActual(obj.getNombreUsuarioActual());
 			objTemp.setNombreUsuarioAnterior(obj.getNombreUsuarioAnterior());
 			objTemp.setNroReintentos(obj.getNroReintentos());
-			objTemp.setNumeroContrato(obj.getNumeroContrato());
-			objTemp.setNumeroDevoluciones(obj.getNumeroDevoluciones());
-			objTemp.setObservacion(obj.getObservacion());
+		//	objTemp.setNumeroContrato(obj.getNumeroContrato());
+	//		objTemp.setNumeroDevoluciones(obj.getNumeroDevoluciones());
+	//		objTemp.setObservacion(obj.getObservacion());
 			objTemp.setPerfilUsuarioActual(obj.getPerfilUsuarioActual());
 			objTemp.setPerfilUsuarioAnterior(obj.getPerfilUsuarioAnterior());
-			objTemp.setProducto(obj.getProducto());
-			objTemp.setScoringAprobado(obj.getScoringAprobado());
-			objTemp.setSegmento(obj.getSegmento());
+			//objTemp.setProducto(obj.getProducto());
+			objTemp.setProducto(fromProductoWebToProducto(obj.getProducto()));
+		//	objTemp.setScoringAprobado(obj.getScoringAprobado());
+		//	objTemp.setSegmento(obj.getSegmento());
 			objTemp.setTaskID(obj.getTaskID());
 			objTemp.setTipoError(obj.getTipoError());
 			objTemp.setTipoOferta(obj.getTipoOferta());

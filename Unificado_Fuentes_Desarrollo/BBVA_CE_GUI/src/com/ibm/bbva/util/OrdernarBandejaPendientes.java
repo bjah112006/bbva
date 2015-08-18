@@ -21,6 +21,7 @@ public class OrdernarBandejaPendientes implements Comparator<ExpedienteTCWrapper
 			return ordenarPorTipoCliente(s1, s2);
 		else
 			return ordenarPorFechaHora(s1, s2);
+		
 	}
 	
 	/*

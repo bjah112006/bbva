@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -12,16 +11,14 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pe.ibm.bean.Cliente;
-import pe.ibm.bean.ExpedienteTCWPS;
+import pe.ibm.bean.ClienteWeb;
 import pe.ibm.bean.ExpedienteTCWPSWeb;
-import pe.ibm.bean.Producto;
+import pe.ibm.bean.ProductoWeb;
 import bbva.ws.api.view.BBVAFacadeLocal;
 
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.entities.Ans;
 import com.ibm.bbva.entities.Empleado;
-import com.ibm.bbva.entities.EstadoTareaCE;
 import com.ibm.bbva.entities.Expediente;
 import com.ibm.bbva.entities.TipoCliente;
 import com.ibm.bbva.messages.Mensajes;
@@ -33,7 +30,7 @@ import com.ibm.bbva.session.TareaBeanLocal;
 import com.ibm.bbva.session.TipoClienteBeanLocal;
 
 @SuppressWarnings("serial")
-public class ExpedienteTCWrapper extends ExpedienteTCWPS implements Serializable {
+public class ExpedienteTCWrapper extends ExpedienteTCWPSWeb implements Serializable {
 	
 	private ExpedienteTCWPSWeb expedienteTC;
 	private AyudaHorario ayudaHorario;
@@ -285,11 +282,11 @@ public class ExpedienteTCWrapper extends ExpedienteTCWPS implements Serializable
 		return expedienteTC.getMoneda();
 	}
 
-	public Cliente getCliente() {
+	public ClienteWeb getCliente() {
 		return expedienteTC.getCliente();
 	}
 
-	public Producto getProducto() {
+	public ProductoWeb getProducto() {
 		return expedienteTC.getProducto();
 	}
 

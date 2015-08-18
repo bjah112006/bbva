@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 import pe.ibm.bean.ExpedienteTCWPS;
+import pe.ibm.bean.ExpedienteTCWPSWeb;
 
 import com.ibm.bbva.messages.Mensajes;
 import com.ibm.bbva.tabla.util.vo.HistorialDetalle;
@@ -12,9 +13,9 @@ import com.ibm.bbva.util.comparators.ComparatorBase;
 
 public class ComparatorFactory {
 	
-	public static Comparator<ExpedienteTCWPS> codigo (String orden) {
-		return new ComparatorBase<Integer, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> codigo (String orden) {
+		return new ComparatorBase<Integer, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(new Integer(o1.getCodigo()), new Integer (o2.getCodigo()));
 			}
 		};
@@ -28,9 +29,9 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> estado (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> estado (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getEstado(), o2.getEstado());
 			}
 		};
@@ -44,25 +45,25 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> rol (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> rol (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getPerfilUsuarioActual(), o2.getPerfilUsuarioActual());
 			}
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> usuario (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> usuario (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getCodigoUsuarioActual(), o2.getCodigoUsuarioActual());
 			}
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> tarea (String orden) {
-		return new ComparatorBase<Integer, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> tarea (String orden) {
+		return new ComparatorBase<Integer, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				String idTarea1 = o1.getIdTarea();
 				String idTarea2 = o2.getIdTarea();
 				idTarea1 = (idTarea1.trim().equals("")) ? "0" : idTarea1;
@@ -72,9 +73,9 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> segmento (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> segmento (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getSegmento(), o2.getSegmento());
 			}
 		};
@@ -88,9 +89,9 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> tipoOferta (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> tipoOferta (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getTipoOferta(), o2.getTipoOferta());
 			}
 		};
@@ -104,9 +105,9 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> tipoDOI (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> tipoDOI (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getCliente().getTipoDOI(), o2.getCliente().getTipoDOI());
 			}
 		};
@@ -120,9 +121,9 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> numeroDOI (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> numeroDOI (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getCliente().getNumeroDOI(), o2.getCliente().getNumeroDOI());
 			}
 		};
@@ -136,9 +137,9 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> apPaterno (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> apPaterno (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getCliente().getApPaterno(), o2.getCliente().getApPaterno());
 			}
 		};
@@ -152,9 +153,9 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> apMaterno (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> apMaterno (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getCliente().getApMaterno(), o2.getCliente().getApMaterno());
 			}
 		};
@@ -168,9 +169,9 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> nombre (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> nombre (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getCliente().getNombre(), o2.getCliente().getNombre());
 			}
 		};
@@ -184,9 +185,9 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> producto (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> producto (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getProducto().getProducto(), o2.getProducto().getProducto());
 			}
 		};
@@ -200,9 +201,9 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> subProducto (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> subProducto (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getProducto().getSubProducto(), o2.getProducto().getSubProducto());
 			}
 		};
@@ -216,9 +217,9 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> moneda (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> moneda (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getMoneda(), o2.getMoneda());
 			}
 		};
@@ -232,81 +233,81 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> fechaRegistro (String orden) {
-		return new ComparatorBase<Date, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> fechaRegistro (String orden) {
+		return new ComparatorBase<Date, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(((ExpedienteTCWrapper)o1).getFechaActivado(), ((ExpedienteTCWrapper)o2).getFechaActivado());
 			}
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> nomUsuarioAsig (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> nomUsuarioAsig (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(((ExpedienteTCWrapper)o1).getNombreCompletoUsuarioActual(), ((ExpedienteTCWrapper)o2).getNombreCompletoUsuarioActual());
 			}
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> nomUsuario (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> nomUsuario (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(((ExpedienteTCWrapper)o1).getNombreUsuarioActual(), ((ExpedienteTCWrapper)o2).getNombreUsuarioActual());
 			}
 		};
 	}
-	
-	public static Comparator<ExpedienteTCWPS> lineaCredito (String orden) {
-		return new ComparatorBase<Double, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+
+	public static Comparator<ExpedienteTCWPSWeb> lineaCredito (String orden) {
+		return new ComparatorBase<Double, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getLineaCredito(), o2.getLineaCredito());
 			}
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> montoAprobado (String orden) {
-		return new ComparatorBase<Double, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> montoAprobado (String orden) {
+		return new ComparatorBase<Double, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getMontoAprobado(), o2.getMontoAprobado());
 			}
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> oficina (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> oficina (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(((ExpedienteTCWrapper)o1).getOficina(), ((ExpedienteTCWrapper)o2).getOficina());
 			}
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> territorio (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> territorio (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(((ExpedienteTCWrapper)o1).getTerritorio(), ((ExpedienteTCWrapper)o2).getTerritorio());
 			}
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> codigoRVGL (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> codigoRVGL (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getCodigoRVGL(), o2.getCodigoRVGL());
 			}
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> contrato (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> contrato (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getNumeroContrato(), o2.getNumeroContrato());
 			}
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> observacion (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> observacion (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(o1.getObservacion(), o2.getObservacion());
 			}
 		};
@@ -389,9 +390,9 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> alerta (String orden) {
-		return new ComparatorBase<Integer, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> alerta (String orden) {
+		return new ComparatorBase<Integer, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				String color1 = ((ExpedienteTCWrapper)o1).getUrlColor();
 				String color2 = ((ExpedienteTCWrapper)o2).getUrlColor();
 				
@@ -413,9 +414,9 @@ public class ComparatorFactory {
 		return 0;
 	}
 	
-	public static Comparator<ExpedienteTCWPS> estadoTarjeta (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> estadoTarjeta (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				String estadoTarjeta1 = null;
 				String estadoTarjeta2 = null;
 				if (((ExpedienteTCWrapper) o1).isRenderEstadoTarea()) {
@@ -429,9 +430,9 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> estadoArchivos (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> estadoArchivos (String orden) {
+		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				String estadoArchivos1 = null;
 				String estadoArchivos2 = null;
 				if (((ExpedienteTCWrapper) o1).isTarea28()) {
@@ -445,9 +446,9 @@ public class ComparatorFactory {
 		};
 	}
 	
-	public static Comparator<ExpedienteTCWPS> devoluciones (String orden) {
-		return new ComparatorBase<Integer, ExpedienteTCWPS> (orden){
-			public int compare(ExpedienteTCWPS o1, ExpedienteTCWPS o2) {
+	public static Comparator<ExpedienteTCWPSWeb> devoluciones (String orden) {
+		return new ComparatorBase<Integer, ExpedienteTCWPSWeb> (orden){
+			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
 				return comparator.compare(((ExpedienteTCWrapper) o1).getNroDevoluciones(), ((ExpedienteTCWrapper) o2).getNroDevoluciones());
 			}
 		};

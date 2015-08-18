@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pe.ibm.bean.ExpedienteTCWPS;
+import pe.ibm.bean.ExpedienteTCWPSWeb;
 
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.entities.Ans;
@@ -35,7 +36,7 @@ public class AyudaHistorial {
 		}
 	}
 	
-	public void asignarFecha (Historial historialVO, ExpedienteTCWPS expedienteTC) {		
+	public void asignarFecha (Historial historialVO, ExpedienteTCWPSWeb expedienteTC) {		
 		historialVO.setFechaFin(Timestamp.valueOf(Util.parseDateString(new Date(),"yyyy-MM-dd hh:mm:ss.SSS").toString()));
 		long fecEnv = expedienteTC.getActivado().getTimeInMillis();
 		historialVO.setFechaEnvio(new Timestamp(fecEnv));
