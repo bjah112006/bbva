@@ -16,7 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import pe.ibm.bean.Consulta;
 import pe.ibm.bean.ExpedienteTCWPS;
+import pe.ibm.bean.ExpedienteTCWPSWeb;
 import pe.ibm.bpd.RemoteUtils;
+import pe.ibm.util.Convertidor;
 
 import com.ibm.bbva.controller.AbstractMBean;
 import com.ibm.bbva.controller.Constantes;
@@ -187,8 +189,9 @@ public class CambiarSituacionExpMB extends AbstractMBean {
 		
 		Historial historial = ConvertExpediente.convertToHistorialVO(expediente);
 		
-		AyudaHistorial ayudaHistorial = new AyudaHistorial();		
-		ayudaHistorial.asignarFecha(historial, expedienteTCWPS);
+		AyudaHistorial ayudaHistorial = new AyudaHistorial();	
+		ExpedienteTCWPSWeb expedienteTCWPS1=Convertidor.fromObjExpedienteTCWPSToObjExpedienteTCWPSWeb(expedienteTCWPS, "1");
+		ayudaHistorial.asignarFecha(historial, expedienteTCWPS1);
 		/*INICIO REQUERIMIENTO 286 27.11.2014*/
 		int ans=0;
 		if (toePerfilEstado!=null){

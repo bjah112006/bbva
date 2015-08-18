@@ -19,7 +19,9 @@ import org.slf4j.LoggerFactory;
 
 import pe.ibm.bean.Consulta;
 import pe.ibm.bean.ExpedienteTCWPS;
+import pe.ibm.bean.ExpedienteTCWPSWeb;
 import pe.ibm.bpd.RemoteUtils;
+import pe.ibm.util.Convertidor;
 import bbva.ws.api.view.FacadeLocal;
 
 import com.ibm.bbva.controller.AbstractMBean;
@@ -517,8 +519,8 @@ public class AprobarExpedienteMB extends AbstractMBean {
 			historial.setAns(0);
 		}
 		/*FIN REQUERIMIENTO 286 27.11.2014*/
-		
-		ayudaHistorial.asignarFecha(historial, expedienteTCWPS);
+		ExpedienteTCWPSWeb expedienteTCWPS1=Convertidor.fromObjExpedienteTCWPSToObjExpedienteTCWPSWeb(expedienteTCWPS, "1");
+		ayudaHistorial.asignarFecha(historial, expedienteTCWPS1);
 		
 		historialBean.create(historial);
 		

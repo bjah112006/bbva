@@ -15,7 +15,9 @@ import org.slf4j.LoggerFactory;
 
 import pe.ibm.bean.Consulta;
 import pe.ibm.bean.ExpedienteTCWPS;
+import pe.ibm.bean.ExpedienteTCWPSWeb;
 import pe.ibm.bpd.RemoteUtils;
+import pe.ibm.util.Convertidor;
 import bbva.ws.api.view.BBVAFacadeLocal;
 
 import com.ibm.bbva.controller.AbstractMBean;
@@ -322,8 +324,9 @@ public class RealizarAltaTarjetaMB extends AbstractMBean {
 			historial.setAns(0);
 		}
 		/*FIN REQUERIMIENTO 286 27.11.2014*/
-		AyudaHistorial ayudaHistorial = new AyudaHistorial();		
-		ayudaHistorial.asignarFecha(historial, expedienteTCWPS);
+		AyudaHistorial ayudaHistorial = new AyudaHistorial();
+		ExpedienteTCWPSWeb expedienteTCWPS1=Convertidor.fromObjExpedienteTCWPSToObjExpedienteTCWPSWeb(expedienteTCWPS, "1");
+		ayudaHistorial.asignarFecha(historial, expedienteTCWPS1);
 		
 		if(historial.getFechaT1()!=null && historial.getFechaT2()!=null){
 			LOG.info("historial- Fecha y Hora fecha 1:::"+historial.getFechaT1().toString());

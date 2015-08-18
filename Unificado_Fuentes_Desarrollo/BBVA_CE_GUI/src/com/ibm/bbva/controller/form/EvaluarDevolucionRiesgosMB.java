@@ -18,6 +18,7 @@ import pe.ibm.bean.Consulta;
 import pe.ibm.bean.ExpedienteTCWPS;
 import pe.ibm.bean.ExpedienteTCWPSWeb;
 import pe.ibm.bpd.RemoteUtils;
+import pe.ibm.util.Convertidor;
 import bbva.ws.api.view.FacadeLocal;
 
 import com.ibm.bbva.controller.AbstractMBean;
@@ -320,8 +321,9 @@ public class EvaluarDevolucionRiesgosMB extends AbstractMBean {
 			toePerfilEstado = null;
 		}
 		/*FIN REQUERIMIENTO 286 27.11.2014*/
-		AyudaHistorial ayudaHistorial = new AyudaHistorial();		
-		ayudaHistorial.asignarFecha(historial, expedienteTCWPS);
+		AyudaHistorial ayudaHistorial = new AyudaHistorial();
+		ExpedienteTCWPSWeb expedienteTCWPS1=Convertidor.fromObjExpedienteTCWPSToObjExpedienteTCWPSWeb(expedienteTCWPS, "1");
+		ayudaHistorial.asignarFecha(historial, expedienteTCWPS1);
 		/*INICIO REQUERIMIENTO 286 27.11.2014*/
 		int ans=0;
 		if (toePerfilEstado!=null){

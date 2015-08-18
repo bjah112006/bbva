@@ -1058,9 +1058,9 @@ public class RegistrarExpedienteMB extends AbstractMBean {
 				}
 				
 				
-				LOG.info("nombre = "+expedienteTCWPS.getCliente().getNombre());
-				LOG.info("nombre = "+expedienteTCWPS.getCliente().getApPaterno());
-				LOG.info("nombre = "+expedienteTCWPS.getCliente().getApMaterno());
+//				LOG.info("nombre = "+expedienteTCWPS.getCliente().getNombre());
+//				LOG.info("nombre = "+expedienteTCWPS.getCliente().getApPaterno());
+//				LOG.info("nombre = "+expedienteTCWPS.getCliente().getApMaterno());
 				remoteUtils.enviarExpedienteTC(tkiid, expedienteTCWPS);
 					
 			}
