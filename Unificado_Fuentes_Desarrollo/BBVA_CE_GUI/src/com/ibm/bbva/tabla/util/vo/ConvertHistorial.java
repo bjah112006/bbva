@@ -449,6 +449,7 @@ public class ConvertHistorial {
 		vo.setExpedienteTC(new ExpedienteTC());
 		vo.setOrigen(historial.getOrigen()!=null?historial.getOrigen():null);
 		vo.setId(historial.getNroExpediente()!=null?Long.parseLong(historial.getNroExpediente()):0);
+		vo.getExpedienteTC().setRiesgoCliente(historial.getRiesgoCliente() !=null?Util.convertStringToDouble(historial.getRiesgoCliente()):0);
 		vo.setClienteNatural(new ClienteNatural());
 		vo.getClienteNatural().setId(historial.getCodClienteNatural()!=null?Long.parseLong(historial.getCodClienteNatural()):0);
 		vo.getClienteNatural().setCodCliente(historial.getCodigoCentralCliente()!=null?historial.getCodigoCentralCliente():null);
@@ -487,6 +488,7 @@ public class ConvertHistorial {
 		vo.getClienteNatural().getCategoriasRenta().get(0).setId(historial.getCodCategRentaCliente() !=null?Long.parseLong(historial.getCodCategRentaCliente()) :null);
 		vo.getClienteNatural().getCategoriasRenta().get(0).setCodigo(historial.getCodCategRentaCliente() !=null?String.valueOf(Long.parseLong(historial.getCodCategRentaCliente())) :null);
 		
+		vo.getClienteNatural().setIngNetoMensual( historial.getIngNetoMensualCliente() !=null?Util.convertStringToDouble(historial.getIngNetoMensualCliente()):0);
 		
 		//Conyugue del Cliente
 		//vo.getExpedienteTC().setClienteNaturalConyuge(new ClienteNatural());
@@ -699,7 +701,7 @@ public class ConvertHistorial {
 			h.setFechaT3(dhDTO.getFechaHoraAtencion()!=null?convertStringToTimestamp(dhDTO.getFechaHoraAtencion()):null);
 			h.getEmpleado().getPerfil().setDescripcion(dhDTO.getPerfilUsuario()!=null?dhDTO.getPerfilUsuario():null);
 			
-			h.getPerfil().setDescripcion(dhDTO.getPerfilUsuario()!=null?dhDTO.getPerfilUsuario():null);
+			h.getPerfil().setDescripcion(dhDTO.getNombrePerfil()!=null?dhDTO.getNombrePerfil():null);
 			
 			h.getExpediente().setId(dhDTO.getNroExpediente()!=null?Long.parseLong(dhDTO.getNroExpediente()):0);
 			h.setNumTerminal(dhDTO.getTerminal()!=null?dhDTO.getTerminal():null);
@@ -707,7 +709,7 @@ public class ConvertHistorial {
 			h.getEmpleado().setNombres(dhDTO.getNombrePerfil()!=null?dhDTO.getNombrePerfil():null);
 			h.getEmpleado().setApepat(dhDTO.getApePatEmpleado()!=null?dhDTO.getApePatEmpleado():null);
 			h.getEmpleado().setApemat(dhDTO.getApeMatEmpleado()!=null?dhDTO.getApeMatEmpleado():null);
-			h.setFechaT1(dhDTO.getFechaHoraTrabajo()!=null?convertStringToTimestamp(dhDTO.getFechaHoraTrabajo()):null);
+			h.setFechaT2(dhDTO.getFechaHoraTrabajo()!=null?convertStringToTimestamp(dhDTO.getFechaHoraTrabajo()):null);
 			h.setFlagDevolucion(dhDTO.getFlagDevolucion()!=null?dhDTO.getFlagDevolucion():null);
 			h.getEstado().setCodigo(dhDTO.getCodEstado()!=null?dhDTO.getCodEstado():null);
 						
