@@ -474,12 +474,27 @@ public class IbmBbvaBusiness {
 				
 				//if(objDelegacionOficina!=null){
 				if(objDelegacionOficina!=null && objExpediente!=null && objExpediente.getClienteNatural()!=null ){
-					LOG.info("Nivel = "+objDelegacionOficina.getNivel());					
+					LOG.info("Nivel = "+objDelegacionOficina.getNivel());
+					/*comentado para el fix2 nde erika abregu
+					 * 
 					if (objExpedienteDTO.getCodigoTipoMonedaSol() != null && objExpedienteDTO.getCodigoTipoMonedaSol().equals(Constantes.CODIGO_TIPO_CAMBIO_DOLARES)) {
 						objTipoCambioCE = obtenerTipoCambioExp(objExpediente.getExpedienteTC(),objExpediente.getEmpleado());
 						objExpedienteDTO.setLineaCredAprob(calcularTipoCambio(objExpedienteDTO.getLineaCredAprob(), objExpedienteDTO.getCodigoTipoMonedaSol(), objTipoCambioCE));
 						objExpedienteDTO.setLineaConsumo(calcularTipoCambio(objExpedienteDTO.getLineaConsumo(), objExpedienteDTO.getCodigoTipoMonedaSol(), objTipoCambioCE));
-					}					
+					}
+					*/
+					//lo nuevo para fix2 de erika aregu
+					if (objExpedienteDTO.getCodigoTipoMonedaSol() != null && Long.toString(objExpedienteDTO.getCodigoTipoMonedaSol()).equals(Constantes.CODIGO_TIPO_CAMBIO_DOLARES)) {
+						
+						objTipoCambioCE = obtenerTipoCambioExp(objExpediente.getExpedienteTC(),objExpediente.getEmpleado());
+						objExpedienteDTO.setLineaCredAprob(calcularTipoCambio(((!Util.isDouble(""+objExpedienteDTO.getLineaCredAprob()) || 
+								objExpedienteDTO.getLineaCredAprob() == 0) ? objExpedienteDTO.getLineaCredSol(): 
+									objExpedienteDTO.getLineaCredAprob()), objExpedienteDTO.getCodigoTipoMonedaSol(), objTipoCambioCE));
+						
+						objExpedienteDTO.setLineaConsumo(calcularTipoCambio(objExpedienteDTO.getLineaConsumo(), objExpedienteDTO.getCodigoTipoMonedaSol(), objTipoCambioCE));
+					}
+					//fin de lo nuevo para el fix2 de erika abregu
+					
 					if (objDelegacionOficina.getTipoMoneda() != null && objDelegacionOficina.getTipoMoneda().getCodigo().equals(Constantes.CODIGO_TIPO_CAMBIO_DOLARES)) {
 						if (objTipoCambioCE == null) {
 							objTipoCambioCE = obtenerTipoCambioExp(objExpediente.getExpedienteTC(), objExpediente.getEmpleado());
@@ -697,7 +712,9 @@ public class IbmBbvaBusiness {
 																			
 																			//if(objExpedienteDTO.getCodigoEstadoCivilTitular()!=null && objExpedienteDTO.getCodigoEstadoCivilTitular().equals(Constantes.ESTADO_CIVIL_CASADO)){
 																			//comentado para fix2 por erika abregu
-																			if(objExpedienteDTO.getCodigoEstadoCivilTitular()!=null && Long.toString(objExpedienteDTO.getCodigoEstadoCivilTitular()).equals(String.valueOf(Constantes.ESTADO_CIVIL_CASADO))){
+																			if(objExpedienteDTO.getCodigoEstadoCivilTitular()!=null && 
+																					(Long.toString(objExpedienteDTO.getCodigoEstadoCivilTitular()).equals(String.valueOf(Constantes.ESTADO_CIVIL_CASADO)) || 
+																							Long.toString(objExpedienteDTO.getCodigoEstadoCivilTitular()).equals(String.valueOf(Constantes.ESTADO_CIVIL_CONVIVIENTE)))){
 																				LOG.info("Iniciando Validación Conyuge ... ");
 																				if( objDelegacionOficina.getBancoConyuge()!=null && objExpediente.getExpedienteTC().getBancoConyuge() != null && objExpediente.getExpedienteTC().getBancoConyuge().getId() >0 &&
 																					objDelegacionOficina.getBancoConyuge().getId()==objExpediente.getExpedienteTC().getBancoConyuge().getId()){
