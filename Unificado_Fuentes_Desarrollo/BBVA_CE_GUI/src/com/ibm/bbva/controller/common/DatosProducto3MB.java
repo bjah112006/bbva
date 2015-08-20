@@ -2395,15 +2395,16 @@ public class DatosProducto3MB extends AbstractMBean {
 		//fix2 erika abregu
 		//numTarjeta=expediente.getExpedienteTC().getNroCta();
 		numTarjeta ="";
-		
-		String[] arrayNumeroT = expediente.getExpedienteTC().getNroCta().split("-");
 		 
-		if(arrayNumeroT.length > 0){
-			for (int i = 0; i < arrayNumeroT.length; i++) {
-				numTarjeta += arrayNumeroT[i];
-			}
-		}else{
-			numTarjeta=expediente.getExpedienteTC().getNroCta();
+		if(expediente.getExpedienteTC().getNroCta()!=null && !expediente.getExpedienteTC().getNroCta().equals("")){
+			String[] arrayNumeroT = expediente.getExpedienteTC().getNroCta().split("-");
+			if(arrayNumeroT.length >0){
+				for (int i = 0; i < arrayNumeroT.length; i++) {
+					numTarjeta += arrayNumeroT[i];
+				}
+			}else{
+				numTarjeta=expediente.getExpedienteTC().getNroCta();
+			}	
 		}
 		
 		LOG.info("numTarjeta inicial:::"+numTarjeta);
