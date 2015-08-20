@@ -57,4 +57,7 @@ public interface EmpleadoBeanLocal {
 	
 	List<Empleado> buscarDebenReasignarse();
 	
+	//fix2 erika abregu
+	List<Empleado> buscarPorIdTipoCategoriaActivo(long idTipoCategoria, long idPerfil);
+	
 }
