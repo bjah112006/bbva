@@ -20,7 +20,7 @@ var SessionController = bonitaApp.controller('SessionController', ['$scope', 'Bo
 			// Save basic session data
 			User.get({"id": session.user_id}).$promise.then(function (user) {
 				$scope.userName = user.firstname + " " + user.lastname;
-				bonitaConfig.setUsername(user.firstname + " " + user.lastname);
+				bonitaConfig.setUsername(user.userName);
 				bonitaConfig.setUserId(session.user_id);
 			});
 			

@@ -1,9 +1,9 @@
 abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http', 'ConsultaSolicitudes', 'bonitaConfig', function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaConfig) {
 	$scope.tiposDocumento = [
-		{"id": 1, "name": "Número Solicitud"},
-		{"id": 2, "name": "Número DOI Cliente"},
-		{"id": 3, "name": "Número RVGL"},
-		{"id": 4, "name": "Número Solicitud Pre-Impreso"}
+		{"id": "rootprocessinstanceid", "name": "Número Solicitud"},
+		{"id": "num_doi_cliente", "name": "Número DOI Cliente"},
+		{"id": "num_rvgl", "name": "Número RVGL"},
+		{"id": "num_tramite", "name": "Número Solicitud Pre-Impreso"}
 	];
     $scope.estaciones = [
         {"id": "OFICINA", "name": "Oficina"},
@@ -24,6 +24,13 @@ abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http'
     $scope.$watch(function(scope) { return scope.tipoFiltro }, function(newValue, oldValue) {
         $scope.disabled.tipoDocumento = (newValue == 'estacion');
         $scope.disabled.estacion = (newValue == 'tiposDocumento');
+
+		if(newValue == 'estacion') {
+			$scope.nroDocumento = '';
+    		$scope.tipoDocumento = {};
+		} else {
+			$scope.estacion = {};
+		}
     });
 
 	var columnDefs = [
@@ -95,17 +102,14 @@ abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http'
 		var parameters = {
 			p: 0,
 			c: 1,
-			f: "username=" + bonitaConfig.getUsername() + ","
+			f: "username=" + bonitaConfig.getUsername() + ",",
+			u: bonitaConfig.getUsername()
 		};
 
 		if($scope.tipoFiltro == 'estacion') {
 			parameters.f += "estacion='" + $scope.estacion["select"]["id"] + "'";
 		} else {
-
-	    	$scope.nroDocumento = '';
-    		$scope.tipoDocumento = '';
-
-			console.log($scope.tipoFiltro + "-->>>>>")
+			parameters.f +=  $scope.tipoDocumento["select"]["id"] + "='" + $scope.nroDocumento + "'";
 		}
 
 		ConsultaSolicitudes.get(parameters).$promise.then(function(solicitudes){
