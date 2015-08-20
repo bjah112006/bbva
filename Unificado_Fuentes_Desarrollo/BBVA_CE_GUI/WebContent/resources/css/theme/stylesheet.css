@@ -2264,7 +2264,7 @@
 .evenrow{
     background:none repeat scroll 0 0 #EEEEEE;
 }
-table#panelTablaBp td {
+table#frmBandejaBusqueda\:tablaBandejaPend td {
     border: 1px solid #C6C6C6;
     border-collapse: collapse;
 }
