@@ -224,9 +224,20 @@ public class IbmBbvaBusiness {
 				LOG.info("idTipoCategoria = "+ idTipoCategoria);
 				LOG.info("idProducto = "+ objExpediente.getProducto().getId());
 				LOG.info("idMoneda = "+ objExpedienteTC.getTipoMonedaSol().getId());				
-				DelegacionRiesgo objDelegacionRiesgo=delegacionRiesgoBeanLocalBean.buscarPorId(idTipoCategoria, 
-						objExpediente.getProducto().getId(), objExpedienteTC.getTipoMonedaSol().getId());
 				
+				/**
+				 * comentado para fix2 para erika abregu
+				 * se comento para cambiar el parametro de tipo de moneda, debe ser siempre soles, puesto
+				 * que en la parametria no existen parametros para dolares
+				 * DelegacionRiesgo objDelegacionRiesgo=delegacionRiesgoBeanLocalBean.buscarPorId(idTipoCategoria, 
+						objExpediente.getProducto().getId(), objExpedienteTC.getTipoMonedaSol().getId());
+				 */
+				 
+				//lo cambiado para fix2 erika abregu
+				 DelegacionRiesgo objDelegacionRiesgo=delegacionRiesgoBeanLocalBean.buscarPorId(idTipoCategoria, 
+						objExpediente.getProducto().getId(), Long.parseLong(Constantes.CODIGO_TIPO_CAMBIO_SOLES));
+				//fin de lo cambiado para fix2 erika abregu
+				 
 				//FIX2 ERIKA ABREGU 22-07-2015
 				DelegacionRiesgoClasificacionBanco objDelegacionRiesgoClasifBco=delegacionRiesgoClasifBcoBeanLocalBean.buscarPorId(idTipoCategoria, 
 						objExpediente.getProducto().getId());
@@ -239,8 +250,10 @@ public class IbmBbvaBusiness {
 							objExpedienteTC.getTipoMonedaAprob().getCodigo().equals(Constantes.CODIGO_TIPO_CAMBIO_DOLARES)){
 						
 						LOG.info("objExpedienteTC.getTipoMonedaAprob().getCodigo():" + objExpedienteTC.getTipoMonedaAprob().getCodigo());
+						LOG.info("objExpedienteTC.getTipoMonedaSol().getCodigo():" + objExpedienteTC.getTipoMonedaSol().getCodigo());
 						objTipoCambioCE = obtenerTipoCambioExp(objExpedienteTC, objExpediente.getEmpleado());
 						objExpedienteTC.setLineaCredAprob(calcularTipoCambio(objExpedienteTC.getLineaCredAprob(), objExpedienteTC.getTipoMonedaAprob(), objTipoCambioCE));
+						
 					}
 //					if(objExpedienteTC.getSubproducto().getTipoMoneda() != null && objExpedienteTC.getSubproducto().getTipoMoneda().getCodigo()!=null && 
 //							objExpedienteTC.getSubproducto().getTipoMoneda().getCodigo().equals(Constantes.CODIGO_TIPO_CAMBIO_DOLARES)){
@@ -255,7 +268,13 @@ public class IbmBbvaBusiness {
 						
 						LOG.info("objExpedienteTC.getTipoMonedaSol().getCodigo():" + objExpedienteTC.getTipoMonedaSol().getCodigo());
 						objTipoCambioCE = obtenerTipoCambioExp(objExpedienteTC, objExpediente.getEmpleado());						
-						objExpedienteTC.setLineaCredSol(calcularTipoCambio(objExpedienteTC.getLineaCredSol(), objExpedienteTC.getTipoMonedaAprob() ,objTipoCambioCE));
+						
+						//comentado para fix2 erika abregu
+						//objExpedienteTC.setLineaCredSol(calcularTipoCambio(objExpedienteTC.getLineaCredSol(), objExpedienteTC.getTipoMonedaAprob() ,objTipoCambioCE));
+						//fin de comentado para fix2 erika abregu
+						//lo cambiado para el fix2 erika abregu
+						objExpedienteTC.setLineaCredSol(calcularTipoCambio(objExpedienteTC.getLineaCredSol(), objExpedienteTC.getTipoMonedaSol() ,objTipoCambioCE));
+						//fin de lo cambiado para el fix2 erika abregu
 					}
 					
 					Double lineaCredito = Util.isDouble(""+objExpedienteTC.getLineaCredAprob()) ? objExpedienteTC.getLineaCredAprob() : null;
