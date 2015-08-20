@@ -86,7 +86,7 @@ inner join public.arch_process_instance b on a.tenantid=b.tenantid and a.process
 inner join public.arch_flownode_instance c on b.tenantid=c.tenantid and b.rootprocessinstanceid=c.rootcontainerid
 inner join public.actor d on c.tenantid=d.tenantid and c.actorid=d.id
 left join public.user_ e on c.tenantid=e.tenantid and c.assigneeid=e.id
-where c.stateid not in(4, 32);
+where b.stateid=6 and c.stateid not in(4, 32);
 
 select * from public.user_
 select * from public.arch_data_instance
@@ -154,6 +154,7 @@ from fastpyme.arch_data_instance_detail
 where containertype='PROCESS_INSTANCE'
 group by containerid, containertype, tenantid;
 
+-- drop view if exists fastpyme.instance;
 create view fastpyme.instance as
 select
       a.name
@@ -164,7 +165,7 @@ select
     , a.actorid
     , a.actor
     , a.flownodedefinitionid
-    , a.name taskname
+    , a.taskname
     , a.stateid
     , a.statename
     , a.assigneeid
@@ -200,7 +201,7 @@ select
     , a.actorid
     , a.actor
     , a.flownodedefinitionid
-    , a.name taskname
+    , a.taskname
     , a.stateid
     , a.statename
     , a.assigneeid
@@ -241,10 +242,18 @@ inner join fastpyme.data_instance b on a.tenantid=b.tenantid and a.rootprocessin
 
 select *
 from fastpyme.arch_task_pending a
-inner join fastpyme.arch_data_instance b on a.tenantid=b.tenantid and a.rootprocessinstanceid=b.containerid;
+inner join fastpyme.arch_data_instance b on a.tenantid=b.tenantid and a.rootprocessinstanceid=b.containerid
+where a.rootprocessinstanceid=10
+order by a.tenantid, a.rootprocessinstanceid, actor;
 
 select row_number() over(order by tenantid, rootprocessinstanceid, actor), *
-from fastpyme.arch_instance;
+from fastpyme.arch_instance where rootprocessinstanceid=10;
+
+select row_number() over(order by tenantid, rootprocessinstanceid, actor), *
+from fastpyme.instance where rootprocessinstanceid=10;
+
+inner join public.user_ f on b.tenantid=f.tenantid and b.startedby=f.if
+left join custom_usr_inf_val g on f.tenantid=g.tenantid and f.id=g.userid and g.definitionid=3
 
 -- nro
 rootprocessinstanceid
@@ -288,7 +297,9 @@ select * from public.user_;
 
 select * from public.user_membership;
 
-select * from public.arch_flownode_instance;
+select * from public.arch_flownode_instance where rootcontainerid=10 and stateid=2;
+
+select * from public.arch_process_instance where rootprocessinstanceid=10;
 
 select b.name, a.* from public.flownode_instance a
 inner join public.actor b on a.actorid=b.id and a.tenantid=b.tenantid;
@@ -318,5 +329,26 @@ AS
 );
 
 -- select * from public.process_definition;
--- select * from public.process_instance;
+-- select startedby from public.process_instance;
 */
+select * from user_ a
+inner join custom_usr_inf_val b on a.id=b.userid and definitionid=3
+where a.id in(
+select startedby from public.process_instance
+);
+ 
+select  * from public.custom_usr_inf_val
+
+
+"P007395"
+"P012866"
+"XP88810"
+"P017336"
+"P018795"
+
+" 6282-ADECCO"
+"0712 - MALL AV.PZA S.ANITA"
+"0242 - DAMERO GAMARRA"
+"0396 - COVIDA"
+"0486 - San Isidro"
+

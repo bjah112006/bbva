@@ -18,29 +18,48 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
 
 	private final IdentityService identityService;
 	private final TechnicalLoggerService logger;
-	private final LDAPService ldapService;
 
 	public JAASGenericAuthenticationServiceImpl(final IdentityService identityService, final TechnicalLoggerService logger) {
         this.identityService = identityService;
         this.logger = logger;
-        ldapService = new LDAPService(LDAPValidate.getInstance());
     }
 	
     @Override
     public String checkUserCredentials(Map<String, Serializable> credentials) {
         String methodName = "checkUserCredentials";
         SUser user = null;
+        boolean isCheckCredentials = false;
         
         try {
         	String password = String.valueOf(credentials.get(AuthenticationConstants.BASIC_PASSWORD));
-        	String userName = String.valueOf(credentials.get(AuthenticationConstants.BASIC_USERNAME)).toUpperCase();
+        	String userName = String.valueOf(credentials.get(AuthenticationConstants.BASIC_USERNAME));
             
             if (logger.isLoggable(this.getClass(), TechnicalLogSeverity.TRACE)) {
                 logger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogBeforeMethod(this.getClass(), methodName));
             }
             
+            String bonitaUser = LDAPValidate.getInstance().getProperty("user_name_bonita");
+            // logger.log(this.getClass(), TechnicalLogSeverity.ERROR, bonitaUser);
+            // logger.log(this.getClass(), TechnicalLogSeverity.ERROR, userName);
+            // logger.log(this.getClass(), TechnicalLogSeverity.ERROR, password);
+            if(bonitaUser.equalsIgnoreCase(userName)) {
+                user = identityService.getUserByUserName(userName);
+                logger.log(this.getClass(), TechnicalLogSeverity.ERROR, user.getUserName());
+                isCheckCredentials = identityService.chechCredentials(user, password);
+                if (isCheckCredentials) {
+                    if (logger.isLoggable(this.getClass(), TechnicalLogSeverity.TRACE)) {
+                        logger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogAfterMethod(this.getClass(), methodName));
+                    }
+                    return userName;
+                }
+                return null;
+            }
+            
+            userName = String.valueOf(credentials.get(AuthenticationConstants.BASIC_USERNAME)).toUpperCase();
+            
             try {
-            	ldapService.verificarUsuario(userName);
+                LDAPService ldapService = new LDAPService();
+                ldapService.verificarUsuario(userName);
             	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, userName);
             } catch (final Exception e) {
             	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Exception generic");
@@ -51,13 +70,14 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
             logger.log(this.getClass(), TechnicalLogSeverity.ERROR, user.getUserName());
             
             String isValidLDAP = DBUtil.obtenerParametro(DBUtil.FLAG_ACTIVACION_LDAP); 
-            boolean isCheckCredentials = false;
             
             if ("0".equalsIgnoreCase(isValidLDAP)) {
             	isCheckCredentials = identityService.chechCredentials(user, password);
             } else {
             	String userBonitaProfile=getPrincipalUserProfileFromBonita(user.getId());
-            	if(userBonitaProfile.equals("ABN")){
+            	String roles = DBUtil.obtenerParametro(DBUtil.ROLES_EXCLUIDOS);
+            	
+            	if(roles.indexOf("|" + userBonitaProfile + "|") > -1){
             		isCheckCredentials = identityService.chechCredentials(user, password);
             	}else{
             		isCheckCredentials = LDAPValidate.getInstance().checkCredentials(userName, password);	

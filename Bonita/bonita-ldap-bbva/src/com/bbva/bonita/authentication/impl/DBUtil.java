@@ -15,6 +15,7 @@ public class DBUtil {
     public static final String FLAG_ACTIVACION_LDAP = "001";
     public static final String URL_LDAP = "002";
     public static final String HORAS_TRASNCURRIDAS = "003";
+    public static final String ROLES_EXCLUIDOS = "009";
 
     public static String obtenerParametro(String table, String key) {
     	String parametro = "";

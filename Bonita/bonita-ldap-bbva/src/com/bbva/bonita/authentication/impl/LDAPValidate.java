@@ -30,8 +30,8 @@ public class LDAPValidate {
 
     public String getProperty(String key) {
 		try {
-			logger.log(Level.INFO, "btm.root ======>" + System.getProperty("btm.root"));
-			logger.log(Level.INFO, "bonita.home ===>" + System.getProperty("bonita.home"));
+			// logger.log(Level.INFO, "btm.root ======>" + System.getProperty("btm.root"));
+			// logger.log(Level.INFO, "bonita.home ===>" + System.getProperty("bonita.home"));
 			props = new Properties();
 			props.load(new FileInputStream(System.getProperty("btm.root").replace("\\", "/") + "/conf/configWFFastPyme.properties"));
 		} catch (IOException e) {
