@@ -20,7 +20,10 @@ import java.util.List;
 	@NamedQuery(name = "Empleado.findByCodigo", query = "SELECT e FROM Empleado e WHERE e.codigo = :codigo"),
 	@NamedQuery(name = "Empleado.findByIdTipoCategoria", query = "SELECT e FROM Empleado e WHERE e.tipoCategoria.id = :idTipoCategoria and e.perfil.id = :idPerfil"),
 	@NamedQuery(name = "Empleado.findByIdPerfil", query = "SELECT e FROM Empleado e WHERE e.perfil.id = :idPerfil"),
-	@NamedQuery(name = "Empleado.findByIdOficina", query = "SELECT e FROM Empleado e WHERE e.oficina.id = :idOficina Order by e.apepat, e.apemat, e.nombres")
+	@NamedQuery(name = "Empleado.findByIdOficina", query = "SELECT e FROM Empleado e WHERE e.oficina.id = :idOficina Order by e.apepat, e.apemat, e.nombres"),
+	
+	//fix2 erika abregu
+	@NamedQuery(name = "Empleado.findByIdTipoCategoriaActivo", query = "SELECT e FROM Empleado e WHERE e.tipoCategoria.id = :idTipoCategoria and e.perfil.id = :idPerfil and e.flagActivo = '1'")
 })
 public class Empleado implements Serializable {
 	private static final long serialVersionUID = 1L;
