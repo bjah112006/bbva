@@ -34,7 +34,10 @@ import org.bonitasoft.engine.api.TenantAPIAccessor
 import org.bonitasoft.engine.bpm.process.ProcessDefinition;
 import org.bonitasoft.engine.bpm.process.ProcessInstance;
 import org.bonitasoft.engine.bpm.process.ProcessInstanceSearchDescriptor;
+import org.bonitasoft.engine.identity.CustomUserInfoValue;
+import org.bonitasoft.engine.identity.CustomUserInfoValueSearchDescriptor;
 import org.bonitasoft.engine.identity.User;
+import org.bonitasoft.engine.search.Order;
 import org.bonitasoft.engine.search.SearchOptions;
 import org.bonitasoft.engine.search.SearchOptionsBuilder;
 import org.bonitasoft.engine.search.SearchResult;
@@ -101,6 +104,11 @@ public class ConsultaSolicitud implements RestApiController {
             
             if(requestFilter.indexOf("rootprocessinstanceid=") > -1) {
                 logger.log Level.SEVERE, "===> Buscando en pendientes"
+                filters.eachWithIndex {value, index ->
+                    if(value.indexOf("username") > -1) {
+                        filters[index] = ""
+                    }
+                }
                 buscarInstancias(filters, sorts, page, rowForPage, username, true, consultaResponse)
             } else if(requestFilter.indexOf("estacion=") > -1) {
                 logger.log Level.SEVERE, "===> Buscando en pendientes"
@@ -154,11 +162,28 @@ public class ConsultaSolicitud implements RestApiController {
         Integer rowNum = (page * rowsForPage) + 1;
         
         filters.eachWithIndex {value, index ->
-            if(index > 0 && where.length() > 0) {
-                where.append(" and ")
-            }
-            if(value.toLowerCase().indexOf("username") == -1) {
-                where.append(value)
+            if(!value.isEmpty()) {
+                if(index > 0 && where.length() > 0) {
+                    where.append(" and ")
+                }
+                if(value.toLowerCase().indexOf("username") == -1) {
+                    where.append(value)
+                } else {
+                    // Filtro por jerarquia de usuario
+                    User user = identityAPI.getUserByUserName(username.trim())
+                    SearchOptionsBuilder optionsBuilder = new SearchOptionsBuilder(0, 10)
+                    optionsBuilder.filter(CustomUserInfoValueSearchDescriptor.DEFINITION_ID, 3)
+                    optionsBuilder.filter(CustomUserInfoValueSearchDescriptor.USER_ID, user.getId())
+                    optionsBuilder.sort(CustomUserInfoValueSearchDescriptor.USER_ID, Order.ASC)
+                    SearchResult<CustomUserInfoValue> searchResult = identityAPI.searchCustomUserInfoValues(optionsBuilder.done())
+                    List<CustomUserInfoValue> infoValue = searchResult.getResult()
+                    
+                    if(infoValue != null && infoValue.size() == 1) {
+                        logger.log Level.SEVERE, "===> Oficina: " + infoValue.get(0).value
+                        String oficina = infoValue.get(0).value.split("-")[0]
+                        where.append("ofi_registro like '" + oficina.trim() + "%'")
+                    }
+                }
             }
         }
         
@@ -239,12 +264,11 @@ public class ConsultaSolicitud implements RestApiController {
             
             while (rs.next()) {
                 row = mapper.proccess(rs, metadata)
-                row.put("userTask", row.get("username").toString().trim() + " - " + (row.get("firstname").toString().trim() + " " + row.get("lastname").toString().trim()).trim())
+                row.put("userTask", row.get("username") == null ? "" : (row.get("username").toString().trim() + " - " + (row.get("firstname").toString().trim() + " " + row.get("lastname").toString().trim()).trim()))
                 result.add row;
             }
         } catch (Exception e) {
             throw new BussinesException(e)
-            // logger.log(Level.SEVERE, "Ejecutando consulta", e);
         } finally {
             try {
                 if(rs != null) {
@@ -258,7 +282,6 @@ public class ConsultaSolicitud implements RestApiController {
                 }
             } catch (Exception e) {
                 throw new BussinesException(e)
-                // logger.log(Level.SEVERE, "Cerrando conexiones", e);
             }
         }
         
