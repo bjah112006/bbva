@@ -88,6 +88,18 @@ public class EmpleadoBean extends AbstractFacade<Empleado> implements EmpleadoBe
 		return resultList;
 	}
 	
+	
+	//fix2 erika abregu
+	@Override
+	public List<Empleado> buscarPorIdTipoCategoriaActivo(long idTipoCategoria, long idPerfil) {
+		List<Empleado> resultList = em.createNamedQuery("Empleado.findByIdTipoCategoriaActivo")
+				.setParameter("idTipoCategoria", idTipoCategoria)
+				.setParameter("idPerfil", idPerfil)
+				.getResultList();
+		return resultList;
+	}
+	//fin de fix2 erika abregu
+	
 	@Override
 	public List<Empleado> buscarPorIdPerfil(long idPerfil) {
 		List<Empleado> resultList = em.createNamedQuery("Empleado.findByIdPerfil").setParameter("idPerfil", idPerfil).getResultList();
