@@ -373,7 +373,7 @@ public class DatosHistAntiguoDAO extends BaseDAO{
 	            	objDatosGeneradosHisAntPorIdDTO.setOrigen(results.getString("ORIGEN"));	            	
 	            	objDatosGeneradosHisAntPorIdDTO.setNroExpediente(results.getString("CORRELATIVO_EXPEDIENTE"));
 	            	//objDatosGeneradosHisAntPorIdDTO.setId(results.getString("HIST_ID"));
-	            	
+	            	objDatosGeneradosHisAntPorIdDTO.setRiesgoCliente(results.getString("EXP_RIESGO_CLIENTE_GRUPAL"));
 	            	
 	            	objDatosGeneradosHisAntPorIdDTO.setCodOficina(results.getString("CORRELATIVO_OFICINA_EMP"));
 	            	objDatosGeneradosHisAntPorIdDTO.setCodigoOficina(results.getString("OFIEXP_CODIGO"));
@@ -410,6 +410,7 @@ public class DatosHistAntiguoDAO extends BaseDAO{
 	            	objDatosGeneradosHisAntPorIdDTO.setSegmentoCliente(results.getString("DESCRIPCION_SEGMENTO_CLIENTE"));
 	            	objDatosGeneradosHisAntPorIdDTO.setPagoHabCliente(results.getString("PAGO_HABIENTE_CLIENTE"));
 	            	objDatosGeneradosHisAntPorIdDTO.setCodCategRentaCliente(results.getString("CODIGO_CAT_RENTA"));
+	            	objDatosGeneradosHisAntPorIdDTO.setIngNetoMensualCliente(results.getString("CLI_INGRESO_NETO_MENSUAL"));
 	            	
 	            	objDatosGeneradosHisAntPorIdDTO.setNombresEmpleado(results.getString("NOMBRE_GESTOR_RIESGO"));
 	            	objDatosGeneradosHisAntPorIdDTO.setApeMatEmpleado(results.getString("APELLIDO_PATERNO_GESTOR_RIESGO"));
@@ -587,34 +588,34 @@ public class DatosHistAntiguoDAO extends BaseDAO{
 	        LOG.info("antes del while");
 	        while (results.next()) {
 	        	
-	        	objDatosDetalleHistIiceDTO=new DatosDetalleHistoricoIiceDTO();
-	            try{
-	            		            	
-	            	objDatosDetalleHistIiceDTO.setNroHistorial(results.getString("CORRELATIVO_HISTORIAL"));
-	            	objDatosDetalleHistIiceDTO.setCodUsuario(results.getString("CODIGO_USUARIO"));
-	            	objDatosDetalleHistIiceDTO.setNombreUsuario(results.getString("NOMBRE_USUARIO"));
-	            	objDatosDetalleHistIiceDTO.setEstadoExpediente(results.getString("ESTADO_EXPEDIENTE"));
-	            	objDatosDetalleHistIiceDTO.setFechaHoraEnvio(results.getString("FECHA_HORA_ENVIO"));
-	            	objDatosDetalleHistIiceDTO.setFechaHoraAtencion(results.getString("FECHA_HORA_ATENCION"));
-	            	objDatosDetalleHistIiceDTO.setPerfilUsuario(results.getString("PERFIL_USUARIO"));
-	            	objDatosDetalleHistIiceDTO.setNroExpediente(results.getString("CORRELATIVO_EXPEDIENTE"));
-	            	objDatosDetalleHistIiceDTO.setTerminal(results.getString("TERMINAL"));
-	            	objDatosDetalleHistIiceDTO.setNombrePerfil(results.getString("PERFIL_NOMBRE"));
-	            	objDatosDetalleHistIiceDTO.setNombreEmpleado(results.getString("EMP_NOMBRE"));
-	            	objDatosDetalleHistIiceDTO.setApePatEmpleado(results.getString("EMP_APELLIDOP"));
-	            	objDatosDetalleHistIiceDTO.setApeMatEmpleado(results.getString("EMP_APELLIDOM"));
-	            	objDatosDetalleHistIiceDTO.setFechaHoraTrabajo(results.getString("FECHA_HORA_TRABAJO"));
-	            	objDatosDetalleHistIiceDTO.setFlagDevolucion(results.getString("FLAG_DEVOLUCION"));
-	            	objDatosDetalleHistIiceDTO.setCodEstado(results.getString("CODIGO_ESTADO"));
-	            	
-	                 
-	            } catch(Throwable t){
-	            	LOG.info("message: " + t.getMessage());
-	            	t.printStackTrace();            	 
-	            	
-	            }
-	            listDatosDetalleHistIiceDTO.add(objDatosDetalleHistIiceDTO);
-
+	        	if(!results.isFirst()){
+	        		objDatosDetalleHistIiceDTO=new DatosDetalleHistoricoIiceDTO();
+		            try{
+		            	
+		            	objDatosDetalleHistIiceDTO.setNroHistorial(results.getString("CORRELATIVO_HISTORIAL"));
+		            	objDatosDetalleHistIiceDTO.setCodUsuario(results.getString("CODIGO_USUARIO"));
+		            	objDatosDetalleHistIiceDTO.setNombreUsuario(results.getString("NOMBRE_USUARIO"));
+		            	objDatosDetalleHistIiceDTO.setEstadoExpediente(results.getString("ESTADO_EXPEDIENTE"));
+		            	objDatosDetalleHistIiceDTO.setFechaHoraEnvio(results.getString("FECHA_HORA_ENVIO"));
+		            	objDatosDetalleHistIiceDTO.setFechaHoraAtencion(results.getString("FECHA_HORA_ATENCION"));
+		            	objDatosDetalleHistIiceDTO.setPerfilUsuario(results.getString("PERFIL_USUARIO"));
+		            	objDatosDetalleHistIiceDTO.setNroExpediente(results.getString("CORRELATIVO_EXPEDIENTE"));
+		            	objDatosDetalleHistIiceDTO.setTerminal(results.getString("TERMINAL"));
+		            	objDatosDetalleHistIiceDTO.setNombrePerfil(results.getString("PERFIL_NOMBRE"));
+		            	objDatosDetalleHistIiceDTO.setNombreEmpleado(results.getString("EMP_NOMBRE"));
+		            	objDatosDetalleHistIiceDTO.setApePatEmpleado(results.getString("EMP_APELLIDOP"));
+		            	objDatosDetalleHistIiceDTO.setApeMatEmpleado(results.getString("EMP_APELLIDOM"));
+		            	objDatosDetalleHistIiceDTO.setFechaHoraTrabajo(results.getString("FECHA_HORA_TRABAJO"));
+		            	objDatosDetalleHistIiceDTO.setFlagDevolucion(results.getString("FLAG_DEVOLUCION"));
+		            	objDatosDetalleHistIiceDTO.setCodEstado(results.getString("CODIGO_ESTADO"));
+		                 
+		            } catch(Throwable t){
+		            	LOG.info("message: " + t.getMessage());
+		            	t.printStackTrace();            	 
+		            	
+		            }
+		            listDatosDetalleHistIiceDTO.add(objDatosDetalleHistIiceDTO);
+	        	}
 	        }
 	        
 	        results.close();
