@@ -58,13 +58,26 @@ public class ElevaSuperiorMB extends AbstractMBean {
 		/*Cargar lista de Superiores*/
 		for (TipoCategoria tipoCatego : listTipoCategoria) {
 			if (tipoCatego.getFlagSuperior().equals(Constantes.FLAG_SUPERIOR_1)) {
-				List<Empleado> listEmpleado = empleadoBean
+				/*
+				 * cambiado por erika abregu para fix2
+				 * se debe filtrara por empleados con flag superior, que sean de riesgo superior y que sean activos
+				 * List<Empleado> listEmpleado = empleadoBean
 						.buscarPorIdTipoCategoria(tipoCatego.getId(), Constantes.ID_PERFIL_RIESGOS_SUPERIOR);
 				if (listEmpleado != null && !listEmpleado.isEmpty()) {
 					LOG.info("Tamaño de listEmpleado con idCategoria "+tipoCatego.getId()+" es "+listEmpleado.size());
 					lista.addAll(listEmpleado);
 				}else
 					LOG.info("listEmpleado con idCategoria "+tipoCatego.getId()+" es vacío");
+				 */
+				//lo cambiado para fix2 erika abregu
+				List<Empleado> listEmpleado = empleadoBean
+						.buscarPorIdTipoCategoriaActivo(tipoCatego.getId(), Constantes.ID_PERFIL_RIESGOS_SUPERIOR);
+				if (listEmpleado != null && !listEmpleado.isEmpty()) {
+					LOG.info("Tamaño de listEmpleado con idCategoria "+tipoCatego.getId()+" es "+listEmpleado.size());
+					lista.addAll(listEmpleado);
+				}else
+					LOG.info("listEmpleado con idCategoria "+tipoCatego.getId()+" es vacío");
+				//fin de lo cambiado para fix2 erika abregu
 			}
 		}
 		if(lista!=null)
