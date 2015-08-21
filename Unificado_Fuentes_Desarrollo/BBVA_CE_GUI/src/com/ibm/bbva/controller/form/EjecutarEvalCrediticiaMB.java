@@ -118,6 +118,11 @@ public class EjecutarEvalCrediticiaMB extends AbstractMBean {
 		}
 	}
 	
+	public String comodin()
+	{
+		return null;
+	}
+	
 	public String aprobar() {
 		LOG.info("Aprobar Operacion - Exp : "+expediente.getId());
 		FacesContext ctx = FacesContext.getCurrentInstance(); 
