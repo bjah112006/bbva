@@ -482,7 +482,7 @@ public class RemoteUtils {
 						objTCWPS.setNumeroContrato(obj.getNroContrato());
 						objTCWPS.setObservacion(obj.getComentario());
 						objTCWPS.setIdOficina(String.valueOf(obj.getIdOficina()));
-						objTCWPS.setFlagRetraer(obj.getFlagRetraer());
+						objTCWPS.setFlagRetraer(null);
 						objTCWPS.setAccionExp(obj.getAccion());
 						objTCWPS.setIdGrupoSegmento(String.valueOf(obj.getIdGrupoSegmento()));
 						objTCWPS.setNumeroDevoluciones(obj.getNroDevoluciones());
