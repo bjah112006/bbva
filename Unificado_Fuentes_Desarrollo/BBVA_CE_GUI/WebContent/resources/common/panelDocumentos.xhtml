@@ -191,10 +191,16 @@
 	                        <h:outputText value="#{tipodoc.tipoDocumento.descripcion}"/>
 	                    </h:column>
 	                    <h:column>
-	                        <h:dataTable value="#{tipodoc.lstAyudaPanelDocumentos}" var="itemdoc" border="1" cellpadding="3" cellspacing="0" rendered="true" style="border-collapse: collapse; border-style: hidden;">
+	                        <h:dataTable value="#{tipodoc.lstAyudaPanelDocumentos}" var="itemdoc" border="1" cellpadding="3" cellspacing="0" rendered="true" style="border-collapse: collapse; border-style: hidden;" id="tblDocumentos">
 			                   <h:column nowrap="true" align="left" width="18" rendered="#{paneldocumentos.opObligatorio}">
+			                   		  
 				                    <h:graphicImage value="#{resource['images:1d.png']}" rendered="#{!itemdoc.std and itemdoc.docGuia}"/>  
 				                    <h:graphicImage value="#{resource['images:1e.png']}" rendered="#{itemdoc.std and itemdoc.docGuia}" />
+				                    
+				                    <!--
+				                    <h:outputText value="1" rendered="#{!itemdoc.std and itemdoc.docGuia}"/>
+				                    <h:outputText value="2" rendered="#{itemdoc.std and itemdoc.docGuia}"/>
+				                      -->
 				                </h:column>
 				                
 			                    <h:column nowrap="true" align="center" width="30" rendered="#{paneldocumentos.opObservar}">
@@ -210,7 +216,7 @@
 									<h:outputText value="#{itemdoc.codigoTipoDoc}"
 										rendered="#{itemdoc.docTransferencias and itemdoc.docEscaneado}"/>
 									
-									<h:outputLink value="#"
+									<h:outputLink value="#" 
 										rendered="#{itemdoc.docEscaneado and itemdoc.idCm != '0'}"
 										onclick="return abrirDocumentoBrowser(#{itemdoc.idCm}, '#{itemdoc.codigoTipoDoc}')">
 										<h:outputText value="#{itemdoc.feRegistro}">
@@ -227,6 +233,8 @@
 				                	
 				                	<h:outputText value="#{msg['com.ibm.bbva.visualizarExpediente.formVisualizarExpediente.mensajeDocumentoNoSubido']}" rendered="#{itemdoc.flagEscaneado == '0' and paneldocumentos.pantallaConsulta}"></h:outputText>
 				                	
+				                	<h:inputHidden value="#{itemdoc.codigoTipoDoc}"></h:inputHidden>
+				                					                
 				                </h:column>
 				                
                 				<h:column nowrap="true" align="center" width="30" rendered="#{paneldocumentos.opEliminar}">
