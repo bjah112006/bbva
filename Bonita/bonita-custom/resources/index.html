@@ -31,9 +31,11 @@
     <script type="text/javascript" src="src/js/controllers/cuadroMandoController.js"></script>
     <script type="text/javascript" src="src/js/controllers/restAPIController.js"></script>
     <script type="text/javascript" src="src/js/directives/loadingDirective.js"></script>
+    <script type="text/javascript" src="src/js/util/dateUtil.js"></script>
 </head>
 <body>
     <div id="layout" class="container">
+		<!--
     	<div ng-controller="SessionController">
 			<div class="ui-widget-overlay-background" data-loading></div>
 			<div class="ui-widget-overlay" data-loading>
@@ -68,13 +70,11 @@
 	            <div class="btn-group">
 	                <label class="btn btn-primary" ng-model="menu" btn-radio="'consulta'">Consulta</label>
 	                <label class="btn btn-primary btn-last-child" ng-model="menu" btn-radio="'cuadromando'">Cuadro de Mando</label>
-					<!--
-	                <label class="btn btn-primary" ng-model="menu" btn-radio="'restAPI'">RestAPI</label>
-					-->
 	           </div> 
 	        </div>
 		</div>
-        <div class="well well-lg">
+		-->
+        <div class="well well-lg" style="border: 0px; margin-bottom: 0px;">
             <div id="body" ng-view></div>
         </div>
     </div>

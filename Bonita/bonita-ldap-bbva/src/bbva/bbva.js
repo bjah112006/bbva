@@ -111,9 +111,6 @@ abrirReporte = function(fecha) {
             $("#tblReporte").html(html);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            // console.log(xhr);
-            // console.log(ajaxOptions);
-            // console.log(thrownError);
             alert("Error al descargar el listado de reportes");   
         }
     });
@@ -137,8 +134,6 @@ createTable = function() {
         table +='            <div class="tr odd tr_1">';
         table +='                <div class="th th_reporte _1 odd even th_1 th_type_title">Reporte</div>';
         table +='                <div class="th th_fecha _2 even odd th_2 th_type_title th_last">Fecha</div>';
-        /*table +='                <div class="th th_reporte sortable priority _1 even odd th_1 th_type_title">Reporte</div>';
-        table +='                <div class="th th_fecha sortable _2 even odd th_2 th_type_title th_last">Fecha</div>';*/
         table +='            </div>';
         table +='        </div>';
         table +='        <div id="tblReporte" class="tbody">'; // current
@@ -185,9 +180,7 @@ createDialog = function() {
 };
 
 abrirConsulta = function() {
-	var body = document.body,
-        html = document.documentElement,
-        height = Math.max(body.offsetHeight, html.clientHeight, html.offsetHeight) - $("#header").outerHeight() - 35;
+	var height = $(window).height() - $("#header").outerHeight() - 70;
 	
     var __xhr = $.ajax({
         type: "post", 
@@ -196,23 +189,14 @@ abrirConsulta = function() {
         async: false,
         url: obtenerContexto("bbva/consulta.html"),
         success: function(data) {
-        	//var bodyContent = $("#body").find(".page").find(".body");
         	var bodyContent = $("#body");
-        	/*var menuContent = $("#menu").find("li");
-        	menuContent.each(function (index){
-        		var clase = $(this).attr("class");
-        		if(clase.contains("current")){
-        			var clas = clase.replace("current", "");
-        			$(this).removeClass(clase);
-        			$(this).addClass(clas);
-        		}
-        		if(clase.contains("bbva-consulta")){
-        			$(this).removeClass(clase);
-        			$(this).addClass(clase + " " + "current");
-        		}
-        	});*/
+			$(".current").removeClass("current");
+			$(".bbva-consulta").addClass("current");
+
         	bodyContent.html(data);
             bodyContent.find("#panelIzq").css("height", height + "px");
+
+			$(window).resize();
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert("Error al abrir pantalla de consulta");
@@ -251,7 +235,7 @@ consultarSolicitudes = function () {
 	
 	if(chk == "filtro1" && valorFiltro == ""){
 		alert("Debe ingresar un valor para los criterios de busqueda");
-	}else if(chk == "filtro2" && estacion == "-1"){
+	}else if(chk = "filtro2" && estacion == "-1"){
 		alert("Debe seleccionar una estacion");
 	}else{
 		buscarSolicitudes(filtro, valorFiltro, estacion);
@@ -293,13 +277,21 @@ buscarSolicitudes = function(filtro, valorFiltro, estacion){
             $("#divTablaSolicitudes").html(html);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            /*console.log(xhr);
-            console.log(ajaxOptions);*/
             console.log(thrownError);
             alert("ERROR AL CONSULTAR SOLICITUDES");   
         }
     });
 };
+
+$(window).resize(function(){
+	if($("#panelAngular").length > 0) {
+		$("#panelAngular").css("width", ($(window).width() - ($("#panelConsulta").outerWidth())) + "px");
+		$("#panelAngular").css("height", ($(window).height() - $("#header").outerHeight()) + "px");
+	}
+});
+
+$(document).ready(function(){
+});
 
 $(document).bind('DOMNodeInserted', function(event) {
     if(event.target.nodeName == 'LI') {

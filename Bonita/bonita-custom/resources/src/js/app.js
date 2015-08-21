@@ -2,7 +2,9 @@
 
 var bonitaApp = angular.module('bonitaApp', ['ngRoute', 'ngSanitize', 'ngBonita', 'abstractControllers', 'ui.bootstrap', 'ui.select', 'angularGrid', "chart.js"]);
 var abstractControllers = angular.module('abstractControllers', []);
-var SessionController = bonitaApp.controller('SessionController', ['$scope', 'BonitaSession', 'User', 'bonitaConfig', '$location', '$q', function SessionController($scope, BonitaSession, User, bonitaConfig, $location, $q) {
+var SessionController = bonitaApp.controller('SessionController', ['$scope', 'BonitaSession', 'User', 'bonitaConfig', '$location', '$q', 
+	function SessionController($scope, BonitaSession, User, bonitaConfig, $location, $q) {
+
 	$scope.userName = "Anonimo";
 	$scope.menu = 'cuadromando';
 	
@@ -27,14 +29,13 @@ var SessionController = bonitaApp.controller('SessionController', ['$scope', 'Bo
 			deferred.resolve(session);
 		}
 	});
-
 }]);
 
 bonitaApp.config(function($routeProvider, $httpProvider) {
 	$routeProvider.when('/', {
 		controller : 'ConsultaSolicitudController',
 		templateUrl : 'src/views/consultaSolicitud.html'
-	}).when('/consulta', {
+	}).when('/consulta/:modo', {
 		controller : 'ConsultaSolicitudController',
 		templateUrl : 'src/views/consultaSolicitud.html'
 	}).when('/cuadromando', {

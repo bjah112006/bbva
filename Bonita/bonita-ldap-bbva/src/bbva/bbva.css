@@ -6,6 +6,10 @@
     background: url("reporte_16.png") no-repeat scroll 15px center transparent !important;
 }
 
+#header #menu > div > ul.dropdownmenu.notCustom > li.current a.bbva-consulta {
+    background: url("reporte_16_black.png") no-repeat scroll 15px center transparent !important;
+}
+
 #bbva-panel .popupframe {
     top: 100px;
 }
@@ -23,10 +27,6 @@
     padding-bottom: 5px;
     margin-bottom: 0px;
     min-height: 24px;
-    /*
-    position: fixed;
-    width: 438px;
-    */
 }
 
 #bbva-panel .itemlistingpage .tables_panel .table .thead .tr .th {
@@ -100,9 +100,4 @@
 
 .headerFiltro{
 	padding: 7px 0 7px 35px;
-}
-
-#header #menu > div > ul.dropdownmenu.notCustom > li.current a.bbva-consulta,
-#header #menu > div > ul.dropdownmenu.notCustom > li.current:hover a.bbva-consulta {
-  background: url("themeResource?theme=portal&location=skin/images/icon-apps-selected.png") transparent no-repeat 15px center !important;
 }

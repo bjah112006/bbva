@@ -148,7 +148,9 @@ angular.module('ngBonita').factory('bonitaAuthentication', function ($log, $http
 'use strict';
 
 angular.module('ngBonita').provider('bonitaConfig', function () {
-	var bonitaUrl = 'http://192.168.238.137:8080/bonita';
+	var url = document.URL;
+    var tmp = url.split("bonita");
+	var bonitaUrl = tmp[0] + "bonita";
 	var defaultPager = {
 		p : 0,
 		c : 10

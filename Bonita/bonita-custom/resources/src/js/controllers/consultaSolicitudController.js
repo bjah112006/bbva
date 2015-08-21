@@ -1,4 +1,5 @@
-abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http', 'ConsultaSolicitudes', 'bonitaConfig', function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaConfig) {
+abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http', 'ConsultaSolicitudes', 'bonitaConfig', 'DateUtil',
+function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaConfig, DateUtil) {
 	$scope.tiposDocumento = [
 		{"id": "rootprocessinstanceid", "name": "Número Solicitud"},
 		{"id": "num_doi_cliente", "name": "Número DOI Cliente"},
@@ -36,22 +37,35 @@ abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http'
 	var columnDefs = [
         {headerName: "N° Solicitud", field: "rootprocessinstanceid", width: 80, cellRenderer: function(params) {
             var resultElement = document.createElement("a");
-			resultElement.href = "#/restAPI/detail/" + params.value;
+
+/*
+            		if(data.solicitudes[i].idArchivada!=""){
+            			row += '<tr><td><a href="' + obtenerContexto('homepage') + '?id=' + data.solicitudes[i].idArchivada + '&_p=' + data.solicitudes[i].variable + '&_pf=1">' + data.solicitudes[i].nroSolicitud + '</a></td>';
+            		}else{
+            			row += '<tr><td><a href="' + obtenerContexto('homepage') + '?id=' + data.solicitudes[i].nroSolicitud + '&_p=' + data.solicitudes[i].variable + '&_pf=1">' + data.solicitudes[i].nroSolicitud + '</a></td>';
+            		}
+*/
+			resultElement.target="top"
+			resultElement.href = bonitaConfig.getBonitaUrl() + "/portal/homepage?id=" + params.value + '&_p=casemoredetails&_pf=1';
 			resultElement.innerHTML = params.value;
             return resultElement;
         }},
-		{headerName: "RUC", field: "num_doi_cliente", width: 90},
-        {headerName: "Raz\u00F3n Social", field: "nombre_cliente", width: 80},
-        {headerName: "Estado", field: "estado_solicitud", width: 350},
+		{headerName: "RUC", field: "num_doi_cliente", width: 100},
+        {headerName: "Raz\u00F3n Social", field: "nombre_cliente", width: 350},
+        {headerName: "Estado", field: "estado_solicitud", width: 150},
         {headerName: "Tipo Oferta", field: "oferta_aprobada", width: 160},
         {headerName: "Oficina", field: "ofi_registro", width: 160},
-        {headerName: "Fecha Ingreso", field: "startdate", width: 160},
-        {headerName: "Usuario", field: "userTask", width: 160},
-        {headerName: "RVGL", field: "num_rvgl", width: 160},
-		{headerName: "Producto", field: "producto", width: 70},
-		{headerName: "Campa\u00F1a", field: "campania", width: 70},
-		{headerName: "Clasif. Cliente", field: "clte_clasificacion", width: 70},
-		{headerName: "ABN. Registrante", field: "usu_registrante", width: 70}
+        {headerName: "Fecha Ingreso", field: "startdate", width: 100, cellRenderer: function(params) {
+			var resultElement = document.createElement("span");
+			resultElement.innerHTML = DateUtil.toString(DateUtil.longToDate(params.value), DateUtil.DDMMYYYYHHmmss);
+            return resultElement;
+		}},
+        {headerName: "Usuario", field: "userTask", width: 200},
+        {headerName: "RVGL", field: "num_rvgl", width: 180},
+		{headerName: "Producto", field: "producto", width: 180},
+		{headerName: "Campa\u00F1a", field: "campania", width: 150},
+		{headerName: "Clasif. Cliente", field: "clte_clasificacion", width: 150},
+		{headerName: "ABN. Registrante", field: "usu_registrante", width: 150}
     ];
 
 	$scope.gridInstances = {
@@ -97,7 +111,7 @@ abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http'
         }
     };
 
-	$scope.pageSize = 8;
+	$scope.pageSize = 6;
 	$scope.buscar = function(){
 		var parameters = {
 			p: 0,
