@@ -171,6 +171,16 @@ public class ConsultaSolicitud implements RestApiController {
                 } else {
                     // Filtro por jerarquia de usuario
                     User user = identityAPI.getUserByUserName(username.trim())
+                    
+                    // Ambito
+                    SearchOptionsBuilder optionsBuilder = new SearchOptionsBuilder(0, 10)
+                    optionsBuilder.filter(CustomUserInfoValueSearchDescriptor.DEFINITION_ID, 3)
+                    optionsBuilder.filter(CustomUserInfoValueSearchDescriptor.USER_ID, user.getId())
+                    optionsBuilder.sort(CustomUserInfoValueSearchDescriptor.USER_ID, Order.ASC)
+                    SearchResult<CustomUserInfoValue> searchResult = identityAPI.searchCustomUserInfoValues(optionsBuilder.done())
+                    List<CustomUserInfoValue> infoValue = searchResult.getResult()
+                    
+                    // Oficina
                     SearchOptionsBuilder optionsBuilder = new SearchOptionsBuilder(0, 10)
                     optionsBuilder.filter(CustomUserInfoValueSearchDescriptor.DEFINITION_ID, 3)
                     optionsBuilder.filter(CustomUserInfoValueSearchDescriptor.USER_ID, user.getId())
