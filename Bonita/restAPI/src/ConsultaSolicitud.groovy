@@ -27,7 +27,12 @@ import java.util.logging.Logger
 import groovy.json.JsonBuilder
 
 import org.bonitasoft.console.common.server.login.HttpServletRequestAccessor
-import org.bonitasoft.console.common.server.page.*
+import org.bonitasoft.console.common.server.page.PageContext;
+import org.bonitasoft.console.common.server.page.PageResourceProvider;
+import org.bonitasoft.console.common.server.page.RestApiController;
+import org.bonitasoft.console.common.server.page.RestApiResponse;
+import org.bonitasoft.console.common.server.page.RestApiResponseBuilder;
+import org.bonitasoft.console.common.server.page.RestApiUtil;
 import org.bonitasoft.engine.api.IdentityAPI
 import org.bonitasoft.engine.api.ProcessAPI
 import org.bonitasoft.engine.api.TenantAPIAccessor
