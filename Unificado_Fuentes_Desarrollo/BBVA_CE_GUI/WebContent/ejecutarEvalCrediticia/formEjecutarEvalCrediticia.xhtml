@@ -66,7 +66,36 @@
 				});
 			});
         	
+        	function validarPorcentajeEndeudamiento()
+        	{
+        	
+        		var valido = true;
+        	    var porcentajeOriginal = $("#frmEjecutarEvalCrediticia\\:porcentEndeudaCambiadoOriginal").val();
+        	    var porcentaje = $("#frmEjecutarEvalCrediticia\\:porcentEndeudaCambiado").val();
+        	
+        		if(parseFloat(porcentajeOriginal) != parseFloat(porcentaje))
+        		{
+        			$('[id$="tblDocumentos"] tr').each(function(i,row){
+        				
+						if($(this).find("input[type=hidden]").val() == 'ODSR0' && $(this).find("a").text() == '')
+        				{
+        					valido = false; 
+        				}
+        										        	
+        			});
+        		}
+        		     
+        		if(!valido)
+        		{
+        			alert('El porcentaje de endeudamiento fue modificado; por consiguiente, es obligatorio adjuntar: Otros documentos sustentatorios - Analista de Riesgos ');
+        		}     
+        		               		        		       
+        		return valido;
+        		
+        	}
+        	
         	function confAceptar (form) {
+
         		var msg = $("#frmEjecutarEvalCrediticia\\:confirmacion").text();
         		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
 		        var msgDocsObs = '';
@@ -75,7 +104,15 @@
 		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
 		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
 		        }
-        		return confirm(msg);
+		        if(validarPorcentajeEndeudamiento())
+		        {
+			        return confirm(msg);
+		        }     
+		        else
+		        {
+		        	return false;
+		        }
+		         		        	   		
         	}
         	
         	function confAprobMod (form) {
@@ -87,7 +124,15 @@
 		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
 		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
 		        }
-        		return confirm(msg);
+		        if(validarPorcentajeEndeudamiento())
+		        {
+			        return confirm(msg);
+		        }     
+		        else
+		        {
+		        	return false;
+		        }
+		                		
         	}     
         	
         	function confAprobObs (form) {
@@ -111,7 +156,14 @@
 		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
 		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
 		        }
-        		return confirm(msg);
+        		if(validarPorcentajeEndeudamiento())
+		        {
+			        return confirm(msg);
+		        }     
+		        else
+		        {
+		        	return false;
+		        }
         	} 
         	        	        	
         	function confDevolerCpm () {
@@ -120,7 +172,14 @@
         	}
         	function confDevolverGestor () {
         		var msg = $("#frmEjecutarEvalCrediticia\\:devolverGestor").text();
-        		return confirm(msg);
+        		if(validarPorcentajeEndeudamiento())
+		        {
+			        return confirm(msg);
+		        }     
+		        else
+		        {
+		        	return false;
+		        }
         	}
         	function confDenegar () {
         		var msg = $("#frmEjecutarEvalCrediticia\\:denegar").text();
@@ -128,7 +187,14 @@
         	}        	
         	function confElevarSuperior () {
         		var msg = $("#frmEjecutarEvalCrediticia\\:elevarSuperior").text();
-        		return confirm(msg);
+        		if(validarPorcentajeEndeudamiento())
+		        {
+			        return confirm(msg);
+		        }     
+		        else
+		        {
+		        	return false;
+		        }
         	}   
 			        	     	        	
         /* ]]> */
@@ -229,11 +295,11 @@
 							<ui:include src="/resources/common/elevaSuperior.xhtml" />
 							
 							<div class="column boton-principal" style="widht:50px;">
-								
+									            		                     
 								<h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.aprobarOp']}"
 												 action="#{ejecutarEvalCrediticia.aprobar}" 
 		            		                     disabled="#{!ejecutarEvalCrediticia.activoAceptar}" 
-		            		                     onclick="return confAceptar();" accesskey="a" />
+		            		                     onclick="return confAceptar();" accesskey="a" />		            		                     
 		            		                     
 								<h:commandButton value="#{msg['com.ibm.bbva.ejecutarEvalCrediticia.formEjecutarEvalCrediticia.aprobarMod']}"
 												 action="#{ejecutarEvalCrediticia.aprobarMod}" 
