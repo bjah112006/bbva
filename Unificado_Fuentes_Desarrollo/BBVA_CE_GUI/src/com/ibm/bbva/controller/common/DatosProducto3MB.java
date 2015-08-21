@@ -162,6 +162,7 @@ public class DatosProducto3MB extends AbstractMBean {
 	//FIX2 ERIKA ABREGU
 	private boolean disabledPorsEndeudamiento;
 	private String porcentEndeudaCambiado;
+	private String porcentEndeudaCambiadoOriginal;
 	//FIN DE FIX2 ERIKA ABREGU
 	
 	//FIX2 ERIKA ABREGU	
@@ -882,6 +883,7 @@ public class DatosProducto3MB extends AbstractMBean {
 		 * */
 		/*Obtiene Porcentaje de Endeudamiento*/
 		porcentEndeudaCambiado = expediente.getExpedienteTC().getPorcentajeEndeudamiento()!=0?Double.toString(expediente.getExpedienteTC().getPorcentajeEndeudamiento()):"";
+		porcentEndeudaCambiadoOriginal = porcentEndeudaCambiado;
 		/** FIN de Fix2 de Erika Abregu * */
 		
 		producto= new Producto();
@@ -2474,7 +2476,13 @@ public class DatosProducto3MB extends AbstractMBean {
 		this.porcentEndeudaCambiado = porcentEndeudaCambiado;
 	}
 
+	public String getPorcentEndeudaCambiadoOriginal() {
+		return porcentEndeudaCambiadoOriginal;
+	}
 
-	
-	
+	public void setPorcentEndeudaCambiadoOriginal(
+			String porcentEndeudaCambiadoOriginal) {
+		this.porcentEndeudaCambiadoOriginal = porcentEndeudaCambiadoOriginal;
+	}
+
 }
