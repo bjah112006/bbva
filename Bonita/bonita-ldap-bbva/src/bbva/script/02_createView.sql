@@ -236,6 +236,8 @@ alter table fastpyme.data_instance_detail owner to bonita;
 alter table fastpyme.task_pending owner to bonita;
 alter table fastpyme.instance owner to bonita;
 
+INSERT INTO tbl_pyme_parameter(id_table, id_column, id_reference, val_column1, val_column2, flg_state) VALUES (10, '010', '', '|B23|B21|', 'Cargos que pertenecen a la oficina', 1);
+
 select *
 from fastpyme.task_pending a
 inner join fastpyme.data_instance b on a.tenantid=b.tenantid and a.rootprocessinstanceid=b.containerid and estacion='OFICINA';
@@ -332,12 +334,13 @@ AS
 -- select startedby from public.process_instance;
 */
 select * from user_ a
-inner join custom_usr_inf_val b on a.id=b.userid and definitionid=3
+inner join custom_usr_inf_val b on a.id=b.userid -- and definitionid=3
 where a.id in(
 select startedby from public.process_instance
 );
  
 select  * from public.custom_usr_inf_val
+select  * from public.custom_usr_inf_def
 
 
 "P007395"

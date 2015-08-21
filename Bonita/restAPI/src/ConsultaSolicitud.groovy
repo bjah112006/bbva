@@ -55,6 +55,10 @@ import com.everis.util.db.mapper.impl.MapMapperImpl;
 
 public class ConsultaSolicitud implements RestApiController {
 
+    String CARGOS_OFICINA = "010";
+    long AMBITO = 1L;
+    long OFICINA = 3L;
+    long PUESTO = 4L;
     Logger logger
     APISession apiSession
     IdentityAPI identityAPI
@@ -157,6 +161,7 @@ public class ConsultaSolicitud implements RestApiController {
     }
     
     private void buscarInstancias(String[] filters, String sorts, int page, int rowsForPage, String username, boolean active, ConsultaResponse response) {
+        String cargosOficina = DBUtil.obtenerParametro(CARGOS_OFICINA);
         StringBuilder where = new StringBuilder("");
         StringBuilder orderBy = new StringBuilder("");
         Integer rowNum = (page * rowsForPage) + 1;
@@ -169,30 +174,47 @@ public class ConsultaSolicitud implements RestApiController {
                 if(value.toLowerCase().indexOf("username") == -1) {
                     where.append(value)
                 } else {
-                    // Filtro por jerarquia de usuario
+                    // Filter for user
                     User user = identityAPI.getUserByUserName(username.trim())
+                    SearchOptionsBuilder optionsBuilder;
+                    SearchResult<CustomUserInfoValue> searchResult;
+                    List<CustomUserInfoValue> infoValue;
+                    String oficina;
+                    String ambito;
+                    String puesto;
                     
-                    // Ambito
-                    SearchOptionsBuilder optionsBuilder = new SearchOptionsBuilder(0, 10)
-                    optionsBuilder.filter(CustomUserInfoValueSearchDescriptor.DEFINITION_ID, 3)
+                    // Info Customize
+                    optionsBuilder = new SearchOptionsBuilder(0, 10)
                     optionsBuilder.filter(CustomUserInfoValueSearchDescriptor.USER_ID, user.getId())
                     optionsBuilder.sort(CustomUserInfoValueSearchDescriptor.USER_ID, Order.ASC)
-                    SearchResult<CustomUserInfoValue> searchResult = identityAPI.searchCustomUserInfoValues(optionsBuilder.done())
-                    List<CustomUserInfoValue> infoValue = searchResult.getResult()
+                    searchResult = identityAPI.searchCustomUserInfoValues(optionsBuilder.done())
+                    infoValue = searchResult.getResult()
                     
-                    // Oficina
-                    SearchOptionsBuilder optionsBuilder = new SearchOptionsBuilder(0, 10)
-                    optionsBuilder.filter(CustomUserInfoValueSearchDescriptor.DEFINITION_ID, 3)
-                    optionsBuilder.filter(CustomUserInfoValueSearchDescriptor.USER_ID, user.getId())
-                    optionsBuilder.sort(CustomUserInfoValueSearchDescriptor.USER_ID, Order.ASC)
-                    SearchResult<CustomUserInfoValue> searchResult = identityAPI.searchCustomUserInfoValues(optionsBuilder.done())
-                    List<CustomUserInfoValue> infoValue = searchResult.getResult()
-                    
-                    if(infoValue != null && infoValue.size() == 1) {
-                        logger.log Level.SEVERE, "===> Oficina: " + infoValue.get(0).value
-                        String oficina = infoValue.get(0).value.split("-")[0]
-                        where.append("ofi_registro like '" + oficina.trim() + "%'")
+                    for(CustomUserInfoValue info : infoValue) {
+                        switch(info.getDefinitionId()) {
+                            case AMBITO:
+                                ambito = info.getValue()
+                                break
+                            case PUESTO:
+                                puesto = info.getValue()
+                                break
+                            case OFICINA:
+                                oficina = info.getValue().split("-")[0]
+                                break
+                            default:
+                                break
+                        }
                     }
+                    
+                    if(cargosOficina.indexOf("|" + puesto + "|") > -1) {
+                        where.append("ofi_registro like '" + oficina.trim() + "%'")
+                    } else if(!ambito.isEmpty()) {
+                        // TODO: where.append("ofi_registro like '" + oficina.trim() + "%'")
+                    }
+                    
+                    logger.log Level.SEVERE, "===> Ambito: " + ambito
+                    logger.log Level.SEVERE, "===> Oficina: " + oficina
+                    logger.log Level.SEVERE, "===> Puesto: " + puesto
                 }
             }
         }
