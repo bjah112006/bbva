@@ -284,17 +284,45 @@ public class PanelDocumentosMB extends AbstractMBean {
 	public void cambiarEstadoObligatorio(AjaxBehaviorEvent event, String indicador){
 		LOG.info("cargarDocumentosPanel : entro para cambiar estado obligatorio");
 		
+		/*
 		List<GuiaDocumentaria> listGuiaDocumentaria = (List<GuiaDocumentaria>) FacesContext
 				.getCurrentInstance().getExternalContext().getSessionMap()
 				.get(Constantes.LISTA_DOC_EXP_ADJ);
-		
+	    */
+				
+		/*
 		for(GuiaDocumentaria guiaDocumentaria:listGuiaDocumentaria){
 			if(String.valueOf(guiaDocumentaria.getTipoDocumento().getId()).equals(Constantes.OTROS_DOCS_SUSTENTATORIOS_ANALISTA_RIESGOS)){
 				guiaDocumentaria.setObligatorio(indicador);
 			}
 		}
+		*/
+			
+		/*
+		List<PersonaPD> listaPersonaPD = (List<PersonaPD>) FacesContext
+				.getCurrentInstance().getExternalContext().getSessionMap()
+				.get(Constantes.LISTA_AYUDA_AGR_PANEL_DOCUMENTOS);
+		for(PersonaPD objPersonaPD : listaPersonaPD)
+		{
+			List<TipoDocumentoPD> listaTipoDocumentoPD  = objPersonaPD.getLstTipoDocumentoPDs();
+			for(TipoDocumentoPD objTipoDocumentoPD : listaTipoDocumentoPD)
+			{
+				List<AyudaPanelDocumentos> listaAyudaPanelDocumentos = objTipoDocumentoPD.getLstAyudaPanelDocumentos();
+				for(AyudaPanelDocumentos objAyudaPanelDocumentos : listaAyudaPanelDocumentos)
+				{
+					if(objAyudaPanelDocumentos.getCodigoTipoDoc().equals("ODSR0"))
+					{
+						objAyudaPanelDocumentos.getObjGuiaDocumentaria().setObligatorio(indicador);
+						//objAyudaPanelDocumentos.setStd(!indicador.equals("1"));
+					}					
+				}
+			}
+			
+		}		
 		
+		this.setLstPersonaPDs(listaPersonaPD);
 		
+		*/
 	}
 	
 	
@@ -619,9 +647,9 @@ public void eliminarDocumentoContent(AjaxBehaviorEvent event){
 	}	
 	
 	public boolean validarDocumentos(){
-		LOG.info("this.isOpValidar() -> "+this.isOpValidar());
+		//LOG.info("this.isOpValidar() -> "+this.isOpValidar());
 		
-		if(this.isOpValidar()){
+		//if(this.isOpValidar()){
 			// esta validación ya nunca se hace, opValidar siempre es false
 //			Map<String, Object> mapListDocumentosCM  = (Map<String, Object>) getObjectSession(Constantes.EXPEDIENTE_LISTA_DOCUMENTO_CM);
 //			
@@ -647,8 +675,36 @@ public void eliminarDocumentoContent(AjaxBehaviorEvent event){
 //				}
 //			}
 
+		//}
+		//LOG.info("Retorna TRUE validarDocumentos");
+		
+		/*
+		List<PersonaPD> listaPersonaPD = (List<PersonaPD>) FacesContext
+				.getCurrentInstance().getExternalContext().getSessionMap()
+				.get(Constantes.LISTA_AYUDA_AGR_PANEL_DOCUMENTOS);
+		
+		for(PersonaPD objPersonaPD : listaPersonaPD)
+		{
+			List<TipoDocumentoPD> listaTipoDocumentoPD  = objPersonaPD.getLstTipoDocumentoPDs();
+			for(TipoDocumentoPD objTipoDocumentoPD : listaTipoDocumentoPD)
+			{
+				List<AyudaPanelDocumentos> listaAyudaPanelDocumentos = objTipoDocumentoPD.getLstAyudaPanelDocumentos();
+				for(AyudaPanelDocumentos objAyudaPanelDocumentos : listaAyudaPanelDocumentos)
+				{
+					if(objAyudaPanelDocumentos.getCodigoTipoDoc().equals("ODSR0"))
+					{
+						if(objAyudaPanelDocumentos.isDocGuia() && !objAyudaPanelDocumentos.isStd())
+						{
+							System.out.println(" XXX Escaneado : " + objAyudaPanelDocumentos.isDocEscaneado());
+							return objAyudaPanelDocumentos.isDocEscaneado();
+						}						
+					}					
+				}
+			}
+			
 		}
-		LOG.info("Retorna TRUE validarDocumentos");
+		*/
+		
 		return true;
 
 	}
