@@ -9,6 +9,7 @@
    <script type="text/javascript"> 
      /* <![CDATA[ */
         function myFuncion(event) {
+        
 		    if (event.status == "success") {
 		        $(".soloNumeros").keypress(function (event) {
        				if (event.which > 31 && (event.which < 48 || event.which > 57)) {
@@ -51,8 +52,35 @@
 					event.preventDefault();
 				}
 			});	
-			$(".cmpNumeroDecimalMill").autoNumeric({aSep: ',', aDec: '.'});	
-			$(".cmpNumeroDecimalDece").autoNumeric({aSep: ',', aDec: '.', vMax:99.99});					  
+			$(".cmpNumeroDecimalMill").autoNumeric({aSep: ',', aDec: '.'});
+			$(".cmpNumeroDecimalDece").autoNumeric({aSep: ',', aDec: '.', vMax:99.99});		
+				
+			/*		
+			jQuery('.cmpNumeroDecimalMill').each(function() {
+				    var currentElement = $(this);
+				
+				    var value = currentElement.val();
+				    
+				    if(value.indexOf('.') != '-1')
+				    {
+					    var valores = value.split('.');
+					    
+					    if(valores.length > 1)
+					    {
+					    	if(valores[1].length < 2)
+					    	{
+					    		currentElement.val(valores[0] + '.' + valores[1] + '0');
+					    	}
+					    } 
+				    }
+				    else
+				    {
+				    	currentElement.val(valores[0].concat('.00'));
+				    }
+
+				});	
+			  */	
+			  			  
 	    });
        /* ]]> */
     </script>
@@ -355,10 +383,11 @@
 	              <h:inputText value="#{datosProducto3.porcentEndeudaCambiado}" 
 	              		styleClass="txt-resaltado-2 campoValor3 cmpNumeroDecimalMill" id="porcentEndeudaCambiado" 
 	              		onkeypress="return disableEnterKey(event);"  disabled="#{datosProducto3.disabledPorsEndeudamiento}">
-		            <f:convertNumber locale="en" pattern="#,##0.00"/>
-		            <f:ajax onevent="myFuncion" event="blur" render="idPanelDocumentos appletContentRefresh" execute="@form" listener="#{datosProducto3.cambiarDocumentoObligatorio}"/>
+		              <f:convertNumber locale="en" pattern="#,##0.00" /> 
+		            <!--  <f:ajax onevent="myFuncion" event="change" render="idPanelDocumentos appletContentRefresh" execute="@form" listener="#{datosProducto3.cambiarDocumentoObligatorio}"/> -->
 		          </h:inputText>
 		          <h:outputText value="%" styleClass="caja-texto valor-componente"/>
+		          <h:inputHidden value="#{datosProducto3.porcentEndeudaCambiadoOriginal}" id="porcentEndeudaCambiadoOriginal" />
               </span>  
               
                 
