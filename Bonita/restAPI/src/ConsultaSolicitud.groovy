@@ -214,7 +214,20 @@ public class ConsultaSolicitud implements RestApiController {
                     if(cargosOficina.indexOf("|" + puesto + "|") > -1) {
                         where.append("ofi_registro like '" + oficina.trim() + "%'")
                     } else if(!ambito.isEmpty()) {
-                        // TODO: where.append("ofi_registro like '" + oficina.trim() + "%'")
+                        if(where.length() > 0) {
+                            where.append(" and ")
+                        }
+                        String[] oficinas = ambito.split("|")
+                        if(oficinas.length > 0) {
+                            where.append(" ( ")
+                            oficinas.eachWithIndex {value1, index1 ->
+                                if(index1 > 0) {
+                                    where.append(" or ")
+                                }
+                                where.append("ofi_registro like '" + value1.trim() + "%'")
+                            }
+                            where.append(" ) ")
+                        }
                     }
                     
                     logger.log Level.SEVERE, "===> Ambito: " + ambito
