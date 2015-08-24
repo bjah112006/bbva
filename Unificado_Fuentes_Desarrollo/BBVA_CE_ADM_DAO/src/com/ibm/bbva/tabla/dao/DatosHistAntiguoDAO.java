@@ -821,30 +821,30 @@ public class DatosHistAntiguoDAO extends BaseDAO{
 
 	@Override
     protected String getEntityName() {
-        return "CONELE.SP_CE_HISTORICO_UNIFICADO";
+        return "CONELE.PG_CE_HISTOR_IICE.SP_CE_HISTORICO_UNIFICADO";
     }
 	
     protected String getEntityNamePorId() {
-        return "CONELE.SP_CE_HISTORICO_UNIF_POR_ID";
+        return "CONELE.PG_CE_HISTOR_IICE.SP_CE_HISTORICO_UNIF_POR_ID";
     }
    
     protected String getAyudaMemoriaIICE() {
-        return "CONELE.SP_CE_AYUDA_MEMORIA_IICE";
+        return "CONELE.PG_CE_HISTOR_IICE.SP_CE_AYUDA_MEMORIA_IICE";
     }
     
     protected String getDetalleHistorialIICE() {
-        return "CONELE.SP_CE_DETALLE_HISTORIAL_IICE";
+        return "CONELE.PG_CE_HISTOR_IICE.SP_CE_DETALLE_HISTORIAL_IICE";
     }
     
     protected String getDetalleObservacionesIICE() {
-        return "CONELE.SP_CE_DET_OBSERVACIONES_IICE";
+        return "CONELE.PG_CE_HISTOR_IICE.SP_CE_DET_OBSERVACIONES_IICE";
     }
     
     protected String getDetalleLogIICE() {
-        return "CONELE.SP_CE_DETALLE_LOG_IICE";
+        return "CONELE.PG_CE_HISTOR_IICE.SP_CE_DETALLE_LOG_IICE";
     }
     
     protected String getDocumentoPorExpIICE() {
-        return "SP_CE_DOCUMENTO_X_EXP";
+        return "CONELE.PG_CE_HISTOR_IICE.SP_CE_DOCUMENTO_X_EXP";
     }
 }
