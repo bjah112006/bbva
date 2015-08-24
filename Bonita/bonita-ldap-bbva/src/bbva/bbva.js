@@ -196,89 +196,16 @@ abrirConsulta = function() {
         	bodyContent.html(data);
             bodyContent.find("#panelIzq").css("height", height + "px");
 
+            if($("#panelAngular").length > 0) {
+                var url = document.URL;
+                var tmp = url.split("bonita");
+            	$("#panelAngular").attr("src", tmp[0] + "bonita/apps/wfpyme/home/#/");
+            }
+            
 			$(window).resize();
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert("Error al abrir pantalla de consulta");
-        }
-    });
-};
-
-mostrarFiltros = function () {
-	var filtro = $("input:radio[name=filtro]:checked").val();
-	if(filtro == "filtro1"){
-		//Criterios de Busqueda
-		$("#cboEstacion").val("-1");
-		
-		$("#cboFiltro").attr("disabled", false);
-		$("#txtFiltro").attr("disabled", false);
-		
-		$("#cboEstacion").attr("disabled", true);
-	}else{
-		//Estacion
-		$("#cboFiltro").val("01");
-		$("#txtFiltro").val("");
-		
-		$("#cboFiltro").attr("disabled", true);
-		$("#txtFiltro").attr("disabled", true);
-		
-		$("#cboEstacion").attr("disabled", false);
-	}
-};
-
-consultarSolicitudes = function () {
-	var filtro = $("#cboFiltro").val();
-	var valorFiltro = $("#txtFiltro").val();
-	var estacion = $("#cboEstacion").val();
-	
-	var chk = $("input:radio[name=filtro]:checked").val();
-	
-	if(chk == "filtro1" && valorFiltro == ""){
-		alert("Debe ingresar un valor para los criterios de busqueda");
-	}else if(chk = "filtro2" && estacion == "-1"){
-		alert("Debe seleccionar una estacion");
-	}else{
-		buscarSolicitudes(filtro, valorFiltro, estacion);
-	}
-};
-
-buscarSolicitudes = function(filtro, valorFiltro, estacion){
-	var request = 'listRequest?filtro='+filtro + "&estacion="+estacion;
-	var __xhr = $.ajax({
-        type: "post", 
-        dataType: 'json',
-        cache: false,
-        url: obtenerContexto(request),
-        data: {"valorFiltro": valorFiltro},
-        success: function(data) {
-        	var html = "";
-        	var row = '<div class="headerFiltro">'; 
-            row += '<table class="tabla"><tr class="cabeceraColumna"><td>N° Solicitud</td><td>RUC</td><td>Razon Social</td><td>Estado</td><td>Tipo Oferta</td><td>Oficina</td><td>Fecha Ingreso</td>'; 
-            row += '<td>Usuario</td><td>RVGL</td><td>Producto</td><td>Campaña</td><td>Clasif. Cliente</td><td>ABN. Registrante</td></tr>';
-            if(data!=null){
-            	for(var i=0; i < data.solicitudes.length; i++) {
-            		if(data.solicitudes[i].idArchivada!=""){
-            			row += '<tr><td><a href="' + obtenerContexto('homepage') + '?id=' + data.solicitudes[i].idArchivada + '&_p=' + data.solicitudes[i].variable + '&_pf=1">' + data.solicitudes[i].nroSolicitud + '</a></td>';
-            		}else{
-            			row += '<tr><td><a href="' + obtenerContexto('homepage') + '?id=' + data.solicitudes[i].nroSolicitud + '&_p=' + data.solicitudes[i].variable + '&_pf=1">' + data.solicitudes[i].nroSolicitud + '</a></td>';
-            		}
-	                row += '<td>' + data.solicitudes[i].ruc + '</td><td>' + data.solicitudes[i].nombre + '</td>';
-	                row += '<td>' + data.solicitudes[i].estado + '</td><td>' + data.solicitudes[i].tipoOferta + '</td><td>' +  data.solicitudes[i].oficina + '</td>';
-	                row += '<td>' + data.solicitudes[i].fechaIngreso + '</td><td>' + data.solicitudes[i].usuario + '</td><td>' +  data.solicitudes[i].rvgl + '</td>';
-	                row += '<td>' + data.solicitudes[i].producto + '</td><td>' + data.solicitudes[i].campania + '</td><td>' +  data.solicitudes[i].clasificacion + '</td>';
-	                row += '<td>' + data.solicitudes[i].abnRegistrante + "</td></tr>";
-	            }
-            }else{
-            	alert("No se encontraron resultados para los filtros ingresados");
-            }
-            html += row;
-            html += '</table></div>';
-            
-            $("#divTablaSolicitudes").html(html);
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            console.log(thrownError);
-            alert("ERROR AL CONSULTAR SOLICITUDES");   
         }
     });
 };
