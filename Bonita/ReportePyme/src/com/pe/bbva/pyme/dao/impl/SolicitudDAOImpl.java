@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.bonitasoft.engine.bpm.data.ArchivedDataInstance;
 import org.bonitasoft.engine.bpm.data.DataInstance;
+import org.bonitasoft.engine.bpm.data.DataNotFoundException;
 import org.bonitasoft.engine.bpm.flownode.ArchivedFlowNodeInstance;
 import org.bonitasoft.engine.bpm.flownode.ArchivedFlowNodeInstanceSearchDescriptor;
 import org.bonitasoft.engine.bpm.process.ArchivedProcessInstance;
@@ -262,7 +263,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 		}
 	
 //		solicitudHecha.setFechaLlegada(Utils.convertirDateEnCadena(elementoTareaHecha., ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));
-		List<ArchivedDataInstance> datosTareaArchivada = getProcessAPI().getArchivedActivityDataInstances(elementoTareaHecha.getSourceObjectId(), 1, 100);
+		List<ArchivedDataInstance> datosTareaArchivada = getProcessAPI().getArchivedActivityDataInstances(elementoTareaHecha.getSourceObjectId(), 1, 200);
 		Iterator<ArchivedDataInstance> itrDataTarea = datosTareaArchivada.iterator();
 		while(itrDataTarea.hasNext()) {
 			ArchivedDataInstance elementDataCaso = (ArchivedDataInstance) itrDataTarea.next();
@@ -278,7 +279,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 		Solicitud solicitudAux = new Solicitud();
 		solicitudAux.setNroSolicitud(String.valueOf(elementoSolicitud.getRootProcessInstanceId()));
 		solicitudAux.setFechaLlegada(Utils.convertirDateEnCadena(elementoSolicitud.getStartDate(), ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));
-		List<ArchivedDataInstance> datosArchivadosAdicionales = getProcessAPI().getArchivedProcessDataInstances(elementoSolicitud.getRootProcessInstanceId(), 1, 100);
+		List<ArchivedDataInstance> datosArchivadosAdicionales = getProcessAPI().getArchivedProcessDataInstances(elementoSolicitud.getRootProcessInstanceId(), 1, 200);
 		Iterator<ArchivedDataInstance> itrDataCaso = datosArchivadosAdicionales.iterator();
 		while(itrDataCaso.hasNext()) {
 			ArchivedDataInstance elementDataCaso = (ArchivedDataInstance) itrDataCaso.next();
@@ -293,15 +294,31 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO{
 		Solicitud solicitudAux = new Solicitud();
 		solicitudAux.setNroSolicitud(String.valueOf(elementoSolicitud.getRootProcessInstanceId()));
 		solicitudAux.setFechaLlegada(Utils.convertirDateEnCadena(elementoSolicitud.getStartDate(), ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));
-		List<DataInstance> datosPendientesAdicionales = getProcessAPI().getProcessDataInstances(elementoSolicitud.getRootProcessInstanceId(), 1, 100);
+		List<DataInstance> datosPendientesAdicionales = getProcessAPI().getProcessDataInstances(elementoSolicitud.getRootProcessInstanceId(), 1, 200);
+	
 		Iterator<DataInstance> itrDataCaso = datosPendientesAdicionales.iterator();
 		while(itrDataCaso.hasNext()) {
 			DataInstance elementDataCaso = (DataInstance) itrDataCaso.next();
 			String nombre = elementDataCaso.getName();
 			String valor = elementDataCaso.getValue()==null?ConstantesEnum.CADENA_VACIA.getNombre():elementDataCaso.getValue().toString();
 			solicitudAux = setearDetalleSolicitud(solicitudAux, nombre, valor);
-		}	
+		}
+		if(!(solicitudAux.getEstado()!=null && solicitudAux.getEstado().equals(""))){
+			solicitudAux.setEstado(get_last_status(elementoSolicitud.getRootProcessInstanceId()));
+		}
 		return solicitudAux;
+	}
+	
+	private String get_last_status(Long process_instance_ID){
+		String last_status="";
+		try {
+			DataInstance data_instance=getProcessAPI().getProcessDataInstance("estado_solicitud", process_instance_ID);
+			last_status=data_instance.getValue().toString();
+		} catch (DataNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return last_status;
 	}
 	
 	private Solicitud setearDetalleSolicitud(Solicitud solicitudAux,String nombre,String valor){
