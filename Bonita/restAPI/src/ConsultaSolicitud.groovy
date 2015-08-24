@@ -124,6 +124,15 @@ public class ConsultaSolicitud implements RestApiController {
                 buscarInstancias(filters, sorts, page, rowForPage, username, true, consultaResponse)
             } else {
                 logger.log Level.SEVERE, "===> Buscando en pendientes y archivadas"
+                if(requestFilter.indexOf("num_doi_cliente=") > -1 ||
+                   requestFilter.indexOf("num_rvgl=") > -1 ||
+                   requestFilter.indexOf("num_tramite=") > -1) {
+                    filters.eachWithIndex {value, index ->
+                        if(value.indexOf("username") > -1) {
+                            filters[index] = ""
+                        }
+                    }
+                }
                 buscarInstancias(filters, sorts, page, rowForPage, username, false, consultaResponse)
             }
         } catch(Exception e) {
@@ -217,14 +226,14 @@ public class ConsultaSolicitud implements RestApiController {
                         if(where.length() > 0) {
                             where.append(" and ")
                         }
-                        String[] oficinas = ambito.split("|")
+                        String[] oficinas = ambito.split("\\|")
                         if(oficinas.length > 0) {
                             where.append(" ( ")
                             oficinas.eachWithIndex {value1, index1 ->
                                 if(index1 > 0) {
                                     where.append(" or ")
                                 }
-                                where.append("ofi_registro like '" + value1.trim() + "%'")
+                                where.append("ambito_registro like '" + value1.trim() + "%'")
                             }
                             where.append(" ) ")
                         }

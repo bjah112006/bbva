@@ -1,5 +1,5 @@
-abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http', 'ConsultaSolicitudes', 'bonitaConfig', 'DateUtil',
-function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaConfig, DateUtil) {
+abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http', 'ConsultaSolicitudes', 'bonitaConfig', 'DateUtil', '$timeout',
+function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaConfig, DateUtil, $timeout) {
 	$scope.tiposDocumento = [
 		{"id": "rootprocessinstanceid", "name": "Número Solicitud"},
 		{"id": "num_doi_cliente", "name": "Número DOI Cliente"},
@@ -45,8 +45,8 @@ function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaC
             			row += '<tr><td><a href="' + obtenerContexto('homepage') + '?id=' + data.solicitudes[i].nroSolicitud + '&_p=' + data.solicitudes[i].variable + '&_pf=1">' + data.solicitudes[i].nroSolicitud + '</a></td>';
             		}
 */
-			resultElement.target="top"
-			resultElement.href = bonitaConfig.getBonitaUrl() + "/portal/homepage?id=" + params.value + '&_p=casemoredetails&_pf=1';
+			resultElement.target="_top"
+			resultElement.href = bonitaConfig.getBonitaUrl() + "/portal/homepage#?id=" + params.value + '&_p=casemoredetails&_pf=1';
 			resultElement.innerHTML = params.value;
             return resultElement;
         }},
@@ -113,6 +113,10 @@ function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaC
 
 	$scope.pageSize = 6;
 	$scope.buscar = function(){
+		$timeout(function(){
+			window.parent.document.getElementById("initloader").style.display = "block";
+		}, 0);
+
 		var parameters = {
 			p: 0,
 			c: 1,

@@ -6,7 +6,7 @@ var SessionController = bonitaApp.controller('SessionController', ['$scope', 'Bo
 	function SessionController($scope, BonitaSession, User, bonitaConfig, $location, $q) {
 
 	$scope.userName = "Anonimo";
-	$scope.menu = 'cuadromando';
+	$scope.menu = 'consulta';
 	
 	$scope.$watch(function(scope) { return scope.menu }, function(newValue, oldValue) {
 		$location.path(newValue);
@@ -35,7 +35,7 @@ bonitaApp.config(function($routeProvider, $httpProvider) {
 	$routeProvider.when('/', {
 		controller : 'ConsultaSolicitudController',
 		templateUrl : 'src/views/consultaSolicitud.html'
-	}).when('/consulta/:modo', {
+	}).when('/consulta', {
 		controller : 'ConsultaSolicitudController',
 		templateUrl : 'src/views/consultaSolicitud.html'
 	}).when('/cuadromando', {

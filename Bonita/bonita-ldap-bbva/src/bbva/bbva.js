@@ -188,6 +188,9 @@ abrirConsulta = function() {
         cache: false,
         async: false,
         url: obtenerContexto("bbva/consulta.html"),
+		beforeSend: function(xhr) {
+			window.parent.document.getElementById("initloader").style.display = "block";
+		},
         success: function(data) {
         	var bodyContent = $("#body");
 			$(".current").removeClass("current");
@@ -201,10 +204,11 @@ abrirConsulta = function() {
                 var tmp = url.split("bonita");
             	$("#panelAngular").attr("src", tmp[0] + "bonita/apps/wfpyme/home/#/");
             }
-            
+
 			$(window).resize();
         },
         error: function (xhr, ajaxOptions, thrownError) {
+			window.parent.document.getElementById("initloader").style.display = "none";
             alert("Error al abrir pantalla de consulta");
         }
     });

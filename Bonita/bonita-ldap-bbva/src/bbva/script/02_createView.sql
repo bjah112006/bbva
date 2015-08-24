@@ -1,7 +1,7 @@
 ﻿-- drop extension tablefunc;
 -- create extension tablefunc schema public version "1.0";
 
--- drop schema if exists fastpyme cascade;
+drop schema if exists fastpyme cascade;
 create schema fastpyme authorization bonita;
 --ALTER SCHEMA fastpyme OWNER TO bonita;
     
@@ -88,10 +88,6 @@ inner join public.actor d on c.tenantid=d.tenantid and c.actorid=d.id
 left join public.user_ e on c.tenantid=e.tenantid and c.assigneeid=e.id
 where b.stateid=6 and c.stateid not in(4, 32);
 
-select * from public.user_
-select * from public.arch_data_instance
-select * from public.arch_process_instance
-
 /*
 create view fastpyme.data_instance as
 select * from public.crosstab(
@@ -112,7 +108,7 @@ select * from public.crosstab(
 );
 */
 
-drop view if exists fastpyme.data_instance;
+-- drop view if exists fastpyme.data_instance;
 create view fastpyme.data_instance as
 select containerid
 , containertype
@@ -129,11 +125,12 @@ select containerid
 , max(case name when 'clte_clasificacion' then value else '' end) clte_clasificacion
 , max(case name when 'num_tramite' then value else '' end) num_tramite
 , max(case name when 'usu_registrante' then value else '' end) usu_registrante
+, max(case name when 'ambito_registro' then value else '' end) ambito_registro
 from fastpyme.data_instance_detail
 where containertype='PROCESS_INSTANCE'
 group by containerid, containertype, tenantid;
 
-drop view if exists fastpyme.arch_data_instance;
+-- drop view if exists fastpyme.arch_data_instance;
 create view fastpyme.arch_data_instance as
 select containerid
 , containertype
@@ -150,6 +147,7 @@ select containerid
 , max(case name when 'clte_clasificacion' then value else '' end) clte_clasificacion
 , max(case name when 'num_tramite' then value else '' end) num_tramite
 , max(case name when 'usu_registrante' then value else '' end) usu_registrante
+, max(case name when 'ambito_registro' then value else '' end) ambito_registro
 from fastpyme.arch_data_instance_detail
 where containertype='PROCESS_INSTANCE'
 group by containerid, containertype, tenantid;
@@ -185,6 +183,7 @@ select
     , b.clte_clasificacion
     , b.num_tramite
     , b.usu_registrante
+    , b.ambito_registro
 from fastpyme.task_pending a
 inner join fastpyme.data_instance b on 
 a.tenantid=b.tenantid and 
@@ -221,6 +220,7 @@ select
     , b.clte_clasificacion
     , b.num_tramite
     , b.usu_registrante
+    , b.ambito_registro
 from fastpyme.arch_task_pending a
 inner join fastpyme.arch_data_instance b on 
 a.tenantid=b.tenantid and 
@@ -236,8 +236,9 @@ alter table fastpyme.data_instance_detail owner to bonita;
 alter table fastpyme.task_pending owner to bonita;
 alter table fastpyme.instance owner to bonita;
 
-INSERT INTO tbl_pyme_parameter(id_table, id_column, id_reference, val_column1, val_column2, flg_state) VALUES (10, '010', '', '|B23|B21|', 'Cargos que pertenecen a la oficina', 1);
+-- INSERT INTO tbl_pyme_parameter(id_table, id_column, id_reference, val_column1, val_column2, flg_state) VALUES (10, '010', '', '|B23|B21|', 'Cargos que pertenecen a la oficina', 1);
 
+/*
 select *
 from fastpyme.task_pending a
 inner join fastpyme.data_instance b on a.tenantid=b.tenantid and a.rootprocessinstanceid=b.containerid and estacion='OFICINA';
@@ -284,7 +285,7 @@ num_tramite
     	public static final String DEVUELTO_POR_MESA_CONTROL = "DEVUELTO POR MESA CONTROL";
     	public static final String APROBADO_CON_MODIFICACION_POR_CONFIRMAR = "APROBADO CON MODIFICACION POR CONFIRMAR";
     	public static final String REQUISITO_OBSERVADO = "REQUISITO OBSERVADO";
-
+*/
 
 /*
 select * from fastpyme.data_instance;
@@ -333,6 +334,8 @@ AS
 -- select * from public.process_definition;
 -- select startedby from public.process_instance;
 */
+
+/*
 select * from user_ a
 inner join custom_usr_inf_val b on a.id=b.userid -- and definitionid=3
 where a.id in(
@@ -342,6 +345,9 @@ select startedby from public.process_instance
 select  * from public.custom_usr_inf_val
 select  * from public.custom_usr_inf_def
 
+select * from public.user_
+select * from public.arch_data_instance
+select * from public.arch_process_instance
 
 "P007395"
 "P012866"
@@ -355,3 +361,4 @@ select  * from public.custom_usr_inf_def
 "0396 - COVIDA"
 "0486 - San Isidro"
 
+*/
