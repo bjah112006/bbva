@@ -6,13 +6,15 @@ var SessionController = bonitaApp.controller('SessionController', ['$scope', 'Bo
 	function SessionController($scope, BonitaSession, User, bonitaConfig, $location, $q) {
 
 	$scope.userName = "Anonimo";
+	/*
 	$scope.menu = 'consulta';
 	
 	$scope.$watch(function(scope) { return scope.menu }, function(newValue, oldValue) {
 		$location.path(newValue);
 		$location.replace();
     });
-	
+	*/	
+
 	BonitaSession.getCurrent().$promise.then(function (session) {
 		var deferred = $q.defer();
 		

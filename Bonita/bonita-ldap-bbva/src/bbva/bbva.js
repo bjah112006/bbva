@@ -179,7 +179,7 @@ createDialog = function() {
     return html;
 };
 
-abrirConsulta = function() {
+abrirConsulta = function(page) {
 	var height = $(window).height() - $("#header").outerHeight() - 70;
 	
     var __xhr = $.ajax({
@@ -194,7 +194,12 @@ abrirConsulta = function() {
         success: function(data) {
         	var bodyContent = $("#body");
 			$(".current").removeClass("current");
-			$(".bbva-consulta").addClass("current");
+			if(page == "") {
+				$(".bbva-consulta").addClass("current");
+			} else {
+				$(".bbva-cuadro").addClass("current");
+			}
+			
 
         	bodyContent.html(data);
             bodyContent.find("#panelIzq").css("height", height + "px");
@@ -202,7 +207,7 @@ abrirConsulta = function() {
             if($("#panelAngular").length > 0) {
                 var url = document.URL;
                 var tmp = url.split("bonita");
-            	$("#panelAngular").attr("src", tmp[0] + "bonita/apps/wfpyme/home/#/");
+            	$("#panelAngular").attr("src", tmp[0] + "bonita/apps/wfpyme/home/#/" + page);
             }
 
 			$(window).resize();
@@ -230,7 +235,9 @@ $(document).bind('DOMNodeInserted', function(event) {
             $("<li class='bbva-reporte'><a class='bbva-reporte' href='javascript: void(0);' onclick='abrirReporte()'>Reporte</a></li>").insertAfter($(event.target));
             $("body").append(createDialog());
         } else if($(event.target).hasClass("bbva-reporte")) {
-            $("<li class='bbva-consulta'><a class='bbva-consulta' href='javascript: void(0);' onclick='abrirConsulta()'>Consulta</a></li>").insertAfter($(event.target));
+            $("<li class='bbva-consulta'><a class='bbva-consulta' href='javascript: void(0);' onclick='abrirConsulta(\"\")'>Consulta</a></li>").insertAfter($(event.target));
+        } else if($(event.target).hasClass("bbva-consulta")) {
+            $("<li class='bbva-cuadro'><a class='bbva-cuadro' href='javascript: void(0);' onclick='abrirConsulta(\"cuadromando\")'>Cuadro de Mando</a></li>").insertAfter($(event.target));
         }
     }
 });

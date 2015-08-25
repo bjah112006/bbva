@@ -1,9 +1,83 @@
 <div>
-	<h1>
-		<small>Cuadro de Mando</small>
-	</h1>
+    <h1>
+        <small>Cuadro de Mando</small>
+    </h1>
 </div>
 <div class="form-group">
-    <canvas id="bar" class="chart chart-bar" data="bar.data" labels="bar.labels" series="bar.series"></canvas>
-    <canvas id="pie" class="chart chart-pie" data="pie.data" labels="pie.labels" click="pie.onclick"></canvas>
+    <fieldset>
+        <legend>Criterio de b&uacute;squeda</legend>
+        <div class="row">
+            <table style="width: 100%;">
+                <tr><td>
+                    <table>
+                        <tr>
+                            <td><label class="control-label control-label-0">Centro Negocio:&nbsp;</label></td>
+                            <td>
+                                <ui-select 
+                                    ng-model="tipoDocumento.select"
+                                    ng-disabled="disabled.tipoDocumento"
+                                    theme="select2" 
+                                    style="width: 220px;" 
+                                    class="form-control" 
+                                    title="Tipo de documento">
+                                    <ui-select-match placeholder="Seleccione un tipo de documento de la lista...">
+                                        {{$select.selected.name}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in tiposDocumento | filter: $select.search">
+                                        <div ng-bind-html="item.name | highlight: $select.search"></div>
+                                        <!--
+                                        <small ng-bind-html="item.name | highlight: $select.search"></small>
+                                        -->
+                                    </ui-select-choices>
+                                </ui-select>
+                            </td>
+                            <td>
+                                <input type="text" 
+                                    class="form-control ui-corner-tr-br" 
+                                    style="border-left: 0px;" 
+                                    ng-model="nroDocumento"
+                                    ng-disabled="disabled.tipoDocumento"/>
+                            </td>
+							<td><input name="tipoFiltro" type="radio" ng-model="tipoFiltro" btn-radio="'tiposDocumento'" checked>&nbsp;</td>
+                        </tr>
+                        <tr style="height: 5px;"><td></td>
+                        </tr>
+                        <tr>
+                            <td><label class="control-label control-label-0">Estación:</label></td>
+                            <td>
+                                <ui-select 
+                                    ng-model="estacion.select"
+                                    ng-disabled="disabled.estacion"
+                                    theme="select2" 
+                                    style="width: 220px;" 
+                                    class="form-control" 
+                                    title="Estación">
+                                    <ui-select-match placeholder="Seleccione una estación...">
+                                        {{$select.selected.name}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in estaciones | filter: $select.search">
+                                        <div ng-bind-html="item.name | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </td>
+							<td><input name="tipoFiltro" type="radio" ng-model="tipoFiltro" btn-radio="'estacion'"></td>
+                        </tr>
+                    </table>
+                </td><td valign="top">
+                    <label class="btn btn-primary" ng-click="buscar()" style="float: right;">Consultar</label>
+                </td></tr>
+            </table>
+        </div>
+    </fieldset>
+    <div class="row" style="height:20px;">&nbsp;</div>
+    <fieldset>
+        <legend>Resultado</legend>
+        <div class="row">
+            <div style="height: 250px; width: 1000px; margin: auto;" ag-grid="gridInstances"></div>
+        </div>
+		<div class="form-group">
+		    <canvas id="bar" class="chart chart-bar" data="bar.data" labels="bar.labels" series="bar.series"></canvas>
+		    <canvas id="pie" class="chart chart-pie" data="pie.data" labels="pie.labels" click="pie.onclick"></canvas>
+		</div>
+    </fieldset>
 </div>

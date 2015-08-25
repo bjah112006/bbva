@@ -10,6 +10,14 @@
     background: url("reporte_16_black.png") no-repeat scroll 15px center transparent !important;
 }
 
+#header #menu > div > ul.dropdownmenu.notCustom > li a.bbva-cuadro {
+    background: url("reporte_16.png") no-repeat scroll 15px center transparent !important;
+}
+
+#header #menu > div > ul.dropdownmenu.notCustom > li.current a.bbva-cuadro {
+    background: url("reporte_16_black.png") no-repeat scroll 15px center transparent !important;
+}
+
 #bbva-panel .popupframe {
     top: 100px;
 }

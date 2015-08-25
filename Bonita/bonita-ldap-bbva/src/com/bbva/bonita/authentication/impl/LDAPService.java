@@ -87,12 +87,18 @@ public class LDAPService {
                 String[] oficina = obtenerOficina(usuario.getCodigoCentro());
     
                 /***
-                 * - 1;"AMBITO"
-                 * - 3;"OFICINA"
-                 * - 4;"PUESTO"
+                 * - 1:"AMBITO"
+                 * - 2:"CENTRO NEGOCIOS"
+                 * - 3:"OFICINA"
+                 * - 4:"PUESTO"
                  **/
                 if (puestosConOficina.indexOf("|" + usuario.getPuesto().getNombreCargoFuncionalLocal() + "|") > -1 && !oficina[1].isEmpty()) {
                     identityAPI.setCustomUserInfoValue(1, user.getId(), oficina[1]);
+                }
+                
+                if (!oficina[1].isEmpty()) {
+                    String centroNegocio =DBUtil.obtenerCentroNegocio(oficina[1]);
+                    identityAPI.setCustomUserInfoValue(2, user.getId(), centroNegocio);
                 }
                 
                 if (!oficina[0].isEmpty()) {

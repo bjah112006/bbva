@@ -17,6 +17,29 @@ public class DBUtil {
     public static final String HORAS_TRASNCURRIDAS = "003";
     public static final String ROLES_EXCLUIDOS = "009";
 
+    public static String obtenerCentroNegocio(String territorio) {
+        String parametro = "";
+        
+        try {
+            InitialContext ic = new InitialContext();
+            DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS");
+            Connection cn = ds.getConnection();
+            PreparedStatement ps = cn.prepareStatement("SELECT * FROM TBL_PYME_PARAMETER WHERE ID_TABLE=4 AND '|' || VAL_COLUMN2 || '|' LIKE '%|" + territorio + "|%'");
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                parametro = rs.getString("VAL_COLUMN1");
+            }
+
+            rs.close();
+            ps.close();
+            cn.close();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "obtenerCentroNegocio", e);
+        }
+        return parametro;
+    }
+    
     public static String obtenerParametro(String table, String key) {
     	String parametro = "";
     	

@@ -15,6 +15,7 @@
                             <td><label class="control-label control-label-0">Criterio de Consulta:&nbsp;</label></td>
                             <td>
                                 <ui-select 
+									id="cboTipoDocumento"
                                     ng-model="tipoDocumento.select"
                                     ng-disabled="disabled.tipoDocumento"
                                     theme="select2" 
@@ -33,7 +34,8 @@
                                 </ui-select>
                             </td>
                             <td>
-                                <input type="text" 
+                                <input id="txtTipoDocumento"
+									type="text" 
                                     class="form-control ui-corner-tr-br" 
                                     style="border-left: 0px;" 
                                     ng-model="nroDocumento"

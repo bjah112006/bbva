@@ -340,15 +340,13 @@ body {
 }
 
 @media (min-width: 1000px) {
-    .ui-corner-tl-bl {
+    #txtTipoDocumento {
         border-top-right-radius: 0px;
         border-bottom-right-radius: 0px;
-    }
-    .ui-corner-tr-br {
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
     }
-    #layout .select2-container .select2-choice {
+    #cboTipoDocumento .select2-choice {
         border-top-left-radius: 4px;
         border-top-right-radius: 0px;
         border-bottom-left-radius: 4px; 
