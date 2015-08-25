@@ -184,6 +184,7 @@ public class LDAPService {
             userUpdater.setManagerId(jefe.getId());
         }
         userUpdater.setProfessionalContactData(contactDataUpdater);
+        userUpdater.setPersonalContactData(contactDataUpdater);
         
         identityAPI.updateUser(user.getId(), userUpdater);
     }
@@ -202,6 +203,7 @@ public class LDAPService {
             userCreator.setManagerUserId(jefe.getId());
         }
         userCreator.setProfessionalContactData(contactDataCreator);
+        userCreator.setPersonalContactData(contactDataCreator);
 
         return identityAPI.createUser(userCreator);
     }
