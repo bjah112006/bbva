@@ -60,6 +60,35 @@
 	            	}
 				});
 			});
+			
+			function validarPorcentajeEndeudamiento()
+        	{
+        	
+        		var valido = true;
+        	    var porcentajeOriginal = $("#frmRevisarRegistrarDictamen\\:porcentEndeudaCambiadoOriginal").val();
+        	    var porcentaje = $("#frmEjecutarEvalCrediticia\\:porcentEndeudaCambiado").val();
+        	
+        		if(parseFloat(porcentajeOriginal) != parseFloat(porcentaje))
+        		{
+        			$('[id$="tblDocumentos"] tr').each(function(i,row){
+        				
+						if($(this).find("input[type=hidden]").val() == 'ODSR0' && $(this).find("a").text() == '')
+        				{
+        					valido = false; 
+        				}
+        										        	
+        			});
+        		}
+        		     
+        		if(!valido)
+        		{
+        			alert('El porcentaje de endeudamiento fue modificado; por consiguiente, es obligatorio adjuntar: Otros documentos sustentatorios - Analista de Riesgos ');
+        		}     
+        		               		        		       
+        		return valido;
+        		
+        	}
+        	
         	function confAceptar (form, idBoton) {
         		var msg = $("#frmRevisarRegistrarDictamen\\:confirmacion").text();
         		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
@@ -69,7 +98,17 @@
         			msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
         			msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
         		}
-        		var op = confirm(msg);
+        		
+        		var op = false;
+        		if(validarPorcentajeEndeudamiento())
+		        {
+			        op = confirm(msg);
+		        }     
+		        else
+		        {
+		        	op = false;
+		        }
+		                		
         		if (op) {
         			clickAceptarGenerico(form, idBoton);
         		}
@@ -84,7 +123,15 @@
         			msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
         			msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
         		}
-        		var op = confirm(msg);
+        		var op = false;
+        		if(validarPorcentajeEndeudamiento())
+		        {
+			        op = confirm(msg);
+		        }     
+		        else
+		        {
+		        	op = false;
+		        }
         		if (op) {
         			clickAceptarGenerico(form, idBoton);
         		}
@@ -99,7 +146,15 @@
         			msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
         			msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
         		}
-        		var op = confirm(msg);
+        		var op = false;
+        		if(validarPorcentajeEndeudamiento())
+		        {
+			        op = confirm(msg);
+		        }     
+		        else
+		        {
+		        	op = false;
+		        }
         		if (op) {
         			clickAceptarGenerico(form, idBoton);
         		}
