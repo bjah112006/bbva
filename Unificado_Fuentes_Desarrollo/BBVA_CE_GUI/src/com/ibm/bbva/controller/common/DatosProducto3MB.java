@@ -464,6 +464,8 @@ public class DatosProducto3MB extends AbstractMBean {
 		renderedPlazoSolicitadoApr = true;
 		habPlazoSolApr = true;
 		renderedPlazoSolicitadoAprobEdit=true;
+		//FIX2 ERIKA ABREGU
+		disabledPorsEndeudamiento = false;
 	}
 	
 	private void iniciarEjecutarEvalCrediticia() {
