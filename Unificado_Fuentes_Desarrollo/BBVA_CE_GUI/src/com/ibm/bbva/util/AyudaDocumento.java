@@ -57,15 +57,17 @@ public class AyudaDocumento {
 		    for (GuiaDocumentaria guia : listGuiaDocumentaria){
 		    	LOG.info("Adjuntando Documento Expediente");
 		    	LOG.info("Guía: " +  guia.getId());
+		    	if (guia.getId() <= 0) continue; // estos son documentos que se adjuntaron en tareas anteriores y solo se visualizan, no son parte de la guía para la tarea
+		    	
 		    	List<DocumentoExpTc> lstDocumentoExpTc = documentoExpTcBean.consultarDocumentosExpediente(expediente.getId(), guia.getTipoDocumento().getCodigo());
 		    	boolean canCreate = false;
 		    	if (lstDocumentoExpTc != null) {
 					for (DocumentoExpTc docExpTc: lstDocumentoExpTc) {						
-						if (docExpTc.getIdCm() != null && guia.getId() > 0) {
-							canCreate = true;
-						}else{
+						if (docExpTc.getTarea().getId() == expediente.getExpedienteTC().getTarea().getId()) {
 							canCreate = false;
 							break;
+						} else {
+							canCreate = true;
 						}					
 					}
 				}else{
@@ -124,26 +126,8 @@ public class AyudaDocumento {
 						}
 					}
 		    	}
-		    	//if (esNuevo) {
 		    	documentoExpTcBean.create(documentoExpTc);	
 		    	LOG.info("DocumentoExpTc: " + documentoExpTc.getId());
-		    	//} else {
-		    		//documentoExpTcBean.edit(documentoExpTc);
-		    	//}
-		    	//}
-		    }
-		    List<DocumentoExpTc> listDocumentoExpTc = documentoExpTcBean.buscarPorExpediente(expediente.getId());
-		    String lisDocumentosAdjuntos = "";
-		    if (!(listDocumentoExpTc == null || listDocumentoExpTc.isEmpty())){
-		    	for (DocumentoExpTc docExpTc : listDocumentoExpTc){
-		    		if (docExpTc.getFlagCm()==null)
-		    			lisDocumentosAdjuntos = lisDocumentosAdjuntos + docExpTc.getTipoDocumento().getCodigo() + ";" + docExpTc.getId() + "|";
-		    		else if (!docExpTc.getFlagCm().equals("1"))
-		    			lisDocumentosAdjuntos = lisDocumentosAdjuntos + docExpTc.getTipoDocumento().getCodigo() + ";" + docExpTc.getId() + "|";
-		    	}
-		    	LOG.info("lisDocumentosAdjuntos: " + lisDocumentosAdjuntos);
-		    	FacesContext.getCurrentInstance().getExternalContext()
-        		.getSessionMap().put(Constantes.LISTA_DOCUMENTOS_ADJUNTOS, lisDocumentosAdjuntos);
 		    }
 		}
 	}
@@ -163,7 +147,9 @@ public class AyudaDocumento {
 			List<DocumentoExpTc> lstDocumentoExpTc = documentoExpTcBean.buscarPorExpediente(expediente.getId());
 			for(DocumentoExpTc documentoExpTc : lstDocumentoExpTc){
 	    		for (String codTipoDoc : strListaDocsTransferencias.split(",")) {
-					if (documentoExpTc.getTipoDocumento().getCodigo().equals(codTipoDoc) && "0".equals(documentoExpTc.getFlagEscaneado())) {
+					if (documentoExpTc.getTipoDocumento().getCodigo().equals(codTipoDoc)
+							&& "0".equals(documentoExpTc.getFlagEscaneado())
+							&& documentoExpTc.getTarea().getId() == expediente.getExpedienteTC().getTarea().getId()) {
 						documentoExpTc.setFlagEscaneado("1");
 						documentoExpTcBean.edit(documentoExpTc);	
 						break;
@@ -175,11 +161,11 @@ public class AyudaDocumento {
 		List<DocumentoExpTc> listDocumentoExpTc = documentoExpTcBean.buscarPorExpediente(expediente.getId());
 	    String lisDocumentosAdjuntos = "";
 	    if (!(listDocumentoExpTc == null || listDocumentoExpTc.isEmpty())){
-	    	for (DocumentoExpTc docExpTc : listDocumentoExpTc){
-	    		if (docExpTc.getFlagCm()==null)
+	    	for (DocumentoExpTc docExpTc : listDocumentoExpTc) {
+	    		if (docExpTc.getTarea().getId() == expediente.getExpedienteTC().getTarea().getId()
+	    				&& (docExpTc.getFlagCm()==null || !docExpTc.getFlagCm().equals("1"))) {
 	    			lisDocumentosAdjuntos = lisDocumentosAdjuntos + docExpTc.getTipoDocumento().getCodigo() + ";" + docExpTc.getId() + "|";
-	    		else if (!docExpTc.getFlagCm().equals("1"))
-	    			lisDocumentosAdjuntos = lisDocumentosAdjuntos + docExpTc.getTipoDocumento().getCodigo() + ";" + docExpTc.getId() + "|";
+	    		}
 	    	}
 	    	LOG.info("lisDocumentosAdjuntos: " + lisDocumentosAdjuntos);
 	    	FacesContext.getCurrentInstance().getExternalContext()

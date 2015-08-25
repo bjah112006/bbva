@@ -175,11 +175,11 @@ public class PanelDocumentosMB extends AbstractMBean {
 		 * 
 		 */
 		
-		ExpedienteTCWPSWeb expedienteTCWPS = (ExpedienteTCWPSWeb) getObjectSession(Constantes.EXPEDIENTE_PROCESO_SESION);
+		ExpedienteTCWPSWeb expedienteTCWPSWeb = (ExpedienteTCWPSWeb) getObjectSession(Constantes.EXPEDIENTE_PROCESO_SESION);
 		
-		if(expedienteTCWPS != null){
-			if(expedienteTCWPS.getFlagEnProcesoTimer() != null){
-				if(expedienteTCWPS.getFlagEnProcesoTimer().equals("1")){
+		if(expedienteTCWPSWeb != null){
+			if(expedienteTCWPSWeb.getFlagEnProcesoTimer() != null){
+				if(expedienteTCWPSWeb.getFlagEnProcesoTimer().equals("1")){
 					expedienteEnProceso = true;
 				}
 			}
@@ -528,7 +528,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 		
 	}
 	
-public void eliminarDocumentoContent(AjaxBehaviorEvent event){
+	public void eliminarDocumentoContent(AjaxBehaviorEvent event){
 		LOG.info("idCm="+strCodigoTipoDocEliminar);
 		BigDecimal idCm = new BigDecimal(strCodigoTipoDocEliminar);//strCodigoTipoDocEliminar recibe ahora el idCM
 		DocumentoExpTc docExpTC = documentoExpTcBean.consultarDocumentoExpediente(expediente.getId(), idCm);
@@ -647,9 +647,9 @@ public void eliminarDocumentoContent(AjaxBehaviorEvent event){
 	}	
 	
 	public boolean validarDocumentos(){
-		//LOG.info("this.isOpValidar() -> "+this.isOpValidar());
+		LOG.info("this.isOpValidar() -> "+this.isOpValidar());
 		
-		//if(this.isOpValidar()){
+		if(this.isOpValidar()){
 			// esta validación ya nunca se hace, opValidar siempre es false
 //			Map<String, Object> mapListDocumentosCM  = (Map<String, Object>) getObjectSession(Constantes.EXPEDIENTE_LISTA_DOCUMENTO_CM);
 //			
@@ -675,8 +675,8 @@ public void eliminarDocumentoContent(AjaxBehaviorEvent event){
 //				}
 //			}
 
-		//}
-		//LOG.info("Retorna TRUE validarDocumentos");
+		}
+		LOG.info("Retorna TRUE validarDocumentos");
 		
 		/*
 		List<PersonaPD> listaPersonaPD = (List<PersonaPD>) FacesContext
