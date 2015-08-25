@@ -172,14 +172,7 @@
         	}
         	function confDevolverGestor () {
         		var msg = $("#frmEjecutarEvalCrediticia\\:devolverGestor").text();
-        		if(validarPorcentajeEndeudamiento())
-		        {
-			        return confirm(msg);
-		        }     
-		        else
-		        {
-		        	return false;
-		        }
+        		return confirm(msg);
         	}
         	function confDenegar () {
         		var msg = $("#frmEjecutarEvalCrediticia\\:denegar").text();
