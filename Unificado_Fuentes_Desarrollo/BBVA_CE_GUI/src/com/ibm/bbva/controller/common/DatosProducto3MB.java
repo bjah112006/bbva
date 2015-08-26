@@ -1581,20 +1581,135 @@ public class DatosProducto3MB extends AbstractMBean {
 			
 			 if (accion.equals(Constantes.ACCION_BOTON_APROBADO_CON_MOD_OBS) || accion.equals(Constantes.ACCION_BOTON_APROBAR_OPERACION)){
 				if (plazoSol>0){
-					if(expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")){
-						long plazoSolApr = (expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr()):0);
-						LOG.info("plazoSolApr -> "+plazoSolApr);
-						if(!(plazoSolApr > 0 && plazoSolApr <= plazoSol)){
-							addMessageError(formulario + ":idPlazoSolApr", 
-									"com.ibm.bbva.common.datosProducto3.msg.plazoSolApr", plazoSol);
-							existeError = true;							
+					
+					//FIX2 ERIKA ABREGU
+					DelegacionRiesgoCondicion objDelegacionRiesgoCondPlazo=delegacionRiesgoCondicionBeanLocalBean.buscarPorId(Constantes.CONDICION_PLAZO);
+					
+					if(objDelegacionRiesgoCondPlazo == null || objDelegacionRiesgoCondPlazo.getSimbolo() == null ||
+							"".equals(objDelegacionRiesgoCondPlazo.getSimbolo().getDescripcion())){
+						
+						addMessageError(formulario + ":idPlazoSolApr", 
+								"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprSinCond", plazoSol);
+						existeError = true;
+					}else {
+						if(expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")){
+							long plazoSolApr = (expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr()):0);
+							LOG.info("plazoSolApr -> "+plazoSolApr);
+							
+							if(!"SV".equals(objDelegacionRiesgoCondPlazo.getSimbolo().getDescripcion())){
+								String condicion = objDelegacionRiesgoCondPlazo.getSimbolo().getDescripcion();
+								LOG.info("plazoSolApr sin condicion SV -> "+plazoSolApr);
+								if("<=".equals(condicion)){
+									if(!(plazoSolApr > 0 && plazoSol <= plazoSolApr)){
+										LOG.info("plazoSolApr con condicion <=  --> "+plazoSolApr);
+										addMessageError(formulario + ":idPlazoSolApr", 
+												"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprCond_1", plazoSol);
+										existeError = true;							
+									}
+								}else if(">=".equals(condicion)){
+									if(!(plazoSolApr > 0 && plazoSol >= plazoSolApr)){
+										LOG.info("plazoSolApr con condicion >=  --> "+plazoSolApr);
+										addMessageError(formulario + ":idPlazoSolApr", 
+												"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprCond_2", plazoSol);
+										existeError = true;							
+									}
+								}else if ("==".equals(condicion)){
+									if(!(plazoSolApr > 0 && plazoSol == plazoSolApr)){
+										LOG.info("plazoSolApr con condicion ==  --> "+plazoSolApr);
+										addMessageError(formulario + ":idPlazoSolApr", 
+												"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprCond_3", plazoSol);
+										existeError = true;							
+									}
+								}else{
+									LOG.info("plazoSolApr con ninguna condicion -> "+plazoSolApr);
+									addMessageError(formulario + ":idPlazoSolApr", 
+											"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprSinCond", plazoSol);
+									existeError = true;
+								}
+									
+							}else{
+								if(!(plazoSolApr > 0)){
+									addMessageError(formulario + ":idPlazoSolApr", 
+											"com.ibm.bbva.common.datosProducto3.msg.plazoSolAprCero", plazoSol);
+									existeError = true;							
+								}
+							}
+							
+							/*if(!(plazoSolApr > 0 && plazoSolApr <= plazoSol)){
+								addMessageError(formulario + ":idPlazoSolApr", 
+										"com.ibm.bbva.common.datosProducto3.msg.plazoSolApr", plazoSol);
+								existeError = true;							
+							}*/
 						}
+						
 					}
 				}
 				
 				if(lineaSol>0){
 					LOG.info("lineaCreditoAprobado :::: "+lineaCreditoAprobado);
-					if(lineaCreditoAprobado!=null && !lineaCreditoAprobado.equals("")){
+					
+					//FIX2 ERIKA ABREGU
+					DelegacionRiesgoCondicion objDelegacionRiesgoCondImporte=delegacionRiesgoCondicionBeanLocalBean.buscarPorId(Constantes.CONDICION_IMPORTE);
+					
+					if (objDelegacionRiesgoCondImporte == null || objDelegacionRiesgoCondImporte.getSimbolo() == null ||
+							"".equals(objDelegacionRiesgoCondImporte.getSimbolo().getDescripcion())) {
+							
+						addMessageError(formulario + ":lineaCredAprob", 
+								"com.ibm.bbva.common.datosProducto3.msg.linCredAprobSinCond", lineaSol);
+						existeError = true;
+					
+					}else {
+						
+						if(lineaCreditoAprobado!=null && !lineaCreditoAprobado.equals("")){
+							Double linCredAprob = expediente.getExpedienteTC().getLineaCredAprob();
+							LOG.info("linCredAprob :::: "+linCredAprob);
+						
+							if(!"SV".equals(objDelegacionRiesgoCondImporte.getSimbolo().getDescripcion())){
+								LOG.info("linCredAprob sin condicion SV -> "+linCredAprob);
+								String condicion = objDelegacionRiesgoCondImporte.getSimbolo().getDescripcion();
+								
+								if("<=".equals(condicion)){
+									if (!(linCredAprob.doubleValue()>0 && lineaSol <= linCredAprob.doubleValue() )){
+										LOG.info("linCredAprob con condicion <=  :::: "+linCredAprob);
+										addMessageError(formulario + ":lineaCredAprob", 
+												"com.ibm.bbva.common.datosProducto3.msg.linCredAprobCond_1", lineaSol);
+										existeError = true;
+									}
+								}else if(">=".equals(condicion)){
+									if (!(linCredAprob.doubleValue()>0 && lineaSol >= linCredAprob.doubleValue() )){
+										LOG.info("linCredAprob con condicion >=  :::: "+linCredAprob);
+										addMessageError(formulario + ":lineaCredAprob", 
+												"com.ibm.bbva.common.datosProducto3.msg.linCredAprobCond_2", lineaSol);
+										existeError = true;
+									}
+								}else if ("==".equals(condicion)){
+									if (!(linCredAprob.doubleValue()>0 && lineaSol == linCredAprob.doubleValue() )){
+										LOG.info("linCredAprob con condicion ==  :::: "+linCredAprob);
+										addMessageError(formulario + ":lineaCredAprob", 
+												"com.ibm.bbva.common.datosProducto3.msg.linCredAprobCond_3", lineaSol);
+										existeError = true;
+									}
+								}else{
+									LOG.info("linCredAprob con ninguna condicion :::: "+linCredAprob);
+									addMessageError(formulario + ":lineaCredAprob", 
+											"com.ibm.bbva.common.datosProducto3.msg.linCredAprobSinCond", lineaSol);
+									existeError = true;
+								}
+								
+							}else{
+								if (!(linCredAprob.doubleValue()>0)){
+									addMessageError(formulario + ":lineaCredAprob", 
+											"com.ibm.bbva.common.datosProducto3.msg.linCredAprobCero", lineaSol);
+									existeError = true;
+								}
+							}
+							
+						}
+						
+					}
+					
+					//COMENTADO POR ERIKA ABREGU PARA EL CAMBIO DE FIX2
+					/*if(lineaCreditoAprobado!=null && !lineaCreditoAprobado.equals("")){
 						Double linCredAprob = expediente.getExpedienteTC().getLineaCredAprob();
 						LOG.info("linCredAprob :::: "+linCredAprob);
 						if (!(linCredAprob.doubleValue()>0 && linCredAprob.doubleValue()<=lineaSol )){
@@ -1602,7 +1717,7 @@ public class DatosProducto3MB extends AbstractMBean {
 									"com.ibm.bbva.common.datosProducto3.msg.linCredAprobValidacion", lineaSol);
 							existeError = true;
 						}
-					}
+					}*/
 				}
 			}			
 
