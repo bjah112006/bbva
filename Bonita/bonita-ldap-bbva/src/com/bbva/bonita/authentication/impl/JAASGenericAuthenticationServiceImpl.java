@@ -72,16 +72,20 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
             String isValidLDAP = DBUtil.obtenerParametro(DBUtil.FLAG_ACTIVACION_LDAP); 
             
             if ("0".equalsIgnoreCase(isValidLDAP)) {
-            	isCheckCredentials = identityService.chechCredentials(user, password);
+                isCheckCredentials = identityService.chechCredentials(user, password);
             } else {
-            	String userBonitaProfile=getPrincipalUserProfileFromBonita(user.getId());
-            	String roles = DBUtil.obtenerParametro(DBUtil.ROLES_EXCLUIDOS);
-            	
-            	if(roles.indexOf("|" + userBonitaProfile + "|") > -1){
-            		isCheckCredentials = identityService.chechCredentials(user, password);
-            	}else{
-            		isCheckCredentials = LDAPValidate.getInstance().checkCredentials(userName, password);	
-            	}
+                String userBonitaProfile = getPrincipalUserProfileFromBonita(user.getId());
+                String roles = DBUtil.obtenerParametro(DBUtil.ROLES_EXCLUIDOS);
+
+                logger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Roles Bonita: " + roles);
+                logger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Profile: " + userBonitaProfile);
+
+                if (roles.indexOf("|" + userBonitaProfile + "|") > -1) {
+                    isCheckCredentials = identityService.chechCredentials(user, password);
+                } else {
+                    isCheckCredentials = LDAPValidate.getInstance().checkCredentials(userName, password);
+                    logger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Autentifica LDAP");
+                }
             }
             
             if (isCheckCredentials) {
