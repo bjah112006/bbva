@@ -1,6 +1,8 @@
 package com.ibm.bbva.controller.common;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Date;
 import java.util.List;
 
@@ -161,7 +163,7 @@ public class DatosProducto3MB extends AbstractMBean {
 	
 	//FIX2 ERIKA ABREGU
 	private boolean disabledPorsEndeudamiento;
-	private String porcentEndeudaCambiado;
+	private Double porcentEndeudaCambiado;
 	private String porcentEndeudaCambiadoOriginal;
 	//FIN DE FIX2 ERIKA ABREGU
 	
@@ -884,8 +886,8 @@ public class DatosProducto3MB extends AbstractMBean {
 		 * Fix2 de Erika Abregu
 		 * */
 		/*Obtiene Porcentaje de Endeudamiento*/
-		porcentEndeudaCambiado = expediente.getExpedienteTC().getPorcentajeEndeudamiento()!=0?Double.toString(expediente.getExpedienteTC().getPorcentajeEndeudamiento()):"";
-		porcentEndeudaCambiadoOriginal = porcentEndeudaCambiado;
+		porcentEndeudaCambiado = expediente.getExpedienteTC().getPorcentajeEndeudamiento()!=0?expediente.getExpedienteTC().getPorcentajeEndeudamiento():0.00;
+		porcentEndeudaCambiadoOriginal = Double.toString(porcentEndeudaCambiado);
 		/** FIN de Fix2 de Erika Abregu * */
 		
 		producto= new Producto();
@@ -2072,8 +2074,8 @@ public class DatosProducto3MB extends AbstractMBean {
 			}
 			
 			//FIX2 ERIKA ABREGU
-			if(porcentEndeudaCambiado!=null && porcentEndeudaCambiado != Double.toString(expediente.getExpedienteTC().getPorcentajeEndeudamiento())){
-				expediente.getExpedienteTC().setPorcentajeEndeudamiento(Util.convertStringToDouble(porcentEndeudaCambiado));
+			if(porcentEndeudaCambiado!=null && porcentEndeudaCambiado != expediente.getExpedienteTC().getPorcentajeEndeudamiento()){
+				expediente.getExpedienteTC().setPorcentajeEndeudamiento(porcentEndeudaCambiado);
 			}
 		}else if (jspPrinc.equals("formVerificarResultadoDomiciliaria") ||
 				  jspPrinc.equals("formCambiarSituacionExp") ||
@@ -2448,7 +2450,7 @@ public class DatosProducto3MB extends AbstractMBean {
 				ctx.getApplication().getVariableResolver().resolveVariable(ctx, "paneldocumentos");
 		
 		if(porcentEndeudaCambiado!=null){
-			if(Util.convertStringToDouble(porcentEndeudaCambiado) != expediente.getExpedienteTC().getPorcentajeEndeudamiento()){
+			if(porcentEndeudaCambiado != expediente.getExpedienteTC().getPorcentajeEndeudamiento()){
 				/*Cambiar en la Guia Documentaria el doc Otros documentos sustentarios – Analista de Riesgos de Opcional a Obligatorio*/
 				LOG.info("porcentEndeudaCambiado es = " + porcentEndeudaCambiado + "y no es igual a % endeudamiento inicial " + expediente.getExpedienteTC().getPorcentajeEndeudamiento());
 				panelDocumento.cambiarEstadoObligatorio(event, "1");
@@ -2585,11 +2587,11 @@ public class DatosProducto3MB extends AbstractMBean {
 		this.disabledPorsEndeudamiento = disabledPorsEndeudamiento;
 	}
 
-	public String getPorcentEndeudaCambiado() {
+	public Double getPorcentEndeudaCambiado() {
 		return porcentEndeudaCambiado;
 	}
 
-	public void setPorcentEndeudaCambiado(String porcentEndeudaCambiado) {
+	public void setPorcentEndeudaCambiado(Double porcentEndeudaCambiado) {
 		this.porcentEndeudaCambiado = porcentEndeudaCambiado;
 	}
 
