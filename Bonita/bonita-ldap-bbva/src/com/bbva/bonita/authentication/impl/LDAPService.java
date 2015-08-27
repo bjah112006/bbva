@@ -23,6 +23,8 @@ import org.bonitasoft.engine.identity.ContactDataCreator;
 import org.bonitasoft.engine.identity.ContactDataUpdater;
 import org.bonitasoft.engine.identity.User;
 import org.bonitasoft.engine.identity.UserCreator;
+import org.bonitasoft.engine.identity.UserMembership;
+import org.bonitasoft.engine.identity.UserMembershipCriterion;
 import org.bonitasoft.engine.identity.UserNotFoundException;
 import org.bonitasoft.engine.identity.UserUpdater;
 
@@ -65,6 +67,7 @@ public class LDAPService {
             
             Usuario usuarioJefe = LDAPValidate.getInstance().obtenerUsuario(usuario.getRegistroJefe());
             jefe = crearUsuario(usuarioJefe, usuario.getRegistroJefe(), null);
+            actualizarDatosUsuario(true, false, usuarioJefe, jefe, usuario.getRegistroJefe());
         }
         
         try {
@@ -80,7 +83,12 @@ public class LDAPService {
         } else if(actualizar) {
             actualizarUsuario(usuario, user, jefe);
         }
+        actualizarDatosUsuario(crear, actualizar, usuario, user, username);
         
+        return user;
+    }
+    
+    private void actualizarDatosUsuario(boolean crear, boolean actualizar, Usuario usuario, User user, String username) {
         try {
             if(crear || actualizar) {
                 String puestosConOficina = LDAPValidate.getInstance().getProperty("puesto.con.oficina");
@@ -112,10 +120,8 @@ public class LDAPService {
             logger.log(Level.SEVERE, "Se creara el usuario: " + username);
             crear = true;
         }
-        
-        return user;
     }
-    
+
     private boolean verificarActualizacion(User user) {
         String horas = DBUtil.obtenerParametro(DBUtil.HORAS_TRASNCURRIDAS);
         Date lastConnection = user.getLastConnection();
@@ -217,7 +223,7 @@ public class LDAPService {
             ResultSet rs = ps.executeQuery();
 
             List<String> memberships = new ArrayList<String>();
-            // List<UserMembership> userMemberships = identityAPI.getUserMemberships(user.getId(), 0, 100, UserMembershipCriterion.ASSIGNED_DATE_DESC);
+            List<UserMembership> userMemberships = identityAPI.getUserMemberships(user.getId(), 0, 100, UserMembershipCriterion.ASSIGNED_DATE_DESC);
             int idRole;
             int idGroup;
             while (rs.next()) {
@@ -225,7 +231,8 @@ public class LDAPService {
                 idGroup = rs.getInt("ID_GROUP");
                 logger.log(Level.SEVERE, "ID_ROLE: " + idRole);
                 logger.log(Level.SEVERE, "ID_GROUP: " + idGroup);
-                if(actualizar = false) {
+                if(actualizar = false || userMemberships.isEmpty()) {
+                    logger.log(Level.SEVERE, "Membresia adicionada");
                     identityAPI.addUserMembership(user.getId(), idGroup, idRole);
                 } else {
                     memberships.add(idGroup + "=" + idRole);

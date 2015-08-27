@@ -16,6 +16,7 @@ public class DBUtil {
     public static final String URL_LDAP = "002";
     public static final String HORAS_TRASNCURRIDAS = "003";
     public static final String ROLES_EXCLUIDOS = "009";
+    public static final String FLAG_VERIFICAR_USUARIO = "011";
 
     public static String obtenerCentroNegocio(String territorio) {
         String parametro = "";

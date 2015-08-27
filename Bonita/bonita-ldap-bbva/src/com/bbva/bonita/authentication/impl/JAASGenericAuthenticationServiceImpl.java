@@ -57,13 +57,16 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
             
             userName = String.valueOf(credentials.get(AuthenticationConstants.BASIC_USERNAME)).toUpperCase();
             
-            try {
-                LDAPService ldapService = new LDAPService();
-                ldapService.verificarUsuario(userName);
-            	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, userName);
-            } catch (final Exception e) {
-            	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Exception generic");
-            	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, LogUtil.getLogOnExceptionMethod(this.getClass(), methodName, e));
+            String isVerificarUsuario= DBUtil.obtenerParametro(DBUtil.FLAG_VERIFICAR_USUARIO); 
+            if ("0".equalsIgnoreCase(isVerificarUsuario)) {
+                try {
+                    LDAPService ldapService = new LDAPService();
+                    ldapService.verificarUsuario(userName);
+                	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, userName);
+                } catch (final Exception e) {
+                	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Exception generic");
+                	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, LogUtil.getLogOnExceptionMethod(this.getClass(), methodName, e));
+                }
             }
             
             user = identityService.getUserByUserName(userName);
