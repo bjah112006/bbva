@@ -32,6 +32,13 @@
 		        	alert(msg);
 		        	$("#frmEjecutarEvalCrediticia\\:idMsgOperacion292").val("false");
 	            }
+	            /*
+	            *if($("#frmEjecutarEvalCrediticia\\:idMsgOperacion292_ES").val() == "true") {
+		        *	var msg = $("#frmEjecutarEvalCrediticia\\:msgOperacion292_ES").text();
+		        *	alert(msg);
+		        *	$("#frmEjecutarEvalCrediticia\\:idMsgOperacion292_ES").val("false");
+	            *}
+	            */
              
 	          if($("#frmEjecutarEvalCrediticia\\:idMsgOperacion").val() == "true") {
 	        	var msg = $("#frmEjecutarEvalCrediticia\\:msgOperacion").text();
@@ -214,6 +221,7 @@
     </h:head>
     <h:body onload="mostrarTabLogPorPerfil()">
 	    <h:form id="frmEjecutarEvalCrediticia">
+	    	<!-- h:inputHidden id="idMsgOperacion292_ES" value="#{elevaSuperior.msjOperacionBol292}"></h:inputHidden-->		
 	    	<h:inputHidden id="idMsgOperacion292" value="#{datosProducto3.msjOperacionBol292}"></h:inputHidden>
 			<h:outputText value="#{datosProducto3.msjOperacion292}" id="msgOperacion292" style="display:none;" />
 		    <h:inputHidden value="#{detalleExpediente.clienteNatural.estadoCivil.codigo}"  id="datoCivil"></h:inputHidden> 
