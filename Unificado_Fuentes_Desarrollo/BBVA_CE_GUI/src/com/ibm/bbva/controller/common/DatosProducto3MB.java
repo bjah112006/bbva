@@ -381,7 +381,7 @@ public class DatosProducto3MB extends AbstractMBean {
 				if (String.valueOf(objExpedienteDTO.getCodigoTipoMonedaSol()).equals(Constantes.CODIGO_TIPO_CAMBIO_DOLARES)) {
 					if(verificarTipoCambio() == null){
 						LOG.info("NO hay tipo de cambio, no puede seguir el flujo.");
-						msjOperacion292="No Existe Tipo de Cambio el día de hoy.";
+						msjOperacion292="No Existe Tipo de Cambio el dï¿½a de hoy.";
 						msjOperacionBol292=true;
 					}
 				}
@@ -398,7 +398,7 @@ public class DatosProducto3MB extends AbstractMBean {
 					if (String.valueOf(objExpedienteDTO.getCodigoTipoMonedaSol()).equals(Constantes.CODIGO_TIPO_CAMBIO_DOLARES)) {
 						if (verificarTipoCambio() == null) {
 							LOG.info("NO hay tipo de cambio, no puede seguir el flujo.");
-							msjOperacion292 = "No Existe Tipo de Cambio el día de hoy.";
+							msjOperacion292 = "No Existe Tipo de Cambio el dï¿½a de hoy.";
 							msjOperacionBol292 = true;						
 						}
 					}
@@ -407,8 +407,8 @@ public class DatosProducto3MB extends AbstractMBean {
 					 	validaDelegacion = facade.ServiceIBMBBVA_delegacionOficinaMemoriaWS(objExpedienteDTO);
 					 	expediente.getExpedienteTC().setFlagDelegacion(validaDelegacion?"1":"0");
 					}else{
-						LOG.info("Validación Delegacion Oficina es falso");
-						msjOperacion="No se encuentra configurado valores de Delegación Oficina";
+						LOG.info("Validaciï¿½n Delegacion Oficina es falso");
+						msjOperacion="No se encuentra configurado valores de Delegaciï¿½n Oficina";
 						msjOperacionBol=true;				
 					}
 				
@@ -490,7 +490,7 @@ public class DatosProducto3MB extends AbstractMBean {
 		if (String.valueOf(objExpedienteDTO.getCodigoTipoMonedaSol()).equals(Constantes.CODIGO_TIPO_CAMBIO_DOLARES)) {
 			if(verificarTipoCambio() == null){
 				LOG.info("NO hay tipo de cambio, no puede seguir el flujo.");
-				msjOperacion292="No Existe Tipo de Cambio el día de hoy.";
+				msjOperacion292="No Existe Tipo de Cambio el dï¿½a de hoy.";
 				msjOperacionBol292=true;
 			}
 		}
@@ -746,7 +746,7 @@ public class DatosProducto3MB extends AbstractMBean {
 					 * */					
 					msjOperacionBol=true;						
 				}else{
-					msjOperacion="No existe configuración 'Sin Nivel'";
+					msjOperacion="No existe configuraciï¿½n 'Sin Nivel'";
 					msjOperacionBol=true;						
 				}					
 			}
@@ -809,7 +809,7 @@ public class DatosProducto3MB extends AbstractMBean {
 			if (String.valueOf(objExpedienteDTO.getCodigoTipoMonedaSol()).equals(Constantes.CODIGO_TIPO_CAMBIO_DOLARES)) {
 				if (verificarTipoCambio() == null) {
 					LOG.info("NO hay tipo de cambio, no puede seguir el flujo.");
-					msjOperacion292 = "No Existe Tipo de Cambio el día de hoy.";
+					msjOperacion292 = "No Existe Tipo de Cambio el dï¿½a de hoy.";
 					msjOperacionBol292 = true;						
 				}
 			}
@@ -852,8 +852,8 @@ public class DatosProducto3MB extends AbstractMBean {
 					habPlazoSolApr = false;
 				}			
 			}else{
-				LOG.info("Validación Delegacion Oficina es falso");
-				msjOperacion="No se encuentra configurado valores de Delegación oficina";
+				LOG.info("Validaciï¿½n Delegacion Oficina es falso");
+				msjOperacion="No se encuentra configurado valores de Delegaciï¿½n oficina";
 				msjOperacionBol=true;				
 			}			
 		}
@@ -2451,15 +2451,15 @@ public class DatosProducto3MB extends AbstractMBean {
 		
 		if(porcentEndeudaCambiado!=null){
 			if(porcentEndeudaCambiado != expediente.getExpedienteTC().getPorcentajeEndeudamiento()){
-				/*Cambiar en la Guia Documentaria el doc Otros documentos sustentarios – Analista de Riesgos de Opcional a Obligatorio*/
+				/*Cambiar en la Guia Documentaria el doc Otros documentos sustentarios ï¿½ Analista de Riesgos de Opcional a Obligatorio*/
 				LOG.info("porcentEndeudaCambiado es = " + porcentEndeudaCambiado + "y no es igual a % endeudamiento inicial " + expediente.getExpedienteTC().getPorcentajeEndeudamiento());
-				panelDocumento.cambiarEstadoObligatorio(event, "1");
+				//panelDocumento.cambiarEstadoObligatorio(event, "1");
 				LOG.info("El documento se puso Obligatorio con exito ");
 			
 			}else{
 				LOG.info("porcentEndeudaCambiado es = " + porcentEndeudaCambiado + "y el % endeudamiento inicial es " + expediente.getExpedienteTC().getPorcentajeEndeudamiento());
-				panelDocumento.cambiarEstadoObligatorio(event, "0");
-				LOG.info("El documento se restableció a No Obligatorio con éxito ");
+				//panelDocumento.cambiarEstadoObligatorio(event, "0");
+				LOG.info("El documento se restableciï¿½ a No Obligatorio con ï¿½xito ");
 			}
 		}
 	}
