@@ -171,6 +171,10 @@
                     <f:selectItem itemValue="2" itemLabel="#{msg['com.ibm.bbva.common.detalleExpediente1.caracteristicasAd2']}" itemDisabled="#{detalleExpediente1.disabledFlagPHabiente}"/>
                     <h:inputHidden><f:selectItem itemValue="3" itemLabel="#{msg['com.ibm.bbva.common.detalleExpediente1.caracteristicasAd3']}" itemDisabled="#{detalleExpediente1.disabledFlagPAval}"/></h:inputHidden>
                     <f:selectItem itemValue="4" itemLabel="#{msg['com.ibm.bbva.common.detalleExpediente1.caracteristicasAd4']}" itemDisabled="#{detalleExpediente1.disabledFlagSubRogacion}"/>
+                    
+                    <f:selectItem itemValue="5"  itemDisabled="#{detalleExpediente1.itemDisabledMonocuota }"
+                    		itemLabel="#{msg['com.ibm.bbva.common.detalleExpediente1.caracteristicasAd5']}"/> 		
+                    		
                     <f:ajax event="click" render="idPanelDocumentos appletContentRefresh idDocumentosReutilizables" 
 						execute="@form" listener="#{detalleExpediente1.cambiarCaracteristicas1}"/> 
                 </h:selectManyCheckbox>
