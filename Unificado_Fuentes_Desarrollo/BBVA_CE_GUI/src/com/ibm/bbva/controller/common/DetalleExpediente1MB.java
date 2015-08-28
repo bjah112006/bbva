@@ -65,6 +65,11 @@ public class DetalleExpediente1MB extends AbstractMBean {
 
 	private static final Logger LOG = LoggerFactory.getLogger(DetalleExpediente1MB.class);
 	
+	/*
+	 * FIX2 ERIKA ABREGU 17-07-2015
+	*/
+	private boolean itemDisabledMonocuota;
+	
 	public DetalleExpediente1MB() {		
 	
 	}	
@@ -142,6 +147,13 @@ public class DetalleExpediente1MB extends AbstractMBean {
 			}else if (clienteNatural.getSubrog()!=null && clienteNatural.getSubrog().equals(Constantes.CHECK_NO_SELECCIONADO)) {
 					 disabledFlagSubRogacion=true;
 			}
+			//fix2 erika abregu
+			if (clienteNatural.getMonocuota()!=null && clienteNatural.getMonocuota().equals(Constantes.CHECK_SELECCIONADO)) {
+				selectedItems.add("5");
+			}else if (clienteNatural.getMonocuota()!=null && clienteNatural.getMonocuota().equals(Constantes.CHECK_NO_SELECCIONADO)) {
+					 itemDisabledMonocuota=true;
+			}
+			//fin de fix
 		} else{
 			
 			/*Obtiene Datos Estado Civil*/					
@@ -167,6 +179,9 @@ public class DetalleExpediente1MB extends AbstractMBean {
 		clienteNatural.setPagoHab(this.clienteNatural.getPagoHab());
 		clienteNatural.setAval(this.clienteNatural.getAval());
 		clienteNatural.setSubrog(this.clienteNatural.getSubrog());
+		//fix2 erika abregu
+		clienteNatural.setMonocuota(this.clienteNatural.getMonocuota());
+		//fin de fix2 erika abregu
 		clienteNatural.setNumDoi(this.clienteNatural.getNumDoi());
 		clienteNatural.setCodCliente(this.clienteNatural.getCodCliente());
 		clienteNatural.setFecVenDoi(this.clienteNatural.getFecVenDoi());
@@ -329,7 +344,9 @@ public class DetalleExpediente1MB extends AbstractMBean {
 		clienteNatural.setPagoHab(seleccion("2"));
 		clienteNatural.setAval(seleccion("3"));
 		clienteNatural.setSubrog(seleccion("4"));
-		
+		//fix2 erika abregu
+		clienteNatural.setMonocuota(seleccion("5"));
+		//fin de fix2 erika abregu
 		EstadoCivil estadoCivil = new EstadoCivil();
 		estadoCivil.setId(Long.parseLong(idEstadoCivil));		
 		clienteNatural.setEstadoCivil(estadoCivil);
@@ -360,6 +377,12 @@ public class DetalleExpediente1MB extends AbstractMBean {
 			if (clienteNatural.getSubrog()!=null && clienteNatural.getSubrog().equals(Constantes.CHECK_SELECCIONADO)) {
 				selectedItems.add("4");
 			}
+			
+			//fix2 erika abregu
+			if (clienteNatural.getMonocuota()!=null && clienteNatural.getMonocuota().equals(Constantes.CHECK_SELECCIONADO)) {
+				selectedItems.add("5");
+			}
+			//fin de fix2 erika abregu
 		}
 		return selectedItems.contains(val) ? 
 				Constantes.CHECK_SELECCIONADO : Constantes.CHECK_NO_SELECCIONADO;
@@ -529,6 +552,18 @@ public class DetalleExpediente1MB extends AbstractMBean {
 		this.disabledFlagSubRogacion = disabledFlagSubRogacion;
 	}	
 	
+	
+	
+	//fix2 erika abregu
+	public boolean isItemDisabledMonocuota() {
+		return itemDisabledMonocuota;
+	}
+
+	public void setItemDisabledMonocuota(boolean itemDisabledMonocuota) {
+		this.itemDisabledMonocuota = itemDisabledMonocuota;
+	}
+	//fin de fix erika abregu
+
 	public void cambiarCategorias1(AjaxBehaviorEvent event) {
 		LOG.info("cambiarCategorias1:::::::");
 		FacesContext ctx = FacesContext.getCurrentInstance();  
