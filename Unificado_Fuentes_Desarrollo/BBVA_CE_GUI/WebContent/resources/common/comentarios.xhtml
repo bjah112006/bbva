@@ -47,7 +47,8 @@
 		}       
         
         function validarPegadoCom(e, campo){
-        	num_caracteres_permitidos = 250;
+        	var num_caracteres_permitidos = 250;
+        	e = e || window.event;
         	if (e.button == 2 || e.ctrlKey) {
         		num_caracteres = campo.value.length;
         		contenido = $.trim(campo.value);

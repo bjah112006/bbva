@@ -517,3 +517,26 @@ function validate_formato(valor) {
 	} else 
 		return false;
 }
+
+function disableEnterKey(e) {
+	var key;
+	var okEvent='1';
+	
+	if (procesandoEst != null) {
+		if (procesandoEst == '1') {
+			okEvent='2';
+		}
+	}
+	if (okEvent == '1') {
+		if (window.event)
+			key = window.event.keyCode;     //IE
+		else
+			key = e.which;     //firefox
+		if(key == 13)
+			return false;
+		else
+			return true;
+	} else {
+		return false;
+	}
+}
