@@ -56,16 +56,21 @@ public class AyudaDocumento {
 		if (!(listGuiaDocumentaria == null || listGuiaDocumentaria.isEmpty())){
 		    for (GuiaDocumentaria guia : listGuiaDocumentaria){
 		    	LOG.info("Adjuntando Documento Expediente");
-		    	LOG.info("Guía: " +  guia.getId());
-		    	if (guia.getId() <= 0) continue; // estos son documentos que se adjuntaron en tareas anteriores y solo se visualizan, no son parte de la guía para la tarea
+		    	LOG.info("Guï¿½a: " +  guia.getId());
+		    	if (guia.getId() <= 0) continue; // estos son documentos que se adjuntaron en tareas anteriores y solo se visualizan, no son parte de la guï¿½a para la tarea
 		    	
 		    	List<DocumentoExpTc> lstDocumentoExpTc = documentoExpTcBean.consultarDocumentosExpediente(expediente.getId(), guia.getTipoDocumento().getCodigo());
 		    	boolean canCreate = false;
 		    	if (lstDocumentoExpTc != null) {
 					for (DocumentoExpTc docExpTc: lstDocumentoExpTc) {						
 						if (docExpTc.getTarea().getId() == expediente.getExpedienteTC().getTarea().getId()) {
-							canCreate = false;
-							break;
+							if(docExpTc.getTarea().getId()==Constantes.CODIGO_TAREA_EJEC_EVAL_CREDITICIA || 
+									docExpTc.getTarea().getId()==Constantes.CODIGO_TAREA_REVISAR_REGIST_DICTAMEN){
+								canCreate = true;
+							}else{
+								canCreate = false;
+								break;
+							}
 						} else {
 							canCreate = true;
 						}					
@@ -115,7 +120,7 @@ public class AyudaDocumento {
 					}
 		    	}*/
 		    	
-		    	/* Se agregó el flag escaneado */
+		    	/* Se agregï¿½ el flag escaneado */
 		    	documentoExpTc.setFlagEscaneado("0");
 		    	LOG.info("strListaDocsTransferencias: "+strListaDocsTransferencias);
 		    	if(strListaDocsTransferencias != null && !strListaDocsTransferencias.equals("null") && strListaDocsTransferencias.split(",").length > 0){
