@@ -93,6 +93,8 @@ public interface Constantes {
 	 */
 	String EXPEDIENTE_ANTIGUO = "Antigua CS PLD";
 	String EXPEDIENTE_UNIFICADO= "Nueva CS Unificado";
+	long CODIGO_TAREA_EJEC_EVAL_CREDITICIA =12;
+	long CODIGO_TAREA_REVISAR_REGIST_DICTAMEN =19;
 	
 	/**
 	 * FIX ERIKA ABREGU
@@ -117,13 +119,13 @@ public interface Constantes {
 	 */
 	String EXPEDIENTE_SESION_ENTRANTE = "expSesionEntrante";	
 	/**
-	 * Objeto de tipo ExpedeinteVO. Es el expediente histórico guardado en bd
+	 * Objeto de tipo ExpedeinteVO. Es el expediente histï¿½rico guardado en bd
 	 */
 	String EXPEDIENTE_SESION_HISTORICO = "expSesionHistorico";
 	
 	/**
 	 * FIX ERIKA ABREGU
-	 * Objeto de tipo ExpedeinteVO. Es el expediente antiguo histórico guardado en bd
+	 * Objeto de tipo ExpedeinteVO. Es el expediente antiguo histï¿½rico guardado en bd
 	 */
 	String EXPEDIENTE_SESION_HISTORICO_ANTIGUO = "expSesionHistoricoAntiguo";
 	
@@ -334,35 +336,35 @@ public interface Constantes {
 	 */
 	String FLAG_NACAR_SESION = "ayuNacarSession";	
 	/**
-	 * Código para el prestamo formalizado de la tarea 1
+	 * Cï¿½digo para el prestamo formalizado de la tarea 1
 	 */
 	String CODIGO_PRESTAMO_FORMALIZADO_TAREA1 = "2";
 	/**
-	 * Código para el prestamo formalizado de la tarea 10
+	 * Cï¿½digo para el prestamo formalizado de la tarea 10
 	 */
 	String CODIGO_PRESTAMO_FORMALIZADO_TAREA10 = "2";
 	/**
-	 * Código para el prestamo formalizado de la tarea 15
+	 * Cï¿½digo para el prestamo formalizado de la tarea 15
 	 */
 	String CODIGO_PRESTAMO_FORMALIZADO_TAREA15 = "2";
 	/**
-	 * Código para el prestamo formalizado de la tarea 16
+	 * Cï¿½digo para el prestamo formalizado de la tarea 16
 	 */
 	String CODIGO_PRESTAMO_FORMALIZADO_TAREA16 = "2";
 	/**
-	 * Código para el prestamo formalizado de la tarea 20
+	 * Cï¿½digo para el prestamo formalizado de la tarea 20
 	 */
 	String CODIGO_PRESTAMO_FORMALIZADO_TAREA20 = "2";
 	/**
-	 * Código para el prestamo formalizado de la tarea 21
+	 * Cï¿½digo para el prestamo formalizado de la tarea 21
 	 */
 	String CODIGO_PRESTAMO_FORMALIZADO_TAREA21 = "2";
 	/**
-	 * Código para el prestamo formalizado de la tarea 23
+	 * Cï¿½digo para el prestamo formalizado de la tarea 23
 	 */
 	String CODIGO_PRESTAMO_FORMALIZADO_TAREA23 = "2";
 	/**
-	 * Código para el prestamo formalizado de la tarea 25
+	 * Cï¿½digo para el prestamo formalizado de la tarea 25
 	 */
 	String CODIGO_PRESTAMO_FORMALIZADO_TAREA25 = "2";
 	/**
@@ -493,9 +495,9 @@ public interface Constantes {
 	String LISTA_CART_X_PRODUCTO_USUARIO_SESION = "listcartXProdXUsu";
 	
 	/**
-	 * Objeto de tipo ExpedienteTC almacenado en el ámbito de sesión.
-	 * Elementos seleccionados de la tabla de búsqueda, ¿por qué no se
-	 *  corrigió la palabra 'ExpedeinteTC'?
+	 * Objeto de tipo ExpedienteTC almacenado en el ï¿½mbito de sesiï¿½n.
+	 * Elementos seleccionados de la tabla de bï¿½squeda, ï¿½por quï¿½ no se
+	 *  corrigiï¿½ la palabra 'ExpedeinteTC'?
 	 */
 	
 	String LISTA_EXPEDIENTE_SELECCIONADOS_PROCESO_SESION = "listExpSeleccionadosProSes";
@@ -956,7 +958,7 @@ public interface Constantes {
 	
 	String DEFECTO_COMBO_TODOS="TODOS";
 	/**
-	 * Nombre de variable de sesión utilizada para inicializar ObservacionRechazoMB
+	 * Nombre de variable de sesiï¿½n utilizada para inicializar ObservacionRechazoMB
 	 */
 	String CODIGO_ACCION_DEVOLVER_ELEGIDO = "codigoAccionDevolverElegido";
 	/**
@@ -1001,7 +1003,7 @@ public interface Constantes {
 	 */
 	String ACCION_BOTON_CONFIRMAR_CORRECCION_33 = "APROBADO";	
 	/**
-	 * Nombre de la accion para el boton confirmar corrección
+	 * Nombre de la accion para el boton confirmar correcciï¿½n
 	 */
 	String ACCION_BOTON_CONFIRMAR_CORRECCION_32 = "EN_VERIFICACION";		
 	/**
@@ -1175,9 +1177,9 @@ public interface Constantes {
 	String CAMPO_OPCION_NO_VISIBLE = "0";
 	
 	/**
-	 * “CU4 – Aprobar Expediente”, 
-	 * “CU12 – Ejecutar evaluación crediticia” 
-	 * “CU19 – Revisar y registrar dictamen”
+	 * ï¿½CU4 ï¿½ Aprobar Expedienteï¿½, 
+	 * ï¿½CU12 ï¿½ Ejecutar evaluaciï¿½n crediticiaï¿½ 
+	 * ï¿½CU19 ï¿½ Revisar y registrar dictamenï¿½
 	 * */
 	String CU_TAREA_4 = "4";
 	String CU_TAREA_12 = "12";
@@ -1211,7 +1213,7 @@ public interface Constantes {
 	String ID_TC_CONSOLIDADO="1";	//JBTA
 	String TIPO_REPORTE_TC = "tipReporteTc"; /*JBTA*/
 	String TITULO_REPORTE_TC = "titReporteTc"; /*JBTA*/
-	String TITULO_REPORTE_TC_HISTORICO = "Reporte Histórico"; /*JBTA*/
+	String TITULO_REPORTE_TC_HISTORICO = "Reporte Histï¿½rico"; /*JBTA*/
 	String TITULO_REPORTE_TC_CONSOLIDADO = "Reporte Consolidado"; /*JBTA*/	
 	
 	
@@ -1355,7 +1357,7 @@ public interface Constantes {
 	 */
 	String EXPEDIENTE_ESTADO = "expEstado";
 	/**
-	 * Flag de estados para tener en cuenta en la reasignación de expedientes
+	 * Flag de estados para tener en cuenta en la reasignaciï¿½n de expedientes
 	 * */
 	String FLAG_ESTADO_ACTIVO_EXPEDIENTE ="1";
 	String FLAG_ESTADO_INACTIVO_EXPEDIENTE ="0";
@@ -1510,7 +1512,7 @@ public interface Constantes {
 	
 	String DESCRIPCION_ERROR="descripErrorObtenerUsu";
 	/**
-	 * Parámetros
+	 * Parï¿½metros
 	 */
 	Long PARAMETRO_TIPO_DESCARGA_LDAP = 108L;
 	Long PARAMETRO_ESTADO_DESCARGA_LDAP = 112L;
@@ -1527,7 +1529,7 @@ public interface Constantes {
 	String GROUP_NAME = "CONELE";
 	
 	/**
-	 * Parámetros Proceso LDAP
+	 * Parï¿½metros Proceso LDAP
 	 */
 	int CODIGO_APLICATIVO_PROCESO_LDAP = 900;
 	String LDAP_WEB_SERVICE_ENDPOINT = "LDAP_WEBS_SERVICE_ENDPOINT";
