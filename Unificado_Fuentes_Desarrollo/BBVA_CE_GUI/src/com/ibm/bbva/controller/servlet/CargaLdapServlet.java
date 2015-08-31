@@ -133,10 +133,17 @@ public class CargaLdapServlet extends HttpServlet
 					objLdapTemp.setCorreoElectronico(objUsuario.getEMail());
 					objLdapTemp.setCodigoCargo(objUsuario.getPuesto() != null ? objUsuario.getPuesto().getNombreCargoFuncionalLocal() : null);
 					objLdapTemp.setCodigoOficina(objUsuario.getCodigoCentro());	
-					if(oficinasSincronizables != null && oficinasSincronizables.length() > 0 && oficinasSincronizables.indexOf(objLdapTemp.getCodigoOficina()) != -1)
+					if(oficinasSincronizables == null || oficinasSincronizables.length() == 0)
 					{
 						ldapTempBeanLocal.create(objLdapTemp);						
-					}															
+					}	
+					else
+					{
+						if(oficinasSincronizables.indexOf(objLdapTemp.getCodigoOficina()) != -1)
+						{
+							ldapTempBeanLocal.create(objLdapTemp);						
+						}
+					}
 				}						
 			} 
 			catch (WSLdapException_Exception e) 
