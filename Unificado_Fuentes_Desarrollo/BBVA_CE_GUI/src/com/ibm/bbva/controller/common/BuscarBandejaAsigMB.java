@@ -140,7 +140,12 @@ public class BuscarBandejaAsigMB extends AbstractMBean {
 			if(empleado.getPerfil().getFlagAdministracion().equals("1")){
 				roles = Util.crearItems(perfilBean.buscarPorProceso(), true, "id", "descripcion");
 			}else{
-				roles = Util.crearItems(perfilBean.buscarPorIdJefe(empleado.getPerfil().getId()), true, "id", "descripcion");
+				Long idPerfil = empleado.getPerfil().getId();
+				if(idPerfil == Constantes.PERFIL_GERENTE_OFICINA.longValue())
+				{
+					idPerfil = Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue();					
+				}
+				roles = Util.crearItems(perfilBean.buscarPorIdJefe(idPerfil), true, "id", "descripcion");
 			}
 		}
 		
@@ -726,6 +731,7 @@ public class BuscarBandejaAsigMB extends AbstractMBean {
 			 * */
 			if(empleado.getPerfil().getFlagAdministracion().equals("1") && 
 				((Long.valueOf(rolSeleccionado) != Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue()) &&  
+						(Long.valueOf(rolSeleccionado) != Constantes.PERFIL_GERENTE_OFICINA.longValue()) &&
 						 (Long.valueOf(rolSeleccionado) != Constantes.PERFIL_GESTOR_PLATAFORMA.longValue()))){
 
 					/**
@@ -797,6 +803,7 @@ public class BuscarBandejaAsigMB extends AbstractMBean {
 			if(empleado.getPerfil().getFlagAdministracion().equals("1")){
 				/* Cargar usuarios cuando rol diferente de ejecutivo y subgerente*/
 				if ((Long.valueOf(rolSeleccionado) != Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue())
+						&& (Long.valueOf(rolSeleccionado) != Constantes.PERFIL_GERENTE_OFICINA.longValue())
 						&& (Long.valueOf(rolSeleccionado) != Constantes.PERFIL_GESTOR_PLATAFORMA.longValue())) {
 					
 					/**
@@ -850,6 +857,7 @@ public class BuscarBandejaAsigMB extends AbstractMBean {
 		//addObjectSession(Constantes.LISTA_USUARIOS_TAREA_ASIG, tareas);
 		
 		if ((Long.valueOf(rolSeleccionado) == Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue())
+				|| (Long.valueOf(rolSeleccionado) == Constantes.PERFIL_GERENTE_OFICINA.longValue())
 				|| (Long.valueOf(rolSeleccionado) == Constantes.PERFIL_GESTOR_PLATAFORMA.longValue())) {
 			
 			addObjectSession(Constantes.LISTA_USUARIOS_CARGADOS, listaEmp);
@@ -930,6 +938,7 @@ public class BuscarBandejaAsigMB extends AbstractMBean {
 				
 				/* Cargar usuarios cuando rol diferente de ejecutivo y subgerente*/
 				if ((Long.valueOf(rolSeleccionado) != Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue())
+						&& (Long.valueOf(rolSeleccionado) != Constantes.PERFIL_GERENTE_OFICINA.longValue())
 						&& (Long.valueOf(rolSeleccionado) != Constantes.PERFIL_GESTOR_PLATAFORMA.longValue())) {
 					
 					/**
@@ -959,7 +968,8 @@ public class BuscarBandejaAsigMB extends AbstractMBean {
 				 * Para el Sub Gerente de Oficina lista los empleados de su oficina y rol seleccionado
 				 * para Jefe CPM y Riesgo Superior solo filtra por rol seleccionado
 				 */
-				if (empleado.getPerfil().getId() == Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue()) {
+				if (empleado.getPerfil().getId() == Constantes.PERFIL_SUB_GERENTE_OFICINA.longValue() ||
+						empleado.getPerfil().getId() == Constantes.PERFIL_GERENTE_OFICINA.longValue()) {
 					
 					/**
 					 * Cambio 08 Mayo 2015 
