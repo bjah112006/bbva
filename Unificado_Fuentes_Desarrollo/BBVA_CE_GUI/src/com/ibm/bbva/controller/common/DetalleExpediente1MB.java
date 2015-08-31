@@ -150,8 +150,19 @@ public class DetalleExpediente1MB extends AbstractMBean {
 			//fix2 erika abregu
 			if (clienteNatural.getMonocuota()!=null && clienteNatural.getMonocuota().equals(Constantes.CHECK_SELECCIONADO)) {
 				selectedItems.add("5");
+				String jspPrinc = getNombreJSPPrincipal();
+				if (jspPrinc.equals("formCoordinarClienteSubsanar")){
+					itemDisabledMonocuota=false;
+				}else{
+					itemDisabledMonocuota=true;
+				}
 			}else if (clienteNatural.getMonocuota()!=null && clienteNatural.getMonocuota().equals(Constantes.CHECK_NO_SELECCIONADO)) {
-					 itemDisabledMonocuota=true;
+				String jspPrinc = getNombreJSPPrincipal();
+				if (jspPrinc.equals("formCoordinarClienteSubsanar")){
+					itemDisabledMonocuota=false;
+				}else{
+					itemDisabledMonocuota=true;
+				}
 			}
 			//fin de fix
 		} else{
@@ -411,7 +422,7 @@ public class DetalleExpediente1MB extends AbstractMBean {
 		String jspPrinc = getNombreJSPPrincipal();
 		boolean isVisual = validaVisualizaPaneles(productoNuevo.getCodTipoOferta());
 		
-		// si cambia el estado civil hay que actualizar también el objeto en sesión
+		// si cambia el estado civil hay que actualizar tambiï¿½n el objeto en sesiï¿½n
 		Expediente expediente = (Expediente) getObjectSession(Constantes.EXPEDIENTE_SESION);
 		if (expediente.getClienteNatural() != null) {
 			if (getIdEstadoCivil() != null && !getIdEstadoCivil().equals(Constantes.CODIGO_CODIGO_CAMPO_VACIO)) {
