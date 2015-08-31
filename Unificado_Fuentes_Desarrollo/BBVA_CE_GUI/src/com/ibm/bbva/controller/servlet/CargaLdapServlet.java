@@ -122,6 +122,7 @@ public class CargaLdapServlet extends HttpServlet
 				ldapTempBeanLocal.clean();
 				List<Usuario> listaUsuarios = objWSLDAPServiceImplPortProxy.obtenerUsuarios(null);
 				LdapTemp objLdapTemp = null;
+				String oficinasSincronizables = multitablaBeanLocal.buscarPorId(Constantes.PARAMETRO_OFICINAS_SINCRONIZABLES).getTexto();
 				for(Usuario objUsuario : listaUsuarios)
 				{					
 					objLdapTemp = new LdapTemp();					
@@ -131,8 +132,11 @@ public class CargaLdapServlet extends HttpServlet
 					objLdapTemp.setApellidoMaterno(objUsuario.getSegundoApellido());
 					objLdapTemp.setCorreoElectronico(objUsuario.getEMail());
 					objLdapTemp.setCodigoCargo(objUsuario.getPuesto() != null ? objUsuario.getPuesto().getNombreCargoFuncionalLocal() : null);
-					objLdapTemp.setCodigoOficina(objUsuario.getCodigoCentro());								
-					ldapTempBeanLocal.create(objLdapTemp);										
+					objLdapTemp.setCodigoOficina(objUsuario.getCodigoCentro());	
+					if(oficinasSincronizables != null && oficinasSincronizables.length() > 0 && oficinasSincronizables.indexOf(objLdapTemp.getCodigoOficina()) != -1)
+					{
+						ldapTempBeanLocal.create(objLdapTemp);						
+					}															
 				}						
 			} 
 			catch (WSLdapException_Exception e) 
