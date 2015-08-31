@@ -255,6 +255,50 @@ public class BuscarBandejaMB extends AbstractMBean {
 //		return new ArrayList<Estado>(set);
 //	}
 
+	public boolean buscarSoloCodigoExp(Consulta consulta){
+
+		if(consulta.getCodigoExpediente()!=null && !consulta.getCodigoExpediente().trim().equals("")){
+	
+			if(consulta.getApPaterno()!=null && !consulta.getApPaterno().trim().equals(""))
+				return false;
+			if(consulta.getApMaterno()!=null && !consulta.getApMaterno().trim().equals(""))
+				return false;
+			if(consulta.getNombres()!=null && !consulta.getNombres().trim().equals(""))
+				return false;
+			if(consulta.getCodRVGL()!=null && !consulta.getCodRVGL().trim().equals(""))
+				return false;
+			if(consulta.getNumeroDOI()!=null && !consulta.getNumeroDOI().trim().equals(""))
+				return false;	
+			if(consulta.getCodPreEvaluador()!=null && !consulta.getCodPreEvaluador().trim().equals(""))
+				return false;
+			if(consulta.getNumeroContrato()!=null && !consulta.getNumeroContrato().trim().equals(""))
+				return false;
+			if(consulta.getTipoDOI()!=null && !consulta.getTipoDOI().trim().equals("") && !consulta.getTipoDOI().equals("-1"))
+				return false;	
+			if(consulta.getIdProducto()!=null && !consulta.getIdProducto().trim().equals("") && !consulta.getIdProducto().equals("-1"))
+				return false;
+			if(consulta.getSubProducto()!=null && !consulta.getSubProducto().trim().equals("") && !consulta.getSubProducto().equals("-1"))
+				return false;
+			if(consulta.getTipoOferta()!=null && !consulta.getTipoOferta().trim().equals("") && !consulta.getTipoOferta().equals("-1"))
+				return false;
+			if(consulta.getSegmento()!=null && !consulta.getSegmento().trim().equals("") && !consulta.getSegmento().equals("-1"))
+				return false;
+			if(consulta.getIdTerritorio()!=null && !consulta.getIdTerritorio().trim().equals("") && !consulta.getIdTerritorio().equals("-1"))
+				return false;
+			if(consulta.getIdOficina()!=null && !consulta.getIdOficina().trim().equals("") && !consulta.getIdOficina().equals("-1"))
+				return false;
+			if(consulta.getEstado()!=null && !consulta.getEstado().trim().equals("") && !consulta.getEstado().equals("-1"))
+				return false;	
+			if(consulta.getFechaInicio()!=null)
+				return false;	
+			if(consulta.getFechaFin()!=null)
+				return false;			
+			
+			return true;
+		}
+
+		return false;
+	}
 	
 	public void buscar () {
 		Consulta consulta = new Consulta();		
@@ -296,6 +340,9 @@ public class BuscarBandejaMB extends AbstractMBean {
 		//List<ExpedienteTCWPSWeb> lista = tareasBDelegate.obtenerInstanciasTareasPorUsuario(consulta);
 		List<ExpedienteTCWPSWeb> lista = tareasBDelegate.obtenerListaTareasBandBusqueda(consulta);
 		
+		boolean soloCodigo = buscarSoloCodigoExp(consulta);
+		LOG.info("Es búsqueda solo x codigo? "+soloCodigo);
+		
 	//	for(ExpedienteTCWPS expediente : lista){
 		//	LOG.info("ESTADO DE EXPEDIENTE RESULTANTE DE CONSULTA ===> " + expediente.getEstado());
 			/*if(expediente.getTaskID().equals(ID_NO_EXISTE_TAREA)){
@@ -325,10 +372,14 @@ public class BuscarBandejaMB extends AbstractMBean {
 		}else
 			LOG.info("lista es nula o vacia");
 		
-		if (consulta.getCodigoExpediente()!=null){ // solo expediente
-			if (lista!=null && lista.size()==0){
-				Historial hist = historialBean.buscarMasRecienPorId(Long.valueOf(codigoExpediente));
+		if (consulta.getCodigoExpediente()!=null && soloCodigo){ // solo expediente
+			
+			Historial hist = historialBean.buscarMasRecienPorId(Long.valueOf(codigoExpediente));
+			
+			//if (lista!=null && lista.size()==0){
+				
 				if (hist != null){
+					
 					if (hist.getEstado().getId() == Constantes.ESTADO_CERRADO_TAREA_27.longValue()
 							|| hist.getEstado().getId() == Constantes.ESTADO_CERRADO_TAREA_11.longValue()) {
 						mostrarLinkExp=true;
@@ -343,51 +394,56 @@ public class BuscarBandejaMB extends AbstractMBean {
 							}
 						}
 					} else {
-						mostrarLinkExp=false;
-						LOG.warn("Expediente no existe en Process pero no está Cerrado en BD.");
-						ExpedienteTCWPSWeb objTCWPS = new ExpedienteTCWPSWeb();
-						objTCWPS.setTaskID("-1");
-						objTCWPS.setIdTarea("");
-						objTCWPS.setCodigo(String.valueOf(hist.getExpediente().getId()));
-						objTCWPS.setEstado(hist.getEstado().getDescripcion());
-						objTCWPS.setAccion(hist.getAccion());
-						objTCWPS.setVerificacionDomiciliaria(hist.getVerifDom());
-						objTCWPS.setSegmento(hist.getClienteNatural().getSegmento().getDescripcion());
-						objTCWPS.setIdTipoOferta(String.valueOf(hist.getTipoOferta().getId()));
-						objTCWPS.setTipoOferta(hist.getTipoOferta().getDescripcion());
-						objTCWPS.setCliente(new ClienteWeb());
-						objTCWPS.getCliente().setTipoDOI(hist.getClienteNatural().getTipoDoi().getDescripcion());
-						objTCWPS.getCliente().setNumeroDOI(hist.getClienteNatural().getNumDoi());
-						objTCWPS.getCliente().setApPaterno(hist.getClienteNatural().getApePat());
-						objTCWPS.getCliente().setApMaterno(hist.getClienteNatural().getApeMat());
-						objTCWPS.getCliente().setNombre(hist.getClienteNatural().getNombre());
-						objTCWPS.setProducto(new ProductoWeb());
-						objTCWPS.getProducto().setIdProducto(String.valueOf(hist.getProducto().getId()));
-						objTCWPS.getProducto().setProducto(hist.getProducto().getDescripcion());
-						objTCWPS.getProducto().setSubProducto(hist.getSubproducto().getDescripcion());
-				    	objTCWPS.setMoneda(hist.getTipoMonedaSol().getDescripcion());
-						objTCWPS.setLineaCredito(hist.getLineaCredSol());
-						objTCWPS.setMontoAprobado(hist.getLineaCredAprob());
-						objTCWPS.setDesOficina(hist.getOficina().getDescripcion());
-						objTCWPS.setDesTerritorio(hist.getOficina().getTerritorio().getDescripcion());
-						objTCWPS.setCodigoRVGL(hist.getRvgl());
-						objTCWPS.setNumeroContrato(hist.getNroContrato());
-						objTCWPS.setObservacion(hist.getComentario());
-						objTCWPS.setIdOficina(String.valueOf(hist.getOficina().getId()));
-						objTCWPS.setFlagRetraer(hist.getFlagRetraer());
-						objTCWPS.setIdGrupoSegmento(String.valueOf(hist.getClienteNatural().getSegmento().getGrupoSegmento().getId()));
-						if (hist.getExpediente().getExpedienteTC().getNroDevoluciones() != null) {
-							objTCWPS.setNumeroDevoluciones(hist.getExpediente().getExpedienteTC().getNroDevoluciones().intValue());
-						} else {
-							objTCWPS.setNumeroDevoluciones(0);
+						if (lista!=null && lista.size()>0){
+							LOG.info("Expediente si existe en Process y no está Cerrado en BD.");
+						}else{
+							mostrarLinkExp=false;
+							LOG.warn("Expediente no existe en Process pero no está Cerrado en BD.");
+							ExpedienteTCWPSWeb objTCWPS = new ExpedienteTCWPSWeb();
+							objTCWPS.setTaskID("-1");
+							objTCWPS.setIdTarea("");
+							objTCWPS.setCodigo(String.valueOf(hist.getExpediente().getId()));
+							objTCWPS.setEstado(hist.getEstado().getDescripcion());
+							objTCWPS.setAccion(hist.getAccion());
+							objTCWPS.setVerificacionDomiciliaria(hist.getVerifDom());
+							objTCWPS.setSegmento(hist.getClienteNatural().getSegmento().getDescripcion());
+							objTCWPS.setIdTipoOferta(String.valueOf(hist.getTipoOferta().getId()));
+							objTCWPS.setTipoOferta(hist.getTipoOferta().getDescripcion());
+							objTCWPS.setCliente(new ClienteWeb());
+							objTCWPS.getCliente().setTipoDOI(hist.getClienteNatural().getTipoDoi().getDescripcion());
+							objTCWPS.getCliente().setNumeroDOI(hist.getClienteNatural().getNumDoi());
+							objTCWPS.getCliente().setApPaterno(hist.getClienteNatural().getApePat());
+							objTCWPS.getCliente().setApMaterno(hist.getClienteNatural().getApeMat());
+							objTCWPS.getCliente().setNombre(hist.getClienteNatural().getNombre());
+							objTCWPS.setProducto(new ProductoWeb());
+							objTCWPS.getProducto().setIdProducto(String.valueOf(hist.getProducto().getId()));
+							objTCWPS.getProducto().setProducto(hist.getProducto().getDescripcion());
+							objTCWPS.getProducto().setSubProducto(hist.getSubproducto().getDescripcion());
+					    	objTCWPS.setMoneda(hist.getTipoMonedaSol().getDescripcion());
+							objTCWPS.setLineaCredito(hist.getLineaCredSol());
+							objTCWPS.setMontoAprobado(hist.getLineaCredAprob());
+							objTCWPS.setDesOficina(hist.getOficina().getDescripcion());
+							objTCWPS.setDesTerritorio(hist.getOficina().getTerritorio().getDescripcion());
+							objTCWPS.setCodigoRVGL(hist.getRvgl());
+							objTCWPS.setNumeroContrato(hist.getNroContrato());
+							objTCWPS.setObservacion(hist.getComentario());
+							objTCWPS.setIdOficina(String.valueOf(hist.getOficina().getId()));
+							objTCWPS.setFlagRetraer(hist.getFlagRetraer());
+							objTCWPS.setIdGrupoSegmento(String.valueOf(hist.getClienteNatural().getSegmento().getGrupoSegmento().getId()));
+							if (hist.getExpediente().getExpedienteTC().getNroDevoluciones() != null) {
+								objTCWPS.setNumeroDevoluciones(hist.getExpediente().getExpedienteTC().getNroDevoluciones().intValue());
+							} else {
+								objTCWPS.setNumeroDevoluciones(0);
+							}
+							lista = new ArrayList<ExpedienteTCWPSWeb>();
+							lista.add(objTCWPS);
+							
+							addObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION, lista);							
 						}
-						lista = new ArrayList<ExpedienteTCWPSWeb>();
-						lista.add(objTCWPS);
-						
-						addObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION, lista);
+
 					}
 				}
-			}
+			//}
 		}
 		
 		// busqueda otros criterios.

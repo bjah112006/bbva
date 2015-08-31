@@ -435,7 +435,8 @@ public class ObservacionRechazoMB extends AbstractMBean {
 		
 		MotivoDevolucion motivoDevolucion = motivoDevolucionBean.buscarPorId(Long.parseLong(motivoSeleccionado));
 		LOG.info("motivoDevolucion.getFlagOtros:" + motivoDevolucion.getFlagOtros());
-		if (motivoDevolucion.getFlagOtros().equals(Constantes.CODIGO_FLAG_OTROS_ACTIVO) && observacionRechazo.trim().equals("")) {
+		if (motivoDevolucion.getFlagOtros().equals(Constantes.CODIGO_FLAG_OTROS_ACTIVO)
+				&& (observacionRechazo == null || observacionRechazo.trim().equals(""))) {
 				existeError = false;
 				LOG.info("Agregando mensaje de validacion ");
 				activoObervacion = true;
