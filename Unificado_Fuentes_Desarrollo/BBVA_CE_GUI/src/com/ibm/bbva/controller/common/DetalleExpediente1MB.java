@@ -152,16 +152,16 @@ public class DetalleExpediente1MB extends AbstractMBean {
 				selectedItems.add("5");
 				String jspPrinc = getNombreJSPPrincipal();
 				if (jspPrinc.equals("formCoordinarClienteSubsanar")){
-					itemDisabledMonocuota=false;
-				}else{
 					itemDisabledMonocuota=true;
+				}else{
+					itemDisabledMonocuota=false;
 				}
 			}else if (clienteNatural.getMonocuota()!=null && clienteNatural.getMonocuota().equals(Constantes.CHECK_NO_SELECCIONADO)) {
 				String jspPrinc = getNombreJSPPrincipal();
 				if (jspPrinc.equals("formCoordinarClienteSubsanar")){
-					itemDisabledMonocuota=false;
-				}else{
 					itemDisabledMonocuota=true;
+				}else{
+					itemDisabledMonocuota=false;
 				}
 			}
 			//fin de fix
