@@ -18,6 +18,29 @@ public class DBUtil {
     public static final String ROLES_EXCLUIDOS = "009";
     public static final String FLAG_VERIFICAR_USUARIO = "011";
 
+    public static String obtenerAmbito(String oficina) {
+        String parametro = "";
+        
+        try {
+            InitialContext ic = new InitialContext();
+            DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS");
+            Connection cn = ds.getConnection();
+            PreparedStatement ps = cn.prepareStatement("SELECT * FROM TBL_PYME_OFICINA_AMBITO WHERE OFICINA = '" + oficina + "'");
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                parametro = rs.getString("AMBITO");
+            }
+
+            rs.close();
+            ps.close();
+            cn.close();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "obtenerAmbito", e);
+        }
+        return parametro;
+    }
+    
     public static String obtenerCentroNegocio(String territorio) {
         String parametro = "";
         

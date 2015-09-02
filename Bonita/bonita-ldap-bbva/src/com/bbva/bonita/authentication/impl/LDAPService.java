@@ -101,7 +101,8 @@ public class LDAPService {
                  * - 4:"PUESTO"
                  **/
                 if (puestosConOficina.indexOf("|" + usuario.getPuesto().getNombreCargoFuncionalLocal() + "|") > -1 && !oficina[1].isEmpty()) {
-                    identityAPI.setCustomUserInfoValue(1, user.getId(), oficina[1]);
+                    String ambito = DBUtil.obtenerAmbito(oficina[0]); 
+                    identityAPI.setCustomUserInfoValue(1, user.getId(), ambito == null || ambito.isEmpty() ? oficina[1] : ambito);
                 }
                 
                 if (!oficina[1].isEmpty()) {
