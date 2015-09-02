@@ -325,7 +325,7 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 			objDescargaLDAPVO.setCarterizacion(sbCarterizacion.toString());
 			objDescargaLDAPVO.setFlagActivo(objDescargaLDAP.getEstado().equals("A"));
 			objDescargaLDAPVO.setPerfil(objDescargaLDAP.getPerfil().getDescripcion());
-			objDescargaLDAPVO.setOficina(objDescargaLDAP.getOficina() != null ? objDescargaLDAP.getOficina().getDescripcion() : "");
+			objDescargaLDAPVO.setOficina(objDescargaLDAP.getOficina() != null ? (objDescargaLDAP.getOficina().getCodigo() + " - " + objDescargaLDAP.getOficina().getDescripcion()) : "");
 			this.listaDescargaLDAP.add(objDescargaLDAPVO);
 		}		
 	}
@@ -364,7 +364,7 @@ public class DescargaLDAP_UI extends AbstractSortPagDataTableMBean
 	
 	public void cargarOficina()
 	{
-		this.listaOficina = Util.crearItems(oficinaBeanLocal.buscarTodos(), true, "id", "descripcion"); 		
+		this.listaOficina = Util.crearItemsConcat(oficinaBeanLocal.buscarTodos(), true, "id", "codigo", "descripcion"); 		
 	}
 	
 	public void cargarPerfil()
