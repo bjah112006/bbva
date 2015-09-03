@@ -94,6 +94,9 @@ public class LDAPService {
                 String puestosConOficina = LDAPValidate.getInstance().getProperty("puesto.con.oficina");
                 String[] oficina = obtenerOficina(usuario.getCodigoCentro());
     
+                logger.log(Level.SEVERE, "Territorio: " + oficina[1]);
+                logger.log(Level.SEVERE, "Oficina: " + oficina[0]);
+                
                 /***
                  * - 1:"AMBITO"
                  * - 2:"CENTRO NEGOCIOS"
@@ -103,6 +106,8 @@ public class LDAPService {
                 if (puestosConOficina.indexOf("|" + usuario.getPuesto().getNombreCargoFuncionalLocal() + "|") > -1 && !oficina[1].isEmpty()) {
                     String ambito = DBUtil.obtenerAmbito(oficina[0]); 
                     identityAPI.setCustomUserInfoValue(1, user.getId(), ambito == null || ambito.isEmpty() ? oficina[1] : ambito);
+                    
+                    logger.log(Level.SEVERE, "Ambito Consultado: " + ambito);
                 }
                 
                 if (!oficina[1].isEmpty()) {
