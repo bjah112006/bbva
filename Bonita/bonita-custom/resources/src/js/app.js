@@ -35,8 +35,8 @@ var SessionController = bonitaApp.controller('SessionController', ['$scope', 'Bo
 
 bonitaApp.config(function($routeProvider, $httpProvider) {
 	$routeProvider.when('/', {
-		controller : 'ConsultaSolicitudController',
-		templateUrl : 'src/views/consultaSolicitud.html'
+		controller : 'ConsultaDocumentosController',
+		templateUrl : 'src/views/consultaDocumentos.html'
 	}).when('/consulta', {
 		controller : 'ConsultaSolicitudController',
 		templateUrl : 'src/views/consultaSolicitud.html'
@@ -49,6 +49,9 @@ bonitaApp.config(function($routeProvider, $httpProvider) {
 	}).when('/restAPI/detail/:id', {
 		controller : 'RestAPIDetailController',
 		templateUrl : 'src/views/restAPIDetail.html'
+	}).when('/documents', {
+		controller : 'ConsultaDocumentosController',
+		templateUrl : 'src/views/consultaDocumentos.html'
 	});
 	
 	var statusLoad, statusUnload;

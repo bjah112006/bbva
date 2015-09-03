@@ -541,3 +541,12 @@ angular.module('ngBonita').factory('ConsultaSolicitudes', function ($resource, b
 
 	return $resource(bonitaConfig.getBonitaUrl() + '/API/extension/consulta', data);
 });
+
+angular.module('ngBonita').factory('ConsultaDocumentos', function ($resource, bonitaConfig) {
+	var data = angular.extend({
+		p : '@p',
+		c : '@c'
+	}, bonitaConfig.getDefaultPager());
+
+	return $resource(bonitaConfig.getBonitaUrl() + '/API/extension/documents', data);
+});
