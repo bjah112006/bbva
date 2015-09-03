@@ -226,6 +226,24 @@ inner join fastpyme.arch_data_instance b on
 a.tenantid=b.tenantid and 
 a.rootprocessinstanceid=b.containerid;
 
+create view fastpyme.file_instance as
+select 
+	to_char('1970-01-01 00:00:00 GMT'::timestamp + ((c.creationdate/1000)::text)::interval, 'yyyy/MM/dd hh:mm:ss') as fecha_documento 	
+	, a.tenantid
+	, a.id as instance
+	, a.name as name_instance
+	, a.processdefinitionid as definition_id
+	, b.documentid
+	, b.name as filename_mapping
+	, b.description as descripcion
+	, c.filename
+	, c.mimetype
+	, c.url
+from public.process_instance a  
+left join public.document_mapping b on a.id = b.PROCESSINSTANCEID  
+left join public.document c on b.documentid = c.id;
+
+
 alter table fastpyme.arch_data_instance owner to bonita;
 alter table fastpyme.arch_data_instance_detail owner to bonita;
 alter table fastpyme.arch_task_pending owner to bonita;
