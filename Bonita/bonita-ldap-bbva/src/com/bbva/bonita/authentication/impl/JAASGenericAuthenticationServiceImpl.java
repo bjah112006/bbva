@@ -58,7 +58,7 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
             userName = String.valueOf(credentials.get(AuthenticationConstants.BASIC_USERNAME)).toUpperCase();
             
             String isVerificarUsuario= DBUtil.obtenerParametro(DBUtil.FLAG_VERIFICAR_USUARIO); 
-            if ("0".equalsIgnoreCase(isVerificarUsuario)) {
+            if ("1".equalsIgnoreCase(isVerificarUsuario)) {
                 try {
                     LDAPService ldapService = new LDAPService();
                     ldapService.verificarUsuario(userName);

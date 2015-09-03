@@ -118,7 +118,7 @@ public class ConsultaSolicitud implements RestApiController {
                         filters[index] = ""
                     }
                 }
-                buscarInstancias(filters, sorts, page, rowForPage, username, true, consultaResponse)
+                buscarInstancias(filters, sorts, page, rowForPage, username, false, consultaResponse)
             } else if(requestFilter.indexOf("estacion=") > -1) {
                 logger.log Level.SEVERE, "===> Buscando en pendientes"
                 buscarInstancias(filters, sorts, page, rowForPage, username, true, consultaResponse)
