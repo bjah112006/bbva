@@ -35,7 +35,7 @@ function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaC
     });
 
 	var columnDefs = [
-        {headerName: "N° Solicitud", field: "rootprocessinstanceid", width: 80, cellRenderer: function(params) {
+        {headerName: "N° Solicitud", field: "url", width: 80, cellRenderer: function(params) {
             var resultElement = document.createElement("a");
 
 /*
@@ -44,10 +44,14 @@ function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaC
             		}else{
             			row += '<tr><td><a href="' + obtenerContexto('homepage') + '?id=' + data.solicitudes[i].nroSolicitud + '&_p=' + data.solicitudes[i].variable + '&_pf=1">' + data.solicitudes[i].nroSolicitud + '</a></td>';
             		}
+            		
+            		?id=936&_p=archivedcasemoredetailsadmin&_pf=1
+            		"/portal/homepage#?id=" + params.value + '&_p=casemoredetails&_pf=1'
 */
+            elements = angular.fromJson(params.value);
 			resultElement.target="_top"
-			resultElement.href = bonitaConfig.getBonitaUrl() + "/portal/homepage#?id=" + params.value + '&_p=casemoredetails&_pf=1';
-			resultElement.innerHTML = params.value;
+			resultElement.href = bonitaConfig.getBonitaUrl() + elements.url;
+			resultElement.innerHTML = elements.value;
             return resultElement;
         }},
 		{headerName: "RUC", field: "num_doi_cliente", width: 100},

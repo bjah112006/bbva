@@ -35,8 +35,8 @@ var SessionController = bonitaApp.controller('SessionController', ['$scope', 'Bo
 
 bonitaApp.config(function($routeProvider, $httpProvider) {
 	$routeProvider.when('/', {
-		controller : 'ConsultaDocumentosController',
-		templateUrl : 'src/views/consultaDocumentos.html'
+		controller : 'ConsultaSolicitudController',
+		templateUrl : 'src/views/consultaSolicitud.html'
 	}).when('/consulta', {
 		controller : 'ConsultaSolicitudController',
 		templateUrl : 'src/views/consultaSolicitud.html'
