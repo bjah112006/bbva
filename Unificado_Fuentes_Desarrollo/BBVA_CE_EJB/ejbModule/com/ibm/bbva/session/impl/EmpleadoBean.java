@@ -388,18 +388,13 @@ public class EmpleadoBean extends AbstractFacade<Empleado> implements EmpleadoBe
 	@Override
 	public List<Empleado> buscarDebenReasignarse() 
 	{
-		String idActivo = "1";
-		int idPerfil = 6;
-		
-		StringBuilder sbQuery = new StringBuilder(" SELECT e FROM Empleado e WHERE ");
-		sbQuery.append(" e.perfil.id = :idPerfil and ");
-		sbQuery.append(" e.flagActivo = :idActivo and ");		
-		sbQuery.append(" (e.codigoCargoAnterior IS NOT NULL OR e.oficinaAnterior IS NOT NULL) ");
-		
+
+		StringBuilder sbQuery = new StringBuilder(" SELECT e FROM Empleado e WHERE ");			
+		sbQuery.append(" ( e.perfilAnterior IS NOT NULL OR e.oficinaAnterior IS NOT NULL OR e.existeLDAP = :noExisteLDAP)");
+	
 		try{
-			List<Empleado> resultList = em.createQuery(sbQuery.toString())
-					.setParameter("idPerfil", idPerfil)
-					.setParameter("idActivo", idActivo)
+			List<Empleado> resultList = em.createQuery(sbQuery.toString())	
+					.setParameter("noExisteLDAP", "N")
 					.getResultList();
 			return resultList;			
 		}catch (NoResultException e) {
