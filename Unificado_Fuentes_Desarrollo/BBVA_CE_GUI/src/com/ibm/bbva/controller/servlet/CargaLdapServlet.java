@@ -171,7 +171,7 @@ public class CargaLdapServlet extends HttpServlet
 			RemoteUtils tareasBDelegate = new RemoteUtils();
 			boolean reasignado = false; 
 			String mensaje = "ERROR";
-			boolean cambioOficinaCargo = true;
+			boolean cambioOficinaPerfilEstado = true;
 			
 			Consulta consulta = null;			
 			List<ExpedienteTCWPSWeb> listaReasignable = null;
@@ -182,7 +182,7 @@ public class CargaLdapServlet extends HttpServlet
 			
 			for(Empleado objEmpleado : listaEmpleado)
 			{
-				cambioOficinaCargo = true;
+				cambioOficinaPerfilEstado = true;
 				
 				consulta = new Consulta();
 				consulta.setTipoConsulta(4);
@@ -255,23 +255,24 @@ public class CargaLdapServlet extends HttpServlet
 					
 					if(!reasignado)
 					{
-						cambioOficinaCargo = false;
+						cambioOficinaPerfilEstado = false;
 					}
 					
 				}	
 				
 								
-				if(!cambioOficinaCargo)
+				if(!cambioOficinaPerfilEstado)
 				{
 					
 					if(objEmpleado.getOficinaAnterior() != null)
 					{
 						objEmpleado.setOficina(objEmpleado.getOficinaAnterior());
 					}
-					if(objEmpleado.getCodigoCargoAnterior() != null)
+					if(objEmpleado.getPerfilAnterior() != null)
 					{
-						objEmpleado.setCodigoCargo(objEmpleado.getCodigoCargoAnterior());
+						objEmpleado.setPerfil(objEmpleado.getPerfilAnterior());
 					}
+					objEmpleado.setFlagActivo("1");
 					
 					empleadoBeanLocal.edit(objEmpleado);
 					
