@@ -206,7 +206,8 @@ public class CargaLdapServlet extends HttpServlet
 					}
 				}
 
-				listaEmpleadoParaAsignar = empleadoBeanLocal.buscarPorPerfilEmpleadoActivo(objEmpleado.getPerfil().getId(), objEmpleado.getOficinaAnterior().getId(), listIdsProd);
+				listaEmpleadoParaAsignar = empleadoBeanLocal.buscarPorPerfilEmpleadoActivo(objEmpleado.getPerfilAnterior() != null ? objEmpleado.getPerfilAnterior().getId() : objEmpleado.getPerfil().getId(), 
+																							objEmpleado.getOficinaAnterior() != null ? objEmpleado.getOficinaAnterior().getId() : objEmpleado.getOficina().getId(), listIdsProd);
 				
 				for(ExpedienteTCWPSWeb objExpedienteTCWPSWeb : listaReasignable)
 				{
