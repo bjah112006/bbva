@@ -89,6 +89,10 @@ public class Empleado implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="ID_PERFIL_FK")
 	private Perfil perfil;
+	
+	@ManyToOne
+	@JoinColumn(name="CARGA_LDAP_ID_PERFIL_ANT")
+	private Perfil perfilAnterior;
 
 	//uni-directional many-to-one association to TipoCategoria
 	@ManyToOne
@@ -103,6 +107,9 @@ public class Empleado implements Serializable {
 	@OneToMany(mappedBy="empleado")
 	private List<ExpedienteTC> expedienteTCs;
 
+	@Column(name="CARGA_LDAP_EXISTE")
+	private String existeLDAP;
+	
 	public Empleado() {
 	}
 
@@ -313,6 +320,22 @@ public class Empleado implements Serializable {
 
 	public void setOficinaBackup(Oficina oficinaBackup) {
 		this.oficinaBackup = oficinaBackup;
+	}
+
+	public Perfil getPerfilAnterior() {
+		return perfilAnterior;
+	}
+
+	public void setPerfilAnterior(Perfil perfilAnterior) {
+		this.perfilAnterior = perfilAnterior;
+	}
+
+	public String getExisteLDAP() {
+		return existeLDAP;
+	}
+
+	public void setExisteLDAP(String existeLDAP) {
+		this.existeLDAP = existeLDAP;
 	}
 	
 }
