@@ -139,7 +139,7 @@ public class CargaLdapServlet extends HttpServlet
 					}	
 					else
 					{
-						if(oficinasSincronizables.indexOf(objLdapTemp.getCodigoOficina()) != -1)
+						if(objLdapTemp.getCodigoOficina() != null && oficinasSincronizables.indexOf(objLdapTemp.getCodigoOficina()) != -1)
 						{
 							ldapTempBeanLocal.create(objLdapTemp);						
 						}
