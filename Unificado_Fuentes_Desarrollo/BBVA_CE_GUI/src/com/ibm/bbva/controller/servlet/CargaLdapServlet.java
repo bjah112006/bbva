@@ -191,9 +191,9 @@ public class CargaLdapServlet extends HttpServlet
 				consulta.setIdOficina(String.valueOf(objEmpleado.getOficinaAnterior() != null ? objEmpleado.getOficinaAnterior().getId() : objEmpleado.getOficina().getId()));
 				listaReasignable = tareasBDelegate.listarTareasBandejaAsignacion(consulta);
 							
-				listCartProducto = vistaBandjCartProdBeanLocal.verificarCartXProducto(objEmpleado.getPerfil().getId(), 
-																					  objEmpleado.getOficina().getTerritorio().getId(), 
-																					  objEmpleado.getId());
+				listCartProducto = vistaBandjCartProdBeanLocal.verificarCartXProducto(objEmpleado.getPerfilAnterior() != null ? objEmpleado.getPerfilAnterior().getId() : objEmpleado.getPerfil().getId(), 
+																						objEmpleado.getOficinaAnterior() != null ? objEmpleado.getOficinaAnterior().getTerritorio().getId() : objEmpleado.getOficina().getTerritorio().getId(), 
+																					    objEmpleado.getId());
 				
 				listIdsProd = new ArrayList<Long>();
 				
