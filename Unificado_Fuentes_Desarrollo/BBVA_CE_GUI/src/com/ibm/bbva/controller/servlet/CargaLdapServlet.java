@@ -187,8 +187,8 @@ public class CargaLdapServlet extends HttpServlet
 				consulta = new Consulta();
 				consulta.setTipoConsulta(4);
 				consulta.setCodUsuarioActual(objEmpleado.getCodigo());
-				consulta.setIdPerfilUsuarioActual(objEmpleado.getPerfil().getCodigo());
-				consulta.setIdOficina(String.valueOf(objEmpleado.getOficinaAnterior().getId()));
+				consulta.setIdPerfilUsuarioActual(objEmpleado.getPerfilAnterior() != null ? objEmpleado.getPerfilAnterior().getCodigo() : objEmpleado.getPerfil().getCodigo());
+				consulta.setIdOficina(String.valueOf(objEmpleado.getOficinaAnterior() != null ? objEmpleado.getOficinaAnterior().getId() : objEmpleado.getOficina().getId()));
 				listaReasignable = tareasBDelegate.listarTareasBandejaAsignacion(consulta);
 							
 				listCartProducto = vistaBandjCartProdBeanLocal.verificarCartXProducto(objEmpleado.getPerfil().getId(), 
