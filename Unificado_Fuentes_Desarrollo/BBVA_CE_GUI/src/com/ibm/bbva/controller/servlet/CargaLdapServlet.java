@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.soap.providers.com.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +35,11 @@ import com.ibm.bbva.session.LogJobDetBeanLocal;
 import com.ibm.bbva.session.MutitablaBeanLocal;
 import com.ibm.bbva.session.ParametrosConfBeanLocal;
 import com.ibm.bbva.session.TareaBeanLocal;
+import com.ibm.bbva.session.TerritorioBeanLocal;
 import com.ibm.bbva.session.TipoClienteBeanLocal;
 import com.ibm.bbva.session.VistaBandjCartProdBeanLocal;
 import com.ibm.bbva.util.ExpedienteTCWrapper;
+import com.ibm.bbva.util.Util;
 
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.entities.CartEmpleadoCE;
@@ -45,6 +48,8 @@ import com.ibm.bbva.entities.Expediente;
 import com.ibm.bbva.entities.LdapTemp;
 import com.ibm.bbva.entities.LogJob;
 import com.ibm.bbva.entities.LogJobDet;
+import com.ibm.bbva.entities.Oficina;
+import com.ibm.bbva.entities.Territorio;
 import com.ibm.bbva.entities.VistaBandjCartProd;
 
 @WebServlet("/CargaLdapServlet")
@@ -69,7 +74,7 @@ public class CargaLdapServlet extends HttpServlet
 	private MutitablaBeanLocal multitablaBeanLocal;
 	private LogJobBeanLocal logJobBeanLocal;
 	private LogJobDetBeanLocal logJobDetBeanLocal;
-	
+
 	public CargaLdapServlet() {
         super();
         // TODO Auto-generated constructor stub
@@ -94,8 +99,8 @@ public class CargaLdapServlet extends HttpServlet
 			cartEmpleadoCEBeanLocal = (CartEmpleadoCEBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.CartEmpleadoCEBeanLocal");
 			multitablaBeanLocal = (MutitablaBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.MutitablaBeanLocal");
 			logJobBeanLocal = (LogJobBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.LogJobBeanLocal");
-			logJobDetBeanLocal = (LogJobDetBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.LogJobDetBeanLocal");
-			
+			logJobDetBeanLocal = (LogJobDetBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.LogJobDetBeanLocal");			
+	
 			if(parametrosConfBeanLocal.buscarPorVariable(Constantes.CODIGO_APLICATIVO_PROCESO_LDAP, Constantes.JOB_CARGA_LDAP_HABILITADO).equals("N"))
 			{				
 				return;
@@ -179,21 +184,41 @@ public class CargaLdapServlet extends HttpServlet
 			List<VistaBandjCartProd> listCartProducto = null;
 			List<Long> listIdsProd = null;
 			ExpedienteTCWrapper objExpedienteTCWrapper = null;
+			List<String> listUsuarios = null;
+			
+			//System.out.println("Empleados reasignables : " + listaEmpleado.size());
 			
 			for(Empleado objEmpleado : listaEmpleado)
 			{
+				
+				//System.out.println("Empleado Deben reasignarse : " + objEmpleado.getCodigo());
+				
 				cambioOficinaPerfilEstado = true;
 				
+				/*
 				consulta = new Consulta();
 				consulta.setTipoConsulta(4);
-				consulta.setCodUsuarioActual(objEmpleado.getCodigo());
-				consulta.setIdPerfilUsuarioActual(objEmpleado.getPerfilAnterior() != null ? objEmpleado.getPerfilAnterior().getCodigo() : objEmpleado.getPerfil().getCodigo());
+				consulta.setCodUsuarioActual(objEmpleado.getCodigo());				
+				consulta.setIdPerfilUsuarioActual(String.valueOf(objEmpleado.getPerfilAnterior() != null ? objEmpleado.getPerfilAnterior().getId() : objEmpleado.getPerfil().getId()));
 				consulta.setIdOficina(String.valueOf(objEmpleado.getOficinaAnterior() != null ? objEmpleado.getOficinaAnterior().getId() : objEmpleado.getOficina().getId()));
+				System.out.println("Oficina anterior : " + String.valueOf(objEmpleado.getOficinaAnterior() != null ? objEmpleado.getOficinaAnterior().getId() : objEmpleado.getOficina().getId()));
 				listaReasignable = tareasBDelegate.listarTareasBandejaAsignacion(consulta);
-							
-				listCartProducto = vistaBandjCartProdBeanLocal.verificarCartXProducto(objEmpleado.getPerfilAnterior() != null ? objEmpleado.getPerfilAnterior().getId() : objEmpleado.getPerfil().getId(), 
-																						objEmpleado.getOficinaAnterior() != null ? objEmpleado.getOficinaAnterior().getTerritorio().getId() : objEmpleado.getOficina().getTerritorio().getId(), 
+				*/
+				
+				consulta = new Consulta();		
+				listUsuarios=new ArrayList<String>();
+				listUsuarios.add(objEmpleado.getCodigo()); 
+				consulta.setUsuarios(listUsuarios);
+				consulta.setConsiderarUsuarios(true);		
+				listaReasignable = tareasBDelegate.obtenerListaTareasBandPendiente(consulta);
+				
+				//System.out.println("Usuario - Expedientes : " + objEmpleado.getCodigo() +  " - " + listaReasignable.size());
+				
+				listCartProducto = vistaBandjCartProdBeanLocal.verificarCartXProducto(objEmpleado.getPerfil().getId(), 
+																						objEmpleado.getOficina().getTerritorio().getId(), 
 																					    objEmpleado.getId());
+				
+				//System.out.println("Número de Productos : " + listCartProducto.size());
 				
 				listIdsProd = new ArrayList<Long>();
 				
@@ -202,12 +227,15 @@ public class CargaLdapServlet extends HttpServlet
 					for(VistaBandjCartProd obj : listCartProducto){
 						if(obj != null && obj.getIdProduto() > 0){
 							listIdsProd.add(new Long(obj.getIdProduto()));
+							//System.out.println("Producto : " + obj.getIdProduto());
 						}
 					}
 				}
 
 				listaEmpleadoParaAsignar = empleadoBeanLocal.buscarPorPerfilEmpleadoActivo(objEmpleado.getPerfilAnterior() != null ? objEmpleado.getPerfilAnterior().getId() : objEmpleado.getPerfil().getId(), 
 																							objEmpleado.getOficinaAnterior() != null ? objEmpleado.getOficinaAnterior().getId() : objEmpleado.getOficina().getId(), listIdsProd);
+				//System.out.println("Empleados par asignar : " + listaEmpleadoParaAsignar.size());
+				
 				
 				if(listaReasignable != null)
 				{
@@ -222,42 +250,46 @@ public class CargaLdapServlet extends HttpServlet
 							if(reasignado) { break; }
 							if(objEmpleadoAsignar.getId() != objEmpleado.getId())
 							{
+								//System.out.println("Se intentará con : " + objEmpleadoAsignar.getCodigo());
+								
 								mensaje = "ERROR";	
 								mensaje = tareasBDelegate.transferirTarea(objEmpleado.getCodigo(),	objEmpleadoAsignar.getCodigo(), objExpedienteTCWPSWeb.getTaskID());
 								
 								if (mensaje.equals("SUCCESS")) 
 								{
-									reasignado = true;
+											
+										reasignado = true;
+										
+										objExpedienteTCWrapper = new ExpedienteTCWrapper(objExpedienteTCWPSWeb,
+												null, tareaBean, bbvaFacade,
+												expedienteBean, tipoClienteBean, ansBean);
+
+													objExpedienteTCWrapper.setIdPerfilUsuarioActual(String.valueOf(objEmpleadoAsignar.getPerfil().getId()));
+													objExpedienteTCWrapper.setPerfilUsuarioActual(objEmpleadoAsignar.getPerfil().getDescripcion());
+													objExpedienteTCWrapper.setCodigoUsuarioActual(objEmpleadoAsignar.getCodigo());
+													
+													objExpedienteTCWPSWeb.setNombreUsuarioActual(objEmpleadoAsignar.getNombresCompletos());
+													objExpedienteTCWPSWeb.setIdPerfilUsuarioActual(String.valueOf(objEmpleadoAsignar.getPerfil().getId()));
+													objExpedienteTCWPSWeb.setPerfilUsuarioActual(objEmpleadoAsignar.getPerfil().getDescripcion());
+													objExpedienteTCWPSWeb.setCodigoUsuarioActual(objEmpleadoAsignar.getCodigo());
+													
+													tareasBDelegate.enviarExpedienteTC(objExpedienteTCWrapper.getTaskID(), objExpedienteTCWrapper.getExpedienteTC());
+
+													Expediente objExpediente = expedienteBean.buscarPorId(Long.valueOf(objExpedienteTCWPSWeb.getCodigo()));
+													if(objExpediente != null)
+													{
+													objExpediente.setEmpleado(new Empleado());
+													objExpediente.getEmpleado().setId(objEmpleadoAsignar.getId());
+													expedienteBean.edit(objExpediente);										
+													}										
 									
-									objExpedienteTCWrapper = new ExpedienteTCWrapper(objExpedienteTCWPSWeb,
-																							null, tareaBean, bbvaFacade,
-																							expedienteBean, tipoClienteBean, ansBean);
-									
-									objExpedienteTCWrapper.setIdPerfilUsuarioActual(String.valueOf(objEmpleadoAsignar.getPerfil().getId()));
-									objExpedienteTCWrapper.setPerfilUsuarioActual(objEmpleadoAsignar.getPerfil().getDescripcion());
-									objExpedienteTCWrapper.setCodigoUsuarioActual(objEmpleadoAsignar.getCodigo());
-									
-									objExpedienteTCWPSWeb.setNombreUsuarioActual(objEmpleadoAsignar.getNombresCompletos());
-									objExpedienteTCWPSWeb.setIdPerfilUsuarioActual(String.valueOf(objEmpleadoAsignar.getPerfil().getId()));
-									objExpedienteTCWPSWeb.setPerfilUsuarioActual(objEmpleadoAsignar.getPerfil().getDescripcion());
-									objExpedienteTCWPSWeb.setCodigoUsuarioActual(objEmpleadoAsignar.getCodigo());
-		
-									tareasBDelegate.enviarExpedienteTC(objExpedienteTCWrapper.getTaskID(), objExpedienteTCWrapper.getExpedienteTC());
-									
-									Expediente objExpediente = expedienteBean.buscarPorId(Long.valueOf(objExpedienteTCWPSWeb.getCodigo()));
-									if(objExpediente != null)
-									{
-										objExpediente.setEmpleado(new Empleado());
-										objExpediente.getEmpleado().setId(objEmpleadoAsignar.getId());
-										expedienteBean.edit(objExpediente);										
-									}	
 		
 								}	
-															
+							
 							}
 						}
 						
-						if(!reasignado)
+						if(!reasignado && cambioOficinaPerfilEstado)
 						{
 							cambioOficinaPerfilEstado = false;
 						}
@@ -289,7 +321,7 @@ public class CargaLdapServlet extends HttpServlet
 											
 					}
 				}
-																		
+
 			}
 				
 			objLogJobDet.setFechaFin(new Date());
