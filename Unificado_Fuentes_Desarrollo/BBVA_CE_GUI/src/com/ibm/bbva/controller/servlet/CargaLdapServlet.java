@@ -209,83 +209,87 @@ public class CargaLdapServlet extends HttpServlet
 				listaEmpleadoParaAsignar = empleadoBeanLocal.buscarPorPerfilEmpleadoActivo(objEmpleado.getPerfilAnterior() != null ? objEmpleado.getPerfilAnterior().getId() : objEmpleado.getPerfil().getId(), 
 																							objEmpleado.getOficinaAnterior() != null ? objEmpleado.getOficinaAnterior().getId() : objEmpleado.getOficina().getId(), listIdsProd);
 				
-				for(ExpedienteTCWPSWeb objExpedienteTCWPSWeb : listaReasignable)
+				if(listaReasignable != null)
 				{
-
-					reasignado = false;
-					for(Empleado objEmpleadoAsignar : listaEmpleadoParaAsignar)
+					
+					for(ExpedienteTCWPSWeb objExpedienteTCWPSWeb : listaReasignable)
 					{
 
-						if(reasignado) { break; }
-						if(objEmpleadoAsignar.getId() != objEmpleado.getId())
+						reasignado = false;
+						for(Empleado objEmpleadoAsignar : listaEmpleadoParaAsignar)
 						{
-							mensaje = "ERROR";	
-							mensaje = tareasBDelegate.transferirTarea(objEmpleado.getCodigo(),	objEmpleadoAsignar.getCodigo(), objExpedienteTCWPSWeb.getTaskID());
-							
-							if (mensaje.equals("SUCCESS")) 
+
+							if(reasignado) { break; }
+							if(objEmpleadoAsignar.getId() != objEmpleado.getId())
 							{
-								reasignado = true;
+								mensaje = "ERROR";	
+								mensaje = tareasBDelegate.transferirTarea(objEmpleado.getCodigo(),	objEmpleadoAsignar.getCodigo(), objExpedienteTCWPSWeb.getTaskID());
 								
-								objExpedienteTCWrapper = new ExpedienteTCWrapper(objExpedienteTCWPSWeb,
-																						null, tareaBean, bbvaFacade,
-																						expedienteBean, tipoClienteBean, ansBean);
-								
-								objExpedienteTCWrapper.setIdPerfilUsuarioActual(String.valueOf(objEmpleadoAsignar.getPerfil().getId()));
-								objExpedienteTCWrapper.setPerfilUsuarioActual(objEmpleadoAsignar.getPerfil().getDescripcion());
-								objExpedienteTCWrapper.setCodigoUsuarioActual(objEmpleadoAsignar.getCodigo());
-								
-								objExpedienteTCWPSWeb.setNombreUsuarioActual(objEmpleadoAsignar.getNombresCompletos());
-								objExpedienteTCWPSWeb.setIdPerfilUsuarioActual(String.valueOf(objEmpleadoAsignar.getPerfil().getId()));
-								objExpedienteTCWPSWeb.setPerfilUsuarioActual(objEmpleadoAsignar.getPerfil().getDescripcion());
-								objExpedienteTCWPSWeb.setCodigoUsuarioActual(objEmpleadoAsignar.getCodigo());
-	
-								tareasBDelegate.enviarExpedienteTC(objExpedienteTCWrapper.getTaskID(), objExpedienteTCWrapper.getExpedienteTC());
-								
-								Expediente objExpediente = expedienteBean.buscarPorId(Long.valueOf(objExpedienteTCWPSWeb.getCodigo()));
-								if(objExpediente != null)
+								if (mensaje.equals("SUCCESS")) 
 								{
-									objExpediente.setEmpleado(new Empleado());
-									objExpediente.getEmpleado().setId(objEmpleadoAsignar.getId());
-									expedienteBean.edit(objExpediente);										
+									reasignado = true;
+									
+									objExpedienteTCWrapper = new ExpedienteTCWrapper(objExpedienteTCWPSWeb,
+																							null, tareaBean, bbvaFacade,
+																							expedienteBean, tipoClienteBean, ansBean);
+									
+									objExpedienteTCWrapper.setIdPerfilUsuarioActual(String.valueOf(objEmpleadoAsignar.getPerfil().getId()));
+									objExpedienteTCWrapper.setPerfilUsuarioActual(objEmpleadoAsignar.getPerfil().getDescripcion());
+									objExpedienteTCWrapper.setCodigoUsuarioActual(objEmpleadoAsignar.getCodigo());
+									
+									objExpedienteTCWPSWeb.setNombreUsuarioActual(objEmpleadoAsignar.getNombresCompletos());
+									objExpedienteTCWPSWeb.setIdPerfilUsuarioActual(String.valueOf(objEmpleadoAsignar.getPerfil().getId()));
+									objExpedienteTCWPSWeb.setPerfilUsuarioActual(objEmpleadoAsignar.getPerfil().getDescripcion());
+									objExpedienteTCWPSWeb.setCodigoUsuarioActual(objEmpleadoAsignar.getCodigo());
+		
+									tareasBDelegate.enviarExpedienteTC(objExpedienteTCWrapper.getTaskID(), objExpedienteTCWrapper.getExpedienteTC());
+									
+									Expediente objExpediente = expedienteBean.buscarPorId(Long.valueOf(objExpedienteTCWPSWeb.getCodigo()));
+									if(objExpediente != null)
+									{
+										objExpediente.setEmpleado(new Empleado());
+										objExpediente.getEmpleado().setId(objEmpleadoAsignar.getId());
+										expedienteBean.edit(objExpediente);										
+									}	
+		
 								}	
-	
-							}	
-														
+															
+							}
 						}
-					}
+						
+						if(!reasignado)
+						{
+							cambioOficinaPerfilEstado = false;
+						}
+						
+					}	
 					
-					if(!reasignado)
+					if(!cambioOficinaPerfilEstado)
 					{
-						cambioOficinaPerfilEstado = false;
+						
+						if(objEmpleado.getOficinaAnterior() != null)
+						{
+							objEmpleado.setOficina(objEmpleado.getOficinaAnterior());
+						}
+						if(objEmpleado.getPerfilAnterior() != null)
+						{
+							objEmpleado.setPerfil(objEmpleado.getPerfilAnterior());
+						}
+						objEmpleado.setFlagActivo("1");
+						
+						empleadoBeanLocal.edit(objEmpleado);
+						
+						List<CartEmpleadoCE> listaCarterizacion = cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(objEmpleado.getId());
+						
+						for(CartEmpleadoCE objCartEmpleadoCE : listaCarterizacion)
+						{
+							objCartEmpleadoCE.setOficina(objEmpleado.getOficina());
+							cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);						
+						}
+											
 					}
-					
-				}	
-				
-								
-				if(!cambioOficinaPerfilEstado)
-				{
-					
-					if(objEmpleado.getOficinaAnterior() != null)
-					{
-						objEmpleado.setOficina(objEmpleado.getOficinaAnterior());
-					}
-					if(objEmpleado.getPerfilAnterior() != null)
-					{
-						objEmpleado.setPerfil(objEmpleado.getPerfilAnterior());
-					}
-					objEmpleado.setFlagActivo("1");
-					
-					empleadoBeanLocal.edit(objEmpleado);
-					
-					List<CartEmpleadoCE> listaCarterizacion = cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(objEmpleado.getId());
-					
-					for(CartEmpleadoCE objCartEmpleadoCE : listaCarterizacion)
-					{
-						objCartEmpleadoCE.setOficina(objEmpleado.getOficina());
-						cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);						
-					}
-										
 				}
+																		
 			}
 				
 			objLogJobDet.setFechaFin(new Date());
