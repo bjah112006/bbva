@@ -18,7 +18,7 @@ public class BaseDAOImpl {
 		icmTemplate = new ICMTemplate();
 		mimeType = "application/pdf";
 		mimeType_Tiff = "image/tiff";
-		itemType = "CE_Document";
+		itemType = "FG_Document";
 	}
 
 	public ICMTemplate getIcmTemplate() {
