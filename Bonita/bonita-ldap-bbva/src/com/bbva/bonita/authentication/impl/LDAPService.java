@@ -93,7 +93,7 @@ public class LDAPService {
             if(crear || actualizar) {
                 String puestosConOficina = LDAPValidate.getInstance().getProperty("puesto.con.oficina");
                 String[] oficina = obtenerOficina(usuario.getCodigoCentro());
-    
+                String ambito ="";
                 logger.log(Level.SEVERE, "Territorio: " + oficina[1]);
                 logger.log(Level.SEVERE, "Oficina: " + oficina[0]);
                 logger.log(Level.SEVERE, "Cod. Oficina: " + oficina[2]);
@@ -105,14 +105,14 @@ public class LDAPService {
                  * - 4:"PUESTO"
                  **/
                 if (puestosConOficina.indexOf("|" + usuario.getPuesto().getNombreCargoFuncionalLocal() + "|") > -1 && !oficina[1].isEmpty()) {
-                    String ambito = DBUtil.obtenerAmbito(oficina[2]); 
+                    ambito = DBUtil.obtenerAmbito(oficina[2]); 
                     identityAPI.setCustomUserInfoValue(1, user.getId(), ambito == null || ambito.isEmpty() ? oficina[1] : ambito);
                     
                     logger.log(Level.SEVERE, "Ambito Consultado: " + ambito);
                 }
                 
                 if (!oficina[1].isEmpty()) {
-                    String centroNegocio =DBUtil.obtenerCentroNegocio(oficina[1]);
+                    String centroNegocio =DBUtil.obtenerCentroNegocio(ambito);
                     identityAPI.setCustomUserInfoValue(2, user.getId(), centroNegocio);
                     
                     logger.log(Level.SEVERE, "Centro de Negocio: " + centroNegocio);
