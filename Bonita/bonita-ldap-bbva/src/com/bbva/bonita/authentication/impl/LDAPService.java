@@ -96,6 +96,7 @@ public class LDAPService {
     
                 logger.log(Level.SEVERE, "Territorio: " + oficina[1]);
                 logger.log(Level.SEVERE, "Oficina: " + oficina[0]);
+                logger.log(Level.SEVERE, "Cod. Oficina: " + oficina[2]);
                 
                 /***
                  * - 1:"AMBITO"
@@ -104,7 +105,7 @@ public class LDAPService {
                  * - 4:"PUESTO"
                  **/
                 if (puestosConOficina.indexOf("|" + usuario.getPuesto().getNombreCargoFuncionalLocal() + "|") > -1 && !oficina[1].isEmpty()) {
-                    String ambito = DBUtil.obtenerAmbito(oficina[0]); 
+                    String ambito = DBUtil.obtenerAmbito(oficina[2]); 
                     identityAPI.setCustomUserInfoValue(1, user.getId(), ambito == null || ambito.isEmpty() ? oficina[1] : ambito);
                     
                     logger.log(Level.SEVERE, "Ambito Consultado: " + ambito);
@@ -113,6 +114,8 @@ public class LDAPService {
                 if (!oficina[1].isEmpty()) {
                     String centroNegocio =DBUtil.obtenerCentroNegocio(oficina[1]);
                     identityAPI.setCustomUserInfoValue(2, user.getId(), centroNegocio);
+                    
+                    logger.log(Level.SEVERE, "Centro de Negocio: " + centroNegocio);
                 }
                 
                 if (!oficina[0].isEmpty()) {
@@ -157,12 +160,13 @@ public class LDAPService {
     
     private String[] obtenerOficina(String codigoCentro) {
         String wsdl = LDAPValidate.getInstance().getProperty("wsdl.centrosBBVA");
-        String[] result = new String[2];
+        String[] result = new String[3];
         ObtenerOficinaRequest obtenerOficinaRequest = new ObtenerOficinaRequest();
         obtenerOficinaRequest.setCodOficina(codigoCentro);
 
         result[0] = "";
         result[1] = "";
+        result[2] = "";
         
         try {
             URL wsdlURL = new URL(wsdl);
@@ -172,6 +176,7 @@ public class LDAPService {
             if(obtenerOficinaResponse != null && obtenerOficinaResponse.getOficina() != null) {
                 result[0] = codigoCentro + " - " + obtenerOficinaResponse.getOficina().getNombreOficina();
                 result[1] = obtenerOficinaResponse.getOficina().getTerritorio().getId();
+                result[2] = codigoCentro;
             } else {
                 logger.log(Level.SEVERE, "Codigo de centro " + codigoCentro + " no registrado");
             }

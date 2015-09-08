@@ -24,7 +24,7 @@ from public.arch_data_instance
 order by containerid, tenantid;
 
 -- drop view if exists fastpyme.task_pending;
-create view fastpyme.task_pending as
+create or replace view fastpyme.task_pending as
 select 
   a.name
 , a.version 
@@ -49,6 +49,7 @@ select
   when 'GMC' then 'MESA DE CONTROL'
   when 'CPM' then 'CPM'
   else '' end estacion
+, '{"url": "/portal/homepage#?id=' || b.rootprocessinstanceid|| '&_p=archivedcasemoredetailsadmin&_pf=1", "value": "' || b.rootprocessinstanceid || '"}' url
 from public.process_definition a
 inner join public.process_instance b on a.tenantid=b.tenantid and a.processid=b.processdefinitionid
 inner join public.flownode_instance c on b.tenantid=c.tenantid and b.rootprocessinstanceid=c.rootcontainerid
@@ -56,7 +57,7 @@ inner join public.actor d on c.tenantid=d.tenantid and c.actorid=d.id
 left join public.user_ e on c.tenantid=e.tenantid and c.assigneeid=e.id;
 
 -- drop view if exists fastpyme.arch_task_pending;
-create view fastpyme.arch_task_pending as
+create or replace view fastpyme.arch_task_pending as
 select 
   a.name
 , a.version 
@@ -81,12 +82,17 @@ select
   when 'GMC' then 'MESA DE CONTROL'
   when 'CPM' then 'CPM'
   else '' end estacion
+, '{"url": "/portal/homepage#?id=' || b.id || '&_p=archivedcasemoredetailsadmin&_pf=1", "value": "' || b.rootprocessinstanceid || '"}' url
 from public.process_definition a
 inner join public.arch_process_instance b on a.tenantid=b.tenantid and a.processid=b.processdefinitionid
+inner join (
+	select rootprocessinstanceid, max(id) id from public.arch_process_instance group by rootprocessinstanceid
+) bx on b.id=bx.id
 inner join public.arch_flownode_instance c on b.tenantid=c.tenantid and b.rootprocessinstanceid=c.rootcontainerid
 inner join public.actor d on c.tenantid=d.tenantid and c.actorid=d.id
 left join public.user_ e on c.tenantid=e.tenantid and c.assigneeid=e.id
 where b.stateid=6 and c.stateid not in(4, 32);
+
 
 /*
 create view fastpyme.data_instance as
@@ -184,6 +190,7 @@ select
     , b.num_tramite
     , b.usu_registrante
     , b.ambito_registro
+    , a.url
 from fastpyme.task_pending a
 inner join fastpyme.data_instance b on 
 a.tenantid=b.tenantid and 
@@ -221,6 +228,7 @@ select
     , b.num_tramite
     , b.usu_registrante
     , b.ambito_registro
+    , a.url
 from fastpyme.arch_task_pending a
 inner join fastpyme.arch_data_instance b on 
 a.tenantid=b.tenantid and 

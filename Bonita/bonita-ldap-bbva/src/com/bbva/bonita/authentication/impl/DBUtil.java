@@ -48,7 +48,7 @@ public class DBUtil {
             InitialContext ic = new InitialContext();
             DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS");
             Connection cn = ds.getConnection();
-            PreparedStatement ps = cn.prepareStatement("SELECT * FROM TBL_PYME_PARAMETER WHERE ID_TABLE=4 AND '|' || VAL_COLUMN2 || '|' LIKE '%|" + territorio + "|%'");
+            PreparedStatement ps = cn.prepareStatement("SELECT * FROM TBL_PYME_PARAMETER WHERE ID_TABLE=4 AND '|' || VAL_COLUMN2 || '|' LIKE '%|0' || right('" + territorio + "', 3) || '|%'");
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
