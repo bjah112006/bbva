@@ -4,7 +4,6 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -254,7 +253,7 @@ public class LDAPService {
             PreparedStatement ps = cn.prepareStatement("SELECT * FROM BBVA_PERFIL WHERE PUESTO='" + puesto + "'");
             ResultSet rs = ps.executeQuery();
 
-            List<String> memberships = new ArrayList<String>();
+            UserMembership membership = null;
             List<UserMembership> userMemberships = identityAPI.getUserMemberships(user.getId(), 0, 100, UserMembershipCriterion.ASSIGNED_DATE_DESC);
             int idRole;
             int idGroup;
@@ -267,7 +266,20 @@ public class LDAPService {
                     logger.log(Level.SEVERE, "Membresia adicionada");
                     identityAPI.addUserMembership(user.getId(), idGroup, idRole);
                 } else {
-                    memberships.add(idGroup + "=" + idRole);
+                    membership = null;
+                    for(UserMembership um : userMemberships) {
+                        if(um.getGroupId() == idGroup && um.getRoleId() == idRole) {
+                            membership = um;
+                            break;
+                        }
+                    }
+                    
+                    if(membership == null) {
+                        logger.log(Level.SEVERE, "Membresia adicionada Actualización");
+                        identityAPI.addUserMembership(user.getId(), idGroup, idRole);
+                    } else {
+                        userMemberships.remove(membership);
+                    }
                 }
             }
 
