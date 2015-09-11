@@ -21,6 +21,7 @@ import org.bonitasoft.engine.exception.CreationException;
 import org.bonitasoft.engine.exception.UpdateException;
 import org.bonitasoft.engine.identity.ContactDataCreator;
 import org.bonitasoft.engine.identity.ContactDataUpdater;
+import org.bonitasoft.engine.identity.CustomUserInfoDefinition;
 import org.bonitasoft.engine.identity.User;
 import org.bonitasoft.engine.identity.UserCreator;
 import org.bonitasoft.engine.identity.UserMembership;
@@ -93,10 +94,30 @@ public class LDAPService {
             if(crear || actualizar) {
                 String puestosConOficina = LDAPValidate.getInstance().getProperty("puesto.con.oficina");
                 String[] oficina = obtenerOficina(usuario.getCodigoCentro());
-                String ambito ="";
+                String ambito = "";
                 logger.log(Level.SEVERE, "Territorio: " + oficina[1]);
                 logger.log(Level.SEVERE, "Oficina: " + oficina[0]);
                 logger.log(Level.SEVERE, "Cod. Oficina: " + oficina[2]);
+                
+                long idVariableAmbito = 0L;
+                long idVariableCentroNegocio = 0L;
+                long idVariableOficina = 0L;
+                long idVariablePuesto = 0L;
+                
+                List<CustomUserInfoDefinition> definitions = identityAPI.getCustomUserInfoDefinitions(0, 100);
+                
+                for(CustomUserInfoDefinition def : definitions) {
+                    if(def.getName().equalsIgnoreCase("AMBITO")) {
+                        idVariableAmbito = def.getId();
+                    } else if(def.getName().equalsIgnoreCase("CN")) {
+                        idVariableCentroNegocio = def.getId();
+                    } else if(def.getName().equalsIgnoreCase("OFICINA")) {
+                        idVariableOficina = def.getId();
+                    } else if(def.getName().equalsIgnoreCase("PUESTO")) {
+                        idVariablePuesto = def.getId();
+                    }
+                    logger.log(Level.SEVERE, def.getName() + ": " + def.getId());
+                }
                 
                 /***
                  * - 1:"AMBITO"
@@ -106,23 +127,23 @@ public class LDAPService {
                  **/
                 if (puestosConOficina.indexOf("|" + usuario.getPuesto().getNombreCargoFuncionalLocal() + "|") > -1 && !oficina[1].isEmpty()) {
                     ambito = DBUtil.obtenerAmbito(oficina[2]); 
-                    identityAPI.setCustomUserInfoValue(1, user.getId(), ambito == null || ambito.isEmpty() ? oficina[1] : ambito);
+                    identityAPI.setCustomUserInfoValue(idVariableAmbito, user.getId(), ambito == null || ambito.isEmpty() ? oficina[1] : ambito);
                     
                     logger.log(Level.SEVERE, "Ambito Consultado: " + ambito);
                 }
                 
                 if (!oficina[1].isEmpty()) {
                     String centroNegocio =DBUtil.obtenerCentroNegocio(ambito);
-                    identityAPI.setCustomUserInfoValue(2, user.getId(), centroNegocio);
+                    identityAPI.setCustomUserInfoValue(idVariableCentroNegocio, user.getId(), centroNegocio);
                     
                     logger.log(Level.SEVERE, "Centro de Negocio: " + centroNegocio);
                 }
                 
                 if (!oficina[0].isEmpty()) {
-                    identityAPI.setCustomUserInfoValue(3, user.getId(), oficina[0]);
+                    identityAPI.setCustomUserInfoValue(idVariableOficina, user.getId(), oficina[0]);
                 }
                 
-                identityAPI.setCustomUserInfoValue(4, user.getId(), usuario.getPuesto().getNombreCargoFuncionalLocal());
+                identityAPI.setCustomUserInfoValue(idVariablePuesto, user.getId(), usuario.getPuesto().getNombreCargoFuncionalLocal());
                 actualizarMembresia(user, usuario.getPuesto().getNombreCargoFuncionalLocal(), actualizar);
             }
         } catch(final UpdateException sunfe) {
