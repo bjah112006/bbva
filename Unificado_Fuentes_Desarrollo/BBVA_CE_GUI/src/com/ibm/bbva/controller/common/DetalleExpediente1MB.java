@@ -87,7 +87,10 @@ public class DetalleExpediente1MB extends AbstractMBean {
 			renderedEstadoCivil = true;
 			disabledFlagPep = true;
 			disabledFlagPHabiente = true;
-			disabledFlagPAval = true;			
+			disabledFlagPAval = true;
+			
+			//fix2 erika abregu
+			itemDisabledMonocuota=true;
 		}
 		
 		obtenerDatos();
