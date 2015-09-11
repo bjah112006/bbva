@@ -63,7 +63,12 @@
 								if(!rs.getMetaData().getColumnTypeName(j).equals("BLOB")){
 									response.getWriter().println("<td style='color:#000000;background-color:#EAF2D3;font-size:12px;'>"+rs.getString(j)+"</td>");
 								}else{
-									response.getWriter().println("<td style='color:#000000;background-color:#EAF2D3;font-size:12px;'>...</td>");
+									if(rs.getBlob(j) != null) {
+										response.getWriter().println("<td style='color:#000000;background-color:#EAF2D3;font-size:12px;'>" + rs.getBlob(j).length() + " bytes</td>");
+									} else {
+										response.getWriter().println("<td style='color:#000000;background-color:#EAF2D3;font-size:12px;'>...</td>");
+									}
+									
 								}
 							}
 						response.getWriter().println("</tr>");

@@ -219,6 +219,24 @@ abrirConsulta = function(page) {
     });
 };
 
+validarDocumento = function() {
+	var longitudPermitida = 10; //Expresada en MB
+	var size = longitudPermitida*1024*1024;
+	
+	$('input[type="file"]').each(function() {
+		var $this = $(this);
+	    if ($this.val() != '') {
+	    	if(size < this.files[0].size){
+	    		alert("Documento supera los " + longitudPermitida + " MB permitidos. Por favor seleccione otro archivo.");
+	    		//console.log("Documento supera los " + longitudPermitida + " MB permitidos. Por favor seleccione otro archivo.");
+	    		$(".bonita_form_button").attr("disabled", "disabled");
+	    	}else{
+	    		$(".bonita_form_button").removeAttr('disabled');
+	    	}
+	    } 
+	});
+}
+
 $(window).resize(function(){
 	if($("#panelAngular").length > 0) {
 		$("#panelAngular").css("width", ($(window).width() - ($("#panelConsulta").outerWidth())) + "px");
@@ -230,7 +248,7 @@ $(document).ready(function(){
 });
 
 $(document).bind('DOMNodeInserted', function(event) {
-    if(event.target.nodeName == 'LI') {
+	if(event.target.nodeName == 'LI') {
         if($(event.target).hasClass("processlistinguser")) {
             $("<li class='bbva-reporte'><a class='bbva-reporte' href='javascript: void(0);' onclick='abrirReporte()'>Reporte</a></li>").insertAfter($(event.target));
             $("body").append(createDialog());
@@ -240,6 +258,7 @@ $(document).bind('DOMNodeInserted', function(event) {
             $("<li class='bbva-cuadro'><a class='bbva-cuadro' href='javascript: void(0);' onclick='abrirConsulta(\"cuadromando\")'>Cuadro de Mando</a></li>").insertAfter($(event.target));
         }
     }
+	validarDocumento();
 });
 
 
