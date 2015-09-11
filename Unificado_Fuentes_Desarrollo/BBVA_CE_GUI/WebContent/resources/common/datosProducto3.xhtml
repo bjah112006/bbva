@@ -148,7 +148,8 @@
 								style="width: 98px;  text-align: right;"
 								rendered="#{datosProducto3.renderedCredApro and datosProducto3.renderedTMCredApro}"
 								readonly="#{!datosProducto3.habCredApro}"
-								disabled="#{!datosProducto3.habCredApro}" id="lineaCredAprob" >
+								disabled="#{!datosProducto3.habCredApro}" id="lineaCredAprob" 
+								onkeypress="return disableEnterKey(event);" >
 								<f:convertNumber locale="en" pattern="#,##0.00"/>
 							</h:inputText>
 							<h:outputText value="#{datosProducto3.expediente.expedienteTC.lineaCredAprob}"
@@ -216,12 +217,13 @@
 	                rendered="#{datosProducto3.renderedPlazoSolicitadoApr}" />
 	                <h:panelGroup>	                
 	                	<h:inputText value="#{datosProducto3.expediente.expedienteTC.plazoSolicitadoApr}" 
-		                    		styleClass="txt-resaltado-2  campoValor1" maxlength="5"  	
+		                    		styleClass="txt-resaltado-2  campoValor1 soloNumeros" maxlength="5"  	
 		                    		style="width: 25px;  text-align: right;"	                    		
 		                    		rendered="#{datosProducto3.renderedCredApro and datosProducto3.renderedPlazoSolicitadoApr and datosProducto3.renderedPlazoSolicitadoAprobEdit}"
 		                    		readonly="#{!datosProducto3.habPlazoSolApr}"
-								    disabled="#{!datosProducto3.habPlazoSolApr}" id="idPlazoSolApr"> 
-		                </h:inputText>  
+								    disabled="#{!datosProducto3.habPlazoSolApr}" id="idPlazoSolApr"
+								    onkeypress="return disableEnterKey(event);" > 
+						</h:inputText>  
 		                <!-- style="#{!datosProducto3.renderedCredApro ? '':'display:none;'} width: 25px; text-align: right;" -->
 		                <h:outputText value="#{datosProducto3.expediente.expedienteTC.plazoSolicitadoApr}"
 								styleClass="caja-texto valor-componente"
