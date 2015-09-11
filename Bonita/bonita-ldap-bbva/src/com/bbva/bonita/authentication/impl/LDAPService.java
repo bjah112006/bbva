@@ -277,9 +277,9 @@ public class LDAPService {
                     if(membership == null) {
                         logger.log(Level.SEVERE, "Membresia adicionada Actualización");
                         identityAPI.addUserMembership(user.getId(), idGroup, idRole);
-                    } else {
+                    } /* else {
                         userMemberships.remove(membership);
-                    }
+                    }*/
                 }
             }
 
