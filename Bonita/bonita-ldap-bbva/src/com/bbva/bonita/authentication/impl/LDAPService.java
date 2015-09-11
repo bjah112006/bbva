@@ -255,11 +255,11 @@ public class LDAPService {
 
             UserMembership membership = null;
             List<UserMembership> userMemberships = identityAPI.getUserMemberships(user.getId(), 0, 100, UserMembershipCriterion.ASSIGNED_DATE_DESC);
-            int idRole;
-            int idGroup;
+            long idRole;
+            long idGroup;
             while (rs.next()) {
-                idRole = rs.getInt("ID_ROLE");
-                idGroup = rs.getInt("ID_GROUP");
+                idRole = rs.getLong("ID_ROLE");
+                idGroup = rs.getLong("ID_GROUP");
                 logger.log(Level.SEVERE, "ID_ROLE: " + idRole);
                 logger.log(Level.SEVERE, "ID_GROUP: " + idGroup);
                 if(actualizar = false || userMemberships.isEmpty()) {
