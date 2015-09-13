@@ -3,6 +3,8 @@ package com.bbva.bonita.authentication.impl;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bonitasoft.engine.authentication.AuthenticationConstants;
 import org.bonitasoft.engine.authentication.GenericAuthenticationService;
@@ -16,12 +18,13 @@ import org.bonitasoft.engine.log.technical.TechnicalLoggerService;
 
 public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticationService {
 
+    private static final Logger logger = Logger.getLogger("JAASGenericAuthenticationServiceImpl");
 	private final IdentityService identityService;
-	private final TechnicalLoggerService logger;
+	private final TechnicalLoggerService technicalLogger;
 
 	public JAASGenericAuthenticationServiceImpl(final IdentityService identityService, final TechnicalLoggerService logger) {
         this.identityService = identityService;
-        this.logger = logger;
+        this.technicalLogger = logger;
     }
 	
     @Override
@@ -34,8 +37,8 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
         	String password = String.valueOf(credentials.get(AuthenticationConstants.BASIC_PASSWORD));
         	String userName = String.valueOf(credentials.get(AuthenticationConstants.BASIC_USERNAME));
             
-            if (logger.isLoggable(this.getClass(), TechnicalLogSeverity.TRACE)) {
-                logger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogBeforeMethod(this.getClass(), methodName));
+            if (technicalLogger.isLoggable(this.getClass(), TechnicalLogSeverity.TRACE)) {
+                technicalLogger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogBeforeMethod(this.getClass(), methodName));
             }
             
             String bonitaUser = LDAPValidate.getInstance().getProperty("user_name_bonita");
@@ -44,11 +47,11 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
             // logger.log(this.getClass(), TechnicalLogSeverity.ERROR, password);
             if(bonitaUser.equalsIgnoreCase(userName)) {
                 user = identityService.getUserByUserName(userName);
-                logger.log(this.getClass(), TechnicalLogSeverity.ERROR, user.getUserName());
+                technicalLogger.log(this.getClass(), TechnicalLogSeverity.ERROR, user.getUserName());
                 isCheckCredentials = identityService.chechCredentials(user, password);
                 if (isCheckCredentials) {
-                    if (logger.isLoggable(this.getClass(), TechnicalLogSeverity.TRACE)) {
-                        logger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogAfterMethod(this.getClass(), methodName));
+                    if (technicalLogger.isLoggable(this.getClass(), TechnicalLogSeverity.TRACE)) {
+                        technicalLogger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogAfterMethod(this.getClass(), methodName));
                     }
                     return userName;
                 }
@@ -62,15 +65,16 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
                 try {
                     LDAPService ldapService = new LDAPService();
                     ldapService.verificarUsuario(userName);
-                	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, userName);
+                	technicalLogger.log(this.getClass(), TechnicalLogSeverity.ERROR, userName);
                 } catch (final Exception e) {
-                	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Exception generic");
-                	logger.log(this.getClass(), TechnicalLogSeverity.ERROR, LogUtil.getLogOnExceptionMethod(this.getClass(), methodName, e));
+                    logger.log(Level.SEVERE, "Error al verificar el usuario: " + userName, e);
+                	technicalLogger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Exception generic");
+                	technicalLogger.log(this.getClass(), TechnicalLogSeverity.ERROR, LogUtil.getLogOnExceptionMethod(this.getClass(), methodName, e));
                 }
             }
             
             user = identityService.getUserByUserName(userName);
-            logger.log(this.getClass(), TechnicalLogSeverity.ERROR, user.getUserName());
+            technicalLogger.log(this.getClass(), TechnicalLogSeverity.ERROR, user.getUserName());
             
             String isValidLDAP = DBUtil.obtenerParametro(DBUtil.FLAG_ACTIVACION_LDAP); 
             
@@ -80,28 +84,28 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
                 String userBonitaProfile = getPrincipalUserProfileFromBonita(user.getId());
                 String roles = DBUtil.obtenerParametro(DBUtil.ROLES_EXCLUIDOS);
 
-                logger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Roles Bonita: " + roles);
-                logger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Profile: " + userBonitaProfile);
+                technicalLogger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Roles Bonita: " + roles);
+                technicalLogger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Profile: " + userBonitaProfile);
 
                 if (roles.indexOf("|" + userBonitaProfile + "|") > -1) {
                     isCheckCredentials = identityService.chechCredentials(user, password);
                 } else {
                     isCheckCredentials = LDAPValidate.getInstance().checkCredentials(userName, password);
-                    logger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Autentifica LDAP");
+                    technicalLogger.log(this.getClass(), TechnicalLogSeverity.ERROR, "Autentifica LDAP");
                 }
             }
             
             if (isCheckCredentials) {
-                if (logger.isLoggable(this.getClass(), TechnicalLogSeverity.TRACE)) {
-                    logger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogAfterMethod(this.getClass(), methodName));
+                if (technicalLogger.isLoggable(this.getClass(), TechnicalLogSeverity.TRACE)) {
+                    technicalLogger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogAfterMethod(this.getClass(), methodName));
                 }
                 return userName;
             }
-            if (logger.isLoggable(this.getClass(), TechnicalLogSeverity.TRACE)) {
-                logger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogAfterMethod(this.getClass(), methodName));
+            if (technicalLogger.isLoggable(this.getClass(), TechnicalLogSeverity.TRACE)) {
+                technicalLogger.log(this.getClass(), TechnicalLogSeverity.TRACE, LogUtil.getLogAfterMethod(this.getClass(), methodName));
             }
         } catch (final Exception sunfe) {
-            logger.log(this.getClass(), TechnicalLogSeverity.ERROR, LogUtil.getLogOnExceptionMethod(this.getClass(), methodName, sunfe));
+            technicalLogger.log(this.getClass(), TechnicalLogSeverity.ERROR, LogUtil.getLogOnExceptionMethod(this.getClass(), methodName, sunfe));
         }
         
         return null;
@@ -118,7 +122,7 @@ public class JAASGenericAuthenticationServiceImpl implements GenericAuthenticati
 				}
 			}
 		} catch (SIdentityException e) {
-		    logger.log(this.getClass(), TechnicalLogSeverity.ERROR, e);
+		    technicalLogger.log(this.getClass(), TechnicalLogSeverity.ERROR, e);
 		}
     	return profile;
     }
