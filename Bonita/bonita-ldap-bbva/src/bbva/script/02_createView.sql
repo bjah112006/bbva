@@ -58,7 +58,7 @@ left join public.user_ e on c.tenantid=e.tenantid and c.assigneeid=e.id;
 
 -- drop view if exists fastpyme.arch_task_pending;
 create or replace view fastpyme.arch_task_pending as
-select 
+select
   a.name
 , a.version 
 , b.tenantid
@@ -86,13 +86,16 @@ select
 from public.process_definition a
 inner join public.arch_process_instance b on a.tenantid=b.tenantid and a.processid=b.processdefinitionid
 inner join (
-	select rootprocessinstanceid, max(id) id from public.arch_process_instance group by rootprocessinstanceid
+	select rootprocessinstanceid, max(id) id from public.arch_process_instance where stateid=6 group by rootprocessinstanceid
 ) bx on b.id=bx.id
-inner join public.arch_flownode_instance c on b.tenantid=c.tenantid and b.rootprocessinstanceid=c.rootcontainerid
+inner join public.arch_flownode_instance c on b.tenantid=c.tenantid and b.sourceobjectid=c.sourceobjectid -- b.rootprocessinstanceid=c.rootcontainerid
 inner join public.actor d on c.tenantid=d.tenantid and c.actorid=d.id
 left join public.user_ e on c.tenantid=e.tenantid and c.assigneeid=e.id
 where b.stateid=6 and c.stateid not in(4, 32);
 
+select * from arch_flownode_instance
+select * from flownode_instance
+select stateid, state_name from public.arch_process_instance
 
 /*
 create view fastpyme.data_instance as

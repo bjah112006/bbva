@@ -102,6 +102,7 @@ public class LDAPService {
                 long idVariableCentroNegocio = 0L;
                 long idVariableOficina = 0L;
                 long idVariablePuesto = 0L;
+                long idVariableTerritorio = 0L;
                 
                 List<CustomUserInfoDefinition> definitions = identityAPI.getCustomUserInfoDefinitions(0, 100);
                 
@@ -114,15 +115,19 @@ public class LDAPService {
                         idVariableOficina = def.getId();
                     } else if(def.getName().equalsIgnoreCase("PUESTO")) {
                         idVariablePuesto = def.getId();
+                    } else if(def.getName().equalsIgnoreCase("TERRITORIO")) {
+                        idVariableTerritorio = def.getId();
                     }
+                    
                     logger.log(Level.SEVERE, def.getName() + ": " + def.getId());
                 }
                 
                 /***
-                 * - 1:"AMBITO"
-                 * - 2:"CENTRO NEGOCIOS"
-                 * - 3:"OFICINA"
-                 * - 4:"PUESTO"
+                 * -   1: "AMBITO"
+                 * -   2: "CENTRO NEGOCIOS"
+                 * -   3: "OFICINA"
+                 * -   4: "PUESTO"
+                 * - 101: "TERRITORIO"
                  **/
                 if (puestosConOficina.indexOf("|" + usuario.getPuesto().getNombreCargoFuncionalLocal() + "|") > -1 && !oficina[1].isEmpty()) {
                     ambito = DBUtil.obtenerAmbito(oficina[2]); 
@@ -140,6 +145,10 @@ public class LDAPService {
                 
                 if (!oficina[0].isEmpty()) {
                     identityAPI.setCustomUserInfoValue(idVariableOficina, user.getId(), oficina[0]);
+                }
+                
+                if (!oficina[1].isEmpty()) {
+                    identityAPI.setCustomUserInfoValue(idVariableTerritorio, user.getId(), oficina[1]);
                 }
                 
                 identityAPI.setCustomUserInfoValue(idVariablePuesto, user.getId(), usuario.getPuesto().getNombreCargoFuncionalLocal());
