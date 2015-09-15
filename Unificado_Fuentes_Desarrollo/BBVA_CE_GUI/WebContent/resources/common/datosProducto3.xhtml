@@ -8,6 +8,7 @@
 <div class="bloque divProd3Principal">
    <script type="text/javascript"> 
      /* <![CDATA[ */
+                          
         function myFuncion(event) {
         
 		    if (event.status == "success") {
@@ -53,6 +54,7 @@
 				}
 			});	
 			$(".cmpNumeroDecimalMill").autoNumeric({aSep: ',', aDec: '.'});
+			$(".soloNumeros").autoNumeric({aSep: ',', aDec: '.'});
 			$(".cmpNumeroDecimalDece").autoNumeric({aSep: ',', aDec: '.', vMax:99.99});		
 				
 			/*		
@@ -149,7 +151,8 @@
 								rendered="#{datosProducto3.renderedCredApro and datosProducto3.renderedTMCredApro}"
 								readonly="#{!datosProducto3.habCredApro}"
 								disabled="#{!datosProducto3.habCredApro}" id="lineaCredAprob" 
-								onkeypress="return disableEnterKey(event);" >
+								onkeypress="return disableEnterKey(event); " 
+								onkeyup="return disableEnterKey(event); " >
 								<f:convertNumber locale="en" pattern="#,##0.00"/>
 							</h:inputText>
 							<h:outputText value="#{datosProducto3.expediente.expedienteTC.lineaCredAprob}"
@@ -222,7 +225,8 @@
 		                    		rendered="#{datosProducto3.renderedCredApro and datosProducto3.renderedPlazoSolicitadoApr and datosProducto3.renderedPlazoSolicitadoAprobEdit}"
 		                    		readonly="#{!datosProducto3.habPlazoSolApr}"
 								    disabled="#{!datosProducto3.habPlazoSolApr}" id="idPlazoSolApr"
-								    onkeypress="return disableEnterKey(event);" > 
+								    onkeypress="return disableEnterKey(event); " 
+								    onkeyup="return disableEnterKey(event); " > 
 						</h:inputText>  
 		                <!-- style="#{!datosProducto3.renderedCredApro ? '':'display:none;'} width: 25px; text-align: right;" -->
 		                <h:outputText value="#{datosProducto3.expediente.expedienteTC.plazoSolicitadoApr}"
