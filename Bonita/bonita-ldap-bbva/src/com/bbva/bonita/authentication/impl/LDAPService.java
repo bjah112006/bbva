@@ -176,15 +176,22 @@ public class LDAPService {
     private long diferenciaEnHoras(Date fechaInicio, Date fechaFin) {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
-
-        cal1.setTime(fechaInicio);
-        cal2.setTime(fechaFin);
+        long result;
         
-        long milis1 = cal1.getTimeInMillis();
-        long milis2 = cal2.getTimeInMillis();
-        long diff = milis2 - milis1;
-
-        return diff / (60 * 60 * 1000);
+        try {
+            cal1.setTime(fechaInicio);
+            cal2.setTime(fechaFin);
+            
+            long milis1 = cal1.getTimeInMillis();
+            long milis2 = cal2.getTimeInMillis();
+            long diff = milis2 - milis1;
+    
+            result = diff / (60 * 60 * 1000);
+        } catch(Exception e) {
+            result = 0;
+        }
+        
+        return result;
     }
     
     private String[] obtenerOficina(String codigoCentro) {
