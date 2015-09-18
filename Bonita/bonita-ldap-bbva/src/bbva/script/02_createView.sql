@@ -49,7 +49,7 @@ select
   when 'GMC' then 'MESA DE CONTROL'
   when 'CPM' then 'CPM'
   else '' end estacion
-, '{"url": "/portal/homepage#?id=' || b.rootprocessinstanceid|| '&_p=archivedcasemoredetailsadmin&_pf=1", "value": "' || b.rootprocessinstanceid || '"}' url
+, '{"url": "/portal/homepage#?id=' || b.rootprocessinstanceid|| '&_p=casemoredetails&_pf=1", "value": "' || b.rootprocessinstanceid || '"}' url
 from public.process_definition a
 inner join public.process_instance b on a.tenantid=b.tenantid and a.processid=b.processdefinitionid
 inner join public.flownode_instance c on b.tenantid=c.tenantid and b.rootprocessinstanceid=c.rootcontainerid
