@@ -90,6 +90,10 @@ public class AbrirPdfMB implements Serializable {
 												
 						this.contentIICE = new com.ibm.bbva.cm.iice.service.ContentServiceImplProxy();
 						this.contentIICE._getDescriptor().setEndpoint(CONTENT_SERVICE_IMPL_IICE);
+						
+						LOG.info("WEB SERVICE DEL CONTENT IICE ES ::: "+ this.contentIICE._getDescriptor().getEndpoint());
+						LOG.info("ID DEL DOCUMENTO ES ::: "+ this.docIice.getId());
+						
 						//this.contentIICE._getDescriptor().setEndpoint("http://118.180.60.70:80/PLDWEBCM/services/ContentServiceImpl");
 						this.docIice = this.contentIICE.find(this.docIice);
 						
@@ -121,7 +125,7 @@ public class AbrirPdfMB implements Serializable {
 				if (doc != null) {
 					this.rutaCM = doc.getUrlContent();
 				} else {
-					LOG.warn("No se encontró el documento con idCm="+idCm+" en el Content.");
+					LOG.warn("No se encontrï¿½ el documento con idCm="+idCm+" en el Content.");
 					this.rutaCM = null;
 				}
 			} else {
