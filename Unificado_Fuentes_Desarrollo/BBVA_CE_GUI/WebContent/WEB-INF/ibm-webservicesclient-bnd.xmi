@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<com.ibm.etools.webservice.wscbnd:ClientBinding xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:com.ibm.etools.webservice.wscbnd="http://www.ibm.com/websphere/appserver/schemas/5.0.2/wscbnd.xmi" xmi:id="ClientBinding_1438298152363">
-  <serviceRefs xmi:id="ServiceRef_1438298152363" serviceRefLink="service/ContentServiceImplService">
-    <portQnameBindings xmi:id="PortQnameBinding_1438298152364" portQnameNamespaceLink="http://impl.service.cm.bbva.ibm.com" portQnameLocalNameLink="ContentServiceImpl" overriddenEndpointURI="http://118.180.60.70:80/PLDWEBCM/services/ContentServiceImpl"/>
-  </serviceRefs>
-</com.ibm.etools.webservice.wscbnd:ClientBinding>
