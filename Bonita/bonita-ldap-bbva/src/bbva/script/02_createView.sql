@@ -134,7 +134,7 @@ select containerid
 , max(case name when 'clte_clasificacion' then value else '' end) clte_clasificacion
 , max(case name when 'num_tramite' then value else '' end) num_tramite
 , max(case name when 'usu_registrante' then value else '' end) usu_registrante
-, max(case name when 'ambito_registro' then value else '' end) ambito_registro
+, max(case name when 'ambito_registrante' then value else '' end) ambito_registro
 from fastpyme.data_instance_detail
 where containertype='PROCESS_INSTANCE'
 group by containerid, containertype, tenantid;
@@ -156,7 +156,7 @@ select containerid
 , max(case name when 'clte_clasificacion' then value else '' end) clte_clasificacion
 , max(case name when 'num_tramite' then value else '' end) num_tramite
 , max(case name when 'usu_registrante' then value else '' end) usu_registrante
-, max(case name when 'ambito_registro' then value else '' end) ambito_registro
+, max(case name when 'ambito_registrante' then value else '' end) ambito_registro
 from fastpyme.arch_data_instance_detail
 where containertype='PROCESS_INSTANCE'
 group by containerid, containertype, tenantid;

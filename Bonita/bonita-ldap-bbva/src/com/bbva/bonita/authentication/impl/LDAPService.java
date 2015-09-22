@@ -14,6 +14,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import javax.xml.namespace.QName;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bonitasoft.engine.api.IdentityAPI;
 import org.bonitasoft.engine.exception.AlreadyExistsException;
 import org.bonitasoft.engine.exception.CreationException;
@@ -211,7 +212,7 @@ public class LDAPService {
             ObtenerOficinaResponse obtenerOficinaResponse = port.obtenerOficina(obtenerOficinaRequest);
             if(obtenerOficinaResponse != null && obtenerOficinaResponse.getOficina() != null) {
                 result[0] = codigoCentro + " - " + obtenerOficinaResponse.getOficina().getNombreOficina();
-                result[1] = obtenerOficinaResponse.getOficina().getTerritorio().getId();
+                result[1] = "0" + StringUtils.right(obtenerOficinaResponse.getOficina().getTerritorio().getId().trim(), 3);
                 result[2] = codigoCentro;
             } else {
                 logger.log(Level.SEVERE, "Codigo de centro " + codigoCentro + " no registrado");
