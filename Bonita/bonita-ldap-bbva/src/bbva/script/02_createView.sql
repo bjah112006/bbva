@@ -162,7 +162,7 @@ where containertype='PROCESS_INSTANCE'
 group by containerid, containertype, tenantid;
 
 -- drop view if exists fastpyme.instance;
-create view fastpyme.instance as
+create or replace view fastpyme.instance as
 select
       a.name
     , a.version 
@@ -179,7 +179,7 @@ select
     , a.username
     , a.firstname
     , a.lastname
-    , case when a.estacion != 'OFICINA' then a.estacion else (case when length(b.usu_registrante) != 0 then 'OFICINA' else 'FUVEX' end) end estacion
+    , case when a.estacion != 'OFICINA' then a.estacion else (case when length(b.usu_registrante) = 0 then 'OFICINA' else 'FUVEX' end) end estacion
     , b.tipo_doi_cliente
     , b.num_doi_cliente
     , b.nombre_cliente
@@ -200,7 +200,7 @@ a.tenantid=b.tenantid and
 a.rootprocessinstanceid=b.containerid;
 
 -- drop view if exists fastpyme.arch_instance;
-create view fastpyme.arch_instance as
+create or replace view fastpyme.arch_instance as
 select
       a.name
     , a.version 
@@ -217,7 +217,7 @@ select
     , a.username
     , a.firstname
     , a.lastname
-    , case when a.estacion != 'OFICINA' then a.estacion else (case when length(b.usu_registrante) != 0 then 'OFICINA' else 'FUVEX' end) end estacion
+    , case when a.estacion != 'OFICINA' then a.estacion else (case when length(b.usu_registrante) = 0 then 'OFICINA' else 'FUVEX' end) end estacion
     , b.tipo_doi_cliente
     , b.num_doi_cliente
     , b.nombre_cliente
