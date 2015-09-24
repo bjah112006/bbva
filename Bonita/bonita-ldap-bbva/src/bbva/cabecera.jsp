@@ -68,7 +68,6 @@
 									} else {
 										response.getWriter().println("<td style='color:#000000;background-color:#EAF2D3;font-size:12px;'>...</td>");
 									}
-									
 								}
 							}
 						response.getWriter().println("</tr>");
