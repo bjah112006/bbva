@@ -58,7 +58,7 @@ import com.bbva.bonita.util.Utils;
 import com.everis.util.db.SQLUtil;
 import com.everis.util.db.mapper.impl.MapMapperImpl;
 
-public class Listados implements RestApiController {
+public class Listado implements RestApiController {
 
     Logger logger
     APISession apiSession
@@ -90,17 +90,35 @@ public class Listados implements RestApiController {
             response.setDetalleSolicitudAreas(new ArrayList<Map<String, Object>>())
             response.setTotalDetalleSolicitudAreas(-1)
             
-            String tipoConsulta = isNullRequestParam(requestAccessor, "tipoConsulta")
+            String tipoConsulta = isNullRequestParam(request, "tipoConsulta")
             
             switch(tipoConsulta) {
                 case "red":
                     consultarTipoRed(response)
                     break;
                 case "areas":
-                    String tipoRed = isNullRequestParam(requestAccessor, "tipoRed")
+                    String tipoRed = isNullRequestParam(request, "tipoRed")
                     consultarAreas(response, tipoRed)
                     break;
                 case "detalle":
+                    String query = """
+                    select codigo_centro_negocio
+                        , sum(case when taskname='Asignar Evaluacion' or taskname='Asignar Evaluación' then 1 else 0 end) ASIGNAR_EVALUACION
+                        , sum(case when taskname='Autorizar Aprobacion' or taskname='Autorizar Aprobación' then 1 else 0 end) AUTORIZAR_EVALUACION
+                        , sum(case when taskname='Evaluar Riesgo Campo' then 1 else 0 end) EVALUAR_RIESGO_CAMPO
+                        , sum(case when taskname='Evaluar Riesgo Mesa' then 1 else 0 end) EVALUAR_RIESGO_MESA
+                        , sum(case when taskname='Registrar Solicitud ' then 1 else 0 end) REGISTRAR_SOLICITUD
+                        , sum(case when taskname='Realizar Desembolso' then 1 else 0 end) REALIZAR_DESEMBOLSO
+                        , sum(case when taskname='Revisar Resultado Dictamen' then 1 else 0 end) REVISAR_RESULTADO_DICTAMEN
+                        , sum(case when taskname='Subsanar Documentacion' or taskname='Subsanar Documentación' then 1 else 0 end) SUBSANAR_DOCUMENTACION
+                        , sum(case when taskname='Validar Documentacion' or taskname='Validar Documentación' then 1 else 0 end) VALIDAR_DOCUMENTACION
+                        , 0 TOTAL
+                    from fastpyme.instance
+                    group by codigo_centro_negocio order by codigo_centro_negocio
+                    """
+                    List<Map<String, Object>> rows = executeQuery(query)
+                    response.setDetalleSolicitudAreas(rows)
+                    response.setTotalDetalleSolicitudAreas(rows.size())
                     break;
                 default:
                     break;

@@ -118,7 +118,7 @@ select * from public.crosstab(
 */
 
 -- drop view if exists fastpyme.data_instance;
-create view fastpyme.data_instance as
+create or replace view fastpyme.data_instance as
 select containerid
 , containertype
 , tenantid
@@ -135,12 +135,13 @@ select containerid
 , max(case name when 'num_tramite' then value else '' end) num_tramite
 , max(case name when 'usu_registrante' then value else '' end) usu_registrante
 , max(case name when 'ambito_registrante' then value else '' end) ambito_registro
+, max(case name when 'codigo_centro_negocio' then value else '' end) codigo_centro_negocio
 from fastpyme.data_instance_detail
 where containertype='PROCESS_INSTANCE'
 group by containerid, containertype, tenantid;
 
 -- drop view if exists fastpyme.arch_data_instance;
-create view fastpyme.arch_data_instance as
+create or replace view fastpyme.arch_data_instance as
 select containerid
 , containertype
 , tenantid
@@ -157,6 +158,7 @@ select containerid
 , max(case name when 'num_tramite' then value else '' end) num_tramite
 , max(case name when 'usu_registrante' then value else '' end) usu_registrante
 , max(case name when 'ambito_registrante' then value else '' end) ambito_registro
+, max(case name when 'codigo_centro_negocio' then value else '' end) codigo_centro_negocio
 from fastpyme.arch_data_instance_detail
 where containertype='PROCESS_INSTANCE'
 group by containerid, containertype, tenantid;
@@ -194,6 +196,7 @@ select
     , b.usu_registrante
     , b.ambito_registro
     , a.url
+	, b.codigo_centro_negocio
 from fastpyme.task_pending a
 inner join fastpyme.data_instance b on 
 a.tenantid=b.tenantid and 
@@ -232,6 +235,7 @@ select
     , b.usu_registrante
     , b.ambito_registro
     , a.url
+	, b.codigo_centro_negocio
 from fastpyme.arch_task_pending a
 inner join fastpyme.arch_data_instance b on 
 a.tenantid=b.tenantid and 

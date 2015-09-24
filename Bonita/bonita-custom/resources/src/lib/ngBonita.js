@@ -550,3 +550,7 @@ angular.module('ngBonita').factory('ConsultaDocumentos', function ($resource, bo
 
 	return $resource(bonitaConfig.getBonitaUrl() + '/API/extension/documents', data);
 });
+
+angular.module('ngBonita').factory('Listado', function ($resource, bonitaConfig) {
+	return $resource(bonitaConfig.getBonitaUrl() + '/API/extension/listado', {});
+});

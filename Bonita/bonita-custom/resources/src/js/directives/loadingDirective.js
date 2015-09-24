@@ -11,12 +11,16 @@ bonitaApp.directive('loading', ['$http', '$timeout', function ($http, $timeout) 
             scope.$watch(scope.isLoading, function (v) {
                 if(v){
 					$timeout(function(){
-						window.parent.document.getElementById("initloader").style.display = "block";
+						if(window.parent.document.getElementById("initloader") != null) {
+							window.parent.document.getElementById("initloader").style.display = "block";
+						}
 					}, 0);
                     elm.removeClass("hide");
                 }else{
 					$timeout(function(){
-						window.parent.document.getElementById("initloader").style.display = "none";
+						if(window.parent.document.getElementById("initloader") != null) {
+							window.parent.document.getElementById("initloader").style.display = "none";
+						}
 					}, 0);
                     elm.addClass("hide");
                 }
