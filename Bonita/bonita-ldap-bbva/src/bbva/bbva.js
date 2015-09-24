@@ -198,9 +198,7 @@ abrirConsulta = function(page) {
 				$(".bbva-consulta").addClass("current");
 			} else if(page == "cuadromando"){
 				$(".bbva-cuadro").addClass("current");
-			} else{
-				$(".bbva-documento").addClass("current");
-			}
+			} 
 
         	bodyContent.html(data);
             bodyContent.find("#panelIzq").css("height", height + "px");
@@ -257,8 +255,6 @@ $(document).bind('DOMNodeInserted', function(event) {
             $("<li class='bbva-consulta'><a class='bbva-consulta' href='javascript: void(0);' onclick='abrirConsulta(\"\")'>Consulta</a></li>").insertAfter($(event.target));
         } else if($(event.target).hasClass("bbva-consulta")) {
             $("<li class='bbva-cuadro'><a class='bbva-cuadro' href='javascript: void(0);' onclick='abrirConsulta(\"cuadromando\")'>Cuadro de Mando</a></li>").insertAfter($(event.target));
-        } else if($(event.target).hasClass("bbva-cuadro")) {
-            $("<li class='bbva-documento'><a class='bbva-documento' href='javascript: void(0);' onclick='abrirConsulta(\"documents\")'>Documentos</a></li>").insertAfter($(event.target));
         }
     }
 	validarDocumento();
