@@ -1,9 +1,51 @@
-abstractControllers.controller('DialogContentController', ['$scope', '$modalInstance', 'rowSelect', function DialogContentController($scope, $modalInstance, rowSelect) {
-	$scope.rowSelect = rowSelect;
+bonitaApp.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+            
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);
 
+bonitaApp.service('fileUpload', ['$http', function ($http) {
+    this.uploadFileToUrl = function(file, uploadUrl, rowSelect, bonitaConfig){
+        var fd = new FormData();
+        fd.append('file', file);
+        $http.post(uploadUrl, fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        })
+        .success(function(result){
+        	//TODO: ACTUALIZAMOS EL DOCUMENTO
+        	$http.put(bonitaConfig.getBonitaUrl() + '/API/bpm/caseDocument/' + rowSelect.documentid, { 
+				'file': result,
+				'fileName': file.name
+			}).success(function(result) {
+			    alert("Se actualizó el documento");
+			}).error(function(error) {
+				console.log(error);
+			});
+        })
+        .error(function(error){
+        });
+    }
+}]);
+
+abstractControllers.controller('DialogUpdateController', ['$scope', '$modalInstance', 'rowSelect', '$http', 'bonitaConfig', 'fileUpload',
+ function DialogUpdateController($scope, $modalInstance, rowSelect, $http, bonitaConfig, fileUpload) {
+	$scope.rowSelect = rowSelect;
 	$scope.ok = function () {
-		//TODO: ACTUALIZA ARCHIVO
-    	$modalInstance.close();
+		var file = $scope.myFile;
+		var uploadUrl = bonitaConfig.getBonitaUrl() + "/portal/fileUpload";
+		fileUpload.uploadFileToUrl(file, uploadUrl, rowSelect, bonitaConfig);
+		$modalInstance.close();
   	};
 
 	$scope.cancel = function () {
@@ -12,15 +54,14 @@ abstractControllers.controller('DialogContentController', ['$scope', '$modalInst
 	
 }]);
 
-abstractControllers.controller('DialogDeleteController', ['$scope', '$modalInstance', 'rowSelect', '$http', 'bonitaConfig', 
- function DialogDeleteController($scope, $modalInstance, rowSelect, $http, bonitaConfig) {
+abstractControllers.controller('DialogDeleteController', ['$scope', '$modalInstance', 'rowSelect', '$http', 'bonitaConfig', 'scope',
+ function DialogDeleteController($scope, $modalInstance, rowSelect, $http, bonitaConfig, scope) {
 	$scope.rowSelect = rowSelect;
-
 	$scope.ok = function () {
-		// TODO: Elimina archivo
-		//$http.delete(bonitaConfig.getBonitaUrl() + '/API/bpm/caseDocument/' + rowSelect.documentid);
-		$scope.buscarDocumentos();
+		// TODO: ELIMINAR DOCUMENTO
+		$http.delete(bonitaConfig.getBonitaUrl() + '/API/bpm/caseDocument/' + rowSelect.documentid);
 		$modalInstance.close();
+		scope.buscarDocumentos();
   	};
 
 	$scope.cancel = function () {
@@ -36,30 +77,30 @@ function ConsultaDocumentosController($scope, $http, ConsultaDocumentos, bonitaC
 	var columnDefs = [
         {headerName: "Fecha", field: "fecha_documento", width: 150},
         {headerName: "Nombre Archivo", field: "filename_mapping", width: 250},
-        {headerName: "", field: "documentid", width: 100, cellRenderer: function(params) {
-        	var html = "<label ng-click='editar()' style='cursor:pointer;text-align:center'>Editar<label/>";
+        {headerName: "", field: "", width: 100, cellRenderer: function(params) {
+        	var html = "<label ng-click='editar()' style='cursor:pointer;'>Editar<label/>";
             var resultElement = document.createElement("div");
     		resultElement.innerHTML = html;
 
     		params.$scope.editar = function(){
     			$timeout(function(){
-    				console.log($scope.gridDocuments.selectedRows[0]);
-    				console.log(params.value);
+    				/*console.log($scope.gridDocuments.selectedRows[0]);
+    				console.log(params.value);*/
     				$scope.rowSelect = $scope.gridDocuments.selectedRows[0];
-    				$scope.open();
+    				$scope.abrirActualizar();
     			}, 0)
     		};
             return resultElement;
          }},
          {headerName: "", field: "documentid", width: 100, cellRenderer: function(params) {
-         	var html = "<label ng-click='eliminar()' style='cursor:pointer;text-align:center'>Eliminar<label/>";
+         	var html = "<label ng-click='eliminar()' style='cursor:pointer;'>Eliminar<label/>";
              var resultElement = document.createElement("div");
      		resultElement.innerHTML = html;
 
      		params.$scope.eliminar = function(){
      			$timeout(function(){
-     				console.log($scope.gridDocuments.selectedRows[0]);
-     				console.log(params.value);
+     				/*console.log($scope.gridDocuments.selectedRows[0]);
+     				console.log(params.value);*/
      				$scope.rowSelect = $scope.gridDocuments.selectedRows[0];
      				$scope.abrirEliminar();
      			}, 0)
@@ -68,11 +109,11 @@ function ConsultaDocumentosController($scope, $http, ConsultaDocumentos, bonitaC
           }}
     ];
 	
-	$scope.open = function (size) {
+	$scope.abrirActualizar = function (size) {
 		var modalInstance = $modal.open({
 			animation: $scope.animationsEnabled,
 			templateUrl: 'dialogContent.html',
-			controller: 'DialogContentController',
+			controller: 'DialogUpdateController',
 			size: size,
 			resolve: {
 				rowSelect: function () {
@@ -91,6 +132,9 @@ function ConsultaDocumentosController($scope, $http, ConsultaDocumentos, bonitaC
 			resolve: {
 				rowSelect: function () {
 					return $scope.rowSelect;
+				},
+				scope: function() {
+					return $scope;
 				}
 			}
 		});
@@ -155,7 +199,7 @@ function ConsultaDocumentosController($scope, $http, ConsultaDocumentos, bonitaC
 		};
 		
 		parameters.f +=  "instance='" + $scope.nroSolicitud + "'";
-
+	
 		ConsultaDocumentos.get(parameters).$promise.then(function(documentosSolicitudes){
 			var dataSource = {
 				rowCount: documentosSolicitudes.totalDocumentos,
