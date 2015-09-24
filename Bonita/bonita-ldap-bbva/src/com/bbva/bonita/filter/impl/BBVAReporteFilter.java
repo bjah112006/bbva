@@ -33,7 +33,8 @@ public class BBVAReporteFilter implements Filter {
 	private static final Logger logger = Logger.getLogger("BBVAReporteFilter");
 	private static final String xRequestWith = "X-Requested-With";
 	private static final String facesRequest = "Faces-Request";
-	private static final String MANAGER_GROUP="GESTION";
+	private static final String MANAGER_GROUP = "GESTION";
+	private static final String SOPORTE_GROUP = "SOPORTE";
 	
 	@Override
 	public void destroy() {
@@ -44,6 +45,7 @@ public class BBVAReporteFilter implements Filter {
 		String writeHTML = "";
 		boolean isAjaxRequest = true;
 		boolean visibleReport=false;
+		boolean visibleDocument = false;
 		
 		final HttpServletRequestAccessor requestAccessor = new HttpServletRequestAccessor((HttpServletRequest) request);
 		final APISession apiSession = requestAccessor.getApiSession();
@@ -63,7 +65,8 @@ public class BBVAReporteFilter implements Filter {
 		if(userName!=null){
 			try {
 				IdentityAPI identityAPI=TenantAPIAccessor.getIdentityAPI(apiSession);
-				visibleReport=isMemberFromManagerGroup(identityAPI,userName);
+				visibleReport=isMemberFromManagerGroup(identityAPI,userName,MANAGER_GROUP);
+				visibleDocument = isMemberFromManagerGroup(identityAPI,userName,SOPORTE_GROUP);
 			} catch (Exception e) {
 				logger.log(Level.SEVERE, "Error en TenantAPIAccessor.getIdentityAPI(apiSession).", e);
 			}
@@ -80,6 +83,18 @@ public class BBVAReporteFilter implements Filter {
 				writeHTML = doc.outerHtml();
 			}
 		}
+		
+		if(visibleDocument){
+			logger.info("Usuario "+userName+" tiene acceso a la consulta y actualizacion de documentos.");
+			Document doc = Jsoup.parse(writeHTML);
+			doc.outputSettings().prettyPrint(false);
+			Elements elements = doc.getElementsByTag("head");
+			if(elements != null && !elements.isEmpty()) {
+				elements.append("<script type='text/javascript' src='bbva/soporte.js'></script>");
+				elements.append("<link rel='stylesheet' type='text/css' href='bbva/bbva.css' />");
+				writeHTML = doc.outerHtml();
+			}
+		}
 
 		logger.info("Interceptado por el filtro BBVAReporteFilter");
 		// logger.info(writeHTML);
@@ -88,7 +103,7 @@ public class BBVAReporteFilter implements Filter {
 		out.close();
 	}
 	
-	private boolean isMemberFromManagerGroup(IdentityAPI identityAPI,String userName) {
+	private boolean isMemberFromManagerGroup(IdentityAPI identityAPI,String userName, String groupName) {
 		String group = "";
 		try {
 			User user=identityAPI.getUserByUserName(userName);
@@ -97,7 +112,7 @@ public class BBVAReporteFilter implements Filter {
 				for (UserMembership membership : lst_membership) {
 					group = membership.getGroupName();
 					logger.info("Group name of "+userName+ " is "+group);
-					if(group.equalsIgnoreCase(MANAGER_GROUP)){
+					if(group.equalsIgnoreCase(groupName)){
 						return true;
 					}
 				}
