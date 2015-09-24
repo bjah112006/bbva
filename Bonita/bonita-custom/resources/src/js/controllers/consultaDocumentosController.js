@@ -38,20 +38,22 @@ bonitaApp.service('fileUpload', ['$http', function ($http) {
     }
 }]);
 
-abstractControllers.controller('DialogUpdateController', ['$scope', '$modalInstance', 'rowSelect', '$http', 'bonitaConfig', 'fileUpload',
- function DialogUpdateController($scope, $modalInstance, rowSelect, $http, bonitaConfig, fileUpload) {
+abstractControllers.controller('DialogUpdateController', ['$scope', '$modalInstance', 'rowSelect', '$http', 'bonitaConfig', 'fileUpload', 'scope',
+ function DialogUpdateController($scope, $modalInstance, rowSelect, $http, bonitaConfig, fileUpload, scope) {
 	$scope.rowSelect = rowSelect;
 	$scope.ok = function () {
-		var file = $scope.myFile;
-		var uploadUrl = bonitaConfig.getBonitaUrl() + "/portal/fileUpload";
-		fileUpload.uploadFileToUrl(file, uploadUrl, rowSelect, bonitaConfig);
-		$modalInstance.close();
+		if(confirm("¿Está seguro que desea actualizar el documento?")){
+			var file = $scope.myFile;
+			var uploadUrl = bonitaConfig.getBonitaUrl() + "/portal/fileUpload";
+			fileUpload.uploadFileToUrl(file, uploadUrl, rowSelect, bonitaConfig);
+			$modalInstance.close();
+			scope.buscarDocumentos();
+		}
   	};
 
 	$scope.cancel = function () {
 		$modalInstance.dismiss('cancel');
 	};
-	
 }]);
 
 abstractControllers.controller('DialogDeleteController', ['$scope', '$modalInstance', 'rowSelect', '$http', 'bonitaConfig', 'scope',
@@ -75,8 +77,13 @@ function ConsultaDocumentosController($scope, $http, ConsultaDocumentos, bonitaC
 	$scope.nroSolicitud = '';
  
 	var columnDefs = [
-        {headerName: "Fecha", field: "fecha_documento", width: 150},
-        {headerName: "Nombre Archivo", field: "filename_mapping", width: 250},
+	    {headerName: "Fecha", field: "fecha_documento", width: 150},
+        {headerName: "Nombre Archivo", field: "filename", width: 250, cellRenderer: function(params) {
+            var resultElement = document.createElement("a");
+			resultElement.href = bonitaConfig.getBonitaUrl() + "/portal/documentDownload?fileName=" + params.value + "&contentStorageId=" + params.data.documentid;
+			resultElement.innerHTML = params.value;
+            return resultElement;
+        }},
         {headerName: "", field: "", width: 100, cellRenderer: function(params) {
         	var html = "<label ng-click='editar()' style='cursor:pointer;'>Editar<label/>";
             var resultElement = document.createElement("div");
@@ -118,6 +125,9 @@ function ConsultaDocumentosController($scope, $http, ConsultaDocumentos, bonitaC
 			resolve: {
 				rowSelect: function () {
 					return $scope.rowSelect;
+				},
+				scope: function() {
+					return $scope;
 				}
 			}
 		});
