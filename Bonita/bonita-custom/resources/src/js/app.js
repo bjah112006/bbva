@@ -1,6 +1,6 @@
 'use strict';
 
-var bonitaApp = angular.module('bonitaApp', ['ngRoute', 'ngSanitize', 'ngBonita', 'abstractControllers', 'ui.bootstrap', 'ui.select', 'angularGrid', "chart.js"]);
+var bonitaApp = angular.module('bonitaApp', ['ngRoute', 'ngSanitize', 'ngBonita', 'abstractControllers', 'ui.bootstrap', 'ui.select', 'angularGrid', "highcharts-ng"]);
 var abstractControllers = angular.module('abstractControllers', []);
 var SessionController = bonitaApp.controller('SessionController', ['$scope', 'BonitaSession', 'User', 'bonitaConfig', '$location', '$q', 
 	function SessionController($scope, BonitaSession, User, bonitaConfig, $location, $q) {

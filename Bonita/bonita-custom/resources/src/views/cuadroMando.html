@@ -57,11 +57,14 @@
     <fieldset>
         <legend>Resultado</legend>
         <div class="row">
-            <div style="height: 250px; width: 820px; margin: auto;" ag-grid="gridInstances"></div>
+            <div style="height: 300px; width: 820px; margin: auto;" ag-grid="gridInstances"></div>
         </div>
 		<div class="form-group">
-		    <canvas id="bar" class="chart chart-bar" data="bar.data" labels="bar.labels" series="bar.series"></canvas>
-		    <canvas id="pie" class="chart chart-pie" data="pie.data" labels="pie.labels" click="pie.onclick"></canvas>
+			<highchart id="chartPie" config="chartConfigPie" style="height: 450px; width: 820px; margin: auto;" ng-hide="chartConfigPie.hide" ></highchart>
+			<!--
+			<canvas style="height: 250px; width: 820px; margin: auto;" id="pie" class="chart chart-pie" data="pie.data" labels="pie.labels" legend="true" click="pie.onclick" ></canvas>
+		    <canvas style="height: 250px; width: 820px; margin: auto;" id="bar" class="chart chart-bar" data="bar.data" labels="bar.labels" series="bar.series" ng-hide="bar.hide" ></canvas>
+			-->
 		</div>
     </fieldset>
 </div>

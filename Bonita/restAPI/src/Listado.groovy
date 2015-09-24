@@ -101,6 +101,13 @@ public class Listado implements RestApiController {
                     consultarAreas(response, tipoRed)
                     break;
                 case "detalle":
+                    String centroNegocio = isNullRequestParam(request, "centroNegocio");
+                    String where = "";
+                    
+                    if(!centroNegocio.equalsIgnoreCase("[Todos]")) {
+                        where = "where codigo_centro_negocio = '${centroNegocio}'";
+                    }
+                    
                     String query = """
                     select codigo_centro_negocio
                         , sum(case when taskname='Asignar Evaluacion' or taskname='Asignar Evaluación' then 1 else 0 end) ASIGNAR_EVALUACION
@@ -114,6 +121,7 @@ public class Listado implements RestApiController {
                         , sum(case when taskname='Validar Documentacion' or taskname='Validar Documentación' then 1 else 0 end) VALIDAR_DOCUMENTACION
                         , 0 TOTAL
                     from fastpyme.instance
+                    ${where} 
                     group by codigo_centro_negocio order by codigo_centro_negocio
                     """
                     List<Map<String, Object>> rows = executeQuery(query)
