@@ -15,7 +15,7 @@ bonitaApp.directive('fileModel', ['$parse', function ($parse) {
 }]);
 
 bonitaApp.service('fileUpload', ['$http', function ($http) {
-    this.uploadFileToUrl = function(file, uploadUrl, rowSelect, bonitaConfig){
+    this.uploadFileToUrl = function(file, uploadUrl, rowSelect, bonitaConfig, scope, $modalInstance){
         var fd = new FormData();
         fd.append('file', file);
         $http.post(uploadUrl, fd, {
@@ -29,6 +29,8 @@ bonitaApp.service('fileUpload', ['$http', function ($http) {
 				'fileName': file.name
 			}).success(function(result) {
 			    alert("Se actualizó el documento");
+			    $modalInstance.close();
+			    scope.buscarDocumentos();
 			}).error(function(error) {
 				console.log(error);
 			});
@@ -45,9 +47,7 @@ abstractControllers.controller('DialogUpdateController', ['$scope', '$modalInsta
 		if(confirm("¿Está seguro que desea actualizar el documento?")){
 			var file = $scope.myFile;
 			var uploadUrl = bonitaConfig.getBonitaUrl() + "/portal/fileUpload";
-			fileUpload.uploadFileToUrl(file, uploadUrl, rowSelect, bonitaConfig);
-			$modalInstance.close();
-			scope.buscarDocumentos();
+			fileUpload.uploadFileToUrl(file, uploadUrl, rowSelect, bonitaConfig, scope, $modalInstance);
 		}
   	};
 
