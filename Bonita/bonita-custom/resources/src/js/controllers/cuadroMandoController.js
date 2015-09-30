@@ -24,7 +24,14 @@ abstractControllers.controller('CuadroMandoController', ['$scope', '$http', '$ti
 			resultElement.target="_top"
 			resultElement.href = "javascript:void(0);";
 			resultElement.onclick = function() {
-				console.log("Hola Mundo")
+				var parameters = {
+					tipoConsulta: "detalleCentroNegocio",
+					centroNegocio: $(this).text()
+				};
+				Listado.get(parameters).$promise.then(function(request){
+					$scope.chartConfig.hide = true;
+					console.log(request);
+				});
 			};
 			resultElement.innerHTML = params.value;
             return resultElement;
@@ -46,64 +53,46 @@ abstractControllers.controller('CuadroMandoController', ['$scope', '$http', '$ti
         rowData: null
     };
 
-    $scope.bar = {
+	$scope.chartDetalle = {
 		hide: true,
-        labels: ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
-        data: [
-            [300, 500, 100]
-        ],
-        series: ['Series A']
-    };
+	};
 
-    $scope.chartConfigPie = {
+    $scope.chartConfig = {
 		hide: true,
 		loading: false,
         chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
+			plotBackgroundColor: null,
+        	plotBorderWidth: null,
+	        plotShadow: false,
+    	    type: 'pie'
         },
-        title: {
+		title: {
             text: 'Centros de Negocio'
-        },
-		subtitle: {
-            text: 'Demo'
-        },
+		},
+			subtitle: {
+            text: ''
+		},
         tooltip: {
-            pointFormat: '{series.name}: <b>{point.y:.1f}%</b>'
-        },
+        	pointFormat: '{series.name}: <b>{point.y:.0f}</b>'
+		},
         plotOptions: {
-            pie: {
-                allowPointSelect: true,
+       		    pie: {
+           		allowPointSelect: true,
                 cursor: 'pointer',
-                dataLabels: {
-                    enabled: true,
-                    format: '<b>{point.name}</b>: {point.y:.1f} %',
+   		        dataLabels: {
+           	    	enabled: true,
+                   	format: '{point.name}: {point.y:.0f}',
                     style: {
-                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                    },
-                    connectorColor: 'silver'
-                }
-            }
-        },
-		legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'top',
-            x: -40,
-            y: 80,
-            floating: true,
-            borderWidth: 1,
-            backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-            shadow: true
-        },
+	                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+   	            	}
+       	    	}
+       		}
+   		},
         series: [{
-			type: "pie",
-            name: "Centro de Negocio",
-            data: []
-        }]
-    };
+   		    "name": "Centro de Negocio",
+            "data": []
+   		}]
+	};
 
 	highchartsNG.ready(function(){
 		Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
@@ -120,14 +109,18 @@ abstractControllers.controller('CuadroMandoController', ['$scope', '$http', '$ti
         	};
 	    });
 	}, this);
-	
-	$scope.buscar = function(){
+
+	loadingPage = function() {
 		$timeout(function(){
 			var initLoader = window.parent.document.getElementById("initloader");
 			if(initLoader != null) {
 				initLoader.style.display = "block";
 			}
 		}, 0);
+	};
+
+	$scope.buscar = function(){
+		loadingPage();
 
 		var parameters = {
 			tipoConsulta: "detalle",
@@ -168,8 +161,8 @@ abstractControllers.controller('CuadroMandoController', ['$scope', '$http', '$ti
 			$scope.gridInstances.rowData = request.detalleSolicitudAreas;
 			$scope.gridInstances.api.onNewRows();
 
-			$scope.chartConfigPie.hide = false;
-			$scope.chartConfigPie.series[0].data = data;
+			$scope.chartConfig.hide = false;
+	        $scope.chartConfig.series[0].data = data;
 		});
 	};
 }]);

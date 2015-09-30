@@ -9,17 +9,18 @@ bonitaApp.directive('loading', ['$http', '$timeout', function ($http, $timeout) 
             };
 
             scope.$watch(scope.isLoading, function (v) {
+				var initLoader = window.parent.document.getElementById("initloader");
                 if(v){
 					$timeout(function(){
-						if(window.parent.document.getElementById("initloader") != null) {
-							window.parent.document.getElementById("initloader").style.display = "block";
+						if(initLoader != null) {
+							initLoader.style.display = "block";
 						}
 					}, 0);
                     elm.removeClass("hide");
                 }else{
 					$timeout(function(){
-						if(window.parent.document.getElementById("initloader") != null) {
-							window.parent.document.getElementById("initloader").style.display = "none";
+						if(initLoader != null) {
+							initLoader.style.display = "none";
 						}
 					}, 0);
                     elm.addClass("hide");

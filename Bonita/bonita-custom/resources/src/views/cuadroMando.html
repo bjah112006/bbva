@@ -60,11 +60,8 @@
             <div style="height: 300px; width: 820px; margin: auto;" ag-grid="gridInstances"></div>
         </div>
 		<div class="form-group">
-			<highchart id="chartPie" config="chartConfigPie" style="height: 450px; width: 820px; margin: auto;" ng-hide="chartConfigPie.hide" ></highchart>
-			<!--
-			<canvas style="height: 250px; width: 820px; margin: auto;" id="pie" class="chart chart-pie" data="pie.data" labels="pie.labels" legend="true" click="pie.onclick" ></canvas>
-		    <canvas style="height: 250px; width: 820px; margin: auto;" id="bar" class="chart chart-bar" data="bar.data" labels="bar.labels" series="bar.series" ng-hide="bar.hide" ></canvas>
-			-->
+			<highchart id="chartGraf" config="chartConfig" style="height: 450px; width: 820px; margin: auto;" ng-hide="chartConfig.hide" ></highchart>
+			<highchart id="chartDetalle" config="chartDetalle" style="height: 450px; width: 820px; margin: auto;" ng-hide="chartDetalle.hide" ></highchart>
 		</div>
     </fieldset>
 </div>

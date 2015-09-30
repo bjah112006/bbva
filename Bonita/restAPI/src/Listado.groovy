@@ -91,6 +91,9 @@ public class Listado implements RestApiController {
             response.setTotalDetalleSolicitudAreas(-1)
             
             String tipoConsulta = isNullRequestParam(request, "tipoConsulta")
+            String query = ""
+            String centroNegocio = ""
+            List<Map<String, Object>> rows
             
             switch(tipoConsulta) {
                 case "red":
@@ -101,14 +104,14 @@ public class Listado implements RestApiController {
                     consultarAreas(response, tipoRed)
                     break;
                 case "detalle":
-                    String centroNegocio = isNullRequestParam(request, "centroNegocio");
+                    centroNegocio = isNullRequestParam(request, "centroNegocio");
                     String where = "";
                     
                     if(!centroNegocio.equalsIgnoreCase("[Todos]")) {
                         where = "where codigo_centro_negocio = '${centroNegocio}'";
                     }
                     
-                    String query = """
+                    query = """
                     select codigo_centro_negocio
                         , sum(case when taskname='Asignar Evaluacion' or taskname='Asignar Evaluación' then 1 else 0 end) ASIGNAR_EVALUACION
                         , sum(case when taskname='Autorizar Aprobacion' or taskname='Autorizar Aprobación' then 1 else 0 end) AUTORIZAR_EVALUACION
@@ -124,7 +127,20 @@ public class Listado implements RestApiController {
                     ${where} 
                     group by codigo_centro_negocio order by codigo_centro_negocio
                     """
-                    List<Map<String, Object>> rows = executeQuery(query)
+                    rows = executeQuery(query)
+                    response.setDetalleSolicitudAreas(rows)
+                    response.setTotalDetalleSolicitudAreas(rows.size())
+                    break;
+                case "detalleCentroNegocio":
+                    centroNegocio = isNullRequestParam(request, "centroNegocio")
+                    query = """
+                    select lastname || ' ' || firstname username, count(1) cant
+                    from fastpyme.instance
+                    where codigo_centro_negocio='${centroNegocio}'
+                    group by lastname || ' ' || firstname
+                    order by count(1) desc
+                    """
+                    rows = executeQuery(query)
                     response.setDetalleSolicitudAreas(rows)
                     response.setTotalDetalleSolicitudAreas(rows.size())
                     break;

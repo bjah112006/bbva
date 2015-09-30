@@ -226,6 +226,15 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
       if (config.credits) {
         mergedOptions.credits = config.credits;
       }
+      if (config.plotOptions) {
+        mergedOptions.plotOptions = config.plotOptions;
+      }
+	  if (config.series) {
+        mergedOptions.series = config.series;
+      }
+	  if (config.chart.type) {
+        mergedOptions.chart.type = config.chart.type;
+      }
       if(config.size) {
         if (config.size.width) {
           mergedOptions.chart.width = config.size.width;
@@ -234,6 +243,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
           mergedOptions.chart.height = config.size.height;
         }
       }
+
       return mergedOptions;
     };
 
@@ -354,7 +364,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
           var func = config.func || undefined;
           var chartType = getChartType(scope);
 
-          chart = new Highcharts[chartType](mergedOptions, func);
+		  // console.log(scope);
+		  // console.log(mergedOptions);
+
+          chart = new Highcharts[chartType](mergedOptions, func); // scope.config
 
           for (var i = 0; i < axisNames.length; i++) {
             if (config[axisNames[i]]) {
