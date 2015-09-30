@@ -24,7 +24,7 @@ bonitaApp.service('fileUpload', ['$http', function ($http) {
         })
         .success(function(result){
         	//TODO: ACTUALIZAMOS EL DOCUMENTO
-        	$http.put(bonitaConfig.getBonitaUrl() + '/API/bpm/caseDocument/' + rowSelect.documentid, { 
+        	$http.put(bonitaConfig.getBonitaUrl() + '/API/bpm/caseDocument/' + rowSelect.document_mapping_id, { 
 				'file': result,
 				'fileName': file.name
 			}).success(function(result) {
@@ -61,7 +61,7 @@ abstractControllers.controller('DialogDeleteController', ['$scope', '$modalInsta
 	$scope.rowSelect = rowSelect;
 	$scope.ok = function () {
 		// TODO: ELIMINAR DOCUMENTO
-		$http.delete(bonitaConfig.getBonitaUrl() + '/API/bpm/caseDocument/' + rowSelect.documentid);
+		$http.delete(bonitaConfig.getBonitaUrl() + '/API/bpm/caseDocument/' + rowSelect.document_mapping_id);
 		$modalInstance.close();
 		scope.buscarDocumentos();
   	};
