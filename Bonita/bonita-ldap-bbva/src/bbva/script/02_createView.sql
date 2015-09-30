@@ -1,4 +1,4 @@
-﻿-- drop extension tablefunc;
+-- drop extension tablefunc;
 -- create extension tablefunc schema public version "1.0";
 
 drop schema if exists fastpyme cascade;
@@ -248,6 +248,7 @@ select
 	, a.id as instance
 	, a.name as name_instance
 	, a.processdefinitionid as definition_id
+	, b.id as document_mapping_id
 	, b.documentid
 	, b.name as filename_mapping
 	, b.description as descripcion
@@ -255,8 +256,8 @@ select
 	, c.mimetype
 	, c.url
 from public.process_instance a  
-left join public.document_mapping b on a.id = b.PROCESSINSTANCEID  
-left join public.document c on b.documentid = c.id;
+inner join public.document_mapping b on a.id = b.PROCESSINSTANCEID  
+inner join public.document c on b.documentid = c.id;
 
 
 alter table fastpyme.arch_data_instance owner to bonita;
