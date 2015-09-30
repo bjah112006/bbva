@@ -72,6 +72,7 @@ public class ConsultaDocumentos implements RestApiController {
     RestApiResponse doHandle(HttpServletRequest request, PageResourceProvider pageResourceProvider, PageContext pageContext, RestApiResponseBuilder apiResponseBuilder, RestApiUtil restApiUtil) {
         logger = restApiUtil.logger
         ConsultaResponse response = consultar(request)
+		logger.log Level.SEVERE, "===> CANTIDAD DOCUMENTOS DEVUELTOS: " + response.getDocumentosSolicitudes().size()
 
         apiResponseBuilder.with {
             withResponse new JsonBuilder(response).toString()
@@ -108,7 +109,7 @@ public class ConsultaDocumentos implements RestApiController {
             logger.log Level.SEVERE, "===> P\u00E1gina: " + page
             logger.log Level.SEVERE, "===> Filas por p\u00E1gina: " + rowForPage
     
-            buscarDocumentosInstancias(filters, sorts, page, rowForPage, username, true, consultaResponse);
+            consultaResponse = buscarDocumentosInstancias(filters, sorts, page, rowForPage, username, true, consultaResponse);
         } catch(Exception e) {
             consultaResponse.setStatus("KO")
             consultaResponse.setError(exceptionToString(e))
@@ -142,7 +143,7 @@ public class ConsultaDocumentos implements RestApiController {
         return "select ${rowNumber}* from (${actv}) a"
     }
     
-    private void buscarDocumentosInstancias(String[] filters, String sorts, int page, int rowsForPage, String username, boolean active, ConsultaResponse response) {
+    private ConsultaResponse buscarDocumentosInstancias(String[] filters, String sorts, int page, int rowsForPage, String username, boolean active, ConsultaResponse response) {
         StringBuilder where = new StringBuilder("");
         StringBuilder orderBy = new StringBuilder("");
         Integer rowNum = (page * rowsForPage) + 1;
@@ -170,8 +171,11 @@ public class ConsultaDocumentos implements RestApiController {
             ) b where row_num >= ${rowNum} limit ${rowsForPage}"""
         logger.log Level.SEVERE, "===> Consulta: " + query
         
+        List<Map<String, Object>> records = executeQuery(query);
+        logger.log Level.SEVERE, "===> REGISTROS CONSULTA: " + records.size()
+        
         response.setDocumentosSolicitudes(new ArrayList<Map<String, Object>>())
-        response.getDocumentosSolicitudes().addAll(executeQuery(query))
+        response.getDocumentosSolicitudes().addAll(records)
         
         if(response.getDocumentosSolicitudes().size() < rowsForPage && page == 0) {
             response.setTotalDocumentos(response.getDocumentosSolicitudes().size())
@@ -190,6 +194,7 @@ public class ConsultaDocumentos implements RestApiController {
                 response.setTotalDocumentos(Long.parseLong(result.get(0).get("totalrows").toString()))
             }
         }
+        return response;
     }
     
     private List<Metadata> getMetadata(ResultSet result) {
@@ -233,20 +238,6 @@ public class ConsultaDocumentos implements RestApiController {
             
             while (rs.next()) {
                 row = mapper.proccess(rs, metadata)
-                logger.log Level.SEVERE, "============================================= "
-                logger.log Level.SEVERE, "=== ROW: " + row
-                logger.log Level.SEVERE, "=== ROWNUM: " + rs.getObject("row_num")
-                logger.log Level.SEVERE, "=== FECHADOCUMENTO: " + rs.getObject("fecha_documento")
-                logger.log Level.SEVERE, "=== INSTANCE: " + rs.getObject("instance")
-                logger.log Level.SEVERE, "=== TENANTID: " + rs.getObject("tenantid")
-                logger.log Level.SEVERE, "=== NAME_INSTANCE: " + rs.getObject("name_instance")
-                logger.log Level.SEVERE, "=== DEFINITION_ID: " + rs.getObject("definition_id")
-                logger.log Level.SEVERE, "=== FILENAME_MAPPING: " + rs.getObject("filename_mapping")
-                logger.log Level.SEVERE, "=== DESCRIPTION: " + rs.getObject("descripcion")
-                logger.log Level.SEVERE, "=== FILENAME: " + rs.getObject("filename")
-                logger.log Level.SEVERE, "=== MIMETYPE: " + rs.getObject("mimetype")
-                logger.log Level.SEVERE, "=== URL: " + rs.getObject("url")
-                logger.log Level.SEVERE, "============================================= "
                 result.add row;
             }
         } catch (Exception e) {
