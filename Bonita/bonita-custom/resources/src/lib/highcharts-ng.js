@@ -235,7 +235,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
 	  if (config.chart.type) {
         mergedOptions.chart.type = config.chart.type;
       }
-      if(config.size) {
+	  if (config.chart.legend) {
+        mergedOptions.chart.legend = config.chart.legend;
+      }
+	  if(config.size) {
         if (config.size.width) {
           mergedOptions.chart.width = config.size.width;
         }
