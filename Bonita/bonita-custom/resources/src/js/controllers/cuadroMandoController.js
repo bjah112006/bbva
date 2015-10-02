@@ -14,6 +14,7 @@ abstractControllers.controller('CuadroMandoController', ['$scope', '$http', '$ti
             request.areas.splice(0, 0, {"val_column1": "[Todos]"});
             $scope.centroNegocio = {"select": {"val_column1": "[Todos]"}};
             $scope.centroNegocios = request.areas;
+			$scope.disabledBuscar = false;
         });
     };
 
@@ -42,9 +43,9 @@ abstractControllers.controller('CuadroMandoController', ['$scope', '$http', '$ti
                     $scope.chartDetalle.xAxis.categories = _catergories;
                     $scope.chartDetalle.series = _series;
                     
-                    console.log(_series);
-                    console.log(_catergories);
-                    console.log(request);
+                    // console.log(_series);
+                    // console.log(_catergories);
+                    // console.log(request);
                 });
             };
             resultElement.innerHTML = params.value;
@@ -70,7 +71,9 @@ abstractControllers.controller('CuadroMandoController', ['$scope', '$http', '$ti
     $scope.chartDetalle = {
         hide: true,
         loading: false,
-        chart: { type: 'bar' },
+        chart: {
+			type: 'bar'
+		},
         title: { text: '' },
         subtitle: { text: '' },
         xAxis: {
@@ -96,6 +99,23 @@ abstractControllers.controller('CuadroMandoController', ['$scope', '$http', '$ti
             bar: {
                 dataLabels: {
                     enabled: true
+                }
+            },
+			series: {
+                cursor: 'pointer',
+                events: {
+                    click: function (event) {
+						console.log(this);
+						console.log(event.point);
+                        alert(this.name + ' clicked\n' +
+                              'Alt: ' + event.altKey + '\n' +
+                              'Control: ' + event.ctrlKey + '\n' +
+                              'Shift: ' + event.shiftKey + '\n' + 
+							  'Category: ' + event.point.category + '\n' +
+                              'value y: ' + event.point.y + '\n' +
+                              'value x: ' + event.point.x + '\n' +
+                              'Serie: ' + event.point.series.name);
+                    }
                 }
             }
         },
@@ -178,6 +198,7 @@ abstractControllers.controller('CuadroMandoController', ['$scope', '$http', '$ti
         }, 0);
     };
 
+	$scope.disabledBuscar = true;
     $scope.buscar = function(){
         loadingPage();
 
