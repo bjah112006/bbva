@@ -1,4 +1,4 @@
--- drop extension tablefunc;
+﻿-- drop extension tablefunc;
 -- create extension tablefunc schema public version "1.0";
 
 drop schema if exists fastpyme cascade;
@@ -93,9 +93,9 @@ inner join public.actor d on c.tenantid=d.tenantid and c.actorid=d.id
 left join public.user_ e on c.tenantid=e.tenantid and c.assigneeid=e.id
 where b.stateid=6 and c.stateid not in(4, 32);
 
-select * from arch_flownode_instance
-select * from flownode_instance
-select stateid, state_name from public.arch_process_instance
+-- select * from arch_flownode_instance
+-- select * from flownode_instance
+-- select stateid, state_name from public.arch_process_instance
 
 /*
 create view fastpyme.data_instance as
@@ -136,6 +136,7 @@ select containerid
 , max(case name when 'usu_registrante' then value else '' end) usu_registrante
 , max(case name when 'ambito_registrante' then value else '' end) ambito_registro
 , max(case name when 'codigo_centro_negocio' then value else '' end) codigo_centro_negocio
+, max(case name when 'codigo_cliente' then value else '' end) codigo_cliente
 from fastpyme.data_instance_detail
 where containertype='PROCESS_INSTANCE'
 group by containerid, containertype, tenantid;
@@ -159,6 +160,7 @@ select containerid
 , max(case name when 'usu_registrante' then value else '' end) usu_registrante
 , max(case name when 'ambito_registrante' then value else '' end) ambito_registro
 , max(case name when 'codigo_centro_negocio' then value else '' end) codigo_centro_negocio
+, max(case name when 'codigo_cliente' then value else '' end) codigo_cliente
 from fastpyme.arch_data_instance_detail
 where containertype='PROCESS_INSTANCE'
 group by containerid, containertype, tenantid;
@@ -196,7 +198,8 @@ select
     , b.usu_registrante
     , b.ambito_registro
     , a.url
-	, b.codigo_centro_negocio
+    , b.codigo_centro_negocio
+    , b.codigo_cliente
 from fastpyme.task_pending a
 inner join fastpyme.data_instance b on 
 a.tenantid=b.tenantid and 
@@ -235,7 +238,8 @@ select
     , b.usu_registrante
     , b.ambito_registro
     , a.url
-	, b.codigo_centro_negocio
+    , b.codigo_centro_negocio
+    , b.codigo_cliente
 from fastpyme.arch_task_pending a
 inner join fastpyme.arch_data_instance b on 
 a.tenantid=b.tenantid and 

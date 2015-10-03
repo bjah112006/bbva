@@ -159,6 +159,7 @@ body {
     border:1px solid #ccc;
 }
 
+#layout .legend,
 #layout legend {
     font-size: 12px;
     font-weight:bold;
@@ -167,6 +168,11 @@ body {
     border: 0px;
     width: auto;
     margin-bottom: 5px;
+}
+
+#layout .legend {
+	padding: 0px;
+	font-weight:normal;
 }
 
 @media (min-width: 900px) {

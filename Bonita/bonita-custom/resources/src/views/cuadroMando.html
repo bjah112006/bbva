@@ -15,7 +15,7 @@
                             <td>
                                 <ui-select 
                                     ng-model="tipoRed.select"
-									on-select="buscarCentros($item, $model)"
+                                    on-select="buscarCentros($item, $model)"
                                     theme="select2" 
                                     style="width: 220px;" 
                                     class="form-control" 
@@ -29,10 +29,11 @@
                                 </ui-select>
                             </td>
                             <td style="width: 25px;"></td>
-							<td><label class="control-label control-label-0">Centro de Negocio:&nbsp;</label></td>
+                            <td><label class="control-label control-label-0">Centro de Negocio:&nbsp;</label></td>
                             <td>
                                 <ui-select 
                                     ng-model="centroNegocio.select"
+									on-select="cambioCentroNegocio($item, $model)"
                                     theme="select2" 
                                     style="width: 220px;" 
                                     class="form-control" 
@@ -57,11 +58,46 @@
     <fieldset>
         <legend>Resultado</legend>
         <div class="row">
-            <div style="height: 300px; width: 820px; margin: auto;" ag-grid="gridInstances"></div>
+            <div ng-style="{'height': '300px', 'width': {{witdh}} + 'px', 'margin': 'auto'}" ag-grid="gridInstances"></div>
         </div>
-		<div class="form-group">
-			<highchart id="chartGraf" config="chartConfig" style="height: 450px; width: 820px; margin: auto;" ng-hide="chartConfig.hide" ></highchart>
-			<highchart id="chartDetalle" config="chartDetalle" style="height: 450px; width: 820px; margin: auto;" ng-hide="chartDetalle.hide" ></highchart>
-		</div>
+        <div class="row">
+            <highchart id="chartGraf" config="chartConfig" style="height: 450px; width: 820px; margin: auto;" ng-hide="chartConfig.hide" ></highchart>
+            <highchart id="chartDetalle" config="chartDetalle" style="height: 450px; width: 820px; margin: auto;" ng-hide="chartDetalle.hide" ></highchart>
+        </div>
+		<div id="detalle" class="hide">
+        	<div class="row">
+				<span class="legend">Solicitudes del gestor: </span>
+			</div>
+        	<div class="row">
+            	<table style="width: 100%;">
+                	<tr><td style="width: 105px;">
+                    	<label class="control-label control-label-0">Asignar a Usuario:&nbsp;</label>
+	                </td>
+    	            <td style="width: 340px;">
+        	            <ui-select 
+            	            ng-model="gestor.select"
+                	        theme="select2" 
+	                        style="width: 320px;" 
+    	                    class="form-control" 
+        	                title="Red">
+            	            <ui-select-match placeholder="Seleccione al gestor...">
+                	            {{$select.selected.name}}
+                    	    </ui-select-match>
+		                    <ui-select-choices repeat="item in gestores | filter: $select.search">
+	                            <div ng-bind-html="item.name | highlight: $select.search"></div>
+	                        </ui-select-choices>
+    	                </ui-select>
+        	        </td>
+	                <td valign="top">
+    	                <label class="btn btn-primary" ng-click="buscar()" style="float: right;" ng-disabled="disabledAsignar">Asignar</label>
+        	        </td></tr>
+					<tr></tr>
+	            </table>
+			</div>
+			<div class="row" style="height: 8px;" >&nbsp;</div>
+			<div class="row">
+        	    <div ng-style="{'height': '300px', 'width': {{witdh}} + 'px', 'margin': 'auto'}" ag-grid="gridDetalle" ></div>
+	        </div>
+		<div>
     </fieldset>
 </div>

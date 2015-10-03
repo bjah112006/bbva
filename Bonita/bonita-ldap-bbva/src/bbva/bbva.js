@@ -239,7 +239,7 @@ validarDocumento = function() {
 $(window).resize(function(){
 	if($("#panelAngular").length > 0) {
 		$("#panelAngular").css("width", ($(window).width() - ($("#panelConsulta").outerWidth())) + "px");
-		$("#panelAngular").css("height", ($(window).height() - $("#header").outerHeight()) + "px");
+		$("#panelAngular").css("height", ($(window).height() - $("#header").outerHeight() - 5) + "px");
 	}
 });
 

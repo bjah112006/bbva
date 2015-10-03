@@ -93,11 +93,21 @@ public class Listado implements RestApiController {
             String tipoConsulta = isNullRequestParam(request, "tipoConsulta")
             String query = ""
             String centroNegocio = ""
+            String username = ""
             List<Map<String, Object>> rows
             
             switch(tipoConsulta) {
                 case "red":
                     consultarTipoRed(response)
+                    query = """
+                    select a.username, a.id, a.lastname || ' ' || a.firstname "name", b.value from user_ a 
+                    inner join custom_usr_inf_val b on a.tenantid=b.tenantid 
+                    and a.id=b.userid 
+                    and b.definitionid=2 
+                    and enabled=true
+                    """
+                    rows = executeQuery(query)
+                    response.setUsuarioPorAreas(rows)
                     break;
                 case "areas":
                     String tipoRed = isNullRequestParam(request, "tipoRed")
@@ -139,6 +149,17 @@ public class Listado implements RestApiController {
                     where codigo_centro_negocio='${centroNegocio}'
                     group by lastname || ' ' || firstname
                     order by count(1) desc
+                    """
+                    rows = executeQuery(query)
+                    response.setDetalleSolicitudAreas(rows)
+                    response.setTotalDetalleSolicitudAreas(rows.size())
+                    break;
+                case "detalleGestor":
+                    username = isNullRequestParam(request, "username")
+                    query = """
+                    select * from fastpyme.instance
+                    where lastname || ' ' || firstname='${username}'
+                    order by rootprocessinstanceid desc
                     """
                     rows = executeQuery(query)
                     response.setDetalleSolicitudAreas(rows)
