@@ -12,7 +12,7 @@ abstractControllers.controller('CuadroMandoController',
 	var container = window.parent.document.getElementById("panelAngular");
 	if(container != null) {
     	// console.log(container.offsetWidth);
-		$scope.witdh = container.offsetWidth - 100;
+		$scope.witdh = container.offsetWidth - 135;
 	} else {
 		$scope.witdh = 820;
 	}
@@ -47,6 +47,19 @@ abstractControllers.controller('CuadroMandoController',
 			$scope.gridInstances.rowData = [];
 			$scope.gridInstances.api.onNewRows();
         });
+    };
+
+    $scope.asignar = function() {
+        /* Listado.get({"tipoConsulta": "areas", "tipoRed": item.value}).$promise.then(function(request){
+            request.areas.splice(0, 0, {"val_column1": "[Todos]"});
+            $scope.centroNegocio = {"select": {"val_column1": "[Todos]"}};
+            $scope.centroNegocios = request.areas;
+			$scope.disabledBuscar = false;
+			mostrarDetalle(false);
+			$scope.chartConfig.hide = true;
+			$scope.gridInstances.rowData = [];
+			$scope.gridInstances.api.onNewRows();
+        }); */
     };
 
 	$scope.cambioCentroNegocio = function(item, model) {
