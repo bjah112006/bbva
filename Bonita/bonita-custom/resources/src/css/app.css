@@ -500,3 +500,7 @@ body {
 	font-size: 18px;
 	font-weight: bold;
 }
+
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+    opacity: 0.3;
+}

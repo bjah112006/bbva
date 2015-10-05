@@ -245,7 +245,7 @@ public class Listado implements RestApiController {
         Connection cn = null
         PreparedStatement ps = null
         ResultSet rs = null
-        logger.log(Level.SEVERE, "[SQLUtil:executeQuery] ${query}", e);
+        logger.log(Level.SEVERE, "[SQLUtil:executeQuery] ${query}");
         try {
             InitialContext ic = new InitialContext()
             DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS")

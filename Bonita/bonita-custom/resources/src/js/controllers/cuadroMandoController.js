@@ -1,3 +1,16 @@
+abstractControllers.controller('DialogReasignacionController', ['$scope', '$modalInstance', 'rowSelect', function RestAPIController($scope, $modalInstance, rows) {
+	$scope.rows = rows;
+
+	$scope.ok = function () {
+		// TODO: Save fecha
+    	$modalInstance.close();
+  	};
+
+	$scope.cancel = function () {
+		$modalInstance.dismiss('cancel');
+	};
+}]);
+
 abstractControllers.controller('CuadroMandoController', 
 ['$scope', '$http', '$timeout', 'Listado', 'highchartsNG', 'bonitaConfig', 'DateUtil', function CuadroMandoController($scope, $http, $timeout, Listado, highchartsNG, bonitaConfig, DateUtil) {
     $scope.tipoRed = {};
@@ -29,6 +42,28 @@ abstractControllers.controller('CuadroMandoController',
         }
     };
 
+	ocultarDetalle = function() {
+        $scope.chartConfig.hide = true;
+        $scope.chartDetalle.hide = true;
+		$scope.gestor = {};
+        $scope.gridInstances.rowData = [];
+        $scope.gridInstances.api.onNewRows();
+        $scope.disabledAsignar = true;
+	}
+
+	$scope.openDialogReasignar = function (size) {
+		var modalInstance = $modal.open({
+			animation: $scope.animationsEnabled,
+			templateUrl: 'dialogReasignar.html',
+			controller: 'DialogReasignacionController',
+			size: size,
+			resolve: {
+				rows: function () {
+					return $scope.gridDetalle.selectedRows;
+				}
+			}
+		});
+	};
 
     Listado.get({"tipoConsulta": "red"}).$promise.then(function(request){
         $scope.tiposRed = request.tipoRed;
@@ -43,14 +78,21 @@ abstractControllers.controller('CuadroMandoController',
             $scope.centroNegocios = request.areas;
             $scope.disabledBuscar = false;
             mostrarDetalle(false);
-            $scope.chartConfig.hide = true;
-            $scope.chartDetalle.hide = true;
-            $scope.gridInstances.rowData = [];
-            $scope.gridInstances.api.onNewRows();
+			ocultarDetalle();
         });
     };
 
     $scope.asignar = function() {
+        /*
+		console.log($scope.gridDetalle.selectedRows.length);
+		console.log($scope.gridDetalle.selectedRows);
+		
+		for(var i in $scope.gridDetalle.selectedRows) {
+		}
+        */
+
+		$scope.openDialogReasignar();
+
         /* Listado.get({"tipoConsulta": "areas", "tipoRed": item.value}).$promise.then(function(request){
             request.areas.splice(0, 0, {"val_column1": "[Todos]"});
             $scope.centroNegocio = {"select": {"val_column1": "[Todos]"}};
@@ -65,13 +107,15 @@ abstractControllers.controller('CuadroMandoController',
 
     $scope.cambioCentroNegocio = function(item, model) {
         mostrarDetalle(false);
-        $scope.chartConfig.hide = true;
-        $scope.chartDetalle.hide = true;
-        $scope.gridInstances.rowData = [];
-        $scope.gridInstances.api.onNewRows();
+        ocultarDetalle();
+    };
+
+    $scope.cambioGestor= function(item, model) {
+        $scope.disabledAsignar = false;
     };
 
     var columnDetalleDefs = [
+        {headerName: '', width: 30, checkboxSelection: true},
         {headerName: "N° Solicitud", field: "rootprocessinstanceid", width: 80, cellRenderer: function(params) {
             var resultElement = document.createElement("a");
             resultElement.target="_top"
@@ -92,7 +136,6 @@ abstractControllers.controller('CuadroMandoController',
     ];
 
     var columnDefs = [
-        {headerName: '', width: 30, checkboxSelection: true},
         {headerName: "Centro Negocio", field: "codigo_centro_negocio", width: 250, cellRenderer: function(params) {
             var resultElement = document.createElement("a");
 
@@ -116,7 +159,7 @@ abstractControllers.controller('CuadroMandoController',
                     $scope.chartDetalle.hide = false;
                     $scope.chartDetalle.xAxis.categories = _catergories;
                     $scope.chartDetalle.series = _series;
-                    
+                    mostrarDetalle(false);
                     // console.log(_series);
                     // console.log(_catergories);
                     // console.log(request);
