@@ -2,37 +2,37 @@ abstractControllers.controller('CuadroMandoController',
 ['$scope', '$http', '$timeout', 'Listado', 'highchartsNG', 'bonitaConfig', 'DateUtil', function CuadroMandoController($scope, $http, $timeout, Listado, highchartsNG, bonitaConfig, DateUtil) {
     $scope.tipoRed = {};
     $scope.centroNegocio = {};
-	$scope.gestorOrigen = {};
-	$scope.gestor = {};
+    $scope.gestorOrigen = {};
+    $scope.gestor = {};
 
     $scope.tiposRed = [];
     $scope.centroNegocios = [];
-	$scope.gestores = [];
+    $scope.gestores = [];
 
-	var container = window.parent.document.getElementById("panelAngular");
-	if(container != null) {
-    	// console.log(container.offsetWidth);
-		$scope.witdh = container.offsetWidth - 135;
-	} else {
-		$scope.witdh = 820;
-	}
+    var container = window.parent.document.getElementById("panelAngular");
+    if(container != null) {
+        // console.log(container.offsetWidth);
+        $scope.witdh = container.offsetWidth - 135;
+    } else {
+        $scope.witdh = 820;
+    }
 
-	mostrarDetalle = function(mostrar) {
-		if(mostrar) {
-			if($("#detalle").hasClass("hide")) {
-				$("#detalle").removeClass("hide");
-			}
-		} else {
-			if(!$("#detalle").hasClass("hide")) {
-				$("#detalle").addClass("hide");
-			}
-		}
-	};
+    mostrarDetalle = function(mostrar) {
+        if(mostrar) {
+            if($("#detalle").hasClass("hide")) {
+                $("#detalle").removeClass("hide");
+            }
+        } else {
+            if(!$("#detalle").hasClass("hide")) {
+                $("#detalle").addClass("hide");
+            }
+        }
+    };
 
 
     Listado.get({"tipoConsulta": "red"}).$promise.then(function(request){
         $scope.tiposRed = request.tipoRed;
-		$scope.gestores = request.usuarioPorAreas;
+        $scope.gestores = request.usuarioPorAreas;
         $scope.centroNegocios = [];
     });
 
@@ -41,11 +41,12 @@ abstractControllers.controller('CuadroMandoController',
             request.areas.splice(0, 0, {"val_column1": "[Todos]"});
             $scope.centroNegocio = {"select": {"val_column1": "[Todos]"}};
             $scope.centroNegocios = request.areas;
-			$scope.disabledBuscar = false;
-			mostrarDetalle(false);
-			$scope.chartConfig.hide = true;
-			$scope.gridInstances.rowData = [];
-			$scope.gridInstances.api.onNewRows();
+            $scope.disabledBuscar = false;
+            mostrarDetalle(false);
+            $scope.chartConfig.hide = true;
+            $scope.chartDetalle.hide = true;
+            $scope.gridInstances.rowData = [];
+            $scope.gridInstances.api.onNewRows();
         });
     };
 
@@ -54,42 +55,44 @@ abstractControllers.controller('CuadroMandoController',
             request.areas.splice(0, 0, {"val_column1": "[Todos]"});
             $scope.centroNegocio = {"select": {"val_column1": "[Todos]"}};
             $scope.centroNegocios = request.areas;
-			$scope.disabledBuscar = false;
-			mostrarDetalle(false);
-			$scope.chartConfig.hide = true;
-			$scope.gridInstances.rowData = [];
-			$scope.gridInstances.api.onNewRows();
+            $scope.disabledBuscar = false;
+            mostrarDetalle(false);
+            $scope.chartConfig.hide = true;
+            $scope.gridInstances.rowData = [];
+            $scope.gridInstances.api.onNewRows();
         }); */
     };
 
-	$scope.cambioCentroNegocio = function(item, model) {
-		mostrarDetalle(false);
-		$scope.chartConfig.hide = true;
-		$scope.gridInstances.rowData = [];
-		$scope.gridInstances.api.onNewRows();
+    $scope.cambioCentroNegocio = function(item, model) {
+        mostrarDetalle(false);
+        $scope.chartConfig.hide = true;
+        $scope.chartDetalle.hide = true;
+        $scope.gridInstances.rowData = [];
+        $scope.gridInstances.api.onNewRows();
     };
 
-	var columnDetalleDefs = [
+    var columnDetalleDefs = [
         {headerName: "N° Solicitud", field: "rootprocessinstanceid", width: 80, cellRenderer: function(params) {
             var resultElement = document.createElement("a");
-			resultElement.target="_top"
-			resultElement.href = bonitaConfig.getBonitaUrl() + "/portal/homepage#?id=" + params.value + "&_p=casemoredetails&_pf=1";
-			resultElement.innerHTML = params.value;
+            resultElement.target="_top"
+            resultElement.href = bonitaConfig.getBonitaUrl() + "/portal/homepage#?id=" + params.value + "&_p=casemoredetails&_pf=1";
+            resultElement.innerHTML = params.value;
             return resultElement;
         }},
-		{headerName: "C\u00F3digo Central", field: "codigo_cliente", width: 100},
+        {headerName: "C\u00F3digo Central", field: "codigo_cliente", width: 100},
         {headerName: "RVGL", field: "num_rvgl", width: 180},
         {headerName: "Raz\u00F3n Social", field: "nombre_cliente", width: 350},
         {headerName: "Oficina", field: "ofi_registro", width: 160},
         {headerName: "Fecha Envio", field: "startdate", width: 100, cellRenderer: function(params) {
-			var resultElement = document.createElement("span");
-			resultElement.innerHTML = DateUtil.toString(DateUtil.longToDate(params.value), DateUtil.DDMMYYYYHHmmss);
+            var resultElement = document.createElement("span");
+            resultElement.innerHTML = DateUtil.toString(DateUtil.longToDate(params.value), DateUtil.DDMMYYYYHHmmss);
             return resultElement;
-		}},
-		{headerName: "Producto", field: "producto", width: 180}
+        }},
+        {headerName: "Producto", field: "producto", width: 180}
     ];
 
     var columnDefs = [
+        {headerName: '', width: 30, checkboxSelection: true},
         {headerName: "Centro Negocio", field: "codigo_centro_negocio", width: 250, cellRenderer: function(params) {
             var resultElement = document.createElement("a");
 
@@ -136,7 +139,9 @@ abstractControllers.controller('CuadroMandoController',
         rowSelected: function(row){}, /* console.log(row); */
         selectionChanged: function(){}, /* console.log('selection changed, ' + $scope.gridHumanTask.selectedRows.length + ' rows selected'); */
         angularCompileRows: true,
-        rowData: null
+        rowData: null,
+        rowSelection: 'multiple',
+        suppressRowClickSelection: true
     };
 
     $scope.gridInstances = {
@@ -152,8 +157,8 @@ abstractControllers.controller('CuadroMandoController',
         hide: true,
         loading: false,
         chart: {
-			type: 'bar'
-		},
+            type: 'bar'
+        },
         title: { text: '' },
         subtitle: { text: '' },
         xAxis: {
@@ -181,32 +186,33 @@ abstractControllers.controller('CuadroMandoController',
                     enabled: true
                 }
             },
-			series: {
+            series: {
                 cursor: 'pointer',
                 events: {
                     click: function (event) {
-						mostrarDetalle(true);
-						$("#detalle").find(".legend").html("Solicitudes del gestor: <b>" + event.point.category + "</b>");
-                		var parameters = {
-		                    tipoConsulta: "detalleGestor",
-        			        username: event.point.category
-		                };
-        		        Listado.get(parameters).$promise.then(function(request){
-            				$scope.gridDetalle.rowData = request.detalleSolicitudAreas;
-            				$scope.gridDetalle.api.onNewRows();
-						});
-						/*
-						console.log(this);
-						console.log(event.point);
+                        mostrarDetalle(true);
+                        $("#detalle").find(".legend").html("Solicitudes del gestor: <b>" + event.point.category + "</b>");
+                        var parameters = {
+                            tipoConsulta: "detalleGestor",
+                            centroNegocio: event.point.series.name.replace("Centro Negocio: ", ""),
+                            username: event.point.category
+                        };
+                        Listado.get(parameters).$promise.then(function(request){
+                            $scope.gridDetalle.rowData = request.detalleSolicitudAreas;
+                            $scope.gridDetalle.api.onNewRows();
+                        });
+                        /*
+                        console.log(this);
+                        console.log(event.point);
                         alert(this.name + ' clicked\n' +
                               'Alt: ' + event.altKey + '\n' +
                               'Control: ' + event.ctrlKey + '\n' +
                               'Shift: ' + event.shiftKey + '\n' + 
-							  'Category: ' + event.point.category + '\n' +
+                              'Category: ' + event.point.category + '\n' +
                               'value y: ' + event.point.y + '\n' +
                               'value x: ' + event.point.x + '\n' +
                               'Serie: ' + event.point.series.name);
-						*/
+                        */
                     }
                 }
             }
@@ -290,8 +296,8 @@ abstractControllers.controller('CuadroMandoController',
         }, 0);
     };
 
-	$scope.disabledAsignar = true;
-	$scope.disabledBuscar = true;
+    $scope.disabledAsignar = true;
+    $scope.disabledBuscar = true;
     $scope.buscar = function(){
         loadingPage();
 

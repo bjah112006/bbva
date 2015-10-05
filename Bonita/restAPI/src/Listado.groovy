@@ -101,9 +101,11 @@ public class Listado implements RestApiController {
                     consultarTipoRed(response)
                     query = """
                     select a.username, a.id, a.lastname || ' ' || a.firstname "name", b.value from user_ a 
-                    inner join custom_usr_inf_val b on a.tenantid=b.tenantid 
+                    inner join custom_usr_inf_val b on a.tenantid=b.tenantid and b.definitionid=2 
+                    inner join user_membership c on a.tenantid=c.tenantid and a.id=c.userid
+                    inner join group_ d on c.tenantid=d.tenantid and c.groupid=d.id
+                    where (d.name='RIESGOS' or d.parentpath='RIESGOS')
                     and a.id=b.userid 
-                    and b.definitionid=2 
                     and enabled=true
                     """
                     rows = executeQuery(query)
@@ -155,10 +157,12 @@ public class Listado implements RestApiController {
                     response.setTotalDetalleSolicitudAreas(rows.size())
                     break;
                 case "detalleGestor":
+                    centroNegocio = isNullRequestParam(request, "centroNegocio")
                     username = isNullRequestParam(request, "username")
                     query = """
                     select * from fastpyme.instance
                     where lastname || ' ' || firstname='${username}'
+                    and codigo_centro_negocio='${centroNegocio}'
                     order by rootprocessinstanceid desc
                     """
                     rows = executeQuery(query)
@@ -241,6 +245,7 @@ public class Listado implements RestApiController {
         Connection cn = null
         PreparedStatement ps = null
         ResultSet rs = null
+        logger.log(Level.SEVERE, "[SQLUtil:executeQuery] ${query}", e);
         try {
             InitialContext ic = new InitialContext()
             DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS")
