@@ -110,6 +110,14 @@ public class Empleado implements Serializable {
 	@Column(name="CARGA_LDAP_EXISTE")
 	private String existeLDAP;
 	
+	
+	@Column(name="COD_CARGO_BACKUP")
+	private String codigoCargoBackup;
+	
+	@ManyToOne
+	@JoinColumn(name="ID_PERFIL_BACKUP")
+	private Perfil perfilBackup;
+	
 	public Empleado() {
 	}
 
@@ -337,5 +345,21 @@ public class Empleado implements Serializable {
 	public void setExisteLDAP(String existeLDAP) {
 		this.existeLDAP = existeLDAP;
 	}
-	
+
+	public String getCodigoCargoBackup() {
+		return codigoCargoBackup;
+	}
+
+	public void setCodigoCargoBackup(String codigoCargoBackup) {
+		this.codigoCargoBackup = codigoCargoBackup;
+	}
+
+	public Perfil getPerfilBackup() {
+		return perfilBackup;
+	}
+
+	public void setPerfilBackup(Perfil perfilBackup) {
+		this.perfilBackup = perfilBackup;
+	}
+
 }

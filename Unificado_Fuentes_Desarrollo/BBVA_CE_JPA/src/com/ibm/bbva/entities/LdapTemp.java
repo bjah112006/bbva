@@ -34,6 +34,12 @@ public class LdapTemp implements Serializable
 	@Column(name="CODOFI")
 	private String codigoOficina;
 
+	@Column(name="CODCARGOTEMP")
+	private String codigoCargoTemp;
+	
+	@Column(name="CODOFITEMP")
+	private String codigoOficinaTemp;
+	
 	public String getId() {
 		return id;
 	}
@@ -88,6 +94,22 @@ public class LdapTemp implements Serializable
 
 	public void setCodigoOficina(String codigoOficina) {
 		this.codigoOficina = codigoOficina;
+	}
+
+	public String getCodigoCargoTemp() {
+		return codigoCargoTemp;
+	}
+
+	public void setCodigoCargoTemp(String codigoCargoTemp) {
+		this.codigoCargoTemp = codigoCargoTemp;
+	}
+
+	public String getCodigoOficinaTemp() {
+		return codigoOficinaTemp;
+	}
+
+	public void setCodigoOficinaTemp(String codigoOficinaTemp) {
+		this.codigoOficinaTemp = codigoOficinaTemp;
 	}
 	
 }

@@ -212,6 +212,9 @@ public class Perfil implements Serializable {
 	@Column(name="FLAG_MENU_DELEG_RIESG_COND")
 	private String flagMenuDELEG_RIESG_COND;
 	
+	@Column(name="CODIGO_IDM")
+	private String codigoIDM;
+	
 	//bi-directional many-to-one association to Empleado
 	@OneToMany(mappedBy="perfil")
 	private List<Empleado> empleados;
@@ -810,6 +813,14 @@ public class Perfil implements Serializable {
 
 	public void setFlagMenuDELEG_RIESG_COND(String flagMenuDELEG_RIESG_COND) {
 		this.flagMenuDELEG_RIESG_COND = flagMenuDELEG_RIESG_COND;
+	}
+
+	public String getCodigoIDM() {
+		return codigoIDM;
+	}
+
+	public void setCodigoIDM(String codigoIDM) {
+		this.codigoIDM = codigoIDM;
 	}
 	
 }
