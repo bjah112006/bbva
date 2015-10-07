@@ -2,26 +2,34 @@
 -- create extension tablefunc schema public version "1.0";
 
 drop schema if exists fastpyme cascade;
-create schema fastpyme authorization bonita;
---ALTER SCHEMA fastpyme OWNER TO bonita;
+create schema fastpyme authorization bonita_db_user;
+--ALTER SCHEMA fastpyme OWNER TO bonita_db_user;
     
 -- drop view if exists fastpyme.data_instance_detail;
-create view fastpyme.data_instance_detail as
+create or replace view fastpyme.data_instance_detail as
 select containerid, containertype, tenantid, name,
 case discriminant
 when 'SDateDataInstanceImpl' then longvalue::text
 else clobvalue end "value"
-from public.data_instance
-order by containerid, tenantid;
+from public.data_instance;
 
 -- drop view if exists fastpyme.data_instance_detail;
-create view fastpyme.arch_data_instance_detail as
-select containerid, containertype, tenantid, name,
-case discriminant
+create or replace view fastpyme.arch_data_instance_detail as
+select a.containerid, a.containertype, a.tenantid, a.name, 
+case a.discriminant
 when 'SDateDataInstanceImpl' then longvalue::text
-else clobvalue end "value"
-from public.arch_data_instance
-order by containerid, tenantid;
+else a.clobvalue end "value", a.archivedate
+from public.arch_data_instance a
+inner join (
+    select containerid, containertype, tenantid, name, max(archivedate) archivedate
+    from public.arch_data_instance 
+    group by containerid, containertype, tenantid, name
+) b on a.containerid=b.containerid
+    and a.containertype=b.containertype
+    and a.tenantid=b.tenantid
+    and a.name=b.name
+    and a.archivedate=b.archivedate;
+
 
 -- drop view if exists fastpyme.task_pending;
 create or replace view fastpyme.task_pending as
@@ -60,7 +68,7 @@ left join public.user_ e on c.tenantid=e.tenantid and c.assigneeid=e.id;
 create or replace view fastpyme.arch_task_pending as
 select
   a.name
-, a.version 
+, a.version
 , b.tenantid
 , b.rootprocessinstanceid
 , b.startdate
@@ -81,15 +89,19 @@ select
   when 'ERM' then 'RIESGO'
   when 'GMC' then 'MESA DE CONTROL'
   when 'CPM' then 'CPM'
-  else '' end estacion
+  else ''
+  end estacion
 , '{"url": "/portal/homepage#?id=' || b.id || '&_p=archivedcasemoredetailsadmin&_pf=1", "value": "' || b.rootprocessinstanceid || '"}' url
 from public.process_definition a
 inner join public.arch_process_instance b on a.tenantid=b.tenantid and a.processid=b.processdefinitionid
 inner join (
-	select rootprocessinstanceid, max(id) id from public.arch_process_instance where stateid=6 group by rootprocessinstanceid
+    select tenantid, rootprocessinstanceid, max(id) id from public.arch_process_instance where stateid=6 group by tenantid, rootprocessinstanceid
 ) bx on b.id=bx.id
-inner join public.arch_flownode_instance c on b.tenantid=c.tenantid and b.sourceobjectid=c.sourceobjectid -- b.rootprocessinstanceid=c.rootcontainerid
-inner join public.actor d on c.tenantid=d.tenantid and c.actorid=d.id
+inner join public.arch_flownode_instance c on b.tenantid=c.tenantid and b.rootprocessinstanceid=c.rootcontainerid
+inner join (
+    select tenantid, rootcontainerid, max(archivedate) archivedate from public.arch_flownode_instance where kind='user' and stateid not in(4, 32) group by tenantid, rootcontainerid
+) cx on c.tenantid=cx.tenantid and c.rootcontainerid=cx.rootcontainerid and c.archivedate=cx.archivedate
+left join public.actor d on c.tenantid=d.tenantid and c.actorid=d.id
 left join public.user_ e on c.tenantid=e.tenantid and c.assigneeid=e.id
 where b.stateid=6 and c.stateid not in(4, 32);
 
@@ -264,15 +276,15 @@ inner join public.document_mapping b on a.id = b.PROCESSINSTANCEID
 inner join public.document c on b.documentid = c.id;
 
 
-alter table fastpyme.arch_data_instance owner to bonita;
-alter table fastpyme.arch_data_instance_detail owner to bonita;
-alter table fastpyme.arch_task_pending owner to bonita;
-alter table fastpyme.arch_instance owner to bonita;
+alter table fastpyme.arch_data_instance owner to bonita_db_user;
+alter table fastpyme.arch_data_instance_detail owner to bonita_db_user;
+alter table fastpyme.arch_task_pending owner to bonita_db_user;
+alter table fastpyme.arch_instance owner to bonita_db_user;
 
-alter table fastpyme.data_instance owner to bonita;
-alter table fastpyme.data_instance_detail owner to bonita;
-alter table fastpyme.task_pending owner to bonita;
-alter table fastpyme.instance owner to bonita;
+alter table fastpyme.data_instance owner to bonita_db_user;
+alter table fastpyme.data_instance_detail owner to bonita_db_user;
+alter table fastpyme.task_pending owner to bonita_db_user;
+alter table fastpyme.instance owner to bonita_db_user;
 
 -- INSERT INTO tbl_pyme_parameter(id_table, id_column, id_reference, val_column1, val_column2, flg_state) VALUES (10, '010', '', '|B23|B21|', 'Cargos que pertenecen a la oficina', 1);
 

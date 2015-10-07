@@ -253,9 +253,9 @@ $(document).bind('DOMNodeInserted', function(event) {
             $("body").append(createDialog());
         } else if($(event.target).hasClass("bbva-reporte")) {
             $("<li class='bbva-consulta'><a class='bbva-consulta' href='javascript: void(0);' onclick='abrirConsulta(\"\")'>Consulta</a></li>").insertAfter($(event.target));
-        } else if($(event.target).hasClass("bbva-consulta")) {
+        }/* else if($(event.target).hasClass("bbva-consulta")) {
             $("<li class='bbva-cuadro'><a class='bbva-cuadro' href='javascript: void(0);' onclick='abrirConsulta(\"cuadromando\")'>Cuadro de Mando</a></li>").insertAfter($(event.target));
-        }
+        }*/
     }
 	validarDocumento();
 });

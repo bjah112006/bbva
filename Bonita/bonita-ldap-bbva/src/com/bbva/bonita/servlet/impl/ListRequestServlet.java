@@ -74,7 +74,7 @@ public class ListRequestServlet extends HttpServlet {
 			List<SolicitudDTO> listaSolicitud = null;
 			List<ArchivedProcessInstance> listArchivedProcessInstances = null;
 		
-			SearchOptionsBuilder builder = new SearchOptionsBuilder(0, 100);
+			SearchOptionsBuilder builder = new SearchOptionsBuilder(0, Integer.MAX_VALUE);
 			if(filtro.getCodigoFiltro().compareTo("01")==0 && filtro.getValorFiltro().compareTo("")!=0){
 				logger.log(Level.INFO, "=== FILTRO POR NRO. SOLICITUD PENDIENTES: " + filtro.getValorFiltro());
 				builder.filter(ProcessInstanceSearchDescriptor.ID, filtro.getValorFiltro());
@@ -89,7 +89,7 @@ public class ListRequestServlet extends HttpServlet {
 			//TODO: SI LA BUSQUEDA ES POR ESTACION, NO SE BUSCAN LAS SOLICITUDES ARCHIVADAS
 			if(filtro.getEstacion().compareTo("-1")==0){
 				//TODO: OBTENEMOS SOLICITUDES ARCHIVADAS
-				builder = new SearchOptionsBuilder(0, 100);
+				builder = new SearchOptionsBuilder(0, Integer.MAX_VALUE);
 				if(filtro.getCodigoFiltro().compareTo("01")==0){
 					logger.log(Level.INFO, "=== FILTRO POR NRO. SOLICITUD ARCHIVADAS: " + filtro.getValorFiltro());
 					builder.filter(ArchivedProcessInstancesSearchDescriptor.SOURCE_OBJECT_ID, filtro.getValorFiltro());
