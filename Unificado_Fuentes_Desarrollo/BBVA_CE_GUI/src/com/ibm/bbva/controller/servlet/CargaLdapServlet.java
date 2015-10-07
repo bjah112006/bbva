@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.soap.providers.com.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +26,18 @@ import bbva.ws.api.view.BBVAFacadeLocal;
 import com.ibm.bbva.proxy.Usuario;
 import com.ibm.bbva.proxy.WSLDAPServiceImplPortProxy;
 import com.ibm.bbva.proxy.WSLdapException_Exception;
+import com.ibm.bbva.proxy.ext.UsuarioExtendido;
+import com.ibm.bbva.proxy.ext.WSLDAPServiceExtImplPortProxy;
 import com.ibm.bbva.session.AnsBeanLocal;
 import com.ibm.bbva.session.CartEmpleadoCEBeanLocal;
+import com.ibm.bbva.session.DescargaLDAPBeanLocal;
 import com.ibm.bbva.session.EmpleadoBeanLocal;
 import com.ibm.bbva.session.ExpedienteBeanLocal;
 import com.ibm.bbva.session.LdapTempBeanLocal;
 import com.ibm.bbva.session.LogJobBeanLocal;
 import com.ibm.bbva.session.LogJobDetBeanLocal;
 import com.ibm.bbva.session.MutitablaBeanLocal;
+import com.ibm.bbva.session.OficinaBeanLocal;
 import com.ibm.bbva.session.ParametrosConfBeanLocal;
 import com.ibm.bbva.session.TareaBeanLocal;
 import com.ibm.bbva.session.TerritorioBeanLocal;
@@ -43,6 +48,7 @@ import com.ibm.bbva.util.Util;
 
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.entities.CartEmpleadoCE;
+import com.ibm.bbva.entities.DescargaLDAP;
 import com.ibm.bbva.entities.Empleado;
 import com.ibm.bbva.entities.Expediente;
 import com.ibm.bbva.entities.LdapTemp;
@@ -63,7 +69,7 @@ public class CargaLdapServlet extends HttpServlet
 	private ParametrosConfBeanLocal parametrosConfBeanLocal;
 	private LdapTempBeanLocal ldapTempBeanLocal;
 	private EmpleadoBeanLocal empleadoBeanLocal;
-	private WSLDAPServiceImplPortProxy objWSLDAPServiceImplPortProxy;
+	private WSLDAPServiceExtImplPortProxy objWSLDAPServiceImplPortProxy;
 	private VistaBandjCartProdBeanLocal vistaBandjCartProdBeanLocal;
 	private ExpedienteBeanLocal expedienteBean;
 	private TareaBeanLocal tareaBean;
@@ -74,6 +80,10 @@ public class CargaLdapServlet extends HttpServlet
 	private MutitablaBeanLocal multitablaBeanLocal;
 	private LogJobBeanLocal logJobBeanLocal;
 	private LogJobDetBeanLocal logJobDetBeanLocal;
+
+	private OficinaBeanLocal oficinabean;
+	private DescargaLDAPBeanLocal descargaLDAPBeanLocal;
+	private EmpleadoBeanLocal empleadobean;	
 
 	public CargaLdapServlet() {
         super();
@@ -99,7 +109,10 @@ public class CargaLdapServlet extends HttpServlet
 			cartEmpleadoCEBeanLocal = (CartEmpleadoCEBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.CartEmpleadoCEBeanLocal");
 			multitablaBeanLocal = (MutitablaBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.MutitablaBeanLocal");
 			logJobBeanLocal = (LogJobBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.LogJobBeanLocal");
-			logJobDetBeanLocal = (LogJobDetBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.LogJobDetBeanLocal");			
+			logJobDetBeanLocal = (LogJobDetBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.LogJobDetBeanLocal");
+			oficinabean = (OficinaBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.OficinaBeanLocal");;
+			descargaLDAPBeanLocal = (DescargaLDAPBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.DescargaLDAPBeanLocal");;
+			empleadobean = (EmpleadoBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.EmpleadoBeanLocal");
 	
 			if(parametrosConfBeanLocal.buscarPorVariable(Constantes.CODIGO_APLICATIVO_PROCESO_LDAP, Constantes.JOB_CARGA_LDAP_HABILITADO).equals("N"))
 			{				
@@ -113,8 +126,8 @@ public class CargaLdapServlet extends HttpServlet
 			
 			LogJobDet objLogJobDet = null;
 			
-			objWSLDAPServiceImplPortProxy = new WSLDAPServiceImplPortProxy();
-			objWSLDAPServiceImplPortProxy._getDescriptor().setEndpoint(parametrosConfBeanLocal.buscarPorVariable(Constantes.CODIGO_APLICATIVO_PROCESO_LDAP, Constantes.LDAP_WEB_SERVICE_ENDPOINT).getValorVariable());
+			objWSLDAPServiceImplPortProxy = new WSLDAPServiceExtImplPortProxy();
+			objWSLDAPServiceImplPortProxy._getDescriptor().setEndpoint(parametrosConfBeanLocal.buscarPorVariable(Constantes.CODIGO_APLICATIVO_PROCESO_LDAP, Constantes.LDAP_WEB_SERVICE_EXT_ENDPOINT).getValorVariable());
 				
 			objLogJobDet = new LogJobDet();
 			objLogJobDet.setNombre("Carga LDAP temporal");
@@ -122,13 +135,12 @@ public class CargaLdapServlet extends HttpServlet
 			objLogJobDet.setLogJob(objLogJob);
 			objLogJobDet = logJobDetBeanLocal.create(objLogJobDet);
 			
-			try 
-			{ 				 
+					 
 				ldapTempBeanLocal.clean();
-				List<Usuario> listaUsuarios = objWSLDAPServiceImplPortProxy.obtenerUsuarios(null);
+				List<UsuarioExtendido> listaUsuarios = objWSLDAPServiceImplPortProxy.obtenerUsuarios(null);
 				LdapTemp objLdapTemp = null;
 				String oficinasSincronizables = multitablaBeanLocal.buscarPorId(Constantes.PARAMETRO_OFICINAS_SINCRONIZABLES).getTexto();
-				for(Usuario objUsuario : listaUsuarios)
+				for(UsuarioExtendido objUsuario : listaUsuarios)
 				{					
 					objLdapTemp = new LdapTemp();					
 					objLdapTemp.setId(objUsuario.getUsuario());
@@ -136,8 +148,37 @@ public class CargaLdapServlet extends HttpServlet
 					objLdapTemp.setApellidoPaterno(objUsuario.getPrimerApellido());
 					objLdapTemp.setApellidoMaterno(objUsuario.getSegundoApellido());
 					objLdapTemp.setCorreoElectronico(objUsuario.getEMail());
-					objLdapTemp.setCodigoCargo(objUsuario.getPuesto() != null ? objUsuario.getPuesto().getNombreCargoFuncionalLocal() : null);
-					objLdapTemp.setCodigoOficina(objUsuario.getCodigoCentro());	
+					objLdapTemp.setCodigoOficinaTemp(null);	
+					objLdapTemp.setCodigoCargoTemp(null);	
+					//validar si existe temporalidad en el registro
+					boolean flagTienePuestoTemporal = objUsuario.getPuestoTemporal()!=null?
+							  StringUtils.isNotBlank(
+									  objUsuario.getPuestoTemporal().getDescripcionPuesto()):false;
+					if(flagTienePuestoTemporal){
+						String codigoPuestoTemporal = objUsuario.getPuestoTemporal().getDescripcionPuesto();
+						List<DescargaLDAP> listaPerfiles = descargaLDAPBeanLocal.buscar("-1", codigoPuestoTemporal, "-1", "-1", "-1", "-1");
+						Empleado empleado = empleadobean.buscarPorCodigo(objUsuario.getUsuario());  
+						for(DescargaLDAP descargaLdap : listaPerfiles){
+							if(!empleado.getPerfil().getCodigo().equals(descargaLdap.getPerfil().getCodigo())){
+								objLdapTemp.setCodigoCargoTemp(codigoPuestoTemporal);	
+							}
+						}
+						objLdapTemp.setCodigoCargo(codigoPuestoTemporal);
+					}else{
+						objLdapTemp.setCodigoCargo(objUsuario.getPuesto() != null ? objUsuario.getPuesto().getNombreCargoFuncionalLocal() : null);
+						
+					}
+					boolean flagTieneOficinaTemporal = objUsuario.getCentroTemporal()!=null?
+												   StringUtils.isNotBlank(
+														   objUsuario.getCentroTemporal().getDescripcion()):false;
+					if(flagTieneOficinaTemporal){
+						objLdapTemp.setCodigoOficinaTemp(objUsuario.getCentroTemporal().getDescripcion());	
+						objLdapTemp.setCodigoOficina(objUsuario.getCentroTemporal().getDescripcion());	
+					}else{
+						objLdapTemp.setCodigoOficina(objUsuario.getCodigoCentro());	
+					}
+					//fin validacion de temporalidad
+					
 					if(oficinasSincronizables == null || oficinasSincronizables.length() == 0)
 					{
 						ldapTempBeanLocal.create(objLdapTemp);						
@@ -150,12 +191,6 @@ public class CargaLdapServlet extends HttpServlet
 						}
 					}
 				}						
-			} 
-			catch (WSLdapException_Exception e) 
-			{
-				e.printStackTrace();
-			}
-			
 			
 			objLogJobDet.setFechaFin(new Date());
 			logJobDetBeanLocal.edit(objLogJobDet);

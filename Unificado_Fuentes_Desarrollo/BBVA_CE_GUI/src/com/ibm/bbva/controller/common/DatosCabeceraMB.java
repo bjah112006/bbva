@@ -7,6 +7,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,15 +17,28 @@ import com.grupobbva.bc.per.tele.seguridad.ServiciosSeguridadBbva;
 import com.ibm.bbva.controller.AbstractMBean;
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.entities.CartEmpleadoCE;
+import com.ibm.bbva.entities.DescargaLDAP;
 import com.ibm.bbva.entities.Empleado;
+import com.ibm.bbva.entities.Oficina;
 import com.ibm.bbva.entities.OficinaTemporal;
+import com.ibm.bbva.proxy.ext.Perfil;
+import com.ibm.bbva.proxy.ext.PerfilesUsuario;
+import com.ibm.bbva.proxy.ext.Usuario;
+import com.ibm.bbva.proxy.ext.UsuarioExtendido;
+import com.ibm.bbva.proxy.ext.WSLDAPServiceExtImplPortProxy;
+import com.ibm.bbva.proxy.ext.WSLdapException_Exception;
 import com.ibm.bbva.session.CartEmpleadoCEBeanLocal;
+import com.ibm.bbva.session.DescargaLDAPBeanLocal;
 import com.ibm.bbva.session.EmpleadoBeanLocal;
+import com.ibm.bbva.session.OficinaBeanLocal;
 import com.ibm.bbva.session.OficinaTemporalBeanLocal;
+import com.ibm.bbva.session.ParametrosConfBeanLocal;
+import com.ibm.bbva.session.PerfilBeanLocal;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +63,24 @@ public class DatosCabeceraMB extends AbstractMBean {
 	private String mensajeAdvertencia;
 	private String etiquetaTemporal;
 	
+	private WSLDAPServiceExtImplPortProxy proxyIDM; 
+	
+	private boolean flagAccesoIDM;//validar acceso en IDM
+	private boolean flagCambiarDatosXTemporalidad ; //flag cambiar datos de usuario por valores TEMPORALES
+	private UsuarioExtendido usuarioIDM;
+	
+	@EJB
+	private PerfilBeanLocal perfilBean;
+	
+	@EJB
+	private OficinaBeanLocal oficinabean;
+	
+	@EJB
+	private ParametrosConfBeanLocal parametrosConfBean;
+	
+	@EJB
+	private DescargaLDAPBeanLocal descargaLDAPBeanLocal;
+	
     public DatosCabeceraMB() {
 	}
     
@@ -64,103 +96,143 @@ public class DatosCabeceraMB extends AbstractMBean {
 		}else{
 			LOG.warn("No se encontro el Usurio en el request : {}",user);
 		}
-    	this.empleado = empleadobean.buscarPorCodigo(user);
+		
+		
+    	flagAccesoIDM = false;
+    	flagCambiarDatosXTemporalidad = false;
+    	
+    	proxyIDM = new WSLDAPServiceExtImplPortProxy();
+    	proxyIDM._getDescriptor().setEndpoint(parametrosConfBean.buscarPorVariable(Constantes.CODIGO_APLICATIVO_PROCESO_LDAP, Constantes.LDAP_WEB_SERVICE_EXT_ENDPOINT).getValorVariable());
+    	List<String> listUsuario = new ArrayList<String>();
+    	listUsuario.add(user);
+    	List<UsuarioExtendido> lista = null;
+    	try {
+			lista = proxyIDM.obtenerUsuarios(listUsuario);
+			List<com.ibm.bbva.entities.Perfil> listaPerfilesCS = perfilBean.buscarTodos();
+			for(Object usuarioExt : lista){
+				Usuario usuarioExtendido = (Usuario)usuarioExt;
+				PerfilesUsuario perfilesUsuario= usuarioExtendido.getPerfiles();
+				List<Perfil> perfilesIDM = perfilesUsuario.getPerfil();
+				for(Perfil perfilIDM : perfilesIDM){
+					for(com.ibm.bbva.entities.Perfil perfilCS : listaPerfilesCS ){
+						if(perfilIDM.getNombre().equals(perfilCS.getCodigoIDM())){
+							flagAccesoIDM = true;
+							break;
+						}
+					}
+				}
+			}
+		} catch (WSLdapException_Exception e1) {
+			e1.printStackTrace();
+		}
+    	//FIN DE VALIDACION DE ACCESO A IDM
     	
     	FacesContext ctx = FacesContext.getCurrentInstance();
 		MenuMB menu = (MenuMB) ctx.getApplication().getVariableResolver().resolveVariable(ctx, "menu");
-    				
-		List<OficinaTemporal> listaOficinaTemporal = this.oficinaTemporalBeanLocal.obtenerActual(this.empleado.getId());
-		OficinaTemporal objOficinaTemporal = null;		
-		if(listaOficinaTemporal.size() > 0)
-		{
-			objOficinaTemporal = listaOficinaTemporal.get(0);
-			DateFormat dateformat= new SimpleDateFormat("dd/MM/yyyy");
-			DateFormat timeformat= new SimpleDateFormat("HH:mm");
-			try {
-				Date fechaActual = dateformat.parse(dateformat.format(new Date()));
-				Date horaActual = timeformat.parse(timeformat.format(new Date()));
-				if(objOficinaTemporal != null && fechaActual.compareTo(objOficinaTemporal.getFechaInicio()) == 0)
-				{
-					if(timeformat.parse(objOficinaTemporal.getHoraInicio()).compareTo(horaActual) > 0)
-					{
-						objOficinaTemporal = null;
-					}
-				}
-				if(objOficinaTemporal != null && fechaActual.compareTo(objOficinaTemporal.getFechaFin()) == 0)
-				{
-					if(timeformat.parse(objOficinaTemporal.getHoraFin()).compareTo(horaActual) < 0)
-					{
-						objOficinaTemporal = null;
-					}
-				}
-			} catch (ParseException e) {
-				// TODO Bloque catch generado automáticamente
-				e.printStackTrace();
-			}					
-		}
-		
-		if(objOficinaTemporal == null)
-		{
-			if(this.empleado.getOficinaBackup() != null)
-			{				
-				RemoteUtils remoteUtils = new RemoteUtils();
-				long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
-				if(cantexp > 0)
-				{
-					this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para la oficina " + this.empleado.getOficina().getCodigo() + " - " + this.empleado.getOficina().getDescripcion() + " temporal configurada");
-				}
-				else
-				{				
-					this.empleado.setOficina(this.empleado.getOficinaBackup());
-					this.empleado.setOficinaBackup(null);
-					this.empleadobean.edit(this.empleado);
-					
-					List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
-					for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
-					{
-						objCartEmpleadoCE.setOficina(this.empleado.getOficina());
-						this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+    	
+		if(flagAccesoIDM){
+			this.empleado = empleadobean.buscarPorCodigo(user);  
+			//validar si tiene temporalidad
+			usuarioIDM = lista.get(0);
+			boolean flagTienePuestoTemporal = usuarioIDM.getPuestoTemporal()!=null?
+											  StringUtils.isNotBlank(
+											  usuarioIDM.getPuestoTemporal().getDescripcionPuesto()):false;
+			String codigoPuesto = usuarioIDM.getPuesto().getDescripcionPuesto();
+			com.ibm.bbva.entities.Perfil perfilTemporal = null;
+			if(flagTienePuestoTemporal){
+				codigoPuesto = usuarioIDM.getPuestoTemporal().getDescripcionPuesto();
+				List<DescargaLDAP> listaPerfiles = descargaLDAPBeanLocal.buscar("-1", codigoPuesto, "-1", "-1", "-1", "-1");
+				for(DescargaLDAP descargaLdap : listaPerfiles){
+					if(!empleado.getPerfil().getCodigo().equals(descargaLdap.getPerfil().getCodigo())){
+						perfilTemporal = descargaLdap.getPerfil();
 					}
 				}
 			}
-		}
-		else
-		{
-			if(this.empleado.getOficinaBackup() == null)
+			boolean flagTieneOficinaTemporal = usuarioIDM.getCentroTemporal()!=null?
+											   StringUtils.isNotBlank(
+											   usuarioIDM.getCentroTemporal().getDescripcion()):false;
+			Oficina objOficinaTemporal = null;
+			if(flagTieneOficinaTemporal){
+				String codigoOficina = usuarioIDM.getCentroTemporal().getDescripcion();
+				objOficinaTemporal = oficinabean.buscarPorCodigo(codigoOficina);
+			}
+	    		
+	    		    				
+			/*List<OficinaTemporal> listaOficinaTemporal = this.oficinaTemporalBeanLocal.obtenerActual(this.empleado.getId());
+			OficinaTemporal objOficinaTemporal = null;		
+			if(flagTieneOficinaTemporal)
 			{
-				RemoteUtils remoteUtils = new RemoteUtils();
-				long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
-				if(cantexp > 0)
-				{
-					this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes, no se le puede establecer la oficina temporal configurada");
-				}
-				else
-				{
-					this.empleado.setOficinaBackup(this.empleado.getOficina());
-					this.empleado.setOficina(objOficinaTemporal.getOficina());				
-					this.empleadobean.edit(this.empleado);
-					
-					List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
-					for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+				objOficinaTemporal = listaOficinaTemporal.get(0);
+				DateFormat dateformat= new SimpleDateFormat("dd/MM/yyyy");
+				DateFormat timeformat= new SimpleDateFormat("HH:mm");
+				try {
+					Date fechaActual = dateformat.parse(dateformat.format(new Date()));
+					Date horaActual = timeformat.parse(timeformat.format(new Date()));
+					if(objOficinaTemporal != null && fechaActual.compareTo(objOficinaTemporal.getFechaInicio()) == 0)
 					{
-						objCartEmpleadoCE.setOficina(this.empleado.getOficina());
-						this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+						if(timeformat.parse(objOficinaTemporal.getHoraInicio()).compareTo(horaActual) > 0)
+						{
+							objOficinaTemporal = null;
+						}
 					}
-				}							
+					if(objOficinaTemporal != null && fechaActual.compareTo(objOficinaTemporal.getFechaFin()) == 0)
+					{
+						if(timeformat.parse(objOficinaTemporal.getHoraFin()).compareTo(horaActual) < 0)
+						{
+							objOficinaTemporal = null;
+						}
+					}
+				} catch (ParseException e) {
+					// TODO Bloque catch generado automáticamente
+					e.printStackTrace();
+				}					
+			}*/
+			
+			if(!(flagTieneOficinaTemporal))//if(objOficinaTemporal == null)
+			{
+				/*validación para el caso en que el usuario tenia configurada una oficina
+				temporal y esta ya caduco se verifica que el usuario no tenga expedientes pendientes, en caso no tenga
+				se procede a restaurar el valor original de su oficina*/
+				if(this.empleado.getOficinaBackup() != null)
+				{				
+					RemoteUtils remoteUtils = new RemoteUtils();
+					long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+					if(cantexp > 0)
+					{
+						this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para la oficina " + this.empleado.getOficina().getCodigo() + " - " + this.empleado.getOficina().getDescripcion() + " temporal configurada");
+						
+					}
+					else
+					{	
+						this.empleado.setOficina(this.empleado.getOficinaBackup());
+						this.empleado.setOficinaBackup(null);
+						this.empleadobean.edit(this.empleado);
+						
+						List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+						for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+						{
+							objCartEmpleadoCE.setOficina(this.empleado.getOficina());
+							//TODO:se debe actualizar el Perfil?
+							this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+						}
+					}
+				}
 			}
 			else
 			{
-				if(this.empleado.getOficina().getId() != objOficinaTemporal.getOficina().getId())
+				//En caso el usuario no tenga configurada una oficina temporal
+				if(this.empleado.getOficinaBackup() == null)
 				{
 					RemoteUtils remoteUtils = new RemoteUtils();
 					long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
 					if(cantexp > 0)
 					{
-						this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para la oficina temporal establecida");
+						this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes, no se le puede establecer la oficina temporal configurada");
 					}
 					else
 					{
-						this.empleado.setOficina(objOficinaTemporal.getOficina());
+						this.empleado.setOficinaBackup(this.empleado.getOficina());
+						this.empleado.setOficina(objOficinaTemporal);	//this.empleado.setOficina(objOficinaTemporal.getOficina());				
 						this.empleadobean.edit(this.empleado);
 						
 						List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
@@ -169,32 +241,142 @@ public class DatosCabeceraMB extends AbstractMBean {
 							objCartEmpleadoCE.setOficina(this.empleado.getOficina());
 							this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 						}
-						
+					}							
+				}
+				else
+				{
+					if(this.empleado.getOficina().getId() != objOficinaTemporal.getId())
+					{
+						RemoteUtils remoteUtils = new RemoteUtils();
+						long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+						if(cantexp > 0)
+						{
+							this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para la oficina temporal establecida");
+						}
+						else
+						{
+							this.empleado.setOficina(objOficinaTemporal);
+							this.empleadobean.edit(this.empleado);
+							
+							List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+							for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+							{
+								objCartEmpleadoCE.setOficina(this.empleado.getOficina());
+								this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+							}
+							
+						}
 					}
 				}
 			}
-		}
-		
-		if(this.empleado.getOficinaBackup() != null) { this.setEtiquetaTemporal("(Temporal)"); }
-		
-		if (empleado == null) {
-			LOG.warn("El empleado (usuario: {}) esta registrado en LDAP y no esta en el sistema", user);
-		} else if (Constantes.FLAG_INACTIVO.equals(empleado.getFlagActivo())) {
-			LOG.info("El empleado {} esta inactivo", empleado.getCodigo());
-			/*HttpServletResponse response = (HttpServletResponse) getExternalContext().getResponse();
-			try {
-				response.sendRedirect("ibm_security_logout?logoutExitPage=/index.faces");
-			} catch (Exception e) {
-				LOG.error(e.getMessage(), e);
-			}*/
-			try{
-				menu.timeOutWAS();
-			} catch (Exception e) {
-				LOG.error(e.getMessage(), e);
+			
+			if(!(perfilTemporal != null))//if(objOficinaTemporal == null)
+			{
+				/*validación para el caso en que el usuario tenia configurada una oficina
+				temporal y esta ya caduco se verifica que el usuario no tenga expedientes pendientes, en caso no tenga
+				se procede a restaurar el valor original de su oficina*/
+				if(this.empleado.getPerfilBackup() != null)
+				{				
+					RemoteUtils remoteUtils = new RemoteUtils();
+					long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+					if(cantexp > 0)
+					{
+						this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para el perfil " + this.empleado.getPerfil().getCodigo() + " - " + this.empleado.getPerfil().getDescripcion() + " temporal configurada");
+					}
+					else
+					{	
+						this.empleado.setPerfil(this.empleado.getPerfilBackup());
+						this.empleado.setPerfilBackup(null);
+						this.empleado.setCodigoCargo(this.empleado.getCodigoCargoBackup());
+						this.empleado.setCodigoCargoBackup(null);
+						this.empleadobean.edit(this.empleado);
+						
+						List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+						for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+						{
+							objCartEmpleadoCE.setOficina(this.empleado.getOficina());
+							//TODO:se debe actualizar el Perfil?
+							this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+						}
+					}
+				}
+			}else
+			{
+				//En caso el usuario no tenga configurada un perfil temporal
+				if(this.empleado.getPerfilBackup() == null)
+				{
+					RemoteUtils remoteUtils = new RemoteUtils();
+					long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+					if(cantexp > 0)
+					{
+						this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes, no se le puede establecer el perfil temporal configurado");
+					}
+					else
+					{
+						this.empleado.setPerfilBackup(this.empleado.getPerfil());
+						this.empleado.setPerfil(perfilTemporal);	//this.empleado.setOficina(objOficinaTemporal.getOficina());
+						this.empleado.setCodigoCargo(codigoPuesto);
+						this.empleado.setCodigoCargoBackup(this.empleado.getCodigoCargo());
+						this.empleadobean.edit(this.empleado);
+						
+						List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+						for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+						{
+							objCartEmpleadoCE.setOficina(this.empleado.getOficina());
+							this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+						}
+					}							
+				}
+				else
+				{
+					if(this.empleado.getPerfil().getId() != perfilTemporal.getId())
+					{
+						RemoteUtils remoteUtils = new RemoteUtils();
+						long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+						if(cantexp > 0)
+						{
+							this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para el perfil temporal establecido");
+						}
+						else
+						{
+							this.empleado.setPerfil(perfilTemporal);
+							this.empleado.setCodigoCargo(codigoPuesto);
+							this.empleadobean.edit(this.empleado);
+							
+							List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+							for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+							{
+								objCartEmpleadoCE.setOficina(this.empleado.getOficina());
+								this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+							}
+							
+						}
+					}
+				}
 			}
-		}
+			
+			//if(this.empleado.getOficinaBackup() != null) { this.setEtiquetaTemporal("(Temporal)"); }
+			if(flagTieneOficinaTemporal || perfilTemporal != null ){ this.setEtiquetaTemporal("(Temporal)"); }
 		
+			if(empleado == null){
+				LOG.info("El empleado (usuario: {}) esta registrado en LDAP y no esta en el sistema", user);
+			} else if (Constantes.FLAG_INACTIVO.equals(empleado.getFlagActivo())) {
+				LOG.info("El empleado {} esta inactivo", empleado.getCodigo());
+				/*HttpServletResponse response = (HttpServletResponse) getExternalContext().getResponse();
+				try {
+					response.sendRedirect("ibm_security_logout?logoutExitPage=/index.faces");
+				} catch (Exception e) {
+					LOG.error(e.getMessage(), e);
+				}*/
+				try{
+					menu.timeOutWAS();
+				} catch (Exception e) {
+					LOG.error(e.getMessage(), e);
+				}
+			}
+		}	
 		addObjectSession(Constantes.USUARIO_SESION, empleado);
+		addObjectSession("IDM_ACCESO", flagAccesoIDM);
     	
     	if(empleado != null && empleado.getPerfil() != null && empleado.getPerfil().getFlagAdministracion().equals("1"))
     		addObjectSession(Constantes.USUARIO_AD_SESION, empleado);
@@ -207,7 +389,8 @@ public class DatosCabeceraMB extends AbstractMBean {
 	    addObjectSession(Constantes.PARAMETROS_SESION, parametrosEscaner);*/
 	    if(empleado!=null && empleado.getOficina()!=null)
 	    	addObjectSession(Constantes.OFICINA_SESION, empleado.getOficina());	  
-	    
+		
+		
 	    //muestra el menu correspondiente
 	    try{
 			menu.restringuirAcceso();

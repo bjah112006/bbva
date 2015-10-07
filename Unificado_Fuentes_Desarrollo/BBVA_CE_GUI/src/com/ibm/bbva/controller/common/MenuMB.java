@@ -470,104 +470,112 @@ public class MenuMB extends AbstractLinksMBean {
 		
 		inicializarOpcionesMenu();
 		Empleado empleado = (Empleado) getObjectSession(Constantes.USUARIO_SESION);
-		if(empleado!=null && empleado.getPerfil()!=null && Constantes.FLAG_ACTIVO.equals(empleado.getFlagActivo())){
-			/*
-			String flagRegistraExp = empleado.getPerfil().getFlagRegistraExp();
-			String flagReasigTareas = empleado.getPerfil().getFlagAsignacion();
-			String flagBanMant = empleado.getPerfil().getFlagAdministracion();
-			String flagBanPend = empleado.getPerfil().getFlagPendientes();
-			
-			if (Constantes.FLAG_REGISTRA_EXPEDIENTE.equals(flagRegistraExp)) {
-				renderedRegExp = true;		
-			}
-			if (Constantes.FLAG_BANDEJA_PENDIENTES.equals(flagBanPend)) {
-				renderedPendientes = true;		
-			}
-			if (Constantes.FLAG_REASIGNA_TAREA.equals(flagReasigTareas)) {
-				renderedReasigTareas = true;
-			}
-			if (Constantes.FLAG_BANDEJA_MANTENIMIENTO.equals(flagBanMant)) {
-				renderedBanMant = true;		
-			}
-			*/
-							
-			String flagMenuRegistraExpediente = empleado.getPerfil().getFlagMenuRegistraExpediente();
-			String flagMenuBandejaPendientes = empleado.getPerfil().getFlagMenuBandejaPendientes();
-			String flagMenuBusqueda = empleado.getPerfil().getFlagMenuBusqueda();
-			String flagMenuBandejaHistorica = empleado.getPerfil().getFlagMenuBandejaHistorica();
-			String flagMenuBandejaAsignacion = empleado.getPerfil().getFlagMenuBandejaAsignacion();
-			String flagMenuBandejaMantenimiento = empleado.getPerfil().getFlagMenuBandejaMantenimiento();			
-			String flagMenuReporteHistorial = empleado.getPerfil().getFlagMenuReporteHistorial();
-			String flagMenuReporteConsolidado = empleado.getPerfil().getFlagMenuReporteConsolidado();
-			String flagMenuReporteTOE = empleado.getPerfil().getFlagMenuReporteTOE();
-			String flagMenuHorario = empleado.getPerfil().getFlagMenuHorario();
-			String flagMenuDescargaLDAP = empleado.getPerfil().getFlagMenuDescargaLDAP();
-			String flagMenuOficinaTemporal = empleado.getPerfil().getFlagMenuOficinaTemporal();
-			
-			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuRegistraExpediente)) {
-				habMenuRegistrarExpediente = true;
-			}
-			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuBandejaPendientes)) {
-				habMenuBandejaPendientes = true;
-			}
-			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuBusqueda)) {
-				habMenuBusqueda = true;
-			}
-			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuBandejaHistorica)) {
-				habMenuBandejaHistorica = true;
-			}
-			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuBandejaAsignacion)) {
-				habMenuBandejaAsignacion = true;
-			}
-			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuBandejaMantenimiento)) {
-				habMenuBandejaMantenimiento = true;
-			}
-			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuBandejaMantenimiento)) {
-				habMenuBandejaMantenimiento = true;
-			}
-			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuReporteHistorial) || 
-					Constantes.OPCION_MENU_VISIBLE.equals(flagMenuReporteConsolidado) || 
-					Constantes.OPCION_MENU_VISIBLE.equals(flagMenuReporteTOE)) {
-				habMenuReportes = true;
-			}
-			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuReporteHistorial)) {
-				habMenuReporteHistorial = true;
-			}
-			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuReporteConsolidado)) {
-				habMenuReporteConsolidado = true;
-			}
-			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuReporteTOE)) {
-				habMenuReporteTOE = true;
-			}
-			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuHorario)) {
-				habMenuHorario = true;
-			}	
-			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuDescargaLDAP)) {
-				habMenuDescargaLDAP = true;
-			}
-			if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuOficinaTemporal)) {
-				habMenuOficinaTemporal = true;
-			}
-		}else { //Usuario inactivo
-			if (mensajesBean == null) {
-				try {
-					mensajesBean = (MensajesBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.MensajesBeanLocal");
-				} catch (Exception e) {
-					LOG.error(e.getMessage(), e);
+		boolean flagAccesoIDM = getObjectSession("IDM_ACCESO") == null?
+								false:Boolean.parseBoolean(getObjectSession("IDM_ACCESO").toString());
+		
+		if(getObjectSession("IDM_ACCESO")!= null && !flagAccesoIDM){
+			mensajeUsuarioInactivo = "<span style=\"color:red;\">Usted no tiene acceso al sistema. Por favor coordinar con el adminstrador del sistema para que le otorgue los accesos</span>";
+		}else{
+			if(empleado!=null && empleado.getPerfil()!=null && Constantes.FLAG_ACTIVO.equals(empleado.getFlagActivo())){
+				/*
+				String flagRegistraExp = empleado.getPerfil().getFlagRegistraExp();
+				String flagReasigTareas = empleado.getPerfil().getFlagAsignacion();
+				String flagBanMant = empleado.getPerfil().getFlagAdministracion();
+				String flagBanPend = empleado.getPerfil().getFlagPendientes();
+				
+				if (Constantes.FLAG_REGISTRA_EXPEDIENTE.equals(flagRegistraExp)) {
+					renderedRegExp = true;		
+				}
+				if (Constantes.FLAG_BANDEJA_PENDIENTES.equals(flagBanPend)) {
+					renderedPendientes = true;		
+				}
+				if (Constantes.FLAG_REASIGNA_TAREA.equals(flagReasigTareas)) {
+					renderedReasigTareas = true;
+				}
+				if (Constantes.FLAG_BANDEJA_MANTENIMIENTO.equals(flagBanMant)) {
+					renderedBanMant = true;		
+				}
+				*/
+								
+				String flagMenuRegistraExpediente = empleado.getPerfil().getFlagMenuRegistraExpediente();
+				String flagMenuBandejaPendientes = empleado.getPerfil().getFlagMenuBandejaPendientes();
+				String flagMenuBusqueda = empleado.getPerfil().getFlagMenuBusqueda();
+				String flagMenuBandejaHistorica = empleado.getPerfil().getFlagMenuBandejaHistorica();
+				String flagMenuBandejaAsignacion = empleado.getPerfil().getFlagMenuBandejaAsignacion();
+				String flagMenuBandejaMantenimiento = empleado.getPerfil().getFlagMenuBandejaMantenimiento();			
+				String flagMenuReporteHistorial = empleado.getPerfil().getFlagMenuReporteHistorial();
+				String flagMenuReporteConsolidado = empleado.getPerfil().getFlagMenuReporteConsolidado();
+				String flagMenuReporteTOE = empleado.getPerfil().getFlagMenuReporteTOE();
+				String flagMenuHorario = empleado.getPerfil().getFlagMenuHorario();
+				String flagMenuDescargaLDAP = empleado.getPerfil().getFlagMenuDescargaLDAP();
+				String flagMenuOficinaTemporal = empleado.getPerfil().getFlagMenuOficinaTemporal();
+				
+				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuRegistraExpediente)) {
+					habMenuRegistrarExpediente = true;
+				}
+				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuBandejaPendientes)) {
+					habMenuBandejaPendientes = true;
+				}
+				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuBusqueda)) {
+					habMenuBusqueda = true;
+				}
+				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuBandejaHistorica)) {
+					habMenuBandejaHistorica = true;
+				}
+				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuBandejaAsignacion)) {
+					habMenuBandejaAsignacion = true;
+				}
+				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuBandejaMantenimiento)) {
+					habMenuBandejaMantenimiento = true;
+				}
+				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuBandejaMantenimiento)) {
+					habMenuBandejaMantenimiento = true;
+				}
+				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuReporteHistorial) || 
+						Constantes.OPCION_MENU_VISIBLE.equals(flagMenuReporteConsolidado) || 
+						Constantes.OPCION_MENU_VISIBLE.equals(flagMenuReporteTOE)) {
+					habMenuReportes = true;
+				}
+				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuReporteHistorial)) {
+					habMenuReporteHistorial = true;
+				}
+				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuReporteConsolidado)) {
+					habMenuReporteConsolidado = true;
+				}
+				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuReporteTOE)) {
+					habMenuReporteTOE = true;
+				}
+				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuHorario)) {
+					habMenuHorario = true;
+				}	
+				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuDescargaLDAP)) {
+					habMenuDescargaLDAP = true;
+				}
+				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuOficinaTemporal)) {
+					habMenuOficinaTemporal = true;
+				}
+			}else { //Usuario inactivo
+				if (mensajesBean == null) {
+					try {
+						mensajesBean = (MensajesBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.MensajesBeanLocal");
+					} catch (Exception e) {
+						LOG.error(e.getMessage(), e);
+					}
+				}
+				Mensajes mensaje = mensajesBean.buscarPorId(Constantes.ID_MENSAJE_USUARIO_INACTIVO);
+				if (mensaje != null && mensaje.getContenido() != null) {
+					mensajeUsuarioInactivo = new String(mensaje.getContenido());
+				} else { // valor por defecto
+					mensajeUsuarioInactivo = "<span style=\"color:red;\">El usuario se encuentra inactivo.</span>";
 				}
 			}
-			Mensajes mensaje = mensajesBean.buscarPorId(Constantes.ID_MENSAJE_USUARIO_INACTIVO);
-			if (mensaje != null && mensaje.getContenido() != null) {
-				mensajeUsuarioInactivo = new String(mensaje.getContenido());
-			} else { // valor por defecto
-				mensajeUsuarioInactivo = "<span style=\"color:red;\">El usuario se encuentra inactivo.</span>";
+			Empleado empleadoAD = (Empleado) getObjectSession(Constantes.USUARIO_AD_SESION);
+			if(empleadoAD != null && Constantes.FLAG_ACTIVO.equals(empleadoAD.getFlagActivo())){
+				habMenuBandejaMonitoreo = true;
 			}
-		}
-		Empleado empleadoAD = (Empleado) getObjectSession(Constantes.USUARIO_AD_SESION);
-		if(empleadoAD != null && Constantes.FLAG_ACTIVO.equals(empleadoAD.getFlagActivo())){
-			habMenuBandejaMonitoreo = true;
-		}
 
+		}
+		
 	}
 
 	public boolean isRenderedRegExp() {
