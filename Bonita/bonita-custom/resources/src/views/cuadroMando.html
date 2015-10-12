@@ -76,6 +76,7 @@
     	            <td style="width: 340px;">
         	            <ui-select 
             	            ng-model="gestor.select"
+                            on-select="cambioGestor($item, $model)"
                 	        theme="select2" 
 	                        style="width: 320px;" 
     	                    class="form-control" 
@@ -101,3 +102,34 @@
 		<div>
     </fieldset>
 </div>
+
+<script type="text/ng-template" id="dialogReasignar.html">
+	<div class="modal-header">
+    	<h3 class="modal-title">Asignar las solicitudes a {{gestor.select.name}}</h3>
+	</div>
+	<div class="modal-body" style="height: 150px; overflow: auto;">
+		<div ng-repeat="item in rows">
+			<div class="row">
+				<span ng-class="item.class" ng-style="{ 'padding-left': '10px', 'padding-right': '3px', 'color': {{item.color}} + ' !important' }"></span>Nro. Solicitud <b>{{item.rootprocessinstanceid}}</b>, cliente <b>{{item.nombre_cliente}}
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<label class="btn btn-primary" ng-click="ok()" ng-hide="hiddenAceptar">Aceptar</label>
+		<label class="btn btn-primary" ng-click="asignar()" ng-hide="hiddenAsignar">Asignar</label>
+		<label class="btn btn-primary" ng-click="cancel()">Cancelar</label>
+	</div>
+</script>
+
+<script type="text/ng-template" id="dialogMensaje.html">
+	<div class="modal-header">
+    	<h3 class="modal-title">{{data.title}}</h3>
+	</div>
+	<div class="modal-body">
+		{{data.message}}
+	</div>
+	<div class="modal-footer">
+		<!-- <button class="btn btn-primary" ng-click="ok()">Aceptar</button> -->
+		<label class="btn btn-primary" ng-click="cancel()">Aceptar</label>
+	</div>
+</script>

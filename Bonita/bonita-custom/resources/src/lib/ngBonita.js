@@ -417,10 +417,14 @@ angular.module('ngBonita').factory('CaseDocument', function ($resource, bonitaCo
  * Resource used to access Bonita human tasks instances
  */
 angular.module('ngBonita').factory('HumanTask', function ($resource, bonitaConfig, bonitaUtils) {
+	/*
 	var data = angular.extend({
 		id : '@id',
 		o : 'priority ASC'
 	}, bonitaConfig.getDefaultPager());
+	*/
+
+	var data = { id : '@id' }
 
 	return $resource(bonitaConfig.getBonitaUrl() + '/API/bpm/humanTask/:id', data, {
 		getFromCurrentUser : {
@@ -431,6 +435,9 @@ angular.module('ngBonita').factory('HumanTask', function ($resource, bonitaConfi
 				}
 			},
 			transformResponse : bonitaUtils.transformPaginateResponse()
+		},
+		asignar : {
+			method : 'PUT'
 		}
 	});
 });
@@ -514,6 +521,20 @@ angular.module('ngBonita').factory('HumanTaskAll', function ($resource, bonitaCo
 					return [ 'state=ready' ];
 				}
 			},
+			transformResponse : bonitaUtils.transformPaginateResponse()
+		}
+	});
+});
+
+angular.module('ngBonita').factory('Task', function ($resource, bonitaConfig, bonitaUtils) {
+	var data = angular.extend({
+		p : '@p',
+		c : '@c'
+	}, bonitaConfig.getDefaultPager());
+
+	return $resource(bonitaConfig.getBonitaUrl() + '/API/bpm/task', data, {
+		obteinTask : {
+			method : 'GET',
 			transformResponse : bonitaUtils.transformPaginateResponse()
 		}
 	});

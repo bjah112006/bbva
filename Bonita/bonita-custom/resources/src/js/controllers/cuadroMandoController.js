@@ -1,9 +1,50 @@
-abstractControllers.controller('DialogReasignacionController', ['$scope', '$modalInstance', 'rowSelect', function RestAPIController($scope, $modalInstance, rows) {
+abstractControllers.controller('DialogMensajeController', ['$scope', '$modalInstance', 'data', function RestAPIController($scope, $modalInstance, data) {
+	$scope.data = data;
+
+	$scope.cancel = function () {
+		$modalInstance.dismiss('cancel');
+	};
+}]);
+
+abstractControllers.controller('DialogReasignacionController', ['$scope', '$modalInstance', 'rows', "gestor", "HumanTask", "Task",
+	function RestAPIController($scope, $modalInstance, rows, gestor, HumanTask, Task) {
 	$scope.rows = rows;
+	$scope.gestor = gestor;
+	$scope.hiddenAceptar = true;
+	$scope.hiddenAsignar = false;
 
 	$scope.ok = function () {
-		// TODO: Save fecha
-    	$modalInstance.close();
+		$modalInstance.close();
+	}
+
+	$scope.asignar = function () {
+		for(var i in $scope.rows) {
+			var row = $scope.rows[i];
+			row.class = "glyphicon glyphicon-remove-sign";
+			row.color = "red";
+
+			var params = {
+				f: "caseId=" + row.rootprocessinstanceid
+			};
+
+			Task.obteinTask(params).$promise.then(function(request1){
+				console.log(request1);
+				var putParams = {
+					assigned_id: $scope.gestor.select.id
+				};
+				HumanTask.asignar({id: request1.items[0].id}, {"assigned_id": ""}).$promise.then(function(request2){
+					HumanTask.asignar({id: request1.items[0].id}, putParams).$promise.then(function(request2){
+						row.class = "glyphicon glyphicon-ok-sign";
+						row.color = "green";
+					});
+				});
+			});
+		}
+
+	
+		$scope.hiddenAceptar = false;
+		$scope.hiddenAsignar = true;
+    	// $modalInstance.close();
   	};
 
 	$scope.cancel = function () {
@@ -12,8 +53,10 @@ abstractControllers.controller('DialogReasignacionController', ['$scope', '$moda
 }]);
 
 abstractControllers.controller('CuadroMandoController', 
-['$scope', '$http', '$timeout', 'Listado', 'highchartsNG', 'bonitaConfig', 'DateUtil', function CuadroMandoController($scope, $http, $timeout, Listado, highchartsNG, bonitaConfig, DateUtil) {
-    $scope.tipoRed = {};
+	['$scope', '$http', '$timeout', 'Listado', 'highchartsNG', 'bonitaConfig', 'DateUtil', '$modal', 
+	function CuadroMandoController($scope, $http, $timeout, Listado, highchartsNG, bonitaConfig, DateUtil, $modal) {
+    
+	$scope.tipoRed = {};
     $scope.centroNegocio = {};
     $scope.gestorOrigen = {};
     $scope.gestor = {};
@@ -51,15 +94,42 @@ abstractControllers.controller('CuadroMandoController',
         $scope.disabledAsignar = true;
 	}
 
-	$scope.openDialogReasignar = function (size) {
+	$scope.openDialogMensaje = function(_title, _message) {
+		$scope.dataMessage = {
+			title: _title,
+			message: _message
+		};
+
+		var modalInstance = $modal.open({
+			animation: $scope.animationsEnabled,
+			templateUrl: 'dialogMensaje.html',
+			controller: 'DialogMensajeController',
+			windowClass: 'child',
+			resolve: {
+				data: function(){
+					return $scope.dataMessage
+				}
+			}
+		});
+	};
+
+	$scope.openDialogReasignar = function() {
 		var modalInstance = $modal.open({
 			animation: $scope.animationsEnabled,
 			templateUrl: 'dialogReasignar.html',
 			controller: 'DialogReasignacionController',
-			size: size,
+			windowClass: 'child',
 			resolve: {
-				rows: function () {
+				rows: function(){
+					for(var i in $scope.gridDetalle.selectedRows) {
+						$scope.gridDetalle.selectedRows[i].class = "glyphicon glyphicon-plus-sign";
+						$scope.gridDetalle.selectedRows[i].color = "black";
+					}
+
 					return $scope.gridDetalle.selectedRows;
+				},
+				gestor: function(){
+					return $scope.gestor;
 				}
 			}
 		});
@@ -91,7 +161,12 @@ abstractControllers.controller('CuadroMandoController',
 		}
         */
 
-		$scope.openDialogReasignar();
+		if($scope.gridDetalle.selectedRows.length == 0) {
+			$scope.openDialogMensaje("Advertencia", "Seleccione las solicitudes a reasignar");
+		} else {
+			$scope.openDialogReasignar();
+		}
+		
 
         /* Listado.get({"tipoConsulta": "areas", "tipoRed": item.value}).$promise.then(function(request){
             request.areas.splice(0, 0, {"val_column1": "[Todos]"});
