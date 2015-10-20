@@ -157,6 +157,8 @@ public class DatosCabeceraMB extends AbstractMBean {
 				for(DescargaLDAP descargaLdap : listaPerfiles){
 					if(!empleado.getPerfil().getCodigo().equals(descargaLdap.getPerfil().getCodigo())){
 						perfilTemporal = descargaLdap.getPerfil();
+					}else{
+						perfilTemporal = empleado.getPerfil();
 					}
 				}
 			}
@@ -361,31 +363,51 @@ public class DatosCabeceraMB extends AbstractMBean {
 				}
 				else
 				{
-					if(perfilTemporal!=null && this.empleado.getPerfil().getId() != perfilTemporal.getId())
-					{
-						RemoteUtils remoteUtils = new RemoteUtils();
-						long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
-						if(cantexp > 0)
+					if(perfilTemporal!=null){
+						if(this.empleado.getPerfil().getId() != perfilTemporal.getId())
 						{
-							this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para el perfil temporal establecido");
-							flagTienePuestoTemporal=true;
-						}
-						else
-						{
-							this.empleado.setPerfil(perfilTemporal);
-							this.empleado.setCodigoCargo(codigoPuesto);
-							this.empleadobean.edit(this.empleado);
-							
-							List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
-							for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+							RemoteUtils remoteUtils = new RemoteUtils();
+							long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+							if(cantexp > 0)
 							{
-								//objCartEmpleadoCE.setOficina(this.empleado.getOficina());
-								//this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
-								
-								objCartEmpleadoCE.getEmpleado().setPerfil(this.empleado.getPerfil());
-								this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+								this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para el perfil temporal establecido");
+								flagTienePuestoTemporal=true;
 							}
-							
+							else
+							{
+								this.empleado.setPerfil(perfilTemporal);
+								this.empleado.setCodigoCargo(codigoPuesto);
+								this.empleadobean.edit(this.empleado);
+								
+								List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+								for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+								{
+									//objCartEmpleadoCE.setOficina(this.empleado.getOficina());
+									//this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+									
+									objCartEmpleadoCE.getEmpleado().setPerfil(this.empleado.getPerfil());
+									this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+								}
+								
+							}
+						}else{
+							RemoteUtils remoteUtils = new RemoteUtils();
+							long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+							if(cantexp > 0)
+							{
+								this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para el perfil temporal establecido");
+								flagTienePuestoTemporal=true;
+							}
+							else
+							{
+								List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+								for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+								{
+									objCartEmpleadoCE.getEmpleado().setPerfil(this.empleado.getPerfil());
+									this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+								}
+								
+							}
 						}
 					}
 				}
