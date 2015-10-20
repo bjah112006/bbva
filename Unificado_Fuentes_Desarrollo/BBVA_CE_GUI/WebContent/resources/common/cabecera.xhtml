@@ -50,6 +50,12 @@
         
          }
     
+    $(document).ready(parpadearPerfil);
+    function parpadearPerfil() 
+    {  $('#lblTemporalPerfil').fadeIn(500).delay(250).fadeOut(500, parpadearPerfil);
+        
+         }
+    
 	/* ]]> */
 </script>
 
@@ -86,7 +92,7 @@
 	        <span class="columna" style="width: 20px">
 	        	<h:outputText value="#{datosCabecera.empleado.oficina.codigo}"/> 
 	        </span> 
-	        <span class="columna" style="width: 80px" id="lblTemporal">	        
+	        <span class="columna" style="width: 60px" id="lblTemporal">	        
 	        	<h:outputText value="#{datosCabecera.etiquetaTemporal}" style="font-weight: bold;color: yellow;"/> 
 	        </span> 
 	        <span class="columna" style="width: 60px">
@@ -106,6 +112,9 @@
 	        </span>
 	        <span class="columna" style="width: 100px">
 	        	<h:outputText value="#{datosCabecera.empleado.perfil.descripcion}"/>
+	        </span>
+	        <span class="columna" style="width: 80px" id="lblTemporalPerfil">	        
+	        	<h:outputText value="#{datosCabecera.etiquetaTemporalPerfil}" style="font-weight: bold;color: yellow;"/> 
 	        </span>
 	    </div>
    
