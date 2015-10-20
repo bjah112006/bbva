@@ -136,10 +136,19 @@ public class DatosCabeceraMB extends AbstractMBean {
 			this.empleado = empleadobean.buscarPorCodigo(user);  
 			//validar si tiene temporalidad
 			usuarioIDM = lista.get(0);
-			boolean flagTienePuestoTemporal = usuarioIDM.getPuestoTemporal()!=null?
+			
+			SimpleDateFormat sdf_puestoTemp = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+			LOG.info("FECHA FIN PUESTO TEMPORAL DE IDM  "+ usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0");
+			Date puestoTempFechaFinIDM = sdf_puestoTemp.parse(usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0" , new ParsePosition(0));
+			LOG.info("FECHA FIN PUESTO TEMPORAL DE IDM CON FORMATO "+puestoTempFechaFinIDM);
+			
+			boolean flagTienePuestoTemporal = (usuarioIDM.getPuestoTemporal()!=null && 
+					puestoTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss"))
+					&& (!usuarioIDM.getPuestoTemporal().getDescripcionPuesto().equals(usuarioIDM.getPuesto().getNombreCargoFuncionalLocal())))?
 											  StringUtils.isNotBlank(
 											  usuarioIDM.getPuestoTemporal().getDescripcionPuesto()):false;
-			String codigoPuesto = usuarioIDM.getPuesto().getDescripcionPuesto();
+			//String codigoPuesto = usuarioIDM.getPuesto().getDescripcionPuesto();
+			String codigoPuesto = "";								  
 			com.ibm.bbva.entities.Perfil perfilTemporal = null;
 			if(flagTienePuestoTemporal){
 				codigoPuesto = usuarioIDM.getPuestoTemporal().getDescripcionPuesto();
@@ -151,13 +160,14 @@ public class DatosCabeceraMB extends AbstractMBean {
 				}
 			}
 			
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-			LOG.info("FECHA FIN DE IDM  "+ usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0");
-			Date fechaFinIDM = sdf.parse(usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0" , new ParsePosition(0));
-			LOG.info("FECHA FIN DE IDM CON FORMATO "+fechaFinIDM);
+			SimpleDateFormat sdf_oficinaTemp = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+			LOG.info("FECHA FIN OFICINA TEMPORAL DE IDM  "+ usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0");
+			Date ofiTempFechaFinIDM = sdf_oficinaTemp.parse(usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0" , new ParsePosition(0));
+			LOG.info("FECHA FIN OFICINA TEMPORAL DE IDM CON FORMATO "+ofiTempFechaFinIDM);
 			
 			boolean flagTieneOficinaTemporal = (usuarioIDM.getCentroTemporal()!=null &&  
-					fechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss")))?
+					ofiTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss"))
+					&& (!usuarioIDM.getCentroTemporal().getDescripcion().equals(usuarioIDM.getCodigoEntidadUsuario())))?
 											   StringUtils.isNotBlank(
 											   usuarioIDM.getCentroTemporal().getDescripcion()):false;
 											   
@@ -282,7 +292,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 				}
 			}
 			
-			if(perfilTemporal == null)//if(objOficinaTemporal == null)
+			if(!(flagTienePuestoTemporal))//if(objOficinaTemporal == null)
 			{
 				/*validación para el caso en que el usuario tenia configurada una oficina
 				temporal y esta ya caduco se verifica que el usuario no tenga expedientes pendientes, en caso no tenga
@@ -294,6 +304,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 					if(cantexp > 0)
 					{
 						this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para el perfil " + this.empleado.getPerfil().getCodigo() + " - " + this.empleado.getPerfil().getDescripcion() + " temporal configurada");
+						flagTienePuestoTemporal=true;
 					}
 					else
 					{	
@@ -325,7 +336,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 					if(cantexp > 0)
 					{
 						this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes, no se le puede establecer el perfil temporal configurado");
-						perfilTemporal = null;
+						flagTienePuestoTemporal = false;
 					}
 					else
 					{
@@ -355,6 +366,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 						if(cantexp > 0)
 						{
 							this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para el perfil temporal establecido");
+							flagTienePuestoTemporal=true;
 						}
 						else
 						{
@@ -380,7 +392,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 			//if(this.empleado.getOficinaBackup() != null) { this.setEtiquetaTemporal("(Temporal)"); }
 			if(flagTieneOficinaTemporal){ this.setEtiquetaTemporal("(Temporal)"); }
 			
-			if(perfilTemporal != null ){ this.setEtiquetaTemporalPerfil("(Temporal)"); }
+			if(flagTienePuestoTemporal ){ this.setEtiquetaTemporalPerfil("(Temporal)"); }
 			
 			if(empleado == null){
 				LOG.info("El empleado (usuario: {}) esta registrado en LDAP y no esta en el sistema", user);
