@@ -137,13 +137,14 @@ public class DatosCabeceraMB extends AbstractMBean {
 			//validar si tiene temporalidad
 			usuarioIDM = lista.get(0);
 			
-			SimpleDateFormat sdf_puestoTemp = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-			LOG.info("FECHA FIN PUESTO TEMPORAL DE IDM  "+ usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0");
-			Date puestoTempFechaFinIDM = sdf_puestoTemp.parse(usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0" , new ParsePosition(0));
+			//SimpleDateFormat sdf_puestoTemp = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS");
+			LOG.info("FECHA FIN PUESTO TEMPORAL DE IDM  "+ (usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0"));
+			//Date puestoTempFechaFinIDM = sdf_puestoTemp.parse(usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0" , new ParsePosition(0));
+			Date puestoTempFechaFinIDM = usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime():null;
 			LOG.info("FECHA FIN PUESTO TEMPORAL DE IDM CON FORMATO "+puestoTempFechaFinIDM);
 			
 			boolean flagTienePuestoTemporal = (usuarioIDM.getPuestoTemporal()!=null && 
-					puestoTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss"))
+					(!puestoTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS")))
 					&& (!usuarioIDM.getPuestoTemporal().getDescripcionPuesto().equals(usuarioIDM.getPuesto().getNombreCargoFuncionalLocal())))?
 											  StringUtils.isNotBlank(
 											  usuarioIDM.getPuestoTemporal().getDescripcionPuesto()):false;
@@ -160,14 +161,15 @@ public class DatosCabeceraMB extends AbstractMBean {
 				}
 			}
 			
-			SimpleDateFormat sdf_oficinaTemp = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-			LOG.info("FECHA FIN OFICINA TEMPORAL DE IDM  "+ usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0");
-			Date ofiTempFechaFinIDM = sdf_oficinaTemp.parse(usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0" , new ParsePosition(0));
+			//SimpleDateFormat sdf_oficinaTemp = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+			LOG.info("FECHA FIN OFICINA TEMPORAL DE IDM  "+ (usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0"));
+			//Date ofiTempFechaFinIDM = sdf_oficinaTemp.parse(usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0" , new ParsePosition(0));
+			Date ofiTempFechaFinIDM = usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime():null;
 			LOG.info("FECHA FIN OFICINA TEMPORAL DE IDM CON FORMATO "+ofiTempFechaFinIDM);
 			
 			boolean flagTieneOficinaTemporal = (usuarioIDM.getCentroTemporal()!=null &&  
-					ofiTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss"))
-					&& (!usuarioIDM.getCentroTemporal().getDescripcion().equals(usuarioIDM.getCodigoEntidadUsuario())))?
+					(!ofiTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss")))
+					&& (!usuarioIDM.getCentroTemporal().getDescripcion().equals(usuarioIDM.getCodigoCentro())))?
 											   StringUtils.isNotBlank(
 											   usuarioIDM.getCentroTemporal().getDescripcion()):false;
 											   
@@ -266,7 +268,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 				}
 				else
 				{
-					if(this.empleado.getOficina().getId() != objOficinaTemporal.getId())
+					if(objOficinaTemporal!=null && this.empleado.getOficina().getId() != objOficinaTemporal.getId())
 					{
 						RemoteUtils remoteUtils = new RemoteUtils();
 						long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
@@ -359,7 +361,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 				}
 				else
 				{
-					if(this.empleado.getPerfil().getId() != perfilTemporal.getId())
+					if(perfilTemporal!=null && this.empleado.getPerfil().getId() != perfilTemporal.getId())
 					{
 						RemoteUtils remoteUtils = new RemoteUtils();
 						long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
