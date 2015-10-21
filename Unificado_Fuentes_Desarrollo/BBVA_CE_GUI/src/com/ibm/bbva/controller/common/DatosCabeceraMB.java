@@ -325,7 +325,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 							//TODO:se debe actualizar el Perfil?
 							//this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 							
-							objCartEmpleadoCE.getEmpleado().setPerfil(this.empleado.getPerfil());
+							objCartEmpleadoCE.setPerfil(this.empleado.getPerfil());
 							this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 						}
 					}
@@ -356,7 +356,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 							//objCartEmpleadoCE.setOficina(this.empleado.getOficina());
 							//this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 							
-							objCartEmpleadoCE.getEmpleado().setPerfil(this.empleado.getPerfil());
+							objCartEmpleadoCE.setPerfil(this.empleado.getPerfil());
 							this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 						}
 					}							
@@ -385,7 +385,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 									//objCartEmpleadoCE.setOficina(this.empleado.getOficina());
 									//this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 									
-									objCartEmpleadoCE.getEmpleado().setPerfil(this.empleado.getPerfil());
+									objCartEmpleadoCE.setPerfil(this.empleado.getPerfil());
 									this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 								}
 								
@@ -403,7 +403,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 								List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
 								for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
 								{
-									objCartEmpleadoCE.getEmpleado().setPerfil(this.empleado.getPerfil());
+									objCartEmpleadoCE.setPerfil(this.empleado.getPerfil());
 									this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 								}
 								

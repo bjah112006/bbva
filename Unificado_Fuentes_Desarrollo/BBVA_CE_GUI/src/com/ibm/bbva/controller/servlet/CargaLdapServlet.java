@@ -151,7 +151,11 @@ public class CargaLdapServlet extends HttpServlet
 					objLdapTemp.setCodigoOficinaTemp(null);	
 					objLdapTemp.setCodigoCargoTemp(null);	
 					//validar si existe temporalidad en el registro
-					boolean flagTienePuestoTemporal = objUsuario.getPuestoTemporal()!=null?
+					Date puestoTempFechaFinIDM = objUsuario.getPuestoTemporal()!=null? objUsuario.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime():null;
+					
+					boolean flagTienePuestoTemporal = (objUsuario.getPuestoTemporal()!=null  && 
+							(!puestoTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS")))
+							&& (!objUsuario.getPuestoTemporal().getDescripcionPuesto().equals(objUsuario.getPuesto().getNombreCargoFuncionalLocal())))?
 							  StringUtils.isNotBlank(
 									  objUsuario.getPuestoTemporal().getDescripcionPuesto()):false;
 					if(flagTienePuestoTemporal){
@@ -168,7 +172,12 @@ public class CargaLdapServlet extends HttpServlet
 						objLdapTemp.setCodigoCargo(objUsuario.getPuesto() != null ? objUsuario.getPuesto().getNombreCargoFuncionalLocal() : null);
 						
 					}
-					boolean flagTieneOficinaTemporal = objUsuario.getCentroTemporal()!=null?
+					
+					Date ofiTempFechaFinIDM = objUsuario.getCentroTemporal()!=null? objUsuario.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime():null;
+					
+					boolean flagTieneOficinaTemporal = (objUsuario.getCentroTemporal()!=null &&  
+							(!ofiTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss")))
+							&& (!objUsuario.getCentroTemporal().getDescripcion().equals(objUsuario.getCodigoCentro())))?
 												   StringUtils.isNotBlank(
 														   objUsuario.getCentroTemporal().getDescripcion()):false;
 					if(flagTieneOficinaTemporal){
