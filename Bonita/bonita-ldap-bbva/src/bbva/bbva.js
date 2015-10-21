@@ -201,7 +201,7 @@ abrirConsulta = function(page) {
 			} 
 
         	bodyContent.html(data);
-            bodyContent.find("#panelIzq").css("height", height + "px");
+            // bodyContent.find("#panelIzq").css("height", height + "px");
 
             if($("#panelAngular").length > 0) {
                 var url = document.URL;
@@ -237,25 +237,38 @@ validarDocumento = function() {
 }
 
 $(window).resize(function(){
+	if (typeof window.innerWidth != 'undefined') {
+		viewportWidth = window.innerWidth;
+		viewportHeight = window.innerHeight;
+	} else if (typeof document.documentElement != 'undefined'
+			&& typeof document.documentElement.clientWidth != 'undefined'
+			&& document.documentElement.clientWidth != 0) {
+		viewportWidth = document.documentElement.clientWidth;
+		viewportHeight = document.documentElement.clientHeight;
+	} else {
+		viewportWidth = document.getElementsByTagName('body')[0].clientWidth;
+		viewportHeight = document.getElementsByTagName('body')[0].clientHeight;
+	}
+
 	if($("#panelAngular").length > 0) {
-		$("#panelAngular").css("width", ($(window).width() - ($("#panelConsulta").outerWidth())) + "px");
-		$("#panelAngular").css("height", ($(window).height() - $("#header").outerHeight() - 5) + "px");
+		$("#panelAngular").css({
+			  "width": $(window).width() + "px"
+			, "height": (viewportHeight - $("#header").outerHeight() - 5) + "px"
+			, "padding-top": $("#header").outerHeight() + "px"
+		});
 	}
 });
 
-$(document).ready(function(){
-});
-
 $(document).bind('DOMNodeInserted', function(event) {
-	if(event.target.nodeName == 'LI') {
+    if(event.target.nodeName == 'LI') {
         if($(event.target).hasClass("processlistinguser")) {
             $("<li class='bbva-reporte'><a class='bbva-reporte' href='javascript: void(0);' onclick='abrirReporte()'>Reporte</a></li>").insertAfter($(event.target));
             $("body").append(createDialog());
         } else if($(event.target).hasClass("bbva-reporte")) {
             $("<li class='bbva-consulta'><a class='bbva-consulta' href='javascript: void(0);' onclick='abrirConsulta(\"\")'>Consulta</a></li>").insertAfter($(event.target));
-        }/* else if($(event.target).hasClass("bbva-consulta")) {
+        } else if($(event.target).hasClass("bbva-consulta")) {
             $("<li class='bbva-cuadro'><a class='bbva-cuadro' href='javascript: void(0);' onclick='abrirConsulta(\"cuadromando\")'>Cuadro de Mando</a></li>").insertAfter($(event.target));
-        }*/
+        }
     }
 	validarDocumento();
 });
