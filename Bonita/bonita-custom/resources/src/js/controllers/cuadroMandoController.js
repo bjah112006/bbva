@@ -21,7 +21,6 @@ abstractControllers.controller('DialogReasignacionController', ['$scope', '$moda
 		for(var i in $scope.rows) {
 			var row = $scope.rows[i];
 			row.class = "glyphicon glyphicon-remove-sign";
-			row.color = "red";
 
 			var params = {
 				f: "caseId=" + row.rootprocessinstanceid
@@ -35,7 +34,6 @@ abstractControllers.controller('DialogReasignacionController', ['$scope', '$moda
 				HumanTask.asignar({id: request1.items[0].id}, {"assigned_id": ""}).$promise.then(function(request2){
 					HumanTask.asignar({id: request1.items[0].id}, putParams).$promise.then(function(request2){
 						row.class = "glyphicon glyphicon-ok-sign";
-						row.color = "green";
 					});
 				});
 			});
@@ -123,7 +121,6 @@ abstractControllers.controller('CuadroMandoController',
 				rows: function(){
 					for(var i in $scope.gridDetalle.selectedRows) {
 						$scope.gridDetalle.selectedRows[i].class = "glyphicon glyphicon-plus-sign";
-						$scope.gridDetalle.selectedRows[i].color = "black";
 					}
 
 					return $scope.gridDetalle.selectedRows;

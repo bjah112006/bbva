@@ -18,6 +18,7 @@
 									id="cboTipoDocumento"
                                     ng-model="tipoDocumento.select"
                                     ng-disabled="disabled.tipoDocumento"
+									on-select="cambioValor($item, $model)"
                                     theme="select2" 
                                     style="width: 220px;" 
                                     class="form-control" 
@@ -51,6 +52,7 @@
                                 <ui-select 
                                     ng-model="estacion.select"
                                     ng-disabled="disabled.estacion"
+									on-select="cambioValor($item, $model)"
                                     theme="select2" 
                                     style="width: 220px;" 
                                     class="form-control" 
@@ -66,7 +68,7 @@
                         </tr>
                     </table>
                 </td><td valign="top">
-                    <label class="btn btn-primary" ng-click="buscar()" style="float: right;">Consultar</label>
+                    <label class="btn btn-primary" ng-click="buscar()" style="float: right;" ng-disabled="disabledConsultar">Consultar</label>
                 </td></tr>
             </table>
         </div>
@@ -75,7 +77,7 @@
     <fieldset>
         <legend>Resultado</legend>
         <div class="row">
-            <div style="height: 250px; width: 1000px; margin: auto;" ag-grid="gridInstances"></div>
+            <div ng-style="{'height': '300px', 'width': {{witdh}} + 'px', 'margin': 'auto'}" ag-grid="gridInstances"></div>
         </div>
     </fieldset>
 </div>

@@ -1,5 +1,6 @@
 abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http', 'ConsultaSolicitudes', 'bonitaConfig', 'DateUtil', '$timeout',
 function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaConfig, DateUtil, $timeout) {
+	$scope.disabledConsultar = true;
     $scope.tiposDocumento = [
         {"id": "rootprocessinstanceid", "name": "Número Solicitud"},
         {"id": "num_doi_cliente", "name": "Número DOI Cliente"},
@@ -22,6 +23,18 @@ function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaC
         estacion: true
     };
 
+    var container = window.parent.document.getElementById("panelAngular");
+    if(container != null) {
+        // console.log(container.offsetWidth);
+        $scope.witdh = container.offsetWidth - 135;
+    } else {
+        $scope.witdh = 820;
+    }
+
+    $scope.cambioValor= function(item, model) {
+        $scope.disabledConsultar = false;
+    };
+
     $scope.$watch(function(scope) { return scope.tipoFiltro }, function(newValue, oldValue) {
         $scope.disabled.tipoDocumento = (newValue == 'estacion');
         $scope.disabled.estacion = (newValue == 'tiposDocumento');
@@ -32,22 +45,13 @@ function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaC
         } else {
             $scope.estacion = {};
         }
+
+		$scope.disabledConsultar = true;
     });
 
     var columnDefs = [
         {headerName: "N° Solicitud", field: "url", width: 80, cellRenderer: function(params) {
             var resultElement = document.createElement("a");
-
-/*
-                    if(data.solicitudes[i].idArchivada!=""){
-                        row += '<tr><td><a href="' + obtenerContexto('homepage') + '?id=' + data.solicitudes[i].idArchivada + '&_p=' + data.solicitudes[i].variable + '&_pf=1">' + data.solicitudes[i].nroSolicitud + '</a></td>';
-                    }else{
-                        row += '<tr><td><a href="' + obtenerContexto('homepage') + '?id=' + data.solicitudes[i].nroSolicitud + '&_p=' + data.solicitudes[i].variable + '&_pf=1">' + data.solicitudes[i].nroSolicitud + '</a></td>';
-                    }
-                    
-                    ?id=936&_p=archivedcasemoredetailsadmin&_pf=1
-                    "/portal/homepage#?id=" + params.value + '&_p=casemoredetails&_pf=1'
-*/
             elements = angular.fromJson(params.value);
             resultElement.target="_top"
             resultElement.href = bonitaConfig.getBonitaUrl() + elements.url;
@@ -115,35 +119,49 @@ function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaC
         }
     };
 
-    $scope.pageSize = 6;
+    var parameters = {};
+
+    $scope.pageSize = 10;
     $scope.buscar = function(){
         $timeout(function(){
-            window.parent.document.getElementById("initloader").style.display = "block";
+            var initLoader = window.parent.document.getElementById("initloader");
+            if(initLoader != null) {
+                initLoader.style.display = "block";
+            }
         }, 0);
 
-        var parameters = {
-            p: 0,
-            c: 1,
-            f: "username=" + bonitaConfig.getUsername() + ",",
-            u: bonitaConfig.getUsername()
-        };
+        parameters = {
+        	p: -1,
+	        c: 1,
+    	    f: "",
+        	r1: 0,
+	        r2: 0,
+    	    n: "S",
+        	u: bonitaConfig.getUsername()
+	    };
 
-        if($scope.tipoFiltro == 'estacion') {
-            parameters.f += "estacion='" + $scope.estacion["select"]["id"] + "'";
+		if($scope.tipoFiltro == 'estacion') {
+            parameters.f = "estacion=" + $scope.estacion["select"]["id"];
         } else {
-            parameters.f +=  $scope.tipoDocumento["select"]["id"] + "='" + $scope.nroDocumento + "'";
+            parameters.f =  $scope.tipoDocumento["select"]["id"] + "=" + $scope.nroDocumento;
         }
 
-        ConsultaSolicitudes.get(parameters).$promise.then(function(solicitudes){
+        ConsultaSolicitudes.get(parameters).$promise.then(function(request){
             var dataSource = {
-                rowCount: solicitudes.totalSolicitudes,
+                rowCount: request.totalSolicitudes,
                 pageSize: $scope.pageSize,
                 getRows: function (params) {
-                    var pag = params.startRow / $scope.pageSize;
-                    parameters.p = pag;
+                    var pagOld = parameters.p;
+                    var pagNew = params.startRow / $scope.pageSize;
+                    parameters.p = pagNew;
                     parameters.c = $scope.pageSize;
-                    ConsultaSolicitudes.get(parameters).$promise.then(function(solicitudes){
-                        params.successCallback(solicitudes.solicitudes, -1);
+                    parameters.n = pagNew >= pagOld ? 'S' : 'A';
+                    console.log(parameters);
+                    
+                    ConsultaSolicitudes.get(parameters).$promise.then(function(request){
+                        parameters.r1 = request.ids1;
+                        parameters.r2 = request.ids2;
+                        params.successCallback(request.solicitudes, request.totalSolicitudes);
                     });
                 }
             };

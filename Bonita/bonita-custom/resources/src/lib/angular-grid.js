@@ -5755,12 +5755,15 @@ var awk;
                 return versionCopy !== this.callVersion;
             };
             PaginationController.prototype.onBtNext = function () {
-				console.log(this.btLast.disabled);
+				// console.log(this.btLast.disabled);	
                 this.currentPage++;
                 this.loadPage();
             };
             PaginationController.prototype.onBtPrevious = function () {
                 this.currentPage--;
+				if(this.currentPage < 0) {
+					this.currentPage = 0;
+				}
                 this.loadPage();
             };
             PaginationController.prototype.onBtFirst = function () {
