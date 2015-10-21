@@ -159,13 +159,17 @@ public class CargaLdapServlet extends HttpServlet
 							  StringUtils.isNotBlank(
 									  objUsuario.getPuestoTemporal().getDescripcionPuesto()):false;
 					if(flagTienePuestoTemporal){
+						//VALIDAR SI CAMBIO DE PERFIL
 						String codigoPuestoTemporal = objUsuario.getPuestoTemporal().getDescripcionPuesto();
-						List<DescargaLDAP> listaPerfiles = descargaLDAPBeanLocal.buscar("-1", codigoPuestoTemporal, "-1", "-1", "-1", "-1");
-						Empleado empleado = empleadobean.buscarPorCodigo(objUsuario.getUsuario());  
-						for(DescargaLDAP descargaLdap : listaPerfiles){
-							if(!empleado.getPerfil().getCodigo().equals(descargaLdap.getPerfil().getCodigo())){
-								objLdapTemp.setCodigoCargoTemp(codigoPuestoTemporal);	
-							}
+						//Buscar nuevo peril
+						List<DescargaLDAP> listaPerfilesNuevo = descargaLDAPBeanLocal.buscar("-1", codigoPuestoTemporal, "-1", "-1", "-1", "-1");
+						String codigoPerfilNuevo = listaPerfilesNuevo.get(0).getPerfil().getCodigo();
+						//Buscar peril original
+						List<DescargaLDAP> listaPerfilesOriginal = descargaLDAPBeanLocal.buscar("-1", objUsuario.getPuesto().getNombreCargoFuncionalLocal(), "-1", "-1", "-1", "-1");
+						String codigoPerfilOriginal = listaPerfilesOriginal.get(0).getPerfil().getCodigo();
+						//Empleado empleado = empleadobean.buscarPorCodigo(objUsuario.getUsuario());  
+						if(!codigoPerfilOriginal.equals(codigoPerfilNuevo)){
+							objLdapTemp.setCodigoCargoTemp(codigoPuestoTemporal);	
 						}
 						objLdapTemp.setCodigoCargo(codigoPuestoTemporal);
 					}else{
@@ -187,7 +191,6 @@ public class CargaLdapServlet extends HttpServlet
 						objLdapTemp.setCodigoOficina(objUsuario.getCodigoCentro());	
 					}
 					//fin validacion de temporalidad
-					
 					if(oficinasSincronizables == null || oficinasSincronizables.length() == 0)
 					{
 						ldapTempBeanLocal.create(objLdapTemp);						
