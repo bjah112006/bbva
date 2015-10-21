@@ -150,7 +150,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 											  usuarioIDM.getPuestoTemporal().getDescripcionPuesto()):false;
 			//String codigoPuesto = usuarioIDM.getPuesto().getDescripcionPuesto();
 			String codigoPuesto = "";								  
-			com.ibm.bbva.entities.Perfil perfilTemporal = null;
+			com.ibm.bbva.entities.Perfil perfilTemporal = empleado.getPerfil();
 			if(flagTienePuestoTemporal){
 				codigoPuesto = usuarioIDM.getPuestoTemporal().getDescripcionPuesto();
 				List<DescargaLDAP> listaPerfiles = descargaLDAPBeanLocal.buscar("-1", codigoPuesto, "-1", "-1", "-1", "-1");
