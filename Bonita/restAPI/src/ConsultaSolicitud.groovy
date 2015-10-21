@@ -73,7 +73,7 @@ public class ConsultaSolicitud implements RestApiController {
         ConsultaResponse response = consultar(request)
 
         ObjectMapper mapper = new ObjectMapper();
-        logger.log Level.SEVERE, mapper.writeValueAsString(response.getSolicitudes());
+        // logger.log Level.SEVERE, mapper.writeValueAsString(response.getSolicitudes());
         apiResponseBuilder.with {
             withResponse mapper.writeValueAsString(response)
             build()
@@ -240,23 +240,49 @@ public class ConsultaSolicitud implements RestApiController {
         params.put "p_rownum", Long.parseLong(isNullRequestParam(request, "r1", "0"));
         logger.log Level.SEVERE, "===> Consulta en proceso: " + select;
         logger.log Level.SEVERE, "===> Parametros en proceso: " + params;
-        result.addAll(executeQuery(select, params));
-        logger.log Level.SEVERE, result.size() + "";
+        if(page > -1) {
+            result.addAll(executeQuery(select, params));
+            logger.log Level.SEVERE, result.size() + "";
+        }
+        
+        long rowCount = 0L;
+        select = "select * from fastpyme.fn_count_instance(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        rowCount += executeQueryCount(select, params);
+        logger.log Level.SEVERE, rowCount + " Solo Pendientes";
         
         if(!active) {
             select = "select * from fastpyme.fn_arch_instance(?, ?, ?, ?, ?, ?, ?, ?, ?)";
             params.put "p_rownum", Long.parseLong(isNullRequestParam(request, "r2", "0"));
             logger.log Level.SEVERE, "===> Consulta archivadas: " + select;
             logger.log Level.SEVERE, "===> Parametros archivados: " + params;
-            result.addAll(executeQuery(select, params));
-            logger.log Level.SEVERE, result.size() + "";
+            if(page > -1) {
+                result.addAll(executeQuery(select, params));
+                logger.log Level.SEVERE, result.size() + "";
+            }
+            
+            select = "select * from fastpyme.fn_count_arch_instance(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            rowCount += executeQueryCount(select, params);
+            logger.log Level.SEVERE, rowCount + " Pendientes y Activas";
         }
         
         Collections.sort(result);
         response.setSolicitudes(result.size() <= rowsForPage ? result : result.subList(0, rowsForPage - 1));
-        response.setTotalSolicitudes(response.getSolicitudes().size());
+        response.setTotalSolicitudes(rowCount);
+        
+        Long ids1 = 0L;
+        Long ids2 = 0L;
+        
+        for(Solicitud s : response.getSolicitudes()) {
+            if("P".equalsIgnoreCase(s.type_instance) && s.rownum.compareTo(ids1) > 0) {
+                ids1 = s.rownum;
+            } else if("A".equalsIgnoreCase(s.type_instance) && s.rownum.compareTo(ids2) > 0) {
+                ids2 = s.rownum;
+            }
+        }
         
         long t2 = System.currentTimeMillis();
+        response.setIds1(ids1);
+        response.setIds2(ids2);
         response.setTiempoEjecucion(t2 - t1);
     }
 
@@ -281,6 +307,49 @@ public class ConsultaSolicitud implements RestApiController {
         }
 
         return cols;
+    }
+    
+    private Long executeQueryCount(String query, Map<String, Object> parameters) throws BussinesException {
+        Long result = 0L;
+        Connection cn = null
+        PreparedStatement ps = null
+        ResultSet rs = null
+        try {
+            InitialContext ic = new InitialContext()
+            DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS")
+            cn = ds.getConnection()
+            ps = cn.prepareStatement(query)
+            
+            int i = 1;
+            for(String key : parameters.keySet()) {
+                ps.setObject(i, parameters.get(key));
+                i++;
+            }
+            
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                result = rs.getLong("rows_count");
+            }
+        } catch (Exception e) {
+            throw new BussinesException(e)
+        } finally {
+            try {
+                if(rs != null) {
+                    rs.close()
+                }
+                if(ps != null) {
+                    ps.close()
+                }
+                if(cn != null) {
+                    cn.close()
+                }
+            } catch (Exception e) {
+                throw new BussinesException(e)
+            }
+        }
+        
+        return result;
     }
     
     private List<Solicitud> executeQuery(String query, Map<String, Object> parameters) throws BussinesException {
@@ -406,288 +475,6 @@ public class ConsultaSolicitud implements RestApiController {
         Long rownum; // bigint
         String type_instance; // text
         String userTask; // text
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getVersion() {
-            return version;
-        }
-
-        public void setVersion(String version) {
-            this.version = version;
-        }
-
-        public Long getTenantid() {
-            return tenantid;
-        }
-
-        public void setTenantid(Long tenantid) {
-            this.tenantid = tenantid;
-        }
-
-        public Long getRootprocessinstanceid() {
-            return rootprocessinstanceid;
-        }
-
-        public void setRootprocessinstanceid(Long rootprocessinstanceid) {
-            this.rootprocessinstanceid = rootprocessinstanceid;
-        }
-
-        public Long getStartdate() {
-            return startdate;
-        }
-
-        public void setStartdate(Long startdate) {
-            this.startdate = startdate;
-        }
-
-        public Long getActorid() {
-            return actorid;
-        }
-
-        public void setActorid(Long actorid) {
-            this.actorid = actorid;
-        }
-
-        public String getActor() {
-            return actor;
-        }
-
-        public void setActor(String actor) {
-            this.actor = actor;
-        }
-
-        public Long getFlownodedefinitionid() {
-            return flownodedefinitionid;
-        }
-
-        public void setFlownodedefinitionid(Long flownodedefinitionid) {
-            this.flownodedefinitionid = flownodedefinitionid;
-        }
-
-        public String getTaskname() {
-            return taskname;
-        }
-
-        public void setTaskname(String taskname) {
-            this.taskname = taskname;
-        }
-
-        public Integer getStateid() {
-            return stateid;
-        }
-
-        public void setStateid(Integer stateid) {
-            this.stateid = stateid;
-        }
-
-        public String getStatename() {
-            return statename;
-        }
-
-        public void setStatename(String statename) {
-            this.statename = statename;
-        }
-
-        public Long getAssigneeid() {
-            return assigneeid;
-        }
-
-        public void setAssigneeid(Long assigneeid) {
-            this.assigneeid = assigneeid;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getFirstname() {
-            return firstname;
-        }
-
-        public void setFirstname(String firstname) {
-            this.firstname = firstname;
-        }
-
-        public String getLastname() {
-            return lastname;
-        }
-
-        public void setLastname(String lastname) {
-            this.lastname = lastname;
-        }
-
-        public String getEstacion() {
-            return estacion;
-        }
-
-        public void setEstacion(String estacion) {
-            this.estacion = estacion;
-        }
-
-        public String getTipo_doi_cliente() {
-            return tipo_doi_cliente;
-        }
-
-        public void setTipo_doi_cliente(String tipo_doi_cliente) {
-            this.tipo_doi_cliente = tipo_doi_cliente;
-        }
-
-        public String getNum_doi_cliente() {
-            return num_doi_cliente;
-        }
-
-        public void setNum_doi_cliente(String num_doi_cliente) {
-            this.num_doi_cliente = num_doi_cliente;
-        }
-
-        public String getNombre_cliente() {
-            return nombre_cliente;
-        }
-
-        public void setNombre_cliente(String nombre_cliente) {
-            this.nombre_cliente = nombre_cliente;
-        }
-
-        public String getEstado_solicitud() {
-            return estado_solicitud;
-        }
-
-        public void setEstado_solicitud(String estado_solicitud) {
-            this.estado_solicitud = estado_solicitud;
-        }
-
-        public String getOferta_aprobada() {
-            return oferta_aprobada;
-        }
-
-        public void setOferta_aprobada(String oferta_aprobada) {
-            this.oferta_aprobada = oferta_aprobada;
-        }
-
-        public String getOfi_registro() {
-            return ofi_registro;
-        }
-
-        public void setOfi_registro(String ofi_registro) {
-            this.ofi_registro = ofi_registro;
-        }
-
-        public String getNum_rvgl() {
-            return num_rvgl;
-        }
-
-        public void setNum_rvgl(String num_rvgl) {
-            this.num_rvgl = num_rvgl;
-        }
-
-        public String getProducto() {
-            return producto;
-        }
-
-        public void setProducto(String producto) {
-            this.producto = producto;
-        }
-
-        public String getCampania() {
-            return campania;
-        }
-
-        public void setCampania(String campania) {
-            this.campania = campania;
-        }
-
-        public String getClte_clasificacion() {
-            return clte_clasificacion;
-        }
-
-        public void setClte_clasificacion(String clte_clasificacion) {
-            this.clte_clasificacion = clte_clasificacion;
-        }
-
-        public String getNum_tramite() {
-            return num_tramite;
-        }
-
-        public void setNum_tramite(String num_tramite) {
-            this.num_tramite = num_tramite;
-        }
-
-        public String getUsu_registrante() {
-            return usu_registrante;
-        }
-
-        public void setUsu_registrante(String usu_registrante) {
-            this.usu_registrante = usu_registrante;
-        }
-
-        public String getAmbito_registro() {
-            return ambito_registro;
-        }
-
-
-
-        public void setAmbito_registro(String ambito_registro) {
-            this.ambito_registro = ambito_registro;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public String getCodigo_centro_negocio() {
-            return codigo_centro_negocio;
-        }
-
-        public void setCodigo_centro_negocio(String codigo_centro_negocio) {
-            this.codigo_centro_negocio = codigo_centro_negocio;
-        }
-
-        public String getCodigo_cliente() {
-            return codigo_cliente;
-        }
-
-        public void setCodigo_cliente(String codigo_cliente) {
-            this.codigo_cliente = codigo_cliente;
-        }
-
-        public Long getRownum() {
-            return rownum;
-        }
-
-        public void setRownum(Long rownum) {
-            this.rownum = rownum;
-        }
-
-        public String getType_instance() {
-            return type_instance;
-        }
-
-        public void setType_instance(String type_instance) {
-            this.type_instance = type_instance;
-        }
-
-        public String getUserTask() {
-            return userTask;
-        }
-
-        public void setUserTask(String userTask) {
-            this.userTask = userTask;
-        }
 
         @Override
         public int compareTo(Solicitud o) {
