@@ -40,6 +40,10 @@ public class CartEmpleadoCE implements Serializable {
     @JoinColumn(name = "ID_OFICINA_FK")
     private Oficina oficina;
 
+  	@ManyToOne
+  	@JoinColumn(name="ID_PERFIL_FK")
+  	private Perfil perfil;
+    
     public CartEmpleadoCE() {
     }
     
@@ -89,4 +93,13 @@ public class CartEmpleadoCE implements Serializable {
 		this.oficina = oficina;
 	}
 
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
+	}
+
+	
 }
