@@ -137,13 +137,16 @@ public class DatosCabeceraMB extends AbstractMBean {
 			//validar si tiene temporalidad
 			usuarioIDM = lista.get(0);
 			
-			//SimpleDateFormat sdf_puestoTemp = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS");
+			LOG.info("FECHA INICIO PUESTO TEMPORAL DE IDM  "+ (usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
+			Date puestoTempFechaInicioIDM = usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
+			LOG.info("FECHA INICIO PUESTO TEMPORAL DE IDM CON FORMATO "+puestoTempFechaInicioIDM);
+			
 			LOG.info("FECHA FIN PUESTO TEMPORAL DE IDM  "+ (usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0"));
-			//Date puestoTempFechaFinIDM = sdf_puestoTemp.parse(usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0" , new ParsePosition(0));
 			Date puestoTempFechaFinIDM = usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime():null;
 			LOG.info("FECHA FIN PUESTO TEMPORAL DE IDM CON FORMATO "+puestoTempFechaFinIDM);
-			
+						
 			boolean flagTienePuestoTemporal = (usuarioIDM.getPuestoTemporal()!=null && 
+					(puestoTempFechaInicioIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS"))) &&
 					(!puestoTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS")))
 					&& (!usuarioIDM.getPuestoTemporal().getDescripcionPuesto().equals(usuarioIDM.getPuesto().getNombreCargoFuncionalLocal())))?
 											  StringUtils.isNotBlank(
@@ -163,13 +166,16 @@ public class DatosCabeceraMB extends AbstractMBean {
 				}
 			}
 			
-			//SimpleDateFormat sdf_oficinaTemp = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+			LOG.info("FECHA INICIO OFICINA TEMPORAL DE IDM  "+ (usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
+			Date ofiTempFechaInicioIDM = usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
+			LOG.info("FECHA INICIO OFICINA TEMPORAL DE IDM CON FORMATO "+ofiTempFechaInicioIDM);
+			
 			LOG.info("FECHA FIN OFICINA TEMPORAL DE IDM  "+ (usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0"));
-			//Date ofiTempFechaFinIDM = sdf_oficinaTemp.parse(usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0" , new ParsePosition(0));
 			Date ofiTempFechaFinIDM = usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime():null;
 			LOG.info("FECHA FIN OFICINA TEMPORAL DE IDM CON FORMATO "+ofiTempFechaFinIDM);
 			
 			boolean flagTieneOficinaTemporal = (usuarioIDM.getCentroTemporal()!=null &&  
+					(ofiTempFechaInicioIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss"))) &&
 					(!ofiTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss")))
 					&& (!usuarioIDM.getCentroTemporal().getDescripcion().equals(usuarioIDM.getCodigoCentro())))?
 											   StringUtils.isNotBlank(
