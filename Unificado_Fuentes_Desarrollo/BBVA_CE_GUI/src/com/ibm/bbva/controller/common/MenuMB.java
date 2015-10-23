@@ -508,7 +508,7 @@ public class MenuMB extends AbstractLinksMBean {
 				String flagMenuReporteTOE = empleado.getPerfil().getFlagMenuReporteTOE();
 				String flagMenuHorario = empleado.getPerfil().getFlagMenuHorario();
 				String flagMenuDescargaLDAP = empleado.getPerfil().getFlagMenuDescargaLDAP();
-				String flagMenuOficinaTemporal = empleado.getPerfil().getFlagMenuOficinaTemporal();
+//				String flagMenuOficinaTemporal = empleado.getPerfil().getFlagMenuOficinaTemporal();
 				
 				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuRegistraExpediente)) {
 					habMenuRegistrarExpediente = true;
@@ -551,9 +551,9 @@ public class MenuMB extends AbstractLinksMBean {
 				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuDescargaLDAP)) {
 					habMenuDescargaLDAP = true;
 				}
-				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuOficinaTemporal)) {
-					habMenuOficinaTemporal = true;
-				}
+//				if (Constantes.OPCION_MENU_VISIBLE.equals(flagMenuOficinaTemporal)) {
+//					habMenuOficinaTemporal = true;
+//				}
 			}else { //Usuario inactivo
 				if (mensajesBean == null) {
 					try {
