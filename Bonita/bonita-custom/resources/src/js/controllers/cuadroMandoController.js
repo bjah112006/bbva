@@ -223,7 +223,7 @@ abstractControllers.controller('CuadroMandoController',
                     var _series = [{"name": "Centro Negocio: " + parameters.centroNegocio, data: []}];
                     
                     for(var i in request.detalleSolicitudAreas) {
-                        _catergories.push(request.detalleSolicitudAreas[i].username == null ? "No Disponible" : request.detalleSolicitudAreas[i].username);
+                        _catergories.push(request.detalleSolicitudAreas[i].username == null ? "SIN ASIGNAR" : request.detalleSolicitudAreas[i].username.toUpperCase());
                         _series[0].data.push(request.detalleSolicitudAreas[i].cant);
                     }
                     
@@ -310,7 +310,7 @@ abstractControllers.controller('CuadroMandoController',
                         var parameters = {
                             tipoConsulta: "detalleGestor",
                             centroNegocio: event.point.series.name.replace("Centro Negocio: ", ""),
-                            username: event.point.category
+                            username: event.point.category == 'SIN ASIGNAR' ? '-1' : event.point.category
                         };
                         Listado.get(parameters).$promise.then(function(request){
                             $scope.gridDetalle.rowData = request.detalleSolicitudAreas;
@@ -445,7 +445,7 @@ abstractControllers.controller('CuadroMandoController',
                 total.asignar_evaluacion += row.asignar_evaluacion;
                 total.evaluar_riesgo_campo += row.evaluar_riesgo_campo;
                 total.evaluar_riesgo_mesa += row.evaluar_riesgo_mesa;
-                total.autorizar_evaluacion += row.evaluar_riesgo_mesa;
+                total.autorizar_evaluacion += row.autorizar_evaluacion;
                 total.total += row.total;
 
                 data.push({"name": row.codigo_centro_negocio, "y" :row.total});

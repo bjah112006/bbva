@@ -170,9 +170,9 @@ public class ConsultaSolicitud implements RestApiController {
             SearchOptionsBuilder optionsBuilder;
             SearchResult<CustomUserInfoValue> searchResult;
             List<CustomUserInfoValue> infoValue;
-            String oficina;
-            String ambito;
-            String puesto;
+            String oficina = "";
+            String ambito = "";
+            String puesto = "";
             
             // Info Customize
             optionsBuilder = new SearchOptionsBuilder(0, 10);
@@ -184,13 +184,13 @@ public class ConsultaSolicitud implements RestApiController {
             for(CustomUserInfoValue info : infoValue) {
                 switch(info.getDefinitionId()) {
                     case AMBITO:
-                        ambito = info.getValue();
+                        ambito = info.getValue() == null ? "" : info.getValue();
                         break;
                     case PUESTO:
-                        puesto = info.getValue();
+                        puesto = info.getValue() == null ? "" : info.getValue();
                         break;
                     case OFICINA:
-                        oficina = info.getValue().split("-")[0];
+                        oficina = info.getValue() == null ? "" : info.getValue().split("-")[0];
                         break;
                     default:
                         break;

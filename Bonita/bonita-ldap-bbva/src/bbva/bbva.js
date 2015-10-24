@@ -1,96 +1,96 @@
 var 
 DateUtil = {
-	yyyymmdd: 'yyyyMMdd',
-	DDMMYYYY: 'dd/MM/yyyy',
-	DDMMYYYYHHmmss: 'dd/MM/yyyy HH:mm:ss',
-	MMDDYYYY: 'MM/dd/yyyy',
-	YYYYMMDD: 'yyyy/dd/MM',
-	parse: function(val, format) {
-		var dd = 1, mm = 1, yy = 1900;
-		
-		if(format == this.DDMMYYYY) {
-			dd = parseInt(val.substring(0,2), 10);
-			mm = parseInt(val.substring(3,5), 10);
-			yy = parseInt(val.substring(6,10), 10);
-		} else if(format == this.MMDDYYYY) {
-			mm = parseInt(val.substring(0,2), 10);
-			dd = parseInt(val.substring(3,5), 10);
-			yy = parseInt(val.substring(6,10), 10);
-		} else if(format == this.YYYYMMDD) {
-			yy = parseInt(val.substring(0,4), 10);
-			mm = parseInt(val.substring(5,7), 10);
-			dd = parseInt(val.substring(8,10), 10);
-		} else if(format == this.yyyymmdd) {
-			yy = parseInt(val.substring(0,4), 10);
-			mm = parseInt(val.substring(4,6), 10);
-			dd = parseInt(val.substring(6,8), 10);
-		}
-		
-		return new Date(yy, mm - 1, dd, 0, 0, 0);
-	},
-	compareTo: function(val1, val2, format) {
-		return (this.parse(val1, format).getTime() > this.parse(val2, format).getTime());
-	},
-	addDays: function(date, numDays) {
-		return new Date(date.getTime() + (numDays * 24 * 3600 * 1000));
-	},
-	lastDay: function(val, format) {
-		var date = this.parse(val, format);
-		
-		d = 1;
-		m = date.getMonth() + 1;
-		y = (m == 12 ? 1 : 0) + date.getFullYear();
-		m = (m == 12 ? 0 : m);
-		
-		date = new Date(y, m, d, 0, 0, 0);
-		
-		return this.addDays(date, -1);
-	},
-	toString: function(date, format) {
-		var dd = '01', mm = '01', yy = '1900', hh = "00", nn = "00", ss = "", val = "01/01/1900";
-		
-		if(format == this.DDMMYYYY) {
-			dd = date.getDate();
-			mm = date.getMonth() + 1;
-			yy = date.getFullYear();
-			
-			val  = (dd < 10 ? '0' : '') + dd + "/";
-			val += (mm < 10 ? '0' : '') + mm + "/";
-			val += yy;
-		} else if(format == this.DDMMYYYYHHmmss) {
-			dd = date.getDate();
-			mm = date.getMonth() + 1;
-			yy = date.getFullYear();
-			hh = date.getHours();
-			nn = date.getMinutes();
-			ss = date.getSeconds();
-			
-			val  = (dd < 10 ? '0' : '') + dd + "/";
-			val += (mm < 10 ? '0' : '') + mm + "/";
-			val += yy;
-			val += " ";
-			val += (hh < 10 ? '0' : '') + hh + ":";
-			val += (nn < 10 ? '0' : '') + nn + ":";
-			val += (ss < 10 ? '0' : '') + ss;
-		}
-		
-		return val;
-	},
-	longToDate: function(milliseconds) {
-		return new Date(milliseconds);
-	}
+    yyyymmdd: 'yyyyMMdd',
+    DDMMYYYY: 'dd/MM/yyyy',
+    DDMMYYYYHHmmss: 'dd/MM/yyyy HH:mm:ss',
+    MMDDYYYY: 'MM/dd/yyyy',
+    YYYYMMDD: 'yyyy/dd/MM',
+    parse: function(val, format) {
+        var dd = 1, mm = 1, yy = 1900;
+        
+        if(format == this.DDMMYYYY) {
+            dd = parseInt(val.substring(0,2), 10);
+            mm = parseInt(val.substring(3,5), 10);
+            yy = parseInt(val.substring(6,10), 10);
+        } else if(format == this.MMDDYYYY) {
+            mm = parseInt(val.substring(0,2), 10);
+            dd = parseInt(val.substring(3,5), 10);
+            yy = parseInt(val.substring(6,10), 10);
+        } else if(format == this.YYYYMMDD) {
+            yy = parseInt(val.substring(0,4), 10);
+            mm = parseInt(val.substring(5,7), 10);
+            dd = parseInt(val.substring(8,10), 10);
+        } else if(format == this.yyyymmdd) {
+            yy = parseInt(val.substring(0,4), 10);
+            mm = parseInt(val.substring(4,6), 10);
+            dd = parseInt(val.substring(6,8), 10);
+        }
+        
+        return new Date(yy, mm - 1, dd, 0, 0, 0);
+    },
+    compareTo: function(val1, val2, format) {
+        return (this.parse(val1, format).getTime() > this.parse(val2, format).getTime());
+    },
+    addDays: function(date, numDays) {
+        return new Date(date.getTime() + (numDays * 24 * 3600 * 1000));
+    },
+    lastDay: function(val, format) {
+        var date = this.parse(val, format);
+        
+        d = 1;
+        m = date.getMonth() + 1;
+        y = (m == 12 ? 1 : 0) + date.getFullYear();
+        m = (m == 12 ? 0 : m);
+        
+        date = new Date(y, m, d, 0, 0, 0);
+        
+        return this.addDays(date, -1);
+    },
+    toString: function(date, format) {
+        var dd = '01', mm = '01', yy = '1900', hh = "00", nn = "00", ss = "", val = "01/01/1900";
+        
+        if(format == this.DDMMYYYY) {
+            dd = date.getDate();
+            mm = date.getMonth() + 1;
+            yy = date.getFullYear();
+            
+            val  = (dd < 10 ? '0' : '') + dd + "/";
+            val += (mm < 10 ? '0' : '') + mm + "/";
+            val += yy;
+        } else if(format == this.DDMMYYYYHHmmss) {
+            dd = date.getDate();
+            mm = date.getMonth() + 1;
+            yy = date.getFullYear();
+            hh = date.getHours();
+            nn = date.getMinutes();
+            ss = date.getSeconds();
+            
+            val  = (dd < 10 ? '0' : '') + dd + "/";
+            val += (mm < 10 ? '0' : '') + mm + "/";
+            val += yy;
+            val += " ";
+            val += (hh < 10 ? '0' : '') + hh + ":";
+            val += (nn < 10 ? '0' : '') + nn + ":";
+            val += (ss < 10 ? '0' : '') + ss;
+        }
+        
+        return val;
+    },
+    longToDate: function(milliseconds) {
+        return new Date(milliseconds);
+    }
 },
 
 buscarArchivo = function() {
-	var fecha = $("#txtFiltroFecha").val();
-	abrirReporte(fecha);
+    var fecha = $("#txtFiltroFecha").val();
+    abrirReporte(fecha);
 },
 
 abrirReporte = function(fecha) {
-	if(fecha == undefined){
-		fecha = "";
-	}
-	var __xhr = $.ajax({
+    if(fecha == undefined){
+        fecha = "";
+    }
+    var __xhr = $.ajax({
         type: "post", 
         dataType: 'json',
         cache: false,
@@ -155,15 +155,15 @@ createDialog = function() {
         html += '                    <div class="header"><h1>Reportes</h1></div>';
         html += '                    <div class="itemlistingpage">';
         html += '                     <div class="tables_panel">';
-        html += '                    	<form class="form form_search search" onSubmit="buscarArchivo(); return false;">';
-        html += '                    		<div class="formentries" style="width:50%">';
-        html += '                    			<div class="formentry formentry_query query text">';
-        html += '                    				<div class="label"><label title="Introduzca fecha del archivo que desea buscar" for="txtFiltroFecha"></label></div>';
-        html += '                    				<div class="input"><input type="text" name="txtFiltroFecha" title="Introduzca fecha del archivo que desea buscar" id="txtFiltroFecha" maxlength="10" placeholder="Búsqueda Fecha..."/></div>';
-        html += '                    			</div>';
-        html += '                    		</div>';
-        html += '                    		<div class="formactions" style="width:52%"><a class="search btn btn-action" href="#">Búsqueda</a></div>';
-        html += '                    	</form>';
+        html += '                        <form class="form form_search search" onSubmit="buscarArchivo(); return false;">';
+        html += '                            <div class="formentries" style="width:50%">';
+        html += '                                <div class="formentry formentry_query query text">';
+        html += '                                    <div class="label"><label title="Introduzca fecha del archivo que desea buscar" for="txtFiltroFecha"></label></div>';
+        html += '                                    <div class="input"><input type="text" name="txtFiltroFecha" title="Introduzca fecha del archivo que desea buscar" id="txtFiltroFecha" maxlength="10" placeholder="Búsqueda Fecha..."/></div>';
+        html += '                                </div>';
+        html += '                            </div>';
+        html += '                            <div class="formactions" style="width:52%"><a class="search btn btn-action" href="#">Búsqueda</a></div>';
+        html += '                        </form>';
         html += '                     </div>';
         html += '                    </div>';
         html += '                    <div class="body">';
@@ -180,97 +180,105 @@ createDialog = function() {
 };
 
 abrirConsulta = function(page) {
-	var height = $(window).height() - $("#header").outerHeight() - 70;
-	
+    var height = $(window).height() - $("#header").outerHeight() - 70;
+    
     var __xhr = $.ajax({
         type: "post", 
         dataType: 'html',
         cache: false,
         async: false,
         url: obtenerContexto("bbva/consulta.html"),
-		beforeSend: function(xhr) {
-			window.parent.document.getElementById("initloader").style.display = "block";
-		},
+        beforeSend: function(xhr) {
+            window.parent.document.getElementById("initloader").style.display = "block";
+        },
         success: function(data) {
-        	var bodyContent = $("#body");
-			$(".current").removeClass("current");
-			if(page == "") {
-				$(".bbva-consulta").addClass("current");
-			} else if(page == "cuadromando"){
-				$(".bbva-cuadro").addClass("current");
-			} 
+            var bodyContent = $("#body");
+            $(".current").removeClass("current");
+            if(page == "") {
+                $(".bbva-consulta").addClass("current");
+            } else if(page == "cuadromando"){
+                $(".bbva-cuadro").addClass("current");
+            } else if(page == "documents") {
+                $(".bbva-documento").addClass("current");
+            }
 
-        	bodyContent.html(data);
+            bodyContent.html(data);
             // bodyContent.find("#panelIzq").css("height", height + "px");
 
             if($("#panelAngular").length > 0) {
                 var url = document.URL;
                 var tmp = url.split("bonita");
-            	$("#panelAngular").attr("src", tmp[0] + "bonita/apps/wfpyme/home/#/" + page);
+                $("#panelAngular").attr("src", tmp[0] + "bonita/apps/wfpyme/home/#/" + page);
             }
 
-			$(window).resize();
+            $(window).resize();
         },
         error: function (xhr, ajaxOptions, thrownError) {
-			window.parent.document.getElementById("initloader").style.display = "none";
+            window.parent.document.getElementById("initloader").style.display = "none";
             alert("Error al abrir pantalla de consulta");
         }
     });
 };
 
 validarDocumento = function() {
-	var longitudPermitida = 10; //Expresada en MB
-	var size = longitudPermitida*1024*1024;
-	
-	$('input[type="file"]').each(function() {
-		var $this = $(this);
-	    if ($this.val() != '') {
-	    	if(size < this.files[0].size){
-	    		alert("Documento supera los " + longitudPermitida + " MB permitidos. Por favor seleccione otro archivo.");
-	    		//console.log("Documento supera los " + longitudPermitida + " MB permitidos. Por favor seleccione otro archivo.");
-	    		$(".bonita_form_button").attr("disabled", "disabled");
-	    	}else{
-	    		$(".bonita_form_button").removeAttr('disabled');
-	    	}
-	    } 
-	});
+    var longitudPermitida = 10; //Expresada en MB
+    var size = longitudPermitida*1024*1024;
+    
+    $('input[type="file"]').each(function() {
+        var $this = $(this);
+        if ($this.val() != '') {
+            if(size < this.files[0].size){
+                alert("Documento supera los " + longitudPermitida + " MB permitidos. Por favor seleccione otro archivo.");
+                //console.log("Documento supera los " + longitudPermitida + " MB permitidos. Por favor seleccione otro archivo.");
+                $(".bonita_form_button").attr("disabled", "disabled");
+            }else{
+                $(".bonita_form_button").removeAttr('disabled');
+            }
+        } 
+    });
 }
 
+obtenerContexto = function(_url) {
+    var context = "bonita/portal"; 
+    var url = document.URL;
+    var tmp = url.split(context);
+
+    return tmp[0] + context + "/" + _url;
+};
+
 $(window).resize(function(){
-	if (typeof window.innerWidth != 'undefined') {
-		viewportWidth = window.innerWidth;
-		viewportHeight = window.innerHeight;
-	} else if (typeof document.documentElement != 'undefined'
-			&& typeof document.documentElement.clientWidth != 'undefined'
-			&& document.documentElement.clientWidth != 0) {
-		viewportWidth = document.documentElement.clientWidth;
-		viewportHeight = document.documentElement.clientHeight;
-	} else {
-		viewportWidth = document.getElementsByTagName('body')[0].clientWidth;
-		viewportHeight = document.getElementsByTagName('body')[0].clientHeight;
-	}
-
-	if($("#panelAngular").length > 0) {
-		$("#panelAngular").css({
-			  "width": $(window).width() + "px"
-			, "height": (viewportHeight - $("#header").outerHeight() - 5) + "px"
-			, "padding-top": $("#header").outerHeight() + "px"
-		});
-	}
-});
-
-$(document).bind('DOMNodeInserted', function(event) {
-    if(event.target.nodeName == 'LI') {
-        if($(event.target).hasClass("processlistinguser")) {
-            $("<li class='bbva-reporte'><a class='bbva-reporte' href='javascript: void(0);' onclick='abrirReporte()'>Reporte</a></li>").insertAfter($(event.target));
-            $("body").append(createDialog());
-        } else if($(event.target).hasClass("bbva-reporte")) {
-            $("<li class='bbva-consulta'><a class='bbva-consulta' href='javascript: void(0);' onclick='abrirConsulta(\"\")'>Consulta</a></li>").insertAfter($(event.target));
-        } else if($(event.target).hasClass("bbva-consulta")) {
-            $("<li class='bbva-cuadro'><a class='bbva-cuadro' href='javascript: void(0);' onclick='abrirConsulta(\"cuadromando\")'>Cuadro de Mando</a></li>").insertAfter($(event.target));
-        }
+    if (typeof window.innerWidth != 'undefined') {
+        viewportWidth = window.innerWidth;
+        viewportHeight = window.innerHeight;
+    } else if (typeof document.documentElement != 'undefined'
+            && typeof document.documentElement.clientWidth != 'undefined'
+            && document.documentElement.clientWidth != 0) {
+        viewportWidth = document.documentElement.clientWidth;
+        viewportHeight = document.documentElement.clientHeight;
+    } else {
+        viewportWidth = document.getElementsByTagName('body')[0].clientWidth;
+        viewportHeight = document.getElementsByTagName('body')[0].clientHeight;
     }
-	validarDocumento();
+
+    if($("#panelAngular").length > 0) {
+        $("#panelAngular").css({
+              "width": $(window).width() + "px"
+            , "height": (viewportHeight - $("#header").outerHeight() - 5) + "px"
+            , "padding-top": $("#header").outerHeight() + "px"
+        });
+    }
 });
 
-
+//$(document).bind('DOMNodeInserted', function(event) {
+//    if(event.target.nodeName == 'LI') {
+//        if($(event.target).hasClass("processlistinguser")) {
+//            $("<li class='bbva-reporte'><a class='bbva-reporte' href='javascript: void(0);' onclick='abrirReporte()'>Reporte</a></li>").insertAfter($(event.target));
+//            $("body").append(createDialog());
+//        } else if($(event.target).hasClass("bbva-reporte")) {
+//            $("<li class='bbva-consulta'><a class='bbva-consulta' href='javascript: void(0);' onclick='abrirConsulta(\"\")'>Consulta</a></li>").insertAfter($(event.target));
+//        } else if($(event.target).hasClass("bbva-consulta")) {
+//            $("<li class='bbva-cuadro'><a class='bbva-cuadro' href='javascript: void(0);' onclick='abrirConsulta(\"cuadromando\")'>Cuadro de Mando</a></li>").insertAfter($(event.target));
+//        }
+//    }
+//    // validarDocumento();
+//});

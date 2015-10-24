@@ -120,7 +120,7 @@ public class Listado implements RestApiController {
                     String where = "";
                     
                     if(!centroNegocio.equalsIgnoreCase("[Todos]")) {
-                        where = "where codigo_centro_negocio = '${centroNegocio}'";
+                        where = " and codigo_centro_negocio = '${centroNegocio}'";
                     }
                     
                     query = """
@@ -136,7 +136,7 @@ public class Listado implements RestApiController {
                         , sum(case when taskname='Validar Documentacion' or taskname='Validar Documentación' then 1 else 0 end) VALIDAR_DOCUMENTACION
                         , 0 TOTAL
                     from fastpyme.instance
-                    ${where} 
+                    where name='FAST NEGOCIOS' ${where} 
                     group by codigo_centro_negocio order by codigo_centro_negocio
                     """
                     rows = executeQuery(query)
@@ -146,11 +146,30 @@ public class Listado implements RestApiController {
                 case "detalleCentroNegocio":
                     centroNegocio = isNullRequestParam(request, "centroNegocio")
                     query = """
-                    select lastname || ' ' || firstname username, count(1) cant
+                    select lastname || ' ' || firstname username
+                        , sum(case when taskname='Asignar Evaluacion' or taskname='Asignar Evaluación'         then 1
+                                   when taskname='Autorizar Aprobacion' or taskname='Autorizar Aprobación'     then 1
+                                   when taskname='Evaluar Riesgo Campo'                                        then 1
+                                   when taskname='Evaluar Riesgo Mesa'                                         then 1
+                                   when taskname='Registrar Solicitud '                                        then 1
+                                   when taskname='Realizar Desembolso'                                         then 1
+                                   when taskname='Revisar Resultado Dictamen'                                  then 1
+                                   when taskname='Subsanar Documentacion' or taskname='Subsanar Documentación' then 1
+                                   when taskname='Validar Documentacion' or taskname='Validar Documentación'   then 1
+                                   else 0 end) cant
                     from fastpyme.instance
-                    where codigo_centro_negocio='${centroNegocio}'
+                    where name='FAST NEGOCIOS' and codigo_centro_negocio='${centroNegocio}'
                     group by lastname || ' ' || firstname
-                    order by count(1) desc
+                    order by sum(case when taskname='Asignar Evaluacion' or taskname='Asignar Evaluación'         then 1
+                                   when taskname='Autorizar Aprobacion' or taskname='Autorizar Aprobación'     then 1
+                                   when taskname='Evaluar Riesgo Campo'                                        then 1
+                                   when taskname='Evaluar Riesgo Mesa'                                         then 1
+                                   when taskname='Registrar Solicitud '                                        then 1
+                                   when taskname='Realizar Desembolso'                                         then 1
+                                   when taskname='Revisar Resultado Dictamen'                                  then 1
+                                   when taskname='Subsanar Documentacion' or taskname='Subsanar Documentación' then 1
+                                   when taskname='Validar Documentacion' or taskname='Validar Documentación'   then 1
+                                   else 0 end) desc
                     """
                     rows = executeQuery(query)
                     response.setDetalleSolicitudAreas(rows)
@@ -161,8 +180,22 @@ public class Listado implements RestApiController {
                     username = isNullRequestParam(request, "username")
                     query = """
                     select * from fastpyme.instance
-                    where lastname || ' ' || firstname='${username}'
-                    and codigo_centro_negocio='${centroNegocio}'
+                    where name='FAST NEGOCIOS'
+                    and (('${username}' = '-1' and assigneeid=0) or lastname || ' ' || firstname='${username}')
+                    and codigo_centro_negocio='${centroNegocio}' and taskname in(
+                          'Asignar Evaluacion'
+                        , 'Asignar Evaluación'
+                        , 'Autorizar Aprobacion'
+                        , 'Autorizar Aprobación'
+                        , 'Evaluar Riesgo Campo'
+                        , 'Evaluar Riesgo Mesa'
+                        , 'Registrar Solicitud '
+                        , 'Realizar Desembolso'
+                        , 'Revisar Resultado Dictamen'
+                        , 'Subsanar Documentacion'
+                        , 'Subsanar Documentación'
+                        , 'Validar Documentacion'
+                        , 'Validar Documentación' )
                     order by rootprocessinstanceid desc
                     """
                     rows = executeQuery(query)
