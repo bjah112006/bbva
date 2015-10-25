@@ -21,113 +21,115 @@ import org.slf4j.LoggerFactory;
 import com.pe.bbva.pyme.utils.ConstantesEnum;
 
 public class BonitaDataAccess {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(BonitaDataAccess.class);
-		
-	private APISession apiSession;
-	private ProcessAPI processAPI;
-	private IdentityAPI identityAPI;
-	private ProcessDefinition processDefinition;
-	
-	private String userName;
-	private String password;
-	private String idProceso;
-	private String serverUrl;
-	private String applicationName;
-		
-	public BonitaDataAccess() throws Exception{
-		super();	
-		this.userName = BonitaClientRest.getProperty(ConstantesEnum.PARAM_USER_NAME_BONITA.getNombre());
-		this.password = BonitaClientRest.getProperty(ConstantesEnum.PARAM_PASSWORD_BONITA.getNombre());
-		this.idProceso = BonitaClientRest.getProperty(ConstantesEnum.PARAM_ID_PROCESO.getNombre());
-		this.serverUrl = BonitaClientRest.getProperty(ConstantesEnum.PARAM_SERVER_NAME.getNombre());
-		this.applicationName = BonitaClientRest.getProperty(ConstantesEnum.PARAM_APPLICATION_NAME.getNombre());
-		this.setApiSession(obtenerAccesoBonita(this.serverUrl, this.applicationName, this.userName, this.password));
-		this.setProcessAPI(TenantAPIAccessor.getProcessAPI(getApiSession()));
-		this.setIdentityAPI(TenantAPIAccessor.getIdentityAPI(getApiSession()));
-//		this.setProcessDefinition(getProcessAPI().getProcessDefinition(new Long(this.idProceso)));
-		LOG.debug("...acceso autorizado a BD Bonita");
-	}	
-	
-	public static APISession obtenerAccesoBonita(String serverUrl,String applicationName,String username, String password) throws BonitaHomeNotSetException,ServerAPIException, UnknownAPITypeException, LoginException {
-		Map<String, String> apiTypeManagerParams = new HashMap<String, String>();
-		apiTypeManagerParams.put(ConstantesEnum.PROP_SERVER_NAME.getNombre(), serverUrl);
-		apiTypeManagerParams.put(ConstantesEnum.PROP_APPLICATION_NAME.getNombre(), applicationName);
-		APITypeManager.setAPITypeAndParams(ApiAccessType.HTTP,apiTypeManagerParams);
-		LoginAPI loginAPI = TenantAPIAccessor.getLoginAPI();
-		APISession session = loginAPI.login(username,password);
-		return session;
-	}
 
-	public APISession getApiSession() {
-		return apiSession;
-	}
+    private static final Logger LOG = LoggerFactory.getLogger(BonitaDataAccess.class);
 
-	public void setApiSession(APISession apiSession) {
-		this.apiSession = apiSession;
-	}	
+    private APISession apiSession;
+    private ProcessAPI processAPI;
+    private IdentityAPI identityAPI;
+    private ProcessDefinition processDefinition;
 
-	public ProcessAPI getProcessAPI() {
-		return processAPI;
-	}
+    private String userName;
+    private String password;
+    private String idProceso;
+    private String serverUrl;
+    private String applicationName;
 
-	public void setProcessAPI(ProcessAPI processAPI) {
-		this.processAPI = processAPI;
-	}
+    public BonitaDataAccess() throws Exception {
+        super();
+        this.userName = BonitaClientRest.getProperty(ConstantesEnum.PARAM_USER_NAME_BONITA.getNombre());
+        this.password = BonitaClientRest.getProperty(ConstantesEnum.PARAM_PASSWORD_BONITA.getNombre());
+        this.idProceso = BonitaClientRest.getProperty(ConstantesEnum.PARAM_ID_PROCESO.getNombre());
+        this.serverUrl = BonitaClientRest.getProperty(ConstantesEnum.PARAM_SERVER_NAME.getNombre());
+        this.applicationName = BonitaClientRest.getProperty(ConstantesEnum.PARAM_APPLICATION_NAME.getNombre());
+        this.setApiSession(obtenerAccesoBonita(this.serverUrl, this.applicationName, this.userName, this.password));
+        this.setProcessAPI(TenantAPIAccessor.getProcessAPI(getApiSession()));
+        this.setIdentityAPI(TenantAPIAccessor.getIdentityAPI(getApiSession()));
+        // this.setProcessDefinition(getProcessAPI().getProcessDefinition(new
+        // Long(this.idProceso)));
+        LOG.debug("...acceso autorizado a BD Bonita");
+    }
 
-	public IdentityAPI getIdentityAPI() {
-		return identityAPI;
-	}
+    public static APISession obtenerAccesoBonita(String serverUrl, String applicationName, String username, String password) throws BonitaHomeNotSetException, ServerAPIException,
+            UnknownAPITypeException, LoginException {
+        Map<String, String> apiTypeManagerParams = new HashMap<String, String>();
+        apiTypeManagerParams.put(ConstantesEnum.PROP_SERVER_NAME.getNombre(), serverUrl);
+        apiTypeManagerParams.put(ConstantesEnum.PROP_APPLICATION_NAME.getNombre(), applicationName);
+        APITypeManager.setAPITypeAndParams(ApiAccessType.HTTP, apiTypeManagerParams);
+        LoginAPI loginAPI = TenantAPIAccessor.getLoginAPI();
+        APISession session = loginAPI.login(username, password);
+        return session;
+    }
 
-	public void setIdentityAPI(IdentityAPI identityAPI) {
-		this.identityAPI = identityAPI;
-	}
+    public APISession getApiSession() {
+        return apiSession;
+    }
 
-	public ProcessDefinition getProcessDefinition() {
-		return processDefinition;
-	}
+    public void setApiSession(APISession apiSession) {
+        this.apiSession = apiSession;
+    }
 
-	public void setProcessDefinition(ProcessDefinition processDefinition) {
-		this.processDefinition = processDefinition;
-	}
+    public ProcessAPI getProcessAPI() {
+        return processAPI;
+    }
 
-	public String getIdProceso() {
-		return idProceso;
-	}
+    public void setProcessAPI(ProcessAPI processAPI) {
+        this.processAPI = processAPI;
+    }
 
-	public void setIdProceso(String idProceso) {
-		this.idProceso = idProceso;
-	}
+    public IdentityAPI getIdentityAPI() {
+        return identityAPI;
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    public void setIdentityAPI(IdentityAPI identityAPI) {
+        this.identityAPI = identityAPI;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public ProcessDefinition getProcessDefinition() {
+        return processDefinition;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setProcessDefinition(ProcessDefinition processDefinition) {
+        this.processDefinition = processDefinition;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getIdProceso() {
+        return idProceso;
+    }
 
-	public String getServerUrl() {
-		return serverUrl;
-	}
+    public void setIdProceso(String idProceso) {
+        this.idProceso = idProceso;
+    }
 
-	public void setServerUrl(String serverUrl) {
-		this.serverUrl = serverUrl;
-	}
+    public String getUserName() {
+        return userName;
+    }
 
-	public String getApplicationName() {
-		return applicationName;
-	}
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-	public void setApplicationName(String applicationName) {
-		this.applicationName = applicationName;
-	}	
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
 }
