@@ -14,22 +14,22 @@ public class Get implements RestApiController {
     @Override
     RestApiResponse doHandle(HttpServletRequest request, PageResourceProvider pageResourceProvider, PageContext pageContext, RestApiResponseBuilder apiResponseBuilder, RestApiUtil restApiUtil) {
         Map<String, String> response = [:]
-		Logger logger = restApiUtil.logger
-		String key = request.getParameter "key"
-		
-		logger.log Level.SEVERE, "find key: [" + key + "]"
-		
+        Logger logger = restApiUtil.logger
+        String key = request.getParameter "key"
+
+        logger.log Level.SEVERE, "find key: [" + key + "]"
+
         if(key != null) {
-			String value = DBUtil.obtenerParametro(key)
-			response.put "key", key
-			response.put "value", value
-			if(value.isEmpty()) {
-				response.put "error", "Valor de clave no registrado en la base de datos"
-			}
+            String value = DBUtil.obtenerParametro(key)
+            response.put "key", key
+            response.put "value", value
+            if(value.isEmpty()) {
+                response.put "error", "Valor de clave no registrado en la base de datos"
+            }
         } else {
-			response.put "key", ""
-			response.put "value", ""     
-            response.put "error", "Valor de clave invalido" 
+            response.put "key", ""
+            response.put "value", ""
+            response.put "error", "Valor de clave invalido"
         }
         apiResponseBuilder.with {
             withResponse new JsonBuilder(response).toPrettyString()

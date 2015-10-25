@@ -1,60 +1,60 @@
 abstractControllers.controller('DialogMensajeController', ['$scope', '$modalInstance', 'data', function RestAPIController($scope, $modalInstance, data) {
-	$scope.data = data;
+    $scope.data = data;
 
-	$scope.cancel = function () {
-		$modalInstance.dismiss('cancel');
-	};
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
 }]);
 
 abstractControllers.controller('DialogReasignacionController', ['$scope', '$modalInstance', 'rows', "gestor", "HumanTask", "Task",
-	function RestAPIController($scope, $modalInstance, rows, gestor, HumanTask, Task) {
-	$scope.rows = rows;
-	$scope.gestor = gestor;
-	$scope.hiddenAceptar = true;
-	$scope.hiddenAsignar = false;
+    function RestAPIController($scope, $modalInstance, rows, gestor, HumanTask, Task) {
+    $scope.rows = rows;
+    $scope.gestor = gestor;
+    $scope.hiddenAceptar = true;
+    $scope.hiddenAsignar = false;
 
-	$scope.ok = function () {
-		$modalInstance.close();
-	}
+    $scope.ok = function () {
+        $modalInstance.close();
+    }
 
-	$scope.asignar = function () {
-		for(var i in $scope.rows) {
-			var row = $scope.rows[i];
-			row.class = "glyphicon glyphicon-remove-sign";
+    $scope.asignar = function () {
+        for(var i in $scope.rows) {
+            var row = $scope.rows[i];
+            row.class = "glyphicon glyphicon-remove-sign";
 
-			var params = {
-				f: "caseId=" + row.rootprocessinstanceid
-			};
+            var params = {
+                f: "caseId=" + row.rootprocessinstanceid
+            };
 
-			Task.obteinTask(params).$promise.then(function(request1){
-				console.log(request1);
-				var putParams = {
-					assigned_id: $scope.gestor.select.id
-				};
-				HumanTask.asignar({id: request1.items[0].id}, {"assigned_id": ""}).$promise.then(function(request2){
-					HumanTask.asignar({id: request1.items[0].id}, putParams).$promise.then(function(request2){
-						row.class = "glyphicon glyphicon-ok-sign";
-					});
-				});
-			});
-		}
+            Task.obteinTask(params).$promise.then(function(request1){
+                console.log(request1);
+                var putParams = {
+                    assigned_id: $scope.gestor.select.id
+                };
+                HumanTask.asignar({id: request1.items[0].id}, {"assigned_id": ""}).$promise.then(function(request2){
+                    HumanTask.asignar({id: request1.items[0].id}, putParams).$promise.then(function(request2){
+                        row.class = "glyphicon glyphicon-ok-sign";
+                    });
+                });
+            });
+        }
 
-	
-		$scope.hiddenAceptar = false;
-		$scope.hiddenAsignar = true;
-    	// $modalInstance.close();
-  	};
+    
+        $scope.hiddenAceptar = false;
+        $scope.hiddenAsignar = true;
+        // $modalInstance.close();
+      };
 
-	$scope.cancel = function () {
-		$modalInstance.dismiss('cancel');
-	};
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
 }]);
 
 abstractControllers.controller('CuadroMandoController', 
-	['$scope', '$http', '$timeout', 'Listado', 'highchartsNG', 'bonitaConfig', 'DateUtil', '$modal', 
-	function CuadroMandoController($scope, $http, $timeout, Listado, highchartsNG, bonitaConfig, DateUtil, $modal) {
+    ['$scope', '$http', '$timeout', 'Listado', 'highchartsNG', 'bonitaConfig', 'DateUtil', '$modal', 
+    function CuadroMandoController($scope, $http, $timeout, Listado, highchartsNG, bonitaConfig, DateUtil, $modal) {
     
-	$scope.tipoRed = {};
+    $scope.tipoRed = {};
     $scope.centroNegocio = {};
     $scope.gestorOrigen = {};
     $scope.gestor = {};
@@ -83,54 +83,54 @@ abstractControllers.controller('CuadroMandoController',
         }
     };
 
-	ocultarDetalle = function() {
+    ocultarDetalle = function() {
         $scope.chartConfig.hide = true;
         $scope.chartDetalle.hide = true;
-		$scope.gestor = {};
+        $scope.gestor = {};
         $scope.gridInstances.rowData = [];
         $scope.gridInstances.api.onNewRows();
         $scope.disabledAsignar = true;
-	}
+    }
 
-	$scope.openDialogMensaje = function(_title, _message) {
-		$scope.dataMessage = {
-			title: _title,
-			message: _message
-		};
+    $scope.openDialogMensaje = function(_title, _message) {
+        $scope.dataMessage = {
+            title: _title,
+            message: _message
+        };
 
-		var modalInstance = $modal.open({
-			animation: $scope.animationsEnabled,
-			templateUrl: 'dialogMensaje.html',
-			controller: 'DialogMensajeController',
-			windowClass: 'child',
-			resolve: {
-				data: function(){
-					return $scope.dataMessage
-				}
-			}
-		});
-	};
+        var modalInstance = $modal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'dialogMensaje.html',
+            controller: 'DialogMensajeController',
+            windowClass: 'child',
+            resolve: {
+                data: function(){
+                    return $scope.dataMessage
+                }
+            }
+        });
+    };
 
-	$scope.openDialogReasignar = function() {
-		var modalInstance = $modal.open({
-			animation: $scope.animationsEnabled,
-			templateUrl: 'dialogReasignar.html',
-			controller: 'DialogReasignacionController',
-			windowClass: 'child',
-			resolve: {
-				rows: function(){
-					for(var i in $scope.gridDetalle.selectedRows) {
-						$scope.gridDetalle.selectedRows[i].class = "glyphicon glyphicon-plus-sign";
-					}
+    $scope.openDialogReasignar = function() {
+        var modalInstance = $modal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'dialogReasignar.html',
+            controller: 'DialogReasignacionController',
+            windowClass: 'child',
+            resolve: {
+                rows: function(){
+                    for(var i in $scope.gridDetalle.selectedRows) {
+                        $scope.gridDetalle.selectedRows[i].class = "glyphicon glyphicon-plus-sign";
+                    }
 
-					return $scope.gridDetalle.selectedRows;
-				},
-				gestor: function(){
-					return $scope.gestor;
-				}
-			}
-		});
-	};
+                    return $scope.gridDetalle.selectedRows;
+                },
+                gestor: function(){
+                    return $scope.gestor;
+                }
+            }
+        });
+    };
 
     Listado.get({"tipoConsulta": "red"}).$promise.then(function(request){
         $scope.tiposRed = request.tipoRed;
@@ -145,25 +145,25 @@ abstractControllers.controller('CuadroMandoController',
             $scope.centroNegocios = request.areas;
             $scope.disabledBuscar = false;
             mostrarDetalle(false);
-			ocultarDetalle();
+            ocultarDetalle();
         });
     };
 
     $scope.asignar = function() {
         /*
-		console.log($scope.gridDetalle.selectedRows.length);
-		console.log($scope.gridDetalle.selectedRows);
-		
-		for(var i in $scope.gridDetalle.selectedRows) {
-		}
+        console.log($scope.gridDetalle.selectedRows.length);
+        console.log($scope.gridDetalle.selectedRows);
+        
+        for(var i in $scope.gridDetalle.selectedRows) {
+        }
         */
 
-		if($scope.gridDetalle.selectedRows.length == 0) {
-			$scope.openDialogMensaje("Advertencia", "Seleccione las solicitudes a reasignar");
-		} else {
-			$scope.openDialogReasignar();
-		}
-		
+        if($scope.gridDetalle.selectedRows.length == 0) {
+            $scope.openDialogMensaje("Advertencia", "Seleccione las solicitudes a reasignar");
+        } else {
+            $scope.openDialogReasignar();
+        }
+        
 
         /* Listado.get({"tipoConsulta": "areas", "tipoRed": item.value}).$promise.then(function(request){
             request.areas.splice(0, 0, {"val_column1": "[Todos]"});

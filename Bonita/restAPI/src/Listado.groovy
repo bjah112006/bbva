@@ -92,6 +92,7 @@ public class Listado implements RestApiController {
             
             String tipoConsulta = isNullRequestParam(request, "tipoConsulta")
             String query = ""
+            String tipoRed = ""
             String centroNegocio = ""
             String username = ""
             List<Map<String, Object>> rows
@@ -112,15 +113,16 @@ public class Listado implements RestApiController {
                     response.setUsuarioPorAreas(rows)
                     break;
                 case "areas":
-                    String tipoRed = isNullRequestParam(request, "tipoRed")
+                    tipoRed = isNullRequestParam(request, "tipoRed")
                     consultarAreas(response, tipoRed)
                     break;
                 case "detalle":
+                    tipoRed = isNullRequestParam(request, "tipoRed")
                     centroNegocio = isNullRequestParam(request, "centroNegocio");
                     String where = "";
                     
                     if(!centroNegocio.equalsIgnoreCase("[Todos]")) {
-                        where = " and codigo_centro_negocio = '${centroNegocio}'";
+                        where = " and id_reference='$tipoRed' and a.codigo_centro_negocio = '${centroNegocio}'";
                     }
                     
                     query = """
@@ -135,8 +137,8 @@ public class Listado implements RestApiController {
                         , sum(case when taskname='Subsanar Documentacion' or taskname='Subsanar Documentación' then 1 else 0 end) SUBSANAR_DOCUMENTACION
                         , sum(case when taskname='Validar Documentacion' or taskname='Validar Documentación' then 1 else 0 end) VALIDAR_DOCUMENTACION
                         , 0 TOTAL
-                    from fastpyme.instance
-                    where name='FAST NEGOCIOS' ${where} 
+                    from fastpyme.instance a, public.tbl_pyme_parameter b
+                    where a.codigo_centro_negocio=b.val_column1 and a.name='FAST NEGOCIOS' ${where} 
                     group by codigo_centro_negocio order by codigo_centro_negocio
                     """
                     rows = executeQuery(query)
@@ -146,36 +148,32 @@ public class Listado implements RestApiController {
                 case "detalleCentroNegocio":
                     centroNegocio = isNullRequestParam(request, "centroNegocio")
                     query = """
-                    select lastname || ' ' || firstname username
-                        , sum(case when taskname='Asignar Evaluacion' or taskname='Asignar Evaluación'         then 1
-                                   when taskname='Autorizar Aprobacion' or taskname='Autorizar Aprobación'     then 1
-                                   when taskname='Evaluar Riesgo Campo'                                        then 1
-                                   when taskname='Evaluar Riesgo Mesa'                                         then 1
-                                   when taskname='Registrar Solicitud '                                        then 1
-                                   when taskname='Realizar Desembolso'                                         then 1
-                                   when taskname='Revisar Resultado Dictamen'                                  then 1
-                                   when taskname='Subsanar Documentacion' or taskname='Subsanar Documentación' then 1
-                                   when taskname='Validar Documentacion' or taskname='Validar Documentación'   then 1
-                                   else 0 end) cant
+                    select lastname || ' ' || firstname username, count(*) cant
                     from fastpyme.instance
-                    where name='FAST NEGOCIOS' and codigo_centro_negocio='${centroNegocio}'
+                    where name='FAST NEGOCIOS' and codigo_centro_negocio='${centroNegocio}' and taskname in(
+                          'Asignar Evaluacion'
+                        , 'Asignar Evaluación'
+                        , 'Autorizar Aprobacion'
+                        , 'Autorizar Aprobación'
+                        , 'Evaluar Riesgo Campo'
+                        , 'Evaluar Riesgo Mesa'
+                        , 'Validar Documentacion'
+                        , 'Validar Documentación' )
                     group by lastname || ' ' || firstname
-                    order by sum(case when taskname='Asignar Evaluacion' or taskname='Asignar Evaluación'         then 1
-                                   when taskname='Autorizar Aprobacion' or taskname='Autorizar Aprobación'     then 1
-                                   when taskname='Evaluar Riesgo Campo'                                        then 1
-                                   when taskname='Evaluar Riesgo Mesa'                                         then 1
-                                   when taskname='Registrar Solicitud '                                        then 1
-                                   when taskname='Realizar Desembolso'                                         then 1
-                                   when taskname='Revisar Resultado Dictamen'                                  then 1
-                                   when taskname='Subsanar Documentacion' or taskname='Subsanar Documentación' then 1
-                                   when taskname='Validar Documentacion' or taskname='Validar Documentación'   then 1
-                                   else 0 end) desc
+                    order by count(*) desc
                     """
                     rows = executeQuery(query)
                     response.setDetalleSolicitudAreas(rows)
                     response.setTotalDetalleSolicitudAreas(rows.size())
                     break;
                 case "detalleGestor":
+                    /*
+                     *  -- , 'Registrar Solicitud '
+                     *  -- , 'Realizar Desembolso'
+                     *  -- , 'Revisar Resultado Dictamen'
+                     *  -- , 'Subsanar Documentacion'
+                     *  -- , 'Subsanar Documentación'
+                     **/
                     centroNegocio = isNullRequestParam(request, "centroNegocio")
                     username = isNullRequestParam(request, "username")
                     query = """
@@ -189,11 +187,6 @@ public class Listado implements RestApiController {
                         , 'Autorizar Aprobación'
                         , 'Evaluar Riesgo Campo'
                         , 'Evaluar Riesgo Mesa'
-                        , 'Registrar Solicitud '
-                        , 'Realizar Desembolso'
-                        , 'Revisar Resultado Dictamen'
-                        , 'Subsanar Documentacion'
-                        , 'Subsanar Documentación'
                         , 'Validar Documentacion'
                         , 'Validar Documentación' )
                     order by rootprocessinstanceid desc
@@ -205,7 +198,6 @@ public class Listado implements RestApiController {
                 default:
                     break;
             }
-            
         } catch(Exception e) {
             response.setStatus("KO")
             response.setError(exceptionToString(e))

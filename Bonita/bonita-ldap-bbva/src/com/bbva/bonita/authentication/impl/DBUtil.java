@@ -20,7 +20,7 @@ public class DBUtil {
 
     public static String obtenerAmbito(String oficina) {
         String parametro = "";
-        
+
         try {
             InitialContext ic = new InitialContext();
             DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS");
@@ -40,10 +40,10 @@ public class DBUtil {
         }
         return parametro;
     }
-    
+
     public static String obtenerCentroNegocio(String territorio) {
         String parametro = "";
-        
+
         try {
             InitialContext ic = new InitialContext();
             DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS");
@@ -63,10 +63,10 @@ public class DBUtil {
         }
         return parametro;
     }
-    
+
     public static String obtenerParametro(String table, String key) {
-    	String parametro = "";
-    	
+        String parametro = "";
+
         try {
             InitialContext ic = new InitialContext();
             DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS");
@@ -75,7 +75,7 @@ public class DBUtil {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-            	parametro = rs.getString("VAL_COLUMN1");
+                parametro = rs.getString("VAL_COLUMN1");
             }
 
             rs.close();
@@ -86,10 +86,10 @@ public class DBUtil {
         }
         return parametro;
     }
-    
+
     public static String obtenerParametroDetalle(String table, String key) {
-    	String parametro = "";
-    	
+        String parametro = "";
+
         try {
             InitialContext ic = new InitialContext();
             DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS");
@@ -98,7 +98,7 @@ public class DBUtil {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-            	parametro = rs.getString("VAL_COLUMN2");
+                parametro = rs.getString("VAL_COLUMN2");
             }
 
             rs.close();
@@ -109,7 +109,7 @@ public class DBUtil {
         }
         return parametro;
     }
-    
+
     public static String obtenerParametro(String key) {
         return obtenerParametro("10", key);
     }
