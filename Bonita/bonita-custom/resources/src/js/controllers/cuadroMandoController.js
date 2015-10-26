@@ -418,6 +418,7 @@ abstractControllers.controller('CuadroMandoController',
 
         var parameters = {
             tipoConsulta: "detalle",
+            tipoRed: $scope.tipoRed.select.value,
             centroNegocio: $scope.centroNegocio.select.val_column1
         };
 

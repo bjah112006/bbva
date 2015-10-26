@@ -76,13 +76,33 @@ body {
     font-weight: normal;
 }
 
-#menu .btn-last-child {
-  border-radius: 0px;
+#menu .btn {
+    height: 45px;
+    line-height: 28px;
+    border-radius: 0px;
 }
 
-#menu .btn {
-	height: 45px;
-	line-height: 28px;
+#menu .btn-first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+#menu .btn-last-child {
+  /* border-radius: 0px; */
+}
+
+#menu .btn .caret {
+    margin-left: 10px;
+}
+
+#menu .dropdown {
+    margin-left: -5px;
+}
+
+#menu .dropdown-first {
+    margin-left: 0px;
 }
 
 #layout .btn {
@@ -140,8 +160,8 @@ body {
     margin-top: 0px;
     margin-bottom: 20px;
     color: #0072C9;
-  	font-family: 'BBVA Web Light';
-  	font-size: 25px;
+    font-family: 'BBVA Web Light';
+    font-size: 25px;
 }
 
 #layout .form-group {
@@ -149,7 +169,7 @@ body {
 }
 
 #layout fieldset {
-	width: 100%;
+    width: 100%;
     padding: 0.6em 1em;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -171,8 +191,8 @@ body {
 }
 
 #layout .legend {
-	padding: 0px;
-	font-weight:normal;
+    padding: 0px;
+    font-weight:normal;
 }
 
 @media (min-width: 900px) {
@@ -298,21 +318,21 @@ body {
 }
 
 .ui-icon-bbva-close {
-	display: block;
-	text-indent: -99999px;
-	overflow: hidden;
-	background-image: url('../img/logout16x16.png');
-	background-repeat: no-repeat;
-	background-position: center center;
-	width: 16px;
-	height: 16px;
+    display: block;
+    text-indent: -99999px;
+    overflow: hidden;
+    background-image: url('../img/logout16x16.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 16px;
+    height: 16px;
 }
 
 .control-label-0 {
-	height: 29px;
+    height: 29px;
     line-height: 34px;
     vertical-align: middle;
-	font-weight: normal;
+    font-weight: normal;
 }
 
 /* Corner radius */
@@ -361,63 +381,63 @@ body {
 }
 
 .hide {
-	display: none;
+    display: none;
 }
 
 /*
 .ag-header,
 .ag-header .ag-header-viewport,
 .ag-header .ag-header-container {
-	height: 30px;
+    height: 30px;
 }
 */
 
 .ag-header .ag-header-cell {
- 	text-align: center;
-	background:#f8f8f5;
-	font-weight: bold;
-	font-size: 9px;
-	color:#62676b;
-	line-height: 26px;
-	border: 1px solid #e5e5e5;
-	box-shadow: #fff 0 0 0 2px inset;
-	moz-box-shadow: #fff 0 0 0 2px inset;
-	-o-box-shadow: #fff 0 0 0 2px inset;
-	-moz-box-shadow: #fff 0 0 0 2px inset;
-	-webkit-box-shadow:#fff 0 0 0 2px inset;
+    text-align: center;
+    background:#f8f8f5;
+    font-weight: bold;
+    font-size: 9px;
+    color:#62676b;
+    line-height: 26px;
+    border: 1px solid #e5e5e5;
+    box-shadow: #fff 0 0 0 2px inset;
+    moz-box-shadow: #fff 0 0 0 2px inset;
+    -o-box-shadow: #fff 0 0 0 2px inset;
+    -moz-box-shadow: #fff 0 0 0 2px inset;
+    -webkit-box-shadow:#fff 0 0 0 2px inset;
 }
 
 .ag-body .ag-row-even {
-	
+    
 }
 
 .ag-body .ag-row-odd {
-	background: #f3fcff;
+    background: #f3fcff;
 }
 
 .ag-body .ag-cell {
-	padding: 0 10px;
-	overflow: hidden;
-	border: none;
-	border-bottom: 1px solid #e5e5e5;
-	font-size: 0.9em;
-	white-space: pre-wrap;
-	line-height: 30px;
-	text-align: left;
+    padding: 0 10px;
+    overflow: hidden;
+    border: none;
+    border-bottom: 1px solid #e5e5e5;
+    font-size: 0.9em;
+    white-space: pre-wrap;
+    line-height: 30px;
+    text-align: left;
 }
 
 .ag-paging-button {
-	margin-top: 2px;
-	padding-top: 3px;
-	padding-bottom: 4px;
+    margin-top: 2px;
+    padding-top: 3px;
+    padding-bottom: 4px;
 }
 /*
 .ag-body .cell-col-1,
 .ag-body .cell-col-3,
 .ag-body .cell-col-4,
 .ag-body .cell-col-5 {
-	margin: auto;
-	text-align: center;
+    margin: auto;
+    text-align: center;
 }
 */
 .loading-center {
@@ -438,8 +458,8 @@ body {
     background-color: #ededed;
     outline: 0px;
     padding: 0px;
-	width: 300px;
-	height: 170px;
+    width: 300px;
+    height: 170px;
     display: table-cell;
     text-align: center;
     vertical-align: middle;
@@ -455,8 +475,8 @@ body {
     border: 1px solid #dcdcdc;
     background: #fff;
     position: relative;
-	width: 280px;
-	height: 150px;
+    width: 280px;
+    height: 150px;
     margin: auto;
 }
 
@@ -475,30 +495,30 @@ body {
 }
 
 .ui-widget-overlay-background {
-	position:absolute;
-	z-index:9998;
-	top:0;
-	left:0;
-	width:100%;
-	height:100%;
+    position:absolute;
+    z-index:9998;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
     background: #2d5972 url("../img/ui-bg_flat_0_2d5972_40x100.png") 50% 50% repeat-x;
     opacity: .30;
     filter: Alpha(Opacity=30);
 }
 
 .ui-widget-overlay {
-	position:absolute;
-	z-index:9999;
-	top:0;
-	left:0;
-	width:100%;
-	height:100%;
-	display: table;
+    position:absolute;
+    z-index:9999;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display: table;
 }
 
 .highcharts-title tspan {
-	font-size: 18px;
-	font-weight: bold;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
@@ -520,7 +540,7 @@ body {
 .modal-header h3,
 .modal-header .h3 {
     font-size: 14px;
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .modal-footer {
@@ -539,30 +559,30 @@ body {
 }
 
 .parent {
-	position: relative;
+    position: relative;
 }
 
 .child {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .glyphicon-ok-sign {
-	padding-left: 10px;
-	padding-right: 3px;
-	color: green;
+    padding-left: 10px;
+    padding-right: 3px;
+    color: green;
 }
 
 .glyphicon-remove-sign {
-	padding-left: 10px;
-	padding-right: 3px;
-	color: red;
+    padding-left: 10px;
+    padding-right: 3px;
+    color: red;
 }
 
 .glyphicon-plus-sign {
-	padding-left: 10px;
-	padding-right: 3px;
-	color: black;
+    padding-left: 10px;
+    padding-right: 3px;
+    color: black;
 }
