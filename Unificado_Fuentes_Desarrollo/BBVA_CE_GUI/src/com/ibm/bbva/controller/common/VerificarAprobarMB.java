@@ -93,6 +93,7 @@ public class VerificarAprobarMB extends AbstractMBean {
 			       nombJSP.equals("formRegistrarExpedienteCu25")) {
 			LOG.info("CONDICION B");
 			iniciarConfExp (expedienteVO);
+			
 		} else if (nombJSP.equals("formRegistrarDatos") || 
 				   nombJSP.equals("formAprobarExpediente") ||
 				   nombJSP.equals("formRegistrarAprobResolucion") || 
@@ -140,7 +141,12 @@ public class VerificarAprobarMB extends AbstractMBean {
 			verDPS = false;
 			LOG.info("verDPS es false");
 		}
-			
+		
+		String nombJSP = getNombreJSPPrincipal();
+		if((nombJSP.equals("formVerificarConformidadExpediente") && (!verLaboral && !verDomiciliaria ))){
+			verLaboral = true;
+			verDomiciliaria = true;
+		}	
 				
 	}
 	
