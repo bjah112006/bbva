@@ -9,11 +9,11 @@
 		<meta http-equiv="Pragma" content="no-cache"/>
 		<meta http-equiv="Cache-Control" content="no-cache"/>
 		<meta http-equiv="Expires" content="0"/>
-		<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
-        <h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
+		<h:outputStylesheet library="css/theme" name="stylesheet.css" target="head"/>
         <h:outputStylesheet library="css/style" name="style.css" target="head"/>
         <h:outputStylesheet library="css/style" name="stylecabecera.css" target="head"/>
         <h:outputStylesheet library="css/style" name="stylemenu.css" target="head"/>
+        <h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
         <h:outputScript library="js" name="jquery-1.8.2.js" target="head"/>
         <h:outputScript library="js" name="jquery-ui.js" target="head"/>
         <h:outputScript library="js" name="jquery.numeric.js" target="head"/>
@@ -32,10 +32,10 @@
 	 		);
 	 		
 	 		$(".mostrarModal").click(function (event) {
-	   				var img = '<img src="/BBVA_CE_GUI/resources/images/loading.gif" height="60" width="60"><span style="text-align:center; display:block; margin-top:5px">Procesando...</span>';
+	 				var img = '<img src=\"/BBVA_CE_GUI/resources/images/loading.gif\" height=\"60\" width=\"60\" /><span style=\"text-align:center; display:block; margin-top:5px\">Procesando...</span>';
 					modal.open({content: img});
 	   			});
-	   		
+	   			
 	   		try {
 		   		var preloadImg = new Image();
 		 		preloadImg.src = "/BBVA_CE_GUI/resources/images/loading.gif";
@@ -248,8 +248,8 @@
                 	    <h:panelGroup styleClass="tituloMenu">
 							<h:outputText id="idTblPendiente" value="Búsqueda de Expedientes" />			
 							<h:outputText value=" " />
-						</h:panelGroup>           	
-	                    <ui:include src="/resources/common/buscarBandeja.xhtml"/>
+						</h:panelGroup> 
+					    <ui:include src="/resources/common/buscarBandeja.xhtml"/>
 						<h:outputText value="#{buscarBandeja.textoMensajeSinFiltro}" escape="false"/>
 						<h:panelGroup id="pnlHistorico">
 							<h:outputText value="#{buscarBandeja.textoMensajeSoloExpediente}" escape="false"/>
@@ -265,8 +265,8 @@
 						    <!-- <h:commandButton id="idBuscarBusq" value="#{msg['com.ibm.bbva.bandejaBusqueda.formBandejaBusqueda.buscar']}">
 	            		    	<f:ajax onevent="mostrarProcesando" event="click" render="@form" execute="@form" listener="#{bandejaBusqueda.buscar}"/>
 	            		    </h:commandButton>-->
-	            		    <h:commandButton id="idBuscarBusq" value="#{msg['com.ibm.bbva.bandejaBusqueda.formBandejaBusqueda.buscar']}"
-	            		                     action="#{bandejaBusqueda.buscar}" styleClass="mostrarModal"/>
+	            		     <h:commandButton id="idBuscarBusq" value="#{msg['com.ibm.bbva.bandejaBusqueda.formBandejaBusqueda.buscar']}"
+	            		                     action="#{bandejaBusqueda.buscar}" styleClass="mostrarModal"  />              
                             <h:commandButton value="#{msg['com.ibm.bbva.bandejaBusqueda.formBandejaBusqueda.limpiar']}"
 	            		                     action="#{bandejaBusqueda.limpiar}"/>		            		                     							
 						    <h:commandButton id="salirbb" value="#{msg['com.ibm.bbva.bandejaBusqueda.formBandejaBusqueda.salir']}"
