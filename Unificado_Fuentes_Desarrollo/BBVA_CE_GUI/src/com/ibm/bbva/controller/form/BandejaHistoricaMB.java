@@ -36,7 +36,7 @@ public class BandejaHistoricaMB extends AbstractMBean {
 		if (buscarBandejaHist.valida()) {
 			List<HistorialDetalle> lista = buscarBandejaHist.buscar();
 			addObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION, lista);
-			
+						
 			TablaBandejaHistMB tablaBandejaHist = (TablaBandejaHistMB)  
 					 ctx.getApplication().getVariableResolver().resolveVariable(ctx, "tablaBandejaHist");
 			
