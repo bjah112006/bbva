@@ -147,7 +147,7 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
         }else{
         	LOG.info("Lista horario oficina ya esta cargada");
     		if(mapaDatosHorarioOficina!=null)
-    			LOG.info("Tamaño de mapa:::"+mapaDatosHorarioOficina.size());        	
+    			LOG.info("Tamaï¿½o de mapa:::"+mapaDatosHorarioOficina.size());        	
         }
         
         if (nombJSP.equals("formBandejaPendientes")) {
@@ -180,7 +180,7 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 			}
 		}
 		if(mapa!=null){
-			LOG.info("Tamaño de mapa:::"+mapa.size());
+			LOG.info("Tamaï¿½o de mapa:::"+mapa.size());
 			
 			Iterator it = mapa.keySet().iterator();
 			while(it.hasNext()){
@@ -279,10 +279,10 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 						//if(empleado != null && empleado.getPerfi<<l() != null){
 							//listTareaPerfil = tareaPerfilBean.buscarPorIdPerfil(empleado.getPerfil().getId());
 							//if(listTareaPerfil != null && listTareaPerfil.size() > 0){
-								//LOG.info("Tamaño listTareaPerfil .. "+listTareaPerfil.size());
+								//LOG.info("Tamaï¿½o listTareaPerfil .. "+listTareaPerfil.size());
 							//	listRetraccionTarea = retraccionTareaBean.buscarPorFlagRetraer(Long.parseLong(etc.getIdTarea()), listTareaPerfil.get(0).getTarea().getId());
 								if(listRetraccionTarea!=null && listRetraccionTarea.size()>0){
-									//LOG.info("Tamaño listRetraccionTarea ... "+listRetraccionTarea.size());
+									//LOG.info("Tamaï¿½o listRetraccionTarea ... "+listRetraccionTarea.size());
 									for (RetraccionTarea obj : listRetraccionTarea ){
 									//	Long id=listTareaPerfil.get(0).getTarea().getId();
 									  if (obj!=null && obj.getLlegada()==Long.parseLong(etc.getIdTarea())){
@@ -291,11 +291,11 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 										}
 									}//fin for									
 								}/*else
-									LOG.info("Tamaño listRetraccionTarea es nulo o vacio.. ");*/
+									LOG.info("Tamaï¿½o listRetraccionTarea es nulo o vacio.. ");*/
 
 								//LOG.info("RenderedRe..."+this.isRenderedRe());
 							//}else
-								//LOG.info("Tamaño listTareaPerfil nulo o vacio.. ");
+								//LOG.info("Tamaï¿½o listTareaPerfil nulo o vacio.. ");
 						//}
 					/*}*/ //else
 						//LOG.info("etc no es Retraer");
@@ -316,11 +316,11 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 		
 
 		/**
-		 * Ordenar Lista por Código de Expediente
+		 * Ordenar Lista por Cï¿½digo de Expediente
 		 * */
 		if(listTabla!=null && listTabla.size()>0){
 			
-			LOG.info("Ordenando Lista por Código de Expediente");
+			LOG.info("Ordenando Lista por Cï¿½digo de Expediente");
 			Comparator<ExpedienteTCWPSWeb> comparator = null;
 			String orden = ComparatorBase.SORT_ORDER_ASC;
 			
@@ -346,7 +346,7 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 			actualiarAyudaHorario(null);
 		}else{
 			
-			LOG.info("listaCount tamaño:::"+listTabla.size());
+			LOG.info("listaCount tamaÃ±o:::"+listTabla.size());
 		}		
  		
 	}
@@ -525,7 +525,7 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 
 		Expediente expediente = obtenerExpediente(codigo);
 		
-		//Actualiza estado activo de Expediente para el momento de la reasignación	
+		//Actualiza estado activo de Expediente para el momento de la reasignaciï¿½n	
 		expedienteBean.actualizarEstadoExpediente(Constantes.FLAG_ESTADO_ACTIVO_EXPEDIENTE, expediente.getId());
 		
 		RemoteUtils bandeja = new RemoteUtils();
@@ -536,7 +536,7 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 		if(expedienteTC != null){
 			/**
 			 * Si el ID de Tarea existe, continuar
-			 * con la lógica.
+			 * con la lï¿½gica.
 			 */
 			if(expedienteTC.getIdTarea() != null){
 			
@@ -553,14 +553,14 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 							LOG.info("tarea des:::"+expedienteTC.getDesTarea());
 							expediente.getExpedienteTC().setTarea(tarea);
 						}catch(Exception ex){
-							LOG.error("No se encontró la tarea " + expedienteTC.getIdTarea(), ex);
+							LOG.error("No se encontrï¿½ la tarea " + expedienteTC.getIdTarea(), ex);
 						}
 						
 						if(expediente.getExpedienteTC().getTarea() != null){
 							if(expediente.getExpedienteTC().getTarea().getId()!=Constantes.ID_TAREA_1 && expediente.getEstado().getId()!=Constantes.ESTADO_EN_REGISTRO_TAREA_1){
 								LOG.info("Actualizacion de TI y T2 ");
 								
-								LOG.info("Fecha de activación =========> " + fechaActivado.toString());
+								LOG.info("Fecha de activaciï¿½n =========> " + fechaActivado.toString());
 								expediente.getExpedienteTC().setFechaT2(new Timestamp(bandeja.obtenerTimestampServidorProcess().getTimeInMillis()));
 								expediente.getExpedienteTC().setFechaT1(fechaActivado); /*fecha de asignacion del processo*/
 								LOG.info("Fecha y Hora fecha 1:::"+expediente.getExpedienteTC().getFechaT1().toString());
@@ -659,11 +659,11 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 		 * @author Daniel Flores
 		 * 
 		 * Obtener el estado anterior del expediente y 
-		 * reestablecerlo. Esto se realizará con la consulta
+		 * reestablecerlo. Esto se realizarï¿½ con la consulta
 		 * al historial del expediente.
 		 * 
 		 * Guardamos el estado actual para luego guardarlo
-		 * como parte del historial del expediente, este tendrá
+		 * como parte del historial del expediente, este tendrï¿½
 		 * un flag de  RETRAER.
 		 * 
 		 */
@@ -688,8 +688,8 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 		/** Guardamos el expediente con el estado anterior **/		
         expedienteBean.edit(expediente);
         
-        /** En el historial se guarda el expediente con el estado inicial que después
-         * fue cambiado al que tenía anteriormente.
+        /** En el historial se guarda el expediente con el estado inicial que despuï¿½s
+         * fue cambiado al que tenï¿½a anteriormente.
          */
         expediente.setEstado(ultimoEstado);
 		Historial historial = ConvertExpediente.convertToHistorialVO(expediente);			
@@ -809,7 +809,7 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 	            sortField = sortFieldAttribute;
 	            sortAscending = true;
 	        }
-	        // regresa a la primera página si cambia el orden
+	        // regresa a la primera pï¿½gina si cambia el orden
 	        dataTable.setFirst(0);
 		} // si no viene el atributo sortField no cambia el ordenamiento
         
@@ -937,7 +937,7 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 		//buscarBandejaAsig.cargarUsuariosAsignados(listaUsuariosAsignar);
 		//setListTabla((List<ExpedienteTCWrapper>)getObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION));
 		listTabla=(List<ExpedienteTCWrapper>)getObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION);
-		LOG.info("tamaño tabla ="+listTabla.size());
+		LOG.info("tamaï¿½o tabla ="+listTabla.size());
 	    //buscarBandejaAsig.buscar();
 		actualizarLista();
 		
@@ -1171,17 +1171,17 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 											obj.setAyudaHorario(new AyudaHorario(Long.parseLong(obj.getExpedienteTC().getIdOficinaUsu())));
 											LOG.info("Se ha creado horario...");
 										} catch (NamingException e) {
-											// TODO Bloque catch generado automáticamente
+											// TODO Bloque catch generado automï¿½ticamente
 											LOG.error(e.getMessage(), e);
 										}
 						        	}else
 					        			LOG.info("Ayuda horario no es null para id exp::"+obj.getExpedienteTC().getCodigo());				        		
 					       	  }else
-					       			LOG.info("IdOficinaUsu es vacío");
+					       			LOG.info("IdOficinaUsu es vacï¿½o");
 
 
 						      /**
-						       * Modificación Flag Retraer - Visualizarlo
+						       * Modificaciï¿½n Flag Retraer - Visualizarlo
 						       * 04 de Agosto 2015
 						       * */
 						      this.setRenderedRe(false);
@@ -1224,7 +1224,7 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 							 if(obj.getExpedienteTC().getFlagRetraer()!=null && obj.getExpedienteTC().getFlagRetraer().equals("1"))
 								 this.setRenderedRe(true);
 						      /**
-						       * Fin / Modificación Flag Retraer - Visualizarlo
+						       * Fin / Modificaciï¿½n Flag Retraer - Visualizarlo
 						       * */							 
 						        	
 				        }else{
