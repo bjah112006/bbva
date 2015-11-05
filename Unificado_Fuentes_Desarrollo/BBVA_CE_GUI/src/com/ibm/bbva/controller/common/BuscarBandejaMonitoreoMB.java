@@ -77,7 +77,7 @@ public class BuscarBandejaMonitoreoMB extends AbstractMBean {
 		
 		this.limpiar();
 		
-		/** Obtener último tipo búsqueda **/
+		/** Obtener ï¿½ltimo tipo bï¿½squeda **/
 		tipoBusqueda = (String)getObjectSession(Constantes.TIPO_BUSQUEDA_BM);
 		
 		/*Carga Lista de Perfiles/Roles*/
@@ -124,7 +124,7 @@ public class BuscarBandejaMonitoreoMB extends AbstractMBean {
 				for(LogErrores logErrores : listLogErrores){
 					ExpedienteTCWPS expedienteTCWPS = new ExpedienteTCWPS();
 					//tablaMonitoreo.setCantidadDocumentos(String.valueOf(logErrores.getCantidadDocumentos())); -- no mostrar en la grilla
-					expedienteTCWPS.setCodigo(String.valueOf(logErrores.getExpediente().getId()));
+					expedienteTCWPS.setCodigo(String.valueOf(logErrores.getExpediente().getId()!=0? logErrores.getExpediente().getId() : 0));
 					
 					if(logErrores.getEmpleado() != null){
 						expedienteTCWPS.setCodigoUsuarioAnterior(logErrores.getEmpleado().getCodigo());
@@ -132,9 +132,12 @@ public class BuscarBandejaMonitoreoMB extends AbstractMBean {
 					}
 
 					//expedienteTCWPS.setDescripcionError(logErrores.getDescripcionError()); -- no mostrar en la grilla
-					expedienteTCWPS.setPerfilUsuarioActual(logErrores.getPerfil().getDescripcion());
-					expedienteTCWPS.setDesTarea(logErrores.getTarea().getDescripcion());
-					expedienteTCWPS.setEstadoAnterior(logErrores.getEstadoCE().getDescripcion());
+					expedienteTCWPS.setPerfilUsuarioActual(
+							(logErrores.getPerfil() !=null && logErrores.getPerfil().getId()>0)? logErrores.getPerfil().getDescripcion():"");
+					expedienteTCWPS.setDesTarea(
+							(logErrores.getTarea()!=null && logErrores.getTarea().getId()>0)? logErrores.getTarea().getDescripcion():"");
+					expedienteTCWPS.setEstadoAnterior(
+							(logErrores.getEstadoCE() != null && logErrores.getEstadoCE().getId() >0 ? logErrores.getEstadoCE().getDescripcion():""));
 					
 					String fechaCancelacion = logErrores.getFechaCancelacion() == null ? "" : Util.parseDateString(logErrores.getFechaCancelacion(),"dd/MM/yyyy");
 					expedienteTCWPS.setFechaCancelacion(fechaCancelacion);
@@ -146,7 +149,8 @@ public class BuscarBandejaMonitoreoMB extends AbstractMBean {
 					expedienteTCWPS.setFechaIncidencia(fechaIncidencia);
 
 					//expedienteTCWPS.setNroReintentos(String.valueOf(logErrores.getExpediente().getId())); -- no mostrar en la grilla
-					expedienteTCWPS.setTipoError(logErrores.getTipoError());
+					expedienteTCWPS.setTipoError(
+							(logErrores.getTipoError()==null || ("").equals(logErrores.getTipoError())?"": logErrores.getTipoError()));
 										
 					listTabla.add(expedienteTCWPS);
 				}
