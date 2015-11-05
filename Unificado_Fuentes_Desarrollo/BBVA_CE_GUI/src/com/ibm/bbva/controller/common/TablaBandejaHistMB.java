@@ -69,9 +69,9 @@ public class TablaBandejaHistMB extends AbstractSortPagDataTableMBean {
 	public void actualizarLista () {
 		listTabla = (List<HistorialDetalle>) getObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION);
 		
-		if(listTabla!=null){
+		if(listTabla!=null && listTabla.size()>0){
 			this.setNumRegistros(String.valueOf(this.getListTabla().size())+" registros encontrados");
-			LOG.info("ListTabla tamaño::::"+this.getListTabla().size());
+			LOG.info("ListTabla tamaÃ±o::::"+this.getListTabla().size());
 		}else{
 			this.setNumRegistros("0 registros encontrados");
 			LOG.info("ListTabla es nulo");
@@ -139,7 +139,7 @@ public class TablaBandejaHistMB extends AbstractSortPagDataTableMBean {
 	            sortField = sortFieldAttribute;
 	            sortAscending = true;
 	        }
-	        // regresa a la primera página si cambia el orden
+	        // regresa a la primera pï¿½gina si cambia el orden
 	        dataTable.setFirst(0);
 		} // si no viene el atributo sortField no cambia el ordenamiento
 		
@@ -268,7 +268,7 @@ public class TablaBandejaHistMB extends AbstractSortPagDataTableMBean {
 
 	@Override
 	public void actualiarAyudaHorario(ActionEvent event) {
-		// TODO Apéndice de método generado automáticamente
+		// TODO Apï¿½ndice de mï¿½todo generado automï¿½ticamente
 		
 	}
 
