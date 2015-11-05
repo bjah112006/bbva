@@ -1213,7 +1213,8 @@ public interface Constantes {
 	String ID_TC_CONSOLIDADO="1";	//JBTA
 	String TIPO_REPORTE_TC = "tipReporteTc"; /*JBTA*/
 	String TITULO_REPORTE_TC = "titReporteTc"; /*JBTA*/
-	String TITULO_REPORTE_TC_HISTORICO = "Reporte Hist�rico"; /*JBTA*/
+	//String TITULO_REPORTE_TC_HISTORICO = "Reporte Hist�rico"; /*JBTA*/
+	String TITULO_REPORTE_TC_HISTORICO = "Reporte Histórico"; /*JBTA*/
 	String TITULO_REPORTE_TC_CONSOLIDADO = "Reporte Consolidado"; /*JBTA*/	
 	
 	
