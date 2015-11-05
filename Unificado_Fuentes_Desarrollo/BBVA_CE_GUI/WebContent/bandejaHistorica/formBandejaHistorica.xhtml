@@ -31,9 +31,13 @@
 	 		);	
 	 		
 	 		$(".mostrarModal").click(function (event) {
-	   				var img = '<img src="/BBVA_CE_GUI/resources/images/loading.gif" height="60" width="60"><span style="text-align:center; display:block; margin-top:5px">Procesando...</span>';
+	   				var img = '<img src=\"/BBVA_CE_GUI/resources/images/loading.gif\" height=\"60\" width=\"60\" /><span style=\"text-align:center; display:block; margin-top:5px\">Procesando...</span>';
 					modal.open({content: img});
-	   			});	   	   	
+	   			});
+	   		try {
+		   		var preloadImg = new Image();
+		 		preloadImg.src = "/BBVA_CE_GUI/resources/images/loading.gif";
+		 	} catch (e) { }		   	   	
 		});
 		
         function validarFormatoFechaInicio(){
