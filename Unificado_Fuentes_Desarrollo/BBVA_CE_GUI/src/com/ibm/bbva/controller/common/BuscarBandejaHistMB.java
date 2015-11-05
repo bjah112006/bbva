@@ -316,14 +316,8 @@ public class BuscarBandejaHistMB extends AbstractMBean {
 				historialDetalle.setObservacion(Constantes.OBSERVACION_REGISTRADA);
 			}
 			//FIX ERIKA ABREGU
-//			if(hist.getExpediente().getOrigen()!=null && (Constantes.EXPEDIENTE_ANTIGUO).equals(hist.getExpediente().getOrigen())){
-//				SimpleDateFormat sdf = new SimpleDateFormat ("dd/MM/yyyy hh:mm:ss"); 
-//				LOG.info("hist.getExpediente().getFecRegistro()  "+hist.getExpediente().getFecRegistro());
-//				historialDetalle.setFechaRegistro(hist.getExpediente().getFecRegistro()!=null? sdf.format(hist.getExpediente().getFecRegistro()) :null );
-//			}else{
-				SimpleDateFormat sdf = new SimpleDateFormat ("dd/MM/yyyy hh:mm:ss a"); 
-				historialDetalle.setFechaRegistro(hist.getExpediente().getFecRegistro()!=null? sdf.format(hist.getExpediente().getFecRegistro()) :null );
-//			}
+			SimpleDateFormat sdf = new SimpleDateFormat ("dd/MM/yyyy hh:mm:ss a"); 
+			historialDetalle.setFechaRegistro(hist.getExpediente().getFecRegistro()!=null? sdf.format(hist.getExpediente().getFecRegistro()) :null );
 			//FIN DE FIX
 			historialDetalle.setCorreo(hist.getClienteNatural()==null?"":hist.getClienteNatural().getCorreo());		 
 			historialDetalle.setCelular(hist.getClienteNatural()==null?"":hist.getClienteNatural().getCelular());
