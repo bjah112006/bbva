@@ -92,7 +92,7 @@ public class CargaLdapServlet extends HttpServlet
 	
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException 
 	{
-		
+		LOG.info("CargaLdapServlet:INICIO PROCESO DE CARGA DE EMPLEADOS");
 		try 
 		{
 			response.setHeader("Content-Type", "text/plain");
@@ -137,9 +137,13 @@ public class CargaLdapServlet extends HttpServlet
 			
 					 
 				ldapTempBeanLocal.clean();
+				LOG.info("CargaLdapServlet: inicio invocacion obtener empleados");
+				LOG.info("ws:"+parametrosConfBeanLocal.buscarPorVariable(Constantes.CODIGO_APLICATIVO_PROCESO_LDAP, Constantes.LDAP_WEB_SERVICE_EXT_ENDPOINT).getValorVariable());
 				List<UsuarioExtendido> listaUsuarios = objWSLDAPServiceImplPortProxy.obtenerUsuarios(null);
+				LOG.info("CargaLdapServlet: fin obtener empleados");
 				LdapTemp objLdapTemp = null;
 				String oficinasSincronizables = multitablaBeanLocal.buscarPorId(Constantes.PARAMETRO_OFICINAS_SINCRONIZABLES).getTexto();
+				
 				for(UsuarioExtendido objUsuario : listaUsuarios)
 				{					
 					objLdapTemp = new LdapTemp();					
@@ -210,9 +214,9 @@ public class CargaLdapServlet extends HttpServlet
 			
 			objLogJobDet.setFechaFin(new Date());
 			logJobDetBeanLocal.edit(objLogJobDet);
-			
+			LOG.info("CargaLdapServlet: inicio invocacion package carga de empleados");
 			empleadoBeanLocal.ejecutarDescargaLDAP(objLogJob.getId());
-			
+			LOG.info("CargaLdapServlet: fin invocacion package carga de empleados");
 			/**
 			 ******* REASIGNACIÓN ********			 
 			 */
@@ -388,7 +392,7 @@ public class CargaLdapServlet extends HttpServlet
 	    {
 	        e.printStackTrace();
 	    }
-
+		LOG.info("CargaLdapServlet: FIN PROCESO DE CARGA DE EMPLEADOS");
 	}
 
 }
