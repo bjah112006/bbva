@@ -143,7 +143,7 @@ public class ReporteTCCSVServlet extends HttpServlet {
 			arrayList.add(Long.parseLong(codOficina));
 			arrayList.add(Integer.parseInt(tipoReporteTOE));
 			
-
+ 
 			
 			AyudaDatosReporte objAyudaDatosReporte=new AyudaDatosReporte();
 			String result= objAyudaDatosReporte.buscarGenerarTOE(arrayList);
@@ -162,7 +162,7 @@ public class ReporteTCCSVServlet extends HttpServlet {
 			     sheet.setDisplayGridlines(false);
 			            
 				 /**
-				 * Comienza creaciï¿½n de encabezado
+				 * Comienza creación de encabezado
 				 * */
 			     int numColTituloPrincipal=1;
 			     int numFirstColTituloRol=2; 
@@ -175,7 +175,7 @@ public class ReporteTCCSVServlet extends HttpServlet {
 			     int lastCol=18;	
 			     
 			     int cont = 0;
-		         //Creaciï¿½n de Titulo de reporte 
+		         //Creación de Titulo de reporte 
 			      for(List<ListaReporteToe> listReporteToe : listaReporte_Prod_TipoOferta_Flujo){
 
 			        if(listReporteToe!=null && listReporteToe.size()>0){
@@ -191,29 +191,29 @@ public class ReporteTCCSVServlet extends HttpServlet {
 					    objAyudaDatosReporte.createTituloCell(wb, t2row, numColTituloRol, CellStyle.ALIGN_CENTER,
 						        CellStyle.VERTICAL_CENTER, Constantes.DESCRIPCION_SUBTITULO_1+" "+fechaInicio+" AL "+fechaFin+getTituloTabla(cont, objAyudaDatosReporte));
 					    
-					    //Creaciï¿½n de Titulo Rol
+					    //Creación de Titulo Rol
 					    Row titRolRow = objAyudaDatosReporte.crearFila(sheet, wb, numFilaTitulo1+3);
 					    objAyudaDatosReporte.crearTituloCabecera_Rol_Perfil_Tiempo(wb, sheet, titRolRow, numFirstColTituloRol, numLastColTituloRol, numFilaTitulo1+3, 0, 200, 1, listaRoles);
 					            	
-						//Creaciï¿½n de Titulo Perfiles
+						//Creación de Titulo Perfiles
 					    Row titPerRow = objAyudaDatosReporte.crearFila(sheet, wb, numFilaTitulo1+4);
 					    objAyudaDatosReporte.crearTituloCabecera_Rol_Perfil_Tiempo(wb, sheet, titPerRow, numFirstColTituloRol, numLastColTituloRol, numFilaTitulo1+4, 0, 200, 0, listaPerfiles);
 					            
-						//Creaciï¿½n de Titulo tiempos tc y te
+						//Creación de Titulo tiempos tc y te
 					    Row titTiempRow = objAyudaDatosReporte.crearFila(sheet, wb, numFilaTitulo1+5);
 					    objAyudaDatosReporte.crearTituloCabecera_Rol_Perfil_Tiempo(wb, sheet, titTiempRow, numFirstColTituloRol, numLastColTituloRol, numFilaTitulo1+5, 0, 200, 2, listaTiempo_tc_te);	
 					            
 					    if(listReporteToe!=null && listReporteToe.size()>0){
-					    	//Creaciï¿½n de Tiempos Objetivos 
+					    	//Creación de Tiempos Objetivos 
 					    	objAyudaDatosReporte.crearContenido_Tiempo(wb, sheet, numFirstColTituloRol-1, 0, 300, listReporteToe, numFilaTitulo1);	
 					    }
-						//Creaciï¿½n de Porcentaje TOE
+						//Creación de Porcentaje TOE
 					    //if(listPorc_Prod_TipOferta_Flujo!=null && listPorc_Prod_TipOferta_Flujo.size()>0)
 					    List<ListaReportePorcentajeToe> listPorcentaje = listPorc_Prod_TipOferta_Flujo.get(cont);
 					    Row filPorc = objAyudaDatosReporte.crearFila(sheet, wb, numFilaTitulo1+9);
 					    objAyudaDatosReporte.crearPorcentajeTOE(wb, sheet, filPorc, numFirstColTituloRol-1, numLastColTituloRol+16, numFilaTitulo1+9, 0, 300, 2, listPorcentaje);
 					    
-					    // Creaciï¿½n de Unidades CPM y RIESGO
+					    // Creación de Unidades CPM y RIESGO
 
 					    // CPM
 					    List<ListaReporteUnidadToe> listaUnidad = listUnid_Prod_TipOferta_Flujo.get(cont);
@@ -250,12 +250,11 @@ public class ReporteTCCSVServlet extends HttpServlet {
 					 response.addDateHeader("Expires", 0);
 					 response.setContentType("application/vnd.ms-excel");  
 						
-					 //response.addHeader("Content-Disposition", "filename="+nombreArchivo+".xls");
-					 response.addHeader("Content-Disposition", "attachment; filename=\""+nombreArchivo+".xls\"");
+					 response.addHeader("Content-Disposition", "filename="+nombreArchivo+".xls");
 					 try {
 						wb.write(response.getOutputStream());
 					} catch (IOException e) {
-						// TODO Bloque catch generado automï¿½ticamente
+						// TODO Bloque catch generado automáticamente
 						LOG.error(e.getMessage(), e);
 					}		
 				
@@ -273,7 +272,7 @@ public class ReporteTCCSVServlet extends HttpServlet {
 				     sheet.setDisplayGridlines(false);
 				            
 					 /**
-					 * Comienza creaciï¿½n de encabezado
+					 * Comienza creación de encabezado
 					 * */
 				     int numColTituloPrincipal=1;
 				     int numFirstColTituloRol=2; 
@@ -286,7 +285,7 @@ public class ReporteTCCSVServlet extends HttpServlet {
 				     int lastCol=4;	
 				     
 				     int cont = 0;
-			         //Creaciï¿½n de Titulo de reporte 
+			         //Creación de Titulo de reporte 
 				     if(listaReporte_Prod_TipoOferta_Flujo!=null)
 				      for(List<ListaReporteToe> listReporteToe : listaReporte_Prod_TipoOferta_Flujo){
 				    	 
@@ -316,29 +315,29 @@ public class ReporteTCCSVServlet extends HttpServlet {
 						    	
 						    numFilaTitulo1++;
 						    
-						    //Creaciï¿½n de Titulo Unidad
+						    //Creación de Titulo Unidad
 						    Row titRolRow = objAyudaDatosReporte.crearFila(sheet, wb, numFilaTitulo1+3);
 						    objAyudaDatosReporte.crearTituloCabecera_Rol_Perfil_Tiempo(wb, sheet, titRolRow, numFirstColTituloRol, numLastColTituloRol+1, numFilaTitulo1+3, 0, 200, 0, listaRoles);
 						            	
-							//Creaciï¿½n de Titulo Perfiles
+							//Creación de Titulo Perfiles
 						    Row titPerRow = objAyudaDatosReporte.crearFila(sheet, wb, numFilaTitulo1+4);
 						    objAyudaDatosReporte.crearTituloCabecera_Rol_Perfil_Tiempo(wb, sheet, titPerRow, numFirstColTituloRol, numLastColTituloRol+1, numFilaTitulo1+4, 0, 200, 0, listaPerfiles);
 						            
 						    
-							//Creaciï¿½n de Titulo tiempos tc y te
+							//Creación de Titulo tiempos tc y te
 						    Row titTiempRow = objAyudaDatosReporte.crearFila(sheet, wb, numFilaTitulo1+5);
 						    objAyudaDatosReporte.crearTituloCabecera_Rol_Perfil_Tiempo(wb, sheet, titTiempRow, numFirstColTituloRol, numLastColTituloRol, numFilaTitulo1+5, 0, 200, 2, listaTiempo_tc_te);	
 						            
 						    if(listReporteToe!=null && listReporteToe.size()>0){
-						    	//Creaciï¿½n de Tiempos Objetivos 
+						    	//Creación de Tiempos Objetivos 
 						    	objAyudaDatosReporte.crearContenido_TiempoEspecifico(wb, sheet, numFirstColTituloRol-1, 0, 300, listReporteToe, numFilaTitulo1);	
 						    }
-							//Creaciï¿½n de Porcentaje TOE
+							//Creación de Porcentaje TOE
 						    List<ListaReportePorcentajeToe> listPorcentaje = listPorc_Prod_TipOferta_Flujo.get(cont);
 						    Row filPorc = objAyudaDatosReporte.crearFila(sheet, wb, numFilaTitulo1+9);
 						    objAyudaDatosReporte.crearPorcentajeTOE_especifico(wb, sheet, filPorc, numFirstColTituloRol-1, numLastColTituloRol+3, numFilaTitulo1+9, 0, 300, 2, listPorcentaje);
 						    
-						    // Creaciï¿½n de Unidades CPM y RIESGO
+						    // Creación de Unidades CPM y RIESGO
 
 						    
 						    numFilaTitulo1=numFilaTitulo1+16;
@@ -360,13 +359,12 @@ public class ReporteTCCSVServlet extends HttpServlet {
 						 response.addDateHeader("Expires", 0);
 						 response.setContentType("application/vnd.ms-excel");  
 							
-						 //response.addHeader("Content-Disposition", "filename="+nombreArchivo+".xls");
-						 response.addHeader("Content-Disposition", "attachment; filename=\""+nombreArchivo+".xls\"");
+						 response.addHeader("Content-Disposition", "filename="+nombreArchivo+".xls");
 						 try {
 							 LOG.info("Imprimir");
 							wb.write(response.getOutputStream());
 						} catch (IOException e) {
-							// TODO Bloque catch generado automï¿½ticamente
+							// TODO Bloque catch generado automáticamente
 							LOG.error(e.getMessage(), e);
 						}						
 				}
@@ -520,8 +518,7 @@ public class ReporteTCCSVServlet extends HttpServlet {
 			//response.setContentType("text/csv");
 			response.setContentType("application/vnd.ms-excel");  
 			
-			//response.addHeader("Content-Disposition", "filename="+nombreArchivo+".xls");
-			response.addHeader("Content-Disposition", "attachment; filename=\""+nombreArchivo+".xls\"");
+			response.addHeader("Content-Disposition", "filename="+nombreArchivo+".xls");
 			wb.write(response.getOutputStream());
 		}
 		catch(Exception ex) {
@@ -1332,8 +1329,8 @@ public class ReporteTCCSVServlet extends HttpServlet {
 	}
 	private static String EliminarCaracterExt(String input) {
 	    // Cadena de caracteres original a sustituir.
-	    String original = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
-	    // Cadena de caracteres ASCII que reemplazarï¿½n los originales.
+	    String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ";
+	    // Cadena de caracteres ASCII que reemplazarán los originales.
 	    String ascii = "aaaeeeiiiooouuunAAAEEEIIIOOOUUUNcC";
 	    String output = input;
 	    for (int i=0; i<original.length(); i++) {
