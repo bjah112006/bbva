@@ -359,7 +359,8 @@ public class ReporteTCCSVServlet extends HttpServlet {
 						 response.addDateHeader("Expires", 0);
 						 response.setContentType("application/vnd.ms-excel");  
 							
-						 response.addHeader("Content-Disposition", "filename="+nombreArchivo+".xls");
+						//response.addHeader("Content-Disposition", "filename="+nombreArchivo+".xls");
+						 response.addHeader("Content-Disposition", "attachment; filename=\""+nombreArchivo+".xls\"");
 						 try {
 							 LOG.info("Imprimir");
 							wb.write(response.getOutputStream());
