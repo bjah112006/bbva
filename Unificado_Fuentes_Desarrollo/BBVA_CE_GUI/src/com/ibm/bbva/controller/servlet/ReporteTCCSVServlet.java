@@ -250,7 +250,9 @@ public class ReporteTCCSVServlet extends HttpServlet {
 					 response.addDateHeader("Expires", 0);
 					 response.setContentType("application/vnd.ms-excel");  
 						
-					 response.addHeader("Content-Disposition", "filename="+nombreArchivo+".xls");
+					//response.addHeader("Content-Disposition", "filename="+nombreArchivo+".xls");
+					 response.addHeader("Content-Disposition", "attachment; filename=\""+nombreArchivo+".xls\"");
+					 
 					 try {
 						wb.write(response.getOutputStream());
 					} catch (IOException e) {
@@ -519,7 +521,8 @@ public class ReporteTCCSVServlet extends HttpServlet {
 			//response.setContentType("text/csv");
 			response.setContentType("application/vnd.ms-excel");  
 			
-			response.addHeader("Content-Disposition", "filename="+nombreArchivo+".xls");
+			//response.addHeader("Content-Disposition", "filename="+nombreArchivo+".xls");
+			response.addHeader("Content-Disposition", "attachment; filename=\""+nombreArchivo+".xls\"");
 			wb.write(response.getOutputStream());
 		}
 		catch(Exception ex) {
