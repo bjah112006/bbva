@@ -471,7 +471,12 @@ public class ReporteTCCSVServlet extends HttpServlet {
 		    HSSFWorkbook wb = new HSSFWorkbook();
 	
 		     // Creo la Hoja en Excel
-		    Sheet sheet = wb.createSheet(Constantes.DESCRIPCION_HOJA_EXCEL2);
+		    Sheet sheet;
+		    if(tipoReporteTC.equals(Constantes.ID_TC_CONSOLIDADO)){
+		    	sheet = wb.createSheet(Constantes.DESCRIPCION_HOJA_EXCEL2);
+			}else {
+				sheet = wb.createSheet(Constantes.DESCRIPCION_HOJA_EXCEL3);
+			}
 			
 		    int numColTituloPrincipal=1;
 		    int numFirstColTituloRol=2; 
