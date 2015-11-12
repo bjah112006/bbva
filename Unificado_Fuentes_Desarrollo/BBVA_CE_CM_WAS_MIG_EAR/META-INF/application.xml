@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_6.xsd" version="6">
+	<display-name>BBVA_CE_CM_WAS_MIG_EAR</display-name>
+	<module id="Module_1447268576626">
+		<web>
+			<web-uri>BBVA_CE_CM_WAS_MIG.war</web-uri>
+			<context-root>BBVA_CE_CM_WAS_MIG</context-root>
+		</web>
+	</module>
+	
+</application>
