@@ -109,7 +109,8 @@ public class VerificarAprobarMB extends AbstractMBean {
    				   nombJSP.equals("formEvaluarFactibilidadOp") ||
 			       nombJSP.equals("formArchivarExpediente") ||
 			       nombJSP.equals("formVisualizarExpediente") ||
-			       nombJSP.equals("formGestionEnvioContent")) {
+			       nombJSP.equals("formGestionEnvioContent") ||
+			       nombJSP.equals("formCorregirExpediente32")) {
 			LOG.info("CONDICION C");
 			iniciarConfExp(expedienteVO);
 			// deshabilita los checks
