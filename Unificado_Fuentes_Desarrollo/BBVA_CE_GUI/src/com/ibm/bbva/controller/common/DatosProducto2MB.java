@@ -434,7 +434,7 @@ public class DatosProducto2MB extends AbstractMBean {
 			existeError = true;
 		}
 		Double riesgo = expediente.getExpedienteTC().getRiesgoCliente();
-		if (riesgo == null || riesgo.doubleValue() < 0) {
+		if (riesgo == null || riesgo.doubleValue() <= 0) {
 			addMessageError(idComponente + ":riesgoCliente",
 					"com.ibm.bbva.common.datosProducto2.msg.riesgoCliente");
 			existeError = true;
