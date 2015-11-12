@@ -1,0 +1,108 @@
+<div>
+	<h1>Bandeja de {{tipo}}</h1>
+	<div class="row">
+		<fieldset>
+			<legend>Criterios de Busqueda</legend>
+			<table class="table-panel">
+				<tr>
+					<td><label class="control-label control-label-0">Nro. Solicitud:&nbsp;</label></td>
+					<td><input id="txtNroSolicitud" type="text" class="form-control" /></td>
+					<td class="separator"></td>
+					<td><label class="control-label control-label-0">Documento de Identidad:&nbsp;</label></td>
+					<td>
+						<ui-select 
+							id="cboTipoDocumento"
+							ng-model="tipoDocumento.select"
+							ng-disabled="disabled.tipoDocumento"
+							on-select="cambioValor($item, $model)"
+							theme="select2" 
+							style="width: 220px;" 
+							class="form-control" 
+							title="Tipo de documento">
+							<ui-select-match placeholder="Seleccione un tipo de documento de la lista...">
+								{{$select.selected.name}}
+							</ui-select-match>
+							<ui-select-choices repeat="item in tiposDocumento | filter: $select.search">
+								<div ng-bind-html="item.name | highlight: $select.search"></div>
+							</ui-select-choices>
+						</ui-select>
+					</td>
+					<td>
+						<input id="txtTipoDocumento"
+							type="text" 
+							class="form-control ui-corner-tr-br" 
+							style="border-left: 0px;" 
+							ng-model="nroDocumento"/>
+					</td>
+				</tr>
+				<tr>
+					<td><label class="control-label control-label-0">C&oacute;digo de Cliente:&nbsp;</label></td>
+					<td><input id="txtCodigoCliente" type="text" class="form-control" /></td>
+					<td class="separator"></td>
+					<td><label class="control-label control-label-0">Tipo de Propuesta:&nbsp;</label></td>
+					<td>
+						<ui-select 
+							id="cboTipoPropuesta"
+							ng-model="tipoDocumento.select"
+							ng-disabled="disabled.tipoDocumento"
+							on-select="cambioValor($item, $model)"
+							theme="select2" 
+							style="width: 220px;" 
+							class="form-control" 
+							title="Tipo de documento">
+							<ui-select-match placeholder="Seleccione un tipo de documento de la lista...">
+								{{$select.selected.name}}
+							</ui-select-match>
+							<ui-select-choices repeat="item in tiposDocumento | filter: $select.search">
+								<div ng-bind-html="item.name | highlight: $select.search"></div>
+							</ui-select-choices>
+						</ui-select>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td><label class="control-label control-label-0">Nro. RVGL:&nbsp;</label></td>
+					<td><input id="txtNroRVGL" type="text" class="form-control" /></td>
+					<td class="separator"></td>
+					<td><label class="control-label control-label-0" ng-hide="visibleEstacion">Estaci&oacute;n:&nbsp;</label></td>
+					<td>
+						<ui-select 
+							id="cboEstacion"
+							ng-model="tipoDocumento.select"
+							ng-hide="visibleEstacion"
+							on-select="cambioValor($item, $model)"
+							theme="select2" 
+							style="width: 220px;" 
+							class="form-control" 
+							title="Tipo de documento">
+							<ui-select-match placeholder="Seleccione un tipo de documento de la lista...">
+								{{$select.selected.name}}
+							</ui-select-match>
+							<ui-select-choices repeat="item in tiposDocumento | filter: $select.search">
+								<div ng-bind-html="item.name | highlight: $select.search"></div>
+							</ui-select-choices>
+						</ui-select>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+			<table class="table-panel table-right">
+				<tr>
+					<td>
+						<label class="btn btn-primary" ng-click="buscar()" ng-hide="visibleNuevo">Nuevo</label>
+						<label class="btn btn-primary" ng-click="buscar()">Buscar</label>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+	</div>
+    <div class="row" style="height:5px;">&nbsp;</div>
+	<div class="row">
+		<fieldset>
+			<legend>Resultado</legend>
+			<div class="row">
+				<div ag-grid="gridPendientes"></div>
+			</div>
+		</fieldset>
+	</div>
+<div>
