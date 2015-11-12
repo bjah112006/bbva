@@ -3,6 +3,7 @@ package com.ibm.bbva.controller.common;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -11,22 +12,19 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bbva.ws.api.view.FacadeLocal;
 
-import com.ibm.bbva.cm.iice.service.ContentServiceImplProxy;
+import com.ibm.bbva.cm.iice.service.ContentServiceImplDelegateProxy;
 import com.ibm.bbva.cm.service.impl.Documento;
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.entities.DocumentoExpTc;
 import com.ibm.bbva.entities.Expediente;
 import com.ibm.bbva.entities.TipoDocumento;
 import com.ibm.bbva.session.ParametrosConfBeanLocal;
-import com.ibm.bbva.tabla.ejb.impl.TablaFacadeBean;
 
 @ManagedBean(name = "abrirPDF")
 @RequestScoped
@@ -38,7 +36,7 @@ public class AbrirPdfMB implements Serializable {
 	
 	/*FIX ERIKA ABREGU 27/06/2015 */
 	private Expediente expediente;
-	private ContentServiceImplProxy contentIICE = null;
+	private ContentServiceImplDelegateProxy contentIICE = null;
 	private com.ibm.bbva.cm.iice.service.Documento docIice = null;
 	private String CONTENT_SERVICE_IMPL_IICE= "";
 	private ParametrosConfBeanLocal parametrosConfBean;
@@ -88,27 +86,32 @@ public class AbrirPdfMB implements Serializable {
 							LOG.error(e.getMessage(), e);
 						}
 												
-						this.contentIICE = new com.ibm.bbva.cm.iice.service.ContentServiceImplProxy();
-						this.contentIICE._getDescriptor().setEndpoint(CONTENT_SERVICE_IMPL_IICE);
+						this.contentIICE = new ContentServiceImplDelegateProxy();
+						this.contentIICE.setEndpoint(CONTENT_SERVICE_IMPL_IICE);
 						
-						LOG.info("WEB SERVICE DEL CONTENT IICE ES ::: "+ this.contentIICE._getDescriptor().getEndpoint());
+						LOG.info("WEB SERVICE DEL CONTENT IICE ES ::: "+ this.contentIICE.getEndpoint());
 						LOG.info("ID DEL DOCUMENTO ES ::: "+ this.docIice.getId());
 						
 						//this.contentIICE._getDescriptor().setEndpoint("http://118.180.60.70:80/PLDWEBCM/services/ContentServiceImpl");
-						this.docIice = this.contentIICE.find(this.docIice);
+						try {
+							this.docIice = this.contentIICE.find(this.docIice);
+						} catch (RemoteException e) {
+							LOG.error("Error de invocacion : "+e.getCause(),e);
+						}
 						
 						if(this.docIice != null && this.docIice.getId()!=null && this.docIice.getUrlContent()!=null){
-							doc.setCodCliente(this.docIice.getCodCliente()!=null?this.docIice.getCodCliente():null);
-							doc.setContenido(this.docIice.getContenido()!=null?this.docIice.getContenido():null);
-							doc.setFechaCreacion(this.docIice.getFechaCreacion()!=null?this.docIice.getFechaCreacion():null);
-							doc.setFechaExpiracion(this.docIice.getFechaExpiracion()!=null?this.docIice.getFechaExpiracion():null);
+//							doc.setCodCliente(this.docIice.getCodCliente()!=null?this.docIice.getCodCliente():null);
+//							doc.setContenido(this.docIice.getContenido()!=null?this.docIice.getContenido():null);
+//							doc.setFechaCreacion(this.docIice.getFechaCreacion()!=null?this.docIice.getFechaCreacion():null);
+//							doc.setFechaExpiracion(value)
+							System.out.println(this.docIice.getFechaExpiracion()!=null?this.docIice.getFechaExpiracion():null);
 							doc.setId(this.docIice.getId()!=null?this.docIice.getId():0);
-							//doc.setMandatorio(this.docIice.get);
-							doc.setNombreArchivo(this.docIice.getNombreArchivo()!=null?this.docIice.getNombreArchivo():null);
-							doc.setNumDoi(this.docIice.getNumDoi()!=null?this.docIice.getNumDoi():null);
-							doc.setOrigen(this.docIice.getOrigen()!=null?this.docIice.getOrigen():null);
+//							doc.setMandatorio(this.docIice.get);
+//							doc.setNombreArchivo(this.docIice.getNombreArchivo()!=null?this.docIice.getNombreArchivo():null);
+//							doc.setNumDoi(this.docIice.getNumDoi()!=null?this.docIice.getNumDoi():null);
+//							doc.setOrigen(this.docIice.getOrigen()!=null?this.docIice.getOrigen():null);
 							doc.setTipo(this.docIice.getTipo()!=null?this.docIice.getTipo():null);
-							doc.setTipoDoi(this.docIice.getTipoDoi()!=null?this.docIice.getTipoDoi():null);
+//							doc.setTipoDoi(this.docIice.getTipoDoi()!=null?this.docIice.getTipoDoi():null);
 							doc.setUrlContent(this.docIice.getUrlContent()!=null?this.docIice.getUrlContent():null);
 							
 						}

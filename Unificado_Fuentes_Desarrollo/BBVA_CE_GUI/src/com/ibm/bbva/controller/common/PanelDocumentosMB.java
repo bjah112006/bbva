@@ -27,9 +27,7 @@ import javax.faces.event.ValueChangeEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pe.ibm.bean.ExpedienteTCWPS;
 import pe.ibm.bean.ExpedienteTCWPSWeb;
-
 import bbva.ws.api.view.FacadeLocal;
 
 import com.ibm.bbva.cm.service.impl.Documento;
@@ -40,14 +38,12 @@ import com.ibm.bbva.entities.Empleado;
 import com.ibm.bbva.entities.Expediente;
 import com.ibm.bbva.entities.GuiaDocumentaria;
 import com.ibm.bbva.entities.Persona;
-import com.ibm.bbva.entities.Tarea;
 import com.ibm.bbva.entities.TareaPerfil;
 import com.ibm.bbva.entities.TipoDocumento;
 import com.ibm.bbva.session.DocumentoExpTcBeanLocal;
 import com.ibm.bbva.session.GuiaDocumentariaBeanLocal;
 import com.ibm.bbva.session.TareaPerfilBeanLocal;
 import com.ibm.bbva.session.TipoDocumentoBeanLocal;
-import com.ibm.bbva.tabla.dto.DatosAyudaMemoriaIiceDTO;
 import com.ibm.bbva.tabla.dto.DatosDocumentosExpIiceDTO;
 import com.ibm.bbva.tabla.ejb.impl.TablaFacadeBean;
 import com.ibm.bbva.tabla.util.vo.ConvertHistorial;
@@ -55,8 +51,6 @@ import com.ibm.bbva.tabla.util.vo.DocumentoReutilizable;
 import com.ibm.bbva.util.AyudaPanelDocumentos;
 import com.ibm.bbva.util.PersonaPD;
 import com.ibm.bbva.util.TipoDocumentoPD;
-
-import com.ibm.bbva.cm.iice.service.ContentServiceImplProxy;
 //import com.ibm.bbva.cm.iice.Documento;
 
 @SuppressWarnings("serial")

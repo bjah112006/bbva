@@ -2,36 +2,28 @@ package com.ibm.bbva.controller.common;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ibm.bbva.cm.iice.service.ContentServiceImplProxy;
 import com.ibm.bbva.controller.AbstractMBean;
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.entities.DocumentoExpTc;
 import com.ibm.bbva.entities.Empleado;
 import com.ibm.bbva.entities.Expediente;
-import com.ibm.bbva.entities.GuiaDocumentaria;
 import com.ibm.bbva.entities.TipoDocumento;
 import com.ibm.bbva.session.DocumentoExpTcBeanLocal;
 import com.ibm.bbva.session.ParametrosConfBeanLocal;
 import com.ibm.bbva.session.TipoDocumentoBeanLocal;
 import com.ibm.bbva.tabla.dto.DatosDocumentosExpIiceDTO;
 import com.ibm.bbva.tabla.ejb.impl.TablaFacadeBean;
-import com.ibm.bbva.tabla.util.vo.ConvertHistorial;
 import com.ibm.bbva.util.AyudaPanelDocumentos;
 
 @SuppressWarnings("serial")
