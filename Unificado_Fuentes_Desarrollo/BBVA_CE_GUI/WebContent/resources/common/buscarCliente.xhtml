@@ -11,14 +11,16 @@
 		/* <![CDATA[ */
 			$(document).ready(function(){
 				var tipoDocumento = $("#frmRegistrarExpediente\\:selectTipoDOI").val();
-			    if (tipoDocumento == "3" || tipoDocumento == "6") {
+				if (tipoDocumento == "3" || tipoDocumento == "6") {
 			        $(".onlyNumbers").keypress(function (event) {
-	       				if (event.which > 31 && (event.which < 48 || event.which > 57)) {
-	    	   				event.preventDefault();
-	       				}     
+						if (event.which > 31 && (event.which < 48 || event.which > 57)) {
+							if(!event.ctrlKey){
+								event.preventDefault();	
+							}
+	    	   			}     
 		   			});
-	   			}
-	   			
+	   			}			    
+			    	   			
 	   			$(".mostrarModal").click(function (event) {
 	   				var img = '<img src=\"/BBVA_CE_GUI/resources/images/loading.gif\" height=\"60\" width=\"60\"><span style=\"text-align:center; display:block; margin-top:5px\">Procesando...</span>';
 					//procesandoEst='1';
@@ -30,7 +32,7 @@
 			 		preloadImg.src = "/BBVA_CE_GUI/resources/images/loading.gif";
 			 	} catch (e) { }
 	 	 	});	
-	 	 
+			
 		    function validarTipoDocumento(event) {
 	 			if (event.status == "success") {
 	 				var tipoDocumento = $("#frmRegistrarExpediente\\:selectTipoDOI").val();
@@ -49,7 +51,10 @@
 		    	var tipoDocumento = $("#frmRegistrarExpediente\\:selectTipoDOI").val();
 		        if (tipoDocumento == "3" || tipoDocumento == "6"){
 		        	if (e.which > 31 && (e.which < 48 || e.which > 57)) {
-		        		e.preventDefault();
+		        		if(!event.ctrlKey){
+							 alert(" entro a event 2");
+							event.preventDefault();	
+						}
 		           	}         		
 		        }
 		    }	 	 
