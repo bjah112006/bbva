@@ -158,7 +158,7 @@ public class DatosProducto2MB extends AbstractMBean {
 		     (nombJSP.equals("formCorregirExpediente32")) ||
 		     (nombJSP.equals("formCorregirExpediente33")) ||
 		     (nombJSP.equals("formRegistrarDatos"))){
-			if (numeroCuenta!=null) {
+			if (numeroCuenta!=null && numeroCuenta.length()>19) {
 				strEntidad=numeroCuenta.substring(0,4);
 				LOG.info("strEntidad:::"+strEntidad);
 				strOficina=numeroCuenta.substring(4,8);
