@@ -1,4 +1,4 @@
-abstractControllers.controller('DialogMensajeController', ['$scope', '$modalInstance', 'data', function RestAPIController($scope, $modalInstance, data) {
+abstractControllers.controller('DialogMensajeController', ['$scope', '$modalInstance', 'data', function DialogMensajeController($scope, $modalInstance, data) {
     $scope.data = data;
 
     $scope.cancel = function () {
@@ -6,8 +6,8 @@ abstractControllers.controller('DialogMensajeController', ['$scope', '$modalInst
     };
 }]);
 
-abstractControllers.controller('DialogReasignacionController', ['$scope', '$modalInstance', 'rows', "gestor", "HumanTask", "Task",
-    function RestAPIController($scope, $modalInstance, rows, gestor, HumanTask, Task) {
+abstractControllers.controller('DialogReasignacionController', ['$scope', '$modalInstance', 'rows', "gestor", "HumanTask", "Task", '$timeout',
+    function DialogReasignacionController($scope, $modalInstance, rows, gestor, HumanTask, Task, $timeout) {
     $scope.rows = rows;
     $scope.gestor = gestor;
     $scope.hiddenAceptar = true;
@@ -17,29 +17,44 @@ abstractControllers.controller('DialogReasignacionController', ['$scope', '$moda
         $modalInstance.close();
     }
 
-    $scope.asignar = function () {
-        for(var i in $scope.rows) {
-            var row = $scope.rows[i];
-            row.class = "glyphicon glyphicon-remove-sign";
+    function reasignar(row) {
+        row.class = "glyphicon glyphicon-remove-sign";
+        row.mensajeOperacion = " no se pudo reasignar";
 
-            var params = {
-                f: "caseId=" + row.rootprocessinstanceid
-            };
+        var params = {
+            f: "caseId=" + row.rootprocessinstanceid
+        };
 
+        $timeout(function(){
             Task.obteinTask(params).$promise.then(function(request1){
-                console.log(request1);
+                // console.log(request1);
                 var putParams = {
                     assigned_id: $scope.gestor.select.id
                 };
-                HumanTask.asignar({id: request1.items[0].id}, {"assigned_id": ""}).$promise.then(function(request2){
-                    HumanTask.asignar({id: request1.items[0].id}, putParams).$promise.then(function(request2){
+
+                if(request1.items[0].assigned_id == "") {
+                    HumanTask.asignar({id: request1.items[0].id}, putParams).$promise.then(function(request3){
                         row.class = "glyphicon glyphicon-ok-sign";
+                        row.mensajeOperacion = " reasignado correctamente";
                     });
-                });
+                } else {
+                    HumanTask.asignar({id: request1.items[0].id}, {"assigned_id": ""}).$promise.then(function(request2){
+                        HumanTask.asignar({id: request1.items[0].id}, putParams).$promise.then(function(request3){
+                            row.class = "glyphicon glyphicon-ok-sign";
+                            row.mensajeOperacion = " reasignado correctamente";
+                        });
+                    });
+                }
             });
+        }, 0);
+    }
+
+    $scope.asignar = function () {
+        for(var i in $scope.rows) {
+            var row = $scope.rows[i];
+            reasignar(row);
         }
 
-    
         $scope.hiddenAceptar = false;
         $scope.hiddenAsignar = true;
         // $modalInstance.close();
@@ -121,6 +136,7 @@ abstractControllers.controller('CuadroMandoController',
                 rows: function(){
                     for(var i in $scope.gridDetalle.selectedRows) {
                         $scope.gridDetalle.selectedRows[i].class = "glyphicon glyphicon-plus-sign";
+                        $scope.gridDetalle.selectedRows[i].mensajeOperacion = "";
                     }
 
                     return $scope.gridDetalle.selectedRows;

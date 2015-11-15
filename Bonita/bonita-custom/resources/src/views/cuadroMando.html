@@ -110,7 +110,7 @@
 	<div class="modal-body" style="height: 150px; overflow: auto;">
 		<div ng-repeat="item in rows">
 			<div class="row">
-				<span ng-class="item.class"></span>Nro. Solicitud <b>{{item.rootprocessinstanceid}}</b>, cliente <b>{{item.nombre_cliente}}
+				<span ng-class="item.class"></span>Nro. Solicitud <b>{{item.rootprocessinstanceid}}</b>{{item.mensajeOperacion}}, cliente {{item.nombre_cliente}}
 			</div>
 		</div>
 	</div>

@@ -15,10 +15,10 @@
                             <td><label class="control-label control-label-0">Criterio de Consulta:&nbsp;</label></td>
                             <td>
                                 <ui-select 
-									id="cboTipoDocumento"
+                                    id="cboTipoDocumento"
                                     ng-model="tipoDocumento.select"
                                     ng-disabled="disabled.tipoDocumento"
-									on-select="cambioValor($item, $model)"
+                                    on-select="cambioValor($item, $model)"
                                     theme="select2" 
                                     style="width: 220px;" 
                                     class="form-control" 
@@ -36,7 +36,7 @@
                             </td>
                             <td>
                                 <input id="txtTipoDocumento"
-									type="text" 
+                                    type="text" 
                                     class="form-control ui-corner-tr-br" 
                                     style="border-left: 0px;" 
                                     ng-model="nroDocumento"
@@ -52,7 +52,7 @@
                                 <ui-select 
                                     ng-model="estacion.select"
                                     ng-disabled="disabled.estacion"
-									on-select="cambioValor($item, $model)"
+                                    on-select="cambioValor($item, $model)"
                                     theme="select2" 
                                     style="width: 220px;" 
                                     class="form-control" 

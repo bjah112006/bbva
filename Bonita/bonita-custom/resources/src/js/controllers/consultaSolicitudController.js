@@ -1,6 +1,6 @@
 abstractControllers.controller('ConsultaSolicitudController', ['$scope', '$http', 'ConsultaSolicitudes', 'bonitaConfig', 'DateUtil', '$timeout',
 function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaConfig, DateUtil, $timeout) {
-	$scope.disabledConsultar = true;
+    $scope.disabledConsultar = true;
     $scope.tiposDocumento = [
         {"id": "rootprocessinstanceid", "name": "Número Solicitud"},
         {"id": "num_doi_cliente", "name": "Número DOI Cliente"},
@@ -46,7 +46,7 @@ function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaC
             $scope.estacion = {};
         }
 
-		$scope.disabledConsultar = true;
+        $scope.disabledConsultar = true;
     });
 
     var columnDefs = [
@@ -131,16 +131,16 @@ function ConsultaSolicitudController($scope, $http, ConsultaSolicitudes, bonitaC
         }, 0);
 
         parameters = {
-        	p: -1,
-	        c: 1,
-    	    f: "",
-        	r1: 0,
-	        r2: 0,
-    	    n: "S",
-        	u: bonitaConfig.getUsername()
-	    };
+            p: -1,
+            c: 1,
+            f: "",
+            r1: 0,
+            r2: 0,
+            n: "S",
+            u: bonitaConfig.getUsername()
+        };
 
-		if($scope.tipoFiltro == 'estacion') {
+        if($scope.tipoFiltro == 'estacion') {
             parameters.f = "estacion=" + $scope.estacion["select"]["id"];
         } else {
             parameters.f =  $scope.tipoDocumento["select"]["id"] + "=" + $scope.nroDocumento;

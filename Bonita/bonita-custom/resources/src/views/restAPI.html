@@ -1,31 +1,28 @@
 <div>
-	<h1>
-		<small>Rest API</small>
-	</h1>
+    <h1>
+        <small>Administraci&oacute;n de Tareas</small>
+    </h1>
 </div>
 <div class="form-group">
-	<fieldset>
-		<legend>Tareas Humanas</legend>
-		<div style="height: 300px; width: 840px;" ag-grid="gridHumanTask"></div>
-		<!--
-		<pagination previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></pagination>
-		-->
-	</fieldset>
+    <fieldset>
+        <legend>Tareas Humanas</legend>
+        <div ng-style="{'height': '300px', 'width': {{witdh}} + 'px', 'margin': 'auto'}" ag-grid="gridHumanTask"></div>
+    </fieldset>
 </div>
 <script type="text/ng-template" id="dialogContent.html">
-	<div class="modal-header">
-    	<h3 class="modal-title">Cambiar la fecha de asignación</h3>
-	</div>
-	<div class="modal-body">
-		<table>
-			<tr>
-				<td>Fecha :&nbsp;&nbsp;</td>
-				<td><input class="form-control"  ng-model='rowSelect.assigned_date'/></td>
-			</tr>
-		</table>
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" ng-click="ok()">Aceptar</button>
-		<button class="btn btn-primary" ng-click="cancel()">Cancelar</button>
-	</div>
+    <div class="modal-header">
+        <h3 class="modal-title">Cambiar la fecha de asignación</h3>
+    </div>
+    <div class="modal-body">
+        <table>
+            <tr>
+                <td>Fecha :&nbsp;&nbsp;</td>
+                <td><input class="form-control"  ng-model='rowSelect.assigned_date'/></td>
+            </tr>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">Aceptar</button>
+        <button class="btn btn-primary" ng-click="cancel()">Cancelar</button>
+    </div>
 </script>
