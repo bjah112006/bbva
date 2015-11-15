@@ -119,10 +119,9 @@ public class Listado implements RestApiController {
                 case "detalle":
                     tipoRed = isNullRequestParam(request, "tipoRed")
                     centroNegocio = isNullRequestParam(request, "centroNegocio");
-                    String where = "";
-                    
+                    String where = " and id_reference='$tipoRed'";
                     if(!centroNegocio.equalsIgnoreCase("[Todos]")) {
-                        where = " and id_reference='$tipoRed' and a.codigo_centro_negocio = '${centroNegocio}'";
+                        where = " and a.codigo_centro_negocio = '${centroNegocio}'";
                     }
                     
                     query = """

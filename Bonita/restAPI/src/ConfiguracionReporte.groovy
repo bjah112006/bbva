@@ -28,7 +28,7 @@ public class ConfiguracionReporte implements RestApiController {
         logger.log Level.SEVERE, "find idTable: [" + idTable + "]"
         
         apiResponseBuilder.with {
-            withResponse new JsonBuilder(obtenerParametros(idTable))
+            withResponse new JsonBuilder(obtenerParametros(idTable)).toString()
             build()
         }
     }
