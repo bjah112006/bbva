@@ -40,7 +40,7 @@ bonitaApp.config(function($routeProvider, $httpProvider) {
     }).when('/bandeja/:tipo', {
         controller : 'BandejaController',
         templateUrl : 'src/views/bandeja.html'
-    }).when('/solictud/:fase', {
+    }).when('/solicitud/:estacion/:fase/:id', {
         controller : 'SolicitudController',
         templateUrl : 'src/views/solicitud.html'
     }).when('/oportunidad', {

@@ -1,0 +1,265 @@
+<div class="row">
+    <fieldset>
+        <legend>Oportunidad de Negocio</legend>
+        <table class="table-panel table-panel-100">
+            <tr>
+                <td><label class="control-label control-label-0">Tipo Propuesta:</label></td>
+                <td>
+                    <ui-select 
+                        ng-model="propuesta.select"
+                        ng-disabled="desactivar"
+                        on-select="propuesta.onSelect($item, $model)"
+                        theme="select2" 
+                        style="width: 220px;"
+                        class="form-control">
+                        <ui-select-match placeholder="Seleccione">
+                            {{$select.selected.value}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="item in listaPropuestas | filter: $select.search">
+                            <div ng-bind-html="item.value | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </td>
+                <td class="separator"></td>
+                <td>Oficina:</td>
+                <td>{{solicitud.codigoOficina}} - {{solicitud.nombreOficina}}</td>
+            </tr>
+            <tr>
+                <td><label class="control-label -  control-label-0">Documento de Identidad:</label></td>
+                <td>
+                    <div class="row">
+                        <div class="col">
+                            <ui-select 
+                                ng-model="documento.select"
+                                ng-disabled="desactivar"
+                                on-select="documento.onSelect($item, $model)"
+                                theme="select2" 
+                                style="width: 80px;" 
+                                class="form-control ui-corner-tl-bl">
+                                <ui-select-match placeholder="Seleccione">
+                                    {{$select.selected.value}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="item in listaDocumentos | filter: $select.search">
+                                    <div ng-bind-html="item.value | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col">
+                            <input 
+                                type="text"
+                                ng-model="solicitud.nroDocumento"
+                                ng-disabled="desactivar"
+                                class="form-control ui-corner-tr-br"/>
+                        </div>
+                    </div>
+                </td>
+                <td class="separator"></td>
+                <td>Cliente:</td>
+                <td>{{solicitud.codigoCliente}}</td>
+            </tr>
+            <tr>
+                <td><label class="control-label control-label-0">Raz&oacute;n Social:</label></td>
+                <td colspan="4">
+                    <input 
+                        type="text"
+                        ng-model="solicitud.razonSocial"
+                        ng-disabled="desactivar"
+                        class="form-control ui-corner-tr-br" />
+                </td>
+            </tr>
+            <tr>
+                <td><label class="control-label control-label-0">Grupo Econ&oacute;mico:</label></td>
+                <td>
+                    <input 
+                        type="text" 
+                        ng-model="solicitud.grupoEconomico"
+                        ng-disabled="desactivar"
+                        class="form-control ui-corner-tr-br" />
+                </td>
+                <td class="separator"></td>
+                <td><label class="control-label control-label-0">Nro. RVGL:</label></td>
+                <td>
+                    <input 
+                        type="text" 
+                        ng-model="solicitud.nroRVGL"
+                        ng-disabled="desactivar"
+                        class="form-control ui-corner-tr-br" />
+                </td>
+            </tr>
+            <tr>
+                <td><label class="control-label control-label-0">Riesgo Grupo Actual:</label></td>
+                <td>
+                    <div class="row">
+                        <div class="col">
+                            <input 
+                                type="text"
+                                ng-model="solicitud.montoRiesgoGrupo"
+                                ng-disabled="desactivar"
+                                class="form-control ui-corner-tl-bl" />
+                        </div>
+                        <div class="col">
+                            <ui-select 
+                                ng-model="monedaRiesgoGrupo.select"
+                                ng-disabled="desactivar"
+                                on-select="monedaRiesgoGrupo.onSelect($item, $model)"
+                                theme="select2" 
+                                style="width: 80px;" 
+                                class="form-control ui-corner-tr-br">
+                                <ui-select-match placeholder="Seleccione">
+                                    {{$select.selected.value}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="item in listaMonedas | filter: $select.search">
+                                    <div ng-bind-html="item.value | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </td>
+                <td class="separator"></td>
+                <td><label class="control-label control-label-0">Imp. Propuesto:</label></td>
+                <td>
+                    <div class="row">
+                        <div class="col">
+                            <input 
+                                type="text"
+                                ng-model="solicitud.montoPropuesta"
+                                ng-disabled="desactivar"
+                                class="form-control ui-corner-tl-bl" />
+                        </div>
+                        <div class="col">
+                            <ui-select 
+                                ng-model="monedaPropuesta.select"
+                                ng-disabled="desactivar"
+                                on-select="monedaPropuesta.onSelect($item, $model)"
+                                theme="select2" 
+                                style="width: 80px;" 
+                                class="form-control ui-corner-tr-br">
+                                <ui-select-match placeholder="Seleccione">
+                                    {{$select.selected.value}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="item in listaMonedas | filter: $select.search">
+                                    <div ng-bind-html="item.value | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label class="control-label control-label-0">Riesgo Total:</label></td>
+                <td>
+                    <div class="row">
+                        <div class="col">
+                            <input 
+                                type="text"
+                                ng-model="solicitud.montoRiesgoTotal"
+                                ng-disabled="desactivar"
+                                class="form-control ui-corner-tl-bl" />
+                        </div>
+                        <div class="col">
+                            <ui-select 
+                                ng-model="monedaRiesgoTotal.select"
+                                ng-disabled="desactivar"
+                                on-select="monedaRiesgoTotal.onSelect($item, $model)"
+                                theme="select2" 
+                                style="width: 80px;" 
+                                class="form-control ui-corner-tr-br">
+                                <ui-select-match placeholder="Seleccione">
+                                    {{$select.selected.value}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="item in listaMonedas | filter: $select.search">
+                                    <div ng-bind-html="item.value | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </td>
+                <td class="separator"></td>
+                <td><label class="control-label control-label-0">Oportunidad de Negocio:</label></td>
+                <td>
+                    <div class="row">
+                        <div class="col">
+                            <input 
+                                type="text"
+                                ng-model="solicitud.montoOportunidad"
+                                ng-disabled="desactivar"
+                                class="form-control ui-corner-tl-bl" />
+                        </div>
+                        <div class="col">
+                            <ui-select 
+                                ng-model="monedaOportunidad.select"
+                                ng-disabled="desactivar"
+                                on-select="monedaOportunidad.onSelect($item, $model)"
+                                theme="select2" 
+                                style="width: 80px;" 
+                                class="form-control ui-corner-tr-br">
+                                <ui-select-match placeholder="Seleccione">
+                                    {{$select.selected.value}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="item in listaMonedas | filter: $select.search">
+                                    <div ng-bind-html="item.value | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label class="control-label control-label-0">Etiqueta de Riesgo:</label></td>
+                <td>
+                    <ui-select 
+                        ng-model="etiqueta.select"
+                        ng-disabled="desactivar"
+                        on-select="etiqueta.onSelect($item, $model)"
+                        theme="select2" 
+                        style="width: 220px;" 
+                        class="form-control">
+                        <ui-select-match placeholder="Seleccione">
+                            {{$select.selected.value}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="item in listaEtiquetas | filter: $select.search">
+                            <div ng-bind-html="item.value | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </td>
+                <td class="separator"></td>
+                <td><label class="control-label control-label-0">Correo asistente:</label></td>
+                <td>
+                    <input 
+                        type="text"
+                        ng-model="solicitud.correoAsistente"
+                        ng-disabled="desactivar"
+                        class="form-control ui-corner-tr-br" />
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</div>
+<div class="row">
+    <fieldset>
+        <legend>Guia Documentaria</legend>
+        <table class="table-panel table-panel-100" ng-repeat="guia in listaGuiaDocumentaria">
+            <tr>
+                <td colspan="2">Grupo: {{guia.value}}</td>
+            </tr>
+            <tr ng-repeat="documento in guia.documentos">
+                <td><a href="#">{{documento.value}}</a></td>
+                <td><input type="file"/></td>
+            <tr>
+            <tr>
+                <td colspan="2">Comentario:</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea style="width: 100%; height: 90px;"></textarea>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</div>
+<div class="row" ng-hide="ocultarObservaciones">
+    <fieldset>
+        <legend>Observaciones Finales</legend>
+        <textarea style="width: 100%; height: 90px;" ng-model="solicitud.observacionesFinales"></textarea>
+    </fieldset>
+</div>

@@ -30,12 +30,12 @@
     <script type="text/javascript" src="src/lib/ui-bootstrap-tpls-0.14.3.js"></script>
     <script type="text/javascript" src="src/lib/ngBonita.js"></script>
     <script type="text/javascript" src="src/js/app.js"></script>
-
-	<script type="text/javascript" src="src/js/controllers/BandejaController.js"></script>
+    <script type="text/javascript" src="src/js/controllers/BandejaController.js"></script>
     <script type="text/javascript" src="src/js/controllers/OportunidadController.js"></script>
-	<script type="text/javascript" src="src/js/controllers/SolicitudController.js"></script>
-	
+    <script type="text/javascript" src="src/js/controllers/SolicitudController.js"></script>
+    <script type="text/javascript" src="src/js/services/SolicitudService.js"></script>
     <script type="text/javascript" src="src/js/directives/loadingDirective.js"></script>
+    <script type="text/javascript" src="src/js/directives/solicitud/OficinaRegistrarDirective.js"></script>
     <script type="text/javascript" src="src/js/util/dateUtil.js"></script>
 </head>
 <body>
@@ -68,8 +68,8 @@
                     <div class="panelTitle"><span>Workflow Riesgos</span></div>
                 </div>
             </div>
-			<!--
-            <div>
+
+            <div id="menu">
                 <div class="btn-group dropdown-first" uib-dropdown>
                     <button id="mnuConsulta" type="button" class="btn btn-primary btn-first-child"  uib-dropdown-toggle>Bandeja<span class="caret"></span></button>
                     <ul class="uib-dropdown-menu" role="menu" aria-labelledby="mnuConsulta">
@@ -86,51 +86,34 @@
                     </ul>
                 </div>
             </div>
-			-->
-			<div id="menu">
-				<nav class="navbar navbar-default" role="navigation">
-				<!-- Brand and toggle get grouped for better mobile display -->
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="#">Workflow Riesgos</a>
-				</div>
+            <!--
+            <div id="menu">
+                <nav class="navbar navbar-default" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Workflow Riesgos</a>
+                </div>
 
-				<!-- Collect the nav links, forms, and other content for toggling -->
-				<div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'">
-					<ul class="nav navbar-nav">
-						<li uib-dropdown>
-							<a href="#" uib-dropdown-toggle>Bandeja&nbsp;<b class="caret"></b></a>
-							<ul class="dropdown-menu">
-							    <li><a href="#/bandeja/pendientes">Pendientes</a></li>
-								<li><a href="#/bandeja/asignacion">Asignación</a></li>
-								<li><a href="#/bandeja/busqueda">Busqueda</a></li>
-							</ul>
-						</li>
-					</ul>
-				
-					<!--
-					<ul class="nav navbar-nav navbar-right">
-					<li><a href="#">Link</a></li>
-					<li dropdown>
-					<a href="#" dropdown-toggle>Dropdown <b class="caret"></b></a>
-					<ul class="dropdown-menu">
-					<li><a href="#">Action</a></li>
-					<li><a href="#">Another action</a></li>
-					<li><a href="#">Something else here</a></li>
-					<li><a href="#">Separated link</a></li>
-					<li><a href="#">One more separated link</a></li>
-					</ul>
-					</li>
-					</ul>
-					-->
-				</div><!-- /.navbar-collapse -->
-				</nav>
-			</div>
+                <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'">
+                    <ul class="nav navbar-nav">
+                        <li uib-dropdown>
+                            <a href="#" uib-dropdown-toggle>Bandeja&nbsp;<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/bandeja/pendientes">Pendientes</a></li>
+                                <li><a href="#/bandeja/asignacion">Asignación</a></li>
+                                <li><a href="#/bandeja/busqueda">Busqueda</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                </nav>
+            </div>
+            -->
         </div>
         <div class="well well-lg" style="border: 0px; margin-bottom: 0px;">
             <div id="body" ng-view></div>

@@ -162,11 +162,11 @@ body {
     color: #0072C9;
     font-family: 'BBVA Web Light';
     font-size: 25px;
-	text-align: left;
+    text-align: left;
 }
 
 #layout .well h1 small {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 #layout .form-group {
@@ -341,32 +341,37 @@ body {
 }
 
 /* Corner radius */
-.ui-corner-all,
-.ui-corner-top,
-.ui-corner-left,
-.ui-corner-tl,
-.ui-corner-tl-bl {
+.ui-corner-all {
+    border-radius: 4px;
+}
+
+.ui-corner-top {
     border-top-left-radius: 4px;
-}
-.ui-corner-all,
-.ui-corner-top,
-.ui-corner-right,
-.ui-corner-tr,
-.ui-corner-tr-br {
     border-top-right-radius: 4px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
-.ui-corner-all,
-.ui-corner-bottom,
-.ui-corner-left,
-.ui-corner-bl,
-.ui-corner-tl-bl {
+
+.ui-corner-bottom {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
     border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
 }
-.ui-corner-all,
-.ui-corner-bottom,
-.ui-corner-right,
-.ui-corner-br,
-.ui-corner-tr-br {
+
+.ui-corner-tl-bl,
+.ui-corner-tl-bl a.select2-choice  {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 0px;
+}
+
+.ui-corner-tr-br,
+.ui-corner-tr-br a.select2-choice {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 0px;
     border-bottom-right-radius: 4px;
 }
 
@@ -577,31 +582,36 @@ body {
     color: black;
 }
 
+.row table.table-panel-100 {
+    width: 100%;
+}
+
 .row table.table-panel {
-	border-collapse: collapse;
+    border-collapse: collapse;
 }
 
 .row table.table-panel td {
-	padding-bottom: 8px;
+    padding-bottom: 8px;
     background-color: #fff;
-    border: 1px solid transparent;
+    /*border: 1px solid #f00; transparent;*/
     border-radius: none;
     box-shadow: none;
 }
 
 .row table.table-panel td .control-label {
-	display: table-cell;
-	vertical-align: middle;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .row table.table-panel td.separator {
-	width: 15px;
+    width: 15px;
 }
 
 .row table.table-right {
-	float: right;
+    float: right;
 }
 
+/*
 @media (min-width: 1000px) {
     #txtTipoDocumento {
         border-top-left-radius: 0px;
@@ -612,59 +622,71 @@ body {
         border-bottom-right-radius: 0px;
     }
 }
+*/
 
 @media only screen 
-	and (max-width: 760px), (min-device-width: 768px) 
-	and (max-device-width: 1024px)  {
+    and (max-width: 760px), (min-device-width: 768px) 
+    and (max-device-width: 1024px)  {
 
-	/* Force table to not be like tables anymore */
-	.row table.table-panel,
-	.row table.table-panel thead, 
-	.row table.table-panel tbody, 
-	.row table.table-panel th, 
-	.row table.table-panel td, 
-	.row table.table-panel tr { 
-		display: block; 
-	}
-	
-	/* Hide table headers (but not display: none;, for accessibility) */
-	.row table.table-panel thead tr { 
-		position: absolute;
-		top: -9999px;
-		left: -9999px;
-	}
-	
-	.row table.table-panel tr {
-		border: 1px solid #ccc;
-	}
-	
-	.row table.table-panel td { 
-		/* Behave  like a "row" */
-		border: none;
-		border-bottom: 1px solid #eee; 
-		position: relative;
-	}
-	
-	.row table.table-panel td:before { 
-		/* Now like a table header */
-		position: absolute;
-		/* Top/left values mimic padding */
-		top: 6px;
-		left: 6px;
-		width: 45%; 
-		padding-right: 10px; 
-		white-space: nowrap;
-	}
+    /* Force table to not be like tables anymore */
+    .row table.table-panel,
+    .row table.table-panel thead, 
+    .row table.table-panel tbody, 
+    .row table.table-panel th, 
+    .row table.table-panel td, 
+    .row table.table-panel tr { 
+        display: block; 
+    }
+    
+    /* Hide table headers (but not display: none;, for accessibility) */
+    .row table.table-panel thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    .row table.table-panel tr {
+        border: 1px solid #ccc;
+    }
+    
+    .row table.table-panel td { 
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee; 
+        position: relative;
+    }
+    
+    .row table.table-panel td:before { 
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 6px;
+        left: 6px;
+        width: 45%; 
+        padding-right: 10px; 
+        white-space: nowrap;
+    }
+}
+
+.table-panel .row {
+    margin: 0px !important;
+}
+
+.table-panel .col {
+    position: relative;
+    min-height: 1px;
+    padding: 0px;
+    float: left;
 }
 
 /*
 .form-control {
-	height: 28px;
-	line-height: 28px;
+    height: 28px;
+    line-height: 28px;
 }
 
 .select2-container .select2-choice {
-	height: 28px;
-	line-height: 28px;
+    height: 28px;
+    line-height: 28px;
 }
 */

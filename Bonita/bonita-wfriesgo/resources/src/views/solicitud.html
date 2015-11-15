@@ -1,108 +1,394 @@
 <div>
-	<h1>Bandeja de {{tipo}}</h1>
-	<div class="row">
-		<fieldset>
-			<legend>Criterios de Busqueda</legend>
-			<table class="table-panel">
-				<tr>
-					<td><label class="control-label control-label-0">Nro. Solicitud:&nbsp;</label></td>
-					<td><input id="txtNroSolicitud" type="text" class="form-control" /></td>
-					<td class="separator"></td>
-					<td><label class="control-label control-label-0">Documento de Identidad:&nbsp;</label></td>
-					<td>
-						<ui-select 
-							id="cboTipoDocumento"
-							ng-model="tipoDocumento.select"
-							ng-disabled="disabled.tipoDocumento"
-							on-select="cambioValor($item, $model)"
-							theme="select2" 
-							style="width: 220px;" 
-							class="form-control" 
-							title="Tipo de documento">
-							<ui-select-match placeholder="Seleccione un tipo de documento de la lista...">
-								{{$select.selected.name}}
-							</ui-select-match>
-							<ui-select-choices repeat="item in tiposDocumento | filter: $select.search">
-								<div ng-bind-html="item.name | highlight: $select.search"></div>
-							</ui-select-choices>
-						</ui-select>
-					</td>
-					<td>
-						<input id="txtTipoDocumento"
-							type="text" 
-							class="form-control ui-corner-tr-br" 
-							style="border-left: 0px;" 
-							ng-model="nroDocumento"/>
-					</td>
-				</tr>
-				<tr>
-					<td><label class="control-label control-label-0">C&oacute;digo de Cliente:&nbsp;</label></td>
-					<td><input id="txtCodigoCliente" type="text" class="form-control" /></td>
-					<td class="separator"></td>
-					<td><label class="control-label control-label-0">Tipo de Propuesta:&nbsp;</label></td>
-					<td>
-						<ui-select 
-							id="cboTipoPropuesta"
-							ng-model="tipoDocumento.select"
-							ng-disabled="disabled.tipoDocumento"
-							on-select="cambioValor($item, $model)"
-							theme="select2" 
-							style="width: 220px;" 
-							class="form-control" 
-							title="Tipo de documento">
-							<ui-select-match placeholder="Seleccione un tipo de documento de la lista...">
-								{{$select.selected.name}}
-							</ui-select-match>
-							<ui-select-choices repeat="item in tiposDocumento | filter: $select.search">
-								<div ng-bind-html="item.name | highlight: $select.search"></div>
-							</ui-select-choices>
-						</ui-select>
-					</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td><label class="control-label control-label-0">Nro. RVGL:&nbsp;</label></td>
-					<td><input id="txtNroRVGL" type="text" class="form-control" /></td>
-					<td class="separator"></td>
-					<td><label class="control-label control-label-0" ng-hide="visibleEstacion">Estaci&oacute;n:&nbsp;</label></td>
-					<td>
-						<ui-select 
-							id="cboEstacion"
-							ng-model="tipoDocumento.select"
-							ng-hide="visibleEstacion"
-							on-select="cambioValor($item, $model)"
-							theme="select2" 
-							style="width: 220px;" 
-							class="form-control" 
-							title="Tipo de documento">
-							<ui-select-match placeholder="Seleccione un tipo de documento de la lista...">
-								{{$select.selected.name}}
-							</ui-select-match>
-							<ui-select-choices repeat="item in tiposDocumento | filter: $select.search">
-								<div ng-bind-html="item.name | highlight: $select.search"></div>
-							</ui-select-choices>
-						</ui-select>
-					</td>
-					<td></td>
-				</tr>
-			</table>
-			<table class="table-panel table-right">
-				<tr>
-					<td>
-						<label class="btn btn-primary" ng-click="buscar()" ng-hide="visibleNuevo">Nuevo</label>
-						<label class="btn btn-primary" ng-click="buscar()">Buscar</label>
-					</td>
-				</tr>
-			</table>
-		</fieldset>
-	</div>
-    <div class="row" style="height:5px;">&nbsp;</div>
-	<div class="row">
-		<fieldset>
-			<legend>Resultado</legend>
-			<div class="row">
-				<div ag-grid="gridPendientes"></div>
-			</div>
-		</fieldset>
-	</div>
+    <h1><small>Solicitud {{solicitud.nroSolicitud}}</small></h1>
+    <!-- Inicia Oficina Registrar Solicitud  -->
+    <oficina-registrar
+        desactivar="false"
+        solicitud="solicitud"
+        etiqueta="etiqueta"
+        documento="documento"
+        propuesta="propuesta"
+        moneda-riesgo-grupo="monedaRiesgoGrupo"
+        moneda-riesgo-total="monedaRiesgoTotal"
+        moneda-propuesta="monedaPropuesta"
+        moneda-oportunidad="monedaOportunidad"
+        lista-documentos="listaDocumentos"
+        lista-propuestas="listaPropuestas"
+        lista-etiquetas="listaEtiquetas"
+        lista-monedas="listaMonedas"
+        lista-guia-documentaria="listaGuiaDocumentaria"
+        ocultar-observaciones="mostrar.oficinaRegistrar">
+    </oficina-registrar>
+    <div class="row" ng-hide="mostrar.oficinaRegistrar">
+        <table class="table-panel table-right">
+            <tr>
+                <td>
+                    <label class="btn btn-primary" ng-click="eventos.oficinaRegistrar()">Guardar Solicitud</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Termina Oficina Registrar Solicitud  -->
+    
+   <!-- Inicia Riesgos Asigna Evaluador  -->
+    <div class="row" ng-hide="mostrar.riesgosAsignar">
+        <fieldset>
+            <legend>Asignar Evaluador y &Aacute;mbito</legend>
+            <table class="table-panel">
+                <tr>
+                    <td colspan="3">Evaluador:</td>
+                </tr>
+                <tr>
+                    <td>
+                        <ui-select 
+                            ng-model="tipoEvaluador.select"
+                            on-select="tipoEvaluador.onSelect($item, $model)"
+                            theme="select2" 
+                            style="width: 220px;" 
+                            class="form-control">
+                            <ui-select-match placeholder="Seleccione">
+                                {{$select.selected.value}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="item in listaTipoEvaluador | filter: $select.search">
+                                <div ng-bind-html="item.value | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </td>
+                    <td class="separator"></td>
+                    <td>
+                        <ui-select 
+                            ng-model="evaluador.select"
+                            on-select="evaluador.onSelect($item, $model)"
+                            theme="select2" 
+                            style="width: 220px;" 
+                            class="form-control">
+                            <ui-select-match placeholder="Seleccione">
+                                {{$select.selected.value}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="item in listaEvaluador | filter: $select.search">
+                                <div ng-bind-html="item.value | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">&Aacute;mbito de Decisi&oacute;n:</td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <ui-select 
+                            ng-model="tipoAmbitoEvaluador.select"
+                            on-select="tipoAmbitoEvaluador.onSelect($item, $model)"
+                            theme="select2" 
+                            style="width: 220px;" 
+                            class="form-control" 
+                            title="Tipo de documento">
+                            <ui-select-match placeholder="Seleccione un tipo de documento de la lista...">
+                                {{$select.selected.value}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="item in listaTipoAmbitoEvaluador | filter: $select.search">
+                                <div ng-bind-html="item.value | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">Comentario:</td>
+                </tr>
+            </table>
+            <table class="table-panel table-panel-100">
+                <tr>
+                    <td>
+                        <textarea style="width: 100%; height: 90px;" ng-model="solicitud.comentarioAsignacion"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+    <div class="row" ng-hide="mostrar.riesgosAsignar">
+        <table class="table-panel table-right">
+            <tr>
+                <td>
+                    <label class="btn btn-primary" ng-click="eventos.riesgosAsignar()">Enviar a Revisi&oacute;n</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Termina Riesgos Asigna Evaluador  -->
+    
+    <!-- Inicia Riesgos Revisa File  -->
+    <div class="row" ng-hide="mostrar.riesgosRevisar">
+        <fieldset>
+            <legend>Evaluaci&oacute;n de Documentaci&oacute;n</legend>
+            <table class="table-panel">
+                <tr>
+                    <td colspan="5">Documentaci&oacute;n:</td>
+                </tr>
+                <tr>
+                    <td><input type="radio" ng-model="solicitud.revisionAprobada" value="A"></td>
+                    <td>&nbsp;Aprobada</td>
+                    <td class="separator"></td>
+                    <td><input type="radio" ng-model="solicitud.revisionAprobada" value="D"></td>
+                    <td>&nbsp;Rechazada</td>
+                </tr>
+                <tr>
+                    <td colspan="2">Comentario:</td>
+                </tr>
+            </table>
+            <table class="table-panel table-panel-100">
+                <tr>
+                    <td>
+                        <textarea style="width: 100%; height: 90px;" ng-model="solicitud.comentarioRevisionRiesgos"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+    <div class="row" ng-hide="mostrar.riesgosRevisar">
+        <table class="table-panel table-right">
+            <tr>
+                <td>
+                    <label class="btn btn-primary" ng-click="eventos.riesgosRevisar()">Enviar a Evaluaci&oacute;n</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Termina Riesgos Revisa File  -->
+    
+    <!-- Inicia Riesgos Evalua File  -->
+    <div class="row"" ng-hide="mostrar.riesgosEvaluar.pnl">
+        <fieldset>
+            <legend>Evaluaci&oacute;n</legend>
+            <table class="table-panel table-panel-100">
+                <tr>
+                    <td><label class="control-label control-label-0">Riesgo Grupo Actual:</label></td>
+                    <td>
+                        <div class="row">
+                            <div class="col">
+                                <input 
+                                    type="text"
+                                    ng-model="solicitud.evaluacion[0].montoRiesgoGrupo"
+                                    ng-disabled="desactivar"
+                                    class="form-control ui-corner-tl-bl" />
+                            </div>
+                            <div class="col">
+                                <ui-select 
+                                    ng-model="evaluacion.monedaRiesgoGrupo.select"
+                                    on-select="evaluacion.monedaRiesgoGrupo.onSelect($item, $model)"
+                                    theme="select2" 
+                                    style="width: 80px;" 
+                                    class="form-control ui-corner-tr-br">
+                                    <ui-select-match placeholder="Seleccione">
+                                        {{$select.selected.value}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in listaMonedas | filter: $select.search">
+                                        <div ng-bind-html="item.value | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="separator"></td>
+                    <td><label class="control-label control-label-0">Imp. Propuesto:</label></td>
+                    <td>
+                        <div class="row">
+                            <div class="col">
+                                <input 
+                                    type="text"
+                                    ng-model="solicitud.evaluacion[0].montoPropuesta"
+                                    class="form-control ui-corner-tl-bl" />
+                            </div>
+                            <div class="col">
+                                <ui-select 
+                                    ng-model="evaluacion.monedaPropuesta.select"
+                                    on-select="evaluacion.monedaPropuesta.onSelect($item, $model)"
+                                    theme="select2" 
+                                    style="width: 80px;" 
+                                    class="form-control ui-corner-tr-br">
+                                    <ui-select-match placeholder="Seleccione">
+                                        {{$select.selected.value}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in listaMonedas | filter: $select.search">
+                                        <div ng-bind-html="item.value | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label class="control-label control-label-0">Riesgo Total:</label></td>
+                    <td>
+                        <div class="row">
+                            <div class="col">
+                                <input 
+                                    type="text"
+                                    ng-model="solicitud.evaluacion[0].montoRiesgoTotal"
+                                    class="form-control ui-corner-tl-bl" />
+                            </div>
+                            <div class="col">
+                                <ui-select 
+                                    ng-model="evaluacion.monedaRiesgoTotal.select"
+                                    on-select="evaluacion.monedaRiesgoTotal.onSelect($item, $model)"
+                                    theme="select2" 
+                                    style="width: 80px;" 
+                                    class="form-control ui-corner-tr-br">
+                                    <ui-select-match placeholder="Seleccione">
+                                        {{$select.selected.value}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in listaMonedas | filter: $select.search">
+                                        <div ng-bind-html="item.value | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="separator"></td>
+                    <td><label class="control-label control-label-0">Oportunidad de Negocio:</label></td>
+                    <td>
+                        <div class="row">
+                            <div class="col">
+                                <input 
+                                    type="text"
+                                    ng-model="solicitud.evaluacion[0].montoOportunidad"
+                                    class="form-control ui-corner-tl-bl" />
+                            </div>
+                            <div class="col">
+                                <ui-select 
+                                    ng-model="evaluacion.monedaOportunidad.select"
+                                    on-select="evaluacion.monedaOportunidad.onSelect($item, $model)"
+                                    theme="select2" 
+                                    style="width: 80px;" 
+                                    class="form-control ui-corner-tr-br">
+                                    <ui-select-match placeholder="Seleccione">
+                                        {{$select.selected.value}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in listaMonedas | filter: $select.search">
+                                        <div ng-bind-html="item.value | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5"><label class="control-label control-label-0">Comit&eacute; Pipeline:</label></td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <table>
+                            <tr>
+                                <td><input type="radio" ng-model="solicitud.evaluacion[0].comitePipeline" value="S"></td>
+                                <td>&nbsp;Si</td>
+                                <td class="separator"></td>
+                                <td><input type="radio" ng-model="solicitud.evaluacion[0].comitePipeline" value="N"></td>
+                                <td>&nbsp;No</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr ng-hide="mostrar.riesgosEvaluar.rw1">
+                    <td colspan="5"><label class="control-label control-label-0">Acci&oacute;n:</label></td>
+                </tr>
+                <tr ng-hide="mostrar.riesgosEvaluar.rw1">
+                    <td colspan="5">
+                        <table>
+                            <tr>
+                                <td><input type="radio" ng-model="solicitud.evaluacion[0].accion" value="D"></td>
+                                <td>&nbsp;Dictaminar</td>
+                                <td class="separator"></td>
+                                <td><input type="radio" ng-model="solicitud.evaluacion[0].accion" value="S"></td>
+                                <td>&nbsp;Siguiente &aacute;mbito</td>
+                                <td class="separator"></td>
+                                <td><input type="radio" ng-model="solicitud.evaluacion[0].accion" value="O"></td>
+                                <td>&nbsp;Observar expediente</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr ng-hide="mostrar.riesgosEvaluar.rw1">
+                    <td colspan="5">Comentario:</td>
+                </tr>
+                <tr ng-hide="mostrar.riesgosEvaluar.rw1">
+                    <td colspan="5">
+                        <textarea style="width: 100%; height: 90px;" ng-model="solicitud.evaluacion[0].comentario"></textarea>
+                    </td>
+                </tr>
+                <tr ng-hide="mostrar.riesgosEvaluar.rw2">
+                    <td>Evaluador:</td>
+                    <td colspan="4">{{solicitud.evaluacion[0].evaluador}}</td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+    <div class="row" ng-hide="mostrar.riesgosEvaluar.btn">
+        <table class="table-panel table-right">
+            <tr>
+                <td>
+                    <label class="btn btn-primary" ng-click="eventos.riesgosEvaluar()">Enviar</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Termina Riesgos Evalua File  -->
+    
+    <!-- Inicia Riesgos Cambiar Estado  -->
+    <div class="row" ng-hide="mostrar.riesgosCambiar">
+        <table class="table-panel table-right">
+            <tr>
+                <td>
+                    <label class="btn btn-primary" ng-click="eventos.riesgosCambiar()">Enviar</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Termina Riesgos Cambiar Estado  -->
+    
+    <!-- Inicia Riesgos Dictamen  -->
+    
+    <div class="row" ng-hide="mostrar.riesgosDictaminar">
+        <table class="table-panel table-right">
+            <tr>
+                <td>
+                    <label class="btn btn-primary" ng-click="eventos.riesgosDictaminar()">Enviar</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Termina Riesgos Dictamen  -->
+    
+    <!-- Inicia Oficina Revisar Dictamen  -->
+    <div class="row" ng-hide="mostrar.oficinaRevisar">
+        <fieldset>
+            <legend>Revisi&oacute;n Final</legend>
+            <textarea style="width: 100%; height: 90px;" ng-model="solicitud.comentarioRevisionOficina"></textarea>
+        </fieldset>
+    </div>
+    <div class="row" ng-hide="mostrar.oficinaRevisar">
+        <table class="table-panel table-right">
+            <tr>
+                <td>
+                    <label class="btn btn-primary" ng-click="eventos.oficinaRevisar()">Cerrar Expediente</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Termina Oficina Revisar Dictamen  -->
+    
+    <!-- Inicia Oficina Subsanar  -->
+    <div class="row" ng-hide="mostrar.oficinaSubsanar">
+        <fieldset>
+            <legend>Comentario de Subsanaci&oacute;n</legend>
+            <textarea style="width: 100%; height: 90px;" ng-model="solicitud.comentarioSubsanacion"></textarea>
+        </fieldset>
+    </div>
+    <div class="row" ng-hide="mostrar.oficinaSubsanar">
+        <table class="table-panel table-right">
+            <tr>
+                <td>
+                    <label class="btn btn-primary" ng-click="eventos.oficinaSubsanar()">Enviar</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Termina Oficina Subsanar  -->
 <div>
