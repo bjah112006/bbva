@@ -190,7 +190,7 @@ public class ObservacionRechazoMB extends AbstractMBean {
 
 	public String aceptar() {
 		if (esValido()) {
-			removeObjectSession(Constantes.LIST_DOC_TRANSF); //al devolver no se adjuntan documentos
+			//removeObjectSession(Constantes.LIST_DOC_TRANSF); //al devolver no se adjuntan documentos
 			String redireccion = copiar();
 			mostrarDialogo = false;
 			//String accion = Constantes.ACCION_BOTON_DEVOLVER;
