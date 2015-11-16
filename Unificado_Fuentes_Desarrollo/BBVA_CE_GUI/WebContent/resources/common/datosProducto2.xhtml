@@ -16,8 +16,37 @@
 					if($('#frmRegistrarDatos\\:digitoChequeo').val().length==$('#frmRegistrarDatos\\:digitoChequeo').attr('maxlength'))
 						$('#frmRegistrarDatos\\:numCuenta').focus();
 				})
+				
 			});
 		</f:verbatim>
+	</script>
+	
+	<script type="text/javascript">
+		/* <![CDATA[ */
+			function eventoEnterKey(e){
+				if (e.which > 31 && (e.which < 48 || e.which > 57)) {
+					$('.cmpNumeroDecimalMill').autoNumeric('destroy');
+					if((!e.ctrlKey) && (e.which != 46)){
+		        		e.preventDefault();
+		        	}
+		        }else{
+		        	//$('.cmpNumeroDecimalMill').autoNumeric('init');
+		        	$(".cmpNumeroDecimalMill").autoNumeric('init',{aSep: ',', aDec: '.'});
+		        }         		
+		   	}
+		
+			function eventoEnterKeyCent(e){
+				if (e.which > 31 && (e.which < 48 || e.which > 57)) {
+					$('.cmpNumeroDecimalCent').autoNumeric('destroy');
+					if((!e.ctrlKey) && (e.which != 46)){
+		        		e.preventDefault();
+		        	}
+		        }else{
+		        	//$('.cmpNumeroDecimalMill').autoNumeric('init');
+		        	$(".cmpNumeroDecimalCent").autoNumeric({aSep: ',', aDec: '.', vMax:999.99});
+		        }         		
+		   	}
+		/* ]]> */
 	</script>
 	
 <div class="bloque">    
@@ -226,11 +255,12 @@
 			</script>                             
             <div class="campo-espaciado">
                 <span class="columna" style="width:160px;">
-                     <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto2.lineaConsumo']}:" styleClass="etiqueta"/>
+                     <h:outputText value="#{msg['com.ibm.bbva.common.datosProducto2.lineaConsumo']}:" styleClass="etiqueta cmpNumeroDecimalMill"/>
                 </span>
                 <span class="columna" style="width:125px;">
                      <h:inputText value="#{datosProducto2.lineaConsumo}" styleClass="valorDer cmpNumeroDecimalMill"
-                	              id="lineaConsumo" disabled="#{datosProducto2.habLineaConsumo}" readonly="#{datosProducto2.habLineaConsumo}">
+                	              id="lineaConsumo" disabled="#{datosProducto2.habLineaConsumo}" readonly="#{datosProducto2.habLineaConsumo}"
+                	              onkeypress="eventoEnterKey(event);">
         	              <f:convertNumber locale="en" pattern="#,##0.00"/>                	                                 
                	     </h:inputText>
                	</span>     
@@ -256,7 +286,8 @@
                 <span class="columna" style="width:125px;">
                     <h:inputText value="#{datosProducto2.expediente.expedienteTC.porcentajeEndeudamiento}" 
                     			styleClass="valorDer cmpNumeroDecimalCent"
-                		         id="endeudamiento" disabled="#{datosProducto2.habEndeudamiento}" readonly="#{datosProducto2.habEndeudamiento}">
+                		         id="endeudamiento" disabled="#{datosProducto2.habEndeudamiento}" readonly="#{datosProducto2.habEndeudamiento}"
+                		         onkeypress="eventoEnterKeyCent(event);">
                         <f:convertNumber locale="en" pattern="#,##0.00"/>
                     </h:inputText>
                 </span>
@@ -268,7 +299,8 @@
                 </span>
                 <span class="columna" style="width:125px;">
                     <h:inputText value="#{datosProducto2.riesgoCliente}" styleClass="valorDer cmpNumeroDecimalMill" 
-                                 id="riesgoCliente" disabled="#{datosProducto2.habRiesgoCliente}" readonly="#{datosProducto2.habRiesgoCliente}">                  
+                                 id="riesgoCliente" disabled="#{datosProducto2.habRiesgoCliente}" readonly="#{datosProducto2.habRiesgoCliente}"
+                                 onkeypress="eventoEnterKey(event);">                  
                     </h:inputText>                
                 </span>                
                 <h:message for="riesgoCliente" errorClass="mensaje-error"/>                
@@ -280,7 +312,8 @@
                 <span class="columna" style="width:125px;">
                     <h:inputText value="#{datosProducto2.expediente.expedienteTC.clasificacionSbs}" styleClass="valorDer cmpNumeroDecimalCent"
                 		         id="clasificacionSbs" disabled="#{datosProducto2.habClasificacionSbs}" 
-                		         readonly="#{datosProducto2.habClasificacionSbs}">
+                		         readonly="#{datosProducto2.habClasificacionSbs}"
+                		         onkeypress="eventoEnterKeyCent(event);">
                         <f:convertNumber locale="en" pattern="#,##0.00"/>
                     </h:inputText>
                 </span> 
@@ -293,7 +326,7 @@
                 <span class="columna" style="width:125px;">
                     <h:inputText value="#{datosProducto2.expediente.expedienteTC.sbsConyuge}" styleClass="valorDer cmpNumeroDecimalCent"
                 	             id="sbsConyuge" disabled="#{datosProducto2.habSbsConyuge}" readonly="#{datosProducto2.habSbsConyuge}" 
-                	             maxlength="50">
+                	             maxlength="50" onkeypress="eventoEnterKeyCent(event);">
                        <f:convertNumber locale="en" pattern="#,##0.00"/>
                     </h:inputText>
                 </span> 
@@ -338,7 +371,8 @@
                 </span>
                 <span class="columna" style="width:125px;">
                     <h:inputText value="#{datosProducto2.ingNetoMensual}" styleClass="valorDer cmpNumeroDecimalMill"
-                		id="ingNetoMensual" disabled="#{datosProducto2.habIngNetoMensual}" readonly="#{datosProducto2.habIngNetoMensual}">
+                		id="ingNetoMensual" disabled="#{datosProducto2.habIngNetoMensual}" readonly="#{datosProducto2.habIngNetoMensual}"
+                		onkeypress="eventoEnterKey(event);">
                     </h:inputText>
                 </span>
                 <h:message for="ingNetoMensual" errorClass="mensaje-error"/>
