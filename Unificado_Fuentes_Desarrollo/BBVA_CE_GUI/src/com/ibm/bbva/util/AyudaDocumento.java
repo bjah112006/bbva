@@ -47,7 +47,7 @@ public class AyudaDocumento {
 		
 		String strListaDocsTransferencias = (String) FacesContext
 				.getCurrentInstance().getExternalContext().getSessionMap()
-				.get("strListaDocsTransferencias");
+				.get(Constantes.LIST_DOC_TRANSF);
 		
 		//for(DocumentoExpTc documentoExpTc : listDocExpAdjVO) {		
 		    //documentoExpTcBean.remove(documentoExpTc);
@@ -146,7 +146,7 @@ public class AyudaDocumento {
 		
 		String strListaDocsTransferencias = (String) FacesContext
 				.getCurrentInstance().getExternalContext().getSessionMap()
-				.get("strListaDocsTransferencias");
+				.get(Constantes.LIST_DOC_TRANSF);
 		
 		if(strListaDocsTransferencias != null && !strListaDocsTransferencias.equals("null") && strListaDocsTransferencias.split(",").length > 0){
 			List<DocumentoExpTc> lstDocumentoExpTc = documentoExpTcBean.buscarPorExpediente(expediente.getId());
