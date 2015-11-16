@@ -9,11 +9,18 @@ $(window).scroll(function(){
 
 $(document).ready(function(){	
    /*Funcion que permite el ingreso - solo Numeros*/
-   $(".soloNumeros").keypress(function (event) {
+   /*$(".soloNumeros").keypress(function (event) {
        if (event.which > 31 && (event.which < 48 || event.which > 57)) {
     	   event.preventDefault();
        }     
-   });
+   });*/
+   $(".soloNumeros").keypress(function (event) {
+	       if (event.which > 31 && (event.which < 48 || event.which > 57)) {
+	    	   if(!event.ctrlKey){
+					event.preventDefault();	
+				}
+	       }     
+	});
    
    $( ".formatoFecha" ).datepicker({
 	   autoSize: true,
