@@ -211,8 +211,8 @@ public class DatosProducto3MB extends AbstractMBean {
 		String lineaCredAprob = Double.toString(expediente.getExpedienteTC().getLineaCredAprob());	
 		String plazoSolicitadoApr = expediente.getExpedienteTC().getPlazoSolicitadoApr();
 		if (expediente!=null && expediente.getExpedienteTC()!=null) {
-			expediente.getExpedienteTC().setLineaCredAprob(Util.convertStringToDouble(Util.esNuloVacio(lineaCredAprob) ? "0" : lineaCredAprob));
-			expediente.getExpedienteTC().setPlazoSolicitadoApr(Util.esNuloVacio(plazoSolicitadoApr) ? "" : plazoSolicitadoApr);			
+			expediente.getExpedienteTC().setLineaCredAprob(Util.convertStringToDouble(Util.esNuloVacio(lineaCredAprob) ? "0" : lineaCredAprob.trim()));
+			expediente.getExpedienteTC().setPlazoSolicitadoApr(Util.esNuloVacio(plazoSolicitadoApr) ? "" : plazoSolicitadoApr.trim());			
 		}
 		
 		/*Mostrar o Ocultar Campos*/
@@ -668,7 +668,8 @@ public class DatosProducto3MB extends AbstractMBean {
 		objExpedienteDTO.setCodigoProducto(expediente.getProducto().getId());
 		objExpedienteDTO.setCodigoTipoMonedaSol(expediente.getExpedienteTC().getTipoMonedaSol().getId());
 		//objExpedienteDTO.setCodigoTipoScoring(expediente.getExpedienteTC().getTipoScoring().getId());
-		objExpedienteDTO.setPlazoSolicitado(expediente.getExpedienteTC().getPlazoSolicitado());
+		objExpedienteDTO.setPlazoSolicitado(expediente.getExpedienteTC().getPlazoSolicitado()!=null && 
+				!expediente.getExpedienteTC().getPlazoSolicitado().trim().equals("")? expediente.getExpedienteTC().getPlazoSolicitado().trim(): "");
 		LOG.info("PLAZO SOLICITADO = "+objExpedienteDTO.getPlazoSolicitado());
 		
 		if(expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getTipoScoring()!=null){
@@ -772,7 +773,8 @@ public class DatosProducto3MB extends AbstractMBean {
 		objExpedienteDTO.setPerExpPub(expediente.getClienteNatural().getPerExpPub());
 		objExpedienteDTO.setPorcentajeEndeudamiento(expediente.getExpedienteTC().getPorcentajeEndeudamiento());
 		objExpedienteDTO.setRiesgoCliente(expediente.getExpedienteTC().getRiesgoCliente());
-		objExpedienteDTO.setPlazoSolicitado(expediente.getExpedienteTC().getPlazoSolicitado());
+		objExpedienteDTO.setPlazoSolicitado(expediente.getExpedienteTC().getPlazoSolicitado()!=null && 
+				!expediente.getExpedienteTC().getPlazoSolicitado().trim().equals("")? expediente.getExpedienteTC().getPlazoSolicitado().trim(): "");
 		if(objExpedienteDTO.getCodigoEstadoCivilTitular().equals(Constantes.EST_CIVIL_CASADO)){
 			objExpedienteDTO.setBancoConyuge(expediente.getExpedienteTC().getBancoConyuge()==null?null:expediente.getExpedienteTC().getBancoConyuge().getId());
 			objExpedienteDTO.setSbsConyuge(expediente.getExpedienteTC().getSbsConyuge());
@@ -1573,7 +1575,7 @@ public class DatosProducto3MB extends AbstractMBean {
 						"com.ibm.bbva.common.datosProducto3.msg.linCredAprobMayor", lineaCreditoOriginal);
 				existeError = true;
 			}*/
-			long plazoSol = ((expediente.getExpedienteTC().getPlazoSolicitado()==null || expediente.getExpedienteTC().getPlazoSolicitado().equals(""))?0:Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitado()));
+			long plazoSol = ((expediente.getExpedienteTC().getPlazoSolicitado()==null || expediente.getExpedienteTC().getPlazoSolicitado().equals(""))?0:Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitado().trim()));
 			//long plazoSolApr = ((expediente.getExpedienteTC().getPlazoSolicitadoApr()==null || expediente.getExpedienteTC().getPlazoSolicitadoApr().equals(""))?0:Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr()));
 			double lineaSol = (expediente.getExpedienteTC().getLineaCredSol()>0?expediente.getExpedienteTC().getLineaCredSol():0);
 			
@@ -1595,7 +1597,7 @@ public class DatosProducto3MB extends AbstractMBean {
 						existeError = true;
 					}else {
 						if(expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")){
-							long plazoSolApr = (expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr()):0);
+							long plazoSolApr = (expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr().trim()):0);
 							LOG.info("plazoSolApr -> "+plazoSolApr);
 							
 							if(!"SV".equals(objDelegacionRiesgoCondPlazo.getSimbolo().getDescripcion())){
@@ -1751,7 +1753,7 @@ public class DatosProducto3MB extends AbstractMBean {
 						"com.ibm.bbva.common.datosProducto3.msg.linCredAprobMayor", lineaCreditoOriginal);
 				existeError = true;
 			}*/
-			long plazoSol = (expediente.getExpedienteTC().getPlazoSolicitado()!=null && !expediente.getExpedienteTC().getPlazoSolicitado().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitado()):0);
+			long plazoSol = (expediente.getExpedienteTC().getPlazoSolicitado()!=null && !expediente.getExpedienteTC().getPlazoSolicitado().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitado().trim()):0);
 			double lineaSol = (expediente.getExpedienteTC().getLineaCredSol()>0?expediente.getExpedienteTC().getLineaCredSol():0);
 			//long plazoSolApr = (expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr()):0);
 			
@@ -1770,7 +1772,7 @@ public class DatosProducto3MB extends AbstractMBean {
 					}else {
 						
 						if(expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")){
-							long plazoSolApr = (expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr()):0);
+							long plazoSolApr = (expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr().trim()):0);
 							LOG.info("plazoSolApr -> "+plazoSolApr);
 						
 							if(!"SV".equals(objDelegacionRiesgoCondPlazo.getSimbolo().getDescripcion())){
@@ -2022,7 +2024,7 @@ public class DatosProducto3MB extends AbstractMBean {
 		//	long plazoSol = Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitado());
 		//	long plazoSolApr = Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr());
 			
-			long plazoSol = (expediente.getExpedienteTC().getPlazoSolicitado()!=null && !expediente.getExpedienteTC().getPlazoSolicitado().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitado()):0);
+			long plazoSol = (expediente.getExpedienteTC().getPlazoSolicitado()!=null && !expediente.getExpedienteTC().getPlazoSolicitado().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitado().trim()):0);
 			//long plazoSolApr = (expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr()):0);
 			double lineaSol = (expediente.getExpedienteTC().getLineaCredSol()>0?expediente.getExpedienteTC().getLineaCredSol():0);
 			//if (!accion.equals(Constantes.ACCION_BOTON_ELEVAR_A_RIESGOS)) {
@@ -2030,7 +2032,7 @@ public class DatosProducto3MB extends AbstractMBean {
 			 if (accion.equals(Constantes.ACCION_BOTON_APROBADO_CON_MOD_OBS) || accion.equals(Constantes.ACCION_BOTON_APROBAR_OPERACION)){
 				if (plazoSol>0){
 					if(expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")){
-						long plazoSolApr = (expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr()):0);
+						long plazoSolApr = (expediente.getExpedienteTC().getPlazoSolicitadoApr()!=null && !expediente.getExpedienteTC().getPlazoSolicitadoApr().trim().equals("")?Long.parseLong(expediente.getExpedienteTC().getPlazoSolicitadoApr().trim()):0);
 						LOG.info("plazoSolApr -> "+plazoSolApr);
 						if(!(plazoSolApr > 0 && plazoSolApr <= plazoSol)){
 							addMessageError(formulario + ":idPlazoSolApr", 
