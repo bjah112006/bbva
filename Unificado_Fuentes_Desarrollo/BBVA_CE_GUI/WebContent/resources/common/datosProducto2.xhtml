@@ -46,6 +46,14 @@
 		        	$(".cmpNumeroDecimalCent").autoNumeric({aSep: ',', aDec: '.', vMax:999.99});
 		        }         		
 		   	}
+			
+			function eventoEnterKeySoloNumeros(e){
+				if (e.which > 31 && (e.which < 48 || e.which > 57)) {
+	        		if(!event.ctrlKey){
+						event.preventDefault();	
+					}
+	           	}           		
+		   	}
 		/* ]]> */
 	</script>
 	
@@ -397,28 +405,32 @@
                 <span >
 	                <span class="columna" style="width:32px;">
 	                	<h:inputText value="#{datosProducto2.strEntidad}" styleClass="valor soloNumeros"
-	                		id="entidad" disabled="true" readonly="#{datosProducto2.habNumeroCuenta}" style="width:32px;" maxlength="4"/>
+	                		id="entidad" disabled="true" readonly="#{datosProducto2.habNumeroCuenta}" style="width:32px;" maxlength="4"
+	                		onkeypress="eventoEnterKeySoloNumeros(event);"/>
 	                </span>
 	                <span class="tabs" style="width:10px;"> 
 	                	<h:outputText value="-"/>
 	                </span>
 	                <span class="columna" style="width:32px;">
 	                	<h:inputText value="#{datosProducto2.strOficina}" styleClass="valor soloNumeros"
-	                		id="oficina" disabled="#{datosProducto2.habNumeroCuenta}" readonly="#{datosProducto2.habNumeroCuenta}" style="width:32px;" maxlength="4"/>
+	                		id="oficina" disabled="#{datosProducto2.habNumeroCuenta}" readonly="#{datosProducto2.habNumeroCuenta}" style="width:32px;" maxlength="4"
+	                		onkeypress="eventoEnterKeySoloNumeros(event);"/>
 	                </span>
 	                <span class="tabs" style="width:10px;">
 	                	<h:outputText value="-"/>
 	                </span>
 	                <span class="columna" style="width:16px;">
 	                	<h:inputText value="#{datosProducto2.strDigitoChequeo}" styleClass="valor soloNumeros"
-	                		id="digitoChequeo" disabled="#{datosProducto2.habNumeroCuenta}" readonly="#{datosProducto2.habNumeroCuenta}" style="width:16px;" maxlength="2"/>
+	                		id="digitoChequeo" disabled="#{datosProducto2.habNumeroCuenta}" readonly="#{datosProducto2.habNumeroCuenta}" style="width:16px;" maxlength="2"
+	                		onkeypress="eventoEnterKeySoloNumeros(event);"/>
 	                </span>
 	                <span class="tabs" style="width:10px;">
 	                	<h:outputText value="-"/>
 	                </span>
 	                <span class="columna" style="width:81px;">
 	                	<h:inputText value="#{datosProducto2.strNumeroCuenta}" styleClass="valor soloNumeros"
-	                		id="numCuenta" disabled="#{datosProducto2.habNumeroCuenta}" readonly="#{datosProducto2.habNumeroCuenta}" style="width:81px;" maxlength="10"/>
+	                		id="numCuenta" disabled="#{datosProducto2.habNumeroCuenta}" readonly="#{datosProducto2.habNumeroCuenta}" style="width:81px;" maxlength="10"
+	                		onkeypress="eventoEnterKeySoloNumeros(event);"/>
 	                </span>
 	                <h:message for="entidad" errorClass="mensaje-error"/>
 	              </span>
