@@ -785,7 +785,7 @@ public class ProductoNuevoMB extends AbstractMBean {
 		}
 		
 		LOG.info("Plazo solicitado = "+isRenderedPlazoSolicitado());
-		String plazoSol = expediente.getExpedienteTC().getPlazoSolicitado();
+		String plazoSol = expediente.getExpedienteTC().getPlazoSolicitado().trim();
 		if (isRenderedPlazoSolicitado() && (plazoSol==null || plazoSol.trim().equals("") || plazoSol.trim().length()<1)) {
 			addMessageError(formulario + ":idPlazoSol", 
 					"com.ibm.bbva.common.productoNuevo.msg.plazoSolicitado");
