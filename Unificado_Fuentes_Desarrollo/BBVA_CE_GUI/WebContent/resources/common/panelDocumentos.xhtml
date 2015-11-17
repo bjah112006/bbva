@@ -55,11 +55,20 @@
 		$("[id='#{paneldocumentos.htmlListaDocsTransferencias.clientId}']").val('');
 		$("[id='#{paneldocumentos.btnActualizaAppletYPanelDocumentos.clientId}']").click();
 	}*/
-	function abrirDocumentoBrowser(idCm, codigoTipoDoc) {
+	function abrirDocumentoBrowser(idCm, codigoTipoDoc, tipoDocDescrip) {
 		if ($.browser.msie) {
-			winCM=window.open('../pdfContent/abrirPDF.faces?idcm='+idCm+'&codtipodoc'+codigoTipoDoc+'&redirect=0', '_blank','width=850,height=450,resizable=yes');
+			winCM=window.open('../pdfContent/abrirPDF.faces?idcm='+idCm+'&codtipodoc='+codigoTipoDoc+'&redirect=0&tipodocdescrip='+tipoDocDescrip, '_blank','width=850,height=450,resizable=yes');
+			winCM.document.title = tipoDocDescrip;	
+			if (winCM.getElementById){
+				winCM.document.title = tipoDocDescrip;
+			}
+				
 		} else {
-			winCM=window.open('../pdfContent/abrirPDF.faces?idcm='+idCm+'&codtipodoc'+codigoTipoDoc+'&redirect=1', '_blank','width=850,height=450,resizable=yes');
+			winCM=window.open('../pdfContent/abrirPDF.faces?idcm='+idCm+'&codtipodoc='+codigoTipoDoc+'&redirect=1&tipodocdescrip='+tipoDocDescrip, '_blank','width=850,height=450,resizable=yes');
+			winCM.document.title = tipoDocDescrip;
+			if (winCM.getElementById){
+				winCM.document.title = tipoDocDescrip;
+			}
 		}
 		return false;
 	}
@@ -218,7 +227,7 @@
 									
 									<h:outputLink value="#" 
 										rendered="#{itemdoc.docEscaneado and itemdoc.idCm != '0'}"
-										onclick="return abrirDocumentoBrowser(#{itemdoc.idCm}, '#{itemdoc.codigoTipoDoc}')">
+										onclick="return abrirDocumentoBrowser('#{itemdoc.idCm}', '#{itemdoc.codigoTipoDoc}', '#{tipodoc.tipoDocumento.descripcion}')">
 										<h:outputText value="#{itemdoc.feRegistro}">
 											<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
 										</h:outputText>
