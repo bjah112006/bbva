@@ -46,12 +46,14 @@ public class AbrirPdfMB implements Serializable {
 	private FacadeLocal facade;
 
 	private String rutaCM;
+	private String nombreDoc;
 
 	@PostConstruct
 	public void iniciar() {
 		String idCm = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("idcm");
 		String codTipoDoc = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("codtipodoc");
 		String redirect = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("redirect");
+		String tipoDocDescrip = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tipodocdescrip");
 		
 		//fix erika abregu
 		expediente = (Expediente) FacesContext.getCurrentInstance().getExternalContext()
@@ -62,6 +64,7 @@ public class AbrirPdfMB implements Serializable {
 			documentoExp.setIdCm(new BigDecimal(idCm));
 			documentoExp.setTipoDocumento(new TipoDocumento());
 			documentoExp.getTipoDocumento().setCodigo(codTipoDoc);
+			documentoExp.getTipoDocumento().setDescripcion((tipoDocDescrip!=null && tipoDocDescrip.trim().length()>0)? tipoDocDescrip : "");
 			
 			if (documentoExp.getIdCm().intValue() > 0) {
 				Documento doc = new Documento();
@@ -127,16 +130,21 @@ public class AbrirPdfMB implements Serializable {
 				
 				if (doc != null) {
 					this.rutaCM = doc.getUrlContent();
+					//this.nombreDoc = documentoExp.getTipoDocumento().getDescripcion();
+					this.nombreDoc = tipoDocDescrip;
 				} else {
-					LOG.warn("No se encontr� el documento con idCm="+idCm+" en el Content.");
+					LOG.warn("No se encontro el documento con idCm="+idCm+" en el Content.");
 					this.rutaCM = null;
+					this.nombreDoc = null;
 				}
 			} else {
 				this.rutaCM = null;
+				this.nombreDoc = null;
 			}
 			if (redirect != null && redirect.equals("1")) {
 				try {
 					FacesContext.getCurrentInstance().getExternalContext().redirect(rutaCM);
+					//FacesContext.getCurrentInstance().getExternalContext().redirect(nombreDoc);
 				} catch (IOException e) {
 					LOG.error(e.getMessage(), e);
 				}
@@ -152,6 +160,14 @@ public class AbrirPdfMB implements Serializable {
 
 	public void setRutaCM(String rutaCM) {
 		this.rutaCM = rutaCM;
+	}
+
+	public String getNombreDoc() {
+		return nombreDoc;
+	}
+
+	public void setNombreDoc(String nombreDoc) {
+		this.nombreDoc = nombreDoc;
 	}
 
 }
