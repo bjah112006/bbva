@@ -283,7 +283,12 @@ public class DatosProducto2MB extends AbstractMBean {
 	 * @param clienteNatural
 	 */
 	public void copiarDatos(ClienteNatural clienteNatural) {
-		clienteNatural.setIngNetoMensual(clienteNatural.getIngNetoMensual());
+		//clienteNatural.setIngNetoMensual(clienteNatural.getIngNetoMensual());
+		
+		if(ingNetoMensual!=null && Util.convertStringToDouble(Util.esNuloVacio(ingNetoMensual) ? "0" : ingNetoMensual)>0){
+			LOG.info("ingNetoMensual : "+ingNetoMensual);						
+			clienteNatural.setIngNetoMensual(Util.convertStringToDouble(Util.esNuloVacio(ingNetoMensual) ? "0" : ingNetoMensual));
+		}
 		
 		if(codigoBuroSeleccionado!=null && Integer.parseInt(codigoBuroSeleccionado)!=Integer.parseInt(Constantes.CODIGO_CODIGO_CAMPO_VACIO)){
 			int codBuro = Integer.parseInt(codigoBuroSeleccionado);
