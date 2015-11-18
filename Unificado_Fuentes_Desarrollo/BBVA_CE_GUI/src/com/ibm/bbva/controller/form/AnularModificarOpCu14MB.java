@@ -389,6 +389,10 @@ public class AnularModificarOpCu14MB extends AbstractMBean {
 		//Desactivar expediente para bandeja de asignacion no muestre mensaje
 		expediente.setFlagActivo("0");
 		
+		//Eliminar espacios en el campo Plazo Solicitado
+		expediente.getExpedienteTC().setPlazoSolicitado((expediente.getExpedienteTC().getPlazoSolicitado()!=null && 
+						!("").equals(expediente.getExpedienteTC().getPlazoSolicitado()))? expediente.getExpedienteTC().getPlazoSolicitado().trim(): "");
+			
 		expedienteBean.edit(expediente);
 		clienteNaturalBean.edit(clienteNatural);
 		
