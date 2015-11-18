@@ -408,7 +408,8 @@ public class RegistrarDatosMB extends AbstractMBean {
 		objExpedienteDTO.setCodigoProducto(expediente.getProducto().getId());
 		objExpedienteDTO.setCodigoTipoMonedaSol(expediente.getExpedienteTC().getTipoMonedaSol().getId());
 		
-		objExpedienteDTO.setPlazoSolicitado(expediente.getExpedienteTC().getPlazoSolicitado());
+		objExpedienteDTO.setPlazoSolicitado((expediente.getExpedienteTC().getPlazoSolicitado()!=null && 
+				!("").equals(expediente.getExpedienteTC().getPlazoSolicitado()))? expediente.getExpedienteTC().getPlazoSolicitado().trim(): "");
 		LOG.info("PLAZO SOLICITADO = "+objExpedienteDTO.getPlazoSolicitado());
 		
 		if(expediente.getExpedienteTC()!=null && expediente.getExpedienteTC().getTipoScoring()!=null){
@@ -618,6 +619,10 @@ public class RegistrarDatosMB extends AbstractMBean {
 		
 		//Desactivar expediente para bandeja de asignacion no muestre mensaje
 		expediente.setFlagActivo("0");
+		
+		//Eliminar espacios en el campo Plazo Solicitado
+		expediente.getExpedienteTC().setPlazoSolicitado((expediente.getExpedienteTC().getPlazoSolicitado()!=null && 
+				!("").equals(expediente.getExpedienteTC().getPlazoSolicitado()))? expediente.getExpedienteTC().getPlazoSolicitado().trim(): "");
 		
 		expedienteBean.edit(expediente);	
 		clienteNaturalBean.edit(clienteNatural);
