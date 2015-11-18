@@ -777,6 +777,10 @@ public class RegistrarExpedienteMB extends AbstractMBean {
 			expediente.setFecRegistro(new Timestamp(new Date().getTime()));
 			// cambiar estado e historial a estado "Expediente registrado"
 			if (esNuevo) {
+				//Eliminar espacios en el campo Plazo Solicitado
+				expediente.getExpedienteTC().setPlazoSolicitado((expediente.getExpedienteTC().getPlazoSolicitado()!=null && 
+						!("").equals(expediente.getExpedienteTC().getPlazoSolicitado()))? expediente.getExpedienteTC().getPlazoSolicitado().trim(): "");
+			
 				LOG.info("Guardar Expediente");
 				expediente = expedienteBean.create(expediente);	
 				LOG.info("Guardar AyudaMemoria");
@@ -784,6 +788,11 @@ public class RegistrarExpedienteMB extends AbstractMBean {
 			} else {
 				//Desactivar expediente para bandeja de asignacion no muestre mensaje
 				expediente.setFlagActivo("0");
+				
+				//Eliminar espacios en el campo Plazo Solicitado
+				expediente.getExpedienteTC().setPlazoSolicitado((expediente.getExpedienteTC().getPlazoSolicitado()!=null && 
+						!("").equals(expediente.getExpedienteTC().getPlazoSolicitado()))? expediente.getExpedienteTC().getPlazoSolicitado().trim(): "");
+			
 				
 				expedienteBean.edit(expediente);
 			}
@@ -846,6 +855,10 @@ public class RegistrarExpedienteMB extends AbstractMBean {
 
 				LOG.info("exp-crea");
 				
+				//Eliminar espacios en el campo Plazo Solicitado
+				expediente.getExpedienteTC().setPlazoSolicitado((expediente.getExpedienteTC().getPlazoSolicitado()!=null && 
+						!("").equals(expediente.getExpedienteTC().getPlazoSolicitado()))? expediente.getExpedienteTC().getPlazoSolicitado().trim(): "");
+			
 				expediente = expedienteBean.create(expediente);
 				LOG.info("sale-exp-crea: "+expediente.getId());
 
@@ -906,6 +919,10 @@ public class RegistrarExpedienteMB extends AbstractMBean {
 				//Desactivar expediente para bandeja de asignacion no muestre mensaje
 				expediente.setFlagActivo("0");
 				
+				//Eliminar espacios en el campo Plazo Solicitado
+				expediente.getExpedienteTC().setPlazoSolicitado((expediente.getExpedienteTC().getPlazoSolicitado()!=null && 
+						!("").equals(expediente.getExpedienteTC().getPlazoSolicitado()))? expediente.getExpedienteTC().getPlazoSolicitado().trim(): "");
+			
 				expedienteBean.edit(expediente);
 				LOG.info("sale-exp-crea: "+expediente.getId());
 			
