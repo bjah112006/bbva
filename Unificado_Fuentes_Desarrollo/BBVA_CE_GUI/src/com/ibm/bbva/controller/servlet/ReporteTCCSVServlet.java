@@ -11,9 +11,19 @@ import java.util.List;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.joda.time.DateTime;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -467,69 +477,157 @@ public class ReporteTCCSVServlet extends HttpServlet {
 			
 			tablaGenerarTC.buscarTC(arrayList);
 			
-			// Defino el Libro de Excel
-		    HSSFWorkbook wb = new HSSFWorkbook();
-	
-		     // Creo la Hoja en Excel
-		    Sheet sheet;
-		    if(tipoReporteTC.equals(Constantes.ID_TC_CONSOLIDADO)){
-		    	sheet = wb.createSheet(Constantes.DESCRIPCION_HOJA_EXCEL2);
-			}else {
-				sheet = wb.createSheet(Constantes.DESCRIPCION_HOJA_EXCEL3);
-			}
 			
-		    int numColTituloPrincipal=1;
-		    int numFirstColTituloRol=2; 
-		    int numLastColTituloRol=2; 
-		    int numColTituloRol=1;
-		    int numFilaTitulo1=1;
-		    int firsRow=1;
-		    int lastRow=1;
-		    int firstCol=1;
-		    int lastCol=18;
-		     
-		    int cont = 0;
+			if(tipoReporteTC.equals(Constantes.ID_TC_CONSOLIDADO)){
+				// Defino el Libro de Excel
+			    HSSFWorkbook wb = new HSSFWorkbook();
+		
+			     // Creo la Hoja en Excel
+			    Sheet sheet;
+			    /*if(tipoReporteTC.equals(Constantes.ID_TC_CONSOLIDADO)){
+			    	sheet = wb.createSheet(Constantes.DESCRIPCION_HOJA_EXCEL2);
+				}else {
+					sheet = wb.createSheet(Constantes.DESCRIPCION_HOJA_EXCEL3);
+				}*/
+			    sheet = wb.createSheet(Constantes.DESCRIPCION_HOJA_EXCEL2);
+				
+			    int numColTituloPrincipal=1;
+			    //int numFirstColTituloRol=2; 
+			    //int numLastColTituloRol=2; 
+			    int numColTituloRol=1;
+			    int numFilaTitulo1=1;
+			    int firsRow=1;
+			    int lastRow=1;
+			    int firstCol=1;
+			    int lastCol=18;
+			     
+			    //int cont = 0;
 
-        	tablaGenerarTC.pintarTitulos(sheet, firsRow, lastRow, firstCol, lastCol);
-		    Row t1row = tablaGenerarTC.crearFila(sheet, wb, numFilaTitulo1);
-		    tablaGenerarTC.createTituloCell(wb, t1row, numColTituloPrincipal, CellStyle.ALIGN_CENTER,
-		    		CellStyle.VERTICAL_CENTER, tituloReporte);
-		    firsRow++;
-		    lastRow++;
-		    
-		    tablaGenerarTC.pintarTitulos(sheet, firsRow, lastRow, firstCol, lastCol);
-		    Row t2row = tablaGenerarTC.crearFila(sheet, wb, numFilaTitulo1+1);
-		    tablaGenerarTC.createTituloCell(wb, t2row, numColTituloRol, CellStyle.ALIGN_CENTER,
-			        CellStyle.VERTICAL_CENTER, rangoFechas);
-		    		    
-			if(tipoReporteTC.equals(Constantes.ID_TC_CONSOLIDADO)){ // Consolidado
-				listDatosGeneradosCons = tablaGenerarTC.getListDatosGeneradosCons();
-				//generaTituloReporte(writer,60,tituloReporte,10,rangoFechas,9);
-				//generaDatosConsolidadoCsv(writer);
+	        	tablaGenerarTC.pintarTitulos(sheet, firsRow, lastRow, firstCol, lastCol);
+			    Row t1row = tablaGenerarTC.crearFila(sheet, wb, numFilaTitulo1);
+			    tablaGenerarTC.createTituloCell(wb, t1row, numColTituloPrincipal, CellStyle.ALIGN_CENTER,
+			    		CellStyle.VERTICAL_CENTER, tituloReporte);
+			    firsRow++;
+			    lastRow++;
+			    
+			    tablaGenerarTC.pintarTitulos(sheet, firsRow, lastRow, firstCol, lastCol);
+			    Row t2row = tablaGenerarTC.crearFila(sheet, wb, numFilaTitulo1+1);
+			    tablaGenerarTC.createTituloCell(wb, t2row, numColTituloRol, CellStyle.ALIGN_CENTER,
+				        CellStyle.VERTICAL_CENTER, rangoFechas);
+			    		    
+				/*if(tipoReporteTC.equals(Constantes.ID_TC_CONSOLIDADO)){ // Consolidado
+					listDatosGeneradosCons = tablaGenerarTC.getListDatosGeneradosCons();
+					//generaTituloReporte(writer,60,tituloReporte,10,rangoFechas,9);
+					//generaDatosConsolidadoCsv(writer);
+					generaDatosConsolidadoXls(sheet, wb, numFilaTitulo1);
+				}else { // Historico
+					listDatosGeneradosHis = tablaGenerarTC.getListDatosGeneradosHis();
+					//generaTituloReporte(writer,27,tituloReporte,10,rangoFechas,9);
+					//generarDatosHistoricoCsv(writer);
+					generarDatosHistoricoXls(sheet, wb, numFilaTitulo1);
+				}*/
+				//writer.flush();
+			    listDatosGeneradosCons = tablaGenerarTC.getListDatosGeneradosCons();
 				generaDatosConsolidadoXls(sheet, wb, numFilaTitulo1);
-			}else { // Historico
-				listDatosGeneradosHis = tablaGenerarTC.getListDatosGeneradosHis();
-				//generaTituloReporte(writer,27,tituloReporte,10,rangoFechas,9);
-				//generarDatosHistoricoCsv(writer);
-				generarDatosHistoricoXls(sheet, wb, numFilaTitulo1);
+							
+				Sheet ssheet = wb.getSheetAt(0);
+		        ssheet.autoSizeColumn(0);
+		        ssheet.autoSizeColumn(1);
+		        ssheet.setColumnWidth(2, 256 *20);
+		         
+				response.setHeader("Cache-Control","private");
+				response.setHeader("Pragma","private");
+				response.addDateHeader("Expires", 0);
+				//response.setContentType("text/csv");
+				response.setContentType("application/vnd.ms-excel");  
+				
+				//response.addHeader("Content-Disposition", "filename="+nombreArchivo+".xls");
+				response.addHeader("Content-Disposition", "attachment; filename=\""+nombreArchivo+".xls\"");
+				wb.write(response.getOutputStream());
+
+			}else {
+				
+			     SXSSFWorkbook wb = new SXSSFWorkbook(); 
+			     wb.setCompressTempFiles(true);
+
+			     //SXSSFSheet ssheet = (SXSSFSheet) wb.getSheetAt(0);
+			     SXSSFSheet ssheet;
+			     ssheet = (SXSSFSheet)wb.createSheet(Constantes.DESCRIPCION_HOJA_EXCEL3);
+			     ssheet.setRandomAccessWindowSize(100);// keep 100 rows in memory, exceeding rows will be flushed to disk
+			     
+			     
+			     int numColTituloPrincipal=1;
+				 int numColTituloRol=1;
+				 int numFilaTitulo1=1;
+				 int firsRow=1;
+				 int lastRow=1;
+				 int firstCol=1;
+				 int lastCol=18;
+				     
+				 tablaGenerarTC.pintarTitulos(ssheet, firsRow, lastRow, firstCol, lastCol);
+				 Row t1row = tablaGenerarTC.crearFila(ssheet, wb, numFilaTitulo1);
+				 tablaGenerarTC.createTituloCell(wb, t1row, numColTituloPrincipal, CellStyle.ALIGN_CENTER,
+				 		CellStyle.VERTICAL_CENTER, tituloReporte);
+				 firsRow++;
+				 lastRow++;
+				    
+				 tablaGenerarTC.pintarTitulos(ssheet, firsRow, lastRow, firstCol, lastCol);
+				 Row t2row = tablaGenerarTC.crearFila(ssheet, wb, numFilaTitulo1+1);
+				 tablaGenerarTC.createTituloCell(wb, t2row, numColTituloRol, CellStyle.ALIGN_CENTER,
+				      CellStyle.VERTICAL_CENTER, rangoFechas);
+				    		    
+				 listDatosGeneradosHis = tablaGenerarTC.getListDatosGeneradosHis();
+				 generarDatosHistoricoXls(ssheet, wb, numFilaTitulo1);
+				
+								
+				 Sheet sssheet = wb.getSheetAt(0);
+				 sssheet.setColumnWidth(0, 200 *20);
+				 sssheet.setColumnWidth(1, 200 *20);
+				 sssheet.setColumnWidth(2, 400 *20);
+				 sssheet.setColumnWidth(3, 256 *20);
+				 sssheet.setColumnWidth(4, 200 *20);
+				 sssheet.setColumnWidth(5, 200 *20);
+				 sssheet.setColumnWidth(6, 256 *20);
+				 sssheet.setColumnWidth(7, 256 *20);
+				 sssheet.setColumnWidth(8, 200 *20);
+				 sssheet.setColumnWidth(9, 256 *20);
+				 sssheet.setColumnWidth(10, 256 *20);
+				 sssheet.setColumnWidth(11, 200 *20);
+				 sssheet.setColumnWidth(12, 256 *20);
+				 sssheet.setColumnWidth(13, 200 *20);
+				 sssheet.setColumnWidth(14, 300 *20);
+				 sssheet.setColumnWidth(15, 200 *20);
+				 sssheet.setColumnWidth(16, 300 *20);
+				 sssheet.setColumnWidth(17, 200 *20);
+				 sssheet.setColumnWidth(18, 256 *20);
+				 sssheet.setColumnWidth(19, 200 *20);
+				 sssheet.setColumnWidth(20, 300 *20);
+				 sssheet.setColumnWidth(21, 200 *20);
+				 sssheet.setColumnWidth(22, 200 *20);
+				 sssheet.setColumnWidth(23, 200 *20);
+				 sssheet.setColumnWidth(24, 300 *20);
+				 sssheet.setColumnWidth(25, 150 *20);
+				 sssheet.setColumnWidth(26, 200 *20);
+				 sssheet.setColumnWidth(27, 200 *20);
+				 sssheet.setColumnWidth(28, 200 *20);
+				 sssheet.setColumnWidth(29, 200 *20);
+				 sssheet.setColumnWidth(30, 256 *20);
+				 sssheet.setColumnWidth(31, 256 *20);
+				 sssheet.setColumnWidth(32, 256 *20);
+				 sssheet.setColumnWidth(33, 200 *20);
+				 			 
+			     
+			     response.setHeader("Cache-Control","private");
+				 response.setHeader("Pragma","private");
+				 response.addDateHeader("Expires", 0);
+				 response.setContentType("application/vnd.ms-excel");  
+								
+				 response.addHeader("Content-Disposition", "attachment; filename=\""+nombreArchivo+".xlsx\"");
+				 wb.write(response.getOutputStream());
+			     
 			}
-			//writer.flush();
-						
-			Sheet ssheet = wb.getSheetAt(0);
-	        ssheet.autoSizeColumn(0);
-	        ssheet.autoSizeColumn(1);
-	        ssheet.setColumnWidth(2, 256 *20);
-	         
-			response.setHeader("Cache-Control","private");
-			response.setHeader("Pragma","private");
-			response.addDateHeader("Expires", 0);
-			//response.setContentType("text/csv");
-			response.setContentType("application/vnd.ms-excel");  
 			
-			//response.addHeader("Content-Disposition", "filename="+nombreArchivo+".xls");
-			response.addHeader("Content-Disposition", "attachment; filename=\""+nombreArchivo+".xls\"");
-			wb.write(response.getOutputStream());
-		}
+					}
 		catch(Exception ex) {
 			LOG.error(ex.getMessage(), ex);
 		}
@@ -1187,7 +1285,112 @@ public class ReporteTCCSVServlet extends HttpServlet {
 	}
 		
 	
-	private String generarDatosHistoricoXls(Sheet sheet, HSSFWorkbook wb, int numFilaTitulo1) throws IOException{
+	private String generarDatosHistoricoXls(SXSSFSheet ssheet, SXSSFWorkbook wb, int numFilaTitulo1) throws IOException{
+		
+		int totalColumns = 34;
+				
+		//Generamos los encabezados
+		AyudaDatosReporte objAyudaDatosReporte=new AyudaDatosReporte();	
+  		
+		Row titCabRow = objAyudaDatosReporte.crearFila(ssheet, wb, numFilaTitulo1 + 3);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 0, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "NRO_EXPEDIENTE", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 1, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "NUMERO_REGISTRO", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 2, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "USUARIO_ACTUAL", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 3, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "ESTADO_EXPEDIENTE", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 4, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "CODIGO_ESTADO", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 5, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "PERFIL", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 6, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "TAREA", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 7, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "ACCION", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 8, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "CODIGO_PRODUCTO", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 9, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "NOMBRE_PRODUCTO", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 10, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "NOMBRE_TIPO_OFERTA", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 11, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "CODIGO_SUB_PRODUCTO", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 12, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "NOMBRE_SUB_PRODUCTO", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 13, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "CODIGO_OFICINA_USUARIO", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 14, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "NOMBRE_OFICINA_USUARIO", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 15, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "CODIGO_TERRITORIO_USUARIO", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 16, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "NOMBRE_TERRITORIO_USUARIO", true, true, 0, 200);
+		
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 17, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "CODIGO_OFICINA_GESTORA", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 18, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "NOMBRE_OFICINA_GESTORA", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 19, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "CODIGO_TERRITORIO_GESTORA", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 20, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "NOMBRE_TERRITORIO_GESTORA", true, true, 0, 200);
+		
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 21, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "FECHA_HORA_LLEGADA", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 22, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "FECHA_HORA_INICIO_TRABAJO", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 23, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "FECHA_HORA_ENVIO", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 24, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "TIEMPO_EJECUCION_TE", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 25, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "TIEMPO_COLA_TC", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 26, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "TIEMPO_PROCESO_TP", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 27, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "CUMPLIO_ANS", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 28, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "FLAG_DEVOLUCION", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 29, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "FLAG_RETRAER", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 30, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "TERMINAL", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 31, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "OBSERVACION", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 32, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "MOTIVO_DEVOLUCION_RECHAZO", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 33, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "COMENTARIO_DEVOLUCION_RECHAZO", true, true, 0, 200);
+		objAyudaDatosReporte.crearCeldaTitulo(wb, titCabRow, 34, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, "ANS", true, true, 0, 200);
+		int numFilaData = 5;
+
+		if(listDatosGeneradosHis != null) {
+			//Recorremos los datos
+			Font cellFont = wb.createFont();
+			for (DatosGeneradosHisVO obj : listDatosGeneradosHis) {
+				if (obj != null) {
+					
+						Row rowData = objAyudaDatosReporte.crearFila(ssheet, wb, numFilaData );
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 0, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getNroExpediente());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 1, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getNumeroRegistro());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 2, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getUsuarioActual());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 3, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getEstadoExpediente());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 4, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getCodigoEstado());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 5, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getPerfil());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 6, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getTarea());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 7, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getAccion());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 8, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getCodigoProducto());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 9, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getNombreProducto());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 10, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getNombreTipoOferta());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 11, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getCodigoSubProducto());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 12, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getNombreSubProducto());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 13, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getCodigoOficina());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 14, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getNombreOficina());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 15, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getCodigoTerritorio());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 16, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getNombreTerritorio());
+					    
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 17, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getCodigoOficinaGestora());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 18, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getNombreOficinaGestora());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 19, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getCodigoTerritorio());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 20, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getNombreTerritorioGestora());
+					    
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 21, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getFechaHoraLlegada());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 22, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getFechaHoraInicioTrabajo());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 23, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getFechaHoraEnvio());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 24, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getTiempoEjecucionTe());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 25, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getTiempoColaTc());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 25, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getTiempoProcesoTp());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 27, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getCumplioAns());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 28, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getFlagDevolucion());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 29, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getFlagRetraer());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 30, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getTerminal());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 31, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getComentario());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 32, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getMotivoRechazo());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 33, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getObservacion());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 34, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getAns());
+					    
+					    numFilaData++;
+					
+		        }
+			}
+		}
+		
+		/*for(int i=0; i<totalColumns; i++){
+  			ssheet.autoSizeColumn(i);
+  			ssheet.setColumnWidth(i, 200 *80);
+  		}*/
+		return null;
+	}
+	
+private String generarDatosHistoricoXls(Sheet sheet, HSSFWorkbook wb, int numFilaTitulo1) throws IOException{
 		
 		int totalColumns = 26;
 				
