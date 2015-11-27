@@ -66,6 +66,12 @@ public class DatosGeneradosHisDAO extends BaseDAO{
 	            	objDatosGeneradosHisDTO.setNombreOficina(results.getString("NOMBRE_OFICINA"));
 	            	objDatosGeneradosHisDTO.setCodigoTerritorio(results.getString("CODIGO_TERRITORIO"));
 	            	objDatosGeneradosHisDTO.setNombreTerritorio(results.getString("NOMBRE_TERRITORIO"));
+	            	
+	            	objDatosGeneradosHisDTO.setCodigoOficinaGestora(results.getString("CODIGO_OFICINA_GESTORA"));
+	            	objDatosGeneradosHisDTO.setNombreOficinaGestora(results.getString("NOMBRE_OFICINA_GESTORA"));
+	            	objDatosGeneradosHisDTO.setCodigoTerritorioGestora(results.getString("CODIGO_TERRITORIO_GESTORA"));
+	            	objDatosGeneradosHisDTO.setNombreTerritorioGestora(results.getString("NOMBRE_TERRITORIO_GESTORA"));
+	            	
 	            	objDatosGeneradosHisDTO.setFechaHoraLlegada(results.getString("FECHA_HORA_LLEGADA"));
 	            	objDatosGeneradosHisDTO.setFechaHoraInicioTrabajo(results.getString("FECHA_HORA_INICIO_TRABAJO"));
 	            	objDatosGeneradosHisDTO.setFechaHoraEnvio(results.getString("FECHA_HORA_ENVIO"));
