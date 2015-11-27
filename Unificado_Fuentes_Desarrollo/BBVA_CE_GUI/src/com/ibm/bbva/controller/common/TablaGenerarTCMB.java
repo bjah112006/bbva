@@ -14,9 +14,13 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -132,7 +136,16 @@ public class TablaGenerarTCMB {
         sheet.addMergedRegion(new CellRangeAddress(lastRow, lastRow, firstCol, lastCol));
 	}
 	
+	public void pintarTitulos(SXSSFSheet sheet, int firsRow, int lastRow, int firstCol, int lastCol){
+        sheet.addMergedRegion(new CellRangeAddress(lastRow, lastRow, firstCol, lastCol));
+	}
+	
 	public Row crearFila(Sheet sheet, HSSFWorkbook wb, int numFila){
+		Row tmpRow =sheet.createRow((short) numFila);
+		return tmpRow;		
+	}
+	
+	public Row crearFila(SXSSFSheet sheet, SXSSFWorkbook wb, int numFila){
 		Row tmpRow =sheet.createRow((short) numFila);
 		return tmpRow;		
 	}
@@ -150,6 +163,25 @@ public class TablaGenerarTCMB {
 	        cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 	       
 	        CellStyle cellStyle = wb.createCellStyle();
+	        cellStyle.setAlignment(halign);
+	        cellStyle.setVerticalAlignment(valign);
+	        cellStyle.setFont(cellFont);
+	        cell.setCellStyle(cellStyle);
+	    }
+	
+	public void createTituloCell(SXSSFWorkbook wb, Row row, int column, 
+			short halign, short valign,String strContenido) {
+
+	    	CreationHelper ch = wb.getCreationHelper();
+	        Cell cell = row.createCell(column);
+	        cell.setCellValue(ch.createRichTextString(strContenido));
+	       
+	        Font cellFont = wb.createFont();
+	        cellFont.setFontHeightInPoints((short)9);
+	        cellFont.setFontName(HSSFFont.FONT_ARIAL);
+	        cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+	       
+	        XSSFCellStyle cellStyle = (XSSFCellStyle) wb.createCellStyle();
 	        cellStyle.setAlignment(halign);
 	        cellStyle.setVerticalAlignment(valign);
 	        cellStyle.setFont(cellFont);
