@@ -38,6 +38,11 @@ public class DatosGeneradosHisDTO  extends AbstractDTO{
 	private String comentario;
 	private String ans;
 	
+	private String codigoOficinaGestora;
+	private String nombreOficinaGestora;
+	private String codigoTerritorioGestora;
+	private String nombreTerritorioGestora;
+	
 	public String getNroExpediente() {
 		return nroExpediente;
 	}
@@ -223,6 +228,30 @@ public class DatosGeneradosHisDTO  extends AbstractDTO{
 	}
 	public void setAccion(String accion) {
 		this.accion = accion;
+	}
+	public String getCodigoOficinaGestora() {
+		return codigoOficinaGestora;
+	}
+	public void setCodigoOficinaGestora(String codigoOficinaGestora) {
+		this.codigoOficinaGestora = codigoOficinaGestora;
+	}
+	public String getNombreOficinaGestora() {
+		return nombreOficinaGestora;
+	}
+	public void setNombreOficinaGestora(String nombreOficinaGestora) {
+		this.nombreOficinaGestora = nombreOficinaGestora;
+	}
+	public String getCodigoTerritorioGestora() {
+		return codigoTerritorioGestora;
+	}
+	public void setCodigoTerritorioGestora(String codigoTerritorioGestora) {
+		this.codigoTerritorioGestora = codigoTerritorioGestora;
+	}
+	public String getNombreTerritorioGestora() {
+		return nombreTerritorioGestora;
+	}
+	public void setNombreTerritorioGestora(String nombreTerritorioGestora) {
+		this.nombreTerritorioGestora = nombreTerritorioGestora;
 	}
 	
 	
