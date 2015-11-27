@@ -15,9 +15,13 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -1770,6 +1774,11 @@ public class AyudaDatosReporte {
 		return tmpRow;		
 	}
 	
+	public Row crearFila(SXSSFSheet sheet, SXSSFWorkbook wb, int numFila){
+		Row tmpRow =sheet.createRow(numFila);
+		return tmpRow;		
+	}
+	
 	public void crearCeldaTitulo(HSSFWorkbook wb, Row row, int column, short halign, short valign, 
 			String strContenido, boolean booBorde,boolean booCabecera, int encab, int Formato) {
 		
@@ -1832,7 +1841,69 @@ public class AyudaDatosReporte {
 	        }
 	        cell.setCellStyle(cellStyle);
 
-	}	
+	}
+	
+	public void crearCeldaTitulo(SXSSFWorkbook wb, Row row, int column, short halign, short valign, 
+			String strContenido, boolean booBorde,boolean booCabecera, int encab, int Formato) {
+		
+			CreationHelper ch = wb.getCreationHelper();
+	        Cell cell = row.createCell(column);
+	        if(strContenido==null)
+	        	strContenido=Constantes.VALOR_VACIO;
+	        
+	        if(Formato==100){
+	        	if(!strContenido.equals(Constantes.VALOR_VACIO))
+	        		cell.setCellValue(ch.createRichTextString(strContenido+" %"));
+	        	else
+	        		cell.setCellValue(ch.createRichTextString(strContenido));
+	        }else
+	        	cell.setCellValue(ch.createRichTextString(strContenido));
+	        
+	        XSSFCellStyle cellStyle = (XSSFCellStyle)wb.createCellStyle();
+	        cellStyle.setAlignment(halign);
+	        //cellStyle.setAlignment((short)0);
+	        cellStyle.setVerticalAlignment(valign);
+	        //cellStyle.setVerticalAlignment((short) 3);
+	        cellStyle.setWrapText(true);
+	       		    
+	        if(booBorde){
+	        cellStyle.setBorderBottom(HSSFCellStyle.BORDER_DOTTED);
+	        cellStyle.setBottomBorderColor((short)8);
+	        cellStyle.setBorderLeft(HSSFCellStyle.BORDER_DOTTED);
+	        cellStyle.setLeftBorderColor((short)8);
+	        cellStyle.setBorderRight(HSSFCellStyle.BORDER_DOTTED);
+	        cellStyle.setRightBorderColor((short)8);
+	        cellStyle.setBorderTop(HSSFCellStyle.BORDER_DOTTED);
+	        cellStyle.setTopBorderColor((short)8);
+	        }
+	        if(booCabecera){
+	        cellStyle.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
+	        cellStyle.setBottomBorderColor((short)8);
+	        cellStyle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+	        cellStyle.setLeftBorderColor((short)8);
+	        cellStyle.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+	        cellStyle.setRightBorderColor((short)8);
+	        cellStyle.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
+	        cellStyle.setTopBorderColor((short)8);
+	        }	       
+	        
+	        if(Formato==200){
+	        	
+	        	//HSSFPalette palette = wb.getCustomPalette();
+	        	//palette.setColorAtIndex(HSSFColor.BLUE.index, (byte) 34, (byte) 102, (byte) 187);
+	        	
+		        //cellStyle.setWrapText(true);
+	        	cellStyle.setFillForegroundColor(HSSFColor.BLUE.index);
+		        cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		        Font cellFont = wb.createFont();
+		        cellFont.setFontHeightInPoints((short)10);
+		        cellFont.setFontName(HSSFFont.FONT_ARIAL);
+		        cellFont.setColor(HSSFColor.WHITE.index);
+		        cellStyle.setFont(cellFont);
+	        }
+	        cell.setCellStyle(cellStyle);
+
+	}
 	
 	public void crearCeldaData(HSSFFont cellFont, HSSFWorkbook wb, Row row, int column, 
 			short halign, short valign,String strContenido) {
@@ -1855,6 +1926,22 @@ public class AyudaDatosReporte {
 	        cellStyle.setFont(cellFont);
 	        cell.setCellStyle(cellStyle);
 	        */
+	    }
+	
+	public void crearCeldaData(Font cellFont, SXSSFWorkbook wb, Row row, int column, 
+			short halign, short valign,String strContenido) {
+
+	    CreationHelper ch = wb.getCreationHelper();
+	        Cell cell = row.createCell(column);
+	        if(strContenido==null){
+	        	strContenido=Constantes.VALOR_VACIO;
+	        }
+	        cell.setCellValue(ch.createRichTextString(strContenido));
+	       
+	        cellFont.setFontHeightInPoints((short)9);
+	        cellFont.setFontName(HSSFFont.FONT_ARIAL);
+	        cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+	       
 	    }
 	
 	/**
