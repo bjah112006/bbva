@@ -1018,6 +1018,12 @@ public class TablaFacadeBean {
 					objDatosGeneradosHis.setNombreOficina(dto.getNombreOficina());
 					objDatosGeneradosHis.setCodigoTerritorio(dto.getCodigoTerritorio());
 					objDatosGeneradosHis.setNombreTerritorio(dto.getNombreTerritorio());
+					
+					objDatosGeneradosHis.setCodigoOficinaGestora(dto.getCodigoOficinaGestora());
+					objDatosGeneradosHis.setNombreOficinaGestora(dto.getNombreOficinaGestora());
+					objDatosGeneradosHis.setCodigoTerritorioGestora(dto.getCodigoTerritorioGestora());
+					objDatosGeneradosHis.setNombreTerritorioGestora(dto.getNombreTerritorioGestora());
+					
 					objDatosGeneradosHis.setFechaHoraLlegada(dto.getFechaHoraLlegada());
 					objDatosGeneradosHis.setFechaHoraInicioTrabajo(dto.getFechaHoraInicioTrabajo());
 					objDatosGeneradosHis.setFechaHoraEnvio(dto.getFechaHoraEnvio());
