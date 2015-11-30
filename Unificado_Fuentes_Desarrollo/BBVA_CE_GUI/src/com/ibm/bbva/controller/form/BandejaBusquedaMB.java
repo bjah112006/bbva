@@ -30,6 +30,7 @@ public class BandejaBusquedaMB extends AbstractMBean {
 		if (buscarBandejaMB.valida()) {	
 			addObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION, null);
 			addObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION_NUEVO, null);
+			removeObjectSession(Constantes.EXPEDIENTE_SESION_HISTORICO);
 			
 		    buscarBandejaMB.buscar();
 	    }

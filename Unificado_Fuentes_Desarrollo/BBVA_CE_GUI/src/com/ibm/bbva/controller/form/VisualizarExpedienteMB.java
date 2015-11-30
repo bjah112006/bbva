@@ -37,7 +37,7 @@ public class VisualizarExpedienteMB extends AbstractMBean {
 	/*
 	 * FIX ERIKA ABREGU 07/07/2015
 	*/
-	private Expediente expediente;
+	private Expediente expediente = null;
 	private String origen= null;
 	
     private ParametrosConfBeanLocal parametrosConfBean;
@@ -61,10 +61,12 @@ public class VisualizarExpedienteMB extends AbstractMBean {
 		 * FIX ERIKA ABREGU 07/07/2015
 		*/
 		origen = null;
-		expediente = (Expediente) getObjectSession(Constantes.EXPEDIENTE_SESION_HISTORICO);
+		this.expediente = (Expediente) getObjectSession(Constantes.EXPEDIENTE_SESION_HISTORICO);
 				
-		if(expediente != null){
-			this.setOrigen(expediente.getOrigen());
+		if(this.expediente != null){
+			this.setOrigen(this.expediente.getOrigen());
+		}else{
+			this.origen=null;
 		}
 		/*
 		 * FIN DE FIX ERIKA ABREGU 07/07/2015
@@ -246,6 +248,14 @@ public class VisualizarExpedienteMB extends AbstractMBean {
 
 	public void setOrigen(String origen) {
 		this.origen = origen;
+	}
+
+	public Expediente getExpediente() {
+		return expediente;
+	}
+
+	public void setExpediente(Expediente expediente) {
+		this.expediente = expediente;
 	}
 	
 	

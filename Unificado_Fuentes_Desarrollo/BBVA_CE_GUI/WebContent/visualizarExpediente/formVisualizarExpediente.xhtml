@@ -57,9 +57,13 @@
                 		<h:outputText  value="#{visualizarExpediente.mensajeEnProceso}" />
                 	</h:panelGroup>
                 	
-                	<h:panelGroup layout="block" style="#{visualizarExpediente.origen!=null ? '':'display:none;'}" >
-                		<h:outputText  value="#{visualizarExpediente.origen}" styleClass="txt-resaltado-1 valor-componente"/>
-                	</h:panelGroup>
+					<h:panelGroup layout="block" rendered="#{visualizarExpediente.origen != null}">
+	                	<h:outputText  value="#{visualizarExpediente.origen}" styleClass="txt-resaltado-1 valor-componente"/>
+	                </h:panelGroup>
+               
+                <!-- h:panelGroup layout="block" style="#{visualizarExpediente.origen!=null ? '':'display:none;'}" >
+                <h:outputText  value="#{visualizarExpediente.origen}" styleClass="txt-resaltado-1 valor-componente"/>
+                </h:panelGroup-->
                 	    					
                 	<div class="tab-expediente tab-item">
 	                	<ui:include src="/resources/common/datosGestor.xhtml"/>

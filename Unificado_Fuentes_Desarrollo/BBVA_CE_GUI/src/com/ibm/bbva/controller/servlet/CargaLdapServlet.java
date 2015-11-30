@@ -83,7 +83,7 @@ public class CargaLdapServlet extends HttpServlet
 
 	private OficinaBeanLocal oficinabean;
 	private DescargaLDAPBeanLocal descargaLDAPBeanLocal;
-	private EmpleadoBeanLocal empleadobean;	
+//	private EmpleadoBeanLocal empleadobean;	
 
 	public CargaLdapServlet() {
         super();
@@ -112,7 +112,7 @@ public class CargaLdapServlet extends HttpServlet
 			logJobDetBeanLocal = (LogJobDetBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.LogJobDetBeanLocal");
 			oficinabean = (OficinaBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.OficinaBeanLocal");;
 			descargaLDAPBeanLocal = (DescargaLDAPBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.DescargaLDAPBeanLocal");;
-			empleadobean = (EmpleadoBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.EmpleadoBeanLocal");
+			//empleadobean = (EmpleadoBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.EmpleadoBeanLocal");
 	
 			if(parametrosConfBeanLocal.buscarPorVariable(Constantes.CODIGO_APLICATIVO_PROCESO_LDAP, Constantes.JOB_CARGA_LDAP_HABILITADO).equals("N"))
 			{				
@@ -136,81 +136,89 @@ public class CargaLdapServlet extends HttpServlet
 			objLogJobDet = logJobDetBeanLocal.create(objLogJobDet);
 			
 					 
-				ldapTempBeanLocal.clean();
-				LOG.info("CargaLdapServlet: inicio invocacion obtener empleados");
-				LOG.info("ws:"+parametrosConfBeanLocal.buscarPorVariable(Constantes.CODIGO_APLICATIVO_PROCESO_LDAP, Constantes.LDAP_WEB_SERVICE_EXT_ENDPOINT).getValorVariable());
-				List<UsuarioExtendido> listaUsuarios = objWSLDAPServiceImplPortProxy.obtenerUsuarios(null);
-				LOG.info("CargaLdapServlet: fin obtener empleados");
-				LdapTemp objLdapTemp = null;
-				String oficinasSincronizables = multitablaBeanLocal.buscarPorId(Constantes.PARAMETRO_OFICINAS_SINCRONIZABLES).getTexto();
+			ldapTempBeanLocal.clean();
+			LOG.info("CargaLdapServlet: inicio invocacion obtener empleados");
+			LOG.info("ws:"+parametrosConfBeanLocal.buscarPorVariable(Constantes.CODIGO_APLICATIVO_PROCESO_LDAP, Constantes.LDAP_WEB_SERVICE_EXT_ENDPOINT).getValorVariable());
+			List<UsuarioExtendido> listaUsuarios = objWSLDAPServiceImplPortProxy.obtenerUsuarios(null);
+			LOG.info("CargaLdapServlet: fin obtener empleados");
+			LdapTemp objLdapTemp = null;
+			String oficinasSincronizables = multitablaBeanLocal.buscarPorId(Constantes.PARAMETRO_OFICINAS_SINCRONIZABLES).getTexto();
+			
+			for(UsuarioExtendido objUsuario : listaUsuarios)
+			{					
+				objLdapTemp = new LdapTemp();					
+				objLdapTemp.setId(objUsuario.getUsuario());
+				objLdapTemp.setNombre(objUsuario.getNombres());
+				objLdapTemp.setApellidoPaterno(objUsuario.getPrimerApellido());
+				objLdapTemp.setApellidoMaterno(objUsuario.getSegundoApellido());
+				objLdapTemp.setCorreoElectronico(objUsuario.getEMail());
+				objLdapTemp.setCodigoOficinaTemp(null);	
+				objLdapTemp.setCodigoCargoTemp(null);	
+				objLdapTemp.setCodigoCargo(objUsuario.getPuesto() != null ? objUsuario.getPuesto().getNombreCargoFuncionalLocal() : null);
+				//validar si existe temporalidad en el registro
+				Date puestoTempFechaInicioIDM = objUsuario.getPuestoTemporal()!=null? objUsuario.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
+				Date puestoTempFechaFinIDM = objUsuario.getPuestoTemporal()!=null? objUsuario.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime():null;
 				
-				for(UsuarioExtendido objUsuario : listaUsuarios)
-				{					
-					objLdapTemp = new LdapTemp();					
-					objLdapTemp.setId(objUsuario.getUsuario());
-					objLdapTemp.setNombre(objUsuario.getNombres());
-					objLdapTemp.setApellidoPaterno(objUsuario.getPrimerApellido());
-					objLdapTemp.setApellidoMaterno(objUsuario.getSegundoApellido());
-					objLdapTemp.setCorreoElectronico(objUsuario.getEMail());
-					objLdapTemp.setCodigoOficinaTemp(null);	
-					objLdapTemp.setCodigoCargoTemp(null);	
-					//validar si existe temporalidad en el registro
-					Date puestoTempFechaInicioIDM = objUsuario.getPuestoTemporal()!=null? objUsuario.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
-					Date puestoTempFechaFinIDM = objUsuario.getPuestoTemporal()!=null? objUsuario.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime():null;
-					
-					boolean flagTienePuestoTemporal = (objUsuario.getPuestoTemporal()!=null  && 
-							(puestoTempFechaInicioIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS"))) &&
-							(!puestoTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS")))
-							&& (!objUsuario.getPuestoTemporal().getDescripcionPuesto().equals(objUsuario.getPuesto().getNombreCargoFuncionalLocal())))?
-							  StringUtils.isNotBlank(
-									  objUsuario.getPuestoTemporal().getDescripcionPuesto()):false;
-					if(flagTienePuestoTemporal){
+				boolean flagTienePuestoTemporal = (objUsuario.getPuestoTemporal()!=null  && 
+						(puestoTempFechaInicioIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS"))) &&
+						(!puestoTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS")))
+						&& (!objUsuario.getPuestoTemporal().getDescripcionPuesto().equals(objUsuario.getPuesto().getNombreCargoFuncionalLocal())))?
+						  StringUtils.isNotBlank(
+								  objUsuario.getPuestoTemporal().getDescripcionPuesto()):false;
+								  
+				if(flagTienePuestoTemporal){
+					//LOG.info("objUsuario.getUsuario():"+objUsuario.getUsuario());
+					//validar si el puesto
+					String codigoPuestoTemporal = objUsuario.getPuestoTemporal().getDescripcionPuesto();
+					//LOG.info("codigoPuestoTemporal: "+objUsuario.getPuestoTemporal().getDescripcionPuesto());
+					//Buscar nuevo peril
+					List<DescargaLDAP> listaPerfilesNuevo = descargaLDAPBeanLocal.buscar("-1", codigoPuestoTemporal, "-1", "-1", "-1", "-1");
+					if(!listaPerfilesNuevo.isEmpty()){
 						//VALIDAR SI CAMBIO DE PERFIL
-						String codigoPuestoTemporal = objUsuario.getPuestoTemporal().getDescripcionPuesto();
-						//Buscar nuevo peril
-						List<DescargaLDAP> listaPerfilesNuevo = descargaLDAPBeanLocal.buscar("-1", codigoPuestoTemporal, "-1", "-1", "-1", "-1");
 						String codigoPerfilNuevo = listaPerfilesNuevo.get(0).getPerfil().getCodigo();
 						//Buscar peril original
+						//LOG.info("objUsuario.getPuesto().getNombreCargoFuncionalLocal(): "+objUsuario.getPuesto().getNombreCargoFuncionalLocal());
 						List<DescargaLDAP> listaPerfilesOriginal = descargaLDAPBeanLocal.buscar("-1", objUsuario.getPuesto().getNombreCargoFuncionalLocal(), "-1", "-1", "-1", "-1");
-						String codigoPerfilOriginal = listaPerfilesOriginal.get(0).getPerfil().getCodigo();
-						//Empleado empleado = empleadobean.buscarPorCodigo(objUsuario.getUsuario());  
-						if(!codigoPerfilOriginal.equals(codigoPerfilNuevo)){
-							objLdapTemp.setCodigoCargoTemp(codigoPuestoTemporal);	
+						if(!listaPerfilesOriginal.isEmpty()){
+							String codigoPerfilOriginal = listaPerfilesOriginal.get(0).getPerfil().getCodigo();
+							//Empleado empleado = empleadobean.buscarPorCodigo(objUsuario.getUsuario());  
+							if(!codigoPerfilOriginal.equals(codigoPerfilNuevo)){
+								objLdapTemp.setCodigoCargoTemp(codigoPuestoTemporal);
+								objLdapTemp.setCodigoCargo(codigoPuestoTemporal);
+							}
 						}
-						objLdapTemp.setCodigoCargo(codigoPuestoTemporal);
-					}else{
-						objLdapTemp.setCodigoCargo(objUsuario.getPuesto() != null ? objUsuario.getPuesto().getNombreCargoFuncionalLocal() : null);
-						
 					}
 					
-					Date ofiTempFechaInicioIDM = objUsuario.getCentroTemporal()!=null? objUsuario.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
-					Date ofiTempFechaFinIDM = objUsuario.getCentroTemporal()!=null? objUsuario.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime():null;
-					
-					boolean flagTieneOficinaTemporal = (objUsuario.getCentroTemporal()!=null &&  
-							(ofiTempFechaInicioIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss"))) &&
-							(!ofiTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss")))
-							&& (!objUsuario.getCentroTemporal().getDescripcion().equals(objUsuario.getCodigoCentro())))?
-												   StringUtils.isNotBlank(
-														   objUsuario.getCentroTemporal().getDescripcion()):false;
-					if(flagTieneOficinaTemporal){
-						objLdapTemp.setCodigoOficinaTemp(objUsuario.getCentroTemporal().getDescripcion());	
-						objLdapTemp.setCodigoOficina(objUsuario.getCentroTemporal().getDescripcion());	
-					}else{
-						objLdapTemp.setCodigoOficina(objUsuario.getCodigoCentro());	
-					}
-					//fin validacion de temporalidad
-					if(oficinasSincronizables == null || oficinasSincronizables.length() == 0)
+				}
+				
+				Date ofiTempFechaInicioIDM = objUsuario.getCentroTemporal()!=null? objUsuario.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
+				Date ofiTempFechaFinIDM = objUsuario.getCentroTemporal()!=null? objUsuario.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime():null;
+				
+				boolean flagTieneOficinaTemporal = (objUsuario.getCentroTemporal()!=null &&  
+						(ofiTempFechaInicioIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss"))) &&
+						(!ofiTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss")))
+						&& (!objUsuario.getCentroTemporal().getDescripcion().equals(objUsuario.getCodigoCentro())))?
+											   StringUtils.isNotBlank(
+													   objUsuario.getCentroTemporal().getDescripcion()):false;
+				if(flagTieneOficinaTemporal){
+					objLdapTemp.setCodigoOficinaTemp(objUsuario.getCentroTemporal().getDescripcion());	
+					objLdapTemp.setCodigoOficina(objUsuario.getCentroTemporal().getDescripcion());	
+				}else{
+					objLdapTemp.setCodigoOficina(objUsuario.getCodigoCentro());	
+				}
+				//fin validacion de temporalidad
+				if(oficinasSincronizables == null || oficinasSincronizables.length() == 0)
+				{
+					ldapTempBeanLocal.create(objLdapTemp);						
+				}	
+				else
+				{
+					if(objLdapTemp.getCodigoOficina() != null && oficinasSincronizables.indexOf(objLdapTemp.getCodigoOficina()) != -1)
 					{
 						ldapTempBeanLocal.create(objLdapTemp);						
-					}	
-					else
-					{
-						if(objLdapTemp.getCodigoOficina() != null && oficinasSincronizables.indexOf(objLdapTemp.getCodigoOficina()) != -1)
-						{
-							ldapTempBeanLocal.create(objLdapTemp);						
-						}
 					}
-				}						
+				}
+			}						
 			
 			objLogJobDet.setFechaFin(new Date());
 			logJobDetBeanLocal.edit(objLogJobDet);
