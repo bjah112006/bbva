@@ -1359,7 +1359,7 @@ public class ReporteTCCSVServlet extends HttpServlet {
 					    
 					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 17, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getCodigoOficinaGestora());
 					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 18, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getNombreOficinaGestora());
-					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 19, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getCodigoTerritorio());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 19, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getCodigoTerritorioGestora());
 					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 20, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getNombreTerritorioGestora());
 					    
 					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 21, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getFechaHoraLlegada());
@@ -1367,7 +1367,7 @@ public class ReporteTCCSVServlet extends HttpServlet {
 					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 23, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getFechaHoraEnvio());
 					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 24, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getTiempoEjecucionTe());
 					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 25, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getTiempoColaTc());
-					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 25, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getTiempoProcesoTp());
+					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 26, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getTiempoProcesoTp());
 					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 27, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getCumplioAns());
 					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 28, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getFlagDevolucion());
 					    objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, 29, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, obj.getFlagRetraer());
