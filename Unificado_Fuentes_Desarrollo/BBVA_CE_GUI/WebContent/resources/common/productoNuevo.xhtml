@@ -59,6 +59,14 @@
 				return resultado;
 			}
 		}
+		
+		function eventoEnterKey(e){
+			if (e.which > 31 && (e.which < 48 || e.which > 57)) {
+	    		if(!e.ctrlKey){
+					e.preventDefault();	
+				}
+	      	}         		
+	     }	
 		/* ]]> */
 	</script>
 	
@@ -219,7 +227,7 @@
 						                <h:inputText value="#{productoNuevo.expediente.expedienteTC.plazoSolicitado}" 
 						                    		styleClass="campoValor1 txt-resaltado-2 soloNumeros" maxlength="3" id="idPlazoSol" 
 						                    		rendered="#{productoNuevo.renderedPlazoSolicitado}" 
-						                    		onkeypress="return disableEnterKey(event);" />
+						                    		onkeypress="return eventoEnterKey(event);" />
 					               		<h:outputText value=" #{msg['com.ibm.bbva.common.productoNuevo.simboloTiempo']}" styleClass="etiqueta" 
 					               		rendered="#{productoNuevo.renderedPlazoSolicitado}" />
 					               </span>
