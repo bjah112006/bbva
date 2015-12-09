@@ -90,12 +90,12 @@ public class GenerarReporteJob implements Job {
 
         List<Solicitud> solicitudes = obtenerDatosReporte(params);
         
-        String fileName = path
-                .concat(File.separator)
-                .concat(BonitaClientRest.getProperty(ConstantesEnum.PARAM_NOMBRE_SALIDA.getNombre()))
-                .concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre()))
-                .concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
-
+//        String fileName = path
+//                .concat(File.separator)
+//                .concat(BonitaClientRest.getProperty(ConstantesEnum.PARAM_NOMBRE_SALIDA.getNombre()))
+//                .concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre()))
+//                .concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
+        String fileName = "D:\\Reporte_".concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre())).concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet(ConstantesEnum.NOMBRE_HOJA_EXCEL.getNombre());
         int rowIndex = 0;
@@ -132,4 +132,6 @@ public class GenerarReporteJob implements Job {
         workbook.close();
         LOG.debug(fileName + " escrito satisfactoriamente");
     }
+    
+    
 }

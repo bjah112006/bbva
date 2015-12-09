@@ -53,78 +53,106 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO 
     }
 
     public List<Solicitud> listarSolicitudes(List<Config> params) throws Exception {
-        LOG.debug("...inicia listar Solicitudes");
-        List<Solicitud> listaSolicitudes = new ArrayList<Solicitud>();
-        // 1. Obtenemos el Id del proceso "Contratacion Pymes" activo.
-        Long idProcesoPrincipal = (long) 0;// getProcessDefinition().getId();
-        // 2. Obtenemos las Solicitudes
-        // 2.1 Solicitudes Pendientes
-        List<ProcessInstance> listProcessInstances = obtenerListaSolicitudesPendientes(idProcesoPrincipal);
-        // 2.2 Solicitudes Hechas
-        List<ArchivedProcessInstance> listArchivedProcessInstances = obtenerListaSolicitudesHechas(idProcesoPrincipal);
-        // 2.3 preparamos las iteraciones
-        Iterator<ProcessInstance> itrSolicitudPendiente = listProcessInstances.iterator();
-        Iterator<ArchivedProcessInstance> itrSolicitudHecha = listArchivedProcessInstances.iterator();
-        // 3. Recorremos las Solicitudes.
-        // 3.1. Solicitudes Hechas
-        while (itrSolicitudHecha.hasNext()) {
-            ArchivedProcessInstance elementoSolicitud = (ArchivedProcessInstance) itrSolicitudHecha.next();
-            Long idElemento = elementoSolicitud.getRootProcessInstanceId();
-            Date fechaLlegadaAux = elementoSolicitud.getStartDate();
-            // 3.1.1 obtenemos sus datos
-            Solicitud solicitudAux = setearDatosGeneralesSolicitudHecha(elementoSolicitud, params);
-            // 3.1.2 obtenemos sus Tareas Pendientes
-            // List<FlowNodeInstance> listaTareasPendientes =
-            // obtenerListaTareasPendientes(elementoSolicitud.getProcessDefinitionId(),
-            // idElemento);
-            // 3.1.3 obtenemos sus Tareas Hechas
-            List<ArchivedFlowNodeInstance> listaTareasHechas = obtenerListaTareasHechas(elementoSolicitud.getProcessDefinitionId(), idElemento);
-            // 4. Recorremos las listas
-            Iterator<ArchivedFlowNodeInstance> itrTareaHecha = listaTareasHechas.iterator();
-            int index_tarea = 0;
-            while (itrTareaHecha.hasNext()) {
-                ArchivedFlowNodeInstance elementoTareaHecha = (ArchivedFlowNodeInstance) itrTareaHecha.next();
-                index_tarea++;
-                Solicitud solicitudHecha = new Solicitud();
-                setearDatosTrazaTareaHecha(solicitudHecha, elementoTareaHecha, params);
-                solicitudHecha.setFechaLlegada(Utils.convertirDateEnCadena(fechaLlegadaAux, ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));
-                listaSolicitudes.add(solicitudHecha);
-                if (index_tarea > 2 && index_tarea <= listaTareasHechas.size()) {
-                    listaSolicitudes.get(listaSolicitudes.size() - 2).setEstado(solicitudHecha.getEstado());
-                }
-                if (index_tarea == listaTareasHechas.size()) {
-                    solicitudHecha.setEstado(solicitudAux.getEstado());
-                }
-                fechaLlegadaAux = elementoTareaHecha.getArchiveDate();
-            }
-        }
+    	LOG.debug("...inicia listar Solicitudes");
+		List<Solicitud> listaSolicitudes = new ArrayList<Solicitud>();
+		//1. Obtenemos el Id del proceso "Contratacion Pymes" activo.		
+		Long idProcesoPrincipal = (long) 0;//getProcessDefinition().getId();
+		//2. Obtenemos las Solicitudes
+		//2.1 Solicitudes Pendientes
+		List<ProcessInstance> listProcessInstances = obtenerListaSolicitudesPendientes(idProcesoPrincipal);		
+		//2.2 Solicitudes Hechas
+		List<ArchivedProcessInstance> listArchivedProcessInstances = obtenerListaSolicitudesHechas(idProcesoPrincipal);	
+		//2.3 preparamos las iteraciones
+		Iterator<ProcessInstance> itrSolicitudPendiente = listProcessInstances.iterator();
+		Iterator<ArchivedProcessInstance> itrSolicitudHecha = listArchivedProcessInstances.iterator();		
+		//3. Recorremos las Solicitudes.
+		//3.1. Solicitudes Hechas
+		while(itrSolicitudHecha.hasNext()) {
+			ArchivedProcessInstance elementoSolicitud = (ArchivedProcessInstance) itrSolicitudHecha.next();
+	    	Long idElemento = elementoSolicitud.getRootProcessInstanceId();
+	    	Date fechaLlegadaAux = elementoSolicitud.getStartDate();	
+	    	//3.1.1 obtenemos sus datos
+	    	Solicitud solicitudAux = setearDatosGeneralesSolicitudHecha(elementoSolicitud,params);
+	    	//3.1.2 obtenemos sus Tareas Pendientes
+//	    	List<FlowNodeInstance> listaTareasPendientes = obtenerListaTareasPendientes(elementoSolicitud.getProcessDefinitionId(), idElemento);
+	    	//3.1.3 obtenemos sus Tareas Hechas
+	    	List<ArchivedFlowNodeInstance> listaTareasHechas = obtenerListaTareasHechas(elementoSolicitud.getProcessDefinitionId(), idElemento);
+	    	//4. Recorremos las listas
+	    	  Iterator<ArchivedFlowNodeInstance> itrTareaHecha = listaTareasHechas.iterator();
+	    	  int index_tarea=0;
+		      while(itrTareaHecha.hasNext()) {
+		    	  ArchivedFlowNodeInstance elementoTareaHecha = (ArchivedFlowNodeInstance) itrTareaHecha.next();
+//		    	  LOG.info("elementoTareaHecha.getExecutedBy() "+elementoTareaHecha.getExecutedBy());
+//		    	  if(elementoTareaHecha.getExecutedBy()>0){
+		    		  index_tarea++;
+		    		  Solicitud solicitudHecha = setearDatosGeneralesSolicitudHecha(elementoSolicitud,params);
+		    		  setearDatosTrazaTareaHecha(solicitudHecha,elementoTareaHecha,params);
+//			    	  if(!solicitudHecha.getUsuarioEjecutorTarea().equals(ConstantesEnum.USER_SYSTEM.getNombre())){
+			    		  solicitudHecha.setFechaLlegada(Utils.convertirDateEnCadena(fechaLlegadaAux,ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));
+			    		  listaSolicitudes.add(solicitudHecha);
+			    		  if(index_tarea>2 && index_tarea<=listaTareasHechas.size()){
+			    			  listaSolicitudes.get(listaSolicitudes.size()-2).setEstado(solicitudHecha.getEstado());
+			    		  }
+			    		  if(index_tarea==listaTareasHechas.size()){
+			    			  solicitudHecha.setEstado(solicitudAux.getEstado());
+			    		  }
+				    	  fechaLlegadaAux = elementoTareaHecha.getArchiveDate();  
+//			    	  }  
+//		    	  }
+		      }	
+		      /*Iterator<FlowNodeInstance> itrTareaPendiente = listaTareasPendientes.iterator();
+		      while(itrTareaPendiente.hasNext()) {
+		    	  FlowNodeInstance elementoTareaPendiente = (FlowNodeInstance) itrTareaPendiente.next();
+		    	  Solicitud solicitudPendiente = setearDatosTareaPendiente(solicitudAux,elementoTareaPendiente);
+		    	  if(!solicitudPendiente.getUsuarioEjecutorTarea().equals(ConstantesEnum.USER_SYSTEM.getNombre())){
+		    		  solicitudPendiente.setFechaLlegada(Utils.convertirDateEnCadena(fechaLlegadaAux,ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));		    	  
+			    	  listaSolicitudes.add(solicitudPendiente);
+			    	  fechaLlegadaAux = null;  
+		    	  }
+		      }*/	
+		}
         // 3.2 Solicitudes Pendientes
-        while (itrSolicitudPendiente.hasNext()) {
-            ProcessInstance elementoSolicitud = (ProcessInstance) itrSolicitudPendiente.next();
-            Long idElemento = elementoSolicitud.getRootProcessInstanceId();
-            Date fechaLlegadaAux = elementoSolicitud.getStartDate();
-            // 3.2.1 obtenemos sus datos
-            Solicitud solicitudAux = setearDatosGeneralesSolicitudPendiente(elementoSolicitud, params);
-            List<ArchivedFlowNodeInstance> listaTareasHechas = obtenerListaTareasHechas(elementoSolicitud.getProcessDefinitionId(), idElemento);
-            // 4. Recorremos las listas
-            Iterator<ArchivedFlowNodeInstance> itrTareaHecha = listaTareasHechas.iterator();
-            int index_tarea = 0;
-            while (itrTareaHecha.hasNext()) {
-                ArchivedFlowNodeInstance elementoTareaHecha = (ArchivedFlowNodeInstance) itrTareaHecha.next();
-                index_tarea++;
-                Solicitud solicitudHecha = new Solicitud();
-                setearDatosTrazaTareaHecha(solicitudHecha, elementoTareaHecha, params);
-                solicitudHecha.setFechaLlegada(Utils.convertirDateEnCadena(fechaLlegadaAux, ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));
-                listaSolicitudes.add(solicitudHecha);
-                if (index_tarea > 2 && index_tarea <= listaTareasHechas.size()) {
-                    listaSolicitudes.get(listaSolicitudes.size() - 2).setEstado(solicitudHecha.getEstado());
-                }
-                if (index_tarea == listaTareasHechas.size()) {
-                    solicitudHecha.setEstado(solicitudAux.getEstado());
-                }
-                fechaLlegadaAux = elementoTareaHecha.getArchiveDate();
-            }
-        }
+		while(itrSolicitudPendiente.hasNext()) {
+			ProcessInstance elementoSolicitud = (ProcessInstance) itrSolicitudPendiente.next();
+	    	Long idElemento = elementoSolicitud.getRootProcessInstanceId();
+	    	Date fechaLlegadaAux = elementoSolicitud.getStartDate();
+	    	//3.2.1 obtenemos sus datos
+	    	Solicitud solicitudAux = setearDatosGeneralesSolicitudPendiente(elementoSolicitud,params);
+	    	//List<FlowNodeInstance> listaTareasPendientes = obtenerListaTareasPendientes(elementoSolicitud.getProcessDefinitionId(), idElemento);
+	    	List<ArchivedFlowNodeInstance> listaTareasHechas = obtenerListaTareasHechas(elementoSolicitud.getProcessDefinitionId(), idElemento);
+	    	//4. Recorremos las listas
+	    	  Iterator<ArchivedFlowNodeInstance> itrTareaHecha = listaTareasHechas.iterator();
+	    	  int index_tarea=0;
+		      while(itrTareaHecha.hasNext()) {
+		    	  ArchivedFlowNodeInstance elementoTareaHecha = (ArchivedFlowNodeInstance) itrTareaHecha.next();
+//		    	  if(elementoTareaHecha.getExecutedBy()>0){
+		    		  index_tarea++;
+		    		  Solicitud solicitudHecha = setearDatosGeneralesSolicitudPendiente(elementoSolicitud,params);
+		    		  setearDatosTrazaTareaHecha(solicitudHecha,elementoTareaHecha,params);
+//			    	  if(!solicitudHecha.getUsuarioEjecutorTarea().equals(ConstantesEnum.USER_SYSTEM.getNombre())){
+			    		  solicitudHecha.setFechaLlegada(Utils.convertirDateEnCadena(fechaLlegadaAux,ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));
+				    	  listaSolicitudes.add(solicitudHecha);
+				    	  if(index_tarea>2 && index_tarea<=listaTareasHechas.size()){
+			    			  listaSolicitudes.get(listaSolicitudes.size()-2).setEstado(solicitudHecha.getEstado());
+			    		  }
+				    	  if(index_tarea==listaTareasHechas.size()){
+			    			  solicitudHecha.setEstado(solicitudAux.getEstado());
+			    		  }
+				    	  fechaLlegadaAux = elementoTareaHecha.getArchiveDate();  
+//			    	  }  
+//		    	  }
+		      }	
+		      /*Iterator<FlowNodeInstance> itrTareaPendiente = listaTareasPendientes.iterator();
+		      while(itrTareaPendiente.hasNext()) {
+		    	  FlowNodeInstance elementoTareaPendiente = (FlowNodeInstance) itrTareaPendiente.next();
+		    	  Solicitud solicitudPendiente = setearDatosTrazaTareaPendiente(solicitudAux,elementoTareaPendiente);
+		    	  if(!solicitudPendiente.getUsuarioEjecutorTarea().equals(ConstantesEnum.USER_SYSTEM.getNombre())){
+		    		  solicitudPendiente.setFechaLlegada(Utils.convertirDateEnCadena(fechaLlegadaAux,ConstantesEnum.FORMATO_FECHA_COMPLETA.getNombre()));		    	  
+			    	  listaSolicitudes.add(solicitudPendiente);
+			    	  fechaLlegadaAux = null;  
+		    	  }
+		      }*/
+		}
         return listaSolicitudes;
     }
 
@@ -249,7 +277,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO 
 
     private void setearDetalleSolicitud(Solicitud solicitudAux, String nombre, String valor, List<Config> params) {
         for (int i = 0; i < params.size(); i++) {
-            if(nombre.equalsIgnoreCase(params.get(i).getValColumn1())) {
+            if(nombre.equalsIgnoreCase(params.get(i).getValColumn2())) {
                 solicitudAux.put(nombre, valor);
             }
         }
@@ -257,7 +285,7 @@ public class SolicitudDAOImpl extends BonitaDataAccess implements ISolicitudDAO 
 
     private void setearDetallesTarea(Solicitud solicitudAux, String nombre, String valor, List<Config> params) {
         for (int i = 0; i < params.size(); i++) {
-            if(nombre.equalsIgnoreCase(params.get(i).getValColumn1())) {
+            if(nombre.equalsIgnoreCase(params.get(i).getValColumn2())) {
                 solicitudAux.put(nombre, valor);
             }
         }
