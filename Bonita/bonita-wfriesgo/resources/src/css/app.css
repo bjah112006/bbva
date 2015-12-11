@@ -679,6 +679,9 @@ body {
     float: left;
 }
 
+#layout legend.activo {
+    color: red;
+}
 /*
 .form-control {
     height: 28px;

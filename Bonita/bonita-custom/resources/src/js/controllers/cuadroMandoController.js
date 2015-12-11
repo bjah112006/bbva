@@ -214,6 +214,7 @@ abstractControllers.controller('CuadroMandoController',
         {headerName: "C\u00F3digo Central", field: "codigo_cliente", width: 100},
         {headerName: "RVGL", field: "num_rvgl", width: 180},
         {headerName: "Raz\u00F3n Social", field: "nombre_cliente", width: 350},
+        {headerName: "Estado", field: "estado_solicitud", width: 150},
         {headerName: "Oficina", field: "ofi_registro", width: 160},
         {headerName: "Fecha Envio", field: "startdate", width: 100, cellRenderer: function(params) {
             var resultElement = document.createElement("span");

@@ -36,9 +36,14 @@ function SolicitudController($scope, $routeParams, $location, SolicitudService, 
         grupoEconomico: "GRUPO 1",
         nroRVGL: "1984",
         etiqueta: 1,
+        funcion: 3,
         correoAsistente: "jquedena@gmail.com",
+        correoAlterno: "jquedena@hotmail.com",
         observacionesFinales: "Aqui acaba el registro de solicitud",
+        controlAprobada: "A",
+        comentarioControlRiesgos: "Haber que marcas Control",
         tipoEvaluador: 'AN',
+        tipoAmbitoActual: 'SG',
         tipoAmbitoEvaluador: 'SG',
         evaluador: 3,
         comentarioAsignacion: "Se asigna al subgerente",
@@ -62,6 +67,12 @@ function SolicitudController($scope, $routeParams, $location, SolicitudService, 
             }
         ],
         
+        dictamenAprobada: "AS",
+        comitePipeline: "S",
+        comentarioDictamen: "Dictamen aprobado",
+        montoAprobado: 1000.25,
+        monedaAprobado: 2,
+        plazoAprobado: 360,
         comentarioSubsanacion: "Acaba de ser corregida la solicitud",
         comentarioRevisionOficina: "Aqui se cierra la solicitud"
     };
@@ -73,6 +84,7 @@ function SolicitudController($scope, $routeParams, $location, SolicitudService, 
     $scope.listaPropuestas = ListadoService.listaPropuestas;
     $scope.listaDocumentos = ListadoService.listaDocumentos;
     $scope.listaGuiaDocumentaria = ListadoService.listaGuiaDocumentaria;
+    $scope.listaFunciones = ListadoService.listaFunciones;
 
     $scope.propuesta         = { select: buscarLista($scope.listaPropuestas, 'id', $scope.solicitud.tipoPropuesta    ) };
     $scope.documento         = { select: buscarLista($scope.listaDocumentos, 'id', $scope.solicitud.tipoDocumento    ) };
@@ -81,10 +93,19 @@ function SolicitudController($scope, $routeParams, $location, SolicitudService, 
     $scope.monedaPropuesta   = { select: buscarLista($scope.listaMonedas   , 'id', $scope.solicitud.monedaPropuesta  ) };
     $scope.monedaOportunidad = { select: buscarLista($scope.listaMonedas   , 'id', $scope.solicitud.monedaOportunidad) };
     $scope.etiqueta          = { select: buscarLista($scope.listaEtiquetas , 'id', $scope.solicitud.etiqueta         ) };
+    $scope.funcion           = { select: buscarLista($scope.listaFunciones , 'id', $scope.solicitud.funcion          ) };
     
     $scope.$watch(function(scope) { return scope.uri }, function(newValue, oldValue) {
         $scope.mostrar.oficinaRegistrar   = (newValue != 'oficina/registrar' );
+        $scope.mostrar.riesgosControl     = (newValue != 'riesgos/control'   );
         $scope.mostrar.riesgosAsignar     = (newValue != 'riesgos/asignar'   );
+        $scope.mostrar.riesgosAsignarInfo = !(
+                                                newValue == 'riesgos/revisar'    ||
+                                                newValue == 'riesgos/evaluar'    ||
+                                                newValue == 'riesgos/cambiar'    ||
+                                                newValue == 'riesgos/dictaminar' ||
+                                                newValue == 'oficina/revisar'
+                                            );
         $scope.mostrar.riesgosRevisar     = (newValue != 'riesgos/revisar'   );
         $scope.mostrar.riesgosEvaluar     = {};
         $scope.mostrar.riesgosEvaluar.btn = (newValue != 'riesgos/evaluar'   );
@@ -97,9 +118,23 @@ function SolicitudController($scope, $routeParams, $location, SolicitudService, 
         $scope.mostrar.riesgosEvaluar.rw1 = (newValue != 'riesgos/evaluar'   );
         $scope.mostrar.riesgosEvaluar.rw2 = (newValue == 'riesgos/evaluar'   );
         $scope.mostrar.riesgosCambiar     = (newValue != 'riesgos/cambiar'   );
-        $scope.mostrar.riesgosDictaminar  = (newValue != 'riesgos/dictaminar');
+        $scope.mostrar.riesgosDictaminar  = {};
+        $scope.mostrar.riesgosDictaminar.pnl  = !(newValue == 'riesgos/dictaminar' || newValue == 'oficina/revisar');
+        $scope.mostrar.riesgosDictaminar.act  = (newValue != 'riesgos/dictaminar');
         $scope.mostrar.oficinaRevisar     = (newValue != 'oficina/revisar'   );
         $scope.mostrar.oficinaSubsanar    = (newValue != 'oficina/subsanar'  );
+        
+        switch (newValue) {
+            case "oficina/registrar"  : $scope.solicitud.estado = "En Registro"                ; break;
+            case "riesgos/control"    : $scope.solicitud.estado = "Registrado"                 ; break;
+            case "riesgos/asignar"    : $scope.solicitud.estado = "Revisado por GMC"           ; break;
+            case "riesgos/revisar"    : $scope.solicitud.estado = "Asignado"                   ; break;
+            case "riesgos/evaluar"    : $scope.solicitud.estado = "Revisado por Analista"      ; break;
+            case "riesgos/cambiar"    : $scope.solicitud.estado = "Evaluado Nuevo \u00C1mbito" ; break;
+            case "riesgos/dictaminar" : $scope.solicitud.estado = "Evaluado Nuevo \u00C1mbito" ; break;
+            case "oficina/revisar"    : $scope.solicitud.estado = "Dictaminado"                ; break;
+            case "oficina/subsanar"   : $scope.solicitud.estado = "" ; break;
+        }
     });
 
     if(!$scope.mostrar.riesgosAsignar) {
@@ -108,6 +143,7 @@ function SolicitudController($scope, $routeParams, $location, SolicitudService, 
         $scope.listaEvaluador           = ListadoService.listaUsuarios;
 
         $scope.tipoEvaluador       = { select: buscarLista($scope.listaTipoEvaluador       , 'id', $scope.solicitud.tipoEvaluador       ) };
+        $scope.tipoAmbitoActual    = { select: buscarLista($scope.listaTipoAmbitoEvaluador , 'id', $scope.solicitud.tipoAmbitoActual    ) };
         $scope.tipoAmbitoEvaluador = { select: buscarLista($scope.listaTipoAmbitoEvaluador , 'id', $scope.solicitud.tipoAmbitoEvaluador ) };
         $scope.evaluador           = { select: buscarLista($scope.listaEvaluador           , 'id', $scope.solicitud.evaluador           ) };
     }
@@ -124,7 +160,12 @@ function SolicitudController($scope, $routeParams, $location, SolicitudService, 
         };
     }
     
-    $scope.eventos.oficinaRegistrar  = function(){ SolicitudService.oficinaRegistrar ($scope.solicitud); $location.path("solicitud/riesgos/asignar/" + $scope.solicitud.nroSolicitud); $location.replace(); };
+    if(!$scope.mostrar.riesgosDictaminar) {
+        $scope.monedaAprobado = { select: buscarLista($scope.listaMonedas, 'id', $scope.solicitud.monedaAprobado ) };
+    }
+    
+    $scope.eventos.oficinaRegistrar  = function(){ SolicitudService.oficinaRegistrar ($scope.solicitud); $location.path("solicitud/riesgos/control/" + $scope.solicitud.nroSolicitud); $location.replace(); };
+    $scope.eventos.riesgosControl    = function(){ SolicitudService.riesgosControl   ($scope.solicitud); $location.path(($scope.solicitud.controlAprobada === "A" ? "solicitud/riesgos/asignar/" : "solicitud/oficina/subsanar/") + $scope.solicitud.nroSolicitud); $location.replace(); };
     $scope.eventos.riesgosAsignar    = function(){ SolicitudService.riesgosAsignar   ($scope.solicitud); $location.path("solicitud/riesgos/revisar/" + $scope.solicitud.nroSolicitud); $location.replace(); };
     $scope.eventos.riesgosRevisar    = function(){ SolicitudService.riesgosRevisar   ($scope.solicitud); $location.path(($scope.solicitud.revisionAprobada === "A" ? "solicitud/riesgos/evaluar/" : "solicitud/oficina/subsanar/") + $scope.solicitud.nroSolicitud); $location.replace(); };
     $scope.eventos.riesgosEvaluar    = function(){ SolicitudService.riesgosEvaluar   ($scope.solicitud); $location.path("solicitud/riesgos/dictaminar/" + $scope.solicitud.nroSolicitud); $location.replace(); };
@@ -134,6 +175,7 @@ function SolicitudController($scope, $routeParams, $location, SolicitudService, 
     $scope.eventos.oficinaSubsanar   = function(){ SolicitudService.oficinaSubsanar  ($scope.solicitud); $location.path("solicitud/riesgos/revisar/" + $scope.solicitud.nroSolicitud); $location.replace(); };
 
     // oficina/registrar
+    // riesgos/control
     // riesgos/asignar
     // riesgos/revisar
     // riesgos/evaluar

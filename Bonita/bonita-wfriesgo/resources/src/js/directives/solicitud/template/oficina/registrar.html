@@ -88,7 +88,7 @@
             </tr>
             <tr>
                 <td><label class="control-label control-label-0">Riesgo Grupo Actual:</label></td>
-                <td>
+                <td colspan="4">
                     <div class="row">
                         <div class="col">
                             <input 
@@ -115,9 +115,10 @@
                         </div>
                     </div>
                 </td>
-                <td class="separator"></td>
+            </tr>
+            <tr>
                 <td><label class="control-label control-label-0">Imp. Propuesto:</label></td>
-                <td>
+                <td colspan="4">
                     <div class="row">
                         <div class="col">
                             <input 
@@ -147,7 +148,7 @@
             </tr>
             <tr>
                 <td><label class="control-label control-label-0">Riesgo Total:</label></td>
-                <td>
+                <td colspan="4">
                     <div class="row">
                         <div class="col">
                             <input 
@@ -174,9 +175,10 @@
                         </div>
                     </div>
                 </td>
-                <td class="separator"></td>
+            </tr>
+            <tr>
                 <td><label class="control-label control-label-0">Oportunidad de Negocio:</label></td>
-                <td>
+                <td colspan="4">
                     <div class="row">
                         <div class="col">
                             <input 
@@ -223,11 +225,39 @@
                     </ui-select>
                 </td>
                 <td class="separator"></td>
+                <td><label class="control-label control-label-0">Funci&oacute;n:</label></td>
+                <td>
+                    <ui-select 
+                        ng-model="funcion.select"
+                        ng-disabled="desactivar"
+                        on-select="funcion.onSelect($item, $model)"
+                        theme="select2" 
+                        style="width: 220px;" 
+                        class="form-control">
+                        <ui-select-match placeholder="Seleccione">
+                            {{$select.selected.value}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="item in listaFunciones | filter: $select.search">
+                            <div ng-bind-html="item.value | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </td>
+            </tr>
+            <tr>
                 <td><label class="control-label control-label-0">Correo asistente:</label></td>
                 <td>
                     <input 
                         type="text"
                         ng-model="solicitud.correoAsistente"
+                        ng-disabled="desactivar"
+                        class="form-control ui-corner-tr-br" />
+                </td>
+                <td class="separator"></td>
+                <td><label class="control-label control-label-0">Correo alterno:</label></td>
+                <td>
+                    <input 
+                        type="text"
+                        ng-model="solicitud.correoAlterno"
                         ng-disabled="desactivar"
                         class="form-control ui-corner-tr-br" />
                 </td>

@@ -9,6 +9,7 @@ bonitaApp.directive('oficinaRegistrar', function () {
             documento: "=",
             propuesta: "=",
             etiqueta: "=",
+            funcion: "=",
             monedaRiesgoGrupo: "=",
             monedaRiesgoTotal: "=",
             monedaPropuesta: "=",
@@ -18,6 +19,7 @@ bonitaApp.directive('oficinaRegistrar', function () {
             listaEtiquetas: "=",
             listaMonedas: "=",
             listaGuiaDocumentaria: "=",
+            listaFunciones: "=",
             ocultarObservaciones: "=",
             registrar: "&"
         },

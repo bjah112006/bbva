@@ -22,20 +22,36 @@ bonitaApp.factory('ListadoService', function() {
             {id: 'R', value: 'RUC'}
         ],
         listaGuiaDocumentaria: [
-            {id: 1, value: 'Grupo 1', documentos: [
-                {id: 1, value: 'Documento 1'},
-                {id: 2, value: 'Documento 2'},
-                {id: 3, value: 'Documento 3'}
+            {id: 1, value: 'Obligatorio Generales', documentos: [
+                {id: 1, value: 'Reporte de Cr\u00E9dito Propuesto'},
+                {id: 2, value: 'Reporte de Cr\u00E9dito de L\u00EDnea Anterior'},
+                {id: 3, value: 'Posici\u00F3n del Cliente / Grupo Econ\u00F3mico'},
+                {id: 4, value: 'Programa Financiero para importes mayores a USD 1.5M (PFA / PF 2.9)'},
+                {id: 5, value: 'EEFF Metodizados'},
+                {id: 6, value: 'Hoja de Rating Nacar'},
+                {id: 7, value: 'EEFF Sunat con detalles o Auditado de cierre'},
+                {id: 8, value: 'EEFF Situacional con detalles (Abril en adelante y con no mas de 3 meses de desfase)'},
+                {id: 9, value: 'Informe comercial vigente (no mayor a 6 meses)'}
             ]},
-            {id: 2, value: 'Grupo 2', documentos: [
-                {id: 4, value: 'Documento 4'},
-                {id: 5, value: 'Documento 5'},
-                {id: 6, value: 'Documento 6'}
+            {id: 2, value: 'Opcionales / Sugeridas', documentos: [
+                {id: 10, value: 'PDT\'s mensuales para contraste de las ventas'},
+                {id: 11, value: 'Informe de visita'},
+                {id: 12, value: 'Broschure / Memoria de la empresa'},
+                {id: 13, value: 'En caso de grupo econ\u00F3mico incluir EEFF consolidado o combinado (plantilla)'},
+                {id: 14, value: 'Pack gesti\u00F3n para dimensionamiento de l\u00EDneas'}
             ]},
-            {id: 3, value: 'Grupo 3', documentos: [
-                {id: 7, value: 'Documento 7'},
-                {id: 8, value: 'Documento 8'},
-                {id: 9, value: 'Documento 9'}
+            {id: 3, value: 'Obligatorio seg\u00FAn corresponda', documentos: [
+                {id: 15, value: 'Reporte de Crédito de Operaciones Puntuales Vigentes'},
+                {id: 16, value: 'En caso de contar con fiador solitario adjuntar declaraci\u00F3n patrimonial de fiadores'},
+                {id: 17, value: 'En caso de contar con comfort letter de matriz o fianza solidaria de relacionadas, incluir EEFF mas recientes'},
+                {id: 18, value: 'En caso de ser empresa global BBVA contar con opini\u00F3n del gestor principal'},
+                {id: 19, value: 'En caso de empresas agr\u00EDcolas incluir informe de perito'},
+                {id: 20, value: 'En caso de l\u00EDnea para cartas fianzas incluir Back Log de proyectos  ejecutados y en ejecuci\u00F3n.'},
+                {id: 21, value: 'En caso de l\u00EDnea para cartas fianzas incluir Pipeline de proyectos por ejecutar.'},
+                {id: 22, value: 'En caso de l\u00EDnea para operaciones de mediano plazo incluir Flujo de caja con supuestos'},
+                {id: 23, value: 'En caso de l\u00EDnea de descuento de letras incluir detalle de protestos (infocorp) y efectividad (nacar)'},
+                {id: 24, value: 'En caso de l\u00EDnea para comercio exterior incluir reporte de Adex Data Trade'},
+                {id: 25, value: 'En caso de l\u00EDnea de sobregiro incluir saldos medios y resumen de ingresos/egresos en cuenta corriente'}
             ]}
         ],
         listaEtiquetas: [
@@ -43,6 +59,13 @@ bonitaApp.factory('ListadoService', function() {
             {id: 2, value: 'Mantener'},
             {id: 3, value: 'Reducir'},
             {id: 4, value: 'Extinguir'}
+        ],
+        listaFunciones: [
+            {id: 1, value: 'Ejecutivo Corporativo Local'},
+            {id: 2, value: 'Ejecutivo Mediana Empresa'},
+            {id: 3, value: 'Ejecutivo Gran Empresa'},
+            {id: 4, value: 'Ejecutivo de Financiación Estructurada'},
+            {id: 5, value: 'Ejecutivo BIBEC'}
         ],
         listaTiposEvaluadores: [
             {id: 'AN', value: 'Analista'},
@@ -78,6 +101,10 @@ bonitaApp.factory('SolicitudService', function() {
     
     service.oficinaRegistrar = function(_solicitud) {
         console.log("oficinaRegistrar");
+    };
+    
+    service.riesgosControl = function(_solicitud) {
+        console.log("riesgosControl");
     };
     
     service.riesgosAsignar = function(_solicitud) {
