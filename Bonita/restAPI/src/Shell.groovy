@@ -67,25 +67,40 @@ public class Shell implements RestApiController {
     @Override
     RestApiResponse doHandle(HttpServletRequest request, PageResourceProvider pageResourceProvider, PageContext pageContext, RestApiResponseBuilder apiResponseBuilder, RestApiUtil restApiUtil) {
         logger = restApiUtil.logger
-        // Response response = consultar(request)
+        String command = isNullRequestParam(request, "command")
 
         apiResponseBuilder.with {
-            withResponse new JsonBuilder(response).toString()
+            withResponse "<div class='console'>" + executeOnShell(command) + "</div>"
             build()
         }
-
-//        def executeOnShell(String command) {
-//            return executeOnShell(command, new File(System.properties.'user.dir'))
-//        }
     }
 
+    private String isNullRequestParam(HttpServletRequest request, String param, String defaultValue) {
+        String value = request.getParameter param
+        if(value == null) {
+            value = defaultValue
+        }
+        
+        return value
+    }
+    
+    private String isNullRequestParam(HttpServletRequest request, String param) {
+        return isNullRequestParam(request, param, "")
+    }
+    
+    private String executeOnShell(String command) {
+        StringBuilder sb = new StringBuilder();
+        logger.log(Level.SEVERE, "Command: " + command + ": " + executeOnShell(command, new File(System.properties.'user.dir'), sb));
+        return sb.toString();
+    }
+    
     private def executeOnShell(String command, File workingDir, StringBuilder sb) {
         // println command
         def process = new ProcessBuilder(addShellPrefix(command))
             .directory(workingDir)
             .redirectErrorStream(true)
             .start()
-        process.inputStream.eachLine {sb.append it}
+        process.inputStream.eachLine {sb.append it; sb.append("<br/>")}
         process.waitFor();
         return process.exitValue()
     }
