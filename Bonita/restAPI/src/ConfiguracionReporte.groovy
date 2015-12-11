@@ -41,7 +41,7 @@ public class ConfiguracionReporte implements RestApiController {
             InitialContext ic = new InitialContext();
             DataSource ds = (DataSource) ic.lookup("java:comp/env/bonitaSequenceManagerDS");
             Connection cn = ds.getConnection();
-            PreparedStatement ps = cn.prepareStatement("SELECT ID_REFERENCE, VAL_COLUMN2, VAL_COLUMN1 FROM TBL_PYME_PARAMETER WHERE ID_TABLE='" + table + "'");
+            PreparedStatement ps = cn.prepareStatement("SELECT ID_REFERENCE, VAL_COLUMN2, VAL_COLUMN1 FROM TBL_PYME_PARAMETER WHERE ID_TABLE='" + table + "' ORDER BY ID_REFERENCE");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
