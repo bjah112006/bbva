@@ -577,6 +577,8 @@ public class ReporteTCCSVServlet extends HttpServlet {
 				      CellStyle.VERTICAL_CENTER, rangoFechas);
 				    		    
 				 listDatosGeneradosHis = tablaGenerarTC.getListDatosGeneradosHis();
+				 listDatosGeneradosHis.addAll(listDatosGeneradosHis);
+				 System.out.println("total registros= "+listDatosGeneradosHis.size());
 				 generarDatosHistoricoXls(ssheet, wb, numFilaTitulo1);
 				
 								

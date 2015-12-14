@@ -3,7 +3,6 @@ package com.ibm.bbva.controller.common;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -13,11 +12,10 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.component.html.HtmlDataTable;
-import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlInputHidden;
+import javax.faces.component.html.HtmlInputText;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 
@@ -28,27 +26,18 @@ import com.ibm.bbva.controller.AbstractTablaMBean;
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.controller.ConstantesAdmin;
 import com.ibm.bbva.entities.AyudaMemoria;
-import com.ibm.bbva.entities.DocumentoExpTc;
 import com.ibm.bbva.entities.Empleado;
 import com.ibm.bbva.entities.Expediente;
 import com.ibm.bbva.entities.Historial;
-import com.ibm.bbva.entities.MotivoDevolucion;
-import com.ibm.bbva.entities.Oficina;
 import com.ibm.bbva.entities.Perfil;
 import com.ibm.bbva.entities.Tarea;
 import com.ibm.bbva.entities.TareaPerfil;
 import com.ibm.bbva.session.AyudaMemoriaBeanLocal;
-import com.ibm.bbva.session.EmpleadoBeanLocal;
 import com.ibm.bbva.session.TareaBeanLocal;
 import com.ibm.bbva.tabla.dto.DatosAyudaMemoriaIiceDTO;
-import com.ibm.bbva.tabla.dto.DatosHistAntiguoDTO;
 import com.ibm.bbva.tabla.ejb.impl.TablaFacadeBean;
-import com.ibm.bbva.tabla.util.vo.ConvertExpediente;
 import com.ibm.bbva.tabla.util.vo.ConvertHistorial;
 import com.ibm.bbva.tabla.util.vo.TablaAyudaMemoria;
-import com.ibm.bbva.util.Util;
-import com.ibm.ws.webservices.xml.waswebservices.parameter;
-import com.ibm.xtq.ast.nodes.ValueOf;
 
 @SuppressWarnings("serial")
 @ManagedBean(name="tablaAyudaMemoria")

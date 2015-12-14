@@ -1,28 +1,22 @@
 package com.ibm.bbva.tabla.util.vo;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.print.attribute.SetOfIntegerSyntax;
-
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import com.ibm.bbva.controller.Constantes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ibm.bbva.entities.AyudaMemoria;
 import com.ibm.bbva.entities.CategoriaRenta;
 import com.ibm.bbva.entities.ClasifBanco;
 import com.ibm.bbva.entities.ClienteNatural;
+import com.ibm.bbva.entities.DocumentoExpTc;
 import com.ibm.bbva.entities.Empleado;
 import com.ibm.bbva.entities.Estado;
 import com.ibm.bbva.entities.EstadoCivil;
@@ -31,8 +25,6 @@ import com.ibm.bbva.entities.ExpedienteTC;
 import com.ibm.bbva.entities.Garantia;
 import com.ibm.bbva.entities.GrupoSegmento;
 import com.ibm.bbva.entities.Historial;
-import com.ibm.bbva.entities.HistorialLog;
-import com.ibm.bbva.entities.Horario;
 import com.ibm.bbva.entities.Log;
 import com.ibm.bbva.entities.Nivel;
 import com.ibm.bbva.entities.Oficina;
@@ -52,18 +44,13 @@ import com.ibm.bbva.entities.TipoEnvio;
 import com.ibm.bbva.entities.TipoMoneda;
 import com.ibm.bbva.entities.TipoOferta;
 import com.ibm.bbva.entities.TipoScoring;
-import com.ibm.bbva.entities.DocumentoExpTc;
-import com.ibm.bbva.session.HorarioBeanLocal;
 import com.ibm.bbva.tabla.dto.DatosAyudaMemoriaIiceDTO;
 import com.ibm.bbva.tabla.dto.DatosDetalleHistoricoIiceDTO;
 import com.ibm.bbva.tabla.dto.DatosDetalleLogIiceDTO;
 import com.ibm.bbva.tabla.dto.DatosDetalleObservacionesIiceDTO;
 import com.ibm.bbva.tabla.dto.DatosDocumentosExpIiceDTO;
 import com.ibm.bbva.tabla.dto.DatosHistAntiguoDTO;
-import com.ibm.bbva.util.AyudaToe;
 import com.ibm.bbva.util.Util;
-import com.ibm.security.tools.parseCert;
-import com.ibm.ws.webservices.xml.waswebservices.parameter;
 
 public class ConvertHistorial {
 	
