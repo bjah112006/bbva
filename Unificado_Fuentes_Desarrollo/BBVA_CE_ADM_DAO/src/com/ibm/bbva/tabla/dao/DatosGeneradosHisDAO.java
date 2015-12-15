@@ -4,7 +4,9 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,6 +111,86 @@ public class DatosGeneradosHisDAO extends BaseDAO{
 
 		return listDatosGeneradosHisDTO;
 	}
+	
+	public  Map<String, Object[]> generarDatosHistoricoMap(ArrayList pParameters) throws DataAccessException {		
+		Map<String, Object[]> mapDatosGeneradosHisDTO = null;
+		LOG.info("1.- this.getEntityName(): " + this.getEntityName());
+		CallableStatement stmt=getSQLStoredProcedureGenerico(this.getEntityName(),pParameters);
+		LOG.info("2.- despues de CallableStatement");
+		try{
+			LOG.info("3.- try");
+			stmt.execute();			
+			LOG.info("4.- Execute");
+	        ResultSet results = (ResultSet) stmt.getObject(1);
+	        LOG.info("5.- results");
+	        mapDatosGeneradosHisDTO = new HashMap<String, Object[]>();
+	        int i=0;
+	        LOG.info("antes del while");
+	        while (results.next()) {
+	        	
+	            try{
+	            	
+	            	mapDatosGeneradosHisDTO.put(i+"",new Object[]{results.getString("NRO_EXPEDIENTE"),
+	            												results.getString("NUMERO_REGISTRO"),
+	            												results.getString("USUARIO_ACTUAL"),
+	            												results.getString("ESTADO_EXPEDIENTE"),
+	            												results.getString("CODIGO_ESTADO"),
+	            												results.getString("PERFIL"),
+	            												results.getString("TAREA"),
+	            												results.getString("ACCION"),
+	            												results.getString("CODIGO_PRODUCTO"),
+	            												results.getString("NOMBRE_PRODUCTO"),
+	            												results.getString("NOMBRE_TIPO_OFERTA"),
+	            												results.getString("CODIGO_SUB_PRODUCTO"),
+	            												results.getString("NOMBRE_SUB_PRODUCTO"),
+	            												results.getString("CODIGO_OFICINA"),
+	            												results.getString("NOMBRE_OFICINA"),
+	            												results.getString("CODIGO_TERRITORIO"),
+	            												results.getString("NOMBRE_TERRITORIO"),
+	            												results.getString("CODIGO_OFICINA_GESTORA"),
+	            												results.getString("NOMBRE_OFICINA_GESTORA"),
+	            												results.getString("CODIGO_TERRITORIO_GESTORA"),
+	            												results.getString("NOMBRE_TERRITORIO_GESTORA"),
+	            												results.getString("FECHA_HORA_LLEGADA"),
+	            												results.getString("FECHA_HORA_INICIO_TRABAJO"),
+	            												results.getString("FECHA_HORA_ENVIO"),
+	            												results.getString("TIEMPO_EJECUCION_TE"),
+	            												results.getString("TIEMPO_COLA_TC"),
+	            												results.getString("TIEMPO_PROCESO_TP"),
+	            												results.getString("CUMPLIO_ANS"),
+	            												results.getString("FLAG_DEVOLUCION"),
+	            												results.getString("FLAG_RETRAER"),
+	            												results.getString("TERMINAL"),
+	            												results.getString("OBSERVACION"),
+	            												results.getString("MOTIVO_RECHAZO"),
+	            												results.getString("COMENTARIO"),
+	            												results.getString("ANS")});
+	            	
+	                 
+	            } catch(Throwable t){
+	            	LOG.info("message: " + t.getMessage());
+	            	t.printStackTrace();            	 
+	            	
+	            }
+	            i ++;
+
+	        }
+	        LOG.info("REPORTE HISTORICO...TOTAL REGISTROS DATA RECUPERADA:: " + i);
+	        
+	        results.close();
+	        stmt.close();	
+	        
+		}catch (SQLException e) {
+			BaseLogger.log(this.getClass(), "executeSQLStoredProcedure", BaseLogger.Level.ERROR, "Error SQLException obteniendo la conexion para executeSQLStoredProcedure(query): " + e.getMessage());
+			LOG.info("SQLException:getMessage" + e.getMessage());
+		} catch (Exception e){
+			BaseLogger.log(this.getClass(), "executeSQLStoredProcedure", BaseLogger.Level.ERROR, "Error Exception obteniendo la conexion para executeSQLStoredProcedure(query): " + e.getMessage());
+			LOG.info("Exception:getMessage" + e.getMessage());
+		}
+		
+		return mapDatosGeneradosHisDTO;
+	}
+	
 
 	@Override
 	protected <T extends AbstractDTO> List<T> processResult(ResultSet rs)
