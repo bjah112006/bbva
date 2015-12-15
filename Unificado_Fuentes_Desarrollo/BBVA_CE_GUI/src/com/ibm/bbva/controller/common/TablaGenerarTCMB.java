@@ -2,6 +2,7 @@ package com.ibm.bbva.controller.common;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -40,6 +41,7 @@ public class TablaGenerarTCMB {
 	private DatosGeneradosHisVO datosGeneradosHis;
 	private List<DatosGeneradosConsVO> listDatosGeneradosCons;
 	private List<DatosGeneradosHisVO> listDatosGeneradosHis;
+	private Map<String, Object[]> mapDatosGeneradosHis;
 	
 	private boolean viewTabla;
 	
@@ -60,6 +62,26 @@ public class TablaGenerarTCMB {
 			}
 			else {
 				listDatosGeneradosHis = this.generarDatosHistoricoTC(arrayList);
+			}
+			this.viewTabla=true;
+		}else {
+			this.viewTabla=false;
+		}
+		
+		return null;
+	}
+	
+	/*Recuperar data para reporte Excel, en caso del Reporte Historico es mediante HashMap
+	 * */
+	public String buscarTCMap(ArrayList arrayList){
+		
+		String sTipoReport=arrayList.get(8).toString(); //Tipo de reporte
+		if(sTipoReport!=null) {
+			if(sTipoReport.equals(Constantes.ID_TC_CONSOLIDADO)) {
+				listDatosGeneradosCons = this.generarDatosConsolidadoTC(arrayList);
+			}
+			else {
+				mapDatosGeneradosHis = this.generarDatosHistoricoTCMap(arrayList);
 			}
 			this.viewTabla=true;
 		}else {
@@ -96,6 +118,23 @@ public class TablaGenerarTCMB {
 		}
 		return listDatosGeneradosHis;
 	}
+	
+	/*Generacion de Datos Historicos para Reporte mediante HashMap
+	 * */
+	public Map<String, Object[]> generarDatosHistoricoTCMap (ArrayList arrayList) {
+
+		Map<String, Object[]> mapDatosGeneradosHisDTO=null;
+		
+		if (this.tablaFacadeBean == null) {
+			this.tablaFacadeBean = new TablaFacadeBean();
+		}	
+	
+		if(arrayList!=null){
+			mapDatosGeneradosHisDTO=tablaFacadeBean.getGenerarDatosHistoricoTCMap(arrayList);
+		}
+		return mapDatosGeneradosHisDTO;
+	}
+	
 	
 	public boolean getViewTabla() {
 		return this.viewTabla;
@@ -207,5 +246,13 @@ public class TablaGenerarTCMB {
 	        cellStyle.setFont(cellFont);
 	        cell.setCellStyle(cellStyle);
 	    }
+	
+	public Map<String, Object[]> getMapDatosGeneradosHis() {
+		return mapDatosGeneradosHis;
+	}
+
+	public void setMapDatosGeneradosHis(Map<String, Object[]> mapDatosGeneradosHis) {
+		this.mapDatosGeneradosHis = mapDatosGeneradosHis;
+	}
 	
 }
