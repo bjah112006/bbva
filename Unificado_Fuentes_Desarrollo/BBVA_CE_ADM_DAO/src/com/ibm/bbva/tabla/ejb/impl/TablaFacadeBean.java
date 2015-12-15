@@ -806,6 +806,21 @@ public class TablaFacadeBean {
 		return listDatosGeneradosHis;
 	}
 	
+	/**
+	 * Metodo generador de datos reporte historico TC mediante HASHMAP
+	 * */
+	public Map<String, Object[]> getGenerarDatosHistoricoTCMap(ArrayList pParameters){
+		DatosGeneradosHisDAO objDatosGeneradosHisDAO=daoFactory.getDatosGeneradosHisDAO();
+		Map<String, Object[]> mapDatosGeneradosHisDTO=null;
+		try{
+			mapDatosGeneradosHisDTO=objDatosGeneradosHisDAO.generarDatosHistoricoMap(pParameters);
+			
+		}catch (DataAccessException e) {
+			LOG.error(e.getMessage(), e);
+		}
+		return mapDatosGeneradosHisDTO;
+	}
+	
 	
 	/**
 	 * FIX ERIKA ABREGU 27/06/2015
