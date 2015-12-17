@@ -55,7 +55,7 @@
 		$("[id='#{paneldocumentos.htmlListaDocsTransferencias.clientId}']").val('');
 		$("[id='#{paneldocumentos.btnActualizaAppletYPanelDocumentos.clientId}']").click();
 	}*/
-	function abrirDocumentoBrowser(idCm, codigoTipoDoc, tipoDocDescrip) {
+	function abrirDocumentoBrowser(idCm, codigoTipoDoc, tipoDocDescrip, idExpediente) {
 		if ($.browser.msie) {
 			winCM=window.open('../pdfContent/abrirPDF.faces?idcm='+idCm+'&codtipodoc='+codigoTipoDoc+'&redirect=0&tipodocdescrip='+tipoDocDescrip, '_blank','width=850,height=450,resizable=yes');
 			winCM.document.title = tipoDocDescrip;	
@@ -227,7 +227,7 @@
 									
 									<h:outputLink value="#" 
 										rendered="#{itemdoc.docEscaneado and itemdoc.idCm != '0'}"
-										onclick="return abrirDocumentoBrowser('#{itemdoc.idCm}', '#{itemdoc.codigoTipoDoc}', '#{tipodoc.tipoDocumento.descripcion}')">
+										onclick="return abrirDocumentoBrowser('#{itemdoc.idCm}', '#{itemdoc.codigoTipoDoc}', '#{tipodoc.tipoDocumento.descripcion}','#{detalleExpediente.numeroExpediente}')">
 										<h:outputText value="#{itemdoc.feRegistro}">
 											<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
 										</h:outputText>

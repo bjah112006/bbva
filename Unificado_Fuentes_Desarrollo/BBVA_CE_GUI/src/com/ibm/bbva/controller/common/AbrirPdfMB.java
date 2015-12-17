@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -36,10 +38,12 @@ public class AbrirPdfMB implements Serializable {
 	
 	/*FIX ERIKA ABREGU 27/06/2015 */
 	private Expediente expediente;
-	private ContentServiceImplDelegateProxy contentIICE = null;
-	private com.ibm.bbva.cm.iice.service.Documento docIice = null;
-	private String CONTENT_SERVICE_IMPL_IICE= "";
+	//private ContentServiceImplDelegateProxy contentIICE = null;
+	private String URL_PDF_CE_ANTIGUA= "";
 	private ParametrosConfBeanLocal parametrosConfBean;
+	DateFormat dfAnio = new SimpleDateFormat("yyyy");
+	DateFormat dfMes = new SimpleDateFormat("MM");
+	DateFormat dfDia = new SimpleDateFormat("dd");
 	
 	
 	@EJB
@@ -71,66 +75,38 @@ public class AbrirPdfMB implements Serializable {
 				/**FIX ERIKA ABREGU 05/07/2015
 				 * ADICIONAR METODOS DE OBTENER DETALLE DE ANTIGUO CS
 				 */
+				/**
+				 * 16122015 CAMBIO DE ruta de lectura de PDFs de la antigua contratación
+				 */
 				if (expediente != null && expediente.getId() > 0) {
 					if(Constantes.EXPEDIENTE_ANTIGUO.equals(expediente.getOrigen())){
-						LOG.info("Metodo init de AbrirPdfMB Antiguo = "+expediente.getId());
-						
-						//consulta a IICE por ws por la url de la ruta del escaneado
-						this.docIice = new com.ibm.bbva.cm.iice.service.Documento();
-						this.docIice.setId(Integer.parseInt(String.valueOf(documentoExp.getIdCm()))); 	
-						
+						LOG.info("Metodo init de AbrirPdfMB Antiguo = "+expediente.getId());						
 						try{
 							parametrosConfBean = (ParametrosConfBeanLocal) new InitialContext()
 							.lookup("ejblocal:com.ibm.bbva.session.ParametrosConfBeanLocal");
-							
-							CONTENT_SERVICE_IMPL_IICE = parametrosConfBean.buscarPorVariable(1, "CONTENT_SERVICE_IMPL_IICE").getValorVariable();
-							
+							URL_PDF_CE_ANTIGUA = parametrosConfBean.buscarPorVariable(1, "URL_PDF_CE_ANTIGUA").getValorVariable();
 						}catch (NamingException e) {
 							LOG.error(e.getMessage(), e);
 						}
-												
-						this.contentIICE = new ContentServiceImplDelegateProxy();
-						this.contentIICE.setEndpoint(CONTENT_SERVICE_IMPL_IICE);
-						
-						LOG.info("WEB SERVICE DEL CONTENT IICE ES ::: "+ this.contentIICE.getEndpoint());
-						LOG.info("ID DEL DOCUMENTO ES ::: "+ this.docIice.getId());
-						
-						//this.contentIICE._getDescriptor().setEndpoint("http://118.180.60.70:80/PLDWEBCM/services/ContentServiceImpl");
-						try {
-							this.docIice = this.contentIICE.find(this.docIice);
-						} catch (RemoteException e) {
-							LOG.error("Error de invocacion : "+e.getCause(),e);
-						}
-						
-						if(this.docIice != null && this.docIice.getId()!=null && this.docIice.getUrlContent()!=null){
-//							doc.setCodCliente(this.docIice.getCodCliente()!=null?this.docIice.getCodCliente():null);
-//							doc.setContenido(this.docIice.getContenido()!=null?this.docIice.getContenido():null);
-//							doc.setFechaCreacion(this.docIice.getFechaCreacion()!=null?this.docIice.getFechaCreacion():null);
-//							doc.setFechaExpiracion(value)
-							System.out.println(this.docIice.getFechaExpiracion()!=null?this.docIice.getFechaExpiracion():null);
-							doc.setId(this.docIice.getId()!=null?this.docIice.getId():0);
-//							doc.setMandatorio(this.docIice.get);
-//							doc.setNombreArchivo(this.docIice.getNombreArchivo()!=null?this.docIice.getNombreArchivo():null);
-//							doc.setNumDoi(this.docIice.getNumDoi()!=null?this.docIice.getNumDoi():null);
-//							doc.setOrigen(this.docIice.getOrigen()!=null?this.docIice.getOrigen():null);
-							doc.setTipo(this.docIice.getTipo()!=null?this.docIice.getTipo():null);
-//							doc.setTipoDoi(this.docIice.getTipoDoi()!=null?this.docIice.getTipoDoi():null);
-							doc.setUrlContent(this.docIice.getUrlContent()!=null?this.docIice.getUrlContent():null);
-							
-						}
-						
+						LOG.info("FECHA REGISTRO="+this.expediente.getFecRegistro());
+						LOG.info("ID EXPEDIENTE="+this.expediente.getId());
+						String urlPdf =   URL_PDF_CE_ANTIGUA +
+										  "/" + dfAnio.format(this.expediente.getFecRegistro()) +
+										  "/" + dfMes.format(this.expediente.getFecRegistro()) +
+										  "/" + dfDia.format(this.expediente.getFecRegistro()) +
+										  "/" + this.expediente.getId() +
+										  "/" + documentoExp.getIdCm() +
+										  ".pdf";
+						LOG.info("URL_PDF_CE_ANTIGUA="+urlPdf);
+						doc.setUrlContent(urlPdf);
 					}else{
 						doc = facade.obtenerDocumentoCM(documentoExp);
 					}
 				}else{
 					doc = facade.obtenerDocumentoCM(documentoExp);
 				}
-				
-				
-				
 				if (doc != null) {
 					this.rutaCM = doc.getUrlContent();
-					//this.nombreDoc = documentoExp.getTipoDocumento().getDescripcion();
 					this.nombreDoc = tipoDocDescrip;
 				} else {
 					LOG.warn("No se encontro el documento con idCm="+idCm+" en el Content.");

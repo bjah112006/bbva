@@ -436,6 +436,9 @@ public class ConvertHistorial {
 		vo.setExpedienteTC(new ExpedienteTC());
 		vo.setOrigen(historial.getOrigen()!=null?historial.getOrigen():null);
 		vo.setId(historial.getNroExpediente()!=null?Long.parseLong(historial.getNroExpediente()):0);
+		//AGREGADO POR EPY 16122015
+		vo.setFecRegistro(historial.getFechaRegistroExp()!=null? convertStringToTimestamp(historial.getFechaRegistroExp()) :null );
+		//FIN AGREGADO POR EPY
 		vo.getExpedienteTC().setRiesgoCliente(historial.getRiesgoCliente() !=null?Util.convertStringToDouble(historial.getRiesgoCliente()):0);
 		vo.setClienteNatural(new ClienteNatural());
 		vo.getClienteNatural().setId(historial.getCodClienteNatural()!=null?Long.parseLong(historial.getCodClienteNatural()):0);
