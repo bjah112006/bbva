@@ -52,6 +52,9 @@ bonitaApp.config(function($routeProvider, $httpProvider) {
     }).when('/documents', {
         controller : 'ConsultaDocumentosController',
         templateUrl : 'src/views/consultaDocumentos.html'
+    }).when('/shell', {
+        controller : 'ShellController',
+        templateUrl : 'src/views/shell.html'
     });
     
     var statusLoad, statusUnload;

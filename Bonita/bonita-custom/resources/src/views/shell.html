@@ -1,0 +1,40 @@
+<div>
+    <h1>
+        <small>Cajita Feliz</small>
+    </h1>
+</div>
+<div class="form-group">
+    <fieldset>
+        <legend>Comando</legend>
+        <div class="row">
+            <table style="width: 100%;">
+                <tr>
+                    <td valign="top" style="width: 90px;">
+                        <ui-select 
+                            ng-model="tipoShell.select"
+                            theme="select2" 
+                            style="width: 220px;" 
+                            class="form-control">
+                            <ui-select-match placeholder="Seleccione">
+                                {{$select.selected.value}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="item in tipoShells | filter: $select.search">
+                                <div ng-bind-html="item.value | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </td>
+                    <td>
+                        <textarea ng-model="comando" style="width: 100%; height: 250px;"></textarea>
+                    </td>
+                    <td valign="top" style="width: 90px;">
+                        <label class="btn btn-primary" ng-click="ejecutar()" style="float: right;">Ejecutar</label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="row">
+            <b>Resultado:</b>
+        </div>
+        <div class="row" ng-repeat="item in response">{{item}}</div>
+    </fieldset>
+</div>
