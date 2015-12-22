@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+    <bean id="migrarDocumentosTasklet"
+          class="com.pe.bbva.pyme.tasklet.MigrarDocumentoTasklet">
+        <property name="documentoDAO" ref="documentoDAO"/>
+    </bean>
+
+    <batch:job id="migrarDocumentosJob">
+        <batch:step id="migrarDocumentos">
+            <batch:tasklet ref="migrarDocumentosTasklet"/>
+        </batch:step>
+        <batch:listeners>
+            <batch:listener ref="monitoringExecutionListener"/>
+        </batch:listeners>
+    </batch:job>
+</beans>
