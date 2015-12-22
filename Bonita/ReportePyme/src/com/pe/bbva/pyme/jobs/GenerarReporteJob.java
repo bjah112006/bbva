@@ -16,11 +16,11 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import com.pe.bbva.pyme.dao.ISolicitudDAO;
 import com.pe.bbva.pyme.dao.impl.BonitaClientRest;
@@ -30,12 +30,12 @@ import com.pe.bbva.pyme.model.Solicitud;
 import com.pe.bbva.pyme.utils.ConstantesEnum;
 import com.pe.bbva.pyme.utils.Utils;
 
-public class GenerarReporteJob implements Job {
+public class GenerarReporteJob extends QuartzJobBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(GenerarReporteJob.class);
 
-    public void execute(JobExecutionContext ctx) throws JobExecutionException {
-        LOG.info("Verificando hora de ejecucion...");
+    public void executeInternal(JobExecutionContext context) throws JobExecutionException {
+        LOG.debug("Verificando hora de ejecucion...");
         try {
             // 1. Leer archivo de configuracion
             // 2. Verificar si debe lanzarse la tarea programada
@@ -52,24 +52,31 @@ public class GenerarReporteJob implements Job {
 
     private boolean verificarHorarioTareaProgramada() {
         boolean verificado = false;
-        // 1. Obtenemos la frecuencia, dia y hora de ejecucion segun la configuracion.
-        String frecuenciaEjecucion = BonitaClientRest.getProperty(ConstantesEnum.PARAM_FRECUENCIA_EJECUCION.getNombre());
-        String diaEjecucion = ConstantesEnum.FRECUENCIA_MENSUAL.getNombre().equalsIgnoreCase(frecuenciaEjecucion) ? BonitaClientRest.getProperty("dia_ejecucion") : ConstantesEnum.PROCESO_SIN_DIA.getNombre();
-        String horaEjecucion = BonitaClientRest.getProperty(ConstantesEnum.PARAM_HORA_EJECUCION.getNombre());
-        // 2. Obtenemos el dia y hora del sistema
-        Date date = new Date();
-        DateFormat dateFormatDia = new SimpleDateFormat(ConstantesEnum.FORMATO_DIA.getNombre());
-        DateFormat dateFormatHora = new SimpleDateFormat(ConstantesEnum.FORMATO_HORA.getNombre());
-        String diaActual = dateFormatDia.format(date);
-        String horaActual = dateFormatHora.format(date);
-        // 3. Se actualiza el dia de ejecucion para casos especiales
-        Integer diasMes = Utils.getDiasMesActual();
-        diaEjecucion = Integer.parseInt(diaEjecucion) > diasMes ? diasMes.toString() : diaEjecucion;
-        // 4. se comparan para saber si debe ejecutar la tarea programada
-        if (ConstantesEnum.FRECUENCIA_DIARIA.getNombre().equalsIgnoreCase(frecuenciaEjecucion)) {
-            verificado = horaEjecucion.equals(horaActual);
-        } else {
-            verificado = horaEjecucion.equals(horaActual) && diaEjecucion.equals(diaActual);
+        try {
+            // 1. Obtenemos la frecuencia, dia y hora de ejecucion segun la configuracion.
+            String frecuenciaEjecucion = BonitaClientRest.getProperty(ConstantesEnum.PARAM_FRECUENCIA_EJECUCION.getNombre());
+            String diaEjecucion = ConstantesEnum.FRECUENCIA_MENSUAL.getNombre().equalsIgnoreCase(frecuenciaEjecucion) ? BonitaClientRest.getProperty("dia_ejecucion") : ConstantesEnum.PROCESO_SIN_DIA.getNombre();
+            String horaEjecucion = BonitaClientRest.getProperty(ConstantesEnum.PARAM_HORA_EJECUCION.getNombre());
+            // 2. Obtenemos el dia y hora del sistema
+            Date date = new Date();
+            DateFormat dateFormatDia = new SimpleDateFormat(ConstantesEnum.FORMATO_DIA.getNombre());
+            DateFormat dateFormatHora = new SimpleDateFormat(ConstantesEnum.FORMATO_HORA.getNombre());
+            String diaActual = dateFormatDia.format(date);
+            String horaActual = dateFormatHora.format(date);
+            // 3. Se actualiza el dia de ejecucion para casos especiales
+            Integer diasMes = Utils.getDiasMesActual();
+            diaEjecucion = Integer.parseInt(diaEjecucion) > diasMes ? diasMes.toString() : diaEjecucion;
+            // 4. se comparan para saber si debe ejecutar la tarea programada
+            if (ConstantesEnum.FRECUENCIA_DIARIA.getNombre().equalsIgnoreCase(frecuenciaEjecucion)) {
+                verificado = horaEjecucion.equals(horaActual);
+            } else {
+                verificado = horaEjecucion.equals(horaActual) && diaEjecucion.equals(diaActual);
+            }
+        } catch(NullPointerException e) {
+            LOG.info("Error al verificar si se ejecuta la tarea: (NullPointerException)");
+            LOG.debug("Error ejecutando tarea principal:", e);
+        } catch(Exception e) {
+            LOG.error("Error ejecutando tarea principal:", e);
         }
         return verificado;
     }
@@ -90,12 +97,12 @@ public class GenerarReporteJob implements Job {
 
         List<Solicitud> solicitudes = obtenerDatosReporte(params);
         
-//        String fileName = path
-//                .concat(File.separator)
-//                .concat(BonitaClientRest.getProperty(ConstantesEnum.PARAM_NOMBRE_SALIDA.getNombre()))
-//                .concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre()))
-//                .concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
-        String fileName = "D:\\Reporte_".concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre())).concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
+        String fileName = path
+                .concat(File.separator)
+                .concat(BonitaClientRest.getProperty(ConstantesEnum.PARAM_NOMBRE_SALIDA.getNombre()))
+                .concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre()))
+                .concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
+//        String fileName = "D:\\Reporte_".concat(Utils.convertirFechaActualEnCadena(ConstantesEnum.FORMATO_FECHA_CADENA.getNombre())).concat(ConstantesEnum.FORMATO_EXTENSION.getNombre());
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet(ConstantesEnum.NOMBRE_HOJA_EXCEL.getNombre());
         int rowIndex = 0;
