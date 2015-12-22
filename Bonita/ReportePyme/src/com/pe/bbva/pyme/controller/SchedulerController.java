@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.context.annotation.Scope;
@@ -55,6 +54,13 @@ public class SchedulerController implements Serializable {
         return "scheduler/index";
     }
 
+    @RequestMapping(value = "configure")
+    public String configure(ModelMap model) {
+        model.addAttribute("schedulerClass", "");
+        model.addAttribute("jobClass", "ui-state-active-bbva");
+        return "scheduler/configure";
+    }
+    
     @RequestMapping(value = "listar", method = RequestMethod.POST)
     public @ResponseBody String listar() {
         String result = "";

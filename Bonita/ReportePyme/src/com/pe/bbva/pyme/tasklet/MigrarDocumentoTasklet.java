@@ -78,12 +78,14 @@ public class MigrarDocumentoTasklet implements Tasklet {
                 documentoDAO.actualizarDocumento(migrados);
                 migrados = new ArrayList<Documento>();
                 contribution.incrementWriteCount(BATCH_SIZE);
+                execution.incrementCommitCount();
                 LOG.info("COMMIT: " + BATCH_SIZE);
             }
         }
         if(!migrados.isEmpty()) {
             documentoDAO.actualizarDocumento(migrados);
             contribution.incrementWriteCount(migrados.size());
+            execution.incrementCommitCount();
             LOG.info("COMMIT: " + migrados.size());
         }
         

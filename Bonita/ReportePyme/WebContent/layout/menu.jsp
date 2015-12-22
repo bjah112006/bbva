@@ -13,7 +13,7 @@
                                 </div>
                             </td>
                             <td>
-                                <a class="fg-button ${requestScope.jobClass}" href="<%=request.getContextPath()%>/application/list.html">
+                                <a class="fg-button ${requestScope.jobClass}" href="<%=request.getContextPath()%>/scheduler/configure.html">
                                     <div class="title title-ico title-ico-procesos">Configuraci&#243;n de trabajos</div>
                                 </a>
                             </td>

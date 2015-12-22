@@ -193,4 +193,12 @@ listar = function() {
 
 $(document).ready(function() {
     listar();
+    
+    $("#btnVolverPanel").button().on("click", function() {
+        listar();
+        $("#pnlDetalleTarea").addClass("hide");
+        $("#pnlTareas").removeClass("hide");
+    });
+    
+    $("#btnActualizar").button().on("click", listar);
 });
