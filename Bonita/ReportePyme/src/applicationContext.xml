@@ -20,6 +20,7 @@
 
     <aop:aspectj-autoproxy/>
 
+    <!--
     <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
         <property name="jndiName" value="bonitaSequenceManagerDS"/>
         <property name="resourceRef" value="true"/>
@@ -27,15 +28,17 @@
         <property name="cache" value="true"/>
         <property name="proxyInterface" value="javax.sql.DataSource"/>
     </bean>
+    -->
+    <bean class="com.indra.web.postprocessor.WebConfiguringPostProcessor"/>
 
-    <!--
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.postgresql.Driver" />
+        <!--
         <property name="url" value="jdbc:postgresql://localhost:5433/bonita_subscription" />
         <property name="username" value="bonita" />
         <property name="password" value="bonita" />
+        -->
     </bean>
-    -->
 
     <bean id="transactionManager"
         class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -61,24 +64,7 @@
                 </prop>
             </props>
         </property>
-        <!-- 
-        <property name="triggers">
-            <list>
-               <ref bean="generarReporteCronTrigger" />
-            </list>
-        </property>
-         -->
     </bean>
-    <!-- 
-    <bean name="generarReporteJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-        <property name="jobClass" value="com.pe.bbva.pyme.jobs.GenerarReporteJob" />
-    </bean>
-    <bean id="generarReporteCronTrigger"
-        class="org.springframework.scheduling.quartz.CronTriggerBean">
-        <property name="jobDetail" ref="generarReporteJob" />
-        <property name="cronExpression" value="0 0/1 * 1/1 * ? *" />
-    </bean>
-     -->
     <!-- End: Scheduler -->
     
     <!-- Begin: Batch Context -->

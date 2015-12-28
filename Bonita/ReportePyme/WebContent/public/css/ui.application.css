@@ -219,7 +219,7 @@ table td {
 .ui-timepicker-div .ui-widget-header,
 .ui-dialog .ui-dialog-title {
 	font-weight: bold;
-	font-size: 16px;
+	font-size: 12px;
 }
 
 .ui-dialog {
@@ -544,15 +544,15 @@ input.ui-text-highlight-warning {
 }
 
 input.ui-text-date {
-	background: url("../img/calendario16x16.png") no-repeat 66px center; /* calendar.gif */
+	background: url("../img/calendario16x16.png") no-repeat 72px center; /* calendar.gif */
 	padding-right: 18px;
-	width: 62px;
+	width: 70px;
 }
 
 input.ui-text-time {
-	background: url("../img/calendario16x16.png") no-repeat 66px center; /* clock.png */
+	background: url("../img/clock.png") no-repeat 72px center; /* clock.png */
 	padding-right: 18px;
-	width: 62px;
+	width: 70px;
 }
 
 input.ui-text-disabled {
@@ -570,7 +570,7 @@ input.ui-text-conflicto {
 }
 
 .ui-icon-disk {
-	background: url("../theme/bbva/images/ui-icon-bbva-disk.png") !important;
+	/* background: url("../theme/bbva/images/ui-icon-bbva-disk.png") !important; */ 
 }
 
 .ui-icon-pdf {

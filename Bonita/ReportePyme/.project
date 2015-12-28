@@ -3,7 +3,6 @@
 	<name>WFFastPymeBBVA</name>
 	<comment></comment>
 	<projects>
-		<project>bonita-ldap-bbva</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

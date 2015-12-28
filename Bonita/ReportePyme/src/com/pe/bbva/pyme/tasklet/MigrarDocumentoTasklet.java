@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.apache.log4j.Logger;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
@@ -12,26 +14,36 @@ import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.InitializingBean;
 
 import pe.bbvacontinental.medios.gestiondemanda.contentmanagerws.ws.DocumentoRequest;
 import pe.bbvacontinental.medios.gestiondemanda.contentmanagerws.ws.DocumentoResponse;
 import pe.bbvacontinental.medios.gestiondemanda.contentmanagerws.ws.EbsContentManagerSB12Client;
 
-import com.bbva.bonita.authentication.impl.DBUtil;
 import com.pe.bbva.pyme.dao.DocumentoDAO;
 import com.pe.bbva.pyme.model.Documento;
+import com.pe.bbva.pyme.utils.DBUtil;
 
-public class MigrarDocumentoTasklet implements Tasklet {
+public class MigrarDocumentoTasklet implements Tasklet, InitializingBean {
     
     private static final Logger LOG = Logger.getLogger(MigrarDocumentoTasklet.class);
     private static final int BATCH_SIZE = 100;
+    private DataSource dataSource;
     private DocumentoDAO documentoDAO;
     private EbsContentManagerSB12Client clienteContentWS;
     private String endpoint;
 
-    public MigrarDocumentoTasklet() {
-        endpoint = DBUtil.obtenerParametroDetalle("18", "001");
+    @Override
+    public void afterPropertiesSet() throws Exception {
         clienteContentWS = new EbsContentManagerSB12Client();
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
     
     public DocumentoDAO getDocumentoDAO() {
@@ -44,6 +56,7 @@ public class MigrarDocumentoTasklet implements Tasklet {
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+        endpoint = DBUtil.obtenerParametroDetalle(dataSource.getConnection(), "18", "001");
         RepeatStatus status = RepeatStatus.FINISHED;
         StepExecution execution = chunkContext.getStepContext().getStepExecution();
         ExitStatus exitStatus = ExitStatus.COMPLETED;

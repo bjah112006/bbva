@@ -34,6 +34,7 @@ public class SimpleDocumentoDAO implements DocumentoDAO {
     @PostConstruct
     public void init() {
         jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate.setFetchSize(10);
     }
     
     @Override

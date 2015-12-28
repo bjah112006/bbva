@@ -79,7 +79,7 @@ public class SchedulerController implements Serializable {
 
     @RequestMapping(value = "rescheduler/{jobName}", method = RequestMethod.POST)
     public @ResponseBody String rescheduler(@PathVariable("jobName") String jobName, HttpServletRequest request) {
-        String result = "{\"rescheduler\": \"OK\"}"; 
+        String result = "{\"rescheduler\": \"OK\", \"message\": \"Job reschedule\"}"; 
         String cron = request.getParameter("cron");
         try {
             if(jobName.equalsIgnoreCase("migrarDocumentosJob")) {
@@ -101,7 +101,7 @@ public class SchedulerController implements Serializable {
 
     @RequestMapping(value = "execute/{jobName}", method = RequestMethod.POST)
     public @ResponseBody String execute(@PathVariable("jobName") final String jobName, HttpServletRequest request) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String result = "{\"execute\": \"OK\"}"; 
         final Date date;
         try {

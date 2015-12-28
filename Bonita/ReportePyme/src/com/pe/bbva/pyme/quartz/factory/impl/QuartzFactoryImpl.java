@@ -15,13 +15,14 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
 
-import com.bbva.bonita.authentication.impl.DBUtil;
 import com.pe.bbva.pyme.jobs.GenerarReporteJob;
 import com.pe.bbva.pyme.quartz.ExecuteJob;
 import com.pe.bbva.pyme.quartz.domain.JobConfig;
 import com.pe.bbva.pyme.quartz.factory.QuartzFactory;
+import com.pe.bbva.pyme.utils.DBUtil;
 
 /**
  * F\u00E1brica de trabajos
@@ -37,6 +38,9 @@ public class QuartzFactoryImpl implements QuartzFactory {
     @Resource(name = "quartzScheduler")
     private Scheduler scheduler;
 
+    @Resource(name = "dataSource")
+    private DriverManagerDataSource dataSource;
+    
     /*
      * (non-Javadoc)
      * 
@@ -82,7 +86,7 @@ public class QuartzFactoryImpl implements QuartzFactory {
             JobConfig jobConfig;
             String cron = "";
             try {
-                cron = DBUtil.obtenerParametroDetalle("18", "002");
+                cron = DBUtil.obtenerParametroDetalle(dataSource.getConnection(), "18", "002");
             } catch(Exception e) {
                 cron = "0 0 23 1 * ? *";
                 LOG.error("(1) Usando expresion por defecto.");

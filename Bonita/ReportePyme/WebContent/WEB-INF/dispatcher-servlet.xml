@@ -26,7 +26,6 @@
     </bean>
 
     <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager"/>
-    <bean class="com.indra.web.postprocessor.WebConfiguringPostProcessor"/>
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/view/"/>

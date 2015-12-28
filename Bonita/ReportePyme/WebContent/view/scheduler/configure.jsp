@@ -10,7 +10,10 @@
                 <table>
                     <tr>
                         <td>Hora de ejecución:&nbsp;</td>
-                        <td><input type="text" /></td>
+                        <td>
+                            <input type="text" class="ui-text ui-text-time" id="txtHora" maxlength="5"/><span class="ui-text-time-icon" onclick="$('#txtHora').focus();"></span>
+                        </td>
+                        <td>&nbsp;&nbsp;<button id="btnProgramar">Programar</button></td>
                     </tr>
                 </table>
             </div>
@@ -22,8 +25,10 @@
                 <table>
                     <tr>
                         <td>Fecha a procesar:&nbsp;</td>
-                        <td><input type="text" /></td>
-                        <td><button id="btnEjecutar">Ejecutar</button></td>
+                        <td>
+                            <input type="text" class="ui-text ui-text-date" id="txtFecha" maxlength="10"/><span class="ui-text-date-icon" onclick="$('#txtFecha').focus();"></span>
+                        </td>
+                        <td>&nbsp;&nbsp;<button id="btnEjecutar">Ejecutar</button></td>
                     </tr>
                 </table>
             </div>
