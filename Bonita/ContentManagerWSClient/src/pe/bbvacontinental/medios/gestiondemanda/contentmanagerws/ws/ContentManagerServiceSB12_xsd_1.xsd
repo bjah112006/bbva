@@ -1,0 +1,30 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/ws/types"
+     xmlns:base="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/ws/types/base"
+     targetNamespace="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/ws/types/base"
+     elementFormDefault="qualified">
+    <xsd:complexType name="AuditRequest">
+        <xsd:sequence>
+            <xsd:element name="idTransaccion" type="xsd:string"/>
+            <xsd:element name="ipAplicacion" type="xsd:string"/>
+            <xsd:element name="nombreAplicacion" type="xsd:string"/>
+            <xsd:element name="usuarioAplicacion" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="AuditResponse">
+        <xsd:sequence>
+            <xsd:element name="idTransaccion" type="xsd:string"/>
+            <xsd:element name="codigoRespuesta" type="xsd:string"/>
+            <xsd:element name="mensajeRespuesta" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Parametros">
+        <xsd:sequence>
+            <xsd:element name="parametro" minOccurs="1" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="nombre" type="xsd:string"/>
+                    <xsd:attribute name="valor" type="xsd:string"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

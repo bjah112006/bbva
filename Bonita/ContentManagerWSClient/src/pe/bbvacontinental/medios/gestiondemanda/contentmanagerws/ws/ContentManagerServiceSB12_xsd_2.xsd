@@ -1,0 +1,23 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/ws/types"
+     xmlns:base="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/ws/types/base"
+     targetNamespace="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/ws/types"
+     elementFormDefault="qualified">
+    <xsd:import schemaLocation="ContentManagerServiceSB12_xsd_1.xsd" namespace="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/ws/types/base"/>
+    <xsd:element name="insertarDocRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="auditRequest" type="base:AuditRequest"/>
+                <xsd:element name="fileData" type="xsd:base64Binary"/>
+                <xsd:element name="listaParametrosRequest" type="base:Parametros"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="insertarDocResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="auditResponse" type="base:AuditResponse"/>
+                <xsd:element name="listaParametrosResponse" type="base:Parametros"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

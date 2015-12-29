@@ -1,0 +1,95 @@
+<wsdl:definitions
+     name="ContentManagerWSService"
+     targetNamespace="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/ws"
+     xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+     xmlns:tns="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/ws"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+     xmlns:types="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/ws/types"
+     xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+    >
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/ws"
+             elementFormDefault="qualified"/>
+        <xsd:schema>
+            <xsd:import schemaLocation="ContentManagerServiceSB12_xsd_2.xsd" namespace="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/ws/types"/>
+            <xsd:import schemaLocation="ContentManagerServiceSB12_xsd_3.xsd" namespace="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/ws/types"/>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="insertarDocRequestMsg">
+        <wsdl:part name="request" element="types:insertarDocRequest"/>
+    </wsdl:message>
+    <wsdl:message name="insertarDocResponseMsg">
+        <wsdl:part name="response" element="types:insertarDocResponse"/>
+    </wsdl:message>
+    <wsdl:message name="obtenerDocRequestMsg">
+        <wsdl:part name="request" element="types:obtenerDocRequest"/>
+    </wsdl:message>
+    <wsdl:message name="obtenerDocResponseMsg">
+        <wsdl:part name="response" element="types:obtenerDocResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="ContentManagerWSPortType">
+        <wsdl:operation name="insertarDoc">
+            <wsdl:input message="tns:insertarDocRequestMsg"/>
+            <wsdl:output message="tns:insertarDocResponseMsg"/>
+        </wsdl:operation>
+        <wsdl:operation name="obtenerDoc">
+            <wsdl:input message="tns:obtenerDocRequestMsg"/>
+            <wsdl:output message="tns:obtenerDocResponseMsg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="ContentManagerWSPortTypeSOAP12Binding" type="tns:ContentManagerWSPortType">
+        <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="insertarDoc">
+            <soap12:operation style="document" soapAction="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/insertarDoc"
+                 soapActionRequired="false"/>
+            <wsdl:input>
+                <soap12:body use="literal" parts="request"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" parts="response"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="obtenerDoc">
+            <soap12:operation style="document" soapAction="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/obtenerDoc"
+                 soapActionRequired="false"/>
+            <wsdl:input>
+                <soap12:body use="literal" parts="request"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" parts="response"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="ContentManagerWSPortTypeSOAP11Binding" type="tns:ContentManagerWSPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="insertarDoc">
+            <soap:operation style="document" soapAction="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/insertarDoc"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="request"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="response"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="obtenerDoc">
+            <soap:operation style="document" soapAction="http://bbvacontinental.pe/medios/gestiondemanda/contentmanagerws/obtenerDoc"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="request"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="response"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="ContentManagerWSService">
+        <wsdl:port name="ebsContentManagerSB12" binding="tns:ContentManagerWSPortTypeSOAP12Binding">
+            <soap12:address location="http://118.180.188.27:9080/ContentManagerService/ContentManagerServiceSB12"/>
+        </wsdl:port>
+        <wsdl:port name="ebsContentManagerSB11" binding="tns:ContentManagerWSPortTypeSOAP11Binding">
+            <soap:address location="http://118.180.188.27:9080/ContentManagerService/ContentManagerServiceSB11"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
