@@ -3,7 +3,6 @@ package com.pe.bbva.pyme.dao.impl;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -40,7 +39,7 @@ public class SimpleDocumentoDAO implements DocumentoDAO {
     @Override
     @Transactional(readOnly = true)
     public List<Documento> listarDocumentos(boolean hasContent, Date creationDate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        // SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = creationDate == null ? new Date() : creationDate;
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -50,7 +49,7 @@ public class SimpleDocumentoDAO implements DocumentoDAO {
         cal.set(Calendar.MILLISECOND, 0);
         date = cal.getTime();
         
-        String sql = "select * from public.document where hascontent=? and date_trunc('day', to_timestamp('" + sdf.format(creationDate) + "', 'DD/MM/YYYY HH24:MI:SS')) = ?";
+        String sql = "select a.tenantid, a.id, a.author, a.creationdate, a.hascontent, a.filename, a.mimetype, a.url, a.content, b.processinstanceid from public.document a inner join public.document_mapping b on a.id=b.documentid where hascontent=? and date_trunc('day', to_timestamp(creationdate / 1000)) = ?";
         return jdbcTemplate.query(sql, new Object[]{hasContent, date}, new RowMapper<Documento>() {
 
             @Override
@@ -66,6 +65,7 @@ public class SimpleDocumentoDAO implements DocumentoDAO {
                 documento.setMimetype(resultset.getString("MIMETYPE"));
                 documento.setUrl(resultset.getString("URL"));
                 documento.setContent(resultset.getBytes("CONTENT"));
+                documento.setProcessInstanceId(resultset.getLong("PROCESSINSTANCEID"));
 
                 return documento;
             }

@@ -75,7 +75,13 @@ public class MigrarDocumentoTasklet implements Tasklet, InitializingBean {
                       .put("mimetype", doc.getMimetype())
                       .put("mandatorio", "1")
                       .put("origen", "FNE")
-                      .put("fechaCreacion", sdf.format(new Date(doc.getCreationDate())));
+                      .put("fechaCreacion", sdf.format(new Date(doc.getCreationDate())))
+                      .put("id", doc.getId().toString())
+                      .put("numExpediente", doc.getProcessInstanceId().toString())
+                      .put("tipo", "-")
+                      .put("tipoDOI", "R")
+                      .put("numDOI", "-")
+                      .put("codigoCliente", "-");
             
             try {
                 docResponse = clienteContentWS.procesar(docRequest, doc.getContent(), endpoint);

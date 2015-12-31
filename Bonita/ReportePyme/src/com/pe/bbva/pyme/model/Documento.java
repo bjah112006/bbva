@@ -14,6 +14,7 @@ public class Documento implements Serializable {
     private String mimetype;
     private String url;
     private byte[] content;
+    private Long processInstanceId;
 
     public Long getTenantId() {
         return tenantId;
@@ -87,6 +88,14 @@ public class Documento implements Serializable {
         this.content = content;
     }
 
+    public Long getProcessInstanceId() {
+        return processInstanceId;
+    }
+
+    public void setProcessInstanceId(Long processInstanceId) {
+        this.processInstanceId = processInstanceId;
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -127,6 +136,10 @@ public class Documento implements Serializable {
         if (url != null) {
             builder.append("url=");
             builder.append(url);
+        }
+        if (processInstanceId != null) {
+            builder.append("processInstanceId=");
+            builder.append(processInstanceId);
         }
         builder.append("]");
         return builder.toString();
