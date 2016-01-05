@@ -339,30 +339,30 @@ public class AyudaHorario extends AbstractMBean {
         	int minutosEx = obtenerMinutos(rfExActual, fecha);
         	minutosEx = (minutosEx==Constantes.NO_TIENE_MINUTOS ? 0 : minutosEx);
         	DateTime dtHora = new DateTime (fecha);
-        	System.out.println("...................dtHora::::"+dtHora);
+//        	System.out.println("...................dtHora::::"+dtHora);
         	RangoFecha rfNorActualTemp = obtenerRangoFecha(rfNorActual, fecha);
         	
         	DateTime hiNorm = rfNorActualTemp.crearHoraInicio(fecha);
         	DateTime hfNorm = rfNorActualTemp.crearHoraFin(fecha);
         	
-        	System.out.println("...................hiNorm::::"+hiNorm);
-        	System.out.println("...................hfNorm::::"+hfNorm);
+//        	System.out.println("...................hiNorm::::"+hiNorm);
+//        	System.out.println("...................hfNorm::::"+hfNorm);
         	
         	
         	if (rfExActual==null) {
         		Interval interval = new Interval (hiNorm, hfNorm);
         		if (interval.contains(dtHora)) {
-        			System.out.println(" dtHora Contenido en Interval");
+//        			System.out.println(" dtHora Contenido en Interval");
 	        		//System.out.println(" minutesBetween="+Minutes.minutesBetween(dtHora, hfNorm).getMinutes());        			
         			minutos = Minutes.minutesBetween(dtHora, hfNorm).getMinutes();
         		} else if (dtHora.isBefore(hiNorm)) {
-        			System.out.println("hiNorm is Before de dtHora ");
+//        			System.out.println("hiNorm is Before de dtHora ");
         			//System.out.println(" minutosNor="+minutosNor);
         			minutos = minutosNor;
         		} else {
         			minutos = 0;
         		}
-        		System.out.println("...............minutos 1::"+minutos);
+//        		System.out.println("...............minutos 1::"+minutos);
         		
         	} else {
         		RangoFecha rfExActualTemp = obtenerRangoFecha(rfExActual, fecha);
@@ -371,39 +371,39 @@ public class AyudaHorario extends AbstractMBean {
 	        		DateTime hiEx = rfExActualTemp.crearHoraInicio(fecha);
 	        		DateTime hfEx = rfExActualTemp.crearHoraFin(fecha);
 	        	
-	            	System.out.println("...................hiEx::::"+hiEx);
-	            	System.out.println("...................hfEx::::"+hfEx);
-	            	
+//	            	System.out.println("...................hiEx::::"+hiEx);
+//	            	System.out.println("...................hfEx::::"+hfEx);
+//	            	
 		        	Interval primInterv = new Interval (hiNorm, hiEx);
 		        	
 		        	Interval interInterv = new Interval (hiEx, hfEx);
 		        	Interval segInterval = new Interval (hfEx, hfNorm);
 	        	
 		        	if (primInterv.contains(dtHora)){
-		        		System.out.println(" dtHora Contenido en primInterv");
+//		        		System.out.println(" dtHora Contenido en primInterv");
 		        		//System.out.println(" minutosNor="+minutosNor);
 		        		//System.out.println(" minutosEx="+minutosEx);
 		        		//System.out.println(" minutesBetween="+Minutes.minutesBetween(hiNorm, dtHora).getMinutes());
 		        		minutos = minutosNor - minutosEx - 
 		        				Minutes.minutesBetween(hiNorm, dtHora).getMinutes();
 		        	} else if (segInterval.contains(dtHora)) {
-		        		System.out.println(" dtHora Contenido en segInterval");
+//		        		System.out.println(" dtHora Contenido en segInterval");
 		        		//System.out.println(" minutosNor="+minutosNor);
 		        		//System.out.println(" minutesBetween="+Minutes.minutesBetween(hiNorm, dtHora).getMinutes());		        		
 		        		minutos = minutosNor - Minutes.minutesBetween(hiNorm, dtHora).getMinutes();
 		        	} else if (interInterv.contains(dtHora)) {
-		        		System.out.println(" dtHora Contenido en interInterv");
+//		        		System.out.println(" dtHora Contenido en interInterv");
 		        		//System.out.println(" minutosNor="+minutosNor);
 		        		//System.out.println(" minutesBetween="+Minutes.minutesBetween(hiNorm, hfEx).getMinutes());			        		
 		        		minutos = minutosNor - Minutes.minutesBetween(hiNorm, hfEx).getMinutes();
 		        	} else if (dtHora.isBefore(hiNorm)) {
-		        		System.out.println("hiNorm is Before de dtHora ");
+//		        		System.out.println("hiNorm is Before de dtHora ");
 		        		//System.out.println(" minutosNor="+minutosNor);
 		        		//System.out.println(" minutosEx="+minutosEx);
 		        		minutos = minutosNor - minutosEx;
 		        	} // else  minutos = 0
 		        	
-		        	System.out.println("...............minutos 2::"+minutos);
+//		        	System.out.println("...............minutos 2::"+minutos);
 	        	}
         	}
             return minutos;
@@ -420,30 +420,30 @@ public class AyudaHorario extends AbstractMBean {
         	minutosEx = (minutosEx==Constantes.NO_TIENE_MINUTOS ? 0 : minutosEx);
         	DateTime dtHora = new DateTime (fecha);
         	
-        	System.out.println("...................dtHora::::"+dtHora);
+//        	System.out.println("...................dtHora::::"+dtHora);
         	
         	RangoFecha rfNorActualTemp = obtenerRangoFecha(rfNorActual, fecha);
         	
         	DateTime hiNorm = rfNorActualTemp.crearHoraInicio(fecha);
         	DateTime hfNorm = rfNorActualTemp.crearHoraFin(fecha);
-        	System.out.println("...................hiNorm::::"+hiNorm);
-        	System.out.println("...................hfNorm::::"+hfNorm);
+//        	System.out.println("...................hiNorm::::"+hiNorm);
+//        	System.out.println("...................hfNorm::::"+hfNorm);
         	
         	if (rfExActual==null) {
         		Interval interval = new Interval (hiNorm, hfNorm);
         		if (interval.contains(dtHora)) {
-	        		System.out.println(" dtHora Contenido en interval");
+//	        		System.out.println(" dtHora Contenido en interval");
 	        		//System.out.println(" minutesBetween="+Minutes.minutesBetween(hiNorm, dtHora).getMinutes());	        			
         			minutos = Minutes.minutesBetween(hiNorm, dtHora).getMinutes();
         		} else if (dtHora.isAfter(hfNorm) || dtHora.isEqual(hfNorm)) {
-	        		System.out.println("hfNorm is After de dtHora ");
+//	        		System.out.println("hfNorm is After de dtHora ");
 	        		//System.out.println(" minutosNor="+minutosNor);     			
         			minutos = minutosNor;
         		} else {
         			minutos = 0;
         		}
         		
-        		System.out.println("...............minutos 3::"+minutos);
+//        		System.out.println("...............minutos 3::"+minutos);
         		
         	} else {
         		
@@ -453,37 +453,37 @@ public class AyudaHorario extends AbstractMBean {
 		        	DateTime hiEx = rfExActualTemp.crearHoraInicio(fecha);
 		        	DateTime hfEx = rfExActualTemp.crearHoraFin(fecha);
 		        	
-		        	System.out.println("...................hiEx::::"+hiEx);
-		        	System.out.println("...................hfEx::::"+hfEx);
+//		        	System.out.println("...................hiEx::::"+hiEx);
+//		        	System.out.println("...................hfEx::::"+hfEx);
 		        	
 		        	Interval primInterv = new Interval (hiNorm, hiEx);
 		        	Interval interInterv = new Interval (hiEx, hfEx);
 		        	Interval segInterval = new Interval (hfEx, hfNorm);
 		        	if (primInterv.contains(dtHora)){
-		        		System.out.println(" dtHora Contenido en primInterv");
+//		        		System.out.println(" dtHora Contenido en primInterv");
 		        		//System.out.println(" minutosNor="+minutosNor);
 		        		//System.out.println(" minutesBetween="+Minutes.minutesBetween(dtHora, hfNorm).getMinutes());		        		
 		        		minutos = minutosNor - Minutes.minutesBetween(dtHora, hfNorm).getMinutes();
 		        	} else if (segInterval.contains(dtHora)) {
-		        		System.out.println(" dtHora Contenido en segInterval");
+//		        		System.out.println(" dtHora Contenido en segInterval");
 		        		//System.out.println(" minutosNor="+minutosNor);
 		        		//System.out.println(" minutosEx="+minutosEx);
 		        		//System.out.println(" minutesBetween="+Minutes.minutesBetween(dtHora, hfNorm).getMinutes());	
 		        		minutos = minutosNor - minutosEx - 
 		        				Minutes.minutesBetween(dtHora, hfNorm).getMinutes();
 		        	} else if (interInterv.contains(dtHora)) {
-		        		System.out.println(" dtHora Contenido en interInterv");
+//		        		System.out.println(" dtHora Contenido en interInterv");
 		        		//System.out.println(" minutosNor="+minutosNor);
 		        		//System.out.println(" minutesBetween="+Minutes.minutesBetween(dtHora, hfNorm).getMinutes());			        		
 		        		minutos = minutosNor - Minutes.minutesBetween(hiEx, hfNorm).getMinutes();
 		        	} else if (dtHora.isAfter(hfNorm) || dtHora.isEqual(hfNorm)) {
-		        		System.out.println("hfNorm is After de dtHora ");
+//		        		System.out.println("hfNorm is After de dtHora ");
 		        		//System.out.println(" minutosNor="+minutosNor);
 		        		//System.out.println(" minutosEx="+minutosEx);
 		        		minutos = minutosNor - minutosEx;
 		        	} // else  minutos = 0
 		        	
-		        	System.out.println("...............minutos 4::"+minutos);
+//		        	System.out.println("...............minutos 4::"+minutos);
         		}
         	}
         	

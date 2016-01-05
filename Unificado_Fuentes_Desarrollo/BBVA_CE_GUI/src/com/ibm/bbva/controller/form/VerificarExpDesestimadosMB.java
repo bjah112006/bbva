@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.el.ELContext;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -22,6 +23,7 @@ import pe.ibm.util.Convertidor;
 import com.ibm.bbva.controller.AbstractMBean;
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.controller.common.ComentarioMB;
+import com.ibm.bbva.controller.common.MenuMB;
 import com.ibm.bbva.controller.common.PanelDocumentosMB;
 import com.ibm.bbva.controller.common.VerificarAprobarMB;
 import com.ibm.bbva.entities.Estado;
@@ -74,9 +76,21 @@ public class VerificarExpDesestimadosMB extends AbstractMBean {
 		   addObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION, Constantes.FLAG_COPIA_ARCHIVO);
 		   addObjectSession(Constantes.ID_EXPEDIENTE_SESION, expediente.getId());
 		   //return "/bandejaPendientes/formBandejaPendientes?faces-redirect=true";
-		   return "/moverArchivos/formMoverArchivos?faces-redirect=true";
+		   //EPY 28-12-2015
+		   //return "/moverArchivos/formMoverArchivos?faces-redirect=true";
+		   return redireccionar();
 		}
 		return null;
+	}
+	
+	public String redireccionar() {
+		String redireccion = null;
+		ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+		MenuMB menuMB = (MenuMB) FacesContext
+				.getCurrentInstance().getApplication().getELResolver()
+				.getValue(elContext, null, "menu");
+		redireccion = menuMB.bandejaPendientes();
+		return redireccion;
 	}
 
 	public String grabarExp(String accion, Integer estado) {
@@ -123,7 +137,8 @@ public class VerificarExpDesestimadosMB extends AbstractMBean {
 		tkiid = expedienteTCWPS.getTaskID();
 		//objRemoteUtils.enviarExpedienteTC(tkiid, expedienteTCWPS);
 		objRemoteUtils.completarTarea(tkiid, expedienteTCWPS);
-		ayudaExpedienteTC.actualizarListaExpedienteTC(new Consulta());
+		//comentado por EPY 28-12-2015
+		//ayudaExpedienteTC.actualizarListaExpedienteTC(new Consulta());--llamada innecesaria
         
 		//fin process
 		// se almacena en el historial
@@ -194,6 +209,7 @@ public class VerificarExpDesestimadosMB extends AbstractMBean {
 		
 		//todos los documentos se actualizan como no observados
         panelDocumentoMB = (PanelDocumentosMB) ctx.getApplication().getVariableResolver().resolveVariable(ctx, "paneldocumentos");
+        //panelDocumentoMB.actualizarNoObservados();--EPY 30122015
         panelDocumentoMB.actualizarNoObservados();
 		
 		// se remueve el expedeinte de sesion

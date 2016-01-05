@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.el.ELContext;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -23,6 +24,7 @@ import com.ibm.bbva.controller.AbstractMBean;
 import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.controller.common.ComentarioMB;
 import com.ibm.bbva.controller.common.EnvioMailMB;
+import com.ibm.bbva.controller.common.MenuMB;
 import com.ibm.bbva.controller.common.PanelDocumentosMB;
 import com.ibm.bbva.controller.common.VerificarAprobarMB;
 import com.ibm.bbva.entities.Estado;
@@ -81,7 +83,19 @@ public class ArchivarExpedienteMB extends AbstractMBean {
 			}
 		}
 		//return "/bandejaPendientes/formBandejaPendientes?faces-redirect=true";
-		return "/moverArchivos/formMoverArchivos?faces-redirect=true";
+		//EPY 28-12-2015
+		//return "/moverArchivos/formMoverArchivos?faces-redirect=true";
+		return redireccionar();
+	}
+	
+	public String redireccionar() {
+		String redireccion = null;
+		ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+		MenuMB menuMB = (MenuMB) FacesContext
+				.getCurrentInstance().getApplication().getELResolver()
+				.getValue(elContext, null, "menu");
+		redireccion = menuMB.bandejaPendientes();
+		return redireccion;
 	}
 	
 	public void enviarCorreo(Expediente expediente) {
@@ -140,7 +154,8 @@ public class ArchivarExpedienteMB extends AbstractMBean {
 		String tkiid = expedienteTCWPS.getTaskID();		
 		//objRemoteUtils.enviarExpedienteTC(tkiid, expedienteTCWPS);
 		objRemoteUtils.completarTarea(tkiid, expedienteTCWPS);
-		ayudaExpedienteTC.actualizarListaExpedienteTC(new Consulta());
+		//EPY 28/12/2015
+		//ayudaExpedienteTC.actualizarListaExpedienteTC(new Consulta());
         
 		//fin process
 		// se almacena en el historial		

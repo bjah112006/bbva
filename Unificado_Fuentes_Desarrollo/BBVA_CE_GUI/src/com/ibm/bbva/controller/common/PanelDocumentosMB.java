@@ -2023,10 +2023,10 @@ public class PanelDocumentosMB extends AbstractMBean {
 			}
 		}
 	}
-	
-	public void actualizarNoObservados(){
+	// Modificado EPY 31122015
+	/*public void actualizarNoObservados(){
 		LOG.info("en el metodo actualizarNoObservados");
-		//LOG.info("listaAyudaPanelDocumentos::::"+listaAyudaPanelDocumentos.size());
+		LOG.info("listaAyudaPanelDocumentos::::"+listaAyudaPanelDocumentos.size());
 		if(listaAyudaPanelDocumentos!=null)
 		for (AyudaPanelDocumentos apd : listaAyudaPanelDocumentos) {
 			//apd.setColObservar(true);
@@ -2034,6 +2034,27 @@ public class PanelDocumentosMB extends AbstractMBean {
 				DocumentoExpTc docExpTC = documentoExpTcBean.buscarPorId(apd.getIdCm());
 				docExpTC.setFlagObs("0");
 				documentoExpTcBean.edit(docExpTC);
+			}
+		}
+	}*/
+	
+	public void actualizarNoObservados(){
+		LOG.info("en el metodo actualizarNoObservados");
+		LOG.info("listaAyudaPanelDocumentos::::"+listaAyudaPanelDocumentos.size());
+		String iDsCM = "";
+		if(listaAyudaPanelDocumentos!=null){
+			for (AyudaPanelDocumentos apd : listaAyudaPanelDocumentos) {
+				//apd.setColObservar(true);
+				if(apd.getIdCm() > 0){
+					if(iDsCM.length()==0){
+								iDsCM = iDsCM+ apd.getIdCm();
+					}else{
+								iDsCM = iDsCM+","+apd.getIdCm();;
+					}
+				}
+			}
+			if(iDsCM.length()>0){
+				documentoExpTcBean.actualizarDocumentosNoObservados(expediente.getId(), iDsCM);
 			}
 		}
 	}

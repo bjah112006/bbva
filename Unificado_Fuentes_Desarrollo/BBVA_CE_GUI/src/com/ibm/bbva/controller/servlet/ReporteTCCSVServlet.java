@@ -1454,9 +1454,10 @@ public class ReporteTCCSVServlet extends HttpServlet {
 						Row rowData = objAyudaDatosReporte.crearFila(ssheet, wb, numFilaData );
 						int cellnum = 0;
 						for (Object obj : objArr) {
-							if (obj != null) {
-								objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, cellnum++, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, (String) obj);
-							}
+							//if (obj != null) {
+							//	objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, cellnum++, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, (String) obj);
+							//}
+							objAyudaDatosReporte.crearCeldaData(cellFont,wb, rowData, cellnum++, XSSFCellStyle.ALIGN_CENTER, XSSFCellStyle.VERTICAL_CENTER, (obj != null ? (String) obj : ""));
 			                
 			            }
 					        

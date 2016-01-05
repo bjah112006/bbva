@@ -268,8 +268,10 @@ public class RealizarAltaTarjetaMB extends AbstractMBean {
 		LOG.info("Fecha y Hora fecha 3:::"+expedienteTCWPS.getActivado().toString());*/
 		LOG.info(">>>>>>>>>>>>>>> TAREA 7 <<<<<<<<<<<<<<<<<<<<<");
 		objRemoteUtils.completarTarea(tkiid, expedienteTCWPS);
-		ayudaExpedienteTC.actualizarListaExpedienteTC(new Consulta());
-
+		//INICIO EPY 29122015
+		//ayudaExpedienteTC.actualizarListaExpedienteTC(new Consulta());
+		//FIN EPY 29122015
+		
 		//Adjunta Documentos Expediente
 		AyudaDocumento ayudaDocumento = new AyudaDocumento();
 		ayudaDocumento.adjuntarDocumentoExpediente();
@@ -284,6 +286,7 @@ public class RealizarAltaTarjetaMB extends AbstractMBean {
 		PanelDocumentosMB panelDocumentosMB = (PanelDocumentosMB) FacesContext
 				.getCurrentInstance().getApplication().getELResolver()
 				.getValue(elContext, null, "paneldocumentos");
+		//panelDocumentosMB.actualizarNoObservados(); ---EPY 30122015
 		panelDocumentosMB.actualizarNoObservados();
 		
 		//Remueve el tipo y numero de documento

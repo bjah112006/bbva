@@ -243,6 +243,9 @@ public class MenuMB extends AbstractLinksMBean {
 		//verificarTipoCambio();
 		LOG.info("bandejaPendientes INICIO");
 		eliminarObjetosSession();
+		//INICIO EPY 28122015
+		removeObjectSession(Constantes.LISTA_DOCUMENTOS_ADJUNTOS);
+		//FIN EPY 28122015
 		removeObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION);
 		removeObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION_NUEVO);
 		removeObjectSession(Constantes.LIST_DOC_TRANSF);
