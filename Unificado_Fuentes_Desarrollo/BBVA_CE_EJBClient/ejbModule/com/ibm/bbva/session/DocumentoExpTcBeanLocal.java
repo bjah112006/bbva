@@ -21,4 +21,5 @@ public interface DocumentoExpTcBeanLocal {
 	public DocumentoExpTc consultarDocumentoExpediente(long idExpediente, BigDecimal idCm);
 	public List<DocumentoExpTc> buscarPorExpedienteFlagEscaneado(long id, String flagEscaneado);
 	public List<DocumentoExpTc> buscarDocumentosReutilizables(long idTipoDoi, String numeroDoi);
+	public int actualizarDocumentosNoObservados(long idExpediente, String iDsCM);
 }
