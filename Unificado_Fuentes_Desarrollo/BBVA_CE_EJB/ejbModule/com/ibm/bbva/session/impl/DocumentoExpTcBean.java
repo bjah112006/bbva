@@ -268,4 +268,21 @@ public class DocumentoExpTcBean extends AbstractFacade<DocumentoExpTc> implement
 		}
 	}
 	
+	@Override
+	public int actualizarDocumentosNoObservados(long idExpediente, String iDsCM){
+		String query = "update conele.tbl_ce_ibm_documento_exp_tc " +
+						"set FLAG_OBS='0' " +
+						"where id_expediente_fk = " + idExpediente + 
+						"  and ID_CM in (" + iDsCM + ")";
+		int result =0;
+		try{
+			result = em.createNativeQuery(query)
+					.executeUpdate();
+		} catch(Exception e){
+			LOG.error(e.getMessage(),e);
+			return result;
+		}
+		return result;
+	}
+	
 }
