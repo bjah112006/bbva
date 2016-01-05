@@ -253,8 +253,8 @@ public class RemoteUtils {
 			piid = !items.get(i).getAsJsonObject().get(NODE_ITEM_IDPIID).isJsonNull() ? 
 					items.get(i).getAsJsonObject().get(NODE_ITEM_IDPIID).getAsString() : "";
 
-			LOG.info("tkiid:::"+tkiid);
-			LOG.info("piid:::"+piid);
+//			LOG.info("tkiid:::"+tkiid);
+//			LOG.info("piid:::"+piid);
 /*
 			String apPaterno = !items.get(i).getAsJsonObject().get(NODE_ITEM_APPATERNO).isJsonNull() ? items.get(i).getAsJsonObject().get(NODE_ITEM_APPATERNO).getAsString() : null;
 			String apMaterno = !items.get(i).getAsJsonObject().get(NODE_ITEM_APMATERNO).isJsonNull() ? items.get(i).getAsJsonObject().get(NODE_ITEM_APMATERNO).getAsString() : null;
@@ -317,10 +317,10 @@ public class RemoteUtils {
 				expedienteTC.setActivado(null);
 
 
-			LOG.info("Tarea:::::"+i);
-			LOG.info("codigoExp::"+expedienteTC.getCodigo());
-			LOG.info("getIdTarea::"+expedienteTC.getIdTarea());
-			LOG.info("fechaActivacion::"+expedienteTC.getActivado());
+//			LOG.info("Tarea:::::"+i);
+//			LOG.info("codigoExp::"+expedienteTC.getCodigo());
+//			LOG.info("getIdTarea::"+expedienteTC.getIdTarea());
+//			LOG.info("fechaActivacion::"+expedienteTC.getActivado());
 
 			taskList.add(expedienteTC);
 
@@ -894,10 +894,10 @@ public class RemoteUtils {
 
 		List<String> lstIdTask = new ArrayList<String>();
 
-		if(items!=null && items.size()>0){
-			System.out.println("items = "+items.size());
-		}else
-			System.out.println("items es nulo o vacio ");
+//		if(items!=null && items.size()>0){
+//			System.out.println("items = "+items.size());
+//		}else
+//			System.out.println("items es nulo o vacio ");
 
 //		for (int i = 0; i < items.size(); i++) {
 //			tkiid = !items.get(i).getAsJsonObject().get(NODE_ITEM_IDTASK).isJsonNull() ? 
@@ -928,11 +928,11 @@ public class RemoteUtils {
 					TimeZone utc = TimeZone.getTimeZone(CONS_FORMATO_TIME_ZONE);
 					SimpleDateFormat  readFormat = new SimpleDateFormat(CONS_FORMATO_FECHA_1);
 					readFormat.setTimeZone(utc);
-					System.out.println("TIEMPO !!!!!"+ fechaActivacion);
+					//System.out.println("TIEMPO !!!!!"+ fechaActivacion);
 			    	Date fechaStart = readFormat.parse(fechaActivacion);
 					cal.setTime(fechaStart);
 				} catch (ParseException e) {
-					System.out.println(e.getMessage());
+					LOG.error(e.getMessage());
 				}
 
 			    expedienteTC.setActivado(cal);
@@ -950,10 +950,10 @@ public class RemoteUtils {
 //			}else
 //				expedienteTC.setActivado(null);
 
-			System.out.println("Tarea:::::"+i);
-			System.out.println("codigoExp::"+expedienteTC.getCodigo());
-			System.out.println("getIdTarea::"+expedienteTC.getIdTarea());
-			System.out.println("fechaActivacion::"+expedienteTC.getActivado());
+//			System.out.println("Tarea:::::"+i);
+//			System.out.println("codigoExp::"+expedienteTC.getCodigo());
+//			System.out.println("getIdTarea::"+expedienteTC.getIdTarea());
+//			System.out.println("fechaActivacion::"+expedienteTC.getActivado());
 
 			taskList.add(expedienteTC);
 
