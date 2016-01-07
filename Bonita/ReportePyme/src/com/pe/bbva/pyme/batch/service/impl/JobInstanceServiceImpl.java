@@ -18,7 +18,6 @@ import com.pe.bbva.pyme.batch.service.JobInstanceService;
 import com.pe.bbva.pyme.listener.WFFastPymeServletContextListener;
 import com.pe.bbva.pyme.quartz.dao.TriggerDAO;
 import com.pe.bbva.pyme.quartz.domain.Trigger;
-import com.pe.bbva.pyme.utils.DBUtil;
 
 /*
  * (non-Javadoc)
@@ -57,12 +56,6 @@ public class JobInstanceServiceImpl implements Serializable, JobInstanceService 
      */
     @Override
     public void execute(String jobName, Date date) {
-        String activarJob = DBUtil.obtenerParametroDetalle("18", "004");
-        if("0".equalsIgnoreCase(activarJob)) {
-            LOG.error("Proceso inactivado");
-            return;
-        }
-        
         Job job = WFFastPymeServletContextListener.getBean(jobName);
         
         try {

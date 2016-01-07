@@ -32,7 +32,7 @@ public class BonitaClientRest {
     public static String getProperty(String key) {
         String prop = "";
         try {
-            LOG.info("===>" + System.getProperty("btm.root"));
+            LOG.debug("===>" + System.getProperty("btm.root"));
             Properties props = new Properties();
             props.load(new FileInputStream(System.getProperty("btm.root").replace("\\", "/") + "/conf/configWFFastPyme.properties"));
             prop = props.getProperty(key);

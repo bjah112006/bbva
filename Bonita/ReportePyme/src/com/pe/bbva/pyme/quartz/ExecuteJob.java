@@ -7,6 +7,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import com.pe.bbva.pyme.batch.service.JobInstanceService;
 import com.pe.bbva.pyme.listener.WFFastPymeServletContextListener;
+import com.pe.bbva.pyme.utils.DBUtil;
 
 public class ExecuteJob extends QuartzJobBean {
 
@@ -17,6 +18,12 @@ public class ExecuteJob extends QuartzJobBean {
 
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
         LOG.info("Ejecutando: [" + idAplicacion + "]-[" + nombreAplicacion + "]-[" + jobName + "]");
+        String activarJob = DBUtil.obtenerParametroDetalle("18", "004");
+        if("0".equalsIgnoreCase(activarJob)) {
+            LOG.error("Proceso inactivado");
+            return;
+        }
+        
         try {
             JobInstanceService jobInstanceService = WFFastPymeServletContextListener.getBean("jobInstanceService");
             jobInstanceService.execute(jobName);

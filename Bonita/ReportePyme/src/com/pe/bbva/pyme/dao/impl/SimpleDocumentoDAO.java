@@ -49,8 +49,10 @@ public class SimpleDocumentoDAO implements DocumentoDAO {
         cal.set(Calendar.MILLISECOND, 0);
         date = cal.getTime();
         
-        String sql = "select a.tenantid, a.id, a.author, a.creationdate, a.hascontent, a.filename, a.mimetype, a.url, a.content, b.processinstanceid from public.document a inner join public.document_mapping b on a.id=b.documentid where hascontent=? and date_trunc('day', to_timestamp(creationdate / 1000)) = ?";
-        return jdbcTemplate.query(sql, new Object[]{hasContent, date}, new RowMapper<Documento>() {
+        String sql = "select a.tenantid, a.id, a.author, a.creationdate, a.hascontent, a.filename, a.mimetype, a.url, a.content, b.processinstanceid from public.document a inner join public.document_mapping b on a.id=b.documentid where hascontent=? and date_trunc('day', to_timestamp(creationdate / 1000)) = ?" +
+                " union all " +
+                "select a.tenantid, a.id, a.author, a.creationdate, a.hascontent, a.filename, a.mimetype, a.url, a.content, b.processinstanceid from public.document a inner join public.arch_document_mapping b on a.id=b.documentid where hascontent=? and date_trunc('day', to_timestamp(creationdate / 1000)) = ?";
+        return jdbcTemplate.query(sql, new Object[]{hasContent, date, hasContent, date}, new RowMapper<Documento>() {
 
             @Override
             public Documento mapRow(ResultSet resultset, int rowNum) throws SQLException {

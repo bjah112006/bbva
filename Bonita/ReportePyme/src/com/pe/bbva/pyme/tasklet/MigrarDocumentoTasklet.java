@@ -107,7 +107,9 @@ public class MigrarDocumentoTasklet implements Tasklet, InitializingBean {
             LOG.error("ArchivoUtil:escribirArchivo", e);
         } finally {
             try {
-                output.close();
+                if(output != null) {
+                    output.close();
+                }
             } catch (IOException e) {
                 LOG.error("Archivo:cerrar:" + file.getPath(), e);
             }
@@ -121,7 +123,7 @@ public class MigrarDocumentoTasklet implements Tasklet, InitializingBean {
         endpoint = DBUtil.obtenerParametroDetalle(dataSource.getConnection(), "18", "001");
         activarWebService = DBUtil.obtenerParametroDetalle(dataSource.getConnection(), "18", "003");
         directorioTemporal = completarSeparador(DBUtil.obtenerParametroDetalle(dataSource.getConnection(), "18", "005"));
-        url = completarSeparador(DBUtil.obtenerParametroDetalle(dataSource.getConnection(), "18", "006"));
+        url = DBUtil.obtenerParametroDetalle(dataSource.getConnection(), "18", "006");
 
         RepeatStatus status = RepeatStatus.FINISHED;
         StepExecution execution = chunkContext.getStepContext().getStepExecution();
@@ -135,7 +137,7 @@ public class MigrarDocumentoTasklet implements Tasklet, InitializingBean {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat sdfDir = new SimpleDateFormat("yyyy/MM/dd/");
         String archivo;
-        
+        LOG.error("Documentos recuperados: [" + documentos.size() + "]");
         for(int i = 0; i < documentos.size(); i++) {
             contribution.incrementReadCount();
             doc = documentos.get(i);
@@ -165,7 +167,7 @@ public class MigrarDocumentoTasklet implements Tasklet, InitializingBean {
                     LOG.error("Error: \n", e);
                 }
             } else {
-                archivo = directorioTemporal + sdfDir.format(new Date(doc.getCreationDate())) + doc.getProcessInstanceId() + "/" + doc.getFilename();
+                archivo = directorioTemporal + sdfDir.format(new Date(doc.getCreationDate())) + doc.getProcessInstanceId() + "/" + doc.getFilename().replaceAll(" ", "");
                 if(escribirArchivo(archivo, doc.getContent())) {
                     doc.setUrl(url + archivo);
                     migrados.add(doc);
