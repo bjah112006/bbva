@@ -102,7 +102,8 @@ public class Listado implements RestApiController {
                     consultarTipoRed(response)
                     query = """
                     select a.username, a.id, a.lastname || ' ' || a.firstname "name", b.value from user_ a 
-                    inner join custom_usr_inf_val b on a.tenantid=b.tenantid and b.definitionid=2 
+                    inner join custom_usr_inf_val b on a.tenantid=b.tenantid 
+                    inner join custom_usr_inf_def bx on bx.id=b.definitionid and bx.description='Centro Negocio' 
                     inner join user_membership c on a.tenantid=c.tenantid and a.id=c.userid
                     inner join group_ d on c.tenantid=d.tenantid and c.groupid=d.id
                     where (d.name='RIESGOS' or d.parentpath='RIESGOS')
