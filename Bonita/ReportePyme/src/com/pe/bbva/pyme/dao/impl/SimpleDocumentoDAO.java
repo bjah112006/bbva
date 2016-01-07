@@ -75,7 +75,7 @@ public class SimpleDocumentoDAO implements DocumentoDAO {
     @Override
     @Transactional(readOnly = false)
     public void actualizarDocumento(final List<Documento> documentos) {
-        int[] result = jdbcTemplate.batchUpdate("update public.document set hascontent = false, filename = null, mimetype = null, url = ?, content = null where tenantid=? and id=?", new BatchPreparedStatementSetter() {
+        int[] result = jdbcTemplate.batchUpdate("update public.document set hascontent = false, mimetype = null, url = ?, content = null where tenantid=? and id=?", new BatchPreparedStatementSetter() {
             
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {

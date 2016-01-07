@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -22,6 +24,39 @@ public class DBUtil {
     private static Connection getConnection() throws SQLException {
         DriverManagerDataSource dataSource = WFFastPymeServletContextListener.getBean("dataSource");
         return dataSource.getConnection();
+    }
+    
+    public static Map<String, String> obtenerDatosCliente(Long id) {
+        Map<String, String> cliente = new LinkedHashMap<String, String>();
+
+        try {
+            Connection cn = getConnection();
+            PreparedStatement ps = cn.prepareStatement("select * from fastpyme.fn_instance('', '', ?, '-1', '-1', '-1', '-1', 0, 'S');");
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // cliente.put("tipoDOI", rs.getString("TIPO_DOI_CLIENTE"));
+                cliente.put("numDOI", rs.getString("NUM_DOI_CLIENTE"));
+                cliente.put("codigoCliente", rs.getString("CODIGO_CLIENTE"));
+            } else {
+                ps = cn.prepareStatement("select * from fastpyme.fn_arch_instance('', '', ?, '-1', '-1', '-1', '-1', 0, 'S');");
+                ps.setLong(1, id);
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    // cliente.put("tipoDOI", rs.getString("TIPO_DOI_CLIENTE"));
+                    cliente.put("numDOI", rs.getString("NUM_DOI_CLIENTE"));
+                    cliente.put("codigoCliente", rs.getString("CODIGO_CLIENTE"));
+                }
+            }
+            
+            rs.close();
+            ps.close();
+            cn.close();
+        } catch (Exception e) {
+            logger.error("obtenerAmbito", e);
+        }
+        return cliente;
     }
     
     public static String obtenerAmbito(String oficina) {
