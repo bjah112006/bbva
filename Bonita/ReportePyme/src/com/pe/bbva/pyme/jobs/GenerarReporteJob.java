@@ -67,6 +67,11 @@ public class GenerarReporteJob extends QuartzJobBean {
             Integer diasMes = Utils.getDiasMesActual();
             diaEjecucion = Integer.parseInt(diaEjecucion) > diasMes ? diasMes.toString() : diaEjecucion;
             // 4. se comparan para saber si debe ejecutar la tarea programada
+            LOG.debug("Frecuencia: " + frecuenciaEjecucion 
+                    + ", Dia: " + diaEjecucion 
+                    + ", Hora: " + horaEjecucion 
+                    + ", Dia actual: " + diaActual 
+                    + ", Hora actual: " + horaActual);
             if (ConstantesEnum.FRECUENCIA_DIARIA.getNombre().equalsIgnoreCase(frecuenciaEjecucion)) {
                 verificado = horaEjecucion.equals(horaActual);
             } else {
@@ -84,7 +89,7 @@ public class GenerarReporteJob extends QuartzJobBean {
     private List<Solicitud> obtenerDatosReporte(List<Config> params) throws Exception {
         List<Solicitud> listaSolicitudes = new ArrayList<Solicitud>();
         ISolicitudDAO iSolicitudDAO = new SolicitudDAOImpl();
-        listaSolicitudes = iSolicitudDAO.listarSolicitudes(params);
+        listaSolicitudes = iSolicitudDAO.listarSolicitudes();
         return listaSolicitudes;
     }
 
@@ -127,10 +132,69 @@ public class GenerarReporteJob extends QuartzJobBean {
             Solicitud solicitud = iterator.next();
             row = sheet.createRow(rowIndex++);
             
-            for (int i = 0; i < params.size(); i++) {
-                cell = row.createCell(i);
-                cell.setCellValue(solicitud.get(params.get(i).getValColumn2()));
-            }
+            Cell cell0 = row.createCell(0);
+            cell0.setCellValue(solicitud.getNroSolicitud());
+            Cell cell1 = row.createCell(1);
+            cell1.setCellValue(solicitud.getTipoDOICliente());
+            Cell cell2 = row.createCell(2);
+            cell2.setCellValue(solicitud.getNroDOICliente());
+            Cell cell3 = row.createCell(3);
+            cell3.setCellValue(solicitud.getNombreCliente());
+            Cell cell4 = row.createCell(4);
+            cell4.setCellValue(solicitud.getNombreTarea());
+            Cell cell5 = row.createCell(5);
+            cell5.setCellValue(solicitud.getEstado());
+            Cell cell6 = row.createCell(6);
+            cell6.setCellValue(solicitud.getTipoOferta());
+            Cell cell7 = row.createCell(7);
+            cell7.setCellValue(solicitud.getOficinaSolicitud());
+            Cell cell8 = row.createCell(8);
+            cell8.setCellValue(solicitud.getFechaLlegada());
+            Cell cell9 = row.createCell(9);
+            cell9.setCellValue(solicitud.getFechaEnvio());
+            Cell cell10 = row.createCell(10);
+            cell10.setCellValue(solicitud.getRolEjecutorTarea());
+            Cell cell11 = row.createCell(11);
+            cell11.setCellValue(solicitud.getUsuarioEjecutorTarea());
+            Cell cell12 = row.createCell(12);
+            cell12.setCellValue(solicitud.getNroRVGL());
+            Cell cell13 = row.createCell(13);
+            cell13.setCellValue(solicitud.getNroContrato());
+            Cell cell14 = row.createCell(14);
+            cell14.setCellValue(solicitud.getNroGarantia());
+            Cell cell15 = row.createCell(15);
+            cell15.setCellValue(solicitud.getDictamen());       
+            
+            Cell cell16 = row.createCell(16);
+            cell16.setCellValue(solicitud.getProducto());
+            Cell cell17 = row.createCell(17);
+            cell17.setCellValue(solicitud.getCampania());
+            Cell cell18 = row.createCell(18);
+            cell18.setCellValue(solicitud.getClasificacion_clte());
+            Cell cell19 = row.createCell(19);
+            cell19.setCellValue(solicitud.getAbn_registante());
+            Cell cell20 = row.createCell(20);
+            cell20.setCellValue(solicitud.getNum_preimpreso());
+            Cell cell21 = row.createCell(21);
+            cell21.setCellValue(solicitud.getCausal_devol_gmc());
+            Cell cell22 = row.createCell(22);
+            cell22.setCellValue(solicitud.getCausal_clte_cancela());
+            Cell cell23 = row.createCell(23);
+            cell23.setCellValue(solicitud.getMoneda());
+            Cell cell24 = row.createCell(24);
+            cell24.setCellValue(solicitud.getMonto());
+            Cell cell25 = row.createCell(25);
+            cell25.setCellValue(solicitud.getPlazo());
+            Cell cell26 = row.createCell(26);
+            cell26.setCellValue(solicitud.getTasa());
+            
+            Cell cell27 = row.createCell(27);
+            cell27.setCellValue(solicitud.getCentro_negocio_riesgos());
+            
+//            for (int i = 0; i < params.size(); i++) {
+//                cell = row.createCell(i);
+//                cell.setCellValue(solicitud.get(params.get(i).getValColumn2()));
+//            }
         }
         
         FileOutputStream fos = new FileOutputStream(fileName);

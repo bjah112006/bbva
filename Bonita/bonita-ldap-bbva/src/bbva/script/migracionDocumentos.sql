@@ -267,5 +267,5 @@ INSERT INTO tbl_pyme_parameter (id_table, id_column, id_reference, val_column1, 
 INSERT INTO tbl_pyme_parameter (id_table, id_column, id_reference, val_column1, val_column2, flg_state) VALUES (18, '002', '', 'migrarDocumentosJob', '0 18 10 1 * ? *', 1);
 INSERT INTO tbl_pyme_parameter (id_table, id_column, id_reference, val_column1, val_column2, flg_state) VALUES (18, '003', '', 'activarWebService'  , '0', 1);
 INSERT INTO tbl_pyme_parameter (id_table, id_column, id_reference, val_column1, val_column2, flg_state) VALUES (18, '004', '', 'activarJob'         , '0', 1);
-INSERT INTO tbl_pyme_parameter (id_table, id_column, id_reference, val_column1, val_column2, flg_state) VALUES (18, '005', '', 'directorioTemporal' , '/mnt/compartido/bonita', 1);
-INSERT INTO tbl_pyme_parameter (id_table, id_column, id_reference, val_column1, val_column2, flg_state) VALUES (18, '006', '', 'url' , 'http://118.180.34.207:8036/ReportePyme/download?url=', 1);
+INSERT INTO tbl_pyme_parameter (id_table, id_column, id_reference, val_column1, val_column2, flg_state) VALUES (18, '005', '', 'directorioTemporal' , '/mnt/bonitafiles', 1);
+INSERT INTO tbl_pyme_parameter (id_table, id_column, id_reference, val_column1, val_column2, flg_state) VALUES (18, '006', '', 'url' , 'https://extranetperu.grupobbva.pe/ReportePyme/download?url=', 1);
