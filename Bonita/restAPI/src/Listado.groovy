@@ -109,6 +109,7 @@ public class Listado implements RestApiController {
                     where (d.name='RIESGOS' or d.parentpath='RIESGOS')
                     and a.id=b.userid 
                     and enabled=true
+                    order by a.lastname || ' ' || a.firstname
                     """
                     rows = executeQuery(query)
                     response.setUsuarioPorAreas(rows)
@@ -179,7 +180,7 @@ public class Listado implements RestApiController {
                     query = """
                     select * from fastpyme.instance
                     where name='FAST NEGOCIOS'
-                    and (('${username}' = '-1' and assigneeid=0) or lastname || ' ' || firstname='${username}')
+                    and (('${username}' = '-1' and assigneeid=0) or upper(lastname || ' ' || firstname)=upper('${username}'))
                     and codigo_centro_negocio='${centroNegocio}' and taskname in(
                           'Asignar Evaluacion'
                         , 'Asignar Evaluación'
