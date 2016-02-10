@@ -244,7 +244,28 @@ public class HistorialBean extends AbstractFacade<Historial> implements Historia
 		//LOG.info("query : "+query);
 		
 
-	}	
+	}
+	
+	@Override
+	public List<Historial> buscarHistXidExpIdPerfil(Long idExpediente, Long idPerfil) {
+		String idActivo="1";
+		
+		try{
+			String query = "SELECT h FROM Historial h  WHERE h.expediente.id=:idExpediente and h.perfil.id=:idPerfil " +
+					//" and h.empleado.oficina.id == h.oficina.id " +
+					" and h.empleado.flagActivo like :idActivo ORDER BY h.id DESC";
+			List<Historial> resultList = em.createQuery(query)
+					.setParameter("idExpediente", idExpediente)
+					.setParameter("idPerfil", idPerfil)
+					.setParameter("idActivo", idActivo)
+					.getResultList();
+			return resultList;
+			
+		}catch(NoResultException e){
+			return null;
+		}
+	}
+	
 	@Override 
 	public List<Historial> buscarXCriterioExpedienteXPerfil(Long idExpediente, Long idPerfil){
 		String idActivo="1";
