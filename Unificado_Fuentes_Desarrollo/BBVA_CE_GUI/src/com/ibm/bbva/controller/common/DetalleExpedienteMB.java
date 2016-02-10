@@ -9,8 +9,10 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.el.ELContext;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.slf4j.Logger;
@@ -28,6 +30,7 @@ import bbva.ws.api.view.FacadeLocal;
 
 import com.ibm.bbva.controller.AbstractMBean;
 import com.ibm.bbva.controller.Constantes;
+import com.ibm.bbva.controller.form.AprobarExpedienteMB;
 import com.ibm.bbva.entities.CategoriaRenta;
 import com.ibm.bbva.entities.ClienteNatural;
 import com.ibm.bbva.entities.Empleado;
@@ -203,6 +206,11 @@ public class DetalleExpedienteMB extends AbstractMBean {
 					} else { // no esta dentro de su delegacion
 						LOG.info("Fuera de Delegacion Oficina 2 ");
 						mensajeOperacion = Mensajes.getMensaje("com.ibm.bbva.common.detalleExpediente.operFuera");
+						ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+						AprobarExpedienteMB aprobarExpedienteMB = (AprobarExpedienteMB) FacesContext
+								.getCurrentInstance().getApplication().getELResolver()
+								.getValue(elContext, null, "aprobarExpediente");
+						aprobarExpedienteMB.setActivoAprOperacion(true);
 					}	
 					
 				}else{
