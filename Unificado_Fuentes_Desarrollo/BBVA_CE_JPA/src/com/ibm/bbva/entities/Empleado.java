@@ -118,6 +118,9 @@ public class Empleado implements Serializable {
 	@JoinColumn(name="ID_PERFIL_BACKUP")
 	private Perfil perfilBackup;
 	
+	@Column(name="FLAG_EMP_SUSTITUIDO")
+	private String flagEmpleadoSustituido;
+	
 	public Empleado() {
 	}
 
@@ -361,5 +364,15 @@ public class Empleado implements Serializable {
 	public void setPerfilBackup(Perfil perfilBackup) {
 		this.perfilBackup = perfilBackup;
 	}
+
+	public String getFlagEmpleadoSustituido() {
+		return flagEmpleadoSustituido;
+	}
+
+	public void setFlagEmpleadoSustituido(String flagEmpleadoSustituido) {
+		this.flagEmpleadoSustituido = flagEmpleadoSustituido;
+	}
+
+	
 
 }
