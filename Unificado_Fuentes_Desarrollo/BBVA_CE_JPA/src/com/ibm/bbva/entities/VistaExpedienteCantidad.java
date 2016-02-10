@@ -21,7 +21,9 @@ import javax.persistence.Table;
 	@NamedQuery(name="VistaExpedienteCantidad.findByIdProdIdTerrIdOfIdPer", query="SELECT v FROM VistaExpedienteCantidad v WHERE v.idProduto = :idProducto and v.idTerritorio = :idTerritorio and v.idOficina = :idOficina and v.idPerfil = :idPerfil"),
 	@NamedQuery(name="VistaExpedienteCantidad.findByIdEmpleado", query="SELECT v FROM VistaExpedienteCantidad v WHERE v.idEmpleado = :idEmpleado"),
 	@NamedQuery(name="VistaExpedienteCantidad.sumExpByIdEmpleado", query="SELECT v.idEmpleado, SUM(v.numExpedientes) FROM VistaExpedienteCantidad v WHERE v.idEmpleado = :idEmpleado GROUP BY v.idEmpleado"),
-	@NamedQuery(name="VistaExpedienteCantidad.sumExpByAllEmpleado", query="SELECT v.idEmpleado, SUM(v.numExpedientes) FROM VistaExpedienteCantidad v GROUP BY v.idEmpleado")
+	@NamedQuery(name="VistaExpedienteCantidad.sumExpByAllEmpleado", query="SELECT v.idEmpleado, SUM(v.numExpedientes) FROM VistaExpedienteCantidad v GROUP BY v.idEmpleado"),
+	@NamedQuery(name="VistaExpedienteCantidad.sumExpByIdPerfilIdProd", query="SELECT v.idEmpleado, SUM(v.numExpedientes) as sumExpedientes FROM VistaExpedienteCantidad v WHERE v.idPerfil = :idPerfil and v.idProduto = :idProducto GROUP BY v.idEmpleado order by sumExpedientes, v.idEmpleado"),
+	@NamedQuery(name="VistaExpedienteCantidad.sumExpByIdPerfilIdProdIdOfi", query="SELECT v.idEmpleado, SUM(v.numExpedientes) as sumExpedientes FROM VistaExpedienteCantidad v WHERE v.idPerfil = :idPerfil and v.idProduto = :idProducto and v.idOficina = :idOficina GROUP BY v.idEmpleado order by sumExpedientes, v.idEmpleado")
 })
 public class VistaExpedienteCantidad implements Serializable {
 	private static final long serialVersionUID = 1L;
