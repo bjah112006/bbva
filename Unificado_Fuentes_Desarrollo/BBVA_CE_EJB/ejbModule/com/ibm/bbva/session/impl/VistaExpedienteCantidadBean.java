@@ -1,5 +1,6 @@
 package com.ibm.bbva.session.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -109,4 +110,50 @@ public class VistaExpedienteCantidadBean extends AbstractFacade<VistaExpedienteC
 			return null;
 		}
 	}
+	
+	@Override
+	public List<VistaExpedienteCantidad> cantidadExpPorIdPerfilIdProd(long idPerfil, long idProducto){
+	    try{
+	      List listVistaExpedienteCantidad = new ArrayList();
+	      List<Object[]> result = this.em.createNamedQuery("VistaExpedienteCantidad.sumExpByIdPerfilIdProd")
+	    		  .setParameter("idPerfil", Long.valueOf(idPerfil))
+	    		  .setParameter("idProducto", Long.valueOf(idProducto))
+	    		  .getResultList();
+	      for (Object[] obj : result) {
+	        VistaExpedienteCantidad vistaExpedienteCantidad = new VistaExpedienteCantidad();
+	        vistaExpedienteCantidad.setIdEmpleado(((Long)obj[0]).longValue());
+	        vistaExpedienteCantidad.setNumExpedientes(((Long)obj[1]).longValue());
+	        listVistaExpedienteCantidad.add(vistaExpedienteCantidad);
+	        vistaExpedienteCantidad = null;
+	      }
+	      return listVistaExpedienteCantidad;
+	    }
+	    catch (Exception e) {
+	      System.err.println("error: " + e.getMessage()); }
+	    return null;
+	  }
+	
+	@Override
+	public List<VistaExpedienteCantidad> cantidadExpPorIdPerfilIdProdIdOfi(long idPerfil, long idProducto, long idOficina){
+	    try{
+	      List listVistaExpedienteCantidad = new ArrayList();
+	      List<Object[]> result = this.em.createNamedQuery("VistaExpedienteCantidad.sumExpByIdPerfilIdProdIdOfi")
+	    		  .setParameter("idPerfil", Long.valueOf(idPerfil))
+	    		  .setParameter("idProducto", Long.valueOf(idProducto))
+	    		  .setParameter("idOficina", Long.valueOf(idOficina))
+	    		  .getResultList();
+	      for (Object[] obj : result) {
+	        VistaExpedienteCantidad vistaExpedienteCantidad = new VistaExpedienteCantidad();
+	        vistaExpedienteCantidad.setIdEmpleado(((Long)obj[0]).longValue());
+	        vistaExpedienteCantidad.setNumExpedientes(((Long)obj[1]).longValue());
+	        listVistaExpedienteCantidad.add(vistaExpedienteCantidad);
+	        vistaExpedienteCantidad = null;
+	      }
+	      return listVistaExpedienteCantidad;
+	    }
+	    catch (Exception e) {
+	      System.err.println("error: " + e.getMessage()); }
+	    return null;
+	  }
+
 }
