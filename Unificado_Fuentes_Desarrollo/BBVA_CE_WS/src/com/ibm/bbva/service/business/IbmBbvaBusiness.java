@@ -1213,29 +1213,54 @@ public class IbmBbvaBusiness {
 			Empleado objEmpleado=null;
 			List<Historial> listHistorial=null;
 			
-			listHistorial=historialBeanLocalBean.buscarXCriterioExpedienteYPerfilEjecutivo(idExpediente, Long.parseLong(idPerfil+""));
+			//listHistorial=historialBeanLocalBean.buscarXCriterioExpedienteYPerfilEjecutivo(idExpediente, Long.parseLong(idPerfil+""));
+			listHistorial=historialBeanLocalBean.buscarHistXidExpIdPerfil(idExpediente, Long.parseLong(idPerfil+""));
 				
 			if(listHistorial!=null && !listHistorial.isEmpty()){
-				LOG.info("listHistorial tamaño:::"+listHistorial.size());
-				objEmpleado = listHistorial.get(0).getEmpleado();
-				//idAccion=obtenerUltimaAccion(idExpediente);
 				idAccion=obtenerUltimaAccion(objExpediente);
-				LOG.info("idAccion Devolver : "+idAccion);
-				
-				if(objEmpleado!=null && objEmpleado.getOficina()!=null){
-					LOG.info("Oficina = "+objEmpleado.getOficina().getId());
-					LOG.info("Empleado = "+objEmpleado.getId());
-					List<CartEmpleadoCE> listCartEmpleadoCE=cartEmpleadoCEBeanLocalBean.verificarCartEmpleado(idPerfil, objEmpleado.getOficina().getId(), 
-							idProducto, objEmpleado.getId(), idTerritorio);
-					if(listCartEmpleadoCE!=null && listCartEmpleadoCE.size()>0){
-						LOG.info("listCartEmpleadoCE size::"+listCartEmpleadoCE.size());
-						
+				LOG.info("idAccion Devolver " + idAccion + " a Perfil::: " + idPerfil);
+				if (idPerfil.equals(Constantes.ID_PERFIL_MESA_DE_CONTROL) || idPerfil.equals(Constantes.ID_PERFIL_ANALISIS_Y_ALTAS) || idPerfil.equals(Constantes.ID_PERFIL_CONTROLLER) || idPerfil.equals(Constantes.ID_PERFIL_FORMALIZADOR)){
+					LOG.info("Mesa de control con historial || Analisis y Alta con historial || Controller con historial || Formalizador con historial");
+					List<VistaExpedienteCantidad> listVistaExpedienteCantidad = vistaExpedienteCantidadBean.cantidadExpPorIdPerfilIdProd(idPerfil, idProducto);
+					if(listVistaExpedienteCantidad!=null && !listVistaExpedienteCantidad.isEmpty()){
+						idEmpleado = listVistaExpedienteCantidad.get(0).getIdEmpleado();
 						balanceo=false;
-						idEmpleado = objEmpleado.getId(); //estaba actualizando el usuario administrador en BD
-						LOG.info("idEmpleado = "+idEmpleado);
 					}
+					LOG.info("balanceo con historial para perfil "+ idPerfil + " = "+balanceo);	
 					
-					LOG.info("balanceo = "+balanceo);
+				}else{
+					LOG.info("listHistorial tamaño:::"+listHistorial.size());
+					objEmpleado = listHistorial.get(0).getEmpleado();
+					//idAccion=obtenerUltimaAccion(idExpediente);
+					//idAccion=obtenerUltimaAccion(objExpediente);
+					//LOG.info("idAccion Devolver : "+idAccion);
+					
+					LOG.info("Oficina del Empleado "+ objEmpleado.getOficina().getCodigo() + " Oficina del Expediente " + listHistorial.get(0).getOficina().getCodigo());
+					if(objEmpleado.getOficina().getId() == listHistorial.get(0).getOficina().getId()){
+						if(objEmpleado!=null && objEmpleado.getOficina()!=null){
+							LOG.info("Oficina = "+objEmpleado.getOficina().getId());
+							LOG.info("Empleado = "+objEmpleado.getId());
+							List<CartEmpleadoCE> listCartEmpleadoCE=cartEmpleadoCEBeanLocalBean.verificarCartEmpleado(idPerfil, objEmpleado.getOficina().getId(), 
+									idProducto, objEmpleado.getId(), idTerritorio);
+							if(listCartEmpleadoCE!=null && listCartEmpleadoCE.size()>0){
+								LOG.info("listCartEmpleadoCE size::"+listCartEmpleadoCE.size());
+								
+								balanceo=false;
+								idEmpleado = objEmpleado.getId(); //estaba actualizando el usuario administrador en BD
+								LOG.info("idEmpleado = "+idEmpleado);
+							}
+							
+							LOG.info("balanceo = "+balanceo);
+						}
+					}else{
+						LOG.info("Entro al balanceo porque el Ejecutivo que registro el Exp. ya no pertenece a la oficina " + listHistorial.get(0).getOficina().getCodigo());
+						List<VistaExpedienteCantidad> listVistaExpedienteCantidad = vistaExpedienteCantidadBean.cantidadExpPorIdPerfilIdProdIdOfi(idPerfil, idProducto, listHistorial.get(0).getOficina().getId());
+						if(listVistaExpedienteCantidad!=null && !listVistaExpedienteCantidad.isEmpty()){
+							idEmpleado = listVistaExpedienteCantidad.get(0).getIdEmpleado();
+							balanceo=false;
+						}
+						LOG.info("balanceo con historial para perfil "+ idPerfil + " = "+balanceo);	
+					}
 				}
 			}
 			if(listHistorial==null || listHistorial.size()<=0 || balanceo){
@@ -1243,10 +1268,17 @@ public class IbmBbvaBusiness {
 					LOG.info("idAccion - Avanza" + idAccion);
 					if (idPerfil.equals(Constantes.ID_PERFIL_MESA_DE_CONTROL) || idPerfil.equals(Constantes.ID_PERFIL_ANALISIS_Y_ALTAS)){
 						LOG.info("Mesa de control || Analisis y Alta");
-						List<VistaExpedienteCantidad> listVistaExpedienteCantidad = vistaExpedienteCantidadBean.buscarPorIdProdIdTerrIdPer(idProducto, idTerritorio, idPerfil);
+						//List<VistaExpedienteCantidad> listVistaExpedienteCantidad = vistaExpedienteCantidadBean.buscarPorIdProdIdTerrIdPer(idProducto, idTerritorio, idPerfil);
+						List<VistaExpedienteCantidad> listVistaExpedienteCantidad = vistaExpedienteCantidadBean.cantidadExpPorIdPerfilIdProd(idPerfil, idProducto);
 						if(listVistaExpedienteCantidad!=null && !listVistaExpedienteCantidad.isEmpty())
 							idEmpleado = listVistaExpedienteCantidad.get(0).getIdEmpleado();
 						
+					}else if (idPerfil.equals(Constantes.ID_PERFIL_CONTROLLER) || idPerfil.equals(Constantes.ID_PERFIL_FORMALIZADOR)){
+							LOG.info("Controller || Formalizador");
+							List<VistaExpedienteCantidad> listVistaExpedienteCantidad = vistaExpedienteCantidadBean.cantidadExpPorIdPerfilIdProd(idPerfil, idProducto);
+							if(listVistaExpedienteCantidad!=null && !listVistaExpedienteCantidad.isEmpty())
+								idEmpleado = listVistaExpedienteCantidad.get(0).getIdEmpleado();
+							
 					}else if(idPerfil.equals(Constantes.ID_PERFIL_ANALISIS_DE_RIESGOS) || idPerfil.equals(Constantes.ID_PERFIL_SUPERIOR_DE_RIESGOS)){
 						LOG.info("Analisis de riesgos || Riesgo superior");
 						List<VistaExpedienteComplejidad> listVistaExpedienteComplejidad = vistaExpedienteComplejidadBean.buscarPorIdProdIdTerrIdPer(idProducto, idTerritorio, idPerfil);
