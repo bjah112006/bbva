@@ -34,6 +34,8 @@ public interface HistorialBeanLocal {
 			Long idExpediente, Long idtarea1, Long idtarea2);
 	
 	public List<Historial> buscarXCriterioExpedienteXPerfil(Long idExpediente, Long idPerfil);
+	
+	public List<Historial> buscarHistXidExpIdPerfil(Long idExpediente, Long idPerfil);
 
 	public List<Historial> buscarXcriterios(Historial h, Date fechaInicio,
 			Date fechaFin, List<Long> list);
