@@ -14,4 +14,7 @@ public interface VistaExpedienteCantidadBeanLocal {
 		public List<VistaExpedienteCantidad> buscarPorIdProdIdTerrIdOfIdPer(
 				long idProducto, long idTerritorio, long idOficina,
 				long idPerfil);
+		
+		public List<VistaExpedienteCantidad> cantidadExpPorIdPerfilIdProd(long idPerfil, long idProducto);
+		public List<VistaExpedienteCantidad> cantidadExpPorIdPerfilIdProdIdOfi(long idPerfil, long idProducto, long idOficina);
 }
