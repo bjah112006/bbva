@@ -272,49 +272,63 @@ public class RegistrarDatosMB extends AbstractMBean {
 					LOG.info("Id Perfil= "+objPerfil.getId());
 
 					if(listEmpleado!=null && listEmpleado.size()>0){
-						LOG.info("Existe Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion());
-						if(objExpedienteDTO.getCodigoNivel()>0){
-							LOG.info("Nivel a considerar "+objExpedienteDTO.getCodigoNivel());
-							LOG.info("Validacion de tipo de cambio.");
-							if (String.valueOf(objExpedienteDTO.getCodigoTipoMonedaSol()).equals(Constantes.CODIGO_TIPO_CAMBIO_DOLARES)) {
-								if(verificarTipoCambio(expediente.getEmpleado()) == null){
-									LOG.info("NO hay tipo de cambio, no puede seguir el flujo.");
-									msjOperacion292="No Existe Tipo de Cambio el día de hoy.";
-									msjOperacionBol292=true;
-									return null;
-								}
+						if(listEmpleado.size()>1 && objPerfil.getId()==Constantes.ID_PERFIL_SUB_GERENTE){
+							LOG.info("Existe mas de un Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion());
+							msjOperacion="Existe más de un Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion()+":";
+							
+							for(Empleado empleado : listEmpleado){
+								msjOperacion+="\n"+ empleado.getCodigo() + " - " + empleado.getNombresCompletos();	
 							}
-							if(ayudaVerificacionExp.delegacionOficinaValidacion(objExpedienteDTO)){
-								LOG.info("Entra a grabar");
-							    grabarExp(Constantes.ACCION_BOTON_ENVIAR_APROBACION,
-										  Constantes.ESTADO_APROBADO_TAREA_3);				
-								addObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION, Constantes.FLAG_COPIA_ARCHIVO);
-								addObjectSession(Constantes.ID_EXPEDIENTE_SESION, expediente.getId());
-								msgGuiaDocumentaria = false;
-								msjOperacionBol=false;
-								//return "/bandejaPendientes/formBandejaPendientes?faces-redirect=true";		
-								return "/moverArchivos/formMoverArchivos?faces-redirect=true";
-							}else{
-								LOG.info("Validación Delegacion Oficina es falso");
-								Nivel objNivel=nivelBean.buscarPorId(objExpedienteDTO.getCodigoNivel());
-								msjOperacion="No se encuentra configurado valores de Delegación oficina para el Nivel "+objNivel.getDescripcion()+" con Producto "+ objExpedienteDTO.getCodigoProducto();
-								msjOperacionBol=true;				
-							}							
-						}else
-							LOG.info("Nivel es nulo");	
+							msjOperacion+="\n\nPor favor comuníquese con el Administrador.";
+							msjOperacionBol=true;
+							
+						}else{
+							LOG.info("Existe Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion());
+							if(objExpedienteDTO.getCodigoNivel()>0){
+								LOG.info("Nivel a considerar "+objExpedienteDTO.getCodigoNivel());
+								LOG.info("Validacion de tipo de cambio.");
+								if (String.valueOf(objExpedienteDTO.getCodigoTipoMonedaSol()).equals(Constantes.CODIGO_TIPO_CAMBIO_DOLARES)) {
+									if(verificarTipoCambio(expediente.getEmpleado()) == null){
+										LOG.info("NO hay tipo de cambio, no puede seguir el flujo.");
+										msjOperacion292="No Existe Tipo de Cambio el día de hoy.";
+										msjOperacionBol292=true;
+										return null;
+									}
+								}
+								if(ayudaVerificacionExp.delegacionOficinaValidacion(objExpedienteDTO)){
+									LOG.info("Entra a grabar");
+								    grabarExp(Constantes.ACCION_BOTON_ENVIAR_APROBACION,
+											  Constantes.ESTADO_APROBADO_TAREA_3);				
+									addObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION, Constantes.FLAG_COPIA_ARCHIVO);
+									addObjectSession(Constantes.ID_EXPEDIENTE_SESION, expediente.getId());
+									msgGuiaDocumentaria = false;
+									msjOperacionBol=false;
+									//return "/bandejaPendientes/formBandejaPendientes?faces-redirect=true";		
+									return "/moverArchivos/formMoverArchivos?faces-redirect=true";
+								}else{
+									LOG.info("Validación Delegacion Oficina es falso");
+									Nivel objNivel=nivelBean.buscarPorId(objExpedienteDTO.getCodigoNivel());
+									msjOperacion="No se encuentra configurado valores de Delegación oficina para el Nivel "+objNivel.getDescripcion()+" con Producto "+ objExpedienteDTO.getCodigoProducto();
+									msjOperacionBol=true;				
+								}							
+							}else
+								LOG.info("Nivel es nulo");
+						}
 					}else{
 						if(objPerfil.getId()==Constantes.ID_PERFIL_SUB_GERENTE){
 							LOG.info("No Existe Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion());
 							
 							if(objOficina!=null && objOficina.getFlagDesplazada()!=null && !objOficina.getFlagDesplazada().trim().equals("") && 
 									objOficina.getFlagDesplazada().trim().equals(Constantes.FLAG_ACTIVO)){
-								msjOperacion="No Existe Perfil "+objPerfil.getDescripcion().toUpperCase()+" activo para: \n * Oficina Desplazada "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion().toUpperCase();
+								msjOperacion="No Existe Perfil "+objPerfil.getDescripcion().toUpperCase()+" activo para: \n* Oficina Desplazada "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion().toUpperCase();
 								if(objOficina.getOficinaPrincipal()!=null)
-									msjOperacion+="\n  * Oficina Principal "+objOficina.getOficinaPrincipal().getId()+" - "+objOficina.getOficinaPrincipal().getDescripcion();
-								else
-									msjOperacion+="\n - Oficina Desplazada "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion().toUpperCase()+" no tiene configurado su Oficina Principal";
+									msjOperacion+="\n* Oficina Principal "+objOficina.getOficinaPrincipal().getId()+" - "+objOficina.getOficinaPrincipal().getDescripcion()+".";
+								else{
+									msjOperacion+="\n- Oficina Desplazada "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion().toUpperCase()+" no tiene configurado su Oficina Principal.";
+								}
+									msjOperacion+="\n\nPor favor comuníquese con el Administrador.";
 							}else{
-								msjOperacion="No Existe Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion();
+								msjOperacion="No Existe Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion()+".\n\nPor favor comuníquese con el Administrador";
 							}
 							msjOperacionBol=true;
 						}else
