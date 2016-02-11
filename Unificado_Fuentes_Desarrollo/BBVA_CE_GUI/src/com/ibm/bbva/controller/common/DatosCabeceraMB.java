@@ -211,38 +211,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 				String codigoOficina = usuarioIDM.getCentroTemporal().getDescripcion();
 				objOficinaTemporal = oficinabean.buscarPorCodigo(codigoOficina);
 			}
-	    		
-	    		    				
-			/*List<OficinaTemporal> listaOficinaTemporal = this.oficinaTemporalBeanLocal.obtenerActual(this.empleado.getId());
-			OficinaTemporal objOficinaTemporal = null;		
-			if(flagTieneOficinaTemporal)
-			{
-				objOficinaTemporal = listaOficinaTemporal.get(0);
-				DateFormat dateformat= new SimpleDateFormat("dd/MM/yyyy");
-				DateFormat timeformat= new SimpleDateFormat("HH:mm");
-				try {
-					Date fechaActual = dateformat.parse(dateformat.format(new Date()));
-					Date horaActual = timeformat.parse(timeformat.format(new Date()));
-					if(objOficinaTemporal != null && fechaActual.compareTo(objOficinaTemporal.getFechaInicio()) == 0)
-					{
-						if(timeformat.parse(objOficinaTemporal.getHoraInicio()).compareTo(horaActual) > 0)
-						{
-							objOficinaTemporal = null;
-						}
-					}
-					if(objOficinaTemporal != null && fechaActual.compareTo(objOficinaTemporal.getFechaFin()) == 0)
-					{
-						if(timeformat.parse(objOficinaTemporal.getHoraFin()).compareTo(horaActual) < 0)
-						{
-							objOficinaTemporal = null;
-						}
-					}
-				} catch (ParseException e) {
-					// TODO Bloque catch generado automáticamente
-					e.printStackTrace();
-				}					
-			}*/
-			
+	    	
 			if(!(flagTieneOficinaTemporal))//if(objOficinaTemporal == null)
 			{
 				/*validación para el caso en que el usuario tenia configurada una oficina
@@ -336,11 +305,6 @@ public class DatosCabeceraMB extends AbstractMBean {
 				{				
 					//Perfil temporal que tiene registrado el empleado es Sub Gerente
 					if(this.empleado.getPerfil().getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
-						
-						//RemoteUtils remoteUtils = new RemoteUtils();
-						//long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
-						//if(cantexp > 0)
-						//{
 							
 								//Buscar Sub Gerentes activos y de la oficina dada
 								List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
@@ -384,11 +348,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 										flagTienePuestoTemporal = true;
 									}
 								}
-							
-						//}else{	
-						//	actualizarDatosEmpleado();
-						//}	
-							
+						
 					}else{
 						RemoteUtils remoteUtils = new RemoteUtils();
 						long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
@@ -489,35 +449,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 										}
 									}
 								}
-									
-							
-							}//else{
-								//activar al subGerente que en este caso se esta logeando
-								/*this.empleado.setFlagActivo(Constantes.FLAG_ACTIVO);
-								this.empleadobean.edit(this.empleado);
-								
-								//Si tiene Exp. Pendientes se debe reasignar al SG activo
-								if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
-																	
-									for(Empleado subGerenteTemporal : subGerentesTemporales){
-										reasignarExpedientes(subGerenteTemporal, this.empleado);
-										
-										//Actulizar Perfil, Cargo y Carterizacion del SGT
-										subGerenteTemporal.setPerfil(subGerenteTemporal.getPerfilBackup());
-										subGerenteTemporal.setPerfilBackup(null);
-										subGerenteTemporal.setCodigoCargo(subGerenteTemporal.getCodigoCargoBackup());
-										subGerenteTemporal.setCodigoCargoBackup(null);
-										this.empleadobean.edit(subGerenteTemporal);
-										
-										List<CartEmpleadoCE> listaCartEmpleadoSGTempCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(subGerenteTemporal.getId());
-										for(CartEmpleadoCE objCartEmpleadoSGTempCE : listaCartEmpleadoSGTempCE)
-										{
-											objCartEmpleadoSGTempCE.setPerfil(subGerenteTemporal.getPerfil());
-											this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoSGTempCE);
-										}
-									}
-								}*/
-							//}
+							}
 								
 						}
 					}
@@ -549,7 +481,6 @@ public class DatosCabeceraMB extends AbstractMBean {
 								
 								for(Empleado subGerenteActivo : subGerentesActivos)
 								{
-									//RemoteUtils remoteUtils = new RemoteUtils();
 									long cantexpSGA = remoteUtils.countConsultaListaTareasTC(subGerenteActivo.getCodigo());					
 									if(cantexpSGA > 0){
 										reasignarExpedientes(subGerenteActivo, this.empleado);
