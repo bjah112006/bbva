@@ -156,8 +156,8 @@ public class AnularModificarOpCu14MB extends AbstractMBean {
 	
 						if(listEmpleado!=null && listEmpleado.size()>0){
 							if(listEmpleado.size()>1 && objPerfil.getId()==Constantes.ID_PERFIL_SUB_GERENTE){
-								LOG.info("Existe mas de un Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion());
-								msjOperacion="Existe más de un Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion()+":";
+								LOG.info("Existe más de un usuario con Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion());
+								msjOperacion="Existe más de un usuario con Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion()+":";
 								
 								for(Empleado empleado : listEmpleado){
 									msjOperacion+="\n"+ empleado.getCodigo() + " - " + empleado.getNombresCompletos();	
