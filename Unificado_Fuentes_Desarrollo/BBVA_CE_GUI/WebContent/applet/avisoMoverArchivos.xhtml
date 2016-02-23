@@ -30,6 +30,11 @@
 		<h:body onunload="cerrarVentana()">
 			<div style="width:400px;">
 				<div id="appletContent" class="contenido-bloque">
+				<div class="tituloRegistrarDatos">
+					<br/>
+					<h:outputText value="#{msg['com.ibm.bbva.applet.avisoRegistrarExpediente.mensaje_1']}" style="font-size:24px"/><br/>
+					<h:outputText value="#{msg['com.ibm.bbva.applet.avisoRegistrarExpediente.mensaje_2']}" style="font-size:17px"/><br/>
+				</div>
 					<applet code="com.ibm.bbva.app.applet.FTP"
 						        archive="BBVAAppletFTP.jar" 
 						        width="400" 
@@ -52,9 +57,9 @@
 						<param name="listaDocumentosAdjuntos" value="#{avisoMoverArchivos.listaDocumentosAdjuntos}" />
 					</applet>
 				</div>
-			    <div class="titulo1">
+			    <!-- div class="titulo1">
 	                <h:outputText value="#{msg['com.ibm.bbva.applet.avisoMoverArchivos.mensaje']}"/>			
-                </div>
+                </div-->
 			</div>
     </h:body>
 </html>
