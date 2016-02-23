@@ -353,6 +353,13 @@ body {
     display: inline; 
 }
 
+.tituloRegistrarDatos {
+    color:#1D97B3;
+    font-size:24px;
+    font-weight: bold;
+    display: inline; 
+}
+
 .datos-cabecera-muestra div {
     color: #999999;
     font-weight: bold;
