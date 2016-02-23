@@ -62,8 +62,14 @@
 	                	</div>
 	                </div>
 	                <div class="datos" align="center">
-		            	<div id="idAnimacion" style="width:410px; display:block">
+		            	<!-- div id="idAnimacion" style="width:410px; display:block"-->
+		            	<div id="idAnimacion" style="width:810px; display:block">
 							<div id="appletContent" class="contenido-bloque">
+								<div class="tituloRegistrarDatos">
+									<br/>
+									<h:outputText value="#{msg['com.ibm.bbva.applet.avisoRegistrarExpediente.mensaje_1']}" style="font-size:24px"/><br/>
+									<h:outputText value="#{msg['com.ibm.bbva.applet.avisoRegistrarExpediente.mensaje_2']}" style="font-size:17px"/><br/>
+								</div>
 								<applet id="idApplet" code="com.ibm.bbva.app.applet.FTP"
 									        archive="../applet/BBVAAppletFTP.jar" 
 									        width="400" 
@@ -85,9 +91,9 @@
 									<param name="transferencias" value="#{avisoMoverArchivos.escaneosPathParam}" />
 									<param name="listaDocumentosAdjuntos" value="#{avisoMoverArchivos.listaDocumentosAdjuntos}" />
 								</applet>
-								<div class="titulo1">
+								<!-- >div class="titulo1">
 									<h:outputText value="#{msg['com.ibm.bbva.applet.avisoMoverArchivos.mensaje']}"/>
-								</div>
+								</div-->
 							</div>
 						</div>
 					</div>
