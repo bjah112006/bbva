@@ -162,13 +162,11 @@ public class DatosCabeceraMB extends AbstractMBean {
 			//validar si tiene temporalidad
 			usuarioIDM = lista.get(0);
 			
-			LOG.info("FECHA INICIO PUESTO TEMPORAL DE IDM  "+ (usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
+			LOG.info(">>FECHA INICIO PUESTO TEMPORAL DE IDM  "+ (usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
 			Date puestoTempFechaInicioIDM = usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
-			LOG.info("FECHA INICIO PUESTO TEMPORAL DE IDM CON FORMATO "+puestoTempFechaInicioIDM);
 			
-			LOG.info("FECHA FIN PUESTO TEMPORAL DE IDM  "+ (usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0"));
+			LOG.info(">>FECHA FIN PUESTO TEMPORAL DE IDM  "+ (usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0"));
 			Date puestoTempFechaFinIDM = usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime():null;
-			LOG.info("FECHA FIN PUESTO TEMPORAL DE IDM CON FORMATO "+puestoTempFechaFinIDM);
 						
 			boolean flagTienePuestoTemporal = (usuarioIDM.getPuestoTemporal()!=null && 
 					(puestoTempFechaInicioIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS"))) &&
@@ -193,11 +191,9 @@ public class DatosCabeceraMB extends AbstractMBean {
 			
 			LOG.info("FECHA INICIO OFICINA TEMPORAL DE IDM  "+ (usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
 			Date ofiTempFechaInicioIDM = usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
-			LOG.info("FECHA INICIO OFICINA TEMPORAL DE IDM CON FORMATO "+ofiTempFechaInicioIDM);
 			
 			LOG.info("FECHA FIN OFICINA TEMPORAL DE IDM  "+ (usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0"));
 			Date ofiTempFechaFinIDM = usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime():null;
-			LOG.info("FECHA FIN OFICINA TEMPORAL DE IDM CON FORMATO "+ofiTempFechaFinIDM);
 			
 			boolean flagTieneOficinaTemporal = (usuarioIDM.getCentroTemporal()!=null &&  
 					(ofiTempFechaInicioIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss"))) &&
@@ -214,6 +210,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 	    	
 			if(!(flagTieneOficinaTemporal))//if(objOficinaTemporal == null)
 			{
+				LOG.info("flagTieneOficinaTemporal"); 
 				/*validación para el caso en que el usuario tenia configurada una oficina
 				temporal y esta ya caduco se verifica que el usuario no tenga expedientes pendientes, en caso no tenga
 				se procede a restaurar el valor original de su oficina*/
@@ -270,6 +267,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 				}
 				else
 				{
+					LOG.info("En caso el usuario no tenga configurada una oficina temporal");
 					if(objOficinaTemporal!=null && this.empleado.getOficina().getId() != objOficinaTemporal.getId())
 					{
 						RemoteUtils remoteUtils = new RemoteUtils();
@@ -298,6 +296,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 			
 			if(!(flagTienePuestoTemporal))//if(objOficinaTemporal == null)
 			{
+				LOG.info("caso 1 flagTienePuestoTemporal="+flagTienePuestoTemporal);
 				/*validación para el caso en que el usuario tenia configurada una oficina
 				temporal y esta ya caduco se verifica que el usuario no tenga expedientes pendientes, en caso no tenga
 				se procede a restaurar el valor original de su oficina*/
@@ -309,16 +308,16 @@ public class DatosCabeceraMB extends AbstractMBean {
 								//Buscar Sub Gerentes activos y de la oficina dada
 								List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
 										Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
-								
+								LOG.info("caso 1 subGerentesActivos="+subGerentesActivos);
 								if(subGerentesActivos != null && subGerentesActivos.size()>0){
-									
+									LOG.info("CASO1");
 									reasignarExpedientes(this.empleado, subGerentesActivos.get(0));
 									actualizarDatosEmpleado();
 								}else{
 									//Buscar SG inactivos por Oficina, Perfil; Estado y Marca
 									List<Empleado> subGerentesInactivosMarcados = empleadobean.buscarGerenteInactivoPorOficinaPerfilMarca(this.empleado.getOficina().getId(), 
 											Constantes.ID_PERFIL_SUB_GERENTE, Constantes.FLAG_ACTIVO);
-									
+									LOG.info("caso 2 subGerentesActivos="+subGerentesInactivosMarcados);
 									if(subGerentesInactivosMarcados != null && subGerentesInactivosMarcados.size() >0){
 										int contador=0;
 										for(Empleado subGerenteInactivoMarcado : subGerentesInactivosMarcados)
@@ -327,6 +326,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 												RemoteUtils remoteUtils = new RemoteUtils();
 												long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
 												if(cantexp > 0){
+													LOG.info("CASO2");
 													reasignarExpedientes(this.empleado, subGerenteInactivoMarcado);
 													
 												}
@@ -350,6 +350,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 								}
 						
 					}else{
+						LOG.info("Perfil temporal que tiene registrado el empleado es Sub Gerente");
 						RemoteUtils remoteUtils = new RemoteUtils();
 						long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
 						if(cantexp > 0)
@@ -426,11 +427,12 @@ public class DatosCabeceraMB extends AbstractMBean {
 									this.empleado.setFlagActivo(Constantes.FLAG_ACTIVO);
 									this.empleado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
 									this.empleadobean.edit(this.empleado);
-									
+									LOG.info("caso 3 subGerentesTemporales.size()="+subGerentesTemporales.size());
 									//Si tiene Exp. Pendientes se debe reasignar al SG activo
 									if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
 																		
 										for(Empleado subGerenteTemporal : subGerentesTemporales){
+											LOG.info("CASO3");
 											reasignarExpedientes(subGerenteTemporal, this.empleado);
 											
 											//Actulizar Perfil, Cargo y Carterizacion del SGT
@@ -458,6 +460,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 				
 			}else
 			{
+				LOG.info("En caso el usuario no tenga configurada un perfil temporal");
 				//En caso el usuario no tenga configurada un perfil temporal
 				if(this.empleado.getPerfilBackup() == null)
 				{
@@ -475,7 +478,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 							//Buscar Sub Gerentes activos y de la oficina dada
 							List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
 									Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
-							
+							LOG.info("subGerentesActivos="+subGerentesActivos);
 							if(subGerentesActivos != null && subGerentesActivos.size()>0){
 								//Si existen Sub Gerentes activos y ademas tienen Exp. pendientes
 								
@@ -483,6 +486,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 								{
 									long cantexpSGA = remoteUtils.countConsultaListaTareasTC(subGerenteActivo.getCodigo());					
 									if(cantexpSGA > 0){
+										LOG.info("CASO4");
 										reasignarExpedientes(subGerenteActivo, this.empleado);
 											
 									}
@@ -514,9 +518,11 @@ public class DatosCabeceraMB extends AbstractMBean {
 				}
 				else
 				{
+					LOG.info(">>>En caso el usuario no tenga configurada un perfil temporal");
 					if(perfilTemporal!=null){
 						if(this.empleado.getPerfil().getId() != perfilTemporal.getId())
 						{
+							LOG.info(">>>>En caso el usuario no tenga configurada un perfil temporal");
 							RemoteUtils remoteUtils = new RemoteUtils();
 							long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
 							if(cantexp > 0)
@@ -559,6 +565,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 								}
 							}
 						}else{
+							LOG.info(">>>>>En caso el usuario no tenga configurada un perfil temporal");
 							RemoteUtils remoteUtils = new RemoteUtils();
 							long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
 							if(cantexp > 0)
@@ -648,6 +655,7 @@ public class DatosCabeceraMB extends AbstractMBean {
     }
     
     public void reasignarExpedientes(Empleado subGerenteTieneExp, Empleado subGerenteDebeTenerExp){
+    	LOG.info("subGerenteTieneExp="+subGerenteTieneExp.getCodigo()+ " subGerenteDebeTenerExp="+subGerenteDebeTenerExp.getCodigo());
     	//inhabilitarActivosExp();
     	Consulta consulta = null;
     	List<String> listUsuarios = null;
@@ -670,6 +678,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 				//		ctx.getApplication().getVariableResolver().resolveVariable(ctx, "tablaBandejaAsig");
 				//tablaBandejaAsig.setListTabla((List<ExpedienteTCWrapper>)getObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION));
 				//codUsuario=(String)getObjectSession(Constantes.COD_USUARIO_ASIGNAR);
+			LOG.info("subGerenteTieneExp.getCodigo().length()>="+subGerenteTieneExp.getCodigo().length());
 			if(subGerenteTieneExp != null && subGerenteTieneExp.getCodigo().length()>0){
 				consulta = new Consulta();		
 				listUsuarios=new ArrayList<String>();
@@ -677,7 +686,8 @@ public class DatosCabeceraMB extends AbstractMBean {
 				consulta.setUsuarios(listUsuarios);
 				consulta.setConsiderarUsuarios(true);		
 				listaReasignable = tareasBDelegate.obtenerListaTareasBandPendiente(consulta);
-				
+				LOG.info("listaReasignable="+listaReasignable);
+				LOG.info("listaReasignable="+listaReasignable.size());
 				if(listaReasignable != null){
 					for(ExpedienteTCWPSWeb objExpedienteTCWPSWeb : listaReasignable){
 	
