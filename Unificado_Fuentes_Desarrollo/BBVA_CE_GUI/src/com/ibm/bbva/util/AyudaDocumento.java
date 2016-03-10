@@ -63,14 +63,14 @@ public class AyudaDocumento {
 		    	boolean canCreate = false;
 		    	if (lstDocumentoExpTc != null) {
 					for (DocumentoExpTc docExpTc: lstDocumentoExpTc) {						
-						if (docExpTc.getTarea().getId() == expediente.getExpedienteTC().getTarea().getId()) {
-							if(docExpTc.getTarea().getId()==Constantes.CODIGO_TAREA_EJEC_EVAL_CREDITICIA || 
-									docExpTc.getTarea().getId()==Constantes.CODIGO_TAREA_REVISAR_REGIST_DICTAMEN){
-								canCreate = true;
-							}else{
+						if (docExpTc.getTarea().getId() == expediente.getExpedienteTC().getTarea().getId() && docExpTc.getIdCm() == null) {
+							//if(docExpTc.getTarea().getId()==Constantes.CODIGO_TAREA_EJEC_EVAL_CREDITICIA || 
+							//		docExpTc.getTarea().getId()==Constantes.CODIGO_TAREA_REVISAR_REGIST_DICTAMEN){
+							//	canCreate = true;
+							//}else{
 								canCreate = false;
 								break;
-							}
+							//}
 						} else {
 							canCreate = true;
 						}					
