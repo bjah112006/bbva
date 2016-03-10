@@ -25,7 +25,6 @@ import com.ibm.bbva.entities.DescargaLDAP;
 import com.ibm.bbva.entities.Empleado;
 import com.ibm.bbva.entities.Expediente;
 import com.ibm.bbva.entities.Oficina;
-import com.ibm.bbva.entities.OficinaTemporal;
 import com.ibm.bbva.proxy.ext.Perfil;
 import com.ibm.bbva.proxy.ext.PerfilesUsuario;
 import com.ibm.bbva.proxy.ext.Usuario;
@@ -46,8 +45,6 @@ import com.ibm.bbva.session.TipoClienteBeanLocal;
 import com.ibm.bbva.util.ExpedienteTCWrapper;
 import com.ibm.bbva.util.Util;
 
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -157,378 +154,527 @@ public class DatosCabeceraMB extends AbstractMBean {
     	FacesContext ctx = FacesContext.getCurrentInstance();
 		MenuMB menu = (MenuMB) ctx.getApplication().getVariableResolver().resolveVariable(ctx, "menu");
     	
+		/**
+		 * Si se realiza cambio en validacion de los booleanos flagTienePuestoTemporal y flagTieneOficinaTemporal
+		 * se debe considerar los mismos cambios para la clase CargaLdapServlet
+		 * para mantener la igualdad
+		*/
 		if(flagAccesoIDM){
 			this.empleado = empleadobean.buscarPorCodigo(user);  
 			//validar si tiene temporalidad
 			usuarioIDM = lista.get(0);
 			
-			LOG.info(">>FECHA INICIO PUESTO TEMPORAL DE IDM  "+ (usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
-			Date puestoTempFechaInicioIDM = usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
-			
-			LOG.info(">>FECHA FIN PUESTO TEMPORAL DE IDM  "+ (usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0"));
-			Date puestoTempFechaFinIDM = usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime():null;
-						
-			boolean flagTienePuestoTemporal = (usuarioIDM.getPuestoTemporal()!=null && 
-					(puestoTempFechaInicioIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS"))) &&
-					(!puestoTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS")))
-					&& (!usuarioIDM.getPuestoTemporal().getDescripcionPuesto().equals(usuarioIDM.getPuesto().getNombreCargoFuncionalLocal())))?
-											  StringUtils.isNotBlank(
-											  usuarioIDM.getPuestoTemporal().getDescripcionPuesto()):false;
-			//String codigoPuesto = usuarioIDM.getPuesto().getDescripcionPuesto();
-			String codigoPuesto = "";								  
-			com.ibm.bbva.entities.Perfil perfilTemporal = empleado.getPerfil();
-			if(flagTienePuestoTemporal){
-				codigoPuesto = usuarioIDM.getPuestoTemporal().getDescripcionPuesto();
-				List<DescargaLDAP> listaPerfiles = descargaLDAPBeanLocal.buscar("-1", codigoPuesto, "-1", "-1", "-1", "-1");
-				for(DescargaLDAP descargaLdap : listaPerfiles){
-					if(!empleado.getPerfil().getCodigo().equals(descargaLdap.getPerfil().getCodigo())){
-						perfilTemporal = descargaLdap.getPerfil();
-					}else{
-						perfilTemporal = empleado.getPerfil();
+			if(this.empleado != null){
+				
+				if (Constantes.FLAG_INACTIVO.equals(this.empleado.getFlagActivo()) && (!this.empleado.getPerfil().getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()))) {
+					LOG.info("El empleado {} esta inactivo", empleado.getCodigo());
+					/*HttpServletResponse response = (HttpServletResponse) getExternalContext().getResponse();
+					try {
+						response.sendRedirect("ibm_security_logout?logoutExitPage=/index.faces");
+					} catch (Exception e) {
+						LOG.error(e.getMessage(), e);
+					}*/
+					try{
+						menu.timeOutWAS();
+					} catch (Exception e) {
+						LOG.error(e.getMessage(), e);
 					}
-				}
-			}
-			
-			LOG.info("FECHA INICIO OFICINA TEMPORAL DE IDM  "+ (usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
-			Date ofiTempFechaInicioIDM = usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
-			
-			LOG.info("FECHA FIN OFICINA TEMPORAL DE IDM  "+ (usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0"));
-			Date ofiTempFechaFinIDM = usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime():null;
-			
-			boolean flagTieneOficinaTemporal = (usuarioIDM.getCentroTemporal()!=null &&  
-					(ofiTempFechaInicioIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss"))) &&
-					(!ofiTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss")))
-					&& (!usuarioIDM.getCentroTemporal().getDescripcion().equals(usuarioIDM.getCodigoCentro())))?
-											   StringUtils.isNotBlank(
-											   usuarioIDM.getCentroTemporal().getDescripcion()):false;
-											   
-			Oficina objOficinaTemporal = null;
-			if(flagTieneOficinaTemporal){
-				String codigoOficina = usuarioIDM.getCentroTemporal().getDescripcion();
-				objOficinaTemporal = oficinabean.buscarPorCodigo(codigoOficina);
-			}
-	    	
-			if(!(flagTieneOficinaTemporal))//if(objOficinaTemporal == null)
-			{
-				LOG.info("flagTieneOficinaTemporal"); 
-				/*validación para el caso en que el usuario tenia configurada una oficina
-				temporal y esta ya caduco se verifica que el usuario no tenga expedientes pendientes, en caso no tenga
-				se procede a restaurar el valor original de su oficina*/
-				if(this.empleado.getOficinaBackup() != null)
-				{				
-					RemoteUtils remoteUtils = new RemoteUtils();
-					long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
-					if(cantexp > 0)
-					{
-						this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para la oficina " + this.empleado.getOficina().getCodigo() + " - " + this.empleado.getOficina().getDescripcion() + " temporal configurada");
-						flagTieneOficinaTemporal = true;
-					}
-					else
-					{	
-						this.empleado.setOficina(this.empleado.getOficinaBackup());
-						this.empleado.setOficinaBackup(null);
-						this.empleadobean.edit(this.empleado);
-						
-						List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
-						for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
-						{
-							objCartEmpleadoCE.setOficina(this.empleado.getOficina());
-							//TODO:se debe actualizar el Perfil?
-							this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
-						}
-					}
-				}
-			}
-			else
-			{
-				//En caso el usuario no tenga configurada una oficina temporal
-				if(this.empleado.getOficinaBackup() == null)
-				{
-					RemoteUtils remoteUtils = new RemoteUtils();
-					long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
-					if(cantexp > 0)
-					{
-						this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes, no se le puede establecer la oficina temporal configurada");
-						flagTieneOficinaTemporal = false;
-					}
-					else
-					{
-						this.empleado.setOficinaBackup(this.empleado.getOficina());
-						this.empleado.setOficina(objOficinaTemporal);	//this.empleado.setOficina(objOficinaTemporal.getOficina());				
-						this.empleadobean.edit(this.empleado);
-						
-						List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
-						for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
-						{
-							objCartEmpleadoCE.setOficina(this.empleado.getOficina());
-							this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
-						}
-					}							
-				}
-				else
-				{
-					LOG.info("En caso el usuario no tenga configurada una oficina temporal");
-					if(objOficinaTemporal!=null && this.empleado.getOficina().getId() != objOficinaTemporal.getId())
-					{
-						RemoteUtils remoteUtils = new RemoteUtils();
-						long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
-						if(cantexp > 0)
-						{
-							this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para la oficina temporal establecida");
-							flagTieneOficinaTemporal = true;
-						}
-						else
-						{
-							this.empleado.setOficina(objOficinaTemporal);
-							this.empleadobean.edit(this.empleado);
-							
-							List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
-							for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
-							{
-								objCartEmpleadoCE.setOficina(this.empleado.getOficina());
-								this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+				}else{
+					
+					LOG.info("FECHA INICIO PUESTO TEMPORAL DE IDM  "+ (usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
+					Date puestoTempFechaInicioIDM = usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
+					LOG.info("FECHA INICIO PUESTO TEMPORAL DE IDM CON FORMATO "+puestoTempFechaInicioIDM);
+					
+					LOG.info("FECHA FIN PUESTO TEMPORAL DE IDM  "+ (usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0"));
+					Date puestoTempFechaFinIDM = usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime():null;
+					LOG.info("FECHA FIN PUESTO TEMPORAL DE IDM CON FORMATO "+puestoTempFechaFinIDM);
+								
+					boolean flagTienePuestoTemporal = (usuarioIDM.getPuestoTemporal()!=null && 
+							(puestoTempFechaInicioIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS"))) &&
+							(!puestoTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS")))
+							&& (!usuarioIDM.getPuestoTemporal().getDescripcionPuesto().equals(usuarioIDM.getPuesto().getNombreCargoFuncionalLocal())))?
+													  StringUtils.isNotBlank(
+													  usuarioIDM.getPuestoTemporal().getDescripcionPuesto()):false;
+					//String codigoPuesto = usuarioIDM.getPuesto().getDescripcionPuesto();
+					String codigoPuesto = "";								  
+					com.ibm.bbva.entities.Perfil perfilTemporal = empleado.getPerfil();
+					if(flagTienePuestoTemporal){
+						codigoPuesto = usuarioIDM.getPuestoTemporal().getDescripcionPuesto();
+						List<DescargaLDAP> listaPerfiles = descargaLDAPBeanLocal.buscar("-1", codigoPuesto, "-1", "-1", "-1", "-1");
+						for(DescargaLDAP descargaLdap : listaPerfiles){
+							if(!empleado.getPerfil().getCodigo().equals(descargaLdap.getPerfil().getCodigo())){
+								perfilTemporal = descargaLdap.getPerfil();
+							}else{
+								perfilTemporal = empleado.getPerfil();
 							}
-							
 						}
 					}
-				}
-			}
-			
-			if(!(flagTienePuestoTemporal))//if(objOficinaTemporal == null)
-			{
-				LOG.info("caso 1 flagTienePuestoTemporal="+flagTienePuestoTemporal);
-				/*validación para el caso en que el usuario tenia configurada una oficina
-				temporal y esta ya caduco se verifica que el usuario no tenga expedientes pendientes, en caso no tenga
-				se procede a restaurar el valor original de su oficina*/
-				if(this.empleado.getPerfilBackup() != null)
-				{				
-					//Perfil temporal que tiene registrado el empleado es Sub Gerente
-					if(this.empleado.getPerfil().getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
+					
+					LOG.info("FECHA INICIO OFICINA TEMPORAL DE IDM  "+ (usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
+					Date ofiTempFechaInicioIDM = usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
+					LOG.info("FECHA INICIO OFICINA TEMPORAL DE IDM CON FORMATO "+ofiTempFechaInicioIDM);
+					
+					LOG.info("FECHA FIN OFICINA TEMPORAL DE IDM  "+ (usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime().toString():"0"));
+					Date ofiTempFechaFinIDM = usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime():null;
+					LOG.info("FECHA FIN OFICINA TEMPORAL DE IDM CON FORMATO "+ofiTempFechaFinIDM);
+					
+					boolean flagTieneOficinaTemporal = (usuarioIDM.getCentroTemporal()!=null &&  
+							(ofiTempFechaInicioIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss"))) &&
+							(!ofiTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss")))
+							&& (!usuarioIDM.getCentroTemporal().getDescripcion().equals(usuarioIDM.getCodigoCentro())))?
+													   StringUtils.isNotBlank(
+													   usuarioIDM.getCentroTemporal().getDescripcion()):false;
+													   
+					
+					Oficina objOficinaTemporal = null;
+					if(flagTieneOficinaTemporal){
+						String codigoOficina = usuarioIDM.getCentroTemporal().getDescripcion();
+						objOficinaTemporal = oficinabean.buscarPorCodigo(codigoOficina);
+					}
+			    	
+					if(!(flagTieneOficinaTemporal))//if(objOficinaTemporal == null)
+					{
+						/*validación para el caso en que el usuario tenia configurada una oficina
+						temporal y esta ya caduco se verifica que el usuario no tenga expedientes pendientes, en caso no tenga
+						se procede a restaurar el valor original de su oficina*/
+						if(this.empleado.getOficinaBackup() != null)
+						{
 							
-								//Buscar Sub Gerentes activos y de la oficina dada
-								List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
-										Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
-								LOG.info("caso 1 subGerentesActivos="+subGerentesActivos);
-								if(subGerentesActivos != null && subGerentesActivos.size()>0){
-									LOG.info("CASO1");
-									reasignarExpedientes(this.empleado, subGerentesActivos.get(0));
-									actualizarDatosEmpleado();
-								}else{
-									//Buscar SG inactivos por Oficina, Perfil; Estado y Marca
-									List<Empleado> subGerentesInactivosMarcados = empleadobean.buscarGerenteInactivoPorOficinaPerfilMarca(this.empleado.getOficina().getId(), 
-											Constantes.ID_PERFIL_SUB_GERENTE, Constantes.FLAG_ACTIVO);
-									LOG.info("caso 2 subGerentesActivos="+subGerentesInactivosMarcados);
-									if(subGerentesInactivosMarcados != null && subGerentesInactivosMarcados.size() >0){
-										int contador=0;
-										for(Empleado subGerenteInactivoMarcado : subGerentesInactivosMarcados)
-										{
-											if(contador == 0){
-												RemoteUtils remoteUtils = new RemoteUtils();
-												long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
-												if(cantexp > 0){
-													LOG.info("CASO2");
-													reasignarExpedientes(this.empleado, subGerenteInactivoMarcado);
+							//si es un sub gerente que se va a una agencia como sg temporal, entonces:
+							//Perfil que tiene registrado el empleado es Sub Gerente
+							if(this.empleado.getPerfil().getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
+									
+										//Buscar Sub Gerentes activos y de la oficina dada
+										List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
+												Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
+										
+										if(subGerentesActivos != null && subGerentesActivos.size()>0){
+											
+											reasignarExpedientes(this.empleado, subGerentesActivos.get(0));
+											actualizarDatosOficinaEmpleado();
+										}else{
+											//Buscar SG inactivos por Oficina, Perfil; Estado y Marca
+											List<Empleado> subGerentesInactivosMarcados = empleadobean.buscarGerenteInactivoPorOficinaPerfilMarca(this.empleado.getOficina().getId(), 
+													Constantes.ID_PERFIL_SUB_GERENTE, Constantes.FLAG_ACTIVO);
+											
+											if(subGerentesInactivosMarcados != null && subGerentesInactivosMarcados.size() >0){
+												int contador=0;
+												for(Empleado subGerenteInactivoMarcado : subGerentesInactivosMarcados)
+												{
+													if(contador == 0){
+														RemoteUtils remoteUtils = new RemoteUtils();
+														long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+														if(cantexp > 0){
+															reasignarExpedientes(this.empleado, subGerenteInactivoMarcado);
+															
+														}
+														contador ++;
+														
+													}
 													
+													subGerenteInactivoMarcado.setFlagActivo(Constantes.FLAG_ACTIVO);
+													subGerenteInactivoMarcado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
+													this.empleadobean.edit(subGerenteInactivoMarcado);
 												}
-												contador ++;
+												actualizarDatosOficinaEmpleado();
+											}else{
+												//Mensaje Error
+												this.setMensajeAdvertencia("No puedes culminar tu temporalidad debido " +
+														"a que no existe un Subgerente activo para la oficina (" + 
+														this.empleado.getOficina().getCodigo() + "-" + this.empleado.getOficina().getDescripcion()
+														+"), por favor comuníquese con el Administrador");
+												flagTieneOficinaTemporal = true;
+											}
+										}
+								
+							}else{
+								//si no :
+								RemoteUtils remoteUtils = new RemoteUtils();
+								long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+								if(cantexp > 0)
+								{
+									this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para la oficina " + this.empleado.getOficina().getCodigo() + " - " + this.empleado.getOficina().getDescripcion() + " temporal configurada");
+									flagTieneOficinaTemporal = true;
+								}
+								else
+								{	
+									actualizarDatosOficinaEmpleado();
+								}
+							}
+								
+						}else{
+							//Perfil usuario logedo es Sub Gerente
+							if(this.empleado.getPerfil().getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
+								
+								//validar si ese Sub Gerente logeado no es activo
+								if(this.empleado.getFlagActivo().equals(Constantes.FLAG_INACTIVO)){
+									//Existen SGT vigentes en el IDM, que estan reemplazando al SubGerente?
+									List<Empleado> subGerentesTemporales = empleadobean.buscarSubGerenteTemporalPorOficinaYOfiTemp(this.empleado.getOficina().getId(), 
+											Constantes.ID_PERFIL_SUB_GERENTE);
+									
+									if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
+										boolean flagTieneOficinaTemporalSG = false;
+										Empleado sgTemp = null;
+										
+										for(Empleado subGerenteTemporal : subGerentesTemporales){
+											//Consultar IDM si ese subGerenteTemporal sigue vigente
+											UsuarioExtendido usuarioIDMTemporal = null;
+											List<String> listUsuario2 = new ArrayList<String>();
+											//listUsuario = null;
+											boolean flagAccesoIDMTemporalOficina = false;
+									    	listUsuario2.add(subGerenteTemporal.getCodigo());
+									    	lista = null;
+											try {
+												lista = proxyIDM.obtenerUsuarios(listUsuario2);
+												if(lista != null && lista.size()>0){
+													flagAccesoIDMTemporalOficina = true;
+												}
+												
+											} catch (WSLdapException_Exception e1) {
+												e1.printStackTrace();
+											}
+											
+											if(flagAccesoIDMTemporalOficina){
+												usuarioIDMTemporal = lista.get(0);
+												
+												Date oficinaTempFechaInicioIDMTemp = usuarioIDMTemporal.getCentroTemporal()!=null? usuarioIDMTemporal.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
+												Date oficinaTempFechaFinIDMTemp = usuarioIDMTemporal.getCentroTemporal()!=null? usuarioIDMTemporal.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime():null;
+															
+												flagTieneOficinaTemporalSG = (usuarioIDMTemporal.getCentroTemporal()!=null && 
+														(oficinaTempFechaInicioIDMTemp.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS"))) &&
+														(!oficinaTempFechaFinIDMTemp.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS")))
+														&& (!usuarioIDMTemporal.getCentroTemporal().getDescripcion().equals(usuarioIDMTemporal.getCodigoCentro())))?
+																				  StringUtils.isNotBlank(
+																				  usuarioIDMTemporal.getCentroTemporal().getDescripcion()):false;
+																
+												if(flagTieneOficinaTemporalSG){
+													sgTemp = subGerenteTemporal;
+													break;
+												}
+											}	
+											
+										}
+										
+										if(flagTieneOficinaTemporalSG){
+											//Mostrar mensaje de error
+											this.setMensajeAdvertencia("Actualmente existe Subgerente Temporal vigente (" + sgTemp.getCodigo() + " - " + 
+														sgTemp.getNombresCompletos() + ") para la oficina (" + sgTemp.getOficina().getCodigo() + " - " + sgTemp.getOficina().getDescripcion() +
+														"), por favor verifique el periodo de temporalidad en IDM, luego vuelva a validar o comuníquese con el Administrador");
+											 
+											
+										}else{
+											//activar al subGerente que en este caso se esta logeando
+											this.empleado.setFlagActivo(Constantes.FLAG_ACTIVO);
+											this.empleado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
+											this.empleadobean.edit(this.empleado);
+											
+											//Si tiene Exp. Pendientes se debe reasignar al SG activo
+											if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
+																				
+												
+												for(Empleado subGerenteTemporal : subGerentesTemporales){
+													reasignarExpedientes(subGerenteTemporal, this.empleado);
+													
+													//Se atualiza Oficina 
+													subGerenteTemporal.setOficina(subGerenteTemporal.getOficinaBackup());
+													subGerenteTemporal.setOficinaBackup(null);
+													this.empleadobean.edit(subGerenteTemporal);
+													
+													List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(subGerenteTemporal.getId());
+													for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+													{
+														objCartEmpleadoCE.setOficina(subGerenteTemporal.getOficina());
+														this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+													}
+												}
 												
 											}
-											
-											subGerenteInactivoMarcado.setFlagActivo(Constantes.FLAG_ACTIVO);
-											subGerenteInactivoMarcado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
-											this.empleadobean.edit(subGerenteInactivoMarcado);
 										}
-										actualizarDatosEmpleado();
-									}else{
-										//Mensaje Error
-										this.setMensajeAdvertencia("No puedes culminar tu temporalidad debido " +
-												"a que no existe un Subgerente activo para la oficina (" + 
-												this.empleado.getOficina().getCodigo() + "-" + this.empleado.getOficina().getDescripcion()
-												+"), por favor comuníquese con el Administrador");
-										flagTienePuestoTemporal = true;
 									}
-								}
-						
-					}else{
-						LOG.info("Perfil temporal que tiene registrado el empleado es Sub Gerente");
-						RemoteUtils remoteUtils = new RemoteUtils();
-						long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
-						if(cantexp > 0)
-						{
-							this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para el perfil " + this.empleado.getPerfil().getCodigo() + " - " + this.empleado.getPerfil().getDescripcion() + " temporal configurada");
-							flagTienePuestoTemporal=true;
-						}else{
-							actualizarDatosEmpleado();
-						}
-					}
-				
-				}else{
-					//Perfil usuario logedo es Sub Gerente
-					if(this.empleado.getPerfil().getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
-						
-						//validar si ese Sub Gerente logeado no es activo
-						if(this.empleado.getFlagActivo().equals(Constantes.FLAG_INACTIVO)){
-							//Existen SGT vigentes en el IDM, que estan reemplazando al SubGerente?
-							List<Empleado> subGerentesTemporales = empleadobean.buscarSubGerenteTemporalPorOficinaPerfil(this.empleado.getOficina().getId(), 
-									Constantes.ID_PERFIL_SUB_GERENTE);
-							
-							if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
-								boolean flagTienePuestoTemporalSG = false;
-								Empleado sgTemp = null;
-								
-								for(Empleado subGerenteTemporal : subGerentesTemporales){
-									//Consultar IDM si ese subGerenteTemporal sigue vigente
-									UsuarioExtendido usuarioIDMTemporal = null;
-									List<String> listUsuario2 = new ArrayList<String>();
-									//listUsuario = null;
-									boolean flagAccesoIDMTemporal = false;
-							    	listUsuario2.add(subGerenteTemporal.getCodigo());
-							    	lista = null;
-									try {
-										lista = proxyIDM.obtenerUsuarios(listUsuario2);
-										if(lista != null && lista.size()>0){
-											flagAccesoIDMTemporal = true;
-										}
 										
-									} catch (WSLdapException_Exception e1) {
-										e1.printStackTrace();
-									}
-									
-									if(flagAccesoIDMTemporal){
-										usuarioIDMTemporal = lista.get(0);
-										
-										Date puestoTempFechaInicioIDMTemp = usuarioIDMTemporal.getPuestoTemporal()!=null? usuarioIDMTemporal.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
-										Date puestoTempFechaFinIDMTemp = usuarioIDMTemporal.getPuestoTemporal()!=null? usuarioIDMTemporal.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime():null;
-													
-										flagTienePuestoTemporalSG = (usuarioIDMTemporal.getPuestoTemporal()!=null && 
-												(puestoTempFechaInicioIDMTemp.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS"))) &&
-												(!puestoTempFechaFinIDMTemp.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS")))
-												&& (!usuarioIDMTemporal.getPuestoTemporal().getDescripcionPuesto().equals(usuarioIDMTemporal.getPuesto().getNombreCargoFuncionalLocal())))?
-																		  StringUtils.isNotBlank(
-																		  usuarioIDMTemporal.getPuestoTemporal().getDescripcionPuesto()):false;
-														
-										if(flagTienePuestoTemporalSG){
-											sgTemp = subGerenteTemporal;
-											break;
-										}
-									}	
-									
-								}
-								
-								if(flagTienePuestoTemporalSG){
-									//Mostrar mensaje de error
-									this.setMensajeAdvertencia("Actualmente existe Subgerente Temporal vigente (" + sgTemp.getCodigo() + " - " + 
-												sgTemp.getNombresCompletos() + ") para la oficina (" + sgTemp.getOficina().getCodigo() + " - " + sgTemp.getOficina().getDescripcion() +
-												"), por favor verifique el periodo de temporalidad en IDM, luego vuelva a validar o comuníquese con el Administrador");
-									 
-									
-								}else{
-									//activar al subGerente que en este caso se esta logeando
-									this.empleado.setFlagActivo(Constantes.FLAG_ACTIVO);
-									this.empleado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
-									this.empleadobean.edit(this.empleado);
-									LOG.info("caso 3 subGerentesTemporales.size()="+subGerentesTemporales.size());
-									//Si tiene Exp. Pendientes se debe reasignar al SG activo
-									if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
-																		
-										for(Empleado subGerenteTemporal : subGerentesTemporales){
-											LOG.info("CASO3");
-											reasignarExpedientes(subGerenteTemporal, this.empleado);
-											
-											//Actulizar Perfil, Cargo y Carterizacion del SGT
-											subGerenteTemporal.setPerfil(subGerenteTemporal.getPerfilBackup());
-											subGerenteTemporal.setPerfilBackup(null);
-											subGerenteTemporal.setCodigoCargo(subGerenteTemporal.getCodigoCargoBackup());
-											subGerenteTemporal.setCodigoCargoBackup(null);
-											this.empleadobean.edit(subGerenteTemporal);
-											
-											List<CartEmpleadoCE> listaCartEmpleadoSGTempCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(subGerenteTemporal.getId());
-											for(CartEmpleadoCE objCartEmpleadoSGTempCE : listaCartEmpleadoSGTempCE)
-											{
-												objCartEmpleadoSGTempCE.setPerfil(subGerenteTemporal.getPerfil());
-												this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoSGTempCE);
-											}
-										}
-									}
 								}
 							}
-								
 						}
-					}
-				}
-			
-				
-			}else
-			{
-				LOG.info("En caso el usuario no tenga configurada un perfil temporal");
-				//En caso el usuario no tenga configurada un perfil temporal
-				if(this.empleado.getPerfilBackup() == null)
-				{
-					RemoteUtils remoteUtils = new RemoteUtils();
-					long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
-					if(cantexp > 0)
-					{
-						this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes, no se le puede establecer el perfil temporal configurado");
-						flagTienePuestoTemporal = false;
+						
 					}
 					else
 					{
-						//Perfil temporal que viene de IDM es Sub Gerente
-						if(perfilTemporal.getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
-							//Buscar Sub Gerentes activos y de la oficina dada
-							List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
-									Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
-							LOG.info("subGerentesActivos="+subGerentesActivos);
-							if(subGerentesActivos != null && subGerentesActivos.size()>0){
-								//Si existen Sub Gerentes activos y ademas tienen Exp. pendientes
-								
-								for(Empleado subGerenteActivo : subGerentesActivos)
-								{
-									long cantexpSGA = remoteUtils.countConsultaListaTareasTC(subGerenteActivo.getCodigo());					
-									if(cantexpSGA > 0){
-										LOG.info("CASO4");
-										reasignarExpedientes(subGerenteActivo, this.empleado);
-											
-									}
-									
-									//Inactivas al Sub Gerente y marcarlo como Sustituido
-									subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
-									subGerenteActivo.setFlagEmpleadoSustituido(Constantes.FLAG_ACTIVO);
-									this.empleadobean.edit(subGerenteActivo);
-								}
-							}
-						}
-						
-						this.empleado.setPerfilBackup(this.empleado.getPerfil());
-						this.empleado.setPerfil(perfilTemporal);	//this.empleado.setOficina(objOficinaTemporal.getOficina());
-						this.empleado.setCodigoCargoBackup(this.empleado.getCodigoCargo());
-						this.empleado.setCodigoCargo(codigoPuesto);
-						this.empleadobean.edit(this.empleado);
-						
-						List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
-						for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+						//En caso el usuario no tenga configurada una oficina temporal
+						if(this.empleado.getOficinaBackup() == null)
 						{
-							//objCartEmpleadoCE.setOficina(this.empleado.getOficina());
-							//this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
-							
-							objCartEmpleadoCE.setPerfil(this.empleado.getPerfil());
-							this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
-						}
-					}							
-				}
-				else
-				{
-					LOG.info(">>>En caso el usuario no tenga configurada un perfil temporal");
-					if(perfilTemporal!=null){
-						if(this.empleado.getPerfil().getId() != perfilTemporal.getId())
-						{
-							LOG.info(">>>>En caso el usuario no tenga configurada un perfil temporal");
 							RemoteUtils remoteUtils = new RemoteUtils();
 							long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
 							if(cantexp > 0)
 							{
-								this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para el perfil temporal establecido");
-								flagTienePuestoTemporal=true;
+								this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes, no se le puede establecer la oficina temporal configurada");
+								flagTieneOficinaTemporal = false;
+							}
+							else
+							{
+								//si no :
+								this.empleado.setOficinaBackup(this.empleado.getOficina());
+								this.empleado.setOficina(objOficinaTemporal);	//this.empleado.setOficina(objOficinaTemporal.getOficina());				
+								this.empleadobean.edit(this.empleado);
+								
+								List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+								for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+								{
+									objCartEmpleadoCE.setOficina(this.empleado.getOficina());
+									this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+								}
+								
+								//si es un sub gerente que se va a una agencia como sg temporal, entonces:
+								//Perfil del empleado es Sub Gerente
+								if(this.empleado.getPerfil().getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
+									//Buscar Sub Gerentes activos y de la oficina dada
+									List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
+											Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
+									
+									if(subGerentesActivos != null && subGerentesActivos.size()>0){
+										//Si existen Sub Gerentes activos y ademas tienen Exp. pendientes
+										
+										for(Empleado subGerenteActivo : subGerentesActivos)
+										{
+											long cantexpSGA = remoteUtils.countConsultaListaTareasTC(subGerenteActivo.getCodigo());					
+											if(cantexpSGA > 0){
+												reasignarExpedientes(subGerenteActivo, this.empleado);
+													
+											}
+											
+											//Inactivas al Sub Gerente y marcarlo como Sustituido
+											subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
+											subGerenteActivo.setFlagEmpleadoSustituido(Constantes.FLAG_ACTIVO);
+											this.empleadobean.edit(subGerenteActivo);
+										}
+									}
+								}
+								
+							}							
+						}
+						else
+						{
+							if(objOficinaTemporal!=null && this.empleado.getOficina().getId() != objOficinaTemporal.getId())
+							{
+								RemoteUtils remoteUtils = new RemoteUtils();
+								long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+								if(cantexp > 0)
+								{
+									this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para la oficina temporal establecida");
+									flagTieneOficinaTemporal = true;
+								}
+								else
+								{
+									
+									this.empleado.setOficina(objOficinaTemporal);
+									this.empleadobean.edit(this.empleado);
+									
+									List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+									for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+									{
+										objCartEmpleadoCE.setOficina(this.empleado.getOficina());
+										this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+									}
+									
+									//si es un sub gerente que se va a una agencia como sg temporal, entonces:
+									if(this.empleado.getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
+										//Buscar Sub Gerentes activos y de la oficina dada
+										List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(objOficinaTemporal.getId(), 
+												Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
+										
+										if(subGerentesActivos != null && subGerentesActivos.size()>0){
+											//Si existen Sub Gerentes activos y ademas tienen Exp. pendientes
+											for(Empleado subGerenteActivo : subGerentesActivos)
+											{
+												long cantexpSGA = remoteUtils.countConsultaListaTareasTC(subGerenteActivo.getCodigo());					
+												if(cantexpSGA > 0){
+													reasignarExpedientes(subGerenteActivo, this.empleado);
+														
+												}
+												
+												//Inactivas al Sub Gerente
+												subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
+												subGerenteActivo.setFlagEmpleadoSustituido(Constantes.FLAG_ACTIVO);
+												this.empleadobean.edit(subGerenteActivo);
+											}
+										}
+									}
+									
+								}
+							}
+						}
+					}
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
+					if(!(flagTienePuestoTemporal))//if(objOficinaTemporal == null)
+					{
+						/*validación para el caso en que el usuario tenia configurada una oficina
+						temporal y esta ya caduco se verifica que el usuario no tenga expedientes pendientes, en caso no tenga
+						se procede a restaurar el valor original de su oficina*/
+						if(this.empleado.getPerfilBackup() != null)
+						{				
+							//Perfil temporal que tiene registrado el empleado es Sub Gerente
+							if(this.empleado.getPerfil().getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
+									
+										//Buscar Sub Gerentes activos y de la oficina dada
+										List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
+												Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
+										
+										if(subGerentesActivos != null && subGerentesActivos.size()>0){
+											
+											reasignarExpedientes(this.empleado, subGerentesActivos.get(0));
+											actualizarDatosEmpleado();
+										}else{
+											//Buscar SG inactivos por Oficina, Perfil; Estado y Marca
+											List<Empleado> subGerentesInactivosMarcados = empleadobean.buscarGerenteInactivoPorOficinaPerfilMarca(this.empleado.getOficina().getId(), 
+													Constantes.ID_PERFIL_SUB_GERENTE, Constantes.FLAG_ACTIVO);
+											
+											if(subGerentesInactivosMarcados != null && subGerentesInactivosMarcados.size() >0){
+												int contador=0;
+												for(Empleado subGerenteInactivoMarcado : subGerentesInactivosMarcados)
+												{
+													if(contador == 0){
+														RemoteUtils remoteUtils = new RemoteUtils();
+														long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+														if(cantexp > 0){
+															reasignarExpedientes(this.empleado, subGerenteInactivoMarcado);
+															
+														}
+														contador ++;
+														
+													}
+													
+													subGerenteInactivoMarcado.setFlagActivo(Constantes.FLAG_ACTIVO);
+													subGerenteInactivoMarcado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
+													this.empleadobean.edit(subGerenteInactivoMarcado);
+												}
+												actualizarDatosEmpleado();
+											}else{
+												//Mensaje Error
+												this.setMensajeAdvertencia("No puedes culminar tu temporalidad debido " +
+														"a que no existe un Subgerente activo para la oficina (" + 
+														this.empleado.getOficina().getCodigo() + "-" + this.empleado.getOficina().getDescripcion()
+														+"), por favor comuníquese con el Administrador");
+												flagTienePuestoTemporal = true;
+											}
+										}
+								
+							}else{
+								RemoteUtils remoteUtils = new RemoteUtils();
+								long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+								if(cantexp > 0)
+								{
+									this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para el perfil " + this.empleado.getPerfil().getCodigo() + " - " + this.empleado.getPerfil().getDescripcion() + " temporal configurada");
+									flagTienePuestoTemporal=true;
+								}else{
+									actualizarDatosEmpleado();
+								}
+							}
+						
+						}else{
+							//Perfil usuario logedo es Sub Gerente
+							if(this.empleado.getPerfil().getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
+								
+								//validar si ese Sub Gerente logeado no es activo
+								if(this.empleado.getFlagActivo().equals(Constantes.FLAG_INACTIVO)){
+									//Existen SGT vigentes en el IDM, que estan reemplazando al SubGerente?
+									List<Empleado> subGerentesTemporales = empleadobean.buscarSubGerenteTemporalPorOficinaPerfil(this.empleado.getOficina().getId(), 
+											Constantes.ID_PERFIL_SUB_GERENTE);
+									
+									if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
+										boolean flagTienePuestoTemporalSG = false;
+										Empleado sgTemp = null;
+										
+										for(Empleado subGerenteTemporal : subGerentesTemporales){
+											//Consultar IDM si ese subGerenteTemporal sigue vigente
+											UsuarioExtendido usuarioIDMTemporal = null;
+											List<String> listUsuario2 = new ArrayList<String>();
+											//listUsuario = null;
+											boolean flagAccesoIDMTemporal = false;
+									    	listUsuario2.add(subGerenteTemporal.getCodigo());
+									    	lista = null;
+											try {
+												lista = proxyIDM.obtenerUsuarios(listUsuario2);
+												if(lista != null && lista.size()>0){
+													flagAccesoIDMTemporal = true;
+												}
+												
+											} catch (WSLdapException_Exception e1) {
+												e1.printStackTrace();
+											}
+											
+											if(flagAccesoIDMTemporal){
+												usuarioIDMTemporal = lista.get(0);
+												
+												Date puestoTempFechaInicioIDMTemp = usuarioIDMTemporal.getPuestoTemporal()!=null? usuarioIDMTemporal.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
+												Date puestoTempFechaFinIDMTemp = usuarioIDMTemporal.getPuestoTemporal()!=null? usuarioIDMTemporal.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime():null;
+															
+												flagTienePuestoTemporalSG = (usuarioIDMTemporal.getPuestoTemporal()!=null && 
+														(puestoTempFechaInicioIDMTemp.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS"))) &&
+														(!puestoTempFechaFinIDMTemp.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS")))
+														&& (!usuarioIDMTemporal.getPuestoTemporal().getDescripcionPuesto().equals(usuarioIDMTemporal.getPuesto().getNombreCargoFuncionalLocal())))?
+																				  StringUtils.isNotBlank(
+																				  usuarioIDMTemporal.getPuestoTemporal().getDescripcionPuesto()):false;
+																
+												if(flagTienePuestoTemporalSG){
+													sgTemp = subGerenteTemporal;
+													break;
+												}
+											}	
+											
+										}
+										
+										if(flagTienePuestoTemporalSG){
+											//Mostrar mensaje de error
+											this.setMensajeAdvertencia("Actualmente existe Subgerente Temporal vigente (" + sgTemp.getCodigo() + " - " + 
+														sgTemp.getNombresCompletos() + ") para la oficina (" + sgTemp.getOficina().getCodigo() + " - " + sgTemp.getOficina().getDescripcion() +
+														"), por favor verifique el periodo de temporalidad en IDM, luego vuelva a validar o comuníquese con el Administrador");
+											 
+											
+										}else{
+											//activar al subGerente que en este caso se esta logeando
+											this.empleado.setFlagActivo(Constantes.FLAG_ACTIVO);
+											this.empleado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
+											this.empleadobean.edit(this.empleado);
+											
+											//Si tiene Exp. Pendientes se debe reasignar al SG activo
+											if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
+																				
+												for(Empleado subGerenteTemporal : subGerentesTemporales){
+													reasignarExpedientes(subGerenteTemporal, this.empleado);
+													
+													//Actulizar Perfil, Cargo y Carterizacion del SGT
+													subGerenteTemporal.setPerfil(subGerenteTemporal.getPerfilBackup());
+													subGerenteTemporal.setPerfilBackup(null);
+													subGerenteTemporal.setCodigoCargo(subGerenteTemporal.getCodigoCargoBackup());
+													subGerenteTemporal.setCodigoCargoBackup(null);
+													this.empleadobean.edit(subGerenteTemporal);
+													
+													List<CartEmpleadoCE> listaCartEmpleadoSGTempCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(subGerenteTemporal.getId());
+													for(CartEmpleadoCE objCartEmpleadoSGTempCE : listaCartEmpleadoSGTempCE)
+													{
+														objCartEmpleadoSGTempCE.setPerfil(subGerenteTemporal.getPerfil());
+														this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoSGTempCE);
+													}
+												}
+											}
+										}
+									}
+										
+								}
+							}
+						}
+					
+						
+					}else
+					{
+						//En caso el usuario no tenga configurada un perfil temporal
+						if(this.empleado.getPerfilBackup() == null)
+						{
+							RemoteUtils remoteUtils = new RemoteUtils();
+							long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+							if(cantexp > 0)
+							{
+								this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes, no se le puede establecer el perfil temporal configurado");
+								flagTienePuestoTemporal = false;
 							}
 							else
 							{
@@ -540,9 +686,16 @@ public class DatosCabeceraMB extends AbstractMBean {
 									
 									if(subGerentesActivos != null && subGerentesActivos.size()>0){
 										//Si existen Sub Gerentes activos y ademas tienen Exp. pendientes
+										
 										for(Empleado subGerenteActivo : subGerentesActivos)
 										{
-											//Inactivas al Sub Gerente
+											long cantexpSGA = remoteUtils.countConsultaListaTareasTC(subGerenteActivo.getCodigo());					
+											if(cantexpSGA > 0){
+												reasignarExpedientes(subGerenteActivo, this.empleado);
+													
+											}
+											
+											//Inactivas al Sub Gerente y marcarlo como Sustituido
 											subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
 											subGerenteActivo.setFlagEmpleadoSustituido(Constantes.FLAG_ACTIVO);
 											this.empleadobean.edit(subGerenteActivo);
@@ -550,7 +703,9 @@ public class DatosCabeceraMB extends AbstractMBean {
 									}
 								}
 								
-								this.empleado.setPerfil(perfilTemporal);
+								this.empleado.setPerfilBackup(this.empleado.getPerfil());
+								this.empleado.setPerfil(perfilTemporal);	//this.empleado.setOficina(objOficinaTemporal.getOficina());
+								this.empleado.setCodigoCargoBackup(this.empleado.getCodigoCargo());
 								this.empleado.setCodigoCargo(codigoPuesto);
 								this.empleadobean.edit(this.empleado);
 								
@@ -563,69 +718,101 @@ public class DatosCabeceraMB extends AbstractMBean {
 									objCartEmpleadoCE.setPerfil(this.empleado.getPerfil());
 									this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 								}
-							}
-						}else{
-							LOG.info(">>>>>En caso el usuario no tenga configurada un perfil temporal");
-							RemoteUtils remoteUtils = new RemoteUtils();
-							long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
-							if(cantexp > 0)
-							{
-								this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para el perfil temporal establecido");
-								flagTienePuestoTemporal=true;
-							}
-							else
-							{
-								//Perfil temporal que viene de IDM es Sub Gerente
-								if(perfilTemporal.getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
-									//Buscar Sub Gerentes activos y de la oficina dada
-									List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
-											Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
-									
-									if(subGerentesActivos != null && subGerentesActivos.size()>0){
-										//Si existen Sub Gerentes activos y ademas tienen Exp. pendientes
-										for(Empleado subGerenteActivo : subGerentesActivos)
+							}							
+						}
+						else
+						{
+							if(perfilTemporal!=null){
+								if(this.empleado.getPerfil().getId() != perfilTemporal.getId())
+								{
+									RemoteUtils remoteUtils = new RemoteUtils();
+									long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+									if(cantexp > 0)
+									{
+										this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para el perfil temporal establecido");
+										flagTienePuestoTemporal=true;
+									}
+									else
+									{
+										//Perfil temporal que viene de IDM es Sub Gerente
+										if(perfilTemporal.getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
+											//Buscar Sub Gerentes activos y de la oficina dada
+											List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
+													Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
+											
+											if(subGerentesActivos != null && subGerentesActivos.size()>0){
+												//Si existen Sub Gerentes activos y ademas tienen Exp. pendientes
+												for(Empleado subGerenteActivo : subGerentesActivos)
+												{
+													//Inactivas al Sub Gerente
+													subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
+													subGerenteActivo.setFlagEmpleadoSustituido(Constantes.FLAG_ACTIVO);
+													this.empleadobean.edit(subGerenteActivo);
+												}
+											}
+										}
+										
+										this.empleado.setPerfil(perfilTemporal);
+										this.empleado.setCodigoCargo(codigoPuesto);
+										this.empleadobean.edit(this.empleado);
+										
+										List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+										for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
 										{
-											//Inactivas al Sub Gerente
-											subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
-											subGerenteActivo.setFlagEmpleadoSustituido(Constantes.FLAG_ACTIVO);
-											this.empleadobean.edit(subGerenteActivo);
+											//objCartEmpleadoCE.setOficina(this.empleado.getOficina());
+											//this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+											
+											objCartEmpleadoCE.setPerfil(this.empleado.getPerfil());
+											this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 										}
 									}
-								}
-								
-								List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
-								for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
-								{
-									objCartEmpleadoCE.setPerfil(this.empleado.getPerfil());
-									this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+								}else{
+									RemoteUtils remoteUtils = new RemoteUtils();
+									long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+									if(cantexp > 0)
+									{
+										this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para el perfil temporal establecido");
+										flagTienePuestoTemporal=true;
+									}
+									else
+									{
+										//Perfil temporal que viene de IDM es Sub Gerente
+										if(perfilTemporal.getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
+											//Buscar Sub Gerentes activos y de la oficina dada
+											List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
+													Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
+											
+											if(subGerentesActivos != null && subGerentesActivos.size()>0){
+												//Si existen Sub Gerentes activos y ademas tienen Exp. pendientes
+												for(Empleado subGerenteActivo : subGerentesActivos)
+												{
+													//Inactivas al Sub Gerente
+													subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
+													subGerenteActivo.setFlagEmpleadoSustituido(Constantes.FLAG_ACTIVO);
+													this.empleadobean.edit(subGerenteActivo);
+												}
+											}
+										}
+										
+										List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+										for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+										{
+											objCartEmpleadoCE.setPerfil(this.empleado.getPerfil());
+											this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+										}
+									}
 								}
 							}
 						}
 					}
+					
+					//if(this.empleado.getOficinaBackup() != null) { this.setEtiquetaTemporal("(Temporal)"); }
+					if(flagTieneOficinaTemporal){ this.setEtiquetaTemporal("(Temporal)"); }
+					if(flagTienePuestoTemporal ){ this.setEtiquetaTemporalPerfil("(Temporal)"); }
 				}
-			}
-			
-			//if(this.empleado.getOficinaBackup() != null) { this.setEtiquetaTemporal("(Temporal)"); }
-			if(flagTieneOficinaTemporal){ this.setEtiquetaTemporal("(Temporal)"); }
-			
-			if(flagTienePuestoTemporal ){ this.setEtiquetaTemporalPerfil("(Temporal)"); }
-			
-			if(empleado == null){
+			}else {
 				LOG.info("El empleado (usuario: {}) esta registrado en LDAP y no esta en el sistema", user);
-			} else if (Constantes.FLAG_INACTIVO.equals(empleado.getFlagActivo())) {
-				LOG.info("El empleado {} esta inactivo", empleado.getCodigo());
-				/*HttpServletResponse response = (HttpServletResponse) getExternalContext().getResponse();
-				try {
-					response.sendRedirect("ibm_security_logout?logoutExitPage=/index.faces");
-				} catch (Exception e) {
-					LOG.error(e.getMessage(), e);
-				}*/
-				try{
-					menu.timeOutWAS();
-				} catch (Exception e) {
-					LOG.error(e.getMessage(), e);
-				}
-			}
+			} 
 		}	
 		addObjectSession(Constantes.USUARIO_SESION, empleado);
 		addObjectSession("IDM_ACCESO", flagAccesoIDM);
@@ -655,7 +842,6 @@ public class DatosCabeceraMB extends AbstractMBean {
     }
     
     public void reasignarExpedientes(Empleado subGerenteTieneExp, Empleado subGerenteDebeTenerExp){
-    	LOG.info("subGerenteTieneExp="+subGerenteTieneExp.getCodigo()+ " subGerenteDebeTenerExp="+subGerenteDebeTenerExp.getCodigo());
     	//inhabilitarActivosExp();
     	Consulta consulta = null;
     	List<String> listUsuarios = null;
@@ -663,22 +849,9 @@ public class DatosCabeceraMB extends AbstractMBean {
     	ExpedienteTCWrapper objExpedienteTCWrapper = null;
     	RemoteUtils tareasBDelegate = new RemoteUtils();
     	String mensaje = "ERROR";
-		// validacion de carterizacion
-		//Empleado empleado = (Empleado) getObjectSession(Constantes.USUARIO_SESION);
-		//MenuMB menu = (MenuMB)getObjectRequest("menu");
-		//String carterizacion = menu.verificarExisteCarterizacion(empleado.getOficina().getTerritorio().getId(), empleado.getId());
-		
-		try{
-			//if (carterizacion.equals(Constantes.NO_EXISTE_CARTERIZACION) ) {			 
-				//addMessageError(idMsgError + ":datoReasignar", "com.ibm.bbva.bandejaReasigTareas.formBandejaReasigTareas.mensajeError");		
 				
-			//}else{
-				//FacesContext ctx = FacesContext.getCurrentInstance();
-				//TablaBandejaAsigMB tablaBandejaAsig = (TablaBandejaAsigMB)  
-				//		ctx.getApplication().getVariableResolver().resolveVariable(ctx, "tablaBandejaAsig");
-				//tablaBandejaAsig.setListTabla((List<ExpedienteTCWrapper>)getObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION));
-				//codUsuario=(String)getObjectSession(Constantes.COD_USUARIO_ASIGNAR);
-			LOG.info("subGerenteTieneExp.getCodigo().length()>="+subGerenteTieneExp.getCodigo().length());
+		try{
+			
 			if(subGerenteTieneExp != null && subGerenteTieneExp.getCodigo().length()>0){
 				consulta = new Consulta();		
 				listUsuarios=new ArrayList<String>();
@@ -686,8 +859,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 				consulta.setUsuarios(listUsuarios);
 				consulta.setConsiderarUsuarios(true);		
 				listaReasignable = tareasBDelegate.obtenerListaTareasBandPendiente(consulta);
-				LOG.info("listaReasignable="+listaReasignable);
-				LOG.info("listaReasignable="+listaReasignable.size());
+				
 				if(listaReasignable != null){
 					for(ExpedienteTCWPSWeb objExpedienteTCWPSWeb : listaReasignable){
 	
@@ -731,24 +903,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 				}
 
 			}	
-		
-								
-				/*ctx = FacesContext.getCurrentInstance();
-				BuscarBandejaAsigMB busqueda = (BuscarBandejaAsigMB)  
-						ctx.getApplication().getVariableResolver().resolveVariable(ctx, "buscarBandejaAsig");
-				addObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION, tablaBandejaAsig.getListTabla());
-				//removeObjectSession(Constantes.LISTA_EXPEDIENTE_PROCESO_SESION);
-				busqueda.buscar();
-				if (mensaje.equals("SUCCESS")) {
-					this.setStrResultado("Asignación satisfactoria");
-				} else {
-					this.setStrResultado("Error al invocar al process...");
-				}			
-				this.setActEstadoExp(false);
-				this.setDeshabilitar(false);
-				List<Empleado> listaEmp = new ArrayList<Empleado>();
-				busqueda.cargarListaAsignar(listaEmp);*/
-			//}			
+				
 		}catch(Exception ex){
 			LOG.error("Error::"+ex.getMessage(),ex);
 		}
@@ -769,6 +924,20 @@ public class DatosCabeceraMB extends AbstractMBean {
 			//this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 			
 			objCartEmpleadoCE.setPerfil(this.empleado.getPerfil());
+			this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+		}
+    }
+    
+    public void actualizarDatosOficinaEmpleado(){
+    	this.empleado.setOficina(this.empleado.getOficinaBackup());
+		this.empleado.setOficinaBackup(null);
+		this.empleadobean.edit(this.empleado);
+		
+		List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
+		for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+		{
+			objCartEmpleadoCE.setOficina(this.empleado.getOficina());
+			//TODO:se debe actualizar el Perfil?
 			this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 		}
     }
