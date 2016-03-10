@@ -43,6 +43,8 @@ public interface EmpleadoBeanLocal {
 	List<Empleado> buscarSubGerenteTemporalPorOficinaPerfil(long idOficina,
 			long idPerfil);
 	
+	List<Empleado> buscarSubGerenteTemporalPorOficinaYOfiTemp(long idOficina, long idPerfilTemporal);
+	
 	List<Empleado> buscarPorPerfilEmpleadoActivo(long idPerfil, long idOficina);
 
 	List<Empleado> buscarPorIdTipoCategoria(long idTipoCategoria, long idPerfil);
