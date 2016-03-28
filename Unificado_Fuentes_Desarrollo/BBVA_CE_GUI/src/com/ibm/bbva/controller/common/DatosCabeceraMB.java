@@ -42,6 +42,7 @@ import com.ibm.bbva.session.ParametrosConfBeanLocal;
 import com.ibm.bbva.session.PerfilBeanLocal;
 import com.ibm.bbva.session.TareaBeanLocal;
 import com.ibm.bbva.session.TipoClienteBeanLocal;
+import com.ibm.bbva.util.AyudaCargaLdap;
 import com.ibm.bbva.util.ExpedienteTCWrapper;
 import com.ibm.bbva.util.Util;
 
@@ -90,7 +91,6 @@ public class DatosCabeceraMB extends AbstractMBean {
 	private WSLDAPServiceExtImplPortProxy proxyIDM; 
 	
 	private boolean flagAccesoIDM;//validar acceso en IDM
-	private boolean flagCambiarDatosXTemporalidad ; //flag cambiar datos de usuario por valores TEMPORALES
 	private UsuarioExtendido usuarioIDM;
 	
 	@EJB
@@ -104,6 +104,8 @@ public class DatosCabeceraMB extends AbstractMBean {
 	
 	@EJB
 	private DescargaLDAPBeanLocal descargaLDAPBeanLocal;
+	
+	private AyudaCargaLdap ayudaCargaLdap;
 	
     public DatosCabeceraMB() {
 	}
@@ -123,8 +125,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 		
 		
     	flagAccesoIDM = false;
-    	flagCambiarDatosXTemporalidad = false;
-    	
+    	    	
     	proxyIDM = new WSLDAPServiceExtImplPortProxy();
     	proxyIDM._getDescriptor().setEndpoint(parametrosConfBean.buscarPorVariable(Constantes.CODIGO_APLICATIVO_PROCESO_LDAP, Constantes.LDAP_WEB_SERVICE_EXT_ENDPOINT).getValorVariable());
     	List<String> listUsuario = new ArrayList<String>();
@@ -181,7 +182,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 					}
 				}else{
 					
-					LOG.info("FECHA INICIO PUESTO TEMPORAL DE IDM  "+ (usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
+					/*LOG.info("FECHA INICIO PUESTO TEMPORAL DE IDM  "+ (usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
 					Date puestoTempFechaInicioIDM = usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
 					LOG.info("FECHA INICIO PUESTO TEMPORAL DE IDM CON FORMATO "+puestoTempFechaInicioIDM);
 					
@@ -194,10 +195,13 @@ public class DatosCabeceraMB extends AbstractMBean {
 							(!puestoTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS")))
 							&& (!usuarioIDM.getPuestoTemporal().getDescripcionPuesto().equals(usuarioIDM.getPuesto().getNombreCargoFuncionalLocal())))?
 													  StringUtils.isNotBlank(
-													  usuarioIDM.getPuestoTemporal().getDescripcionPuesto()):false;
+													  usuarioIDM.getPuestoTemporal().getDescripcionPuesto()):false;*/
 					//String codigoPuesto = usuarioIDM.getPuesto().getDescripcionPuesto();
 					String codigoPuesto = "";								  
 					com.ibm.bbva.entities.Perfil perfilTemporal = empleado.getPerfil();
+					
+					boolean flagTienePuestoTemporal = ayudaCargaLdap.validarTemporalidadPuestoIDM(usuarioIDM);
+					//if(flagTienePuestoTemporal){
 					if(flagTienePuestoTemporal){
 						codigoPuesto = usuarioIDM.getPuestoTemporal().getDescripcionPuesto();
 						List<DescargaLDAP> listaPerfiles = descargaLDAPBeanLocal.buscar("-1", codigoPuesto, "-1", "-1", "-1", "-1");
@@ -210,7 +214,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 						}
 					}
 					
-					LOG.info("FECHA INICIO OFICINA TEMPORAL DE IDM  "+ (usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
+					/*LOG.info("FECHA INICIO OFICINA TEMPORAL DE IDM  "+ (usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
 					Date ofiTempFechaInicioIDM = usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
 					LOG.info("FECHA INICIO OFICINA TEMPORAL DE IDM CON FORMATO "+ofiTempFechaInicioIDM);
 					
@@ -223,10 +227,12 @@ public class DatosCabeceraMB extends AbstractMBean {
 							(!ofiTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss")))
 							&& (!usuarioIDM.getCentroTemporal().getDescripcion().equals(usuarioIDM.getCodigoCentro())))?
 													   StringUtils.isNotBlank(
-													   usuarioIDM.getCentroTemporal().getDescripcion()):false;
+													   usuarioIDM.getCentroTemporal().getDescripcion()):false;*/
 													   
 					
 					Oficina objOficinaTemporal = null;
+					
+					boolean flagTieneOficinaTemporal =ayudaCargaLdap.validarTemporalidadOficinaIDM(usuarioIDM);
 					if(flagTieneOficinaTemporal){
 						String codigoOficina = usuarioIDM.getCentroTemporal().getDescripcion();
 						objOficinaTemporal = oficinabean.buscarPorCodigo(codigoOficina);
@@ -250,8 +256,8 @@ public class DatosCabeceraMB extends AbstractMBean {
 										
 										if(subGerentesActivos != null && subGerentesActivos.size()>0){
 											
-											reasignarExpedientes(this.empleado, subGerentesActivos.get(0));
-											actualizarDatosOficinaEmpleado();
+											ayudaCargaLdap.reasignarExpedientes(this.empleado, subGerentesActivos.get(0));
+											ayudaCargaLdap.actualizarDatosOficinaEmpleado(this.empleado);
 										}else{
 											//Buscar SG inactivos por Oficina, Perfil; Estado y Marca
 											List<Empleado> subGerentesInactivosMarcados = empleadobean.buscarGerenteInactivoPorOficinaPerfilMarca(this.empleado.getOficina().getId(), 
@@ -265,7 +271,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 														RemoteUtils remoteUtils = new RemoteUtils();
 														long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
 														if(cantexp > 0){
-															reasignarExpedientes(this.empleado, subGerenteInactivoMarcado);
+															ayudaCargaLdap.reasignarExpedientes(this.empleado, subGerenteInactivoMarcado);
 															
 														}
 														contador ++;
@@ -276,7 +282,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 													subGerenteInactivoMarcado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
 													this.empleadobean.edit(subGerenteInactivoMarcado);
 												}
-												actualizarDatosOficinaEmpleado();
+												ayudaCargaLdap.actualizarDatosOficinaEmpleado(this.empleado);
 											}else{
 												//Mensaje Error
 												this.setMensajeAdvertencia("No puedes culminar tu temporalidad debido " +
@@ -298,7 +304,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 								}
 								else
 								{	
-									actualizarDatosOficinaEmpleado();
+									ayudaCargaLdap.actualizarDatosOficinaEmpleado(this.empleado);
 								}
 							}
 								
@@ -373,7 +379,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 																				
 												
 												for(Empleado subGerenteTemporal : subGerentesTemporales){
-													reasignarExpedientes(subGerenteTemporal, this.empleado);
+													ayudaCargaLdap.reasignarExpedientes(subGerenteTemporal, this.empleado);
 													
 													//Se atualiza Oficina 
 													subGerenteTemporal.setOficina(subGerenteTemporal.getOficinaBackup());
@@ -437,7 +443,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 										{
 											long cantexpSGA = remoteUtils.countConsultaListaTareasTC(subGerenteActivo.getCodigo());					
 											if(cantexpSGA > 0){
-												reasignarExpedientes(subGerenteActivo, this.empleado);
+												ayudaCargaLdap.reasignarExpedientes(subGerenteActivo, this.empleado);
 													
 											}
 											
@@ -487,7 +493,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 											{
 												long cantexpSGA = remoteUtils.countConsultaListaTareasTC(subGerenteActivo.getCodigo());					
 												if(cantexpSGA > 0){
-													reasignarExpedientes(subGerenteActivo, this.empleado);
+													ayudaCargaLdap.reasignarExpedientes(subGerenteActivo, this.empleado);
 														
 												}
 												
@@ -520,8 +526,8 @@ public class DatosCabeceraMB extends AbstractMBean {
 										
 										if(subGerentesActivos != null && subGerentesActivos.size()>0){
 											
-											reasignarExpedientes(this.empleado, subGerentesActivos.get(0));
-											actualizarDatosEmpleado();
+											ayudaCargaLdap.reasignarExpedientes(this.empleado, subGerentesActivos.get(0));
+											ayudaCargaLdap.actualizarDatosEmpleado(this.empleado);
 										}else{
 											//Buscar SG inactivos por Oficina, Perfil; Estado y Marca
 											List<Empleado> subGerentesInactivosMarcados = empleadobean.buscarGerenteInactivoPorOficinaPerfilMarca(this.empleado.getOficina().getId(), 
@@ -535,7 +541,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 														RemoteUtils remoteUtils = new RemoteUtils();
 														long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
 														if(cantexp > 0){
-															reasignarExpedientes(this.empleado, subGerenteInactivoMarcado);
+															ayudaCargaLdap.reasignarExpedientes(this.empleado, subGerenteInactivoMarcado);
 															
 														}
 														contador ++;
@@ -546,7 +552,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 													subGerenteInactivoMarcado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
 													this.empleadobean.edit(subGerenteInactivoMarcado);
 												}
-												actualizarDatosEmpleado();
+												ayudaCargaLdap.actualizarDatosEmpleado(this.empleado);
 											}else{
 												//Mensaje Error
 												this.setMensajeAdvertencia("No puedes culminar tu temporalidad debido " +
@@ -565,7 +571,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 									this.setMensajeAdvertencia("Usted cuenta con expedientes pendientes para el perfil " + this.empleado.getPerfil().getCodigo() + " - " + this.empleado.getPerfil().getDescripcion() + " temporal configurada");
 									flagTienePuestoTemporal=true;
 								}else{
-									actualizarDatosEmpleado();
+									ayudaCargaLdap.actualizarDatosEmpleado(this.empleado);
 								}
 							}
 						
@@ -639,7 +645,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 											if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
 																				
 												for(Empleado subGerenteTemporal : subGerentesTemporales){
-													reasignarExpedientes(subGerenteTemporal, this.empleado);
+													ayudaCargaLdap.reasignarExpedientes(subGerenteTemporal, this.empleado);
 													
 													//Actulizar Perfil, Cargo y Carterizacion del SGT
 													subGerenteTemporal.setPerfil(subGerenteTemporal.getPerfilBackup());
@@ -691,7 +697,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 										{
 											long cantexpSGA = remoteUtils.countConsultaListaTareasTC(subGerenteActivo.getCodigo());					
 											if(cantexpSGA > 0){
-												reasignarExpedientes(subGerenteActivo, this.empleado);
+												ayudaCargaLdap.reasignarExpedientes(subGerenteActivo, this.empleado);
 													
 											}
 											
@@ -841,7 +847,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 	    
     }
     
-    public void reasignarExpedientes(Empleado subGerenteTieneExp, Empleado subGerenteDebeTenerExp){
+    /*public void reasignarExpedientes(Empleado subGerenteTieneExp, Empleado subGerenteDebeTenerExp){
     	//inhabilitarActivosExp();
     	Consulta consulta = null;
     	List<String> listUsuarios = null;
@@ -907,9 +913,9 @@ public class DatosCabeceraMB extends AbstractMBean {
 		}catch(Exception ex){
 			LOG.error("Error::"+ex.getMessage(),ex);
 		}
-    }
+    }*/
     
-    public void actualizarDatosEmpleado(){
+    /*public void actualizarDatosEmpleado(){
     	this.empleado.setPerfil(this.empleado.getPerfilBackup());
 		this.empleado.setPerfilBackup(null);
 		this.empleado.setCodigoCargo(this.empleado.getCodigoCargoBackup());
@@ -919,16 +925,12 @@ public class DatosCabeceraMB extends AbstractMBean {
 		List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(this.empleado.getId());
 		for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
 		{
-			//objCartEmpleadoCE.setOficina(this.empleado.getOficina());
-			//TODO:se debe actualizar el Perfil?
-			//this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
-			
 			objCartEmpleadoCE.setPerfil(this.empleado.getPerfil());
 			this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 		}
-    }
+    }*/
     
-    public void actualizarDatosOficinaEmpleado(){
+    /*public void actualizarDatosOficinaEmpleado(){
     	this.empleado.setOficina(this.empleado.getOficinaBackup());
 		this.empleado.setOficinaBackup(null);
 		this.empleadobean.edit(this.empleado);
@@ -937,32 +939,10 @@ public class DatosCabeceraMB extends AbstractMBean {
 		for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
 		{
 			objCartEmpleadoCE.setOficina(this.empleado.getOficina());
-			//TODO:se debe actualizar el Perfil?
 			this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 		}
-    }
-    
-    /*public void inhabilitarActivosExp(){
-		listaExpedientes = (List<String>) getObjectSession(Constantes.LIS_BANDASIGN_ASIGNA);
-		LOG.info("strExpedientes:::"+strExpedientes);	
-		
-		if(listaExpedientes!=null && listaExpedientes.size()>0){
-			for(String item: listaExpedientes){
-				String idExpediente = item;
-				LOG.info("idExpediente ::: "+idExpediente);
-				
-				if(idExpediente!=null && !idExpediente.trim().equals("")){
-					//Actualiza estado activo de Expediente para el momento de la reasignación			
-					expedienteBean.actualizarEstadoExpediente(Constantes.FLAG_ESTADO_INACTIVO_EXPEDIENTE, Long.parseLong(idExpediente));
-					LOG.info("Inactivado ::: "+idExpediente);
-				}			
-			}			
-		}else{
-			LOG.info("listaExpedientes vacio");
-		}
-
-	}*/
-
+    }*/
+  
 	public Empleado getEmpleado() {
 		return empleado;
 	}
