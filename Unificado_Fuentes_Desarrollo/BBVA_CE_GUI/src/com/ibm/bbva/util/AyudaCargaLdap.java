@@ -64,20 +64,13 @@ public class AyudaCargaLdap extends AbstractMBean{
 	public AyudaCargaLdap()  {
 		super();
 		try {
-			tareaBean=(TareaBeanLocal) new InitialContext()
-			.lookup("ejblocal:com.ibm.bbva.session.TareaBeanLocal");
-			bbvaFacade=(BBVAFacadeLocal) new InitialContext()
-			.lookup("ejblocal:com.ibm.bbva.session.BBVAFacadeLocal");
-			tipoClienteBean=(TipoClienteBeanLocal) new InitialContext()
-			.lookup("ejblocal:com.ibm.bbva.session.TipoClienteBeanLocal");
-			expedienteBean=(ExpedienteBeanLocal) new InitialContext()
-			.lookup("ejblocal:com.ibm.bbva.session.ExpedienteBeanLocal");
-			ansBean=(AnsBeanLocal) new InitialContext()
-			.lookup("ejblocal:com.ibm.bbva.session.AnsBeanLocal");
-			empleadobean=(EmpleadoBeanLocal) new InitialContext()
-			.lookup("ejblocal:com.ibm.bbva.session.EmpleadoBeanLocal");
-			cartEmpleadoCEBeanLocal=(CartEmpleadoCEBeanLocal) new InitialContext()
-			.lookup("ejblocal:com.ibm.bbva.session.CartEmpleadoCEBeanLocal");
+			tareaBean=(TareaBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.TareaBeanLocal");
+			bbvaFacade=(BBVAFacadeLocal) new InitialContext().lookup("ejblocal:bbva.ws.api.view.BBVAFacadeLocal");
+			tipoClienteBean=(TipoClienteBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.TipoClienteBeanLocal");
+			expedienteBean=(ExpedienteBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.ExpedienteBeanLocal");
+			ansBean=(AnsBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.AnsBeanLocal");
+			empleadobean=(EmpleadoBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.EmpleadoBeanLocal");
+			cartEmpleadoCEBeanLocal=(CartEmpleadoCEBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.CartEmpleadoCEBeanLocal");
 				
 		} catch (NamingException e) {
 			LOG.error(e.getMessage(), e);
