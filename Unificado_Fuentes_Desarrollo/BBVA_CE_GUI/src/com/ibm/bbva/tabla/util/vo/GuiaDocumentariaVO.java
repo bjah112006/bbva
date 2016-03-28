@@ -13,6 +13,7 @@ public class GuiaDocumentariaVO {
 	private String categoriaRenta;
 	private String persona;
 	private String producto;
+	private String subproducto;
 	//private boolean tasaEspecial;
 	private String tasaEspecial;
 	private String tarea;
@@ -225,6 +226,14 @@ public class GuiaDocumentariaVO {
 	
 	public void setIdGuiaDocumentaria(String idGuiaDocumentaria) {
 		this.idGuiaDocumentaria = idGuiaDocumentaria;
+	}
+
+	public String getSubproducto() {
+		return subproducto;
+	}
+
+	public void setSubproducto(String subproducto) {
+		this.subproducto = subproducto;
 	}
 	
 }
