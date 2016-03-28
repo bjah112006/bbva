@@ -119,6 +119,15 @@ try {
         return items;
     }
 	
+	public static List<SelectItem> listaVaciaSubProducto () {
+		ArrayList<SelectItem> items = new ArrayList<SelectItem>(1);
+		SelectItem selectItem = new SelectItem();
+        selectItem.setValue(Constantes.CODIGO_CODIGO_CAMPO_VACIO);
+        selectItem.setLabel("TODOS");
+        items.add(selectItem);
+        return items;
+    }
+	
 	public static Collection<SelectItem> listaVaciaC () {
 		Collection<SelectItem> items = new ArrayList<SelectItem>();		
 		SelectItem si = new SelectItem();
