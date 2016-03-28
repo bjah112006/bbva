@@ -147,6 +147,8 @@ public class CargaLdapServlet extends HttpServlet
 			LdapTemp objLdapTemp = null;
 			String oficinasSincronizables = multitablaBeanLocal.buscarPorId(Constantes.PARAMETRO_OFICINAS_SINCRONIZABLES).getTexto();
 			
+			ayudaCargaLdap = new AyudaCargaLdap();
+			
 			for(UsuarioExtendido objUsuario : listaUsuarios)
 			{					
 				objLdapTemp = new LdapTemp();					
