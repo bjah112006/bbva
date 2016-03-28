@@ -48,9 +48,16 @@ public class SubproductoBean extends AbstractFacade<Subproducto> implements Subp
 		}
 	}
     
+       
 	@Override
 	public List<Subproducto> buscarPorIdProducto(long idProducto) {
 		List<Subproducto> resultList = em.createNamedQuery("Subproducto.buscarPorIdProducto").setParameter("idProducto", idProducto).getResultList();
+		return resultList;
+	}
+	
+	@Override
+	public List<Subproducto> buscarPorIdProd(long idProducto) {
+		List<Subproducto> resultList = em.createNamedQuery("Subproducto.buscarPorIdProd").setParameter("idProducto", idProducto).setParameter("flag", "1") .getResultList();
 		return resultList;
 	}
 
