@@ -510,7 +510,16 @@ public class GuiaDocumentariaMB extends AbstractMBean{
 		//if(guiaDocumentaria!=null && guiaDocumentaria.getProducto()!=null && guiaDocumentaria.getSubproducto()!=null && guiaDocumentaria.getTipoOferta()!=null)
 		//if(guiaDocumentaria!=null && guiaDocumentaria.getProducto()!=null && guiaDocumentaria.getTipoOferta()!=null)
 		if(guiaDocumentaria!=null && guiaDocumentaria.getProducto()!=null && guiaDocumentaria.getTipoOferta()!=null)
-			listaGuiaDoc.addAll(guiaDocumentariaBean.obtenerGuiaDocOrden(guiaDocumentaria, idConyuge, idsCatRenta));
+			if(expediente != null && expediente.getExpedienteTC() != null && 
+					expediente.getExpedienteTC().getSubproducto()!=null && expediente.getExpedienteTC().getSubproducto().getId()>0){
+				
+				guiaDocumentaria.setSubproducto(expediente.getExpedienteTC().getSubproducto());
+				listaGuiaDoc.addAll(guiaDocumentariaBean.obtenerGuiaDocXSubProdOrden(guiaDocumentaria, idConyuge, idsCatRenta));
+				
+			}else{
+				listaGuiaDoc.addAll(guiaDocumentariaBean.obtenerGuiaDocOrden(guiaDocumentaria, idConyuge, idsCatRenta));
+			}
+			
 	}
 	
 	public String obtenerTipoDocCM(GuiaDocumentaria vo) {
