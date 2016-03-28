@@ -13,6 +13,7 @@ import com.ibm.bbva.controller.Constantes;
 import com.ibm.bbva.entities.DocumentoExpTc;
 import com.ibm.bbva.entities.Expediente;
 import com.ibm.bbva.entities.GuiaDocumentaria;
+import com.ibm.bbva.entities.MotivoDevolucion;
 import com.ibm.bbva.session.DocumentoExpTcBeanLocal;
 //import com.ibm.bbva.tabla.util.vo.DocumentoReutilizable;
 
@@ -141,6 +142,7 @@ public class AyudaDocumento {
 	 * Metodo que permite actualizar el flag de escaneado cuando el expediente ha sido grabado previamente y ha grabado los flags de los documentos en cero
 	 */
 	public void editarDocumentoExpediente() {
+		LOG.info("En el metodo editarDocumentoExpediente ");
 		Expediente expediente = (Expediente) FacesContext.getCurrentInstance().
 				getExternalContext().getSessionMap().get(Constantes.EXPEDIENTE_SESION);
 		
@@ -148,33 +150,72 @@ public class AyudaDocumento {
 				.getCurrentInstance().getExternalContext().getSessionMap()
 				.get(Constantes.LIST_DOC_TRANSF);
 		
-		if(strListaDocsTransferencias != null && !strListaDocsTransferencias.equals("null") && strListaDocsTransferencias.split(",").length > 0){
-			List<DocumentoExpTc> lstDocumentoExpTc = documentoExpTcBean.buscarPorExpediente(expediente.getId());
-			for(DocumentoExpTc documentoExpTc : lstDocumentoExpTc){
-	    		for (String codTipoDoc : strListaDocsTransferencias.split(",")) {
-					if (documentoExpTc.getTipoDocumento().getCodigo().equals(codTipoDoc)
-							&& "0".equals(documentoExpTc.getFlagEscaneado())
-							&& documentoExpTc.getTarea().getId() == expediente.getExpedienteTC().getTarea().getId()) {
-						documentoExpTc.setFlagEscaneado("1");
-						documentoExpTcBean.edit(documentoExpTc);	
-						break;
+		//Verificar si los documentos para ser subidos no vienen de DEVOLVER en una tarea
+		MotivoDevolucion motivoDevolucion = 
+				(MotivoDevolucion) FacesContext.getCurrentInstance().getExternalContext()
+							.getSessionMap().get(Constantes.MOTIVO_DEVOLUCION_TAREA_SESION);
+		
+		
+					
+		if (motivoDevolucion!=null || expediente.getAccion().equals(Constantes.ACCION_BOTON_DEVOLVER)){
+			LOG.info("Tiene Motivo Devolucion por lo tanto es DEVOLVER, Expediente:::" + expediente.getId());
+			LOG.info("ACCION DEL EXPEDIENTE:::" + expediente.getAccion());
+			LOG.info("strListaDocsTransferencias:::" + strListaDocsTransferencias);
+			
+			LOG.info("strListaDocsTransferencias: "+strListaDocsTransferencias);
+	    	if(strListaDocsTransferencias != null && !strListaDocsTransferencias.equals("null") && strListaDocsTransferencias.split(",").length > 0){
+	    		List<DocumentoExpTc> lstDocumentoExpTc = documentoExpTcBean.buscarPorExpediente(expediente.getId());
+	    		for(DocumentoExpTc documentoExpTc : lstDocumentoExpTc){
+	    			for (String codTipoDoc : strListaDocsTransferencias.split(",")) {
+						if (documentoExpTc.getTipoDocumento().getCodigo().equals(codTipoDoc)) {
+							LOG.info("Actualizando FlagEscaneado para Exp::: " +expediente.getId()+" documentoExpTc.getId()::: "+ documentoExpTc.getId());
+							
+							documentoExpTc.setFlagEscaneado("0");
+							documentoExpTcBean.edit(documentoExpTc);	
+							break;
+						}
+					}
+	    		}
+	    		
+	    	}
+			
+		}else{
+			LOG.info("No tiene Motivo Devolucion por lo tanto no es Devolver, Expediente:::" + expediente.getId());
+			LOG.info("ACCION DEL EXPEDIENTE:::" + expediente.getAccion()+"_");
+			//LOG.info("motivoDevolucion ID:::" + motivoDevolucion.getId() +" CODIGO "+ motivoDevolucion.getCodigo() +" DESCRIPCION "+ motivoDevolucion.getDescripcion());
+			
+			if(strListaDocsTransferencias != null && !strListaDocsTransferencias.equals("null") && strListaDocsTransferencias.split(",").length > 0){
+				List<DocumentoExpTc> lstDocumentoExpTc = documentoExpTcBean.buscarPorExpediente(expediente.getId());
+				for(DocumentoExpTc documentoExpTc : lstDocumentoExpTc){
+		    		for (String codTipoDoc : strListaDocsTransferencias.split(",")) {
+						if (documentoExpTc.getTipoDocumento().getCodigo().equals(codTipoDoc)
+								&& "0".equals(documentoExpTc.getFlagEscaneado())
+								&& documentoExpTc.getTarea().getId() == expediente.getExpedienteTC().getTarea().getId()) {
+							documentoExpTc.setFlagEscaneado("1");
+							documentoExpTcBean.edit(documentoExpTc);	
+							break;
+						}
 					}
 				}
-			}
-    	}
-		
-		List<DocumentoExpTc> listDocumentoExpTc = documentoExpTcBean.buscarPorExpediente(expediente.getId());
-	    String lisDocumentosAdjuntos = "";
-	    if (!(listDocumentoExpTc == null || listDocumentoExpTc.isEmpty())){
-	    	for (DocumentoExpTc docExpTc : listDocumentoExpTc) {
-	    		if (docExpTc.getTarea().getId() == expediente.getExpedienteTC().getTarea().getId()
-	    				&& (docExpTc.getFlagCm()==null || !docExpTc.getFlagCm().equals("1"))) {
-	    			lisDocumentosAdjuntos = lisDocumentosAdjuntos + docExpTc.getTipoDocumento().getCodigo() + ";" + docExpTc.getId() + "|";
-	    		}
 	    	}
-	    	LOG.info("lisDocumentosAdjuntos: " + lisDocumentosAdjuntos);
-	    	FacesContext.getCurrentInstance().getExternalContext()
-    		.getSessionMap().put(Constantes.LISTA_DOCUMENTOS_ADJUNTOS, lisDocumentosAdjuntos);
-	    }
+			
+			List<DocumentoExpTc> listDocumentoExpTc = documentoExpTcBean.buscarPorExpediente(expediente.getId());
+		    String lisDocumentosAdjuntos = "";
+		    if (!(listDocumentoExpTc == null || listDocumentoExpTc.isEmpty())){
+		    	for (DocumentoExpTc docExpTc : listDocumentoExpTc) {
+		    		if (docExpTc.getTarea().getId() == expediente.getExpedienteTC().getTarea().getId()
+		    				&& (docExpTc.getFlagCm()==null || !docExpTc.getFlagCm().equals("1"))) {
+		    			lisDocumentosAdjuntos = lisDocumentosAdjuntos + docExpTc.getTipoDocumento().getCodigo() + ";" + docExpTc.getId() + "|";
+		    		}
+		    		
+		    	}
+		    	
+		    	LOG.info("lisDocumentosAdjuntos: " + lisDocumentosAdjuntos);
+		    	FacesContext.getCurrentInstance().getExternalContext()
+	    		.getSessionMap().put(Constantes.LISTA_DOCUMENTOS_ADJUNTOS, lisDocumentosAdjuntos);
+		    }
+			
+		}
+		
 	}
 }
