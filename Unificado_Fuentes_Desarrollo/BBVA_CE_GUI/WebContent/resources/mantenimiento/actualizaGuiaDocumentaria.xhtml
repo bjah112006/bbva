@@ -1,9 +1,50 @@
+
 <ui:composition
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:outputScript library="js" name="funciones.js" target="head"/>    
 <div class="bloque">
+<script type="text/javascript">
+		/* <![CDATA[ */  
+		
+		function changeProducto(e){
+			var valor = jQuery("select[name='formActualizaGuiaDocumentaria\\:cmbProducto'] option:selected").attr("value");
+		    var texto = jQuery("select[name='formActualizaGuiaDocumentaria\\:cmbProducto'] option:selected").text();
+
+			//alert("hola jquery combos valor :"+valor+", texto:"+texto);
+			//alert("productoSeleccionado :"+document.getElementById('codProd').value);
+			document.getElementById('codProd').value = valor;
+			//alert("productoSeleccionado :"+document.getElementById('codProd').value);
+			
+		}
+		
+		function myFuncion(event) {
+			
+			//alert($('#cmbProducto').val());
+					
+			switch(event.status){
+				case "begin":
+					$(document).keydown(function(e) {
+					    if (e.keyCode == 9)
+					    	e.preventDefault();
+					});
+					break;
+				case "success":
+					$(document).off("keydown");
+					break;
+				case "complete":
+					$(document).off("keydown");
+					break;
+			}
+			
+			mostrarProcesando(event);
+		}
+		
+	/* ]]> */
+	</script>
+
 	<div class="contenido-bloque">    
         <span class="columna" style="width:750px" >
         	<div class="titulo titulo-espaciado">            
@@ -57,20 +98,43 @@
 				</span>
 				<h:message for="idFlgObligatorio" errorClass="mensaje-error"/>
             </div>
+            <h:panelGroup id="idSubProducto">
             <div class="campo-espaciado espacios-etiqueta">
             	<span class="columna" style="width:8px;"/>
         		<span class="columna" style="width:160px;">
                 	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.Producto']}" styleClass="etiqueta"/>
                 </span>
                 <span class="columna" style="width:200px;">
-	                <h:selectOneMenu id="cmbProducto" 
-						value="#{actualizaGuiaDocumentaria.productoSeleccionado}" required="true"
+                	<input type="hidden" id = "codProd" name="codProd" value="#{actualizaGuiaDocumentaria.productoSeleccionado}" />
+                    <h:selectOneMenu id="cmbProducto" onchange="javascript : changeProducto(this);"
+						value="#{actualizaGuiaDocumentaria.productoSeleccionado}" 
 						style="width:200px;" styleClass="valor-componente" immediate="true">
 						<f:selectItems value="#{actualizaGuiaDocumentaria.productos}" />
+						<f:ajax onevent="myFuncion" event="change" render="idSubProducto" 
+					                    execute="@form" listener="#{actualizaGuiaDocumentaria.cambiarSubProductos}"/>
 					</h:selectOneMenu>
 				</span>
 				<h:message for="cmbProducto" errorClass="mensaje-error"/>
             </div>
+            
+            <div class="campo-espaciado espacios-etiqueta">
+            	
+            	<span class="columna" style="width:8px;"/>
+        		<span class="columna" style="width:160px;">
+                	<h:outputText value="#{msg['com.ibm.bbva.common.GuiaDocumentaria.SubProducto']}" styleClass="etiqueta"/>
+                </span>
+                <span class="columna" style="width:200px;">
+                	<h:selectOneMenu id="cmbSubProducto" 
+						value="#{actualizaGuiaDocumentaria.subProductoSeleccionado}" required="true"
+						style="width:200px;" styleClass="valor-componente" immediate="true">
+						<f:selectItems value="#{actualizaGuiaDocumentaria.subProductos}" />
+					</h:selectOneMenu>
+				</span>
+				<h:message for="cmbSubProducto" errorClass="mensaje-error"/>
+			
+            </div>
+            </h:panelGroup>
+            
             <div class="campo-espaciado espacios-etiqueta">
         		<span class="columna" style="width:8px;"/>
         		<span class="columna" style="width:160px;">
