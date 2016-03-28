@@ -1196,13 +1196,37 @@ public class ProductoNuevoMB extends AbstractMBean {
 			LOG.info(this.getCodSubproducto());
 			Subproducto subProducto = subproductobean.buscarPorId(Long.parseLong(this.getCodSubproducto()));
 			if(subProducto != null){
-				LOG.info(subProducto.getDescripcion());
+				LOG.info("Sub Producto seleccionado es " + subProducto.getDescripcion());
 			    String tipoMoneda = String.valueOf(subProducto.getTipoMoneda().getId());
 			    this.setCodTipoMoneda(tipoMoneda);
 			    expediente.getExpedienteTC().setSubproducto(subProducto);
 			    TipoMoneda tipoMonedaSol = new TipoMoneda();
 			    tipoMonedaSol.setId(Long.parseLong(tipoMoneda));
 			    expediente.getExpedienteTC().setTipoMonedaSol(tipoMonedaSol);
+			}
+		}
+	}
+	
+	public void cambiarTipoMonedaSubProd(AjaxBehaviorEvent event) {
+		LOG.info("cambiarTipoMoneda");
+		if (this.getCodSubproducto()!=null || this.getCodSubproducto().equals(Constantes.CODIGO_CODIGO_CAMPO_VACIO)) {
+			LOG.info(this.getCodSubproducto());
+			Subproducto subProducto = subproductobean.buscarPorId(Long.parseLong(this.getCodSubproducto()));
+			if(subProducto != null){
+				LOG.info("Sub Producto seleccionado es " + subProducto.getDescripcion());
+			    String tipoMoneda = String.valueOf(subProducto.getTipoMoneda().getId());
+			    this.setCodTipoMoneda(tipoMoneda);
+			    expediente.getExpedienteTC().setSubproducto(subProducto);
+			    TipoMoneda tipoMonedaSol = new TipoMoneda();
+			    tipoMonedaSol.setId(Long.parseLong(tipoMoneda));
+			    expediente.getExpedienteTC().setTipoMonedaSol(tipoMonedaSol);
+			    
+			    /*Guia Documentaria*/
+			    FacesContext ctx = FacesContext.getCurrentInstance(); 
+			    
+				PanelDocumentosMB panelDocumentos = (PanelDocumentosMB)  
+						 ctx.getApplication().getVariableResolver().resolveVariable(ctx, "paneldocumentos");
+				panelDocumentos.cargarDocumentosPanel(event);
 			}
 		}
 	}
