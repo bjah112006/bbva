@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import com.ibm.bbva.entities.CategoriaRenta;
 import com.ibm.bbva.entities.GuiaDocumentaria;
 import com.ibm.bbva.entities.Persona;
 import com.ibm.bbva.entities.Producto;
+import com.ibm.bbva.entities.Subproducto;
 import com.ibm.bbva.entities.Tarea;
 import com.ibm.bbva.entities.TipoDocumento;
 import com.ibm.bbva.entities.TipoOferta;
@@ -26,6 +28,7 @@ import com.ibm.bbva.session.CategoriaRentaBeanLocal;
 import com.ibm.bbva.session.GuiaDocumentariaBeanLocal;
 import com.ibm.bbva.session.PersonaBeanLocal;
 import com.ibm.bbva.session.ProductoBeanLocal;
+import com.ibm.bbva.session.SubproductoBeanLocal;
 import com.ibm.bbva.session.TareaBeanLocal;
 import com.ibm.bbva.session.TipoDocumentoBeanLocal;
 import com.ibm.bbva.session.TipoOfertaBeanLocal;
@@ -41,6 +44,8 @@ public class actualizaGuiaDocumentariaUI extends AbstractMBean{
 	@EJB
 	private ProductoBeanLocal productoBean;
 	@EJB
+	private SubproductoBeanLocal subproductoBean;
+	@EJB
 	private TipoOfertaBeanLocal tipoOfertaBean;
 	@EJB
 	private CategoriaRentaBeanLocal categoriaRentaBean;
@@ -55,7 +60,9 @@ public class actualizaGuiaDocumentariaUI extends AbstractMBean{
 	private List<SelectItem> documentos;
 	private String tipoDocumentoSeleccionado;
 	private List<SelectItem> productos;
+	private List<SelectItem> subProductos;
 	private String productoSeleccionado;
+	private String subProductoSeleccionado;
 	private List<SelectItem> tipoOferta;
 	private String tipoOfertaSeleccionado;
 	private List<SelectItem> categoriaRenta;
@@ -83,7 +90,7 @@ public class actualizaGuiaDocumentariaUI extends AbstractMBean{
 	private Long idGuiaDocumentaria;
 	
 	private List<SelectItem> listaGenerica;
-	
+		
 
 	/**
 	 * Constructor 
@@ -95,6 +102,7 @@ public class actualizaGuiaDocumentariaUI extends AbstractMBean{
 	@PostConstruct
 	public void init() {
 		productos = Util.listaVacia();
+		subProductos = Util.listaVaciaSubProducto();
 		tipoOferta = Util.listaVacia();
 		categoriaRenta = Util.listaVacia();
 		persona = Util.listaVacia();
@@ -106,6 +114,23 @@ public class actualizaGuiaDocumentariaUI extends AbstractMBean{
 		
 		/*Carga Lista de Tipo de Productos*/
 		productos=Util.crearItems(productoBean.buscarTodos(),true,"id","descripcion");
+				
+		/*Carga Lista de Tipo de Sub Productos*/
+		/*if(productoSeleccionado!=null && !productoSeleccionado.equals(Constantes.CODIGO_CODIGO_CAMPO_VACIO)){
+			LOG.info("codProducto para listaSubProducto="+productoSeleccionado);
+			List<Subproducto> listTempSubProductos= subproductoBean.buscarPorIdProd(Util.validarIdInteger(productoSeleccionado));
+			subProductos=new ArrayList<SelectItem>();
+			
+			subProductos.add(new SelectItem(Constantes.CODIGO_CODIGO_CAMPO_VACIO,Constantes.DEFECTO_COMBO_TODOS));	
+			if(subProductos.size()>0){
+				for(Subproducto value : listTempSubProductos){
+					subProductos.add(new SelectItem(value.getCodigo(),value.getDescripcion()));
+				}
+			}
+		}else{
+			subProductos.add(new SelectItem(Constantes.CODIGO_CODIGO_CAMPO_VACIO,Constantes.DEFECTO_COMBO_TODOS));			
+		}*/
+		
 		
 		/*Carga Lista de Tipo de Ofertas*/
 		//tipoOferta=Util.crearItems(tipoOfertaBean.buscarTodos(),true,"id","descripcion");
@@ -191,6 +216,44 @@ public class actualizaGuiaDocumentariaUI extends AbstractMBean{
 		listaGenerica.add(new SelectItem("-1",Constantes.DEFECTO_COMBO_TODOS));
 		listaGenerica.add(new SelectItem("1","SI"));
 		listaGenerica.add(new SelectItem("0","NO"));
+	}
+	
+	public void cambiarSubProductos(AjaxBehaviorEvent event) {
+		LOG.info("cambiarSubProductos");
+		FacesContext ctx = FacesContext.getCurrentInstance();
+						
+		String codProd = ctx.getExternalContext().getRequestParameterMap().get("codProd") !=null?
+				ctx.getExternalContext().getRequestParameterMap().get("codProd"):"";
+	
+		//String codigo = String.valueOf(guiaDocumentaria.getProductoSeleccionado());
+		
+		/*Carga Lista de Tipo de Sub Productos*/
+		//if(guiaDocumentaria.getProductoSeleccionado() !=null && !guiaDocumentaria.getProductoSeleccionado() .equals(Constantes.CODIGO_CODIGO_CAMPO_VACIO)){
+		//	LOG.info("codProducto para listaSubProducto= "+guiaDocumentaria.getProductoSeleccionado() );
+		if(!codProd.equals("") && !codProd .equals(Constantes.CODIGO_CODIGO_CAMPO_VACIO)){
+			LOG.info("codProducto para listaSubProducto= "+codProd );
+			
+			List<Subproducto> listTempSubProductos= subproductoBean.buscarPorIdProd(Util.validarIdInteger(codProd));
+			subProductos=new ArrayList<SelectItem>();
+			
+			subProductos.add(new SelectItem(Constantes.CODIGO_CODIGO_CAMPO_VACIO,Constantes.DEFECTO_COMBO_TODOS));	
+			if(subProductos.size()>0){
+				for(Subproducto value : listTempSubProductos){
+					subProductos.add(new SelectItem(value.getCodigo(),value.getDescripcion()));
+				}
+			}
+			
+			if (datosGuiaDocumentaria.getSubproducto()!=null){
+				subProductoSeleccionado=String.valueOf(this.getSubProductoSeleccionado());
+			}else{
+				subProductoSeleccionado=Constantes.CODIGO_CODIGO_CAMPO_VACIO;
+			}
+			
+		}else{
+			subProductos.add(new SelectItem(Constantes.CODIGO_CODIGO_CAMPO_VACIO,Constantes.DEFECTO_COMBO_TODOS));	
+			subProductoSeleccionado=Constantes.CODIGO_CODIGO_CAMPO_VACIO;
+		}
+	
 	}
 
 	public String grabar(){
@@ -279,6 +342,14 @@ public class actualizaGuiaDocumentariaUI extends AbstractMBean{
 			datosGuiaDocumentaria.setProducto(producto);
 		}else{
 			datosGuiaDocumentaria.setProducto(null);
+		}
+		
+		if (!subProductoSeleccionado.equals(Constantes.CODIGO_CODIGO_CAMPO_VACIO)){
+			Subproducto subProducto = new Subproducto();
+			subProducto=subproductoBean.buscarPorId(Long.valueOf(subProductoSeleccionado));
+			datosGuiaDocumentaria.setSubproducto(subProducto);
+		}else{
+			datosGuiaDocumentaria.setSubproducto(null);
 		}
 		
 		if (!tipoOfertaSeleccionado.equals(Constantes.CODIGO_CODIGO_CAMPO_VACIO)){
@@ -458,9 +529,44 @@ public class actualizaGuiaDocumentariaUI extends AbstractMBean{
 			
 			if (datosGuiaDocumentaria.getProducto()!=null){
 				productoSeleccionado=String.valueOf(datosGuiaDocumentaria.getProducto().getId());
+				
+				/*Carga Lista de Tipo de Sub Productos*/
+				if(productoSeleccionado!=null && !productoSeleccionado.equals(Constantes.CODIGO_CODIGO_CAMPO_VACIO)){
+					LOG.info("codProducto para listaSubProducto= "+productoSeleccionado);
+					List<Subproducto> listTempSubProductos= subproductoBean.buscarPorIdProd(Util.validarIdInteger(productoSeleccionado));
+					subProductos=new ArrayList<SelectItem>();
+					
+					subProductos.add(new SelectItem(Constantes.CODIGO_CODIGO_CAMPO_VACIO,Constantes.DEFECTO_COMBO_TODOS));	
+					if(subProductos.size()>0){
+						for(Subproducto value : listTempSubProductos){
+							subProductos.add(new SelectItem(value.getCodigo(),value.getDescripcion()));
+						}
+					}
+					
+					if (datosGuiaDocumentaria.getSubproducto()!=null){
+						subProductoSeleccionado=String.valueOf(datosGuiaDocumentaria.getSubproducto().getId());
+					}else{
+						subProductoSeleccionado=Constantes.CODIGO_CODIGO_CAMPO_VACIO;
+					}
+					
+				}else{
+					subProductos.add(new SelectItem(Constantes.CODIGO_CODIGO_CAMPO_VACIO,Constantes.DEFECTO_COMBO_TODOS));	
+					subProductoSeleccionado=Constantes.CODIGO_CODIGO_CAMPO_VACIO;
+				}
+				
+				
+				
 			}else{
 				productoSeleccionado=Constantes.CODIGO_CODIGO_CAMPO_VACIO;
+				subProductoSeleccionado=Constantes.CODIGO_CODIGO_CAMPO_VACIO;
+				
 			}
+			
+			/*if (datosGuiaDocumentaria.getSubproducto()!=null){
+				subProductoSeleccionado=String.valueOf(datosGuiaDocumentaria.getSubproducto().getId());
+			}else{
+				subProductoSeleccionado=Constantes.CODIGO_CODIGO_CAMPO_VACIO;
+			}*/
 			
 			if (datosGuiaDocumentaria.getTipoOferta()!=null){
 				tipoOfertaSeleccionado=String.valueOf(datosGuiaDocumentaria.getTipoOferta().getId());
@@ -580,6 +686,7 @@ public class actualizaGuiaDocumentariaUI extends AbstractMBean{
 		tipoDocumentoSeleccionado=Constantes.CODIGO_CODIGO_CAMPO_VACIO;
 		flagObligatorio=false;
 		productoSeleccionado=Constantes.CODIGO_CODIGO_CAMPO_VACIO;
+		subProductoSeleccionado=Constantes.CODIGO_CODIGO_CAMPO_VACIO;
 		tipoOfertaSeleccionado=Constantes.CODIGO_CODIGO_CAMPO_VACIO;
 		//flagClienteNuevo=false;
 		flagClienteNuevo=Constantes.CODIGO_CODIGO_CAMPO_VACIO;
@@ -847,4 +954,17 @@ public class actualizaGuiaDocumentariaUI extends AbstractMBean{
 		this.listaGenerica = listaGenerica;
 	}
 	
+	public String getSubProductoSeleccionado() {
+		return subProductoSeleccionado;
+	}
+	public void setSubProductoSeleccionado(String subProductoSeleccionado) {
+		this.subProductoSeleccionado = subProductoSeleccionado;
+	}
+	public List<SelectItem> getSubProductos() {
+		return subProductos;
+	}
+	public void setSubProductos(List<SelectItem> subProductos) {
+		this.subProductos = subProductos;
+	}
+				
 }
