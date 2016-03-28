@@ -43,6 +43,7 @@ import com.ibm.bbva.session.TareaBeanLocal;
 import com.ibm.bbva.session.TerritorioBeanLocal;
 import com.ibm.bbva.session.TipoClienteBeanLocal;
 import com.ibm.bbva.session.VistaBandjCartProdBeanLocal;
+import com.ibm.bbva.util.AyudaCargaLdap;
 import com.ibm.bbva.util.ExpedienteTCWrapper;
 import com.ibm.bbva.util.Util;
 
@@ -83,7 +84,9 @@ public class CargaLdapServlet extends HttpServlet
 
 	private OficinaBeanLocal oficinabean;
 	private DescargaLDAPBeanLocal descargaLDAPBeanLocal;
-//	private EmpleadoBeanLocal empleadobean;	
+	private EmpleadoBeanLocal empleadobean;
+	
+	private AyudaCargaLdap ayudaCargaLdap;
 
 	public CargaLdapServlet() {
         super();
@@ -112,7 +115,7 @@ public class CargaLdapServlet extends HttpServlet
 			logJobDetBeanLocal = (LogJobDetBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.LogJobDetBeanLocal");
 			oficinabean = (OficinaBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.OficinaBeanLocal");;
 			descargaLDAPBeanLocal = (DescargaLDAPBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.DescargaLDAPBeanLocal");;
-			//empleadobean = (EmpleadoBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.EmpleadoBeanLocal");
+			empleadobean = (EmpleadoBeanLocal) new InitialContext().lookup("ejblocal:com.ibm.bbva.session.EmpleadoBeanLocal");
 	
 			if(parametrosConfBeanLocal.buscarPorVariable(Constantes.CODIGO_APLICATIVO_PROCESO_LDAP, Constantes.JOB_CARGA_LDAP_HABILITADO).equals("N"))
 			{				
@@ -156,7 +159,10 @@ public class CargaLdapServlet extends HttpServlet
 				objLdapTemp.setCodigoCargoTemp(null);	
 				objLdapTemp.setCodigoCargo(objUsuario.getPuesto() != null ? objUsuario.getPuesto().getNombreCargoFuncionalLocal() : null);
 				//validar si existe temporalidad en el registro
-				Date puestoTempFechaInicioIDM = objUsuario.getPuestoTemporal()!=null? objUsuario.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
+				
+				boolean flagTienePuestoTemporal = ayudaCargaLdap.validarTemporalidadPuestoIDM(objUsuario);
+				
+				/*Date puestoTempFechaInicioIDM = objUsuario.getPuestoTemporal()!=null? objUsuario.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
 				Date puestoTempFechaFinIDM = objUsuario.getPuestoTemporal()!=null? objUsuario.getPuestoTemporal().getFechaFin().toGregorianCalendar().getTime():null;
 				
 				boolean flagTienePuestoTemporal = (objUsuario.getPuestoTemporal()!=null  && 
@@ -164,7 +170,7 @@ public class CargaLdapServlet extends HttpServlet
 						(!puestoTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss:SSS"),"dd/MM/yyyy HH:mm:ss:SSS")))
 						&& (!objUsuario.getPuestoTemporal().getDescripcionPuesto().equals(objUsuario.getPuesto().getNombreCargoFuncionalLocal())))?
 						  StringUtils.isNotBlank(
-								  objUsuario.getPuestoTemporal().getDescripcionPuesto()):false;
+								  objUsuario.getPuestoTemporal().getDescripcionPuesto()):false;*/
 								  
 				if(flagTienePuestoTemporal){
 					//LOG.info("objUsuario.getUsuario():"+objUsuario.getUsuario());
@@ -191,7 +197,8 @@ public class CargaLdapServlet extends HttpServlet
 					
 				}
 				
-				Date ofiTempFechaInicioIDM = objUsuario.getCentroTemporal()!=null? objUsuario.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
+				boolean flagTieneOficinaTemporal = ayudaCargaLdap.validarTemporalidadOficinaIDM(objUsuario);
+				/*Date ofiTempFechaInicioIDM = objUsuario.getCentroTemporal()!=null? objUsuario.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
 				Date ofiTempFechaFinIDM = objUsuario.getCentroTemporal()!=null? objUsuario.getCentroTemporal().getFechaFin().toGregorianCalendar().getTime():null;
 				
 				boolean flagTieneOficinaTemporal = (objUsuario.getCentroTemporal()!=null &&  
@@ -199,7 +206,7 @@ public class CargaLdapServlet extends HttpServlet
 						(!ofiTempFechaFinIDM.before(Util.parseStringToDate(Util.getFechayHoraActualByFormato("dd/MM/yyyy HH:mm:ss"),"dd/MM/yyyy HH:mm:ss")))
 						&& (!objUsuario.getCentroTemporal().getDescripcion().equals(objUsuario.getCodigoCentro())))?
 											   StringUtils.isNotBlank(
-													   objUsuario.getCentroTemporal().getDescripcion()):false;
+													   objUsuario.getCentroTemporal().getDescripcion()):false;*/
 				if(flagTieneOficinaTemporal){
 					objLdapTemp.setCodigoOficinaTemp(objUsuario.getCentroTemporal().getDescripcion());	
 					objLdapTemp.setCodigoOficina(objUsuario.getCentroTemporal().getDescripcion());	
@@ -253,138 +260,206 @@ public class CargaLdapServlet extends HttpServlet
 			
 			for(Empleado objEmpleado : listaEmpleado)
 			{
-				
-				//System.out.println("Empleado Deben reasignarse : " + objEmpleado.getCodigo());
-				
-				cambioOficinaPerfilEstado = true;
-				
-				/*
-				consulta = new Consulta();
-				consulta.setTipoConsulta(4);
-				consulta.setCodUsuarioActual(objEmpleado.getCodigo());				
-				consulta.setIdPerfilUsuarioActual(String.valueOf(objEmpleado.getPerfilAnterior() != null ? objEmpleado.getPerfilAnterior().getId() : objEmpleado.getPerfil().getId()));
-				consulta.setIdOficina(String.valueOf(objEmpleado.getOficinaAnterior() != null ? objEmpleado.getOficinaAnterior().getId() : objEmpleado.getOficina().getId()));
-				System.out.println("Oficina anterior : " + String.valueOf(objEmpleado.getOficinaAnterior() != null ? objEmpleado.getOficinaAnterior().getId() : objEmpleado.getOficina().getId()));
-				listaReasignable = tareasBDelegate.listarTareasBandejaAsignacion(consulta);
-				*/
-				
-				consulta = new Consulta();		
-				listUsuarios=new ArrayList<String>();
-				listUsuarios.add(objEmpleado.getCodigo()); 
-				consulta.setUsuarios(listUsuarios);
-				consulta.setConsiderarUsuarios(true);		
-				listaReasignable = tareasBDelegate.obtenerListaTareasBandPendiente(consulta);
-				
-				//System.out.println("Usuario - Expedientes : " + objEmpleado.getCodigo() +  " - " + listaReasignable.size());
-				
-				listCartProducto = vistaBandjCartProdBeanLocal.verificarCartXProducto(objEmpleado.getPerfil().getId(), 
-																						objEmpleado.getOficina().getTerritorio().getId(), 
-																					    objEmpleado.getId());
-				
-				//System.out.println("Número de Productos : " + listCartProducto.size());
-				
-				listIdsProd = new ArrayList<Long>();
-				
-				if(listCartProducto != null && listCartProducto.size() > 0)
-				{
-					for(VistaBandjCartProd obj : listCartProducto){
-						if(obj != null && obj.getIdProduto() > 0){
-							listIdsProd.add(new Long(obj.getIdProduto()));
-							//System.out.println("Producto : " + obj.getIdProduto());
-						}
-					}
-				}
-
-				listaEmpleadoParaAsignar = empleadoBeanLocal.buscarPorPerfilEmpleadoActivo(objEmpleado.getPerfilAnterior() != null ? objEmpleado.getPerfilAnterior().getId() : objEmpleado.getPerfil().getId(), 
-																							objEmpleado.getOficinaAnterior() != null ? objEmpleado.getOficinaAnterior().getId() : objEmpleado.getOficina().getId(), listIdsProd);
-				//System.out.println("Empleados par asignar : " + listaEmpleadoParaAsignar.size());
-				
-				
-				if(listaReasignable != null)
-				{
-					
-					for(ExpedienteTCWPSWeb objExpedienteTCWPSWeb : listaReasignable)
-					{
-
-						reasignado = false;
-						for(Empleado objEmpleadoAsignar : listaEmpleadoParaAsignar)
-						{
-
-							if(reasignado) { break; }
-							if(objEmpleadoAsignar.getId() != objEmpleado.getId())
-							{
-								//System.out.println("Se intentará con : " + objEmpleadoAsignar.getCodigo());
-								
-								mensaje = "ERROR";	
-								mensaje = tareasBDelegate.transferirTarea(objEmpleado.getCodigo(),	objEmpleadoAsignar.getCodigo(), objExpedienteTCWPSWeb.getTaskID());
-								
-								if (mensaje.equals("SUCCESS")) 
-								{
-											
-										reasignado = true;
-										
-										objExpedienteTCWrapper = new ExpedienteTCWrapper(objExpedienteTCWPSWeb,
-												null, tareaBean, bbvaFacade,
-												expedienteBean, tipoClienteBean, ansBean);
-
-													objExpedienteTCWrapper.setIdPerfilUsuarioActual(String.valueOf(objEmpleadoAsignar.getPerfil().getId()));
-													objExpedienteTCWrapper.setPerfilUsuarioActual(objEmpleadoAsignar.getPerfil().getDescripcion());
-													objExpedienteTCWrapper.setCodigoUsuarioActual(objEmpleadoAsignar.getCodigo());
-													
-													objExpedienteTCWPSWeb.setNombreUsuarioActual(objEmpleadoAsignar.getNombresCompletos());
-													objExpedienteTCWPSWeb.setIdPerfilUsuarioActual(String.valueOf(objEmpleadoAsignar.getPerfil().getId()));
-													objExpedienteTCWPSWeb.setPerfilUsuarioActual(objEmpleadoAsignar.getPerfil().getDescripcion());
-													objExpedienteTCWPSWeb.setCodigoUsuarioActual(objEmpleadoAsignar.getCodigo());
-													
-													tareasBDelegate.enviarExpedienteTC(objExpedienteTCWrapper.getTaskID(), objExpedienteTCWrapper.getExpedienteTC());
-
-													Expediente objExpediente = expedienteBean.buscarPorId(Long.valueOf(objExpedienteTCWPSWeb.getCodigo()));
-													if(objExpediente != null)
-													{
-													objExpediente.setEmpleado(new Empleado());
-													objExpediente.getEmpleado().setId(objEmpleadoAsignar.getId());
-													expedienteBean.edit(objExpediente);										
-													}										
-									
-		
-								}	
+				//Si se trata de un Sub Gerente que ya no tiene tiemporalidad
+				if(objEmpleado.getPerfil().getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString())){
+					if(objEmpleado.getOficinaBackup() != null){
+						
+						
+						//Buscar Sub Gerentes activos y de la oficina dada
+						List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(objEmpleado.getOficina().getId(), 
+								Constantes.ID_PERFIL_SUB_GERENTE, objEmpleado.getId());
+						
+						if(subGerentesActivos != null && subGerentesActivos.size()>0){
 							
+							ayudaCargaLdap.reasignarExpedientes(objEmpleado, subGerentesActivos.get(0));
+							ayudaCargaLdap.actualizarDatosOficinaEmpleado(objEmpleado);
+						}else{
+							//Buscar SG inactivos por Oficina, Perfil; Estado y Marca
+							List<Empleado> subGerentesInactivosMarcados = empleadobean.buscarGerenteInactivoPorOficinaPerfilMarca(objEmpleado.getOficina().getId(), 
+									Constantes.ID_PERFIL_SUB_GERENTE, Constantes.FLAG_ACTIVO);
+							
+							if(subGerentesInactivosMarcados != null && subGerentesInactivosMarcados.size() >0){
+								int contador=0;
+								for(Empleado subGerenteInactivoMarcado : subGerentesInactivosMarcados)
+								{
+									if(contador == 0){
+										RemoteUtils remoteUtils = new RemoteUtils();
+										long cantexp = remoteUtils.countConsultaListaTareasTC(objEmpleado.getCodigo());					
+										if(cantexp > 0){
+											ayudaCargaLdap.reasignarExpedientes(objEmpleado, subGerenteInactivoMarcado);
+											
+										}
+										contador ++;
+										
+									}
+									
+									subGerenteInactivoMarcado.setFlagActivo(Constantes.FLAG_ACTIVO);
+									subGerenteInactivoMarcado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
+									empleadobean.edit(subGerenteInactivoMarcado);
+								}
+								ayudaCargaLdap.actualizarDatosOficinaEmpleado(objEmpleado);
 							}
 						}
 						
-						if(!reasignado && cambioOficinaPerfilEstado)
-						{
-							cambioOficinaPerfilEstado = false;
+						
+						
+					}else if(objEmpleado.getPerfilBackup() != null){
+						
+						
+						//Buscar Sub Gerentes activos y de la oficina dada
+						List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(objEmpleado.getOficina().getId(), 
+								Constantes.ID_PERFIL_SUB_GERENTE, objEmpleado.getId());
+						
+						if(subGerentesActivos != null && subGerentesActivos.size()>0){
+							
+							ayudaCargaLdap.reasignarExpedientes(objEmpleado, subGerentesActivos.get(0));
+							ayudaCargaLdap.actualizarDatosEmpleado(objEmpleado);
+						}else{
+							//Buscar SG inactivos por Oficina, Perfil; Estado y Marca
+							List<Empleado> subGerentesInactivosMarcados = empleadobean.buscarGerenteInactivoPorOficinaPerfilMarca(objEmpleado.getOficina().getId(), 
+									Constantes.ID_PERFIL_SUB_GERENTE, Constantes.FLAG_ACTIVO);
+							
+							if(subGerentesInactivosMarcados != null && subGerentesInactivosMarcados.size() >0){
+								int contador=0;
+								for(Empleado subGerenteInactivoMarcado : subGerentesInactivosMarcados)
+								{
+									if(contador == 0){
+										RemoteUtils remoteUtils = new RemoteUtils();
+										long cantexp = remoteUtils.countConsultaListaTareasTC(objEmpleado.getCodigo());					
+										if(cantexp > 0){
+											ayudaCargaLdap.reasignarExpedientes(objEmpleado, subGerenteInactivoMarcado);
+											
+										}
+										contador ++;
+										
+									}
+									
+									subGerenteInactivoMarcado.setFlagActivo(Constantes.FLAG_ACTIVO);
+									subGerenteInactivoMarcado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
+									this.empleadobean.edit(subGerenteInactivoMarcado);
+								}
+								ayudaCargaLdap.actualizarDatosEmpleado(objEmpleado);
+							}
 						}
 						
-					}	
+						
+					}
 					
-					if(!cambioOficinaPerfilEstado)
+				}else{// Si son otros perfiles
+					cambioOficinaPerfilEstado = true;
+					
+					consulta = new Consulta();		
+					listUsuarios=new ArrayList<String>();
+					listUsuarios.add(objEmpleado.getCodigo()); 
+					consulta.setUsuarios(listUsuarios);
+					consulta.setConsiderarUsuarios(true);		
+					listaReasignable = tareasBDelegate.obtenerListaTareasBandPendiente(consulta);
+					
+					listCartProducto = vistaBandjCartProdBeanLocal.verificarCartXProducto(objEmpleado.getPerfil().getId(), 
+																							objEmpleado.getOficina().getTerritorio().getId(), 
+																						    objEmpleado.getId());
+					
+					listIdsProd = new ArrayList<Long>();
+					
+					if(listCartProducto != null && listCartProducto.size() > 0)
+					{
+						for(VistaBandjCartProd obj : listCartProducto){
+							if(obj != null && obj.getIdProduto() > 0){
+								listIdsProd.add(new Long(obj.getIdProduto()));
+								//System.out.println("Producto : " + obj.getIdProduto());
+							}
+						}
+					}
+
+					listaEmpleadoParaAsignar = empleadoBeanLocal.buscarPorPerfilEmpleadoActivo(objEmpleado.getPerfilAnterior() != null ? objEmpleado.getPerfilAnterior().getId() : objEmpleado.getPerfil().getId(), 
+																								objEmpleado.getOficinaAnterior() != null ? objEmpleado.getOficinaAnterior().getId() : objEmpleado.getOficina().getId(), listIdsProd);
+					
+					if(listaReasignable != null)
 					{
 						
-						if(objEmpleado.getOficinaAnterior() != null)
+						for(ExpedienteTCWPSWeb objExpedienteTCWPSWeb : listaReasignable)
 						{
-							objEmpleado.setOficina(objEmpleado.getOficinaAnterior());
-						}
-						if(objEmpleado.getPerfilAnterior() != null)
-						{
-							objEmpleado.setPerfil(objEmpleado.getPerfilAnterior());
-						}
-						objEmpleado.setFlagActivo("1");
-						
-						empleadoBeanLocal.edit(objEmpleado);
-						
-						List<CartEmpleadoCE> listaCarterizacion = cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(objEmpleado.getId());
-						
-						for(CartEmpleadoCE objCartEmpleadoCE : listaCarterizacion)
-						{
-							objCartEmpleadoCE.setOficina(objEmpleado.getOficina());
-							cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);						
-						}
+
+							reasignado = false;
+							for(Empleado objEmpleadoAsignar : listaEmpleadoParaAsignar)
+							{
+
+								if(reasignado) { break; }
+								if(objEmpleadoAsignar.getId() != objEmpleado.getId())
+								{
+									//System.out.println("Se intentará con : " + objEmpleadoAsignar.getCodigo());
+									
+									mensaje = "ERROR";	
+									mensaje = tareasBDelegate.transferirTarea(objEmpleado.getCodigo(),	objEmpleadoAsignar.getCodigo(), objExpedienteTCWPSWeb.getTaskID());
+									
+									if (mensaje.equals("SUCCESS")) 
+									{
+												
+											reasignado = true;
 											
+											objExpedienteTCWrapper = new ExpedienteTCWrapper(objExpedienteTCWPSWeb,
+													null, tareaBean, bbvaFacade,
+													expedienteBean, tipoClienteBean, ansBean);
+
+														objExpedienteTCWrapper.setIdPerfilUsuarioActual(String.valueOf(objEmpleadoAsignar.getPerfil().getId()));
+														objExpedienteTCWrapper.setPerfilUsuarioActual(objEmpleadoAsignar.getPerfil().getDescripcion());
+														objExpedienteTCWrapper.setCodigoUsuarioActual(objEmpleadoAsignar.getCodigo());
+														
+														objExpedienteTCWPSWeb.setNombreUsuarioActual(objEmpleadoAsignar.getNombresCompletos());
+														objExpedienteTCWPSWeb.setIdPerfilUsuarioActual(String.valueOf(objEmpleadoAsignar.getPerfil().getId()));
+														objExpedienteTCWPSWeb.setPerfilUsuarioActual(objEmpleadoAsignar.getPerfil().getDescripcion());
+														objExpedienteTCWPSWeb.setCodigoUsuarioActual(objEmpleadoAsignar.getCodigo());
+														
+														tareasBDelegate.enviarExpedienteTC(objExpedienteTCWrapper.getTaskID(), objExpedienteTCWrapper.getExpedienteTC());
+
+														Expediente objExpediente = expedienteBean.buscarPorId(Long.valueOf(objExpedienteTCWPSWeb.getCodigo()));
+														if(objExpediente != null)
+														{
+														objExpediente.setEmpleado(new Empleado());
+														objExpediente.getEmpleado().setId(objEmpleadoAsignar.getId());
+														expedienteBean.edit(objExpediente);										
+														}										
+										
+			
+									}	
+								
+								}
+							}
+							
+							if(!reasignado && cambioOficinaPerfilEstado)
+							{
+								cambioOficinaPerfilEstado = false;
+							}
+							
+						}	
+						
+						if(!cambioOficinaPerfilEstado)
+						{
+							
+							if(objEmpleado.getOficinaAnterior() != null)
+							{
+								objEmpleado.setOficina(objEmpleado.getOficinaAnterior());
+							}
+							if(objEmpleado.getPerfilAnterior() != null)
+							{
+								objEmpleado.setPerfil(objEmpleado.getPerfilAnterior());
+							}
+							objEmpleado.setFlagActivo("1");
+							
+							empleadoBeanLocal.edit(objEmpleado);
+							
+							List<CartEmpleadoCE> listaCarterizacion = cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(objEmpleado.getId());
+							
+							for(CartEmpleadoCE objCartEmpleadoCE : listaCarterizacion)
+							{
+								objCartEmpleadoCE.setOficina(objEmpleado.getOficina());
+								cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);						
+							}
+												
+						}
 					}
 				}
-
+		
 			}
 				
 			objLogJobDet.setFechaFin(new Date());
