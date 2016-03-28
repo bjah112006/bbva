@@ -517,6 +517,153 @@ public class GuiaDocumentariaBean extends AbstractFacade<GuiaDocumentaria> imple
 			}
 		}
 		whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+"(" + wherePersona + " OR g.persona.id IS NULL)";
+		whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+ " g.flagActivo = '1'";
+		whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+ " (g.subproducto.id IS NULL or g.subproducto.id = 0) ";
+				
+		String query = "SELECT g FROM GuiaDocumentaria g "+(whereObligatorio.length()==0? "" : (" WHERE "+whereObligatorio));;
+		query = query + " ORDER BY g.persona.id ASC, g.obligatorio DESC";
+		LOG.info("obtenerGuiaDocOrden - query 1: "+query);
+		
+		List<GuiaDocumentaria> resultList = em.createQuery(query).getResultList();
+		
+		List<GuiaDocumentaria> resultListTmp = new ArrayList<GuiaDocumentaria>();
+		Set<String> resultSet = new HashSet<String>();
+		for(GuiaDocumentaria guiaDocumentaria : resultList){
+			resultSet.add(String.valueOf(guiaDocumentaria.getTipoDocumento().getId()));
+		}
+		
+		for(String idTipoDocumento : resultSet){
+			GuiaDocumentaria guiaDocumentariaObligatoria = null;
+			GuiaDocumentaria guiaDocumentariaNoObligatoria = null;
+			for(GuiaDocumentaria guiaDocumentaria : resultList){
+				if(String.valueOf(guiaDocumentaria.getTipoDocumento().getId()).equals(idTipoDocumento)){
+					if(guiaDocumentaria.getObligatorio().equals("1")){
+						guiaDocumentariaObligatoria = guiaDocumentaria;
+					}
+					if(guiaDocumentaria.getObligatorio().equals("0")){
+						guiaDocumentariaNoObligatoria = guiaDocumentaria;
+					}
+				}
+			}
+			if(guiaDocumentariaObligatoria != null){
+				resultListTmp.add(guiaDocumentariaObligatoria);
+			}
+			if(guiaDocumentariaNoObligatoria != null){
+				resultListTmp.add(guiaDocumentariaNoObligatoria);
+			}
+		}
+		
+		for(GuiaDocumentaria guiaDocumentaria : resultListTmp){
+			LOG.info("añadido:::::"+ guiaDocumentaria.getId() + " - " + guiaDocumentaria.getTipoDocumento().getDescripcion() + " - " + guiaDocumentaria.getObligatorio());
+		}
+		
+		return resultListTmp;
+	}
+	
+	
+	
+	
+	
+	@Override
+	public List<GuiaDocumentaria> obtenerGuiaDocXSubProdOrden(GuiaDocumentaria g, boolean isConyugue, List<String> categoriaRenta ) {
+		String whereOR = "";	
+		String wherePersona = "";
+		String whereObligatorio = "";
+		
+		if ( g.getProducto()!=null && g.getProducto().getId() > 0 ) {
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" g.producto.id = "+g.getProducto().getId();
+		}
+		
+		if ( g.getSubproducto()!=null && g.getSubproducto().getId() > 0 ) {
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+"(g.subproducto.id = "+g.getSubproducto().getId()+" OR g.subproducto.id IS NULL) ";
+		}
+		
+		if ( g.getTarea()!=null && g.getTarea().getId() > 0 ) {
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" g.tarea.id = "+g.getTarea().getId();			
+	    }
+		
+		if ( g.getTipoOferta()!=null && g.getTipoOferta().getId() > 0 ) {
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" (g.tipoOferta.id = "+g.getTipoOferta().getId()+" OR g.tipoOferta.id IS NULL) ";			
+		}
+		
+		if ( g.getFlagCliente()!=null ) {
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" (g.flagCliente = '"+g.getFlagCliente()+"' OR g.flagCliente IS NULL) ";
+		}
+
+		if ( g.getFlagPagoHab()!=null ) {
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" (g.flagPagoHab = '"+g.getFlagPagoHab()+"' OR g.flagPagoHab IS NULL) ";
+		}
+		
+		if ( g.getFlagVerifDom()!=null ) {
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" (g.flagVerifDom = '"+g.getFlagVerifDom()+"' OR g.flagVerifDom IS NULL) ";
+		}
+		else{
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" (g.flagVerifDom = '0' OR g.flagVerifDom IS NULL) ";
+		}
+		
+		if ( g.getFlagVerifLab()!=null ) {
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" (g.flagVerifLab = '"+g.getFlagVerifLab()+"' OR g.flagVerifLab IS NULL) ";
+		}
+		else{
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" (g.flagVerifLab = '0' OR g.flagVerifLab IS NULL) ";
+		}
+		
+		if ( g.getFlagDps()!=null ) {
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" (g.flagDps = '"+g.getFlagDps()+"' OR g.flagDps IS NULL) ";
+		}
+		else{
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" (g.flagDps = '0' OR g.flagDps IS NULL) ";
+		}
+		
+		if ( g.getFlagPep()!=null ) {
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" g.flagPep = '"+g.getFlagPep()+"'";
+		}
+		else{
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" g.flagPep = '0'";
+		}
+		
+		if ( g.getFlagTasaEsp()!=null ) {
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" (g.flagTasaEsp = '"+g.getFlagTasaEsp()+"' OR g.flagTasaEsp IS NULL) ";
+		}
+		else{
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" (g.flagTasaEsp = '0' OR g.flagTasaEsp IS NULL) ";
+		}
+		
+		if(categoriaRenta.size() < 1){
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+" (g.categoriaRenta.id IS NULL OR g.categoriaRenta.id = 0) ";
+		}
+		else{					
+			CategoriaRenta categoriaRentaTmp = new CategoriaRenta(); 
+			for (int i = 0, n = categoriaRenta.size(); i < n; i++) {
+				categoriaRentaTmp = new CategoriaRenta();
+				categoriaRentaTmp.setId(Long.parseLong(categoriaRenta.get(i)));
+				g.setCategoriaRenta(categoriaRentaTmp);
+				
+				if ( g.getCategoriaRenta()==null ) { 
+					g.getCategoriaRenta().setId(0); 
+				}
+				
+				if(i <= n-2){
+					whereOR = whereOR + "g.categoriaRenta.id= "+g.getCategoriaRenta().getId() + " OR ";
+				}
+				else{
+					whereOR = whereOR + "g.categoriaRenta.id= "+g.getCategoriaRenta().getId();
+				}
+				
+			}
+			whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+"(" + whereOR + " OR g.categoriaRenta.id IS NULL)";
+		}
+
+		wherePersona += " g.persona.id = 1 ";
+		if ( isConyugue ) {
+			wherePersona += (wherePersona.length()==0? "" : " OR ")+" g.persona.id = 2 ";
+		}
+		if ( g.getPersona()!=null && g.getPersona().getId() > 0 ) {
+			if ( g.getPersona().getId() == 3) {
+				wherePersona += (wherePersona.length()==0? "" : " OR ")+" g.persona.id = "+g.getPersona().getId();
+			}
+		}
+		whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+"(" + wherePersona + " OR g.persona.id IS NULL)";
 		whereObligatorio += (whereObligatorio.length()==0? "" : " AND ")+ " g.flagActivo = '1'";	
 				
 		String query = "SELECT g FROM GuiaDocumentaria g "+(whereObligatorio.length()==0? "" : (" WHERE "+whereObligatorio));;
@@ -558,6 +705,14 @@ public class GuiaDocumentariaBean extends AbstractFacade<GuiaDocumentaria> imple
 		
 		return resultListTmp;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	@Override
 	public List<GuiaDocumentaria> obtenerGuiaDoc(GuiaDocumentaria g, boolean isConyugue, List<String> categoriaRenta ) {
