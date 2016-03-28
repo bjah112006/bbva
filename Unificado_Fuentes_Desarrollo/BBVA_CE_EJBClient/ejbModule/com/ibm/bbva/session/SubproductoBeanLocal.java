@@ -8,6 +8,7 @@ public interface SubproductoBeanLocal {
 
 	public Subproducto buscarPorId(long id);
 	public List<Subproducto> buscarPorIdProducto(long idProducto);
+	public List<Subproducto> buscarPorIdProd(long idProducto);
 	public List<Subproducto> buscarTodos();
 	
 }
