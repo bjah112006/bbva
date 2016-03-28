@@ -199,6 +199,12 @@ public class buscarGuiaDocumentaria extends AbstractSortPagDataTableMBean {
 						guiaDocumentaria.setProducto(detalle.getProducto().getDescripcion().toString());
 					}
 					
+					if (detalle.getSubproducto() != null) {
+						guiaDocumentaria.setSubproducto(detalle.getSubproducto().getDescripcion().toString());
+					}else{
+						guiaDocumentaria.setSubproducto(Constantes.DEFECTO_COMBO_TODOS);
+					}
+					
 					if (detalle.getTipoOferta() != null) {
 						guiaDocumentaria.setTipoOferta(detalle.getTipoOferta().getDescripcion().toString());
 					} else{
