@@ -91,6 +91,10 @@ public class GuiaDocumentaria implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="ID_PRODUCTO_FK")
 	private Producto producto;
+	
+	@ManyToOne
+	@JoinColumn(name="ID_SUBPRODUCTO_FK")
+	private Subproducto subproducto;
 
 	//uni-directional many-to-one association to Subproducto
 	/*@ManyToOne
@@ -298,6 +302,14 @@ public class GuiaDocumentaria implements Serializable {
 
 	public void setFlagEscaneado(String flagEscaneado) {
 		this.flagEscaneado = flagEscaneado;
+	}
+
+	public Subproducto getSubproducto() {
+		return subproducto;
+	}
+
+	public void setSubproducto(Subproducto subproducto) {
+		this.subproducto = subproducto;
 	}
 	
 
