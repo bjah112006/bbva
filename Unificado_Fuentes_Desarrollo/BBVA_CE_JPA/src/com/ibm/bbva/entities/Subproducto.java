@@ -13,6 +13,7 @@ import javax.persistence.*;
 @NamedQueries({
 	@NamedQuery(name = "Subproducto.findAll", query = "SELECT s FROM Subproducto s"),
 	@NamedQuery(name = "Subproducto.findById", query = "SELECT s FROM Subproducto s WHERE s.id = :id"),
+	@NamedQuery(name = "Subproducto.buscarPorIdProd", query = "SELECT s FROM Subproducto s WHERE s.producto.id = :idProducto and s.flagActivo=:flag ORDER BY s.descripcion"),
 	@NamedQuery(name = "Subproducto.buscarPorIdProducto", query = "SELECT s FROM Subproducto s WHERE s.producto.id = :idProducto ORDER BY s.descripcion")
 })
 public class Subproducto implements Serializable {
