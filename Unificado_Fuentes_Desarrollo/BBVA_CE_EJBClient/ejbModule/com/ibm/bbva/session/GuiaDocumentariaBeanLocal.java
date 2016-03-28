@@ -18,4 +18,6 @@ public interface GuiaDocumentariaBeanLocal {
 	public void update(GuiaDocumentaria guidaDocumentaria);
 	public GuiaDocumentaria create(GuiaDocumentaria guidaDocumentaria);
 	public GuiaDocumentaria buscarPorId(long id);
+	
+	public List<GuiaDocumentaria> obtenerGuiaDocXSubProdOrden(GuiaDocumentaria g, boolean isConyugue, List<String> categoriaRenta );
 }
