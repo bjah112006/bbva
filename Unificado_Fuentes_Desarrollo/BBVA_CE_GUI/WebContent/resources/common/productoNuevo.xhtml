@@ -304,7 +304,7 @@
 				                	rendered="#{!productoNuevo.renderedSubProducto}">
 				                    <f:selectItems value="#{productoNuevo.listaSubproducto}"/>
 				                    <!--immediate="true" valueChangeListener="#{paneldocumentos.actualizaSubProducto}"  -->
-				                      <f:ajax onevent="myFuncion" event="change" render="idTipoMonedaSol idPanelDocumentos appletContentRefresh" execute="@form" listener="#{productoNuevo.cambiarTipoMoneda}"/>              
+				                      <f:ajax onevent="myFuncion" event="change" render="idTipoMonedaSol idPanelDocumentos appletContentRefresh" execute="@form" listener="#{productoNuevo.cambiarTipoMonedaSubProd}"/>              
 				                	</h:selectOneMenu>
 				                </span>
 				              </span>
