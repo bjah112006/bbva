@@ -182,6 +182,9 @@ public class DatosCabeceraMB extends AbstractMBean {
 					}
 				}else{
 					
+					ayudaCargaLdap = new AyudaCargaLdap();
+					boolean flagTienePuestoTemporal = ayudaCargaLdap.validarTemporalidadPuestoIDM(usuarioIDM);
+					
 					/*LOG.info("FECHA INICIO PUESTO TEMPORAL DE IDM  "+ (usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
 					Date puestoTempFechaInicioIDM = usuarioIDM.getPuestoTemporal()!=null? usuarioIDM.getPuestoTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
 					LOG.info("FECHA INICIO PUESTO TEMPORAL DE IDM CON FORMATO "+puestoTempFechaInicioIDM);
@@ -199,9 +202,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 					//String codigoPuesto = usuarioIDM.getPuesto().getDescripcionPuesto();
 					String codigoPuesto = "";								  
 					com.ibm.bbva.entities.Perfil perfilTemporal = empleado.getPerfil();
-					
-					boolean flagTienePuestoTemporal = ayudaCargaLdap.validarTemporalidadPuestoIDM(usuarioIDM);
-					//if(flagTienePuestoTemporal){
+						
 					if(flagTienePuestoTemporal){
 						codigoPuesto = usuarioIDM.getPuestoTemporal().getDescripcionPuesto();
 						List<DescargaLDAP> listaPerfiles = descargaLDAPBeanLocal.buscar("-1", codigoPuesto, "-1", "-1", "-1", "-1");
@@ -213,6 +214,8 @@ public class DatosCabeceraMB extends AbstractMBean {
 							}
 						}
 					}
+					
+					boolean flagTieneOficinaTemporal =ayudaCargaLdap.validarTemporalidadOficinaIDM(usuarioIDM);
 					
 					/*LOG.info("FECHA INICIO OFICINA TEMPORAL DE IDM  "+ (usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime().toString():"0"));
 					Date ofiTempFechaInicioIDM = usuarioIDM.getCentroTemporal()!=null? usuarioIDM.getCentroTemporal().getFechaInicio().toGregorianCalendar().getTime():null;
@@ -232,7 +235,6 @@ public class DatosCabeceraMB extends AbstractMBean {
 					
 					Oficina objOficinaTemporal = null;
 					
-					boolean flagTieneOficinaTemporal =ayudaCargaLdap.validarTemporalidadOficinaIDM(usuarioIDM);
 					if(flagTieneOficinaTemporal){
 						String codigoOficina = usuarioIDM.getCentroTemporal().getDescripcion();
 						objOficinaTemporal = oficinabean.buscarPorCodigo(codigoOficina);
