@@ -2021,7 +2021,36 @@ public class PanelDocumentosMB extends AbstractMBean {
 					}
 				}					
 			}
-		}
+		}/*else if(listaAyudaPanelDocumentos != null){ 
+			for (AyudaPanelDocumentos apd : listaAyudaPanelDocumentos) {
+				LOG.info("apd.getIdCm():::::"+apd.getIdCm());
+				LOG.info("apd.getIdDocExp():::::"+apd.getIdDocExp());
+				
+					if(apd.getIdCm() == 0){
+						if(apd.getIdDocExp() > 0){
+							LOG.info("a actualizar Flag escaneado para :::::"+apd.getIdCm());
+							DocumentoExpTc docExpTC = documentoExpTcBean.buscarPorId(apd.getIdDocExp());
+							LOG.info("antes de ser actualizado:::::"+docExpTC.getIdCm()+" - "+docExpTC.getFlagEscaneado());
+							docExpTC.setFlagEscaneado("0");
+							documentoExpTcBean.edit(docExpTC);
+						}
+						//break;
+					}
+								
+			}
+		}*/
+		/*LOG.info("a actualizar Flag escaneado para :::::"+expediente.getId());
+		List<DocumentoExpTc> listDocumentoExpTc = documentoExpTcBean.buscarPorExpediente(expediente.getId());
+		if (!(listDocumentoExpTc == null || listDocumentoExpTc.isEmpty())){
+	    	for (DocumentoExpTc docExpTc : listDocumentoExpTc) {
+	    		if (docExpTc.getIdCm()==null) {
+	    			LOG.info("antes de ser actualizado:::::"+docExpTc.getIdCm()+" - "+docExpTc.getFlagEscaneado());
+	    			docExpTc.setFlagEscaneado("0");
+					documentoExpTcBean.edit(docExpTc);
+	    		}
+	    		
+	    	}
+	    }*/
 	}
 	// Modificado EPY 31122015
 	/*public void actualizarNoObservados(){
@@ -2051,11 +2080,38 @@ public class PanelDocumentosMB extends AbstractMBean {
 					}else{
 								iDsCM = iDsCM+","+apd.getIdCm();;
 					}
-				}
+				}/*else if(apd.getIdCm() == 0){
+					LOG.info("a actualizar Flag escaneado para :::::"+apd.getIdCm());
+					List<DocumentoExpTc> listDocumentoExpTc = documentoExpTcBean.buscarPorExpediente(expediente.getId());
+					if (!(listDocumentoExpTc == null || listDocumentoExpTc.isEmpty())){
+				    	for (DocumentoExpTc docExpTc : listDocumentoExpTc) {
+				    		if (docExpTc.getIdCm()==null) {
+				    			LOG.info("antes de ser actualizado:::::"+docExpTc.getIdCm()+" - "+docExpTc.getFlagEscaneado());
+				    			docExpTc.setFlagEscaneado("0");
+								documentoExpTcBean.edit(docExpTc);
+				    		}
+				    		
+				    	}
+				    }
+					
+				}*/
 			}
 			if(iDsCM.length()>0){
 				documentoExpTcBean.actualizarDocumentosNoObservados(expediente.getId(), iDsCM);
 			}
+			
+			/*LOG.info("a actualizar Flag escaneado para :::::"+expediente.getId());
+			List<DocumentoExpTc> listDocumentoExpTc = documentoExpTcBean.buscarPorExpediente(expediente.getId());
+			if (!(listDocumentoExpTc == null || listDocumentoExpTc.isEmpty())){
+		    	for (DocumentoExpTc docExpTc : listDocumentoExpTc) {
+		    		if (docExpTc.getIdCm()==null) {
+		    			LOG.info("antes de ser actualizado:::::"+docExpTc.getIdCm()+" - "+docExpTc.getFlagEscaneado());
+		    			docExpTc.setFlagEscaneado("0");
+						documentoExpTcBean.edit(docExpTc);
+		    		}
+		    		
+		    	}
+		    }*/
 		}
 	}
 
