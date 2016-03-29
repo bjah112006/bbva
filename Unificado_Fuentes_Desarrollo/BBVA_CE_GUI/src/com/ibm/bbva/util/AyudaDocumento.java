@@ -151,17 +151,17 @@ public class AyudaDocumento {
 				.get(Constantes.LIST_DOC_TRANSF);
 		
 		//Verificar si los documentos para ser subidos no vienen de DEVOLVER en una tarea
-		MotivoDevolucion motivoDevolucion = 
-				(MotivoDevolucion) FacesContext.getCurrentInstance().getExternalContext()
-							.getSessionMap().get(Constantes.MOTIVO_DEVOLUCION_TAREA_SESION);
+		//MotivoDevolucion motivoDevolucion = 
+		//		(MotivoDevolucion) FacesContext.getCurrentInstance().getExternalContext()
+		//					.getSessionMap().get(Constantes.MOTIVO_DEVOLUCION_TAREA_SESION);
 		
 		
 					
-		if (motivoDevolucion!=null || expediente.getAccion().equals(Constantes.ACCION_BOTON_DEVOLVER)){
-			LOG.info("Tiene Motivo Devolucion por lo tanto es DEVOLVER, Expediente:::" + expediente.getId());
-			LOG.info("ACCION DEL EXPEDIENTE:::" + expediente.getAccion());
-			LOG.info("strListaDocsTransferencias:::" + strListaDocsTransferencias);
-			
+		//if (motivoDevolucion!=null || expediente.getAccion().equals(Constantes.ACCION_BOTON_DEVOLVER)){
+		if (expediente.getAccion().equals(Constantes.ACCION_BOTON_DEVOLVER)){
+			LOG.info("ENTRO A DEVOLVER!!");
+			LOG.info("La tarea es:::" +expediente.getExpedienteTC().getTarea().getCodigo()+ " La accion es:::"+ expediente.getAccion() +" Expediente:::" + expediente.getId());
+						
 			LOG.info("strListaDocsTransferencias: "+strListaDocsTransferencias);
 	    	if(strListaDocsTransferencias != null && !strListaDocsTransferencias.equals("null") && strListaDocsTransferencias.split(",").length > 0){
 	    		List<DocumentoExpTc> lstDocumentoExpTc = documentoExpTcBean.buscarPorExpediente(expediente.getId());
