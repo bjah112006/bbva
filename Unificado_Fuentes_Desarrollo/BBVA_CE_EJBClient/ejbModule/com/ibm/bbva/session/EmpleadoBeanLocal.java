@@ -37,6 +37,8 @@ public interface EmpleadoBeanLocal {
 	
 	List<Empleado> buscarGerenteInactivoPorOficinaPerfilMarca(long idOficina, long idPerfil, String marca); 
 	
+	List<Empleado> buscarGerenteActivoPorOficinaPerfilMarca(long idOficina, long idPerfil, String marca); 
+	
 	List<Empleado> buscarGerenteTemporalPorOficinaPerfil(long idOficina,
 			long idPerfil);
 	
