@@ -272,7 +272,7 @@ public class RegistrarDatosMB extends AbstractMBean {
 					LOG.info("Id Perfil= "+objPerfil.getId());
 
 					if(listEmpleado!=null && listEmpleado.size()>0){
-						if(listEmpleado.size()>1 && objPerfil.getId()==Constantes.ID_PERFIL_SUB_GERENTE){
+						/*if(listEmpleado.size()>1 && objPerfil.getId()==Constantes.ID_PERFIL_SUB_GERENTE){
 							LOG.info("Existe más de un usuario con Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion());
 							msjOperacion="Existe más de un usuario con Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion()+":";
 							
@@ -282,7 +282,7 @@ public class RegistrarDatosMB extends AbstractMBean {
 							msjOperacion+="\n\nPor favor comuníquese con el Administrador.";
 							msjOperacionBol=true;
 							
-						}else{
+						}else{*/
 							LOG.info("Existe Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion());
 							if(objExpedienteDTO.getCodigoNivel()>0){
 								LOG.info("Nivel a considerar "+objExpedienteDTO.getCodigoNivel());
@@ -313,7 +313,7 @@ public class RegistrarDatosMB extends AbstractMBean {
 								}							
 							}else
 								LOG.info("Nivel es nulo");
-						}
+						//}
 					}else{
 						if(objPerfil.getId()==Constantes.ID_PERFIL_SUB_GERENTE){
 							LOG.info("No Existe Perfil "+objPerfil.getDescripcion()+" para oficina "+expediente.getExpedienteTC().getOficina().getCodigo()+" - "+expediente.getExpedienteTC().getOficina().getDescripcion());
