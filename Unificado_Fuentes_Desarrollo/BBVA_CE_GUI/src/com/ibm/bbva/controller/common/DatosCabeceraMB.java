@@ -256,43 +256,43 @@ public class DatosCabeceraMB extends AbstractMBean {
 										List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
 												Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
 										
-										if(subGerentesActivos != null && subGerentesActivos.size()>0){
+										//Buscar SG inactivos por Oficina, Perfil; Estado y Marca
+										List<Empleado> subGerentesActivosMarcados = empleadobean.buscarGerenteActivoPorOficinaPerfilMarca(this.empleado.getOficina().getId(), 
+												Constantes.ID_PERFIL_SUB_GERENTE, Constantes.FLAG_ACTIVO);
+										
+										if(subGerentesActivosMarcados != null && subGerentesActivosMarcados.size() >0){
+											int contador=0;
+											for(Empleado subGerenteInactivoMarcado : subGerentesActivosMarcados)
+											{
+												if(contador == 0){
+													RemoteUtils remoteUtils = new RemoteUtils();
+													long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+													if(cantexp > 0){
+														ayudaCargaLdap.reasignarExpedientes(this.empleado, subGerenteInactivoMarcado);
+														
+													}
+													contador ++;
+													
+												}
+												
+												//subGerenteInactivoMarcado.setFlagActivo(Constantes.FLAG_ACTIVO);
+												subGerenteInactivoMarcado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
+												this.empleadobean.edit(subGerenteInactivoMarcado);
+											}
+											ayudaCargaLdap.actualizarDatosOficinaEmpleado(this.empleado);
+											
+										}else if(subGerentesActivos != null && subGerentesActivos.size()>0){
 											
 											ayudaCargaLdap.reasignarExpedientes(this.empleado, subGerentesActivos.get(0));
 											ayudaCargaLdap.actualizarDatosOficinaEmpleado(this.empleado);
 										}else{
-											//Buscar SG inactivos por Oficina, Perfil; Estado y Marca
-											List<Empleado> subGerentesInactivosMarcados = empleadobean.buscarGerenteInactivoPorOficinaPerfilMarca(this.empleado.getOficina().getId(), 
-													Constantes.ID_PERFIL_SUB_GERENTE, Constantes.FLAG_ACTIVO);
+											//Mensaje Error
+											this.setMensajeAdvertencia("No puedes culminar tu temporalidad debido " +
+													"a que no existe un Subgerente activo para la oficina (" + 
+													this.empleado.getOficina().getCodigo() + "-" + this.empleado.getOficina().getDescripcion()
+													+"), por favor comuníquese con el Administrador");
+											flagTieneOficinaTemporal = true;
 											
-											if(subGerentesInactivosMarcados != null && subGerentesInactivosMarcados.size() >0){
-												int contador=0;
-												for(Empleado subGerenteInactivoMarcado : subGerentesInactivosMarcados)
-												{
-													if(contador == 0){
-														RemoteUtils remoteUtils = new RemoteUtils();
-														long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
-														if(cantexp > 0){
-															ayudaCargaLdap.reasignarExpedientes(this.empleado, subGerenteInactivoMarcado);
-															
-														}
-														contador ++;
-														
-													}
-													
-													subGerenteInactivoMarcado.setFlagActivo(Constantes.FLAG_ACTIVO);
-													subGerenteInactivoMarcado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
-													this.empleadobean.edit(subGerenteInactivoMarcado);
-												}
-												ayudaCargaLdap.actualizarDatosOficinaEmpleado(this.empleado);
-											}else{
-												//Mensaje Error
-												this.setMensajeAdvertencia("No puedes culminar tu temporalidad debido " +
-														"a que no existe un Subgerente activo para la oficina (" + 
-														this.empleado.getOficina().getCodigo() + "-" + this.empleado.getOficina().getDescripcion()
-														+"), por favor comuníquese con el Administrador");
-												flagTieneOficinaTemporal = true;
-											}
 										}
 								
 							}else{
@@ -315,7 +315,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 							if(this.empleado.getPerfil().getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
 								
 								//validar si ese Sub Gerente logeado no es activo
-								if(this.empleado.getFlagActivo().equals(Constantes.FLAG_INACTIVO)){
+								//if(this.empleado.getFlagActivo().equals(Constantes.FLAG_INACTIVO)){
 									//Existen SGT vigentes en el IDM, que estan reemplazando al SubGerente?
 									List<Empleado> subGerentesTemporales = empleadobean.buscarSubGerenteTemporalPorOficinaYOfiTemp(this.empleado.getOficina().getId(), 
 											Constantes.ID_PERFIL_SUB_GERENTE);
@@ -372,35 +372,54 @@ public class DatosCabeceraMB extends AbstractMBean {
 											
 										}else{
 											//activar al subGerente que en este caso se esta logeando
-											this.empleado.setFlagActivo(Constantes.FLAG_ACTIVO);
-											this.empleado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
-											this.empleadobean.edit(this.empleado);
-											
-											//Si tiene Exp. Pendientes se debe reasignar al SG activo
-											if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
-																				
+											if(this.empleado.getFlagEmpleadoSustituido().equals(Constantes.FLAG_ACTIVO)){
+												//this.empleado.setFlagActivo(Constantes.FLAG_ACTIVO);
+												this.empleado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
+												this.empleadobean.edit(this.empleado);
 												
-												for(Empleado subGerenteTemporal : subGerentesTemporales){
-													ayudaCargaLdap.reasignarExpedientes(subGerenteTemporal, this.empleado);
+												//Si tiene Exp. Pendientes se debe reasignar al SG activo
+												if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
+																					
 													
-													//Se atualiza Oficina 
-													subGerenteTemporal.setOficina(subGerenteTemporal.getOficinaBackup());
-													subGerenteTemporal.setOficinaBackup(null);
-													this.empleadobean.edit(subGerenteTemporal);
-													
-													List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(subGerenteTemporal.getId());
-													for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
-													{
-														objCartEmpleadoCE.setOficina(subGerenteTemporal.getOficina());
-														this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+													for(Empleado subGerenteTemporal : subGerentesTemporales){
+														ayudaCargaLdap.reasignarExpedientes(subGerenteTemporal, this.empleado);
+														
+														//Se atualiza Oficina 
+														subGerenteTemporal.setOficina(subGerenteTemporal.getOficinaBackup());
+														subGerenteTemporal.setOficinaBackup(null);
+														this.empleadobean.edit(subGerenteTemporal);
+														
+														List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(subGerenteTemporal.getId());
+														for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+														{
+															objCartEmpleadoCE.setOficina(subGerenteTemporal.getOficina());
+															this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+														}
 													}
+													
 												}
-												
 											}
+											
+											
+											
 										}
+									}else{
+										//Si no existe ninguna temporalidad para esta oficina y el que se logeo es un sub gerente
+										
+										//Buscar Sub Gerentes activos y de la oficina dada
+										List<Empleado> otrosSubGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
+												Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
+										
+										if(otrosSubGerentesActivos != null && otrosSubGerentesActivos.size()>0){
+											
+											for(Empleado otroSubGerenteActivo : otrosSubGerentesActivos){
+												ayudaCargaLdap.reasignarExpedientes(otroSubGerenteActivo, this.empleado);
+											}
+											
+										}	
 									}
 										
-								}
+								//}
 							}
 						}
 						
@@ -450,7 +469,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 											}
 											
 											//Inactivas al Sub Gerente y marcarlo como Sustituido
-											subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
+											//subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
 											subGerenteActivo.setFlagEmpleadoSustituido(Constantes.FLAG_ACTIVO);
 											this.empleadobean.edit(subGerenteActivo);
 										}
@@ -500,7 +519,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 												}
 												
 												//Inactivas al Sub Gerente
-												subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
+												//subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
 												subGerenteActivo.setFlagEmpleadoSustituido(Constantes.FLAG_ACTIVO);
 												this.empleadobean.edit(subGerenteActivo);
 											}
@@ -508,6 +527,21 @@ public class DatosCabeceraMB extends AbstractMBean {
 									}
 									
 								}
+							}else{
+								//Cuando existe temporalidad y el que se logea es el SGT
+								//Esas acciones se ejecutaran cada ves que se logea un SGT con temporalidad vigente
+								//Buscar Sub Gerentes activos y de la oficina dada
+								List<Empleado> otrosSGPActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(objOficinaTemporal.getId(), 
+										Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
+								
+								if(otrosSGPActivos != null && otrosSGPActivos.size()>0){
+									//Si existen Sub Gerentes activos y ademas tienen Exp. pendientes
+									for(Empleado otroSGPActivo : otrosSGPActivos)
+									{
+										ayudaCargaLdap.reasignarExpedientes(otroSGPActivo, this.empleado);
+									}
+								}
+								
 							}
 						}
 					}
@@ -526,45 +560,45 @@ public class DatosCabeceraMB extends AbstractMBean {
 										List<Empleado> subGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
 												Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
 										
-										if(subGerentesActivos != null && subGerentesActivos.size()>0){
+										//Buscar SG inactivos por Oficina, Perfil; Estado y Marca
+										List<Empleado> subGerentesInactivosMarcados = empleadobean.buscarGerenteInactivoPorOficinaPerfilMarca(this.empleado.getOficina().getId(), 
+												Constantes.ID_PERFIL_SUB_GERENTE, Constantes.FLAG_ACTIVO);
+										
+										if(subGerentesInactivosMarcados != null && subGerentesInactivosMarcados.size() >0){
+											int contador=0;
+											for(Empleado subGerenteInactivoMarcado : subGerentesInactivosMarcados)
+											{
+												if(contador == 0){
+													RemoteUtils remoteUtils = new RemoteUtils();
+													long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
+													if(cantexp > 0){
+														ayudaCargaLdap.reasignarExpedientes(this.empleado, subGerenteInactivoMarcado);
+														
+													}
+													contador ++;
+													
+												}
+												
+												//subGerenteInactivoMarcado.setFlagActivo(Constantes.FLAG_ACTIVO);
+												subGerenteInactivoMarcado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
+												this.empleadobean.edit(subGerenteInactivoMarcado);
+											}
+											ayudaCargaLdap.actualizarDatosEmpleado(this.empleado);
+											
+										}else if(subGerentesActivos != null && subGerentesActivos.size()>0){
 											
 											ayudaCargaLdap.reasignarExpedientes(this.empleado, subGerentesActivos.get(0));
 											ayudaCargaLdap.actualizarDatosEmpleado(this.empleado);
 										}else{
-											//Buscar SG inactivos por Oficina, Perfil; Estado y Marca
-											List<Empleado> subGerentesInactivosMarcados = empleadobean.buscarGerenteInactivoPorOficinaPerfilMarca(this.empleado.getOficina().getId(), 
-													Constantes.ID_PERFIL_SUB_GERENTE, Constantes.FLAG_ACTIVO);
-											
-											if(subGerentesInactivosMarcados != null && subGerentesInactivosMarcados.size() >0){
-												int contador=0;
-												for(Empleado subGerenteInactivoMarcado : subGerentesInactivosMarcados)
-												{
-													if(contador == 0){
-														RemoteUtils remoteUtils = new RemoteUtils();
-														long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
-														if(cantexp > 0){
-															ayudaCargaLdap.reasignarExpedientes(this.empleado, subGerenteInactivoMarcado);
-															
-														}
-														contador ++;
-														
-													}
-													
-													subGerenteInactivoMarcado.setFlagActivo(Constantes.FLAG_ACTIVO);
-													subGerenteInactivoMarcado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
-													this.empleadobean.edit(subGerenteInactivoMarcado);
-												}
-												ayudaCargaLdap.actualizarDatosEmpleado(this.empleado);
-											}else{
-												//Mensaje Error
-												this.setMensajeAdvertencia("No puedes culminar tu temporalidad debido " +
-														"a que no existe un Subgerente activo para la oficina (" + 
-														this.empleado.getOficina().getCodigo() + "-" + this.empleado.getOficina().getDescripcion()
-														+"), por favor comuníquese con el Administrador");
-												flagTienePuestoTemporal = true;
-											}
+											//Mensaje Error
+											this.setMensajeAdvertencia("No puedes culminar tu temporalidad debido " +
+													"a que no existe un Subgerente activo para la oficina (" + 
+													this.empleado.getOficina().getCodigo() + "-" + this.empleado.getOficina().getDescripcion()
+													+"), por favor comuníquese con el Administrador");
+											flagTienePuestoTemporal = true;
 										}
-								
+										
+										
 							}else{
 								RemoteUtils remoteUtils = new RemoteUtils();
 								long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
@@ -582,7 +616,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 							if(this.empleado.getPerfil().getCodigo().equals(Constantes.ID_PERFIL_SUB_GERENTE.toString()) ){
 								
 								//validar si ese Sub Gerente logeado no es activo
-								if(this.empleado.getFlagActivo().equals(Constantes.FLAG_INACTIVO)){
+								//if(this.empleado.getFlagActivo().equals(Constantes.FLAG_INACTIVO)){
 									//Existen SGT vigentes en el IDM, que estan reemplazando al SubGerente?
 									List<Empleado> subGerentesTemporales = empleadobean.buscarSubGerenteTemporalPorOficinaPerfil(this.empleado.getOficina().getId(), 
 											Constantes.ID_PERFIL_SUB_GERENTE);
@@ -639,35 +673,52 @@ public class DatosCabeceraMB extends AbstractMBean {
 											
 										}else{
 											//activar al subGerente que en este caso se esta logeando
-											this.empleado.setFlagActivo(Constantes.FLAG_ACTIVO);
-											this.empleado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
-											this.empleadobean.edit(this.empleado);
-											
-											//Si tiene Exp. Pendientes se debe reasignar al SG activo
-											if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
-																				
-												for(Empleado subGerenteTemporal : subGerentesTemporales){
-													ayudaCargaLdap.reasignarExpedientes(subGerenteTemporal, this.empleado);
-													
-													//Actulizar Perfil, Cargo y Carterizacion del SGT
-													subGerenteTemporal.setPerfil(subGerenteTemporal.getPerfilBackup());
-													subGerenteTemporal.setPerfilBackup(null);
-													subGerenteTemporal.setCodigoCargo(subGerenteTemporal.getCodigoCargoBackup());
-													subGerenteTemporal.setCodigoCargoBackup(null);
-													this.empleadobean.edit(subGerenteTemporal);
-													
-													List<CartEmpleadoCE> listaCartEmpleadoSGTempCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(subGerenteTemporal.getId());
-													for(CartEmpleadoCE objCartEmpleadoSGTempCE : listaCartEmpleadoSGTempCE)
-													{
-														objCartEmpleadoSGTempCE.setPerfil(subGerenteTemporal.getPerfil());
-														this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoSGTempCE);
+											if(this.empleado.getFlagEmpleadoSustituido().equals(Constantes.FLAG_ACTIVO)){
+												//this.empleado.setFlagActivo(Constantes.FLAG_ACTIVO);
+												this.empleado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
+												this.empleadobean.edit(this.empleado);
+												
+												//Si tiene Exp. Pendientes se debe reasignar al SG activo
+												if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
+																					
+													for(Empleado subGerenteTemporal : subGerentesTemporales){
+														ayudaCargaLdap.reasignarExpedientes(subGerenteTemporal, this.empleado);
+														
+														//Actulizar Perfil, Cargo y Carterizacion del SGT
+														subGerenteTemporal.setPerfil(subGerenteTemporal.getPerfilBackup());
+														subGerenteTemporal.setPerfilBackup(null);
+														subGerenteTemporal.setCodigoCargo(subGerenteTemporal.getCodigoCargoBackup());
+														subGerenteTemporal.setCodigoCargoBackup(null);
+														this.empleadobean.edit(subGerenteTemporal);
+														
+														List<CartEmpleadoCE> listaCartEmpleadoSGTempCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(subGerenteTemporal.getId());
+														for(CartEmpleadoCE objCartEmpleadoSGTempCE : listaCartEmpleadoSGTempCE)
+														{
+															objCartEmpleadoSGTempCE.setPerfil(subGerenteTemporal.getPerfil());
+															this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoSGTempCE);
+														}
 													}
 												}
 											}
+										
 										}
+									}else{
+										//Si no existe ninguna temporalidad para esta oficina y el que se logeo es un sub gerente principal
+										
+										//Buscar Sub Gerentes activos y de la oficina dada
+										List<Empleado> otrosSubGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
+												Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
+										
+										if(otrosSubGerentesActivos != null && otrosSubGerentesActivos.size()>0){
+											
+											for(Empleado otroSubGerenteActivo : otrosSubGerentesActivos){
+												ayudaCargaLdap.reasignarExpedientes(otroSubGerenteActivo, this.empleado);
+											}
+											
+										}	
 									}
 										
-								}
+								//}
 							}
 						}
 					
@@ -704,7 +755,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 											}
 											
 											//Inactivas al Sub Gerente y marcarlo como Sustituido
-											subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
+											//subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
 											subGerenteActivo.setFlagEmpleadoSustituido(Constantes.FLAG_ACTIVO);
 											this.empleadobean.edit(subGerenteActivo);
 										}
@@ -752,8 +803,13 @@ public class DatosCabeceraMB extends AbstractMBean {
 												//Si existen Sub Gerentes activos y ademas tienen Exp. pendientes
 												for(Empleado subGerenteActivo : subGerentesActivos)
 												{
+													long cantexpSGA = remoteUtils.countConsultaListaTareasTC(subGerenteActivo.getCodigo());					
+													if(cantexpSGA > 0){
+														ayudaCargaLdap.reasignarExpedientes(subGerenteActivo, this.empleado);
+															
+													}
 													//Inactivas al Sub Gerente
-													subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
+													//subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
 													subGerenteActivo.setFlagEmpleadoSustituido(Constantes.FLAG_ACTIVO);
 													this.empleadobean.edit(subGerenteActivo);
 												}
@@ -775,7 +831,20 @@ public class DatosCabeceraMB extends AbstractMBean {
 										}
 									}
 								}else{
-									RemoteUtils remoteUtils = new RemoteUtils();
+									//Cuando existe temporalidad y el que se logea es el SGT
+									//Esas acciones se ejecutaran cada ves que se logea un SGT con temporalidad vigente
+									//Buscar Sub Gerentes activos y de la oficina dada
+									List<Empleado> otrosSGPActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(objOficinaTemporal.getId(), 
+											Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
+									
+									if(otrosSGPActivos != null && otrosSGPActivos.size()>0){
+										//Si existen Sub Gerentes activos y ademas tienen Exp. pendientes
+										for(Empleado otroSGPActivo : otrosSGPActivos)
+										{
+											ayudaCargaLdap.reasignarExpedientes(otroSGPActivo, this.empleado);
+										}
+									}
+									/*RemoteUtils remoteUtils = new RemoteUtils();
 									long cantexp = remoteUtils.countConsultaListaTareasTC(this.empleado.getCodigo());					
 									if(cantexp > 0)
 									{
@@ -795,7 +864,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 												for(Empleado subGerenteActivo : subGerentesActivos)
 												{
 													//Inactivas al Sub Gerente
-													subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
+													//subGerenteActivo.setFlagActivo(Constantes.FLAG_INACTIVO);
 													subGerenteActivo.setFlagEmpleadoSustituido(Constantes.FLAG_ACTIVO);
 													this.empleadobean.edit(subGerenteActivo);
 												}
@@ -808,7 +877,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 											objCartEmpleadoCE.setPerfil(this.empleado.getPerfil());
 											this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
 										}
-									}
+									}*/
 								}
 							}
 						}
