@@ -316,6 +316,9 @@ public class DatosCabeceraMB extends AbstractMBean {
 								
 								//validar si ese Sub Gerente logeado no es activo
 								//if(this.empleado.getFlagActivo().equals(Constantes.FLAG_INACTIVO)){
+									List<Empleado> subGTporPerfil = empleadobean.buscarSubGerenteTemporalPorOficinaPerfil(this.empleado.getOficina().getId(), 
+										Constantes.ID_PERFIL_SUB_GERENTE);
+								
 									//Existen SGT vigentes en el IDM, que estan reemplazando al SubGerente?
 									List<Empleado> subGerentesTemporales = empleadobean.buscarSubGerenteTemporalPorOficinaYOfiTemp(this.empleado.getOficina().getId(), 
 											Constantes.ID_PERFIL_SUB_GERENTE);
@@ -371,52 +374,53 @@ public class DatosCabeceraMB extends AbstractMBean {
 											 
 											
 										}else{
-											//activar al subGerente que en este caso se esta logeando
-											if(this.empleado.getFlagEmpleadoSustituido().equals(Constantes.FLAG_ACTIVO)){
-												//this.empleado.setFlagActivo(Constantes.FLAG_ACTIVO);
-												this.empleado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
-												this.empleadobean.edit(this.empleado);
-												
-												//Si tiene Exp. Pendientes se debe reasignar al SG activo
-												if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
-																					
+											if(subGTporPerfil == null || subGTporPerfil.size()==0){
+												//activar al subGerente que en este caso se esta logeando
+												if(this.empleado.getFlagEmpleadoSustituido().equals(Constantes.FLAG_ACTIVO)){
+													//this.empleado.setFlagActivo(Constantes.FLAG_ACTIVO);
+													this.empleado.setFlagEmpleadoSustituido(Constantes.FLAG_INACTIVO);
+													this.empleadobean.edit(this.empleado);
 													
-													for(Empleado subGerenteTemporal : subGerentesTemporales){
-														ayudaCargaLdap.reasignarExpedientes(subGerenteTemporal, this.empleado);
+													//Si tiene Exp. Pendientes se debe reasignar al SG activo
+													if(subGerentesTemporales != null && subGerentesTemporales.size()>0){
+																						
 														
-														//Se atualiza Oficina 
-														subGerenteTemporal.setOficina(subGerenteTemporal.getOficinaBackup());
-														subGerenteTemporal.setOficinaBackup(null);
-														this.empleadobean.edit(subGerenteTemporal);
-														
-														List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(subGerenteTemporal.getId());
-														for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
-														{
-															objCartEmpleadoCE.setOficina(subGerenteTemporal.getOficina());
-															this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+														for(Empleado subGerenteTemporal : subGerentesTemporales){
+															ayudaCargaLdap.reasignarExpedientes(subGerenteTemporal, this.empleado);
+															
+															//Se atualiza Oficina 
+															subGerenteTemporal.setOficina(subGerenteTemporal.getOficinaBackup());
+															subGerenteTemporal.setOficinaBackup(null);
+															this.empleadobean.edit(subGerenteTemporal);
+															
+															List<CartEmpleadoCE> listaCartEmpleadoCE = this.cartEmpleadoCEBeanLocal.buscarPorIdEmpleado(subGerenteTemporal.getId());
+															for(CartEmpleadoCE objCartEmpleadoCE : listaCartEmpleadoCE)
+															{
+																objCartEmpleadoCE.setOficina(subGerenteTemporal.getOficina());
+																this.cartEmpleadoCEBeanLocal.edit(objCartEmpleadoCE);
+															}
 														}
+														
 													}
-													
 												}
 											}
-											
-											
-											
+												
 										}
 									}else{
 										//Si no existe ninguna temporalidad para esta oficina y el que se logeo es un sub gerente
-										
-										//Buscar Sub Gerentes activos y de la oficina dada
-										List<Empleado> otrosSubGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
-												Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
-										
-										if(otrosSubGerentesActivos != null && otrosSubGerentesActivos.size()>0){
+										if(subGTporPerfil == null || subGTporPerfil.size()==0){
+											//Buscar Sub Gerentes activos y de la oficina dada
+											List<Empleado> otrosSubGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfilSinSGT(this.empleado.getOficina().getId(), 
+													Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
 											
-											for(Empleado otroSubGerenteActivo : otrosSubGerentesActivos){
-												ayudaCargaLdap.reasignarExpedientes(otroSubGerenteActivo, this.empleado);
+											if(otrosSubGerentesActivos != null && otrosSubGerentesActivos.size()>0){
+												
+												for(Empleado otroSubGerenteActivo : otrosSubGerentesActivos){
+													ayudaCargaLdap.reasignarExpedientes(otroSubGerenteActivo, this.empleado);
+												}
+												
 											}
-											
-										}	
+										}
 									}
 										
 								//}
@@ -706,7 +710,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 										//Si no existe ninguna temporalidad para esta oficina y el que se logeo es un sub gerente principal
 										
 										//Buscar Sub Gerentes activos y de la oficina dada
-										List<Empleado> otrosSubGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
+										List<Empleado> otrosSubGerentesActivos = empleadobean.buscarGerenteActivoPorOficinaPerfilSinSGT(this.empleado.getOficina().getId(), 
 												Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
 										
 										if(otrosSubGerentesActivos != null && otrosSubGerentesActivos.size()>0){
