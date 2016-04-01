@@ -838,7 +838,7 @@ public class DatosCabeceraMB extends AbstractMBean {
 									//Cuando existe temporalidad y el que se logea es el SGT
 									//Esas acciones se ejecutaran cada ves que se logea un SGT con temporalidad vigente
 									//Buscar Sub Gerentes activos y de la oficina dada
-									List<Empleado> otrosSGPActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(objOficinaTemporal.getId(), 
+									List<Empleado> otrosSGPActivos = empleadobean.buscarGerenteActivoPorOficinaPerfil(this.empleado.getOficina().getId(), 
 											Constantes.ID_PERFIL_SUB_GERENTE, this.empleado.getId());
 									
 									if(otrosSGPActivos != null && otrosSGPActivos.size()>0){
