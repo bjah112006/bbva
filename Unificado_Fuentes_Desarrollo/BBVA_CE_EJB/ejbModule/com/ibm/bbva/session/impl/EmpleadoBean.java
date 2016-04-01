@@ -271,6 +271,29 @@ public class EmpleadoBean extends AbstractFacade<Empleado> implements EmpleadoBe
 	}
 	
 	@Override
+	public List<Empleado> buscarGerenteActivoPorOficinaPerfilSinSGT(long idOficina, long idPerfil, long idEmpleado) {
+		String idActivo="1";
+		List<Empleado> resultList = null;
+		String query="SELECT e FROM Empleado e WHERE e.oficina.id = :idOficina and " +
+				" e.perfil.id = :idPerfil and  e.flagActivo like :idActivo" +
+				" and e.perfilBackup.id is null and e.oficinaBackup.id is null " +
+				" and e.id <> :idEmpleado";
+		LOG.info("query GerenteActivo = "+query);
+		try{
+			resultList = em.createQuery(query)
+					.setParameter("idOficina", idOficina)
+					.setParameter("idPerfil", idPerfil)
+					.setParameter("idActivo", idActivo)
+					.setParameter("idEmpleado", idEmpleado)
+					.getResultList();
+			return resultList;			
+		}catch (NoResultException e) {
+			return resultList;
+		}
+
+	}
+	
+	@Override
 	public List<Empleado> buscarGerenteInactivoPorOficinaPerfil(long idOficina, long idPerfil) {
 		String idInactivo="0";
 		String query="SELECT e FROM Empleado e WHERE e.oficina.id = :idOficina and " +
