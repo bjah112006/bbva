@@ -32,7 +32,7 @@ public interface EmpleadoBeanLocal {
 	
 	List<Empleado> buscarGerenteActivoPorOficinaPerfil(long idOficina, long idPerfil, long idEmpleado);
 	
-	public List<Empleado> buscarGerenteActivoPorOficinaPerfilSinSGT(long idOficina, long idPerfil, long idEmpleado);
+	List<Empleado> buscarGerenteActivoPorOficinaPerfilSinSGT(long idOficina, long idPerfil, long idEmpleado);
 	
 	List<Empleado> buscarGerenteInactivoPorOficinaPerfil(long idOficina,
 			long idPerfil);
