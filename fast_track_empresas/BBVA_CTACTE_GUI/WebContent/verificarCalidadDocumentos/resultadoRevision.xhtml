@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+	
+	<f:verbatim>
+		<script type="text/javascript" language="javascript">
+			function rechazarDocumentacion () {
+				if (confirm('¿Desea enviar el expediente?')) {
+					renombrarArchivos ();
+					return true;
+				}
+				return false;
+			}
+			function aprobarDocumentacion () {
+				if (confirm('¿Desea enviar el expediente?')) {
+					renombrarArchivos ();
+					return true;
+				}
+				return false;
+			}
+			
+			
+			function execute_remote(btnName, message) {
+				  var result = confirm(message);
+				  if(result){
+					  var fn = window[btnName];
+			           if(typeof fn === 'function') {
+			        	   if($('#appletVisor').length){
+			        		   $('#appletVisor').attr('width', '1px');
+				        	   $('#appletVisor').attr('height', '1px');
+			        	   }
+			        	   
+			        	   if($('#idIfRVisorContent').length){
+			        		  // $('#idIfRVisorContent').hide();
+				        	  // $('#idIfRVisorContent').attr('height', '1px');
+				        	  $('#idIfRVisorContent').css('z-index', -1);
+				        	 
+			        	   }
+			        	   
+			        	    if($('#iframDni').length){
+			        	    $('#iframDni').css('z-index', -1);
+			        		 //   $('#iframDni').hide();
+				        	  // $('#iframDni').attr('height', '1px');
+				        	  
+			        	   }
+			        	   
+			        	   $('#loading').show();
+			        	   renombrarArchivos ();
+			        	   fn();
+			           } 
+				  } 
+				  return false;
+				}
+			
+			
+		</script>
+	</f:verbatim>
+	<custom:remoteCommand name="renombrarArchivos" actionListener="#{verificarCalidadDocumentos.renombrarArchivos}"
+			oncomplete="cambiarNombre"/>
+	<custom:tabView id="idResultadoRevision" style="width:1100px;">
+		<custom:tab title="Resultado de la revisión">
+		
+			<h:panelGrid  columns="2">
+				<h:panelGroup>
+					<h:inputTextarea id="comentario" value="#{resultadorevision.comentario}" rows="5" cols="100"/>
+					<custom:textAreaCounter for="comentario" maxCharacterSize="3000" />
+				</h:panelGroup>
+				<h:panelGrid columns="1" id="idBotonGridResultRevision">
+					<h:commandButton value="Aprobar Documentación" 
+					disabled="#{resultadorevision.desHabilitarBotonAprobar}" 
+					
+					
+					onclick="return execute_remote('remoteAceptarDoc','¿Desea enviar el expediente?')" />
+	               
+	                <h:commandButton value="Rechazar Documentación" 
+	                disabled="#{resultadorevision.desHabilitarBotonRechazar}" 
+	                
+	                
+	                onclick="return execute_remote('remoteRechazarDoc','¿Desea enviar el expediente?')" />
+	                
+	                
+	                <custom:remoteCommand name="remoteAceptarDoc" process="@form" oncomplete="$('#loading').hide(); "
+					actionListener="#{resultadorevision.aprobarDocumentacion}"  />
+					<custom:remoteCommand name="remoteRechazarDoc" process="@form" oncomplete="$('#loading').hide(); "
+					actionListener="#{resultadorevision.rechazarDocumentacion}"  />
+	            </h:panelGrid>
+			</h:panelGrid>
+		
+		</custom:tab>
+	</custom:tabView>
+</ui:composition>
+
+

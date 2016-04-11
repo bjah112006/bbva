@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+
+	<custom:tabView id="idIdenPJOp">
+		<custom:tab title="Paso 1: Identifique la PJ y la Operación">
+			<table width="100px" border="0" cellpadding="5">
+
+
+				<tr>
+					<td><h:outputText value="Migrado:" styleClass="titulo-bold" />
+					</td>
+					<td><h:outputText value="#{subsanarIdentifiquePJOperacion.esMigrado}" />
+					</td>
+				</tr>
+			</table>
+
+
+			<h:dataTable styleClass="table"
+				value="#{subsanarIdentifiquePJOperacion.listaCliente}" 
+				id="dtClientes" var="item">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Cód. Central" />
+					</f:facet>
+					<h:outputText value="#{item.codigoCentral}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Tipo DOI" />
+					</f:facet>
+					<h:outputText value="#{item.tipoDoiDes}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Nro. DOI" />
+					</f:facet>
+					<h:outputText value="#{item.numeroDoi}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Razón Social" />
+					</f:facet>
+					<h:outputText value="#{item.razonSocial}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Fecha de Constitución" />
+					</f:facet>
+					<h:outputText value="#{item.fechaConstitucion}" />
+				</h:column>
+			</h:dataTable>
+
+			<h:dataTable styleClass="table" value="#{subsanarIdentifiquePJOperacion.listaParticipe}"
+				id="dtClientes1" var="item1">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="C.Central" />
+					</f:facet>
+					<h:outputText value="#{item1.codigoCentral}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Tip. DOI" />
+					</f:facet>
+					<h:outputText value="#{item1.tipoDoiDes}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Nro. DOI" />
+					</f:facet>
+					<h:outputText value="#{item1.numeroDoi}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="nombre" />
+					</f:facet>
+					<h:outputText value="#{item1.nombre} #{item1.apellidoPaterno} #{item1.apellidoMaterno}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Número de cuenta" />
+					</f:facet>
+					<h:outputText value="#{item1.cuenta.numeroContrato}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="¿Tiene firma?" />
+					</f:facet>					
+					<h:outputText value="#{item1.indicadorFirma=='1' ? 'Si' : 'No'}" />
+				</h:column>
+			</h:dataTable>
+
+		</custom:tab>
+	</custom:tabView>
+
+</ui:composition>

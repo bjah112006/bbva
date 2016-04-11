@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="BBVA_CTACTE_EJB">
+        <wb-resource deploy-path="/" source-path="/ejbModule" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/" source-path="/.apt_generated"/>
+        <property name="java-output-path" value="/BBVA_CTACTE_EJB/build/classes"/>
+        <property name="ClientProject" value="BBVA_CTACTE_EJBClient"/>
+        <property name="ClientJARURI" value="BBVA_CTACTE_EJBClient.jar"/>
+    </wb-module>
+</project-modules>

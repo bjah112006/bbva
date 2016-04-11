@@ -1,0 +1,180 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	xmlns:bbva="http://java.sun.com/jsf/composite/components/bbva"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+
+	<ui:define name="title">Reporte de expedientes</ui:define>
+
+
+	<ui:define name="head">
+		<script type="text/javascript">
+		/* <![CDATA[ */
+		
+		function bloquearBusqueda() {
+			
+				$("#form\\:tabView\\:btnGenerar").attr("disabled", "disabled");
+				$("#form\\:tabView\\:loadingDiv").css( "display", "inline" );
+				return true;
+		}
+		
+		/* ]]> */
+	</script>
+	
+	</ui:define>
+
+	<ui:define name="content">
+
+		<custom:tabView id="tabView" style="width:1100px;">
+			<custom:tab id="tab1" title="Filtros de exportacion">
+
+				<table style="width: 1080px; border: 0px solid;">
+					<!-- 			<tr> -->
+					<!-- 				<td colspan="6" style="border: 1px solid;"> -->
+					<!-- 					<h:outputText value="Filtros de exportacion" -->
+					<!-- 						style="font-weight: bold;" /> -->
+					<!-- 				</td> -->
+					<!-- 			</tr> -->
+					<tr>
+						<td style="border: 0px solid;">Fecha registro inicio:</td>
+						<td style="border: 0px solid;"><custom:calendar
+								id="campoFecARegIni" styleClass="campoFecAsigDel"
+								readOnlyInputText="false"
+								value="#{reporte.reporteVO.fechaInicio}" pattern="dd/MM/yyyy"
+								mask="00/00/0000" converterMessage="Fecha inválida">
+							</custom:calendar>
+						</td>
+						<td style="border: 0px solid;">Fecha registro fin:</td>
+						<td style="border: 0px solid;"><custom:calendar
+								id="campoFecARegFin" styleClass="campoFecAsigDel"
+								readOnlyInputText="false" value="#{reporte.reporteVO.fechaFin}"
+								pattern="dd/MM/yyyy" mask="00/00/0000"
+								converterMessage="Fecha inválida">
+							</custom:calendar>
+						</td>
+						<td style="border: 0px solid;">Código Central:</td>
+						<td style="border: 0px solid; text-align: left ;"><h:inputText
+								id="idCodCentral" style="width:150px" styleClass="soloNumeros"
+								value="#{reporte.reporteVO.codigoCentral}">
+							</h:inputText>
+						</td>
+					</tr>
+					<tr>
+						<td style="border: 0px solid;">Nro Expediente:</td>
+						<td style="border: 0px solid;"><h:inputText
+								id="idNumeroExpediente" style="width:95px"
+								styleClass="soloNumeros"
+								value="#{reporte.reporteVO.numeroExpediente}">
+							</h:inputText>
+						</td>
+
+						<td style="border: 0px solid;">Estado expediente:</td>
+						<td style="border: 0px solid;"><h:selectOneMenu immediate="true"
+								id="idEstadoExpediente" styleClass="campoBsqCodOperacion"
+								value="#{reporte.reporteVO.idEstadoExpediente}">
+								<f:selectItem itemLabel="Todos" itemValue="0" />
+								<f:selectItems value="#{reporte.estadosExpedienteSelectValue}" />
+								<f:ajax event="change" render=":form:tabView:idNombreTarea" immediate="true"
+									execute="@form" listener="#{reporte.abilitarTareaActual}" >
+									
+								</f:ajax>
+							</h:selectOneMenu>
+						</td>
+						<td style="border: 0px solid;">Tarea Actual:</td>
+						<td style="border: 0px solid;"><h:selectOneMenu disabled="#{reporte.mostrarTareaActual}"
+								id="idNombreTarea" styleClass="campoBsqNomTarea"
+								value="#{reporte.reporteVO.idTarea}">
+								<f:selectItem itemLabel="Todos" itemValue="0" />
+								<f:selectItems value="#{reporte.tareasSelectValue}" />
+								<f:ajax event="change"></f:ajax>
+							</h:selectOneMenu>
+						</td>
+
+
+
+					</tr>
+					<tr>
+						<td style="border: 0px solid;">Operación:</td>
+						<td style="border: 0px solid;"><h:selectOneMenu
+								id="idOperacion" style="width: 180px"
+								value="#{reporte.reporteVO.idOperacion}"
+								styleClass="campoBsqCodOperacion">
+								<f:selectItem itemLabel="Todos" itemValue="0" />
+								<f:selectItems value="#{reporte.operacionesSelectValue}" />
+								<f:ajax event="change" />
+							</h:selectOneMenu>
+						</td>
+
+						<td style="border: 0px solid;">Territorio:</td>
+						<td style="border: 0px solid;"><h:selectOneMenu
+								id="idTerritorio" style="width: 110px"
+								value="#{reporte.reporteVO.idTerritorio}"
+								styleClass="campoBsqCodOperacion">
+								<f:selectItem itemLabel="Todos" itemValue="0" />
+								<f:selectItems value="#{reporte.territoriosSelectValue}" />
+								<f:ajax event="change" render=":form:tabView:idOficina"
+									execute="@form"
+									listener="#{reporte.obtenerOficinaPorTerritorio}" />
+							</h:selectOneMenu>
+						</td>
+
+						<td style="border: 0px solid;">Oficina:</td>
+						<td style="border: 0px solid;"><h:selectOneMenu
+								id="idOficina" style="width: 100px"
+								value="#{reporte.reporteVO.idOficina}"
+								styleClass="campoBsqCodOperacion">
+								<f:selectItem itemLabel="Todos" itemValue="0" />
+								<f:selectItems value="#{reporte.oficinaItemsExp}" />
+								<f:ajax event="change" />
+							</h:selectOneMenu>
+						</td>
+
+					</tr>
+					<tr>
+						<td style="border: 0px solid;">Responsable:</td>
+						<td style="border: 0px solid; text-align: left;"><h:inputText
+								id="responsable" style="width:150px" styleClass="soloNumeros"
+								value="#{reporte.reporteVO.responsable}">
+							</h:inputText>
+						</td>
+						<td style="border: 0px solid;">Razón Social:</td>
+						<td style="border: 0px solid; text-align: left;"><h:inputText
+								id="razonSocial" style="width:150px" styleClass="soloNumeros"
+								value="#{reporte.reporteVO.razonSocial}">
+							</h:inputText>
+						</td>
+
+						<td style="border: 0px solid;"></td>
+						<td style="border: 0px solid;"></td>
+						<td style="border: 0px solid;"></td>
+						<td style="border: 0px solid;"></td>
+					</tr>
+					<tr>
+						<td colspan="2"  style="border: 0px solid;text-align: left;"> 
+							<h:outputText id="totalFilas" value="#{reporte.totalFilas}"  rendered="#{reporte.activeExport}" ></h:outputText>
+						</td>
+						<td colspan="4" style="border: 0px solid; text-align: right;">
+							<h:commandButton styleClass="boton" value="Generar" id="btnGenerar" render="form:tabView:totalFilas"
+								execute="@form" action="#{reporte.buscar}" >
+								
+							</h:commandButton> 
+							<h:commandButton
+								style="left-padding:5px;" styleClass="boton" value="Limpiar"
+								action="#{reporte.limpiar}" /></td>
+					</tr>
+				</table>
+				
+				<h:panelGroup columns="1" id="loadingDiv" style="display:none;">
+						<h:outputText value="Procesando... " />
+						<h:graphicImage value="#{resource['imagenes:loading.gif']}" />
+				</h:panelGroup>
+			</custom:tab>
+		</custom:tabView>
+		<br></br>
+		
+
+
+	</ui:define>
+</ui:composition>

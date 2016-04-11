@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="templateH" language="java" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="e5dc3cbb-616e-424b-bfab-16c66dd38c59">
+	<property name="ireport.zoom" value="1.6105100000000014"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="33"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1" value="columnHeader"/>
+	<style name="TITULO" forecolor="#00CCFF" hAlign="Center" vAlign="Middle" fontName="Arial" fontSize="22" isBold="true"/>
+	<style name="SUB_TITULO" style="TITULO" fontSize="14" isBold="true"/>
+	<style name="TEXTO1" forecolor="#094FA4" fontName="Arial" fontSize="10" isBold="true"/>
+	<style name="TEXTO2" style="TEXTO1" fontSize="6"/>
+	<style name="TEXTO3" forecolor="#423675" fontName="Arial" fontSize="6"/>
+	<parameter name="TITULO" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Depósitos a Plazo"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUB_TITULO" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Depósitos a Plazo - Personas Naturales"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CABECERA_TABLA" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Resultados"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_6" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["F"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_5" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["E"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_1" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["A"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_4" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_2" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["B"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_3" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_7" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["G"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_8" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["H"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_9" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["I"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_10" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["J"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_11" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["K"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_12" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["M"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_13" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["N"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_14" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["O"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_15" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["P"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_16" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Q"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_17" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["R"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_18" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Z"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_19" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["T"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_20" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["U"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_21" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["W"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_22" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["X"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_23" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Y"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_24" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Z"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_25" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["A1"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_26" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["A2"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_27" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["A3"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COLUMNA_28" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["A4"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FECHA" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMG_CABECERA" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[IMG_CABECERA]]></parameterDescription>
+		<defaultValueExpression><![CDATA["C:\\WORKSPACE_2015\\PCT_PYMES_2015\\MTRINF\\pagcom-parent\\pct-web\\webapp\\imagenes\\logo.gif"]]></defaultValueExpression>
+	</parameter>
+	<campos></campos>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="148" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="anchoPagina" height="50" uuid="39918b74-166c-4398-bbcb-c98406fc2db9"/>
+				<imageExpression><![CDATA[$P{IMG_CABECERA}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement style="TITULO" x="0" y="51" width="anchoPagina" height="28" uuid="bea30f77-742e-45ba-ae5b-6fe8d0d0a7e9"/>
+				<textElement>
+					<font size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TITULO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="SUB_TITULO" x="0" y="87" width="anchoPagina" height="20" uuid="4d039f49-6517-49db-becf-c0491be80126"/>
+				<textFieldExpression><![CDATA[$P{SUB_TITULO}]]></textFieldExpression>
+			</textField>
+			<tablaCabecera></tablaCabecera>
+			<fechaActual></fechaActual>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+			<cabeceras></cabecera>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<contenido></contenido>
+		</band>
+	</detail>
+	
+</jasperReport>

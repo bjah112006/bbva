@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html">
+<h:body style="margin:0px; height:25px;">
+	<h:form id="uploadForm" action="/uploadFileServlet" method="post"
+		enctype="multipart/form-data" style="margin:0px; height:25px;">
+		<h:outputScript>
+		function FileSelected(sender)
+		{
+			var currentsize = sender.files[0].size/1024/1024;
+			var maxsize = #{requerimientoMB.tamañoMaxArchivo};
+   			
+   			if (!(sender.value.toUpperCase().indexOf('ZIP')>-1 ||  sender.value.toUpperCase().indexOf('PDF')>-1)){ 
+   				alert('Solo se puede adjuntar documentos pdf o zip')
+		     	sender.value='';
+			    return false;
+   
+    		}    		
+			if ( currentsize>= maxsize){
+				alert('No se puede adjuntar el archivo por que excede el peso maximo de ' + maxsize + ' MB');
+				sender.value='';
+				return false;
+			}
+		}
+		
+	
+		
+	</h:outputScript>
+		<input id="file" name="archivo" type="file" onchange="FileSelected(this)" />
+	</h:form>
+</h:body>
+</html>

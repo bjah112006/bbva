@@ -1,0 +1,68 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+		
+<!-- h:panelGrid rendered="#{reasignacionExpediente.modoConsulta and reasignacionExpediente.perfilSupervisor}"-->
+<h:panelGrid rendered="#{reasignacionExpediente.bolReasignar}">
+	<custom:tabView id="tabView" style="width:1100px">
+		<custom:tab id="tab1" title="Reasignación de Expediente">	
+			<table width="100%" border ="0">
+				<tr>
+					<td width="20%"></td>
+					<td width="80%"></td>
+				</tr>
+				<tr>
+					<td align="right">	
+						<h:outputLabel  value="Reasignación:" />
+					</td>
+					<td>
+						<h:selectOneMenu  style="width:300px"
+							value="#{reasignacionExpediente.codUsuario}"
+							valueChangeListener="#{reasignacionExpediente.seleccionarUsuario}">
+							<f:selectItem itemLabel="Seleccione" itemValue="-1" />
+							<f:selectItems value="#{reasignacionExpediente.usuariosItems}" />
+							<f:ajax event="change" render=":form:tabView:idBotonesReasignarExp" execute="@form"/>
+						</h:selectOneMenu>
+					</td>
+					
+				</tr>
+				<tr>
+					<td>
+					</td>
+					<td>
+						<h:selectOneMenu style="width:300px"
+							value="#{reasignacionExpediente.idMotivo}"
+							valueChangeListener="#{reasignacionExpediente.seleccionarMotivo}">
+							<f:selectItem itemLabel="Seleccione" itemValue="-1" />
+							<f:selectItems value="#{reasignacionExpediente.motivosItems}" />
+							<f:ajax event="change" render=":form:tabView:idBotonesReasignarExp" execute="@form"/>
+						</h:selectOneMenu>
+					</td>
+					
+				</tr>
+			</table>
+			<table border="0" width="100%">
+				<tr>
+					<td width="30%"></td>
+					<td width="80%"></td>
+				</tr>
+				<tr>
+					<td align="right" width="20%">
+						
+						<h:commandButton id="idBotonesReasignarExp" value="Reasignar expediente" actionListener="#{reasignacionExpediente.reasignarExpediente}" 
+						disabled="#{reasignacionExpediente.desHabilitarBotonReasignar}" styleClass="showLoader"/>
+						
+					</td>
+					<td >	
+						<h:commandButton value="Cerrar" actionListener="#{reasignacionExpediente.cerrar}" styleClass="showLoader">
+						</h:commandButton>
+					</td>
+				</tr>				
+			</table>
+		</custom:tab>
+	</custom:tabView>
+</h:panelGrid>
+
+</ui:composition>

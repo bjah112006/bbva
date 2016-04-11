@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Class-Path: BBVA_CTACTE_EJBClient.jar 
+ BBVA_CTACTE_JPA.jar 
+ BBVA_CTACTE_Comun.jar 
+ log4j-1.2.17.jar 
+ slf4j-api-1.7.5.jar 
+ slf4j-log4j12-1.7.5.jar 
+ BBVA_RestServiceforBPD.jar
+

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://bean.cm.bbva.ibm.com" version="1.0">
+
+  <xs:complexType name="Documento">
+    <xs:sequence>
+      <xs:element name="id" nillable="true" type="xs:int"/>
+      <xs:element name="tipo" nillable="true" type="xs:string"/>
+      <xs:element name="mandatorio" nillable="true" type="xs:boolean"/>
+      <xs:element name="contenido" type="xs:base64Binary"/>
+      <xs:element name="fechaExpiracion" nillable="true" type="xs:dateTime"/>
+      <xs:element name="tipoDoi" nillable="true" type="xs:string"/>
+      <xs:element name="numDoi" nillable="true" type="xs:string"/>
+      <xs:element name="codCliente" nillable="true" type="xs:string"/>
+      <xs:element name="nombreArchivo" nillable="true" type="xs:string"/>
+      <xs:element name="origen" nillable="true" type="xs:string"/>
+      <xs:element name="fechaCreacion" nillable="true" type="xs:dateTime"/>
+      <xs:element name="urlContent" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="DocumentoPid">
+    <xs:sequence>
+      <xs:element name="id" nillable="true" type="xs:int"/>
+      <xs:element name="tipo" nillable="true" type="xs:string"/>
+      <xs:element name="mandatorio" nillable="true" type="xs:boolean"/>
+      <xs:element name="contenido" type="xs:base64Binary"/>
+      <xs:element name="fechaExpiracion" nillable="true" type="xs:dateTime"/>
+      <xs:element name="tipoDoi" nillable="true" type="xs:string"/>
+      <xs:element name="numDoi" nillable="true" type="xs:string"/>
+      <xs:element name="codCliente" nillable="true" type="xs:string"/>
+      <xs:element name="nombreArchivo" nillable="true" type="xs:string"/>
+      <xs:element name="origen" nillable="true" type="xs:string"/>
+      <xs:element name="fechaCreacion" nillable="true" type="xs:dateTime"/>
+      <xs:element name="urlContent" nillable="true" type="xs:string"/>
+      <xs:element name="pid" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema targetNamespace="http://web.servicio.ctacte.bbva.ibm.com/" version="1.0" xmlns:ns1="http://bean.cm.bbva.ibm.com" xmlns:tns="http://web.servicio.ctacte.bbva.ibm.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:import namespace="http://bean.cm.bbva.ibm.com" schemaLocation="WEBCEServiceService_schema2.xsd"/>
+
+  <xs:element name="CM_ObtenerDocumentItemType" type="tns:CM_ObtenerDocumentItemType"/>
+
+  <xs:element name="CM_ObtenerDocumentItemTypeResponse" type="tns:CM_ObtenerDocumentItemTypeResponse"/>
+
+  <xs:element name="CM_Obtener_documento" type="tns:CM_Obtener_documento"/>
+
+  <xs:element name="CM_Obtener_documentoResponse" type="tns:CM_Obtener_documentoResponse"/>
+
+  <xs:element name="CM_Obtener_documentoxCodigo" type="tns:CM_Obtener_documentoxCodigo"/>
+
+  <xs:element name="CM_Obtener_documentoxCodigoResponse" type="tns:CM_Obtener_documentoxCodigoResponse"/>
+
+  <xs:element name="CM_Obtener_documentoxNombreArchivo" type="tns:CM_Obtener_documentoxNombreArchivo"/>
+
+  <xs:element name="CM_Obtener_documentoxNombreArchivoResponse" type="tns:CM_Obtener_documentoxNombreArchivoResponse"/>
+
+  <xs:element name="CM_buscarVistaUnica" type="tns:CM_buscarVistaUnica"/>
+
+  <xs:element name="CM_buscarVistaUnicaResponse" type="tns:CM_buscarVistaUnicaResponse"/>
+
+  <xs:element name="CM_historialDocumentoxCliente" type="tns:CM_historialDocumentoxCliente"/>
+
+  <xs:element name="CM_historialDocumentoxClienteResponse" type="tns:CM_historialDocumentoxClienteResponse"/>
+
+  <xs:complexType name="CM_ObtenerDocumentItemType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoDocumento" type="xs:string"/>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CM_ObtenerDocumentItemTypeResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="ns1:Documento"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CM_buscarVistaUnica">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codCliente" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CM_buscarVistaUnicaResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="ns1:DocumentoPid"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CM_historialDocumentoxCliente">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoDocumento" type="xs:string"/>
+      <xs:element minOccurs="0" name="codCliente" type="xs:string"/>
+      <xs:element name="cantDocumento" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CM_historialDocumentoxClienteResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ns1:Documento"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CM_Obtener_documento">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idDocumento" type="xs:int"/>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CM_Obtener_documentoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="ns1:Documento"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CM_Obtener_documentoxNombreArchivo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="tipoDocumento" type="xs:string"/>
+      <xs:element minOccurs="0" name="nombreArchivo" type="xs:string"/>
+      <xs:element minOccurs="0" name="idCM" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CM_Obtener_documentoxNombreArchivoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="ns1:Documento"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CM_Obtener_documentoxCodigo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoDocumento" type="xs:string"/>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CM_Obtener_documentoxCodigoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="ns1:Documento"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

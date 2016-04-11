@@ -1,0 +1,14 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">	
+
+	<ui:define name="title">Consulta de Poderes</ui:define>
+	
+	<ui:define name="content">
+		<iframe src="#{consultaPoderes.urlSFPPoderes}" style="width: 100%; height: 900px; border-width: 0px; overflow: auto;"></iframe>
+	</ui:define>
+
+</ui:composition>

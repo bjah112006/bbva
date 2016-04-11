@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema targetNamespace="http://servicio.sfp.servicio.ctacte.bbva.ibm.com/" version="1.0" xmlns:ns1="http://bean.cm.bbva.ibm.com" xmlns:tns="http://servicio.sfp.servicio.ctacte.bbva.ibm.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:import namespace="http://bean.cm.bbva.ibm.com" schemaLocation="SFPExternalService_schema2.xsd"/>
+
+  <xs:element name="CM_Obtener_documento_FRF" type="tns:CM_Obtener_documento_FRF"/>
+
+  <xs:element name="CM_Obtener_documento_FRFResponse" type="tns:CM_Obtener_documento_FRFResponse"/>
+
+  <xs:element name="IBMActivacionGET" type="tns:IBMActivacionGET"/>
+
+  <xs:element name="IBMActivacionGETResponse" type="tns:IBMActivacionGETResponse"/>
+
+  <xs:element name="IBMActivacionSET" type="tns:IBMActivacionSET"/>
+
+  <xs:element name="IBMActivacionSETResponse" type="tns:IBMActivacionSETResponse"/>
+
+  <xs:element name="IBMAsociarFirmaGET" type="tns:IBMAsociarFirmaGET"/>
+
+  <xs:element name="IBMAsociarFirmaGETResponse" type="tns:IBMAsociarFirmaGETResponse"/>
+
+  <xs:element name="IBMAsociarFirmaSET" type="tns:IBMAsociarFirmaSET"/>
+
+  <xs:element name="IBMAsociarFirmaSETResponse" type="tns:IBMAsociarFirmaSETResponse"/>
+
+  <xs:element name="IBMRealizarBastanteoGET" type="tns:IBMRealizarBastanteoGET"/>
+
+  <xs:element name="IBMRealizarBastanteoGETResponse" type="tns:IBMRealizarBastanteoGETResponse"/>
+
+  <xs:element name="IBMRealizarBastanteoSET" type="tns:IBMRealizarBastanteoSET"/>
+
+  <xs:element name="IBMRealizarBastanteoSETResponse" type="tns:IBMRealizarBastanteoSETResponse"/>
+
+  <xs:complexType name="CM_Obtener_documento_FRF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IDExpediente" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CM_Obtener_documento_FRFResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="ns1:Documento"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="IBMAsociarFirmaGET">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IDExpediente" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="IBMAsociarFirmaGETResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="tns:participeSTD"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="participeSTD">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="apellidoMaterno" type="xs:string"/>
+      <xs:element minOccurs="0" name="apellidoPaterno" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigoCentral" type="xs:string"/>
+      <xs:element minOccurs="0" name="departamentoCod" type="xs:string"/>
+      <xs:element minOccurs="0" name="departamentoDes" type="xs:string"/>
+      <xs:element minOccurs="0" name="direccion" type="xs:string"/>
+      <xs:element minOccurs="0" name="distritoCod" type="xs:string"/>
+      <xs:element minOccurs="0" name="distritoDes" type="xs:string"/>
+      <xs:element minOccurs="0" name="fechaSerializacion" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="indicadorFirma" type="xs:string"/>
+      <xs:element minOccurs="0" name="nivelIntervencion" type="xs:string"/>
+      <xs:element minOccurs="0" name="nombre" type="xs:string"/>
+      <xs:element minOccurs="0" name="numeroDoi" type="xs:string"/>
+      <xs:element minOccurs="0" name="provinciaCod" type="xs:string"/>
+      <xs:element minOccurs="0" name="provinciaDes" type="xs:string"/>
+      <xs:element minOccurs="0" name="secuenciaIntervencion" type="xs:string"/>
+      <xs:element minOccurs="0" name="tipoDoi" type="xs:string"/>
+      <xs:element minOccurs="0" name="tipoDoiDes" type="xs:string"/>
+      <xs:element minOccurs="0" name="ubicacion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="IBMRealizarBastanteoSET">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="request" type="tns:ibmRealizarBastanteoSETRequest"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ibmRealizarBastanteoSETRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="descripcionError" type="xs:string"/>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:string"/>
+      <xs:element minOccurs="0" name="indicadorFacultades" type="xs:string"/>
+      <xs:element minOccurs="0" name="indicadorGrabacion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="IBMRealizarBastanteoSETResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:ibmRealizarBastanteoSETResponse"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ibmRealizarBastanteoSETResponse">
+    <xs:complexContent>
+      <xs:extension base="tns:responseBaseBean">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="responseBaseBean">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="errorCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="errorDesc" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="IBMActivacionSET">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IDExpediente" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="participes" nillable="true" type="tns:ibmActivacionSETRequest"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ibmActivacionSETRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codCentral" type="xs:string"/>
+      <xs:element minOccurs="0" name="descripcionError" type="xs:string"/>
+      <xs:element minOccurs="0" name="indicadorActivacion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="IBMActivacionSETResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:ibmActivacionOUTResponse"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ibmActivacionOUTResponse">
+    <xs:complexContent>
+      <xs:extension base="tns:responseBaseBean">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="IBMRealizarBastanteoGET">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IDExpediente" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="IBMRealizarBastanteoGETResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:ibmRealizarBastanteoINResponse"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ibmRealizarBastanteoINResponse">
+    <xs:complexContent>
+      <xs:extension base="tns:responseBaseBean">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="codigoCentral" type="xs:string"/>
+          <xs:element minOccurs="0" name="fechaConstitucion" type="xs:dateTime"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="listaCuentas" nillable="true" type="tns:cuentaSTD"/>
+          <xs:element minOccurs="0" name="numeroDoi" type="xs:string"/>
+          <xs:element minOccurs="0" name="razonSocial" type="xs:string"/>
+          <xs:element minOccurs="0" name="tipoDoi" type="xs:string"/>
+          <xs:element minOccurs="0" name="tipoOperacion" type="xs:string"/>
+          <xs:element minOccurs="0" name="tipoPJ" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="cuentaSTD">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="fechaCreacion" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="monedaCod" type="xs:string"/>
+      <xs:element minOccurs="0" name="monedaDes" type="xs:string"/>
+      <xs:element minOccurs="0" name="numeroContrato" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="participeXCuenta" nillable="true" type="tns:participeSTD"/>
+      <xs:element minOccurs="0" name="productoCod" type="xs:string"/>
+      <xs:element minOccurs="0" name="productoDes" type="xs:string"/>
+      <xs:element minOccurs="0" name="situacionCuenta" type="xs:string"/>
+      <xs:element minOccurs="0" name="subproductoCod" type="xs:string"/>
+      <xs:element minOccurs="0" name="subproductoDes" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="IBMActivacionGET">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IDExpediente" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="IBMActivacionGETResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:ibmActivacionResponse"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ibmActivacionResponse">
+    <xs:complexContent>
+      <xs:extension base="tns:responseBaseBean">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="participes" nillable="true" type="tns:ibmActivacionParticipeResponse"/>
+          <xs:element minOccurs="0" name="resultadoBastanteo" type="xs:string"/>
+          <xs:element minOccurs="0" name="tipoOperacion" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ibmActivacionParticipeResponse">
+    <xs:complexContent>
+      <xs:extension base="tns:responseBaseBean">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="codCentral" type="xs:string"/>
+          <xs:element minOccurs="0" name="indicadorAsociacion" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="IBMAsociarFirmaSET">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IDExpediente" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="participes" nillable="true" type="tns:ibmAsociarFirmaRequest"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ibmAsociarFirmaRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codCentral" type="xs:string"/>
+      <xs:element minOccurs="0" name="indicadorAsociacion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="IBMAsociarFirmaSETResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:ibmAsociarFirmaResponse"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ibmAsociarFirmaResponse">
+    <xs:complexContent>
+      <xs:extension base="tns:responseBaseBean">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

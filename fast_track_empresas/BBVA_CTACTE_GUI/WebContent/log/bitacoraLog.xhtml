@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<h:panelGrid>
+		<h:outputText></h:outputText>
+	</h:panelGrid>
+	<h:dataTable var="log"
+			value="#{bitacoraLog.listaLogsExp}"
+			styleClass="ui-datatable ui-widget #{empty bitacoraLog.listaLogsExp ? 'ui-datatable-empty' : 'ui-datatable-not-empty'}"
+	    	headerClass="ui-state-default"
+			rowClasses="ui-widget-content"
+			footerClass="ui-widget-content">  
+        <h:column>  
+        	<f:facet name="header">Terminal</f:facet>
+            <h:outputText value="#{log.numTerminal}" />  
+        </h:column>
+        <h:column>  
+        	<f:facet name="header">Registro</f:facet>
+            <h:outputText value="#{log.empleado.codigo}" />  
+        </h:column>  
+        <h:column>  
+        	<f:facet name="header">Usuario</f:facet>
+            <h:outputText value="#{log.empleado.perfil.descripcion}" />  
+        </h:column>  
+        <h:column>  
+        	<f:facet name="header">Responsable</f:facet>
+            <h:outputText value="#{log.empleado.nombresCompletos}" />  
+        </h:column>  
+        <h:column>  
+        	<f:facet name="header">Historial</f:facet>
+            <h:outputText value="#{log.descripcion}" />  
+        </h:column>  
+        <h:column>  
+        	<f:facet name="header">Fecha y Hora de envio</f:facet>
+            <h:outputText value="#{log.fecRegistro}" />  
+        </h:column>  
+        <h:column>  
+        	<f:facet name="header">Estado</f:facet>
+            <h:outputText value="#{log.estadoExpediente.descripcion}" />  
+        </h:column>
+        <f:facet name="footer">
+        	<h:outputText value="No se encontró registros" rendered="#{empty bitacoraLog.listaLogsExp}"/>
+        </f:facet>
+    </h:dataTable>	
+
+	<h:panelGrid>
+		<h:outputText></h:outputText>
+	</h:panelGrid>		
+					
+</ui:composition>
+
+

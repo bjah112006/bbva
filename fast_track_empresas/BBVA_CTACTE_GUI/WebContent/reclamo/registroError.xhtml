@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml"
+	xmlns:bbva="http://java.sun.com/jsf/composite/components/bbva"
+	xmlns:util="http://java.sun.com/jsf/composite/util">
+
+	<ui:define name="title">Registro</ui:define>
+
+	<ui:define name="head">
+		<ui:include src="/WEB-INF/comun/pingWebsealHead.xhtml" />
+	</ui:define>
+
+
+	<ui:define name="inicioform">
+		<custom:remoteCommand name="alargarSessionWS"
+			actionListener="#{bandejaMB.pinwWEBSEAL}" />
+		<h:inputHidden id="idIntentos" value="#{bandejaMB.intentosWS}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<h:panelGroup id="panelBusqueda">
+			<custom:tabView id="tabView" style="width:100%; height:400px;">
+				<custom:tab id="tab1" title="Registrar Consulta / Reclamo">
+					<h:panelGroup id="idPnlExito">
+						<h:outputText value="#{requerimientoMB.objecto.mensajeError}" escape="false" />
+					</h:panelGroup>
+				</custom:tab>
+			</custom:tabView>
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>

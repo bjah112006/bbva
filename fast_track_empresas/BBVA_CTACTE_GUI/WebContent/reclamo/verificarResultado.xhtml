@@ -1,0 +1,220 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml"
+	xmlns:bbva="http://java.sun.com/jsf/composite/components/bbva"
+	xmlns:util="http://java.sun.com/jsf/composite/util">
+
+	<ui:define name="title">Verificar Consulta / Reclamo</ui:define>
+
+	<ui:define name="head">
+		<ui:include src="/WEB-INF/comun/pingWebsealHead.xhtml" />
+	</ui:define>
+
+	<ui:define name="inicioform">
+		<custom:remoteCommand name="alargarSessionWS"
+			actionListener="#{bandejaMB.pinwWEBSEAL}" />
+		<h:inputHidden id="idIntentos" value="#{bandejaMB.intentosWS}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<h:outputScript>
+			$(document).ready(function() {
+				var showAbsolucionRecon=#{requerimientoMB.objecto.showAbsolucionRecon};
+				var showReconsideracion=#{requerimientoMB.objecto.showReconsideracion};
+				
+				$("#form\\:tabView2").find("a[href='#form:tabView2:tab2']").click();		
+				if(!showAbsolucionRecon){
+					$("#form\\:tabView2").find("a[href='#form:tabView2:tab4']").hide();
+					$("#form\\:tabView2\\:idEditor4").hide();
+				}
+				if(!showReconsideracion){
+					$("#form\\:tabView2").find("a[href='#form:tabView2:tab3']").hide();
+					$("#form\\:tabView2\\:idEditor3").hide();
+				}
+				
+				
+			});	
+		
+			function registrar() {
+				if(confirm('¿Desea enviar el registro?')) {					
+					
+													
+					var iframe = $('#uploadFrame').contents();
+					// alert(iframe.find("#uploadForm"));
+					action = iframe.find("#uploadForm").attr("action").replace("reclamo/upload.faces", "uploadFileServlet/" + $("#form\\:tabView\\:codigoCentral").val()
+																				+"/"+ $("#form\\:tabView\\:nroDoi").val()
+																				+"/"+ $("#form\\:tabView\\:tipoDoi").val());
+					//action = iframe.find("#uploadForm").attr("action").replace("reclamo/upload.faces", "uploadFileServlet/" + $("#form\\:tabView\\:idCodCentral").val());															
+					iframe.find("#uploadForm").attr("action", action);
+					iframe.find("#uploadForm").submit();
+					}
+					// enviarDatos();
+				
+			}
+			
+			function enviar(url, nombreArchivo) {
+			
+				$("#form\\:url").val(url);
+				$("#form\\:nombreArchivo").val(nombreArchivo);
+				enviarDatos();
+			}
+			
+		</h:outputScript>
+		<h:panelGroup id="panelBusqueda" style="width:1100px;">
+			<custom:tabView id="tabView">
+				<custom:tab id="tab1" title="Datos de consulta / reclamo">
+					<h:panelGrid columns="1" style="text-align: left; width:100%;">
+						<h:panelGrid id="idFiltros" columns="6">
+							<h:outputLabel value="Código :" style="font-weight:bold;"
+								for="idCodigo" />
+							<h:outputText id="idCodigo" style="width:100px"
+								value="#{requerimientoMB.objecto.id}" />
+							<h:outputLabel value="Tipo :" style="font-weight:bold;" />
+							<h:outputText id="idTipo" style="width:100px"
+								value="#{requerimientoMB.objecto.str_tipo_operacion}" />
+							
+							<h:outputLabel value="Gestor Solicitante :"
+								style="font-weight:bold;" />
+							<h:outputText id="idGestorSolicitante" style="width:100px"
+								value="#{requerimientoMB.objecto.usuario_registra} #{requerimientoMB.objecto.nombre_usuario_registra}" />
+							
+							<h:outputLabel value="Código Central :" style="font-weight:bold;" />
+							<h:outputText id="idCodCentral" style="width:100px"
+								value="#{requerimientoMB.objecto.cod_central}" />
+
+							<h:outputLabel value="Nro DOI :" style="font-weight:bold;" />
+							<h:outputText id="idNroDOI" style="width:100px"
+								value="#{requerimientoMB.objecto.nro_doi}" />
+							<h:outputLabel value="Razón Social :" style="font-weight:bold;" />
+							<h:outputText id="idRazonSocial" style="width:100px"
+								value="#{requerimientoMB.objecto.razon_social}" />
+							<h:outputLabel value="Categoría :" style="font-weight:bold;"
+								rendered="#{requerimientoMB.objecto.str_categoria_reclamo==0?false:true}" />
+							<h:outputText id="idCategoria" style="width:100px"
+								value="#{requerimientoMB.objecto.str_categoria_reclamo}"
+								rendered="#{requerimientoMB.objecto.str_categoria_reclamo==0?false:true}" />
+							<h:outputLabel value="Estado Actual:" style="font-weight:bold;"
+								for="idEstado" />
+							<h:outputText id="idEstado"
+								value="#{requerimientoMB.objecto.strEstado}" />
+							<h:outputLabel value="Dictamen de Reclamo:"
+								style="font-weight:bold;"
+								rendered="#{requerimientoMB.objecto.showResultado}" />
+							<h:outputText value="#{requerimientoMB.objecto.str_resultado}" />
+							<h:outputLabel value="Abogado:" style="font-weight:bold;"
+								for="idNombreAbogado" />
+							<h:outputText id="idNombreAbogado" style="width:350px;"
+								value="#{requerimientoMB.objecto.nombreAbogadoAsignado}" />
+
+						</h:panelGrid>
+					</h:panelGrid>
+					<h:panelGrid>
+						<h:inputHidden id="codigoCentral"
+							value="#{requerimientoMB.cliente.codigoCentral}" />
+						<h:inputHidden id="nroDoi"
+							value="#{requerimientoMB.cliente.numeroDOI}" />
+						<h:inputHidden id="tipoDoi"
+							value="#{requerimientoMB.cliente.tipoDOI}" />
+
+					</h:panelGrid>
+				</custom:tab>
+			</custom:tabView>
+		</h:panelGroup>
+		<h:panelGrid columns="1" style="width:60%; float:left;">
+			<custom:tabView id="tabView2" style="height:330px;">
+				<custom:tab id="tab4" title="Absolución de Reconsideración">
+					<div
+						style="width: 100%; height: 280px; border: 1px; overflow: auto;">
+						<h:outputText id="idEditor4" name="editor"
+							style="width:100%; height:250px; border:1px;" disabled="true"
+							value="#{requerimientoMB.objecto.descripcion_absolucion_recon}"
+							escape="false" />
+					</div>
+				</custom:tab>
+				<custom:tab id="tab3" title="Reconsideración">
+					<util:editor id="idEditor3" width="625" height="250"
+						value="#{requerimientoMB.objecto.motivo_reconsideracion}"
+						disabled="#{requerimientoMB.objecto.disableReconsideracion}" />
+
+				</custom:tab>
+				<custom:tab id="tab1" title="Absolución">
+					<div
+						style="width: 100%; height: 280px; border: 1px; overflow: auto;">
+						<h:outputText id="editor" name="editor"
+							style="width:100%; height:250px; border:1px;" disabled="true"
+							value="#{requerimientoMB.objecto.descripcion_absolucion}"
+							escape="false" />
+					</div>
+				</custom:tab>
+				<custom:tab id="tab2" title="Reclamo / Consulta">
+					<div
+						style="width: 100%; height: 280px; border: 1px; overflow: auto;">
+						<h:outputText id="editor2" name="editor2"
+							style="width:100%; height:250px; border:1px;" disabled="true"
+							value="#{requerimientoMB.objecto.descripcion_reclamo_Consulta}"
+							escape="false" />
+					</div>
+				</custom:tab>
+			</custom:tabView>
+
+		</h:panelGrid>
+		<h:panelGrid columns="2" style="width:40%; float:left; ">
+			<custom:tabView id="tabViewDocumentos"
+				style="height:200px; width:100%;">
+				<custom:tab id="tab1" title="Documentos Adjuntos">
+					<h:dataTable value="#{requerimientoMB.objecto.listaAttachment}"
+						var="lista" title="Documentos" width="100%">
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="" />
+							</f:facet>
+							<h:outputText style="font-weight:bold;"
+								value="#{lista.estado_ref}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="" />
+							</f:facet>
+							<a href="#{lista.ruta_archivo}" target="_blank">Ver Archivo
+								Adjunto</a>
+						</h:column>
+					</h:dataTable>
+				</custom:tab>
+			</custom:tabView>
+		</h:panelGrid>
+		<h:panelGrid columns="2" style="width:40%; float:left;">
+		
+			<h:panelGroup id="pnlGrpAddDocumento" rendered="#{!requerimientoMB.objecto.readOnly}">
+				<h:outputLabel value="Agregar Documentos"
+					style="font-weight: bold; " />
+				<iframe id="uploadFrame" src="upload.faces"
+					style="width: 350px; height: 25px; overflow: hidden; border: 0px;"></iframe>
+
+				<h:inputHidden id="url"
+					value="#{requerimientoMB.attachment.ruta_archivo}" />
+				<h:inputHidden id="nombreArchivo"
+					value="#{requerimientoMB.attachment.nombre_archivo}" />
+			</h:panelGroup>
+
+		</h:panelGrid>
+		<h:panelGrid columns="2" style="width:88%;">
+			<h:commandButton value="Cerrar Reclamo / Consulta"
+				disabled="#{requerimientoMB.objecto.readOnly}"
+				action="#{requerimientoMB.cerrarConsultaReclamo}"
+				onclick="return confirm('¿Desea cerrar el reclamo?')" />
+			<h:commandButton value="Solicitar Reconsideración" type="button"
+				rendered="#{requerimientoMB.objecto.showReconsideracion}"
+				disabled="#{requerimientoMB.objecto.disableReconsideracion}"
+				onclick="registrar()" />
+
+			<custom:remoteCommand name="enviarDatos"
+				actionListener="#{requerimientoMB.solicitarReconsideracion}"
+				process="@form" />
+		</h:panelGrid>
+	</ui:define>
+
+</ui:composition>

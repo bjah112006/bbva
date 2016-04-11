@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+
+	<f:verbatim>
+		<script type="text/javascript" language="javascript">
+			/*function salir () {			    
+				location.href = "ibm_security_logout?logoutExitPage=/index.jsp";
+				disableBack();				 				
+			}
+            window.history.forward();
+            function disableBack() 
+            {
+             window.history.forward();
+            }*/
+            
+            function salir () {
+				if (confirm("¿Desea Salir del Sistema?")) {
+					cerrarSesionWAS();
+					var winD = window.open('', '_self', '');
+					winD.close();
+				}
+			}
+			
+			/*function salir () {
+				return confirm("¿Desea Salir del Sistema?");
+			}*/			
+		</script>
+	</f:verbatim>
+
+	<h:panelGroup>
+		<ul class="menu-lista">
+			<li><h:commandLink value="Registrar Expediente"
+					action="#{menu.registarExpediente}"
+					rendered="#{menu.mostrarRegExp}" styleClass="showLoader" /></li>
+			<li><h:commandLink value="Bandeja de Trabajo"
+					action="#{menu.bandejaTrabajo}" styleClass="showLoader" /></li>
+			<li><h:commandLink value="Mantenimiento"
+					action="#{menu.mantenimiento}" rendered="#{menu.renderedBanMant}"
+					styleClass="showLoader" /></li>
+			<li><h:commandLink value="Vista Unica"
+					action="#{menu.vistaUnica}" rendered="#{menu.renderedVistaUnica}"
+					styleClass="showLoader" /></li>
+			<li><span>Consultas y Reportes</span>
+				<ul class="menu-lista" style="padding-left: 20px;">
+					<li><h:commandLink value="Consulta de Poderes"
+							action="#{menu.consultaPoderes}" rendered="#{menu.mostrarRegExp}" />
+					</li>
+					<li><h:commandLink value="Reporte de Expedientes"
+							action="#{menu.reporteExpedientes}"
+							rendered="#{menu.renderedReporteExpediente}" />
+					</li>
+					<li><h:commandLink value="Reporte de ANS"
+							action="#{menu.reporteAns}" rendered="#{menu.renderedReporteAns}" />
+					</li>
+
+				</ul></li>
+			<li><h:commandLink value="Horario" styleClass="showLoader"
+					action="#{menu.irHorarioCC}" rendered="#{menu.renderedHorario}" /></li>
+
+			<li><span><h:outputLabel value="Consultas y Reclamos" rendered="#{menu.renderedRegConsuRecla or menu.renderedVerEstConsuRecla}"/></span>
+<!-- 			<span>Consultas y Reclamos</span> -->
+				<ul class="menu-lista" style="padding-left: 20px;">
+					<li><h:commandLink value="Registrar Consulta/Reclamo"
+							rendered="#{menu.renderedRegConsuRecla}"
+							action="#{menu.registroReclamo}" styleClass="showLoader" /></li>
+					<li><h:commandLink value="Ver estado de consultas y reclamos"
+							rendered="#{menu.renderedVerEstConsuRecla}"
+							action="#{menu.bandejaReclamo}" styleClass="showLoader" /></li>
+				</ul></li>
+
+			<li><h:outputLink value="javascript:salir();">
+					<h:outputText value="Salir" />
+				</h:outputLink> <custom:remoteCommand name="cerrarSesionWAS"
+					actionListener="#{menu.cerrarSesionWAS}" /> <h:inputHidden
+					id="paginaInicio" value="#{menu.paginaInicio}" /> <!--h:commandLink value="Salir" onclick="return salir();" action="#{menu.irCerrarSesion}" /-->
+			</li>
+		</ul>
+	</h:panelGroup>
+
+</ui:composition>

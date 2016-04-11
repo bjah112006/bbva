@@ -1,0 +1,257 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+	
+	<ui:define name="content">
+		<table class="bloque">
+			<tr>
+				<td>
+					<!-- TITULO -->
+					<h:panelGroup styleClass="titulo">
+						<h:outputText value="Mantenimiento - Correo" /><h:outputText value=" " />
+					</h:panelGroup>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<f:verbatim>
+					<script type="text/javascript" language="javascript">
+						var compSel = null;
+						var sel = null;
+						function cambiarEstado (comp) {			    
+							if ($(comp).is(':checked')) {
+								if (compSel!=null) {
+									$(compSel).attr('checked', false);
+								}
+								compSel = comp;
+							} else {
+								compSel = null;
+							}
+						}
+						
+						function confirmarElimina(comp) {
+						  var filas = document.getElementById("form:idTablaCorreo").rows.length - 1;
+						  var ok, resultado=false;
+						  for (i=0; filas>i; i++) {			      
+						      ok=document.getElementById("form:idTablaCorreo:"+i+":idSelect").checked;
+						      if(ok){
+						        resultado = confirm('¿Está seguro que desea eliminar el elemento seleccionado?');
+						        break;
+						      }			    
+						  }		  
+						 return resultado;
+						}
+					</script>
+				    </f:verbatim>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<!-- FILTROS -->
+					<table align="center" border="0" cellspacing="0" width="100%">
+						<tr>
+							<td>
+								<table width="100%">
+									<tr>
+										<td align="left" valign="top" width="100%"></td>
+									</tr>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td>
+														<h:outputLabel style="width:150px;" for="filtroPerfil" value="Perfil" styleClass="etiqueta" />
+													</td>
+													<td>
+														<h:selectOneMenu id="filtroPerfil" value="#{busquedaCorreo.perfilSeleccionado}" styleClass="select">
+															<f:selectItems value="#{busquedaCorreo.perfiles}" />
+															<f:ajax execute="@form" render="filtroTarea" listener="#{busquedaCorreo.seleccionarPerfil}" />
+														</h:selectOneMenu>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<h:outputLabel style="width:150px;" for="filtroTarea" value="Tarea" styleClass="etiqueta" />
+													</td>
+													<td>
+														<h:selectOneMenu id="filtroTarea" value="#{busquedaCorreo.tareaSeleccionada}" styleClass="select">
+															<f:selectItems value="#{busquedaCorreo.tareas}" />
+														</h:selectOneMenu>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+									</tr>
+									<tr>
+										<td></td>
+									</tr>
+									<tr>
+										<td align="left">
+											<h:commandButton id="buscar" action="#{busquedaCorreo.buscar}" value="Buscar" styleClass="boton" />
+											<h:commandButton id="limpiar" action="#{busquedaCorreo.limpiar}" value="Limpiar" styleClass="boton" />
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<!-- RESULTADO -->
+					<h:panelGroup style="overflow-x: auto; width: 750px;height: 440px">
+						<table width="100%" border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td class="textotitulo">
+									<h:dataTable border="1" styleClass="tablaTask" style="border-collapse:collapse;" 
+										columnClasses="text,text,text" headerClass="headerClass headerTabla1"
+										rowClasses="uno,dos" id="idTablaCorreo"
+										value="#{busquedaCorreo.listaDatosCorreo}" var="item" footerClass="fondo"
+										rows="#{busquedaCorreo.numeroRegistro}" binding="#{busquedaCorreo.dataTable}" >
+										
+										<h:column align="center">
+											<f:facet name="header">
+												<h:outputText value="Sel." />
+											</f:facet>
+											<h:selectBooleanCheckbox id="idSelect" value="#{item.seleccionado}" onchange="cambiarEstado(this);">  
+											</h:selectBooleanCheckbox>
+										</h:column>
+										
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="Tarea" styleClass="tabla-titulo" />
+											</f:facet>
+											<h:outputText value="#{item.accion.tarea.descripcion}" styleClass="tabla-campo-texto-padding" />
+										</h:column>
+										
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="Acción" styleClass="tabla-titulo" />
+											</f:facet>
+											<h:outputText value="#{item.accion.descripcion}" styleClass="tabla-campo-texto-padding" />
+										</h:column>
+										
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="Asunto" styleClass="tabla-titulo" />
+											</f:facet>
+											<h:outputText value="#{item.asunto}" styleClass="tabla-campo-texto-padding" />
+										</h:column>
+										
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="Cuerpo" styleClass="tabla-titulo" />
+											</f:facet>
+											<h:outputText value="#{item.cuerpoString}" styleClass="tabla-campo-texto-padding" escape="false" />
+										</h:column>
+										
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="Flag Activo" styleClass="tabla-titulo" />
+											</f:facet>
+											<h:selectBooleanCheckbox value="#{item.flagActivo == '1' ? true : false}" disabled="true" />
+										</h:column>
+										
+									</h:dataTable>
+								</td>
+							</tr>
+		
+							<tr>
+								<td class="textotitulo">
+									<h:message for="idTablaCorreo" />
+								</td>
+							</tr>
+						</table>
+					</h:panelGroup>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<span class="etiqueta" style="margin-bottom:10px;" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<!-- BOTONES -->
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td align="left">
+								<h:commandButton id="agregar" action="#{busquedaCorreo.agregar}"
+									value="Agregar" styleClass="boton" />
+								<h:commandButton id="actualizar" action="#{busquedaCorreo.actualizar}"
+									value="Actualizar" styleClass="boton" />
+								<h:commandButton id="eliminar" action="#{busquedaCorreo.eliminar}"
+									onclick="return confirmarElimina(this);"
+									value="Eliminar" styleClass="boton" />
+								<h:commandButton id="cancelar" action="#{busquedaCorreo.cancelar}"
+									value="Cancelar" styleClass="boton" />
+								<h:commandButton value="&#60;&#60;anterior"
+								        styleClass="boton"
+										disabled="#{busquedaCorreo.dataTable.first == 0}"
+										rendered="#{not empty busquedaCorreo.listaDatosCorreo}"
+										actionListener="#{busquedaCorreo.pagePrevious}" />
+								<h:commandButton value="siguiente&#62;&#62;" 
+								    styleClass="boton"
+									rendered="#{not empty busquedaCorreo.listaDatosCorreo}"
+									disabled="#{busquedaCorreo.dataTable.first + busquedaCorreo.dataTable.rows >= busquedaCorreo.dataTable.rowCount}"
+									actionListener="#{busquedaCorreo.pageNext}" />
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<span class="etiqueta" style="margin-bottom:10px;" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<!-- MENSAJE -->
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td>
+								<h:outputText
+									value="La tabla seleccionada no tiene registros asociados. Seleccione la opción Agregar para crear uno."
+									styleClass="mensaje-info"
+									rendered="#{empty busquedaCorreo.listaDatosCorreo}" />
+								<h:outputText
+									value="Seleccione el registro a actualizar o eliminar, o seleccione la opción Agregar"
+									styleClass="mensaje-info"
+									rendered="#{not empty busquedaCorreo.listaDatosCorreo}" />
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<span class="etiqueta" style="margin-bottom:10px;" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<!-- MENSAJE ERROR -->
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td>
+								<h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+									<h:messages styleClass="mensaje-error" globalOnly="true" showDetail="false" />
+								</h:panelGroup>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,304 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+
+	<ui:define name="content">
+	
+	<f:loadBundle basename="com.ibm.bbva.messages.Messages" var="msg"/>
+	
+		<h:panelGrid styleClass="bloque">
+			<table width="100%" border="0" align="center" cellspacing="0">
+				<tr>
+					<td valign="top">
+						<table width="100%">
+						
+							<tr>
+								<td>
+									<table width="100%" border="0" cellpadding="0" cellspacing="0">
+										<tbody>
+											<tr>
+												<td align="center">
+													<h:outputText id="nombreTablaOTX"  styleClass="titulo"
+														value="Mantenimiento - #{consultarTabla.tablaParametricaVO.tablaVO.nombreMostrar}" />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+
+							<tr>
+								<td align="left" valign="top" width="100%">
+								
+									<h:panelGrid columns="3">
+										
+									
+										<!-- CÓDIGO -->
+										
+											<h:column>
+												<h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}"
+													styleClass="mandatorio" />
+												<h:outputLabel style="width:150px;" for="codEmpleado"
+													value="Código"
+													styleClass="etiqueta" />
+											</h:column> 
+											<h:inputText size="39"
+												maxlength="7" id="codEmpleado"
+												value="#{editarEmpleado.empleadoVO.codigo}"
+												disabled="#{editarEmpleado.idEmpleado != null}"
+												styleClass="caja-texto">
+											</h:inputText>
+											<h:message for="codEmpleado" errorClass="mensaje-error"/>
+											
+										<!-- NOMBRES -->
+										
+											<h:column>
+												<h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}"
+													styleClass="mandatorio" />
+												<h:outputLabel style="width:150px;" for="nombres"
+												value="Nombres"
+												styleClass="etiqueta" />
+											</h:column>
+											<h:inputTextarea rows="4" cols="30" onkeypress="validaInputText(event);" size="39"
+												maxlength="7" id="nombres"
+												value="#{editarEmpleado.empleadoVO.nombres}"
+												disabled="#{editarEmpleado.idEmpleado != null}"
+												styleClass="caja-texto">
+											</h:inputTextarea>
+											<h:message for="nombres" errorClass="mensaje-error"/>
+											
+										<!-- APELLIDO PATERNO -->
+										
+											<h:column>
+												<h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}"
+													styleClass="mandatorio" />
+												<h:outputLabel style="width:150px;" for="nombres"
+												value="Ape. Paterno"
+												styleClass="etiqueta" />
+											</h:column>
+											<h:inputText onkeypress="validaInputText(event);" size="39"
+												maxlength="39" id="apePat"
+												disabled="#{editarEmpleado.idEmpleado != null}"
+												value="#{editarEmpleado.empleadoVO.apepat}"
+												styleClass="caja-texto">
+											</h:inputText>
+											<h:message for="apePat" errorClass="mensaje-error"/>
+										
+										<!-- APELLIDO MATERNO -->
+										
+											<h:column>
+												<h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}"
+													styleClass="mandatorio" />
+												<h:outputLabel style="width:150px;" for="apeMat"
+												value="Ape. Materno"
+												styleClass="etiqueta" />
+											</h:column>
+											<h:inputText onkeypress="validaInputText(event);" size="39"
+												maxlength="39" id="apeMat"
+												disabled="#{editarEmpleado.idEmpleado != null}"
+												value="#{editarEmpleado.empleadoVO.apemat}"
+												styleClass="caja-texto">
+											</h:inputText>
+											<h:message for="apeMat" errorClass="mensaje-error"/>
+							
+										<!--  PERFIL -->
+										
+											<h:column>
+												<h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}"
+													styleClass="mandatorio" />
+												<h:outputLabel style="width:150px;" for="selectPerfil"
+												value="Perfil"
+												styleClass="etiqueta" />
+											</h:column>
+											<h:selectOneMenu id="selectPerfil"
+												value="#{editarEmpleado.empleadoVO.perfil}"
+												disabled="true"
+												styleClass="select">
+												<f:selectItems value="#{editarEmpleado.lstPerfiles}" />
+											</h:selectOneMenu>
+											<h:message for="selectPerfil" errorClass="mensaje-error"/>
+										
+										<!-- OFICINA -->
+											
+											<h:column>
+												<h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}"
+													styleClass="mandatorio" />
+												<h:outputLabel style="width:150px;" for="selectOficinas"
+												value="Oficina"
+												styleClass="etiqueta" />
+											</h:column>
+											<h:selectOneMenu id="selectOficinas"
+												value="#{editarEmpleado.empleadoVO.oficina}"
+												styleClass="select">
+												<f:selectItems value="#{editarEmpleado.lstOficinas}" />
+												<f:ajax event="change" render="fechaVigencia" listener="#{editarEmpleado.onChange_Oficina(editarEmpleado.empleadoVO.oficina)}" />
+											</h:selectOneMenu>
+											<h:message for="selectOficinas" errorClass="mensaje-error"/>
+											
+										<!-- NOMBRES COMPLETOS -->
+										
+											<h:column>
+												<h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}"
+													styleClass="mandatorio" />
+												<h:outputLabel style="width:150px;" for="nombresCompletos"
+												value="Nombres Completos"
+												styleClass="etiqueta" />
+											</h:column>
+											<h:inputTextarea rows="4" cols="30" onkeypress="validaInputText(event);"
+												maxlength="7" id="nombresCompletos"
+												disabled="#{editarEmpleado.idEmpleado != null}"
+												value="#{editarEmpleado.empleadoVO.nombresCompletos}"
+												styleClass="caja-texto">
+											</h:inputTextarea>
+											<h:message for="nombresCompletos" errorClass="mensaje-error"/>
+											
+										<!-- CORREO -->
+										
+											<h:outputLabel style="width:150px; margin-left:13px" for="correo"
+												value="Correo"
+												styleClass="etiqueta" />
+											<h:inputText onkeypress="validaInputText(event);" size="39"
+												maxlength="39" id="correo"
+												value="#{editarEmpleado.empleadoVO.correo}"
+												styleClass="caja-texto">
+											</h:inputText>
+											<h:message for="correo" errorClass="mensaje-error"/>
+											
+										<!-- FLAG ACTIVO -->		
+										
+											<h:outputLabel style="width:150px; margin-left:13px" for="flagActivo"
+												value="Flag Activo"
+												styleClass="etiqueta" />
+											<h:selectBooleanCheckbox id="flagActivo"
+												value="#{editarEmpleado.empleadoVO.flagActivo}" />
+											<h:message for="flagActivo" errorClass="mensaje-error"/>
+												
+										<!-- FLAG ABOGADO -->		
+											
+											<h:column>
+												<h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}"
+													styleClass="mandatorio" />
+												<h:outputLabel style="width:150px;" for="flagAbogado"
+												value="Flag Abogado"
+												styleClass="etiqueta" />
+											</h:column>
+											<h:selectBooleanCheckbox id="flagAbogado"
+											value="#{editarEmpleado.empleadoVO.flagAbogado}" />
+											<h:message for="flagAbogado" errorClass="mensaje-error"/>
+										
+										<!-- ESTUDIO ABOGADO -->
+											
+											<h:column>
+												<!--h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}"
+													styleClass="mandatorio" /-->
+												<h:outputLabel style="width:150px; margin-left:13px" for="selectEstudioAbogados"
+												value="Estudio Abogado"
+												styleClass="etiqueta" />
+											</h:column>
+											<h:selectOneMenu id="selectEstudioAbogados"
+												value="#{editarEmpleado.empleadoVO.estudioAbogado}"
+												styleClass="select">
+												<f:selectItems value="#{editarEmpleado.lstEstudioAbogados}" />
+											</h:selectOneMenu>
+											<h:message for="selectEstudioAbogados" errorClass="mensaje-error"/>
+											
+										<!-- PUESTO -->
+										
+											<h:column>
+												<h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}"
+													styleClass="mandatorio" />
+												<h:outputLabel style="width:150px;" for="codCargo"
+												value="Puesto"
+												styleClass="etiqueta" />
+											</h:column>
+											<h:column>
+												<h:inputText onkeypress="validaInputText(event);" size="10"
+													maxlength="7" id="codCargo"
+													value="#{editarEmpleado.empleadoVO.codcargo}"
+													styleClass="caja-texto"
+													placeholder="código"
+													disabled="true"
+													style="margin-right:5px">
+												</h:inputText>
+												<h:inputText onkeypress="validaInputText(event);" size="39"
+													maxlength="15" id="nomCargo"
+													value="#{editarEmpleado.empleadoVO.nomcargo}"
+													styleClass="caja-texto"
+													disabled="true"
+													placeholder="nombre">
+												</h:inputText>
+											</h:column>
+											<h:message for="nomCargo" errorClass="mensaje-error"/>								
+											
+											
+										<!-- FECHA VENCIMIENTO -->
+											
+											<h:column> 
+												<h:graphicImage height="8" width="8"
+													value="#{resource['imagenes:mandatorio.gif']}"
+													styleClass="mandatorio" />
+												<h:outputLabel style="width:150px;" for="fechaVigencia"
+													value="Fecha Vigencia"
+													styleClass="etiqueta" />
+											</h:column>			
+																				
+						                    <h:column>  
+								            	<h:panelGrid id="fechaVigenciaWrapper" style="margin-left:-3px">
+													<custom:calendar id ="fechaVigencia" disabled="#{editarEmpleado.fechaVigenciaDisabled}" effect="drop" pattern="dd/MM/yyyy" rendered="true" value="#{editarEmpleado.empleadoVO.fechaVigencia}" >
+													</custom:calendar>
+												</h:panelGrid>
+									        </h:column>
+									        <h:message for="fechaVigencia" errorClass="mensaje-error"/>
+									        
+											
+										</h:panelGrid>
+								</td>
+							</tr>
+
+							<tr>
+								<td>&#160;</td>
+							</tr>
+							
+                            <h:panelGroup>
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td align="center">
+									<h:commandButton id="guardar"
+										action="#{editarEmpleado.guardar}" value="Guardar"
+										styleClass="boton" />
+									<h:commandButton immediate="true" id="cancelar"
+										action="#{editarEmpleado.cancelar}" value="Cancelar"
+										styleClass="boton" />
+								</td>
+							</tr>
+							</table>
+                            </h:panelGroup>
+							<div style="margin-bottom:10px;" class="etiqueta">
+								<h:outputText value=" " />
+							</div>
+
+							<tr>
+								<td>
+									<h:messages globalOnly="true" styleClass="mensaje-error"></h:messages>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</h:panelGrid>
+	</ui:define>
+</ui:composition>

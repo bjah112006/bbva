@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	xmlns:util="http://java.sun.com/jsf/composite/util">
+
+	<h:panelGrid columns="3">
+		<h:panelGroup>
+			<h:outputText value="Resultado: " />
+			<h:outputText value="#{pieAprobarBastanteo.expediente.resultado}" />
+			<custom:tabView>
+				<custom:tab id="TabInstrucciones" title="Dictámen">
+					<util:editor id="editor" value="#{pieAprobarBastanteo.strDictamen}"
+						width="400" disabled="#{pieAprobarBastanteo.modoConsulta}" />
+					<!--p:dialog header="Content" widgetVar="dlg" showEffect="fade"
+						hideEffect="fade" modal="true">
+						<h:outputText id="display"
+							value="#{pieAprobarBastanteo.strDictamen}" escape="false" />
+					</p:dialog-->
+				</custom:tab>
+				<custom:tab id="idTabInstrucciones" title="Instrucciones">
+					<util:editor id="editor1" disabled="#{pieAprobarBastanteo.modoConsulta}"
+						value="#{pieAprobarBastanteo.strInstrucciones}" width="400" />
+					<!--p:dialog header="Content" widgetVar="dlg" showEffect="fade"
+						hideEffect="fade" modal="true">
+						<h:outputText id="display1"
+							value="#{pieAprobarBastanteo.strInstrucciones}" escape="false" />
+					</p:dialog-->
+				</custom:tab>
+			</custom:tabView>
+		</h:panelGroup>
+		<h:panelGroup>
+			<h:panelGrid columns="1">
+				<h:outputText styleClass="titulo-bold" value="Inconformidad"></h:outputText>
+			</h:panelGrid>
+			<h:panelGrid columns="1">
+				<h:panelGrid columns="1">
+					<h:selectOneMenu id="idAbogados" style="width:330px"
+						value="#{pieAprobarBastanteo.idAbogado}" disabled="#{pieAprobarBastanteo.modoConsulta}">
+						<f:selectItems value="#{pieAprobarBastanteo.abogadosExternos}" />
+					</h:selectOneMenu>
+					<h:selectOneMenu id="idReasignados" style="widht:330px"
+						value="#{pieAprobarBastanteo.idReasignado}" disabled="#{pieAprobarBastanteo.modoConsulta}">
+						<f:selectItems value="#{pieAprobarBastanteo.motivosReasignados}" />
+					</h:selectOneMenu>
+					<h:outputText value="Comentarios" />
+					<h:panelGroup>
+						<h:inputTextarea id="idComentarios" disabled="#{pieAprobarBastanteo.modoConsulta}"
+							value="#{pieAprobarBastanteo.strComentarios}" rows="2" cols="30" />
+						<custom:textAreaCounter for="idComentarios" maxCharacterSize="3000" />
+					</h:panelGroup>
+					<h:message for="idAbogados" errorClass="mensaje-error" />
+					<h:commandButton value="Reasignar Expediente" disabled="#{pieAprobarBastanteo.modoConsulta}"
+						actionListener="#{pieAprobarBastanteo.reasignarExpediente}" 
+						onclick="return confirm('Desea enviar el expediente');" />								
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<h:outputText styleClass="titulo-bold" value="Conformidad" />
+					<h:inputTextarea id="idConformidad" disabled="#{pieAprobarBastanteo.modoConsulta}"
+						value="#{pieAprobarBastanteo.strConformidad}" rows="2" cols="30" />
+					<h:commandButton value="Terminar expediente" disabled="#{pieAprobarBastanteo.modoConsulta}"
+						actionListener="#{pieAprobarBastanteo.terminarExpediente}" 
+						onclick="return confirm('Desea enviar el expediente');" />
+				</h:panelGrid>
+			</h:panelGrid>
+		</h:panelGroup>
+	</h:panelGrid>
+</ui:composition>

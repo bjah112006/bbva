@@ -1,0 +1,92 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	xmlns:util="http://java.sun.com/jsf/composite/util">
+	
+	<custom:remoteCommand name="verificarFacultadesEspeciales" update=":form:idFinalizar" process="@form" 
+			actionListener="#{pieVerificarRealizarBastanteo.verificarFacultadesEspeciales}"/>
+
+	<h:panelGrid columns="2" width="800px">
+		<h:panelGrid columns="1">
+			<custom:tabView id="idVerificar">
+				<custom:tab id="idTabDictamen" title="Dictamen">
+					<util:editor id="editor"
+						value="#{pieVerificarRealizarBastanteo.strDictamen}" 
+						disabled="#{pieVerificarRealizarBastanteo.modoConsulta}" width="500" />
+					<!--p:dialog header="Content" widgetVar="dlg" showEffect="fade"
+						hideEffect="fade" modal="true">
+						<h:outputText id="display"
+							value="{pieVerificarRealizarBastanteo.strDictamen}" escape="false" />
+					</p:dialog-->
+				</custom:tab>
+				<custom:tab id="idTabInstrucciones" title="Instrucciones">
+					<util:editor id="editor1" disabled="#{pieVerificarRealizarBastanteo.modoConsulta}"
+						value="#{pieVerificarRealizarBastanteo.strInstrucciones}" width="500" />
+					<!--p:dialog header="Content" widgetVar="dlg" showEffect="fade"
+						hideEffect="fade" modal="true">
+						<h:outputText id="display1"
+							value="{pieVerificarRealizarBastanteo.strInstrucciones}" escape="false" />
+					</p:dialog-->
+				</custom:tab>
+			</custom:tabView>
+		</h:panelGrid>
+		<h:panelGrid columns="1">
+			<h:panelGrid columns="2">
+				<h:outputText value="Devolver" styleClass="titulo-bold"/>
+				<h:selectBooleanCheckbox id="Devolver" disabled="#{pieVerificarRealizarBastanteo.modoConsulta}"
+					valueChangeListener="#{pieVerificarRealizarBastanteo.habilitarControles}"
+					value="#{pieVerificarRealizarBastanteo.boolDevolver}">
+					<f:ajax event="change"
+						render="idDevolucion idComentariosCont idBotonDevolver idOptionsA idFinalizar" />
+				</h:selectBooleanCheckbox>
+			</h:panelGrid>
+			<h:selectOneMenu id="idDevolucion" style="widht:100px" 
+				value="#{pieVerificarRealizarBastanteo.selDevolucion}"
+				disabled="#{pieVerificarRealizarBastanteo.habilitaDevolucion || pieVerificarRealizarBastanteo.modoConsulta}">
+				<f:selectItems
+					value="#{pieVerificarRealizarBastanteo.listaDevolucion}" />
+			</h:selectOneMenu>
+			<h:outputText value="Comentarios" />
+			<h:panelGroup id="idComentariosCont">
+				<h:inputTextarea id="idComentarios" rows="5" cols="30"
+					value="#{pieVerificarRealizarBastanteo.strComentarios}"
+					disabled="#{pieVerificarRealizarBastanteo.habilitaComentarios || pieVerificarRealizarBastanteo.modoConsulta}" />
+				<custom:textAreaCounter for="idComentarios" maxCharacterSize="3000" />
+			</h:panelGroup>
+			<h:message for="idDevolucion" errorClass="mensaje-error" />
+			<h:commandButton id="idBotonDevolver"
+				value="Devolver a Mesa de Documentos"
+				disabled="#{pieVerificarRealizarBastanteo.habilitaBotonDevolver || pieVerificarRealizarBastanteo.modoConsulta}"
+				onclick="return execute_remoteCommand('remoteDevolucion', '¿Desea devolver a Mesa de Documentos?');" />	
+				
+			<custom:remoteCommand name="remoteDevolucion" process="@form" oncomplete="$('#loading').hide();"
+					actionListener="#{pieVerificarRealizarBastanteo.accionDevolver}"  />
+						
+			<h:panelGrid columns="1">
+				<h:outputText value="Resultado" styleClass="titulo-bold"/>
+			</h:panelGrid>
+			<h:panelGrid columns="1" id="idOpcionesResultados">
+				<h:selectOneRadio layout="PageDirection" id="idOptionsA"
+					value="#{pieVerificarRealizarBastanteo.opcionResultado}"
+					disabled="#{pieVerificarRealizarBastanteo.habilitaBotones || pieVerificarRealizarBastanteo.modoConsulta}">
+					<f:selectItem itemLabel="Aprobado" itemValue="Aprobado" />
+					<f:selectItem itemLabel="Aprobado Parcial"
+						itemValue="Aprobado Parcial" />
+					<f:selectItem itemLabel="Observado" itemValue="Observado" />
+					<!--h:message for="idOptionsA" errorClass="mensaje-error" /-->
+				</h:selectOneRadio>
+				<h:message for="idOptionsA" errorClass="mensaje-error" />				
+			</h:panelGrid>
+			<h:commandButton id="idFinalizar" value="Finalizar Bastanteo"
+				onclick="return execute_remoteCommand('remoteFinalizarBastanteo', '¿Desea enviar el expediente?');"
+				disabled="#{pieVerificarRealizarBastanteo.finalizaBastanteo || pieVerificarRealizarBastanteo.modoConsulta}" />
+			<h:message for="idVerificar:idTabDictamen" errorClass="mensaje-error" />
+			<custom:remoteCommand name="remoteFinalizarBastanteo" process="@form" oncomplete="$('#loading').hide();"
+					actionListener="#{pieVerificarRealizarBastanteo.finalizarBastanteo}"  />
+			
+		</h:panelGrid>
+	</h:panelGrid>
+</ui:composition>
+

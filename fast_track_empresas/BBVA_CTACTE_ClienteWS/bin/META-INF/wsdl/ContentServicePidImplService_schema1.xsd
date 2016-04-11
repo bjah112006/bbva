@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://impl.servicepid.cm.bbva.ibm.com/" version="1.0" xmlns:tns="http://impl.servicepid.cm.bbva.ibm.com/">
+
+  <xs:element name="findAll" type="tns:findAll"/>
+
+  <xs:element name="findAllResponse" type="tns:findAllResponse"/>
+
+  <xs:complexType name="findAll">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="documento" type="tns:documentoPid"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="documentoPid">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codCliente" type="xs:string"/>
+      <xs:element minOccurs="0" name="contenido" type="xs:base64Binary"/>
+      <xs:element minOccurs="0" name="fechaCreacion" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fechaExpiracion" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="id" type="xs:int"/>
+      <xs:element minOccurs="0" name="mandatorio" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="nombreArchivo" type="xs:string"/>
+      <xs:element minOccurs="0" name="numDoi" type="xs:string"/>
+      <xs:element minOccurs="0" name="origen" type="xs:string"/>
+      <xs:element minOccurs="0" name="pid" type="xs:string"/>
+      <xs:element minOccurs="0" name="tipo" type="xs:string"/>
+      <xs:element minOccurs="0" name="tipoDoi" type="xs:string"/>
+      <xs:element minOccurs="0" name="urlContent" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findAllResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="tns:documentoPid"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

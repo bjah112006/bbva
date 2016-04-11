@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+<h:body>
+	<composite:interface displayName="Renderiza la cabecera de una columna para un multiple ordenamiento">
+		<composite:attribute name="propertyName" required="true" />
+	</composite:interface>
+	<composite:implementation>
+	<h:panelGroup id="idpnlGrdOpt">
+		<h:panelGroup id="idpnlGrpOpt" style="#{bandejaMB.mapaHeader[cc.attrs.propertyName].spanStyle}">
+					<h:outputText  styleClass="superIndice" value="(#{bandejaMB.mapaHeader[cc.attrs.propertyName].order})" />
+					<h:commandLink styleClass="superIndice" value="(x)" actionListener="#{bandejaMB.quitarFiltro(cc.attrs.propertyName)}">
+						<f:ajax render="@form" execute="@form"/>
+					</h:commandLink>					
+		</h:panelGroup>		
+	</h:panelGroup>
+	<h:commandLink actionListener="#{bandejaMB.agregarFiltro(cc.attrs.propertyName)}">
+			<div>
+			<h:outputText value="#{bandejaMB.mapaHeader[cc.attrs.propertyName].label}"/>
+				<span id="idSpan" class="#{bandejaMB.mapaHeader[cc.attrs.propertyName].classes}"></span>
+			</div>
+			<f:ajax render="@form" execute="@form"/>
+	</h:commandLink>
+	</composite:implementation>
+</h:body>
+
+</html>

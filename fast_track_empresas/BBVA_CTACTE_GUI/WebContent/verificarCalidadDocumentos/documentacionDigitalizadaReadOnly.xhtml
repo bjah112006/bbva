@@ -1,0 +1,250 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+
+	<script type="text/javascript">
+		/* <![CDATA[ */
+		function abrirDocumento(obj) {
+			var idCm = $(obj).parent().find("input:eq(3)").val();
+			//alert(rutaCM);
+			f_openArchivoEscaneadoCM(idCm);
+			return false;
+		}
+		function eliminarDocumento(obj) {
+			if (confirm('¿Desea eliminar el documento escaneado?')) {
+				var codDoc = valorHidden(obj, "codDocHist");
+				//alert("codDoc-->"+codDoc);
+				applet("appletVisor").eliminarDocumento(codDoc + "-HIST");
+			}
+			return false;
+		}
+		function eliminarDocumentoHist(obj) {
+			if (confirm('¿Desea eliminar el documento escaneado?')) {
+				var codDoc = obj;
+				//alert("codDoc-->"+codDoc);
+				applet("appletVisor").eliminarDocumento(codDoc);
+			}
+			return false;
+		}
+		function confirmaEliminaDocumento(codDoc) {
+			eliminarDocServidor({
+				"codigoDocumento" : codDoc
+			});
+		}
+		function valorHidden(obj, nombHidden) {
+			var lista = $(obj).parent().find("input");
+			//var lista = $(obj).parent().parents("table").get(0).find("input");  
+			for ( var i = 0; i < lista.size(); i++) {
+				var idComp = lista.eq(i).attr("name");
+				if (idComp.match(nombHidden + "$") == nombHidden) {
+					return lista.eq(i).val();
+				}
+			}
+			return null;
+		}
+		$(document).ready(function() {
+			$("#form\\:idDigDoc\\:idTipoPJ").bind("change", function() {
+				selectTipoPJ({
+					"idTipoPJ" : $(this).val()
+				});
+			});
+		});
+		function f_openArchivoEscaneadoCM(idCm) {
+			if ($.browser.msie) {
+				winCM = window.open('../pdfContent/abrirPDF.faces?idcm=' + idCm
+						+ '&redirect=0', 'winDocCM',
+						'width=850,height=450,resizable=yes');
+			} else {
+				winCM = window.open('../pdfContent/abrirPDF.faces?idcm=' + idCm
+						+ '&redirect=1', 'winDocCM',
+						'width=850,height=450,resizable=yes');
+			}
+		}
+		function f_openArchivoEscaneadoCMHist(obj, idCm) {
+			var indice1 = $(obj).parent().parent().parent().parent().parent()
+					.parent().index();
+			var indice2 = $(obj).parent().parent().index();
+			if ($.browser.msie) {
+				winCM = window.open('../pdfContent/abrirPDF.faces?idcm=' + idCm
+						+ '&redirect=0', 'winDocCMH' + indice1 + '' + indice2,
+						'width=850,height=450,resizable=yes');
+			} else {
+				winCM = window.open('../pdfContent/abrirPDF.faces?idcm=' + idCm
+						+ '&redirect=1', 'winDocCMH' + indice1 + '' + indice2,
+						'width=850,height=450,resizable=yes');
+			}
+			return false;
+		}
+		/* ]]> */
+	</script>
+
+	<custom:tabView id="idDocDigitalizadaView" style="width:1100px;">
+		<custom:tab title="Documentación digitalizada">
+
+			<table width="100%" border="0" cellpadding="5">
+				<tr>
+					<td align="right"><h:commandLink style="color:#0000FF;"
+							rendered="#{documentaciondigitalizada.disLinkVistaUnica}"
+							value="Vista Unica"
+							onclick="window.open('../vistaUnica/vistaUnicaListaPopUp.faces?parametros=#{documentaciondigitalizada.expediente.cliente.codigoCentral};#{documentaciondigitalizada.expediente.cliente.numeroDoi};#{documentaciondigitalizada.expediente.cliente.razonSocial}', 
+	              'WindowName', 'dependent=yes, menubar=no, height=650,width=750, toolbar=no, resizable=yes, scrollbars=yes'); return false;">
+						</h:commandLink>
+					</td>
+				</tr>
+			</table>
+			<div style="overflow-x: auto; overflow-x: auto; width:1050px;">
+				<table border="0">
+					<tr>
+						<td align="left"><h:outputText style="font-weight:bold"
+								value="Caso de Negocio:" />
+						</td>
+						<td align="left"><h:outputText
+								value="#{datosGenerales.expediente.casoNegocio.descripcion}" />
+						</td>
+					</tr>
+				</table>
+				<h:dataTable id="tablaDocumentosView" border="0" var="documentoExpW"
+					value="#{documentaciondigitalizada.listaDocExpedienteW}"
+					columnClasses="columna-align-left,columna-align-center,columna-align-left,columna-align-left,columna-align-center,columna-align-center,columna-align-left,columna-align-left,columna-align-center">
+					<h:column id="modelHeaderView">
+						<f:facet name="header">  
+					Tipo Documento   
+				</f:facet>
+						<h:selectOneMenu disabled="true"
+							value="#{documentoExpW.docExpediente.documento.id}"
+							style="width: 255px;">
+							<f:selectItems
+								value="#{documentaciondigitalizada.listaSelectDocumento}" />
+						</h:selectOneMenu>
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+	            	Requiere Escaneo
+	            </f:facet>
+						<h:outputText value="#{documentoExpW.flagReqEscaneo? 'si': 'no'}" />
+						<f:attribute value="center" name="align" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">  
+	                   Archivo escaneado   
+	            </f:facet>
+						<h:commandLink styleClass="abrirDocumento"
+							disabled="#{documentaciondigitalizada.modoConsulta}"
+							value="#{documentoExpW.docExpediente.nombreArchivo}"
+							onclick="return abrirDocumento (this);">
+						</h:commandLink>
+						<h:inputHidden id="pidCM"
+							value="#{documentoExpW.docExpediente.pidCM}" />
+						<h:inputHidden id="codDoc"
+							value="#{documentoExpW.docExpediente.documento.codigoDocumento}" />
+						<h:inputHidden value="#{documentoExpW.rutaCM}" />
+						<h:inputHidden id="idCm"
+							value="#{documentoExpW.docExpediente.idCm}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">  
+	                    Vigencia   
+	            </f:facet>
+						<h:panelGrid id="idFechaVigenciaGrid">
+							<custom:calendar pattern="dd/MM/yyyy" disabled="true"
+								rendered="#{documentoExpW.mostrarFechaVigencia}"
+								value="#{documentoExpW.docExpediente.fechaVigencia}">
+							</custom:calendar>
+						</h:panelGrid>
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">  
+	                    Nro. Página  
+	            </f:facet>
+						<h:outputText value="#{documentoExpW.docExpediente.nroPagina}"
+							rendered="#{documentoExpW.docExpediente.documento.flagNroPagina == '1'}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">  
+	                    Fecha Registro   
+	            </f:facet>
+						<h:outputText value="#{documentoExpW.docExpediente.fechaRegistro}"
+							rendered="#{documentoExpW.docExpediente.documento.flagUltimaFecha == '1'}">
+							<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">  
+	                    ¿Rechazado?   
+	            </f:facet>
+						<h:outputText
+							value="#{documentoExpW.flagComboRechazado? 'si': 'no'}" />
+						<f:attribute value="center" name="align" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">  
+	                    Motivo   
+	            </f:facet>
+						<h:selectOneMenu id="idMotivo" disabled="true"
+							value="#{documentoExpW.idMotivo}" style="width: 300px;"
+							valueChangeListener="#{documentoExpW.seleccionarMotivo}">
+							<f:selectItem itemLabel="Seleccione" itemValue="0" />
+							<f:selectItems
+								value="#{documentaciondigitalizada.motivoRechazoItems}" />
+							<f:ajax event="change" render=":form:idResultadoRevision"
+								execute="@form" />
+						</h:selectOneMenu>
+						<f:attribute value="center" name="align" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">  
+	                    Versiones históricas   
+	            </f:facet>
+						<h:dataTable id="tablaDocumentosHist" var="documentoHist"
+							value="#{documentoExpW.documentoHistCM}">
+							<h:column>
+								<h:outputLink styleClass="abrirDocumento"
+									disabled="#{documentaciondigitalizada.modoConsulta}"
+									onclick="return f_openArchivoEscaneadoCMHist (this, '#{documentoHist.idCm}');"
+									value="#">
+									<h:outputText value="#{documentoHist.nombreArchivo}" />
+								</h:outputLink>
+
+							</h:column>
+						</h:dataTable>
+
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">  
+	                    Última Página   
+	            </f:facet>
+						<h:outputText title="Última página registrada para este documento"
+							style="cursor:help;" value="#{documentoExpW.nroPagina}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">  
+	                    Última Fecha Registro   
+	            </f:facet>
+						<h:outputText id="idUltimaFechaDocumento"
+							value="#{documentoExpW.ultimaFechaEscaneo}">
+							<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</h:column>
+
+				</h:dataTable>
+
+			</div>
+		</custom:tab>
+
+	</custom:tabView>
+
+
+</ui:composition>
+
+

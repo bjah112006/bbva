@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<h:outputScript target="head">
+	/* <![CDATA[ */
+	var myVar;
+	var intentosActuales;
+	$(document).ready(function() {
+		myVar = setInterval(pingWS, 60000);
+		intentosActuales = 1;
+	});
+
+	function pingWS() {
+		var numeroIntentos = parseInt($("#form\\:idIntentos").val());
+		if (typeof console != "undefined")
+			console.log('numeroIntentos: ' + numeroIntentos);
+		alargarSessionWS();
+		if (typeof console != "undefined")
+			console.log('intentosActuales: ' + intentosActuales);
+		if (intentosActuales == numeroIntentos) {
+			clearInterval(myVar);
+		} else {
+			intentosActuales++;
+		}
+	}
+	/* ]]> */
+	</h:outputScript>
+
+</ui:composition>

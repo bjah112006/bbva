@@ -1,0 +1,49 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+	
+	<custom:remoteCommand name="abrirFirmasNoAsociadas"
+			actionListener="#{verificaFirmasObservaciones.abrirFirmasNoAsociadas}" 
+			update=":form:idRechazarDocumentacion :form:idVinculo :form:tablaDocumentos"/>
+	
+	<table width="800" border="0">
+		<tr>
+			<td valign="top">
+				<h:outputText value="Rechazo de la documentación" styleClass="titulo-bold"/>
+				<hr></hr>
+				<h:outputText value="Observaciones" />
+				<br/>
+				<br/>
+				<h:inputTextarea id="idObservaciones"
+					value="#{verificaFirmasObservaciones.strObservaciones}" rows="5"
+					cols="50" disabled="#{verificaFirmasObservaciones.modoConsulta}"/>
+				<custom:textAreaCounter for="idObservaciones" maxCharacterSize="3000" />
+				<br/>
+				<br/>
+				
+				<h:commandButton value="Rechazar documentación"
+					id="idRechazarDocumentacion"
+					disabled="#{verificaFirmasObservaciones.blnRechazar || verificaFirmasObservaciones.modoConsulta}"
+					onclick="return execute_remoteCommand('remoteRechazarDocumentacion', '¿Desea rechazar el Documento Expediente?')"/>		
+				
+				<custom:remoteCommand name="remoteRechazarDocumentacion" process="@form" oncomplete="$('#loading').hide();$('#iframDni').css('z-index', 2);$('#idIfRVisorContent').css('z-index', 1);"
+					actionListener="#{verificaFirmasObservaciones.rechazarDocumentacion}" />		
+			</td>
+			<td valign="top">
+				<h:outputText value="Término de vinculación" styleClass="titulo-bold"></h:outputText>
+				<hr></hr>
+				<h:commandButton value="Terminar vinculacion" id="idVinculo"
+					disabled="#{verificaFirmasObservaciones.blnTerminar || verificaFirmasObservaciones.modoConsulta}"
+					actionListener="#{verificaFirmasObservaciones.terminarVinculacion}" 
+					onclick="return execute_remoteCommand('remoteTerminarViculacion','¿Desea enviar el expediente?')"/>
+					
+				<custom:remoteCommand name="remoteTerminarViculacion" process="@form" oncomplete="$('#loading').hide(); $('#iframDni').css('z-index', 2);$('#idIfRVisorContent').css('z-index', 1);"
+					actionListener="#{verificaFirmasObservaciones.terminarVinculacion}"  />
+			</td>
+		</tr>
+	</table>
+	
+
+</ui:composition>

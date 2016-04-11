@@ -1,0 +1,146 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+
+	<h:outputStylesheet library="css/jquery-ui" name="jquery-ui.css" target="head"/>
+    <h:outputStylesheet library="css" name="ui.jqgrid.css" target="head"/>
+	<h:outputStylesheet library="css" name="style.css" target="head"/>
+    <h:outputScript library="javascript" name="jquery.jqGrid.min.js" target="head"/>
+	<h:outputScript library="javascript" name="grid.locale-en.js" target="head"/>
+	
+	<script type="text/javascript" language="javascript">
+	/* <![CDATA[ */
+	function Link(id) {
+		var row = id.split("=");
+		var row_ID = row[1];
+		var tipoArchivo = $('#tablaJqGridId').getCell(row_ID, 'tipoArchivo');
+		var rutaCM = $('#tablaJqGridId').getCell(row_ID, 'url');
+		var params = { url: rutaCM };
+		if ($.browser.msie && tipoArchivo != "TIF") {
+			window.open('../pdfContent/abrirPDF.faces?'+$.param(params),"myWindow",'width=850,height=450,resizable=yes');
+		} else {
+			window.open(rutaCM,"myWindow",'width=850,height=450,resizable=yes');
+		}
+	}
+	
+	jQuery(document).ready(function () {
+		var listaJQGrid = jQuery('#form\\:listaJQGridId').val();
+		var grid = jQuery('#tablaJqGridId');
+		grid.jqGrid({
+			datastr : listaJQGrid,
+			datatype: "jsonstring",
+			height: 'auto',
+			width: 720,
+			autowidth: false,
+			footerrow: false,
+			pgtext: null,
+			pgbuttons: false,
+			viewrecords: false,
+			loadonce : true,
+			rowNum: #{listarDocumentosContentMB.rowNum},
+			colNames:['tipoDocumento','Nombre de Archivo','Fecha de Creación','Fecha de Vigencia', 'url', 'tipoArchivo'],
+			colModel:[
+				{name:'tipoDocumento',index:'tipoDocumento', width:0, hidden:true, sortable:false},
+				{name:'nombreArchivo',index:'nombreArchivo', width:350, align:'left', sortable:false, formatter: 'showlink',
+					formatoptions: { baseLinkUrl: 'javascript:', showAction: "Link('", addParam: "');"}
+				},
+				{name:'fechaCreacion',index:'fechaCreacion', width:165, align:'left', sortable:false},
+				{name:'fechaVigencia',index:'fechaVigencia', width:165, align:'left', sortable:false},
+				{name:'url',index:'url', width:350, align:'left', sortable:false, hidden:true},
+				{name:'tipoArchivo',index:'tipoArchivo', width:0, hidden:true, sortable:false}
+			],
+			pager: '#pDivJqGrid',
+			grouping: true,
+			groupingView : { groupField : ['tipoDocumento'],
+				groupText:['<b><img src="../resources/imagenes/directorio.gif" alt="folderIcono" height="16" width="16"></img> {0}</b>'],
+				groupColumnShow : [false], groupCollapse: true 
+			},
+			hidegrid:false
+		});
+	});
+	/* ]]> */
+	</script>
+
+    <h:panelGroup id="idListar">
+        <!-- h:message for="idListar" id="idMsgLista" errorClass="mensaje-error" /-->
+
+        <h:panelGrid border="1" cellpadding="12" cellspacing="0">
+            <h:panelGroup>
+                <h:panelGrid columns="1">
+                    <h:selectOneRadio id="selFechas" style="width: 350px;"
+                        value="#{listarDocumentosContentMB.selFecha}">
+                        <f:selectItem id="fecha1" itemLabel="Fecha de Creación"
+                            itemValue="1" />
+                        <f:selectItem id="fecha2" itemLabel="Fecha de Vigencia"
+                            itemValue="2" />
+                    </h:selectOneRadio>
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:panelGroup>
+                        <h:panelGrid columns="4">
+                            <h:outputLabel value="Desde"/>
+
+                            <custom:calendar styleClass="campoBsqFecDesde" id="idFechas"
+                                readOnlyInputText="true"
+                                value="#{listarDocumentosContentMB.strFecha.limInf}"
+                                pattern="dd/MM/yyyy">
+                                <f:attribute name="campo" value="strFecha.limInf" />
+                                <f:ajax event="change" />
+                            </custom:calendar>
+
+
+                            <h:outputLabel value="Hasta" />
+
+                            <custom:calendar styleClass="etiquetaBsqFecHasta"
+                                readOnlyInputText="true"
+                                value="#{listarDocumentosContentMB.strFecha.limSup}"
+                                pattern="dd/MM/yyyy">
+                                <f:attribute name="campo" value="strFecha.limSup" />
+                                <f:ajax event="change" />
+                            </custom:calendar>
+
+
+                        </h:panelGrid>
+
+                        <h:message for="idFechas" errorClass="mensaje-error" />
+                    </h:panelGroup>
+                    <h:commandButton value="Buscar"
+                        actionListener="#{listarDocumentosContentMB.filtrar}"
+                        id="idFiltrar" disabled="#{listarDocumentosContentMB.disFiltrar}" />
+                </h:panelGrid>
+
+                <h:dataTable id="idTablaDocumentos" var="documentoContent"
+                    style="width: 720px;"
+                    value="#{listarDocumentosContentMB}">
+                    <h:column style="text-align: left; width: 100px;">
+                        <f:facet name="header">
+                            <h:outputText value="Cod. Central" />
+                        </f:facet>
+                        <h:outputText value="#{documentoContent.codCentral}"/>
+                    </h:column>
+                    <h:column style="text-align: left; width: 100px;">
+                        <f:facet name="header">
+                            <h:outputText value="Nro DOI" />
+                        </f:facet>
+                        <h:outputText value="#{documentoContent.numeroDoi}" />
+                    </h:column>
+                    <h:column style="text-align: left; width: 250px;">
+                        <f:facet name="header">
+                            <h:outputText value="Razón Social" />
+                        </f:facet>
+                        <h:outputText value="#{documentoContent.razonSocial}" />
+                    </h:column>
+                </h:dataTable>
+                
+                <h:message for="idTablaDocumentos" id="idMsg" errorClass="mensaje-error" />
+				<h:inputHidden id="listaJQGridId" value="#{listarDocumentosContentMB.cadenaJson}" ></h:inputHidden>
+				<table id="tablaJqGridId" class="tablaJqGridClase"></table>
+				<div id="pDivJqGrid" class="divClase" ></div>    
+                
+            </h:panelGroup>
+        </h:panelGrid>
+    </h:panelGroup>
+</ui:composition>
+

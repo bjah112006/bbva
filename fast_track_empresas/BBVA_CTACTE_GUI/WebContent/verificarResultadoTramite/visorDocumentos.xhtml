@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	xmlns:util="http://java.sun.com/jsf/composite/util">
+	
+	
+	<custom:tabView style="width:500px" id="idTVDocumentos1">
+		<custom:tab id="idTab1" title="Dictamen">
+			<util:editor id="editor" value="#{visorDocumento.strDictamen}" width="450"
+				 disabled="#{visorDocumento.disDictamen}"/> 			  
+  			<!--p:dialog header="Content" widgetVar="dlg" showEffect="fade" hideEffect="fade" modal="true">  
+        		<h:outputText id="display1" value="#{visorDocumento.strDictamen}" escape="false" />  
+    		</p:dialog-->
+		</custom:tab>
+		<custom:tab id="idTab2" title="Instrucciones">
+			<util:editor id="editor2" value="#{visorDocumento.strInstrucciones}" width="450" 
+				 disabled="#{visorDocumento.disInstrucciones}"/>			
+  			<!--p:dialog header="Content" widgetVar="dlg" showEffect="fade" hideEffect="fade" modal="true">  
+        		<h:outputText id="display2" value="#{visorDocumento.strInstrucciones}" escape="false" />  
+    		</p:dialog-->
+		</custom:tab>
+		<custom:tab id="idTab3" title="Resultado Revocatoria">
+			<util:editor id="editor3" value="#{visorDocumento.strResultado}" width="450"
+				disabled="#{visorDocumento.disResultado}"/>  
+  			<!--p:dialog header="Content" widgetVar="dlg" showEffect="fade" hideEffect="fade" modal="true">  
+        		<h:outputText id="display3" value="#{visorDocumento.strResultado}" escape="false" />  
+    		</p:dialog-->
+		</custom:tab>
+	</custom:tabView>
+	
+
+</ui:composition>
+	
+	

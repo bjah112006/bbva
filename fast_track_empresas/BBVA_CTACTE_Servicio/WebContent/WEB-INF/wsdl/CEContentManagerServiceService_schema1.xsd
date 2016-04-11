@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema targetNamespace="http://cm.servicio.ctacte.bbva.ibm.com/" version="1.0" xmlns:tns="http://cm.servicio.ctacte.bbva.ibm.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="actualizarDocumentoExp_IdCMCopia" type="tns:actualizarDocumentoExp_IdCMCopia"/>
+
+  <xs:element name="actualizarDocumentoExp_IdCMCopiaResponse" type="tns:actualizarDocumentoExp_IdCMCopiaResponse"/>
+
+  <xs:element name="actualizarEstadoDocumento_CC" type="tns:actualizarEstadoDocumento_CC"/>
+
+  <xs:element name="actualizarEstadoDocumento_CCResponse" type="tns:actualizarEstadoDocumento_CCResponse"/>
+
+  <xs:element name="actualizarEstadoDocumentoxCodigo_CC" type="tns:actualizarEstadoDocumentoxCodigo_CC"/>
+
+  <xs:element name="actualizarEstadoDocumentoxCodigo_CCResponse" type="tns:actualizarEstadoDocumentoxCodigo_CCResponse"/>
+
+  <xs:element name="obtenerDocumentoCM" type="tns:obtenerDocumentoCM"/>
+
+  <xs:element name="obtenerDocumentoCMResponse" type="tns:obtenerDocumentoCMResponse"/>
+
+  <xs:element name="obtenerDocumentoCMxCodigo" type="tns:obtenerDocumentoCMxCodigo"/>
+
+  <xs:element name="obtenerDocumentoCMxCodigoResponse" type="tns:obtenerDocumentoCMxCodigoResponse"/>
+
+  <xs:element name="obtenerDocumentoExpediente_CC" type="tns:obtenerDocumentoExpediente_CC"/>
+
+  <xs:element name="obtenerDocumentoExpediente_CCResponse" type="tns:obtenerDocumentoExpediente_CCResponse"/>
+
+  <xs:element name="obtenerDocumentoxCodigo_CC" type="tns:obtenerDocumentoxCodigo_CC"/>
+
+  <xs:element name="obtenerDocumentoxCodigo_CCResponse" type="tns:obtenerDocumentoxCodigo_CCResponse"/>
+
+  <xs:complexType name="obtenerDocumentoCMxCodigo">
+    <xs:sequence>
+      <xs:element name="idExpediente" type="xs:int"/>
+      <xs:element minOccurs="0" name="codigoDocumento" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerDocumentoCMxCodigoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:documentoCM"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="documentoCM">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codCliente" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigoDocumento" type="xs:string"/>
+      <xs:element minOccurs="0" name="contenido" type="xs:base64Binary"/>
+      <xs:element minOccurs="0" name="fechaCreacion" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fechaExpiracion" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="id" type="xs:decimal"/>
+      <xs:element minOccurs="0" name="mandatorio" type="xs:unsignedShort"/>
+      <xs:element minOccurs="0" name="nombreArchivo" type="xs:string"/>
+      <xs:element minOccurs="0" name="nroDocumento" type="xs:string"/>
+      <xs:element minOccurs="0" name="numDoi" type="xs:string"/>
+      <xs:element minOccurs="0" name="origen" type="xs:string"/>
+      <xs:element minOccurs="0" name="pid" type="xs:string"/>
+      <xs:element minOccurs="0" name="rutaCM" type="xs:string"/>
+      <xs:element minOccurs="0" name="tipo" type="xs:string"/>
+      <xs:element minOccurs="0" name="tipoArchivo" type="xs:string"/>
+      <xs:element minOccurs="0" name="tipoDoi" type="xs:string"/>
+      <xs:element minOccurs="0" name="urlContent" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerDocumentoExpediente_CC">
+    <xs:sequence>
+      <xs:element name="idExpediente" type="xs:int"/>
+      <xs:element minOccurs="0" name="codigoDocumento" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerDocumentoExpediente_CCResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:documentoExpediente"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="documentoExpediente">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="docPesoPromKB" type="xs:int"/>
+      <xs:element minOccurs="0" name="fechaEscaneo" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fechaVigencia" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="flagAlterno" type="xs:string"/>
+      <xs:element minOccurs="0" name="flagCm" type="xs:string"/>
+      <xs:element minOccurs="0" name="flagEscaneado" type="xs:string"/>
+      <xs:element minOccurs="0" name="flagObligatorio" type="xs:string"/>
+      <xs:element minOccurs="0" name="flagRechazado" type="xs:string"/>
+      <xs:element minOccurs="0" name="flagReqEscaneo" type="xs:string"/>
+      <xs:element minOccurs="0" name="id" type="xs:int"/>
+      <xs:element minOccurs="0" name="idCm" type="xs:int"/>
+      <xs:element minOccurs="0" name="idCmCopia" type="xs:int"/>
+      <xs:element minOccurs="0" name="idDocumento" type="xs:int"/>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:int"/>
+      <xs:element minOccurs="0" name="idMotivo" type="xs:int"/>
+      <xs:element minOccurs="0" name="nombreArchivo" type="xs:string"/>
+      <xs:element minOccurs="0" name="pidCM" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerDocumentoxCodigo_CC">
+    <xs:sequence>
+      <xs:element name="idExpediente" type="xs:int"/>
+      <xs:element minOccurs="0" name="codigoDocumento" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerDocumentoxCodigo_CCResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actualizarEstadoDocumentoxCodigo_CC">
+    <xs:sequence>
+      <xs:element name="idExpediente" type="xs:int"/>
+      <xs:element minOccurs="0" name="codigoDocumento" type="xs:string"/>
+      <xs:element minOccurs="0" name="flagCM" type="xs:string"/>
+      <xs:element name="idCM" type="xs:int"/>
+      <xs:element minOccurs="0" name="pidCM" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actualizarEstadoDocumentoxCodigo_CCResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actualizarDocumentoExp_IdCMCopia">
+    <xs:sequence>
+      <xs:element name="idExpediente" type="xs:int"/>
+      <xs:element minOccurs="0" name="codigoDocumento" type="xs:string"/>
+      <xs:element name="idCMCopia" type="xs:int"/>
+      <xs:element minOccurs="0" name="pidCM" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actualizarDocumentoExp_IdCMCopiaResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actualizarEstadoDocumento_CC">
+    <xs:sequence>
+      <xs:element name="idExpediente" type="xs:int"/>
+      <xs:element name="idDocumento" type="xs:int"/>
+      <xs:element minOccurs="0" name="flagCM" type="xs:string"/>
+      <xs:element name="idCM" type="xs:int"/>
+      <xs:element minOccurs="0" name="pidCM" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actualizarEstadoDocumento_CCResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerDocumentoCM">
+    <xs:sequence>
+      <xs:element name="idExpediente" type="xs:int"/>
+      <xs:element name="idDocumento" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerDocumentoCMResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:documentoCM"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

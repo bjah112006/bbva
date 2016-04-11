@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions name="ACCPJ_PagoServicio" targetNamespace="http://grupobbva.com.pe/accpj/pagser/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://grupobbva.com.pe/accpj/pagser/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="PagoServicio_Binding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://grupobbva.com.pe/accpj/pagser/" xmlns:mrm="http://grupobbva.com.pe/accpj/pagser/">
+      <xsd:include schemaLocation="xsd/ACCPJ_PagoServicio_v01.xsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="pagarServicio_in">
+    <wsdl:part element="tns:PagoServicioRq" name="PagoServicioRq"/>
+  </wsdl:message>
+  <wsdl:message name="pagarServicio_out">
+    <wsdl:part element="tns:PagoServicioRs" name="PagoServicioRs"/>
+  </wsdl:message>
+  <wsdl:portType name="PagoServicio_PortType">
+    <wsdl:operation name="pagarServicio">
+      <wsdl:input message="tns:pagarServicio_in" name="pagarServicio_Input"/>
+      <wsdl:output message="tns:pagarServicio_out" name="pagarServicio_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PagoServicio_Binding" type="tns:PagoServicio_PortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="pagarServicio">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="pagarServicio_Input">
+        <soap:body parts="PagoServicioRq" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="pagarServicio_Output">
+        <soap:body parts="PagoServicioRs" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PagoServicio_Service">
+    <wsdl:port binding="tns:PagoServicio_Binding" name="PagoServicio_Port">
+      <soap:address location="http://118.180.36.26:7820/accpj/pagser/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

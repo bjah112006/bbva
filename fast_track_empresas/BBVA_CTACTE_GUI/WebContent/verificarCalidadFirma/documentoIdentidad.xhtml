@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<f:verbatim>
+		<script type="text/javascript">
+			myWindow = null;
+			timeInMilliseconds = 2000;
+			
+			function f_OpenSFP(){
+				url = $("#form\\:linkSFP").val();
+				//myWindow=window.open(url,'myWindowSFP','width=850,height=650,resizable=1,scrollbars=1');
+				wPadre = window;
+				var sOptions;
+				sOptions = 'status=yes,menubar=no,scrollbars=yes,resizable=yes,toolbar=no,channelmode=1';
+				sOptions = sOptions + ',width=' + (screen.availWidth - 5).toString();
+				sOptions = sOptions + ',height=' + (screen.availHeight - 122).toString();
+				sOptions = sOptions + ',screenX=0,screenY=0,left=0,top=0';
+				myWindow = window.open('', 'myWindow', sOptions);
+				//myWindow=window.open(url,'myWindow','width=850,height=650,resizable=1,scrollbars=1');
+				myWindow.location = url;
+				myWindow.focus();
+				myWindow.moveTo( 0, 0 );
+				myWindow.resizeTo( screen.availWidth, screen.availHeight );
+			}
+			
+			function f_CheckWin(){
+				if (myWindow!=null){
+					if (myWindow.closed)
+					{
+						abrirFirmasNoAsociadas();
+						myWindow=null;
+						
+					}
+				}
+			}
+			window.setInterval('f_CheckWin()',timeInMilliseconds);
+			
+			$(document).ready(function(){
+				$("iframe").attr('src',$("#form\\:idRutaDOI").val());
+				
+				
+			});
+		</script>
+	</f:verbatim>
+	
+	<h:panelGroup layout="block" styleClass="ui-state-error ui-corner-all" style="padding:5px;width:800px;margin-bottom:5px;" rendered="#{not empty urlContentManager.mensajeContent}">
+		<h:panelGroup style="float: left; margin-right: 2px;" styleClass="ui-icon ui-icon-alert"></h:panelGroup>
+		<h:outputText value="#{urlContentManager.mensajeContent}" escape="false"/>
+	</h:panelGroup>
+	
+	<table width="800px">
+		<tr>
+			<td>
+				<h:outputText value="Documentos de Identidad"
+						styleClass="titulo-bold"/>
+			</td>
+			<td align="right">
+				<!--h:commandLink disabled="#{urlContentManager.modoConsulta}" 
+						value="Ir a SFP: Asociación de Firmas"
+						onclick="javascript:f_OpenSFP()" /-->
+				<h:outputLink rendered="#{!urlContentManager.modoConsulta}"
+						value="javascript:void(0);"
+						onclick="javascript:f_OpenSFP()">Ir a SFP: Asociación de Firmas</h:outputLink>
+				<h:commandButton id="btnActualizarParticipes"
+					image="#{resource['imagenes:actualizar.png']}"
+					rendered="#{!urlContentManager.modoConsulta}"
+					title="Obtener Partícipes"
+					style="margin-left: 5px; vertical-align: middle;"
+					onclick="return confirm('¿Desea actualizar los partícipes?')">
+					<f:ajax event="action" listener="#{urlContentManager.actualizarParticipes}" 
+						render="idMsgActualizarParticipes" execute="@this" />
+				</h:commandButton>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td align="right">
+				<h:message for="btnActualizarParticipes" id="idMsgActualizarParticipes" errorClass="mensaje-error" infoClass="mensaje-info" />
+			</td>
+		</tr>
+	</table>
+	<h:panelGrid columns="1" width="800px">
+		<hr></hr>
+	</h:panelGrid>
+	<br />	
+	<h:inputHidden id="idRutaDOI" value="#{urlContentManager.rutaDOI}" />
+	<h:inputHidden id="linkSFP" value="#{urlContentManager.urlSFPFirmas}" />
+	<h:panelGroup id="idIfRVisorContent" layout="block">
+		<iframe title="Pagina content" width="720px" height="320px" />
+	</h:panelGroup>
+	<br />
+	<br />
+</ui:composition>

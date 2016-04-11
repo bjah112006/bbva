@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+
+	<!-- TODO revisar si se usa -->
+	<f:verbatim>
+		<script type="text/javascript">
+			function abrirDocumento (obj){
+				var pId = $(obj).parent().find("input:eq(0)").val();
+				//f_openArchivoEscaneadoCM(pId);
+				applet("appletVisor").abrirDocumento("DOID0");
+				return false;
+			}
+			$(document).ready(function(){
+				$("#form\\:idDigDoc\\:idTipoPJ").bind("change", function(){
+					selectTipoPJ ({"idTipoPJ":$(this).val()});
+				});
+			});
+			function f_openArchivoEscaneadoCM(pId){
+				//myWindow=window.open('http://9.6.98.125:9080/BBVA_CE_VisorContentManager/VisorCM.jsp?document='+pId,'myWindow','width=850,height=450,resizable=yes');
+			}			
+		</script>
+	</f:verbatim>
+
+	<custom:tabView id="idDigDoc">
+		<custom:tab title="Paso 2: Digitalice la Documentación">
+			<h:dataTable id="idListDocExp" var="documentoExpSub" width="800"
+				value="#{revisarDigitaliceDocumentacion.listaDocumentoExp}">
+				<h:column id="modelHeader">
+					<f:facet name="header">
+						<h:outputText value="Tipo Doc." />
+					</f:facet>
+					<h:outputText value="#{documentoExpSub.documento.descripcion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="¿Obligatorio?" />
+					</f:facet>
+					<h:selectBooleanCheckbox disabled="true"
+						value="#{documentoExpSub.flagObligatorio=='1' ? true : false}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Archivo escaneado" />
+					</f:facet>
+					<h:commandLink styleClass="abrirDocumento"
+						value="#{documentoExpSub.nombreArchivo}"
+						onclick="return abrirDocumento(this);"
+						rendered="#{documentoExpSub.documento.tipoVisor == 'A' and documentoExpSub.documentoExp.flagEscaneado=='1'}">
+					</h:commandLink>
+					<h:commandLink styleClass="abrirDocumento"
+						value="#{documentoExpSub.nombreArchivo}"
+						actionListener="#{revisarDigitaliceDocumentacion.abrirDocumento}"
+						onclick="return abrirDocumento(this);">
+						<f:ajax event="click" render=":form:idDigDoc:idVisorApplet"
+							execute="@form" />
+						<f:param name="documento"
+							value="#{documentoExpSub.documento.codigoDocumento}" />
+					</h:commandLink>
+					<h:commandLink
+						actionListener="#{revisarDigitaliceDocumentacion.eliminarDocumento}"
+						rendered="#{documentoExpSub.flagEscaneado=='1'}"
+						onclick="return confirm('¿Desea eliminar el documento escaneado?');">
+						<h:graphicImage value="#{resource['imagenes:rojo.png']}" />
+						<f:ajax event="click" render="@form" execute="@form" />
+						<f:param name="documento"
+							value="#{documentoExpSub.documento.codigoDocumento}" />
+					</h:commandLink>
+					<h:inputHidden value="#{documentoExpSub.pidCM}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Versiones históricas" />
+					</f:facet>
+					<h:dataTable id="tablaDocumentosHist" var="documentoHist"
+						value="#{documentoExpSub.listaDocumentoHistorico}">
+						<h:column>
+							<h:commandLink value="#{documentoHist.nombreArchivo}"
+								actionListener="#{revisarDigitaliceDocumentacion.abrirDocumento}">
+								<f:ajax evet="click" render=":form:idDigDoc:idVisorApplet"
+									execute="@form" />
+								<f:param name="documento"
+									value="#{documentoHist.codigoDocumento}" />
+							</h:commandLink>
+						</h:column>
+					</h:dataTable>
+				</h:column>
+			</h:dataTable>
+		</custom:tab>
+	</custom:tabView>
+
+
+</ui:composition>

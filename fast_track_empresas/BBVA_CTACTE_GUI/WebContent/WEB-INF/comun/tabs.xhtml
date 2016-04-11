@@ -1,0 +1,76 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<f:verbatim>
+		<script type="text/javascript">
+			function accionExpediente() {
+				accion("tab-expediente", "tabExp");
+			}
+			function accionAyudaMemoria() {
+				accion("tab-ayuda-memoria", "tabAyu");
+			}
+			function accionHistorial() {
+				accion("tab-historial", "tabHis");
+			}
+			function accionObservaciones() {
+				accion("tab-observaciones", "tabObs");
+			}
+			function accionLog() {
+				accion("tab-log", "tabLog");
+			}
+			function accion(panelTab, claseTab) {
+				$(".tab-item").hide();
+				$("." + panelTab).show();
+
+				var desactivado = $(".desactivado");
+				$(desactivado).removeClass("desactivado");
+				$(desactivado).addClass("activado");
+
+				var tab = $("." + claseTab);
+				$(tab).removeClass("activado");
+				$(tab).addClass("desactivado");
+
+			}
+		</script>
+	</f:verbatim>
+
+	<h:panelGrid columns="1" width="1100">
+		<h:panelGroup>
+			<div class="tabs">
+				<h:outputLink class="desactivado tabExp"
+					value="javascript:accionExpediente ();">
+					<h:outputText value="Expediente" />
+				</h:outputLink>
+				<h:outputLink class="activado tabAyu"
+					value="javascript:accionAyudaMemoria ();">
+					<h:outputText value="Ayuda Memoria" />
+				</h:outputLink>
+				<h:outputLink class="activado tabHis"
+					value="javascript:accionHistorial ();">
+					<h:outputText value="Historial" />
+				</h:outputLink>
+				<h:outputLink class="activado tabObs"
+					value="javascript:accionObservaciones ();">
+					<h:outputText value="Observaciones" />
+				</h:outputLink>
+				<h:outputLink class="activado tabLog"
+					value="javascript:accionLog ();">
+					<h:outputText value="Log" />
+				</h:outputLink>
+			</div>
+		</h:panelGroup>
+		<h:panelGrid styleClass="datos-cabecera-retroceder" width="100%">			
+			<h:panelGroup styleClass="dato">
+				<table width="100%">
+					<tr>
+						<td style="text-align: right !important;"><h:commandLink
+								value="Regresar" action="#{cabecera.regresar}" /></td>
+					</tr>
+				</table>
+
+			</h:panelGroup>
+		</h:panelGrid>
+	</h:panelGrid>
+</ui:composition>

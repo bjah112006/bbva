@@ -1,0 +1,292 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+	
+	<script type="text/javascript">
+		/* <![CDATA[ */
+		$(document).ready(function(){
+			$(".soloNumeros").keypress(function (event) {
+				if (event.which > 31) { 
+					if (event.which < 48 || event.which > 57) {
+						event.preventDefault();
+					}
+				}
+			});
+		});
+		function bloquearBusqueda(data) {
+			if (data.status == 'begin') {
+				$("#form\\:tabView\\:botonBuscar").attr("disabled", "disabled");
+				$("#form\\:tabView\\:loadingDiv").css( "display", "inline" );
+			}
+		}
+		function colapsarExpandirMenu(data) {
+			if (data.status == 'success') {
+				if (#{bandejaMB.menuColapsado}) {
+					// expandir
+					$("#form\\:logoBBVA").css("display", "");
+					$("ul.menu-lista").css("display", "");
+					$("table.datos-cabecera").css("width", "");
+				} else {
+					// colapsar
+					$("#form\\:logoBBVA").css("display", "none");
+					$("ul.menu-lista").css("display", "none");
+					$("table.datos-cabecera").css("width", "1283px");
+				}
+			}
+		}
+		/* ]]> */
+	</script>
+
+	<custom:tabView id="tabView" style="#{bandejaMB.menuColapsado ? 'width:1278px' : 'width:1100px'}">
+		<custom:tab id="tab1" title="Bandeja de Trabajo">
+			<h:panelGroup style="text-align: left; width:1100px;">
+				<h:commandLink style="color:#0000FF !important; padding-right: 10px;"
+					value="#{bandejaMB.menuColapsado ? 'Expandir menú &gt;&gt;' : '&lt;&lt; Colapsar menú'}">
+					<f:ajax event="action" render="@form" execute="@form" listener="#{bandejaMB.colapsarExpandirMenu}" onevent="colapsarExpandirMenu" />
+				</h:commandLink>
+				<h:commandLink  style="color:#0000FF !important;"
+            	    value="Mis tareas pendientes"
+            	    action="#{bandejaMB.obtenerMisPedientes}">
+			        <f:ajax event="action" render=":form:panelBusqueda" execute="@form" onevent="bloquearBusqueda" /><!-- TODO el event era dblclick -->
+				</h:commandLink> 
+			</h:panelGroup>
+			<h:panelGrid columns="1" style="text-align: left; width:1100px;">
+				<h:panelGrid id="idFiltros" columns="1">
+					<h:panelGrid columns="8"
+						columnClasses="etiquetaBsqTarea,campoBsqTarea,etiquetaBsqEstTarea,campoBsqEstTarea,etiquetaBsqNroExp,campoBsqNroExp,etiquetaBsqEstExp,campoBsqEstExp">
+						<h:outputLabel for="idTarea" value="N° Tarea" />
+						<h:inputText id="idTarea" style="width:100px" styleClass="soloNumeros"
+							value="#{bandejaMB.filtro.codTarea}">
+							<f:ajax event="keyup" />
+						</h:inputText>
+						<h:outputLabel for="idEstado" value="Estado de la tarea" />
+						<h:selectOneMenu id="idEstado" style="width:110px"
+							value="#{bandejaMB.filtro.codEstadoTarea}">
+							<f:selectItem itemLabel="Todos" itemValue="0" />
+							<f:selectItems value="#{bandejaMB.estadoItems}" />
+							<f:ajax event="keyup" />
+						</h:selectOneMenu>
+						<h:outputLabel for="idExpediente" value="Nro. Expediente" />
+						<h:inputText id="idExpediente" style="width:80px" styleClass="soloNumeros"
+							value="#{bandejaMB.filtro.expediente}">
+							<f:ajax event="keyup" />
+						</h:inputText>
+						<h:outputLabel for="idEstadoExp" value="Estado del expediente" />
+						<h:selectOneMenu id="idEstadoExp" style="width:105px"
+							value="#{bandejaMB.filtro.codEstadoExp}">
+							<f:selectItem itemLabel="Todos" itemValue="0" />
+							<f:selectItems value="#{bandejaMB.estadoExpItems}" />
+							<f:ajax event="change" />
+						</h:selectOneMenu>
+					</h:panelGrid>
+					<h:panelGrid columns="6"
+						columnClasses="etiquetaBsqNomTarea,campoBsqNomTarea,etiquetaBsqCodCentral,campoBsqCodCentral,etiquetaBsqCodOperacion,campoBsqCodOperacion">
+						<h:outputLabel for="idNomTarea" value="Nombre de Tarea" />
+						<h:selectOneMenu id="idNomTarea" styleClass="campoBsqNomTarea"
+							value="#{bandejaMB.filtro.nomTarea}">
+							<f:selectItem itemLabel="Todos" itemValue="0" />
+							<f:selectItems value="#{bandejaMB.nomTareaItems}" />
+							<f:ajax event="change" />
+						</h:selectOneMenu>
+						<h:outputLabel for="idCodCentral" value="Código Central" />
+						<h:inputText id="idCodCentral" style="width:95px" styleClass="soloNumeros"
+							value="#{bandejaMB.filtro.codCentral}">
+							<f:ajax event="keyup" />
+						</h:inputText>
+						<h:outputLabel for="idOperacion" value="Operación" />
+						<h:selectOneMenu id="idOperacion" style="width: 180px"
+							value="#{bandejaMB.filtro.operacion}" styleClass="campoBsqCodOperacion">
+							<f:selectItem itemLabel="Todos" itemValue="0" />
+							<f:selectItems value="#{bandejaMB.operacionItems}" />
+							<f:ajax event="change" />
+						</h:selectOneMenu>
+					</h:panelGrid>					
+					<h:panelGrid columns="8" 
+					             columnClasses="etiquetaBsqFecAsigDel,campoBsqFecAsigDel,etiquetaBsqFecAsigAl,campoBsqFecAsigAl,etiquetaBsqNroDOI,campoBsqNroDOI,etiquetaBsqRazSocial,campoBsqRazSocial">
+						<h:outputLabel value="Fecha de asignación del" />
+						<h:panelGroup>
+							<custom:calendar id="campoFecAsigDel" styleClass="campoFecAsigDel" readOnlyInputText="false" 
+								value="#{bandejaMB.filtro.strFechaAsignacion.limInf}" pattern="dd/MM/yyyy"
+								maxdate="#{bandejaMB.filtro.strFechaAsignacion.limSup}"
+								mask="00/00/0000" converterMessage="Fecha inválida">
+								<f:attribute name="campo" value="strFechaAsignacion.limInf" />
+								<f:ajax event="change" />
+							</custom:calendar>
+							<h:message for="campoFecAsigDel" errorClass="mensaje-error-fecha" />
+						</h:panelGroup>
+						<h:outputLabel value="al" />
+						<h:panelGroup>
+							<custom:calendar id="campoFecAsigAl" styleClass="campoFecAsigAl" readOnlyInputText="false" 
+								value="#{bandejaMB.filtro.strFechaAsignacion.limSup}" pattern="dd/MM/yyyy"
+								mask="00/00/0000" converterMessage="Fecha inválida">
+								<f:attribute name="campo" value="strFechaAsignacion.limSup" />
+								<f:ajax event="change" />
+							</custom:calendar>
+							<h:message for="campoFecAsigAl" errorClass="mensaje-error-fecha" />
+						</h:panelGroup>
+						
+						<h:outputLabel for="idNumDOI" value="Nro. DOI" />
+						<h:inputText id="idNumDOI" value="#{bandejaMB.filtro.numDoi}"
+							style="width:95px">
+							<f:ajax event="keyup" />
+						</h:inputText>
+						<h:outputLabel for="idRazSoc" value="Razón social" />
+						<h:inputText id="idRazSoc" value="#{bandejaMB.filtro.razSoc}"
+							style="width:260px">
+							<f:ajax event="keyup" />
+						</h:inputText>						
+					</h:panelGrid>
+					
+					<h:panelGrid columns="10" 
+					             columnClasses="etiquetaBsqFecAtenDel,campoBsqFecAtenDel,etiquetaBsqFecAtenAl,campoBsqFecAtenAl,etiquetaBsqGestor,campoBsqGestor,etiquetaBsqTerritorio,campoBsqTerritorio,etiquetaBsqOficina,campoBsqOficina">
+						<h:outputLabel value="Fecha de atención del" />
+						<h:panelGroup>
+							<custom:calendar id="campoBsqFecAtenDel" styleClass="campoBsqFecAtenDel" readOnlyInputText="false" 
+								value="#{bandejaMB.filtro.strFechaAtencion.limInf}"  pattern="dd/MM/yyyy"
+								mask="00/00/0000" converterMessage="Fecha inválida">
+								<f:attribute name="campo" value="strFechaAtencion.limInf" />
+								<f:ajax event="change" />
+							</custom:calendar>
+							<h:message for="campoBsqFecAtenDel" errorClass="mensaje-error-fecha" />
+						</h:panelGroup>
+						<h:outputLabel value="al" />
+						<h:panelGroup>
+							<custom:calendar id="etiquetaBsqFecAtenAl" styleClass="etiquetaBsqFecAtenAl" readOnlyInputText="false" 
+								value="#{bandejaMB.filtro.strFechaAtencion.limSup}"  pattern="dd/MM/yyyy"
+								mask="00/00/0000" converterMessage="Fecha inválida">
+								<f:attribute name="campo" value="strFechaAtencion.limSup" />
+								<f:ajax event="change" />
+							</custom:calendar>
+							<h:message for="etiquetaBsqFecAtenAl" errorClass="mensaje-error-fecha" />
+						</h:panelGroup>
+						<h:outputLabel for="idGestor" value="Gestor" />
+						<h:inputText id="idGestor" value="#{bandejaMB.filtro.gestor}"
+							style="width:95px">
+							<f:ajax event="keyup" />
+						</h:inputText>
+						<h:outputLabel for="idTerritorio" value="Territorio Expediente" />
+						<h:selectOneMenu id="idTerritorio" style="width: 187px"
+							value="#{bandejaMB.filtro.territorioExp}">
+							<f:selectItem itemLabel="Todos" itemValue="0" />
+							<f:selectItems value="#{bandejaMB.territorioItems}" />
+							<f:ajax event="change" render=":form:tabView:idOficina" execute="@form"
+							        listener="#{bandejaMB.cambiarOficinasExp}"/>
+						</h:selectOneMenu>
+						<h:outputLabel for="idOficina" value="Oficina Expediente" />
+						<h:selectOneMenu id="idOficina" style="width:180px"
+							value="#{bandejaMB.filtro.oficinaExp}">
+							<f:selectItem itemLabel="Todos" itemValue="0" />
+							<f:selectItems value="#{bandejaMB.oficinaItemsExp}" />								
+						</h:selectOneMenu>
+					</h:panelGrid>
+
+					<h:panelGrid columns="10" columnClasses="etiquetaBsqResponsable,campoBsqResponsable,etiquetaBsqAns,campoBsqAns,etiquetaBsqFecIniDel,campoBsqFecIniDel,etiquetaBsqFecIniAl,campoBsqFecIniAl,etiquetaBsqEstudio,campoBsqEstudio">
+						<h:outputLabel for="idResponsable" value="Responsable" />
+						<h:inputText id="idResponsable" style="width:100px"
+							value="#{bandejaMB.filtro.responsable}">
+							<f:ajax event="keyup" />
+						</h:inputText>
+						<h:outputLabel for="idANS" value="ANS" />
+						<h:selectOneMenu id="idANS" style="width:133px"
+							value="#{bandejaMB.codSemaforo}">
+							<f:selectItem itemLabel="Todos" itemValue="0" />
+							<f:selectItems value="#{bandejaMB.ansItems}" />
+							<f:ajax event="change" />
+						</h:selectOneMenu>
+						
+						<h:outputLabel value="Fecha de inicio del" />
+						<h:panelGroup>
+							<custom:calendar id="campoBsqFecIniDel" styleClass="campoBsqFecIniDel" readOnlyInputText="false" 
+								value="#{bandejaMB.filtro.strFechaInicio.limInf}"  pattern="dd/MM/yyyy"
+								mask="00/00/0000" converterMessage="Fecha inválida">
+								<f:attribute name="campo" value="strFechaInicio.limInf" />
+								<f:ajax event="change" />
+							</custom:calendar>
+							<h:message for="campoBsqFecIniDel" errorClass="mensaje-error-fecha" />
+						</h:panelGroup>
+						<h:outputLabel value="al" />
+						<h:panelGroup>
+							<custom:calendar id="campoBsqFecIniAl" styleClass="campoBsqFecIniAl" readOnlyInputText="false" 
+								value="#{bandejaMB.filtro.strFechaInicio.limSup}"  pattern="dd/MM/yyyy"
+								mask="00/00/0000" converterMessage="Fecha inválida">
+								<f:attribute name="campo" value="strFechaInicio.limSup" />
+								<f:ajax event="change" />
+							</custom:calendar>
+							<h:message for="campoBsqFecIniAl" errorClass="mensaje-error-fecha" />
+						</h:panelGroup>
+						<h:outputLabel for="idEstudio" value="Estudio" />
+						<h:selectOneMenu id="idEstudio" style="width:190px"
+							value="#{bandejaMB.filtro.estudio}">
+							<f:selectItem itemLabel="Todos" itemValue="0" />
+							<f:selectItems value="#{bandejaMB.estudioItems}" />
+							<f:ajax event="change" render=":form:tabView:idEstudio2" execute="@form"
+							        listener="#{bandejaMB.cambiarAbogados}"/>
+						</h:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="10" columnClasses="etiquetaBsqTerritorioTarea,campoBsqTerritorioTarea,etiquetaBsqOficinaTarea,campoBsqOficinaTarea,etiquetaBsqFecTerDel,campoBsqFecTerDel,etiquetaBsqFecTerAl,campoBsqFecTerAl,etiquetaBsqAbogado,campoBsqAbogado">
+						<h:outputLabel for="idTerritorio2" value="Territorio Tarea" />
+						<h:selectOneMenu id="idTerritorio2" style="width: 187px"
+							value="#{bandejaMB.filtro.territorioTarea}">
+							<f:selectItem itemLabel="Todos" itemValue="0" />
+							<f:selectItems value="#{bandejaMB.territorioItems}" />
+							<f:ajax event="change" render=":form:tabView:idOficina2" execute="@form"
+							        listener="#{bandejaMB.cambiarOficinasTarea}"/>
+						</h:selectOneMenu>
+						<h:outputLabel for="idOficina2" value="Oficina Tarea" />
+						<h:selectOneMenu id="idOficina2" style="width: 150px"
+							value="#{bandejaMB.filtro.oficinaTarea}">
+							<f:selectItem itemLabel="Todos" itemValue="0" />
+							<f:selectItems value="#{bandejaMB.oficinaItemsTarea}" />								
+						</h:selectOneMenu>
+						<h:outputLabel value="Fecha de término del" />
+						<h:panelGroup>
+							<custom:calendar id="campoBsqFecTerDel" styleClass="campoBsqFecTerDel" readOnlyInputText="false" 
+								value="#{bandejaMB.filtro.strFechaTermino.limInf}" pattern="dd/MM/yyyy"
+								mask="00/00/0000" converterMessage="Fecha inválida">
+								<f:attribute name="campo" value="strFechaTermino.limInf" />
+								<f:ajax event="change" />
+							</custom:calendar>
+							<h:message for="campoBsqFecTerDel" errorClass="mensaje-error-fecha" />
+						</h:panelGroup>
+						<h:outputLabel value="al" />
+						<h:panelGroup>
+							<custom:calendar id="campoBsqFecTerAl" styleClass="campoBsqFecIniAl" readOnlyInputText="false" 
+								value="#{bandejaMB.filtro.strFechaTermino.limSup}" pattern="dd/MM/yyyy"
+								mask="00/00/0000" converterMessage="Fecha inválida">
+								<f:attribute name="campo" value="strFechaTermino.limSup" />
+								<f:ajax event="change" />
+							</custom:calendar>
+							<h:message for="campoBsqFecTerAl" errorClass="mensaje-error-fecha" />
+						</h:panelGroup>
+					    <h:outputLabel for="idEstudio2" value="Abogado" />
+						<h:selectOneMenu id="idEstudio2"
+							value="#{bandejaMB.filtro.abogadoEstudio}" style="width:190px">
+							<f:selectItem itemLabel="Todos" itemValue="0" />
+							<f:selectItems value="#{bandejaMB.abogadoItems}" />								
+						</h:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>				
+				<h:panelGrid style="width: 1060px; text-align: center">
+				    <h:panelGroup columns="2">		
+					    <h:commandButton value="Buscar" id="botonBuscar">
+							<f:ajax event="click" listener="#{bandejaMB.filtraTareas}" 
+								render=":form:panelBusqueda" execute="@form" onevent="bloquearBusqueda" />
+						</h:commandButton>
+						<h:commandButton value="Limpiar Filtros">
+							<f:ajax event="click" listener="#{bandejaMB.limpiarFiltros}"
+								render=":form:panelBusqueda" execute="@form" />
+						</h:commandButton>
+					</h:panelGroup>
+					<h:panelGroup columns="1" id="loadingDiv" style="display:none;">
+						<h:outputText value="Procesando... " />
+						<h:graphicImage value="#{resource['imagenes:loading.gif']}" />
+					</h:panelGroup>
+				</h:panelGrid>
+			</h:panelGrid>
+
+		</custom:tab>
+	</custom:tabView>
+</ui:composition>

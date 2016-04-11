@@ -1,0 +1,755 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	xmlns:bbva="http://java.sun.com/jsf/composite/components/bbva"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+
+	<ui:define name="title">Horario</ui:define>
+
+	<ui:define name="content">
+	<h:outputScript>
+		$(document).ready(function() {			
+			$(".soloNumeros").numeric({decimal: false, negative: false});
+		});
+		
+		function validarHora(componente){
+			var cantidad=componente.value;
+			if(cantidad>=24){
+				componente.value='23';
+			}
+		};
+		
+		function validarMinuto(componente){
+			var cantidad=componente.value;
+			if(cantidad>=60){
+				componente.value='59';
+			}
+		};
+	</h:outputScript>
+		<custom:tabView id="tabView" style="width:1100px;">
+			<custom:tab id="tab1" title="Configuracion de horario laboral">
+				
+				
+
+				<table style="width: 1080px; border: 0px solid;">
+					<tr>
+						<td style="border: 0px solid;">
+							Territorio:
+						</td>
+						<td style="border: 0px solid;"><h:selectOneMenu
+							style="width:250px"
+							value="#{horario.horarioVO.idTerritorio}">
+								<f:selectItem itemLabel="Seleccione" itemValue="0" />
+								<f:selectItems value="#{horario.territoriosSelectValue}" />
+								<f:ajax event="change" render=":form:tabView:idOficina"
+									listener="#{horario.obtenerOficinaPorTerritorio}" />
+							</h:selectOneMenu>
+						</td>
+						<td style="border: 0px solid;">
+							Oficina:
+						</td>
+						<td style="border: 0px solid;">
+							<h:selectOneMenu id="idOficina" style="width:250px"
+								value="#{horario.horarioVO.idOficina}">
+								<f:selectItem itemLabel="Seleccione" itemValue="0" />
+								<f:selectItems value="#{horario.oficinaItems}" />
+								<f:ajax event="change"
+									render=":form:tabViewResult:tablaLunes :form:tabViewResult:tablaMartes 
+									:form:tabViewResult:tablaMiercoles 
+									:form:tabViewResult:tablaJueves 
+									:form:tabViewResult:tablaViernes 
+									:form:tabViewResult:tablaSabado 
+									:form:tabViewResult:tablaDomingo :form:tabExcepciones:tablaExcepciones :form:tabViewResult:linkAgregarRango"
+									execute="@form" listener="#{horario.obtenerHorarioGenerico}" />
+							</h:selectOneMenu>
+						</td>
+						<td style="border: 0px solid;">
+							Perfil:
+						</td>
+						<td style="border: 0px solid;">
+							<h:selectOneMenu id="idPerfil" style="width: 250px" 
+								value="#{horario.horarioVO.idPerfil}" >
+								<f:selectItem itemLabel="Seleccione" itemValue="0" />
+								<f:selectItems value="#{horario.perfilesSelectValue}" />
+								<f:ajax event="change"
+									render=":form:tabViewResult:tablaLunes :form:tabViewResult:tablaMartes 
+									:form:tabViewResult:tablaMiercoles 
+									:form:tabViewResult:tablaJueves 
+									:form:tabViewResult:tablaViernes 
+									:form:tabViewResult:tablaSabado 
+									:form:tabViewResult:tablaDomingo :form:tabExcepciones:tablaExcepciones :form:tabViewResult:linkAgregarRango"
+									execute="@form" listener="#{horario.obtenerHorarioGenerico}" />
+							</h:selectOneMenu>
+						</td>
+					</tr>
+				</table>
+				
+			</custom:tab>
+		</custom:tabView>
+
+		<custom:tabView id="tabViewResult" style="width:1100px;height:250px;">
+			<custom:tab id="tab1" title="Horario">
+
+				<table style="width: 1080px;">
+					<tr>
+						<td>
+							<h:commandLink styleClass="colorLink" value="Agregar Rango" id="linkAgregarRango"
+								actionListener="#{horario.preAgregarRangoSemana}" disabled="#{horario.preAgregarDesabilitado}" 
+								render=":form:tabViewResult:tablaAgregarRango ">
+								<f:param name="diaSeleccionado" value="0" />
+							</h:commandLink>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h:panelGroup id="tablaAgregarRango" rendered="#{horario.mostrarRango}"
+								style="width:1080px;">
+								
+								<table class="ui-state-default">
+									<tr>
+										<td>
+											Día de la semana:
+										</td>
+										<td>
+											<h:outputText value="&#160;&#160;" />
+										</td>
+										<td>
+											<h:selectOneMenu id="idDias" style="width:300px"
+												value="#{horario.horarioVO.idDiaSeleccionado}"
+												styleClass="campoBsqCodOperacion">
+												<f:selectItem itemLabel="Seleccionar" itemValue="0" />
+												<f:selectItem itemLabel="DOMINGO" itemValue="1" />
+												<f:selectItem itemLabel="LUNES" itemValue="2" />
+												<f:selectItem itemLabel="MARTES" itemValue="3" />
+												<f:selectItem itemLabel="MIERCOLES" itemValue="4" />
+												<f:selectItem itemLabel="JUEVES" itemValue="5" />
+												<f:selectItem itemLabel="VIERNES" itemValue="6" />
+												<f:selectItem itemLabel="SABADO" itemValue="7" />
+											</h:selectOneMenu>
+										</td>
+										<td>
+											<h:outputText value="&#160;&#160;&#160;" />
+										</td>
+										<td>
+											Rango
+										</td>
+										<td>
+											<h:outputText value="&#160;&#160;" />
+										</td>
+										<td>
+											<h:inputText id="idRangoHoraInicial" style="width:60px" onblur="validarHora(this);"
+												 styleClass="soloNumeros" value="#{horario.horarioVO.rangoHoraInicial}" maxlength="2" >
+											</h:inputText> 
+											: 
+											<h:inputText id="idRangoMinutoInicial" style="width:60px" onblur="validarMinuto(this);"
+												styleClass="soloNumeros" value="#{horario.horarioVO.rangoMinutoInicial}" maxlength="2">
+											</h:inputText>
+										</td>
+										<td > 
+											<h:outputText value="&#160;&#160;&#160;" />
+										</td>
+										<td>
+											a
+										</td>
+										<td> 
+											<h:outputText value="&#160;&#160;" />
+										</td>
+										<td>
+											<h:inputText id="idRangoHoraFinal" style="width:60px" onblur="validarHora(this);"
+												styleClass="soloNumeros" value="#{horario.horarioVO.rangoHoraFinal}" maxlength="2">
+											</h:inputText> 
+											: 
+											<h:inputText id="idRangoMinutoFinal" style="width:60px" onblur="validarMinuto(this);"
+												styleClass="soloNumeros" value="#{horario.horarioVO.rangoMinutoFinal}" maxlength="2">
+											</h:inputText>
+										</td>
+										<td>
+											<h:outputText value="&#160;&#160;&#160;" />
+										</td>
+										<td>
+											<h:selectBooleanCheckbox value="#{horario.horarioVO.estado}" /> Activo
+										</td>
+										<td>
+											<h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+										</td>
+										<td colspan="1" rowspan="2" 
+											style="text-align: left !important;vertical-align:middle !important;">
+											<h:commandButton styleClass="boton" value="Guardar"
+												onclick="return confirm('Desea guardar los cambios?');"
+												execute="@form" action="#{horario.guardarRangoSemana}"
+												render=":form:tablaAgregarRango" />
+										</td>
+										<td>
+											 <h:commandButton styleClass="boton" value="Cancelar"
+												execute="@form" action="#{horario.cerrarGuardarRangoSemana}"
+												render=":form:tablaAgregarRango" />
+										</td>
+									</tr>
+								</table>
+							</h:panelGroup>
+						</td>
+					</tr>
+				</table>
+			
+			
+				<table style="width: 1080px;">
+					<tr>
+						<td>
+							<h:dataTable border="0" cellspacing="1" cellpadding="1"
+								id="tablaDomingo" var="dia" rows="20" widgetVar="tablaDomingo"
+								value="#{horario.rangosDomingo}" width="130" style="border-collapse:collapse;"
+								headerClass="ui-state-default">
+
+								<h:column style="text-align:center !important;">
+									<f:facet name="header">
+										<table width="130">
+											<tr>
+												<td style="text-align:center !important;vertical-align:middle !important;">
+													<h:outputLabel value="DOMINGO" />
+												</td>
+												<td style="text-align:center !important;vertical-align:middle !important;">
+													<h:commandLink actionListener="#{horario.preAgregarRangoSemana}" 
+														disabled="#{horario.preAgregarDesabilitado}" render=":form:tablaAgregarRango">
+														<h:graphicImage value="../imagenes/mas16x16.png"
+															width="13" height="13" />
+														<f:param name="diaSeleccionado" value="1" />
+													</h:commandLink>
+												</td>
+											</tr>
+										</table>
+									</f:facet>
+									<h:commandLink styleClass="#{dia.estado == '1' ? 'colorLink' : 'colorLinkDisabled'}"
+										value="#{dia.descripcion}" style="text-align:center !important;"
+										actionListener="#{horario.preModificarRangoSemana}" render=":form:tablaAgregarRango">
+										<f:param name="rangoSeleccionado" value="#{dia.id}" />
+										<f:param name="dia" value="1" />
+									</h:commandLink>
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">
+										<h:outputLabel value="" />
+									</f:facet>
+									<h:commandLink rendered="#{dia.descripcion != 'N/A'}"
+										actionListener="#{horario.eliminarRango}" onclick="return confirm('Desea eliminar el rango seleccionado?');">
+										<h:graphicImage value="../imagenes/icon_delete.png" width="10"
+											height="10" />
+										<f:param name="idRango" value="#{dia.id}" />
+									</h:commandLink>
+								</h:column>
+							</h:dataTable>
+						</td>
+						<td>
+							<h:dataTable border="0" cellspacing="1" cellpadding="1"
+								id="tablaLunes" var="dia" rows="20" widgetVar="tablaLunes"
+								value="#{horario.rangosLunes}" width="130" style="border-collapse:collapse;"
+								headerClass="ui-state-default">
+
+								<h:column style="text-align:center !important;">
+									<f:facet name="header">
+										<table width="130">
+											<tr>
+												<td style="text-align:center !important;vertical-align:middle !important;">
+													<h:outputLabel value="LUNES" />
+												</td>
+												<td style="text-align:center !important;vertical-align:middle !important;">
+													<h:commandLink actionListener="#{horario.preAgregarRangoSemana}" 
+														disabled="#{horario.preAgregarDesabilitado}" render=":form:tablaAgregarRango">
+														<h:graphicImage value="../imagenes/mas16x16.png"
+															width="13" height="13" />
+														<f:param name="diaSeleccionado" value="2" />
+													</h:commandLink>
+												</td>
+											</tr>
+										</table>
+									</f:facet>
+									<h:commandLink styleClass="#{dia.estado == '1' ? 'colorLink' : 'colorLinkDisabled'}"
+										style="text-align:center !important;" value="#{dia.descripcion}"
+										actionListener="#{horario.preModificarRangoSemana}" render=":form:tablaAgregarRango" >
+										<f:param name="rangoSeleccionado" value="#{dia.id}" />
+										<f:param name="dia" value="2" />
+									</h:commandLink>
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+										<h:outputLabel value="" />
+									</f:facet>
+									<h:commandLink styleClass="colorLink" rendered="#{dia.descripcion != 'N/A'}"
+										actionListener="#{horario.eliminarRango}" onclick="return confirm('Desea eliminar el rango seleccionado?');">
+										<h:graphicImage value="../imagenes/icon_delete.png" width="10"
+											height="10" />
+										<f:param name="idRango" value="#{dia.id}" />
+										
+									</h:commandLink>
+								</h:column>
+							</h:dataTable>
+						</td>
+						<td>
+							<h:dataTable border="0" cellspacing="1" cellpadding="1"
+								id="tablaMartes" var="dia" rows="20" widgetVar="tablaMartes"
+								value="#{horario.rangosMartes}" width="130" style="border-collapse:collapse;"
+								headerClass="ui-state-default">
+
+								<h:column style="text-align:center !important;">
+									<f:facet name="header">
+										<table width="130">
+											<tr>
+												<td style="text-align:center !important;vertical-align:middle !important;">
+													<h:outputLabel value="MARTES" />
+												</td>
+												<td style="text-align:center !important;vertical-align:middle !important;">
+													<h:commandLink actionListener="#{horario.preAgregarRangoSemana}" disabled="#{horario.preAgregarDesabilitado}"
+														render=":form:tablaAgregarRango">
+														<h:graphicImage value="../imagenes/mas16x16.png"
+															width="13" height="13" />
+														<f:param name="diaSeleccionado" value="3" />
+													</h:commandLink>
+												</td>
+											</tr>
+										</table>
+									</f:facet>
+									<h:commandLink styleClass="#{dia.estado == '1' ? 'colorLink' : 'colorLinkDisabled'}"
+										style="text-align:center !important;" value="#{dia.descripcion}"
+										actionListener="#{horario.preModificarRangoSemana}" render=":form:tablaAgregarRango">
+										<f:param name="rangoSeleccionado" value="#{dia.id}" />
+										<f:param name="dia" value="3" />
+									</h:commandLink>
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">
+										<h:outputLabel value="" />
+									</f:facet>
+									<h:commandLink styleClass="colorLink" rendered="#{dia.descripcion != 'N/A'}"
+										actionListener="#{horario.eliminarRango}" onclick="return confirm('Desea eliminar el rango seleccionado?');">
+										<h:graphicImage value="../imagenes/icon_delete.png" width="10"
+											height="10" />
+										<f:param name="idRango" value="#{dia.id}" />
+										
+									</h:commandLink>
+								</h:column>
+							</h:dataTable>
+						</td>
+						<td>
+							<h:dataTable border="0" cellspacing="1" cellpadding="1"
+								id="tablaMiercoles" var="dia" rows="20"
+								widgetVar="tablaMiercoles" value="#{horario.rangosMiercoles}"
+								width="130" style="border-collapse:collapse;"
+								headerClass="ui-state-default">
+
+								<h:column style="text-align:center !important;">
+									<f:facet name="header">
+										<table width="130">
+											<tr>
+												<td style="text-align:center !important;vertical-align:middle !important;">
+													<h:outputLabel value="MIERCOLES" />
+												</td>
+												<td style="text-align:center !important;vertical-align:middle !important;">
+													<h:commandLink actionListener="#{horario.preAgregarRangoSemana}" disabled="#{horario.preAgregarDesabilitado}"
+														render=":form:tablaAgregarRango">
+														<h:graphicImage value="../imagenes/mas16x16.png"
+															width="13" height="13" />
+														<f:param name="diaSeleccionado" value="4" />
+													</h:commandLink>
+												</td>
+											</tr>
+										</table>
+									</f:facet>
+									<h:commandLink styleClass="#{dia.estado == '1' ? 'colorLink' : 'colorLinkDisabled'}"
+										value="#{dia.descripcion}" style="text-align:center !important;"
+										actionListener="#{horario.preModificarRangoSemana}" render=":form:tablaAgregarRango">
+										<f:param name="rangoSeleccionado" value="#{dia.id}" />
+										<f:param name="dia" value="4" />
+									</h:commandLink>
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">
+										<h:outputLabel value="" />
+									</f:facet>
+									<h:commandLink styleClass="colorLink"
+										rendered="#{dia.descripcion != 'N/A'}"
+										actionListener="#{horario.eliminarRango}" onclick="return confirm('Desea eliminar el rango seleccionado?');">
+										<h:graphicImage value="../imagenes/icon_delete.png" width="10"
+											height="10"></h:graphicImage>
+										<f:param name="idRango" value="#{dia.id}" />
+										
+									</h:commandLink>
+								</h:column>
+							</h:dataTable>
+						</td>
+						<td>
+							<h:dataTable border="0" cellspacing="1" cellpadding="1"
+								id="tablaJueves" var="dia" rows="20" widgetVar="tablaJueves"
+								value="#{horario.rangosJueves}" width="130"
+								style="border-collapse:collapse;" headerClass="ui-state-default">
+
+								<h:column style="text-align:center !important;">
+									<f:facet name="header">
+										<table width="130">
+											<tr>
+												<td style="text-align:center !important;vertical-align:middle !important;">
+													<h:outputLabel value="JUEVES" />
+												</td>
+												<td style="text-align:center !important;vertical-align:middle !important;">
+													<h:commandLink actionListener="#{horario.preAgregarRangoSemana}" disabled="#{horario.preAgregarDesabilitado}"
+														render=":form:tablaAgregarRango">
+														<h:graphicImage value="../imagenes/mas16x16.png"
+															width="13" height="13" />
+														<f:param name="diaSeleccionado" value="5" />
+													</h:commandLink>
+												</td>
+											</tr>
+										</table>
+									</f:facet>
+									<h:commandLink styleClass="#{dia.estado == '1' ? 'colorLink' : 'colorLinkDisabled'}"
+										value="#{dia.descripcion}" style="text-align:center !important;"
+										actionListener="#{horario.preModificarRangoSemana}" render=":form:tablaAgregarRango">
+										<f:param name="rangoSeleccionado" value="#{dia.id}" />
+										<f:param name="dia" value="5" />
+									</h:commandLink>
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">
+										<h:outputLabel value="" />
+									</f:facet>
+									<h:commandLink styleClass="colorLink" rendered="#{dia.descripcion != 'N/A'}"
+										actionListener="#{horario.eliminarRango}" onclick="return confirm('Desea eliminar el rango seleccionado?');">
+										<h:graphicImage value="../imagenes/icon_delete.png" width="10"
+											height="10" />
+										<f:param name="idRango" value="#{dia.id}" />
+										
+									</h:commandLink>
+								</h:column>
+							</h:dataTable>
+						</td>
+						<td>
+							<h:dataTable border="0" cellspacing="1" cellpadding="1"
+								id="tablaViernes" var="dia" rows="20" widgetVar="tablaViernes"
+								value="#{horario.rangosViernes}" width="130"
+								style="border-collapse:collapse;" headerClass="ui-state-default">
+
+								<h:column style="text-align:center !important;">
+									<f:facet name="header">
+										<table width="130">
+											<tr>
+												<td style="text-align:center !important;vertical-align:middle !important;">
+													<h:outputLabel value="VIERNES" />
+												</td>
+												<td style="text-align:center !important;vertical-align:middle !important;">
+													<h:commandLink actionListener="#{horario.preAgregarRangoSemana}" disabled="#{horario.preAgregarDesabilitado}"
+														render=":form:tablaAgregarRango">
+														<h:graphicImage value="../imagenes/mas16x16.png"
+															width="13" height="13" />
+														<f:param name="diaSeleccionado" value="6" />
+													</h:commandLink>
+												</td>
+											</tr>
+										</table>
+									</f:facet>
+									<h:commandLink styleClass="#{dia.estado == '1' ? 'colorLink' : 'colorLinkDisabled'}"
+										value="#{dia.descripcion}" style="text-align:center !important;"
+										actionListener="#{horario.preModificarRangoSemana}" render=":form:tablaAgregarRango" >
+										<f:param name="rangoSeleccionado" value="#{dia.id}" />
+										<f:param name="dia" value="6" />
+									</h:commandLink>
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">
+										<h:outputLabel value="" />
+									</f:facet>
+									<h:commandLink styleClass="colorLink" rendered="#{dia.descripcion != 'N/A'}"
+										actionListener="#{horario.eliminarRango}" onclick="return confirm('Desea eliminar el rango seleccionado?');">
+										<h:graphicImage value="../imagenes/icon_delete.png" width="10"
+											height="10"></h:graphicImage>
+										<f:param name="idRango" value="#{dia.id}" />
+										
+									</h:commandLink>
+								</h:column>
+							</h:dataTable>
+						</td>
+						<td>
+							<h:dataTable border="0" cellspacing="1" cellpadding="1"
+								id="tablaSabado" var="dia" rows="20" widgetVar="tablaSabado"
+								value="#{horario.rangosSabado}" width="130"
+								style="border-collapse:collapse;" headerClass="ui-state-default">
+
+								<h:column style="text-align:center !important;">
+									<f:facet name="header">
+										<table width="130">
+											<tr>
+												<td style="text-align:center !important;vertical-align:middle !important;">
+													<h:outputLabel value="SABADO" />
+												</td>
+												<td style="text-align:center !important;vertical-align:middle !important;">
+													<h:commandLink actionListener="#{horario.preAgregarRangoSemana}" disabled="#{horario.preAgregarDesabilitado}"
+														render=":form:tablaAgregarRango">
+														<h:graphicImage value="../imagenes/mas16x16.png"
+															width="13" height="13" />
+														<f:param name="diaSeleccionado" value="7" />
+													</h:commandLink>
+												</td>
+											</tr>
+										</table>
+									</f:facet>
+									<h:commandLink
+										styleClass="#{dia.estado == '1' ? 'colorLink' : 'colorLinkDisabled'}"
+										value="#{dia.descripcion}" style="text-align:center !important;"
+										actionListener="#{horario.preModificarRangoSemana}" render=":form:tablaAgregarRango">
+										<f:param name="rangoSeleccionado" value="#{dia.id}" />
+										<f:param name="dia" value="7" />
+									</h:commandLink>
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">
+										<h:outputLabel value="" />
+									</f:facet>
+									<h:commandLink styleClass="colorLink" rendered="#{dia.descripcion != 'N/A'}"
+										actionListener="#{horario.eliminarRango}" onclick="return confirm('Desea eliminar el rango seleccionado?');">
+										<h:graphicImage value="../imagenes/icon_delete.png" width="10"
+											height="10" />
+										<f:param name="idRango" value="#{dia.id}" />
+										
+									</h:commandLink>
+								</h:column>
+							</h:dataTable>
+						</td>
+					</tr>
+				</table>
+			</custom:tab>
+		</custom:tabView>
+
+		<custom:tabView id="tabExcepciones" style="width:1100px;">
+			<custom:tab id="tab1" title="Feriados y días no laborables">
+				<table style="width: 1040px; border: 0px solid;" id="tablaNuevaExcepcion">
+					<tr>
+						<td>
+							<h:commandLink styleClass="colorLink" value="Agregar feriado" disabled="#{horario.preAgregarDesabilitado}" 
+								actionListener="#{horario.preAgregarFeriado}" render=":form:tabExcepciones:tablaAgregarRango">
+							</h:commandLink>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h:panelGroup id="tablaAgregarExcepcion" style="width:1080px;" rendered="#{horario.mostrarAgregarFeriado}" >
+								<table class="ui-state-default">
+									<tr>
+										<td>
+											Fecha:
+										</td>
+										<td>				
+											<custom:calendar style="width:80px !important;" value="#{horario.feriadoVO.fecha}" 
+												styleClass="campoFecAsigDel" readOnlyInputText="false"
+												pattern="dd/MM/yyyy"
+												mask="00/00/0000" >
+											</custom:calendar>
+										</td>
+										<td>
+											Descripción:
+										</td>
+										<td colspan="3">
+											<h:inputText style="width:150px;" value="#{horario.feriadoVO.descripcion}"></h:inputText>
+										</td>
+										
+									</tr>
+									
+									<tr>
+										<td>
+											<h:selectBooleanCheckbox value="#{horario.feriadoVO.aplicaTodo}" />
+										</td>
+										<td>
+											Feriado Nacional
+										</td>
+										
+										<td>
+											<h:selectBooleanCheckbox  value="#{horario.feriadoVO.aplicaOficina}" />
+										</td>
+										<td>
+											Feriado Oficina
+										</td>
+										
+										<td>
+											<h:selectBooleanCheckbox  value="#{horario.feriadoVO.estadoHorario}" />
+										</td>
+										<td>
+											Activo
+										</td>
+									</tr>
+									
+									
+									<tr>
+										<td style="text-align:right!important;" colspan="6">
+											<h:commandButton value="Guardar"  execute="@form" render=":form:tabExcepciones:tablaAgregarRango"
+											action="#{horario.guardarFeriado}" styleClass="boton" onclick="return confirm('Desea guardar los cambios?');"/>
+										
+										 <h:commandButton styleClass="boton" value="Cancelar"
+												execute="@form" action="#{horario.cerrarGuardarFeriado}"
+												render=":form:tabExcepciones:tablaAgregarRango" />
+										</td>
+										
+									</tr>
+										
+								</table>
+							</h:panelGroup>
+							<h:panelGroup id="tablaAgregarRango" style="width:1080px;"  rendered="#{horario.mostrarAgregarRangoFeriado}">
+								<table>
+									<tr>
+										<h:outputText value="#{horario.rangoVO.titulo}" />
+									</tr>
+									<tr>
+											<td>
+												Rango:
+											</td>
+											<td>
+												<h:inputText  style="width:30px"  onblur="validarHora(this);" maxlength="2"
+													styleClass="soloNumeros" value="#{horario.rangoVO.rangoHoraInicial}"/>
+												: 
+												<h:inputText  style="width:30px" onblur="validarMinuto(this);" maxlength="2"
+													styleClass="soloNumeros" value="#{horario.rangoVO.rangoMinutoInicial}"/>
+											</td>
+											<td>
+												a
+											</td>
+											<td>
+												<h:inputText  style="width:30px" value="#{horario.rangoVO.rangoHoraFinal}"
+													styleClass="soloNumeros" onblur="validarHora(this);" maxlength="2"/>
+												: 
+												<h:inputText  style="width:30px" value="#{horario.rangoVO.rangoMinutoFinal}"
+													styleClass="soloNumeros" onblur="validarMinuto(this);" maxlength="2"/>
+											</td>
+											
+											<td>
+												<h:selectBooleanCheckbox  value="#{horario.rangoVO.estado}" />
+											</td>
+											
+											<td>
+												Activo
+											</td>
+											<td style="text-align:right!important;" colspan="6">
+												<h:commandButton value="Guardar"  execute="@form" render=":form:tabExcepciones:tablaAgregarRango"
+													action="#{horario.guardarRangoFeriado}" styleClass="boton" onclick="return confirm('Desea guardar los cambios?');"/>
+												<h:commandButton styleClass="boton" value="Cancelar"
+												execute="@form" action="#{horario.cerrarGuardarRangoFeriado}"
+												render=":form:tabExcepciones:tablaAgregarRango" />
+											</td>
+										</tr>
+									</table>
+							</h:panelGroup>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h:dataTable border="0" cellspacing="1" cellpadding="1" 
+								id="tablaExcepciones" var="excepcion" rows="100" widgetVar="tablaExcepciones"
+								value="#{horario.excepciones}" width="1040" height="250" style="border-collapse:collapse;" 
+								headerClass="ui-state-default" rowClasses="ui-widget-content">
+
+								<h:column style="text-align:center !important;">
+									<f:facet name="header">
+										<h:outputLabel value="FECHA" />
+									</f:facet>
+									<h:outputLabel value="#{excepcion.fechaExcepcion}" >
+										<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+									</h:outputLabel>
+								</h:column>
+								
+								<h:column style="text-align:center !important;">
+									<f:facet name="header">
+										<h:outputLabel value="DESCRIPCÓN" />
+									</f:facet>
+									
+									<h:commandLink
+										styleClass="colorLink"
+										value="#{excepcion.descripcion}"
+										actionListener="#{horario.preModificarFeriado}" render=":form:tablaAgregarExcepcion">
+										<f:param name="idFeriado" value="#{excepcion.id}" />
+									</h:commandLink>
+									
+									
+								</h:column>
+								
+								<h:column style="text-align:center !important;">
+									<f:facet name="header">
+										<h:outputLabel value="ESTADO" />
+									</f:facet>
+									<h:outputLabel value="#{excepcion.estado=='1' ? 'ACTIVO' : 'INACTIVO'}" />
+								</h:column>
+								
+								<h:column style="text-align:center !important;">
+									<f:facet name="header">
+										<h:outputLabel value="APLICA TODO" />
+									</f:facet>
+									<h:outputLabel value="#{excepcion.aplicaTodo=='1' ? 'SI' : 'NO'}" />
+								</h:column>
+								
+								<h:column style="text-align:center !important;">
+									<f:facet name="header">
+										<h:outputLabel value="APLICA OFICINA" />
+									</f:facet>
+									<h:outputLabel value="#{excepcion.aplicaOficina=='1' ? 'SI' : 'NO'}" />
+								</h:column>
+								
+								<h:column style="text-align:center !important;">
+									<f:facet name="header">
+										<h:outputLabel value="RANGOS" />
+									</f:facet>
+									<ui:repeat value="#{excepcion.rangos}" var="dia">	
+										<div style="left-padding:10px !important; right-padding:10px !important;">
+											<h:commandLink
+												styleClass="#{dia.estado == '1' ? 'colorLink' : 'colorLinkDisabled'}"
+												value="#{dia.descripcion}"
+												style="text-align:center !important;"
+												actionListener="#{horario.preModificarRangoFeriado}"
+												render=":form:tablaAgregarRango">
+												<f:param name="idRangoSeleccionado" value="#{dia.id}" />
+											</h:commandLink>
+
+											<h:commandLink styleClass="colorLink"
+												actionListener="#{horario.eliminarRango}" onclick="return confirm('Desea eliminar el rango seleccionado?');">
+												<h:graphicImage value="../imagenes/icon_delete.png"
+													width="12" height="12" />
+												<f:param name="idRango" value="#{dia.id}" />
+											</h:commandLink>
+										</div>
+									</ui:repeat>
+								</h:column>
+								
+								<h:column style="text-align:center !important;">
+									<f:attribute name="align" value="center" />
+									<f:facet name="header">
+										<h:outputLabel value="AGREGAR" />
+									</f:facet>
+									
+									<h:commandButton styleClass="boton" value="Agregar" render=":form:tabExcepciones:tablaAgregarRango"
+										execute="@form" action="#{horario.preAgregarRangoExepcion}" >
+										<f:param name="idFeriado" value="#{excepcion.id}" />
+									</h:commandButton>
+									
+								</h:column>
+								<h:column style="text-align:center !important;" >
+									<f:attribute name="align" value="center" />
+									<f:facet name="header">
+										<h:outputLabel value="ELIMINAR" />
+									</f:facet>
+									<h:commandButton styleClass="boton" value="Eliminar"
+										render=":form:tabExcepciones:tablaAgregarRango"
+										onclick="return confirm('Desea eliminar el feriado seleccionado?');"
+										execute="@form" action="#{horario.eliminarFeriado}"
+										>
+										<f:param name="idFeriado" value="#{excepcion.id}" />
+									</h:commandButton>
+								</h:column>
+							</h:dataTable>
+						</td>
+					</tr>
+				</table>
+			</custom:tab>
+		</custom:tabView>
+		<br></br>
+	</ui:define>
+</ui:composition>

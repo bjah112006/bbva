@@ -1,0 +1,897 @@
+package com.ibm.bbva.ctacte.servicio.proceso;
+
+import hiper.spring.beans.hfirmas.webservices.xsd.PoderFirmaActivacion;
+import hiper.spring.beans.hfirmas.webservices.xsd.RpteActivacionBE;
+import hiper.webservices.impl.hfirmas.WSServicioSFPHttpSoap11EndpointProxy;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Random;
+
+import javax.mail.internet.InternetAddress;
+import javax.naming.NamingException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import pe.com.grupobbva.accpj.pagser.CtBodyRq;
+import pe.com.grupobbva.accpj.pagser.CtHeader;
+import pe.com.grupobbva.accpj.pagser.CtPagoServicioRq;
+import pe.com.grupobbva.accpj.pagser.CtPagoServicioRs;
+import pe.com.grupobbva.accpj.pagser.PagoServicio_PortProxy;
+import pe.com.grupobbva.sce.qsp5.CtInqPerfilUsuarioRq;
+import pe.com.grupobbva.sce.qsp5.CtInqPerfilUsuarioRs;
+import pe.com.grupobbva.sce.qsp5.SCE_QSP5_PortProxy;
+import clientecontent.ClienteContent;
+
+import com.ibm.bbva.cm.service.Documento;
+import com.ibm.bbva.ctacte.bean.AuditoriaCriteriosSupervision;
+import com.ibm.bbva.ctacte.bean.CobroComision;
+import com.ibm.bbva.ctacte.bean.DocumentoExp;
+import com.ibm.bbva.ctacte.bean.Empleado;
+import com.ibm.bbva.ctacte.bean.EstudioAbogado;
+import com.ibm.bbva.ctacte.bean.Expediente;
+import com.ibm.bbva.ctacte.bean.ExpedienteTarea;
+import com.ibm.bbva.ctacte.bean.Historial;
+import com.ibm.bbva.ctacte.bean.Participe;
+import com.ibm.bbva.ctacte.bean.PerfilBalanceo;
+import com.ibm.bbva.ctacte.bean.TareaPerfil;
+import com.ibm.bbva.ctacte.bean.ViewNumeroExpedientesEmpleado;
+import com.ibm.bbva.ctacte.bean.ViewPesoDocumentoExpediente;
+import com.ibm.bbva.ctacte.bean.ViewPesoParticipeExpediente;
+import com.ibm.bbva.ctacte.business.ExpedienteBusiness;
+import com.ibm.bbva.ctacte.comun.ConstantesParametros;
+import com.ibm.bbva.ctacte.constantes.ConstantesBusiness;
+import com.ibm.bbva.ctacte.dao.AuditoriaBastanteoDAO;
+import com.ibm.bbva.ctacte.dao.AuditoriaClienteDAO;
+import com.ibm.bbva.ctacte.dao.AuditoriaCriteriosSupervisionDAO;
+import com.ibm.bbva.ctacte.dao.CobroComisionDAO;
+import com.ibm.bbva.ctacte.dao.DocumentoExpDAO;
+import com.ibm.bbva.ctacte.dao.EmpleadoDAO;
+import com.ibm.bbva.ctacte.dao.EstadoExpedienteDAO;
+import com.ibm.bbva.ctacte.dao.EstadoTareaDAO;
+import com.ibm.bbva.ctacte.dao.EstudioAbogadoDAO;
+import com.ibm.bbva.ctacte.dao.ExpedienteDAO;
+import com.ibm.bbva.ctacte.dao.HistorialDAO;
+import com.ibm.bbva.ctacte.dao.OperacionDAO;
+import com.ibm.bbva.ctacte.dao.ParticipeDAO;
+import com.ibm.bbva.ctacte.dao.PerfilBalanceoDAO;
+import com.ibm.bbva.ctacte.dao.TareaDAO;
+import com.ibm.bbva.ctacte.dao.TareaPerfilDAO;
+import com.ibm.bbva.ctacte.dao.ViewNumeroExpedientesEmpleadoDAO;
+import com.ibm.bbva.ctacte.dao.ViewPesoDocumentoExpedienteDAO;
+import com.ibm.bbva.ctacte.dao.ViewPesoParticipeExpedienteDAO;
+import com.ibm.bbva.ctacte.servicio.proceso.bean.EmpleadoCE;
+import com.ibm.bbva.ctacte.servicio.proceso.util.ProcesoUtil;
+import com.ibm.bbva.ctacte.servicio.util.Constantes;
+import com.ibm.bbva.ctacte.util.EJBLocator;
+import com.ibm.bbva.ctacte.util.ParametrosSistema;
+
+public class CEProcessService {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(CEProcessService.class);
+	
+	private ExpedienteBusiness expedienteBusiness;
+	private ViewNumeroExpedientesEmpleadoDAO viewNumeroExpedientesEmpleadoDAO;
+	private ViewPesoParticipeExpedienteDAO viewPesoParticipeExpedienteDAO;
+	private ViewPesoDocumentoExpedienteDAO viewPesoDocumentoExpedienteDAO;
+	private TareaPerfilDAO tareaPerfilDAO;
+	private PerfilBalanceoDAO perfilBalanceoDAO;
+	private EmpleadoDAO empleadoDAO;
+	private AuditoriaCriteriosSupervisionDAO auditoriaCriteriosSupervisionDAO;
+	private AuditoriaClienteDAO auditoriaClienteDAO;
+	private AuditoriaBastanteoDAO auditoriaBastanteoDAO;
+	private ExpedienteDAO expedienteDAO;
+	private ParticipeDAO participeDAO;
+	private CobroComisionDAO cobroComisionDAO;
+	private OperacionDAO operacionDAO;
+	private EstadoExpedienteDAO estadoExpedienteDAO;
+	private EstadoTareaDAO estadoTareaDAO;
+	private TareaDAO tareaDAO;
+	private DocumentoExpDAO documentoExpDAO;
+	private EstudioAbogadoDAO estudioAbogadoDAO;
+	private HistorialDAO historialDAO;
+	
+	public CEProcessService() throws NamingException {
+		super();
+		expedienteBusiness = EJBLocator.getExpedienteBusiness();
+		viewNumeroExpedientesEmpleadoDAO = EJBLocator.getViewNumeroExpedientesEmpleadoDAO();
+		viewPesoParticipeExpedienteDAO = EJBLocator.getViewPesoParticipeExpedienteDAO();
+		viewPesoDocumentoExpedienteDAO = EJBLocator.getViewPesoDocumentoExpedienteDAO();
+		tareaPerfilDAO = EJBLocator.getTareaPerfilDAO();
+		perfilBalanceoDAO = EJBLocator.getPerfilBalanceoDAO();
+		empleadoDAO = EJBLocator.getEmpleadoDAO();
+		auditoriaCriteriosSupervisionDAO = EJBLocator.getAuditoriaCriteriosSupervisionDAO();
+		auditoriaClienteDAO = EJBLocator.getAuditoriaClienteDAO();
+		auditoriaBastanteoDAO = EJBLocator.getAuditoriaBastanteoDAO();
+		expedienteDAO = EJBLocator.getExpedienteDAO();
+		participeDAO = EJBLocator.getParticipeDAO();
+		cobroComisionDAO = EJBLocator.getCobroComisionDAO();
+		operacionDAO = EJBLocator.getOperacionDAO();
+		estadoExpedienteDAO = EJBLocator.getEstadoExpedienteDAO();
+		estadoTareaDAO = EJBLocator.getEstadoTareaDAO();
+		tareaDAO = EJBLocator.getTareaDAO();
+		documentoExpDAO = EJBLocator.getDocumentoExpDAO();
+		estudioAbogadoDAO = EJBLocator.getEstudioAbogadoDAO();
+		historialDAO = EJBLocator.getHistorialDAO();
+	}
+	
+	public Integer dentroPlazoSubsanacion(Date dtFechaRegistroExpediente, Date dtFechaUltimoBastanteo){
+		return expedienteBusiness.dentroPlazoSubsanacion(dtFechaRegistroExpediente, dtFechaUltimoBastanteo);
+	}
+	
+	public ViewNumeroExpedientesEmpleado[] obtenerNumExpedientesxEmpleado(Integer intIdProducto, Integer intIdTerritorio, Integer intIdTarea){
+		try{
+			//List<ViewNumeroExpedientesEmpleado> listnumExpedientesxEmpleado = viewNumeroExpedientesEmpleadoDAO.findListaEmpleadosSinExpedientes(intIdProducto, intIdTerritorio, intIdTarea);
+			List<ViewNumeroExpedientesEmpleado> listnumExpedientesxEmpleado = viewNumeroExpedientesEmpleadoDAO.findListaNumeroExpedientesxEmpleado(intIdProducto, intIdTerritorio, intIdTarea);
+			return listnumExpedientesxEmpleado.toArray( new ViewNumeroExpedientesEmpleado[listnumExpedientesxEmpleado.size()]);
+		} catch (Exception ex) {
+			LOG.error("",ex);
+			return null;
+		}
+	}
+	
+	public ViewPesoParticipeExpediente obtenerEmpleadoxPesoParticipe(Integer intIdProducto, Integer intIdTerritorio, Integer intIdTarea){
+		try{
+			ViewPesoParticipeExpediente viewPesoParticipeExpediente = new ViewPesoParticipeExpediente();
+			
+			//Verificar sin existen empleados sin expedientes asignados
+			int intNumEmpleadosSinExpedientes;
+			ViewNumeroExpedientesEmpleado viewNumeroExpedientesEmpleado = new ViewNumeroExpedientesEmpleado();
+			List<ViewNumeroExpedientesEmpleado> listnumExpedientesxEmpleado = viewNumeroExpedientesEmpleadoDAO.findListaEmpleadosSinExpedientes(intIdProducto, intIdTerritorio, intIdTarea);
+			intNumEmpleadosSinExpedientes = listnumExpedientesxEmpleado.size();
+			if (intNumEmpleadosSinExpedientes > 0){
+				int indice = (int) Math.floor(Math.random()*(intNumEmpleadosSinExpedientes-1));
+				viewNumeroExpedientesEmpleado = listnumExpedientesxEmpleado.get(indice);
+				viewPesoParticipeExpediente.setCodEmpleado(viewNumeroExpedientesEmpleado.getCodEmpleado());
+				viewPesoParticipeExpediente.setDesPerfil(viewNumeroExpedientesEmpleado.getDesPerfil());
+				viewPesoParticipeExpediente.setIdEmpleado(viewNumeroExpedientesEmpleado.getIdEmpleado());
+				viewPesoParticipeExpediente.setIdPerfil(viewNumeroExpedientesEmpleado.getIdPerfil());
+				viewPesoParticipeExpediente.setIdProducto(viewNumeroExpedientesEmpleado.getIdProducto());
+				viewPesoParticipeExpediente.setIdTarea(viewNumeroExpedientesEmpleado.getIdTarea());
+				viewPesoParticipeExpediente.setIdTerritorio(viewNumeroExpedientesEmpleado.getIdTerritorio());
+				viewPesoParticipeExpediente.setSumPesoParticipeExpediente(viewNumeroExpedientesEmpleado.getNumExpedientesEmpleado());
+			}else{
+				List<ViewPesoParticipeExpediente> listViewPesoParticipeExpediente = viewPesoParticipeExpedienteDAO.findListaPesoParticipesxExpediente(intIdProducto, intIdTerritorio, intIdTarea);
+				viewPesoParticipeExpediente = listViewPesoParticipeExpediente.get(0);
+			}
+			return viewPesoParticipeExpediente;
+		} catch (Exception ex) {
+			LOG.error("",ex);
+			return null;
+		}
+	}
+	
+	public ViewPesoDocumentoExpediente obtenerEmpleadoxPesoDocumento(Integer intIdProducto, Integer intIdTerritorio, Integer intIdTarea){
+		try{
+			ViewPesoDocumentoExpediente viewPesoDocumentoExpediente = new ViewPesoDocumentoExpediente();
+			//Verificar sin existen empleados sin expedientes asignados
+			int intNumEmpleadosSinExpedientes;
+			ViewNumeroExpedientesEmpleado viewNumeroExpedientesEmpleado = new ViewNumeroExpedientesEmpleado();
+			List<ViewNumeroExpedientesEmpleado> listnumExpedientesxEmpleado = viewNumeroExpedientesEmpleadoDAO.findListaEmpleadosSinExpedientes(intIdProducto, intIdTerritorio, intIdTarea);
+			intNumEmpleadosSinExpedientes = listnumExpedientesxEmpleado.size();
+			if (intNumEmpleadosSinExpedientes > 0){
+				int indice = (int) Math.floor(Math.random()*(intNumEmpleadosSinExpedientes-1));
+				viewNumeroExpedientesEmpleado = listnumExpedientesxEmpleado.get(indice);
+				viewPesoDocumentoExpediente.setCodEmpleado(viewNumeroExpedientesEmpleado.getCodEmpleado());
+				viewPesoDocumentoExpediente.setDesPerfil(viewNumeroExpedientesEmpleado.getDesPerfil());
+				viewPesoDocumentoExpediente.setIdEmpleado(viewNumeroExpedientesEmpleado.getIdEmpleado());
+				viewPesoDocumentoExpediente.setIdPerfil(viewNumeroExpedientesEmpleado.getIdPerfil());
+				viewPesoDocumentoExpediente.setIdProducto(viewNumeroExpedientesEmpleado.getIdProducto());
+				viewPesoDocumentoExpediente.setIdTarea(viewNumeroExpedientesEmpleado.getIdTarea());
+				viewPesoDocumentoExpediente.setIdTerritorio(viewNumeroExpedientesEmpleado.getIdTerritorio());
+				viewPesoDocumentoExpediente.setSumPesoDocumentoExpediente(viewNumeroExpedientesEmpleado.getNumExpedientesEmpleado());
+			}else{
+				List<ViewPesoDocumentoExpediente> listViewPesoDocumentoExpediente = viewPesoDocumentoExpedienteDAO.findListaPesoDocumentoxExpediente(intIdProducto, intIdTerritorio, intIdTarea);
+				viewPesoDocumentoExpediente = listViewPesoDocumentoExpediente.get(0);
+			}
+			return viewPesoDocumentoExpediente;
+		} catch (Exception ex) {
+			LOG.error("",ex);
+			return null;
+		}
+	}
+	
+	public EmpleadoCE obtenerEmpleado(Integer intIdExpediente, Integer intIdProducto, Integer intIdTerritorio, Integer intIdTarea){
+		LOG.info("obtenerEmpleado()");
+		LOG.info("IdExpediente: "+intIdExpediente);
+		LOG.info("IdProducto: "+intIdProducto);
+		LOG.info("IdTerritorio: "+intIdTerritorio);
+		LOG.info("IdTarea: "+intIdTarea);
+		
+		// Si la Tarea es "Verificar y Realizar Bastanteo" y es nueva modificatoria se utiliza el perfil "Pool de Migracion". 
+		if (intIdTarea.intValue() == ConstantesBusiness.ID_TAREA_VERIFICAR_REALIZAR_BASTANTEO) {
+			Expediente expediente = expedienteDAO.load(intIdExpediente);
+			LOG.info("CODIGO OPERACION: "+expediente.getOperacion().getCodigoOperacion());
+			if (ConstantesBusiness.CODIGO_MODIFICATORIA_BASTANTEO.equals(expediente.getOperacion().getCodigoOperacion())) {
+				LOG.info("FLAG_EXP_MIGRADO: "+expediente.getCliente().getFlagExpMigrado());
+				if (!"1".equals(expediente.getCliente().getFlagExpMigrado())) {
+					intIdTarea = ConstantesBusiness.ID_TAREA_VERIFICAR_REALIZAR_BASTANTEO_2;
+				}
+			}
+		}
+		
+		TareaPerfil tareaPerfil = tareaPerfilDAO.findTareaPerfilxTarea(intIdTarea);
+		Integer intIdPerfil = tareaPerfil.getPerfil().getId();
+		
+		LOG.info("ID PERFIL: "+intIdPerfil);
+		
+		Integer intTipoBalanceo=0;
+		String strConsiderarEstudio;
+		
+		PerfilBalanceo perfilBalanceo = new PerfilBalanceo();
+		perfilBalanceo = perfilBalanceoDAO.findObtenerTipoBalanceo(intIdPerfil);
+		intTipoBalanceo = perfilBalanceo.getIdTipoBalanceo();
+		strConsiderarEstudio = perfilBalanceo.getConsiderarEstudio();
+		
+		LOG.info("intTipoBalanceo: "+intTipoBalanceo);
+		LOG.info("strConsiderarEstudio: "+strConsiderarEstudio);
+		
+		ProcesoUtil procesoUtil = new ProcesoUtil();
+		
+		try{
+			EmpleadoCE empleadoCE = null;
+			Integer intIdEstudio = 0;
+			
+			//Se obtendrá el Estudio de Abogado de acuerdo a la probabilidad de balanceo
+			if (strConsiderarEstudio != null && strConsiderarEstudio.equals("1")) {
+				List<EstudioAbogado> lstEstudios = estudioAbogadoDAO.findListaEstudiosBalanceo();
+				if (lstEstudios != null && lstEstudios.size() > 0) {
+					Random rand = new Random();
+					Integer p = rand.nextInt(100)+1; // de 1 a 100
+					LOG.info("Número aleatorio obtenido: "+p);
+					Integer probabilidadAcumulada = 0;
+					for (EstudioAbogado obj : lstEstudios) {
+						probabilidadAcumulada += obj.getPorcentajeCarga();
+						if (p <= probabilidadAcumulada) {
+							intIdEstudio = obj.getId();
+							LOG.info("intIdEstudio: "+intIdEstudio);
+							break;
+						}
+					}
+				} else {
+					LOG.warn("No hay estudios de abogado con porcentaje de carga mayor que cero.");
+				}
+			}
+			
+			if (intIdEstudio > 0) {
+				LOG.info("Balanceo tomando en cuenta el estudio del empleado.");
+				//Verificar sin existen empleados sin expedientes asignados	y que pertenezcan al estudio de abogados
+				int intNumEmpleadosSinExpedientes;
+				List<ViewNumeroExpedientesEmpleado> listEmpleadoSinExpedientes = viewNumeroExpedientesEmpleadoDAO.findListaEmpleadosSinExpedientesPorEstudio(intIdProducto, intIdTerritorio, intIdTarea, intIdEstudio);
+				intNumEmpleadosSinExpedientes = listEmpleadoSinExpedientes.size();
+				if (intNumEmpleadosSinExpedientes > 0){
+					Random random = new Random ();
+					int indice = random.nextInt(intNumEmpleadosSinExpedientes);
+					empleadoCE = procesoUtil.copiarEmpleadoCE(listEmpleadoSinExpedientes.get(indice));
+					LOG.info("Se obtuvo empleado aleatorio sin expedientes asignados.");
+				} else {
+					switch (intTipoBalanceo) {
+						case 1: 
+							List<ViewNumeroExpedientesEmpleado> listnumExpedientesxEmpleado = viewNumeroExpedientesEmpleadoDAO.findListaNumeroExpedientesxEmpleadoPorEstudio(intIdProducto, intIdTerritorio, intIdTarea, intIdEstudio);
+							if (listnumExpedientesxEmpleado.size() > 0) {
+								empleadoCE = procesoUtil.copiarEmpleadoCE(listnumExpedientesxEmpleado.get(0));
+								LOG.info("Se obtuvo empleado con menor número de expedientes.");
+							} else {
+								LOG.warn("No se pudo obtener empleado con menor número de expedientes.");
+							}
+							break;
+						case 2:
+							List<ViewPesoDocumentoExpediente> listViewPesoDocumentoExpediente = viewPesoDocumentoExpedienteDAO.findListaPesoDocumentoxExpedientePorEstudio(intIdProducto, intIdTerritorio, intIdTarea, intIdEstudio);
+							if (listViewPesoDocumentoExpediente.size() > 0) {
+								empleadoCE = procesoUtil.copiarEmpleadoCE(listViewPesoDocumentoExpediente.get(0));
+								LOG.info("Se obtuvo empleado con menor peso de documentos.");
+							} else {
+								LOG.warn("No se pudo obtener empleado con menor peso de documentos.");
+							}
+							break;
+						case 3:
+							List<ViewPesoParticipeExpediente> listViewPesoParticipeExpediente = viewPesoParticipeExpedienteDAO.findListaPesoParticipesxExpedientePorEstudio(intIdProducto, intIdTerritorio, intIdTarea, intIdEstudio);
+							if (listViewPesoParticipeExpediente.size() > 0) {
+								empleadoCE = procesoUtil.copiarEmpleadoCE(listViewPesoParticipeExpediente.get(0));
+								LOG.info("Se obtuvo empleado con menor peso de partícipes.");
+							} else {
+								LOG.warn("No se pudo obtener empleado con menor peso de partícipes.");
+							}
+							break;
+						default:
+							LOG.info("El perfil no tiene un tipo de balanceo válido.");
+							break;
+					}
+				}
+				if (empleadoCE == null) {
+					List<Empleado> empleados = empleadoDAO
+							.getEmpleadosCarterizacionPorEstudio(
+									intIdProducto.intValue(),
+									intIdTerritorio.intValue(),
+									intIdPerfil.intValue(),
+									intIdEstudio.intValue());
+					if (empleados.size() > 0) {
+						int numEmp = empleados.size();
+						Random random = new Random ();
+						Empleado empleado = empleados.get(random.nextInt(numEmp));
+						empleadoCE = procesoUtil.copiarEmpleadoCE(empleado, intIdPerfil, intIdProducto, intIdTarea, intIdTerritorio);
+						LOG.info("Se obtuvo empleado aleatorio que está carterizado.");
+					} else {
+						LOG.warn("No se pudo obtener empleado aleatorio que esté carterizado.");
+					}
+				}
+				if (empleadoCE != null) {
+					//Asignar Carga de trabajo
+					LOG.info("empleadoCE.getIdEmpleado(): " + empleadoCE.getIdEmpleado());
+					LOG.info("empleadoCE.getCodEmpleado(): " + empleadoCE.getCodEmpleado());
+					return empleadoCE;
+				} else {
+					LOG.warn("Falló el balanceo considerando el Estudio de Abogado. Se reintentará con el balanceo normal.");
+				}
+			}
+			
+			LOG.info("Balanceo normal (sin tomar en cuenta el estudio del empleado).");
+			//Verificar sin existen empleados sin expedientes asignados
+			int intNumEmpleadosSinExpedientes;
+			List<ViewNumeroExpedientesEmpleado> listEmpleadoSinExpedientes = viewNumeroExpedientesEmpleadoDAO.findListaEmpleadosSinExpedientes(intIdProducto, intIdTerritorio, intIdTarea);
+			intNumEmpleadosSinExpedientes = listEmpleadoSinExpedientes.size();
+			if (intNumEmpleadosSinExpedientes > 0){
+				Random random = new Random ();
+				int indice = random.nextInt(intNumEmpleadosSinExpedientes);
+				empleadoCE = procesoUtil.copiarEmpleadoCE(listEmpleadoSinExpedientes.get(indice));
+				LOG.info("Se obtuvo empleado aleatorio sin expedientes asignados.");
+			} else {
+				switch (intTipoBalanceo) {
+					case 1: 
+						List<ViewNumeroExpedientesEmpleado> listnumExpedientesxEmpleado = viewNumeroExpedientesEmpleadoDAO.findListaNumeroExpedientesxEmpleado(intIdProducto, intIdTerritorio, intIdTarea);
+						if (listnumExpedientesxEmpleado.size() > 0) {
+							empleadoCE = procesoUtil.copiarEmpleadoCE(listnumExpedientesxEmpleado.get(0));
+							LOG.info("Se obtuvo empleado con menor número de expedientes.");
+						} else {
+							LOG.warn("No se pudo obtener empleado con menor número de expedientes.");
+						}
+						break;
+					case 2:
+						List<ViewPesoDocumentoExpediente> listViewPesoDocumentoExpediente = viewPesoDocumentoExpedienteDAO.findListaPesoDocumentoxExpediente(intIdProducto, intIdTerritorio, intIdTarea);
+						if (listViewPesoDocumentoExpediente.size() > 0) {
+							empleadoCE = procesoUtil.copiarEmpleadoCE(listViewPesoDocumentoExpediente.get(0));
+							LOG.info("Se obtuvo empleado con menor peso de documentos.");
+						} else {
+							LOG.warn("No se pudo obtener empleado con menor peso de documentos.");
+						}
+						break;
+					case 3:
+						List<ViewPesoParticipeExpediente> listViewPesoParticipeExpediente = viewPesoParticipeExpedienteDAO.findListaPesoParticipesxExpediente(intIdProducto, intIdTerritorio, intIdTarea);
+						if (listViewPesoParticipeExpediente.size() > 0) {
+							empleadoCE = procesoUtil.copiarEmpleadoCE(listViewPesoParticipeExpediente.get(0));
+							LOG.info("Se obtuvo empleado con menor peso de partícipes.");
+						} else {
+							LOG.warn("No se pudo obtener empleado con menor peso de partícipes.");
+						}
+						break;
+					default:
+						LOG.info("El perfil no tiene un tipo de balanceo válido.");
+						break;
+				}
+			}
+			if (empleadoCE == null) {
+				List<Empleado> empleados = empleadoDAO
+						.getEmpleadosCarterizacion(intIdProducto.intValue(),
+								intIdTerritorio.intValue(),
+								intIdPerfil.intValue());
+				if (empleados.size() > 0) {
+					int numEmp = empleados.size();
+					Random random = new Random ();
+					Empleado empleado = empleados.get(random.nextInt(numEmp));
+					empleadoCE = procesoUtil.copiarEmpleadoCE(empleado, intIdPerfil, intIdProducto, intIdTarea, intIdTerritorio);
+					LOG.info("Se obtuvo empleado aleatorio que está carterizado.");
+				} else {
+					LOG.warn("No se pudo obtener empleado aleatorio que esté carterizado.");
+				}
+			}
+			if (empleadoCE != null) {
+				//Asignar Carga de trabajo
+				LOG.info("empleadoCE.getIdEmpleado(): " + empleadoCE.getIdEmpleado());
+				LOG.info("empleadoCE.getCodEmpleado(): " + empleadoCE.getCodEmpleado());
+			} else {
+				String userAdmin = ParametrosSistema.getInstance().getProperties(ParametrosSistema.CONF).getProperty("usuarioAdminProcess");
+				LOG.warn("No se encontró usuario, se usará el usuario por defecto: "+userAdmin);
+				empleadoCE = new EmpleadoCE();
+				empleadoCE.setCodEmpleado(userAdmin);
+				empleadoCE.setNomEmpleado(userAdmin);
+			}
+			return empleadoCE;
+		} catch (Exception e) {
+			String userAdmin = ParametrosSistema.getInstance().getProperties(ParametrosSistema.CONF).getProperty("usuarioAdminProcess");
+			LOG.error("Ocurrió una excepción al obtener al empleado, se usará el usuario por defecto: "+userAdmin, e);
+			EmpleadoCE empleadoCE = new EmpleadoCE();
+			empleadoCE.setCodEmpleado(userAdmin);
+			empleadoCE.setNomEmpleado(userAdmin);
+			return empleadoCE;
+		}
+	}
+	
+	public Integer verificarCriterioSupervision(String strCodigoCentral, String strResultadoBastanteo){
+		try{
+			LOG.info("verificarCriterioSupervision(String strCodigoCentral, String strResultadoBastanteo)");
+			LOG.info("strCodigoCentral : "+strCodigoCentral);
+			LOG.info("strResultadoBastanteo : "+strResultadoBastanteo);
+			Integer intverificarCriterioSupervision = 0;
+			AuditoriaCriteriosSupervision auditoriaCriteriosSupervision = new AuditoriaCriteriosSupervision();
+			
+			auditoriaCriteriosSupervision = auditoriaCriteriosSupervisionDAO.findObtenerCriterioSupervision(Constantes.CS_SIN_AUDITORIA_BASTANTEO);
+			LOG.info("auditoriaCriteriosSupervision.getIndicador() : "+auditoriaCriteriosSupervision.getIndicador());
+			if (Constantes.VALOR_UNO.equals(auditoriaCriteriosSupervision.getIndicador())){
+				intverificarCriterioSupervision = Constantes.VALOR_CERO;
+			}else{
+				auditoriaCriteriosSupervision = auditoriaCriteriosSupervisionDAO.findObtenerCriterioSupervision(Constantes.CS_BASTANTEO_COMPLETO);
+				LOG.info("auditoriaCriteriosSupervision.getIndicador() : "+auditoriaCriteriosSupervision.getIndicador());
+				if (Constantes.VALOR_UNO.equals(auditoriaCriteriosSupervision.getIndicador())){
+					intverificarCriterioSupervision = Constantes.VALOR_UNO;
+				}else{
+					AuditoriaCriteriosSupervision auditoriaCriteriosCodCent = auditoriaCriteriosSupervisionDAO.
+							findObtenerCriterioSupervision(Constantes.CS_CODIGO_CENTRAL);
+					LOG.info("auditoriaCriteriosSupervision.getIndicador() : "+auditoriaCriteriosCodCent.getIndicador());
+					AuditoriaCriteriosSupervision auditoriaCriteriosResBast = auditoriaCriteriosSupervisionDAO.
+							findObtenerCriterioSupervision(Constantes.CS_RESULTADO_BASTANTEO);
+					LOG.info("auditoriaCriteriosSupervision.getIndicador() : "+auditoriaCriteriosResBast.getIndicador());
+					
+					Integer intverificarCriterioCodCent = Constantes.VALOR_CERO;
+					Integer intverificarCriterioResBast = Constantes.VALOR_CERO;
+					
+					if (Constantes.VALOR_UNO.equals(auditoriaCriteriosCodCent.getIndicador())) {
+						if (auditoriaClienteDAO.findExisteCodigoCentral(strCodigoCentral)){
+							intverificarCriterioCodCent = Constantes.VALOR_UNO;
+						} else {
+							intverificarCriterioCodCent = Constantes.VALOR_CERO;
+						}
+					}
+					
+					if (Constantes.VALOR_UNO.equals(auditoriaCriteriosResBast.getIndicador())) {
+						if (auditoriaBastanteoDAO.findExisteResultadoBastanteo(strResultadoBastanteo)){
+							intverificarCriterioResBast = Constantes.VALOR_UNO;
+						}else{
+							intverificarCriterioResBast = Constantes.VALOR_CERO;
+						}
+					}
+					
+					if (Constantes.VALOR_UNO.equals(intverificarCriterioCodCent) || 
+							Constantes.VALOR_UNO.equals(intverificarCriterioResBast)) {
+						intverificarCriterioSupervision = Constantes.VALOR_UNO;
+					} else {
+						intverificarCriterioSupervision = Constantes.VALOR_CERO;
+					}
+				}
+			}
+			LOG.info("Return : "+intverificarCriterioSupervision);
+			return intverificarCriterioSupervision;
+		} catch (Exception ex) {
+			LOG.error("",ex);
+			return null;
+		}
+	}
+	
+	public Integer activarFirmas(Integer intIdExpediente, String tipoOperacion, String usuarioResponsable){
+		try{
+			LOG.debug("activarFirmas(Integer intIdExpediente, String tipoOperacion, String usuarioResponsable)");
+			Integer resultado = 0;
+			Expediente expediente = new Expediente();
+			expediente = expedienteDAO.load(intIdExpediente);
+			
+			/**********INICIO: FIX EXISTE FIRMA ASOCIADA MIGRACION**********/
+			List<Participe> listParticipeUnicos = participeDAO.findByExpedienteParticipesUnicos(intIdExpediente);
+			String existeFirmaAsociada = ConstantesBusiness.NO_EXISTE_FIRMA_ASOCIADA;
+			for (Participe p : listParticipeUnicos) {
+				if (ConstantesBusiness.FLAG_FIRMA_ASOCIADA.equals(p.getFlagFirmaAsociada())) {
+					existeFirmaAsociada = ConstantesBusiness.EXISTE_FIRMA_ASOCIADA;
+				}
+			}
+			LOG.info("FlagExisteFirmaAsociada: " + existeFirmaAsociada);
+			if (existeFirmaAsociada.equals(ConstantesBusiness.NO_EXISTE_FIRMA_ASOCIADA)) {
+				LOG.info("No se ejecuta la activación de firmas porque ningún partícipe tiene el flag de firma asociada.");
+				return 0;
+			}
+			/**********FIN: FIX EXISTE FIRMA ASOCIADA MIGRACION**********/
+			
+			String resultadoBastanteo = expediente.getResultado();
+			
+			WSServicioSFPHttpSoap11EndpointProxy portType = new WSServicioSFPHttpSoap11EndpointProxy ();
+			Properties properties = ParametrosSistema.getInstance().getProperties(ParametrosSistema.CONF);
+			// http://118.180.34.15:9080/SFPWS/services/WSServicioSFP.WSServicioSFPHttpSoap11Endpoint/
+			LOG.debug("URL Servicio SFP: {}", properties.getProperty(ConstantesParametros.SERVICIO_SFP));
+			String url = properties.getProperty(ConstantesParametros.SERVICIO_SFP);
+			portType._getDescriptor().setEndpoint(url);
+					
+			//List<Participe> listParticipeUnicos = participeDAO.findByExpedienteParticipesUnicos(intIdExpediente);
+			List<RpteActivacionBE> lstRpteActivacionBE = new ArrayList<RpteActivacionBE>();
+			LOG.debug("***Metodo activarFirmas CEProcessService.java***");
+			LOG.debug("NroExpediente: " + intIdExpediente);
+			LOG.debug("TipoOperacion: " + tipoOperacion);
+			LOG.debug("Usuario: " + usuarioResponsable);
+			for (int j=0; j<listParticipeUnicos.size();j++){
+				RpteActivacionBE rpteActivacion_BE = new RpteActivacionBE();
+				Participe participeUnico = listParticipeUnicos.get(j);
+				LOG.debug("participeUnico.getCodigoCentral(): " + participeUnico.getCodigoCentral());
+				LOG.debug("participeUnico.getFlagFirmaAsociada().toString(): " + participeUnico.getFlagFirmaAsociada().toString());
+				
+				rpteActivacion_BE.setCodigoCentral(participeUnico.getCodigoCentral());
+				rpteActivacion_BE.setDescripcionError("");
+				rpteActivacion_BE.setIndicadorActivacion(participeUnico.getFlagFirmaAsociada().toString());
+				lstRpteActivacionBE.add(rpteActivacion_BE);
+			}
+			
+			String numeroExpediente = intIdExpediente.toString();
+			//Poder_Firma_Activacion pfa = portType.activarPoderes(numeroExpediente, tipoOperacion, listaRepresentantes.toArray(new RpteActivacion_BE[0]), resultadoBastanteo, "P014773");
+			Integer inttipoOperacion = Integer.parseInt(tipoOperacion.trim());
+			String tipoOperacionNew = inttipoOperacion.toString();
+			String resultadoBastanteoNew = "0";
+			
+			Expediente expedienteGenerado = expedienteDAO.findByIdExpUltBastanteo(intIdExpediente);
+			if (expedienteGenerado != null && expedienteGenerado.getOperacion().getCodigoOperacion().equals(ConstantesBusiness.CODIGO_SUBSANACION_BASTANTEO)) {
+				LOG.info("El expediente original fue observado y generó un expediente de subsanación.");
+				Historial historial = historialDAO.findUltimaTarea(expedienteGenerado.getId(), ConstantesBusiness.ID_TAREA_VERIFICAR_REALIZAR_BASTANTEO);
+				if (historial != null) {
+					LOG.info("El expediente de subsanación ha pasado por la tarea Verificar y Realizar Bastanteo.");
+					numeroExpediente = expedienteGenerado.getId().toString();
+					tipoOperacionNew = expedienteGenerado.getOperacion().getId().toString();
+					resultadoBastanteo = expedienteGenerado.getResultado();
+					LOG.info("Se invocará al servicio de activar firmas y poderes con los datos del expediente de subsanación.");
+				}
+			}
+			/*
+			 * Cuando resultado bastanteo es nulo es porque esta en cambio de firma o revocatoria
+			 * 
+			 */
+			if (resultadoBastanteo != null) {
+				if (resultadoBastanteo.toUpperCase().compareToIgnoreCase(ConstantesBusiness.ACCION_EXPEDIENTE_APROBADO)==0){
+					resultadoBastanteoNew = ConstantesBusiness.CODIGO_BASTANTEO_APROBADO;
+				}
+				if (resultadoBastanteo.toUpperCase().compareToIgnoreCase(ConstantesBusiness.ACCION_EXPEDIENTE_APROBADO_PARCIAL)==0){
+					resultadoBastanteoNew = ConstantesBusiness.CODIGO_BASTANTEO_APROBADO_PARCIAL;
+				}
+				if (resultadoBastanteo.toUpperCase().compareToIgnoreCase(ConstantesBusiness.ACCION_EXPEDIENTE_OBSERVADO)==0){
+					resultadoBastanteoNew = ConstantesBusiness.CODIGO_BASTANTEO_OBSERVADO;
+				}
+			}
+			if (tipoOperacionNew.toUpperCase().compareToIgnoreCase(ConstantesBusiness.OPERACION_REVOCATORIA_IBM)==0){
+				tipoOperacionNew = ConstantesBusiness.OPERACION_REVOCATORIA_SFP;
+			}
+			LOG.debug("ResultadoBastanteo: " + resultadoBastanteoNew);
+			LOG.debug("tipoOperacionNew: " + tipoOperacionNew);
+			LOG.debug("arrayRpteActivacion_BE[0].getCodigo_central(): " + lstRpteActivacionBE.get(0).getCodigoCentral());
+			LOG.debug("Invocar al metodo de Activacion de Firmas y Poderes");
+			//Poder_Firma_Activacion pfa = portType.activarPoderes(numeroExpediente, tipoOperacionNew, arrayRpteActivacion_BE, resultadoBastanteoNew, "P014773");
+			PoderFirmaActivacion pfa = portType.activarPoderes(numeroExpediente, tipoOperacionNew, lstRpteActivacionBE, resultadoBastanteoNew, usuarioResponsable);
+			//Poder_Firma_Activacion pfa = new Poder_Firma_Activacion();
+			//pfa.setExito_activacion_poder(false);
+			//pfa.setDsc_mensaje("01NO OK por error en Firmas");
+			if (pfa!=null){
+				LOG.debug("pfa.getExito_activacion_poder(): " + pfa.isExitoActivacionPoder());
+				LOG.info("pfa.getDsc_mensaje(): " + pfa.getDscMensaje());
+				if (pfa.isExitoActivacionPoder()){
+					resultado = 1;
+					List<Participe> listParticipe = participeDAO.findByExpedienteParticipes(intIdExpediente);
+					Participe participe = new Participe();
+					
+					RpteActivacionBE rpteActivacionBE = new RpteActivacionBE();
+					List<RpteActivacionBE> lista = pfa.getListaRepresentantesOutput();
+					for(int k=0;k<lista.size();k++){
+						rpteActivacionBE = lista.get(k);
+						for(int i=0;i<listParticipe.size();i++){
+							participe = listParticipe.get(i);
+							if (rpteActivacionBE.getCodigoCentral().compareToIgnoreCase(participe.getCodigoCentral())==0){
+								String flagFirmaActiva = rpteActivacionBE.getIndicadorActivacion();
+								LOG.debug("rpteActivacionBE.getCodigo_central(): " + rpteActivacionBE.getCodigoCentral());
+								LOG.debug("flagFirmaActiva[0]: " + flagFirmaActiva.substring(0, 1));
+								participe.setFlagFirmaActiva(flagFirmaActiva.substring(0, 1));
+								participeDAO.update(participe);
+							}
+						}
+					}
+				}else{
+					LOG.info("Servicio Activacion False");
+					String codTipoErrorActivacion ="";
+					String detalleTipoErrorActivacion ="";
+					String perfilSupervisor="";
+					String asunto = ConstantesBusiness.ASUNTO_CORREO_ACTIVACION_FIRMAS;
+					String codigoCliente=expediente.getCliente().getCodigoCentral();
+					String mensaje = "";
+					if (pfa.getDscMensaje()!=null){
+						codTipoErrorActivacion = pfa.getDscMensaje().substring(0, 2);
+						detalleTipoErrorActivacion = pfa.getDscMensaje().substring(2,pfa.getDscMensaje().length());
+						
+						if(codTipoErrorActivacion.equals(ConstantesBusiness.CODIGO_ERROR_POR_FIRMAS_SERVICIO_SFP)){
+							perfilSupervisor= ConstantesBusiness.CODIGO_PERFIL_SUPERVISOR_FIRMA;
+						}else if(codTipoErrorActivacion.equals(ConstantesBusiness.CODIGO_ERROR_POR_PODERES_SERVICIO_SFP)){
+							perfilSupervisor= ConstantesBusiness.CODIGO_PERFIL_SUPERVISOR_ABOGADO_BASTANTEO;
+						}else if(codTipoErrorActivacion.equals(ConstantesBusiness.CODIGO_ERROR_POR_SISTEMA_SERVICIO_SFP)){
+							perfilSupervisor= ConstantesBusiness.CODIGO_PERFIL_ADMINISTRADOR;
+						}
+						LOG.info("perfilSupervisor: " + perfilSupervisor);
+						List<Empleado> listEmp = empleadoDAO.getEmpleadosPorPerfil(Integer.parseInt(perfilSupervisor));
+						List<InternetAddress> listAddresses = new ArrayList<InternetAddress> ();
+						for (Empleado e : listEmp) {
+							//Listar correos:  
+							if ((e.getCorreo()!=null) || (e.getCorreo().trim()!="")){
+								listAddresses.add(new InternetAddress(e.getCorreo()));
+								LOG.info("e.getCorreo(): " + e.getCorreo());
+							}
+						}
+						mensaje = "Expediente: " + intIdExpediente.toString() + " - Codigo Central: " + codigoCliente + " - Detalle: " + detalleTipoErrorActivacion;
+						//*************Enviar Correo***********************
+						//intIdExpediente
+						ProcesoUtil procesoUtil = new ProcesoUtil();
+						
+						
+						InternetAddress[] arrAddresses = listAddresses.toArray(new InternetAddress[0]);
+						procesoUtil.enviarCorreo(asunto, arrAddresses, mensaje);
+					}
+				}
+			}
+			
+			return resultado;
+		} catch (Exception ex) {
+			LOG.error("",ex);
+			return 0;
+		}
+	}
+	
+	public String obtenerEstadoBastanteo(Integer intIdExpediente){
+		String strEstadoBastanteo = "";
+		try{
+			Expediente expediente = new Expediente();
+			expediente = expedienteDAO.load(intIdExpediente);
+			if (expediente.getResultado()!=null)
+				strEstadoBastanteo = expediente.getFlagIndicadorBastanteo().toString();
+			return strEstadoBastanteo;
+		
+		}catch (Exception ex) {
+			LOG.error("",ex);
+			return strEstadoBastanteo;
+		}
+	}
+	
+	
+	public CobroComision obtenerHoraReintento(Integer id){
+		CobroComision cobroComision = new CobroComision();
+		try{
+			LOG.info("obtenerHoraReintento({})", id);
+			cobroComision = cobroComisionDAO.findAll().get(0);
+			LOG.info("obtenerHoraReintento({})", cobroComision);
+			return cobroComision;
+		}catch (Exception ex) {
+			LOG.error("",ex);
+			return cobroComision;
+		}
+	}
+	
+//	public String cobroComisionInmediato(String strIdExpediente,String codEmpleadoResponsable){
+//		LOG.info("cobroComisionInmediato({},{})", strIdExpediente, codEmpleadoResponsable);
+//		return "0";
+//	}
+		
+	public String cobroComisionInmediato(String strIdExpediente,String codEmpleadoResponsable){
+		String strCobroComision = "-2";
+		try{
+			LOG.debug("Servicio Cobro Comision (strIdExpediente): " + strIdExpediente);
+			Expediente expediente = new Expediente();
+			
+			int idExpediente = Integer.parseInt(strIdExpediente.trim());
+			expediente = expedienteDAO.load(idExpediente);
+			String strcodCentralCliente = expediente.getCliente().getCodigoCentral();
+			LOG.debug("strcodCentralCliente : " + strcodCentralCliente);
+			String strnumCuenta = expediente.getNumeroCuentaCobro();
+			LOG.debug("strnumCuenta : " + strnumCuenta);
+//			/*Empleado empleado = new Empleado();
+//			EmpleadoDAO empleadoDAO = DAOFactory.getInstance().getEmpleadoDAO();
+//			empleado = empleadoDAO.findByCodigo(codEmpleadoResponsable);
+//			String codOficina = empleado.getOficina().getCodigo();*/
+//			
+//			
+//			/*Inicio Obtener Centro Contable*/
+//			
+			LOG.debug("codEmpleadoResponsable : " + codEmpleadoResponsable);
+			pe.com.grupobbva.sce.qsp5.CtHeader rhCC = new pe.com.grupobbva.sce.qsp5.CtHeader();
+			rhCC.setUsuario(codEmpleadoResponsable);
+			LOG.debug("usuCC : " + codEmpleadoResponsable);
+			pe.com.grupobbva.sce.qsp5.CtBodyRq rqCC = new pe.com.grupobbva.sce.qsp5.CtBodyRq();
+			rqCC.setUsuario(codEmpleadoResponsable);
+			LOG.debug("usuCC : " + codEmpleadoResponsable);
+			CtInqPerfilUsuarioRq qCC = new CtInqPerfilUsuarioRq();
+			qCC.setHeader(rhCC);
+			qCC.setData(rqCC);
+			LOG.debug("rhCC : " + rhCC);
+			
+			SCE_QSP5_PortProxy servCC = new SCE_QSP5_PortProxy();
+			//http://118.180.36.26:7802/sce/qsp5/
+			Properties properties = ParametrosSistema.getInstance().getProperties(ParametrosSistema.CONF);
+			String urlQSP5 = properties.getProperty(ConstantesParametros.SERVICIO_QSP5);
+			servCC._getDescriptor().setEndpoint(urlQSP5);
+			
+			LOG.debug("codEmpleadoResponsable: " + codEmpleadoResponsable);
+			LOG.debug("Invocando callQSP5");
+			CtInqPerfilUsuarioRs sCC = servCC.callQSP5(qCC);
+			LOG.debug("sCC.getHeader().getCodigo(): " + sCC.getHeader().getCodigo());
+			LOG.debug("sCC.getHeader().getDescripcion(): " + sCC.getHeader().getDescripcion());
+			String codOficina = sCC.getData().getOficOperativa();
+			if (sCC.getHeader().getCodigo().compareTo(ConstantesBusiness.CODIGO_OK_SERVICIO_SCE_QSP5)==0){
+			
+				String strCentroCosto = "";
+				LOG.debug("sCC : " + sCC);
+				if (sCC!=null){
+					strCentroCosto = sCC.getData().getOficOperativa();
+					LOG.debug("strCentroCosto : " + strCentroCosto);
+				}
+				/*Fin Obtener Centro Contable*/
+				LOG.debug("strCentroCosto: " + strCentroCosto);
+				
+				CtHeader rh = new CtHeader();
+				rh.setUsuario(codEmpleadoResponsable);
+				LOG.debug("Servicio Cobro Comision CtHeader (usu): " + codEmpleadoResponsable);
+				
+				CtBodyRq rq = new CtBodyRq();
+				rq.setCentroContable(strCentroCosto);
+				LOG.debug("Servicio Cobro Comision CtBodyRq (centroContable): " + strCentroCosto);
+				rq.setCodCentralCliente(strcodCentralCliente);
+				LOG.debug("Servicio Cobro Comision CtBodyRq (codCentralCliente): " + strcodCentralCliente);
+				rq.setDescCargo(Constantes.DESC_CARGO_SERVICIO_COBRO_COMISION);
+				LOG.debug("Servicio Cobro Comision CtBodyRq (descCargo): " + Constantes.DESC_CARGO_SERVICIO_COBRO_COMISION);
+				rq.setNumCuenta(strnumCuenta);
+				LOG.debug("Servicio Cobro Comision CtBodyRq (numCuenta): " + strnumCuenta);
+				rq.setOficinaUsuario(codOficina);
+				LOG.debug("Servicio Cobro Comision CtBodyRq (oficinaUsuario): " + codOficina);
+				rq.setReferencia(strIdExpediente);
+				LOG.debug("Servicio Cobro Comision CtBodyRq (referencia): " + strIdExpediente);
+				//rq.setRegistroUsuario(registroUsuario);
+				//LOG.debug("Servicio Cobro Comision CtBodyRq (registroUsuario): " + registroUsuario);
+				rq.setRegistroUsuario(codEmpleadoResponsable);
+				
+				CtPagoServicioRq q = new CtPagoServicioRq();
+				q.setHeader(rh);
+				q.setData(rq);
+				
+				CtPagoServicioRs s = new CtPagoServicioRs();
+				
+				PagoServicio_PortProxy serv = new PagoServicio_PortProxy();
+				//http://118.180.36.26:7820/accpj/pagser/
+				String urlStr = properties.getProperty(ConstantesParametros.SERVICIO_PAGO_SERVICIO);
+				LOG.info("accpj/pagser : "+urlStr);
+				String urlPS = urlStr;
+				serv._getDescriptor().setEndpoint(urlPS);
+				
+				s = serv.pagarServicio(q);
+				
+				strCobroComision = s.getHeader().getCodigo();
+				//+POR SOLICITUD BBVA+System.out..println("Pago Servicio : "+strCobroComision);
+				String descError = "";
+				if (!Constantes.PAGO_SERVICIO_CORRECTO.equals(strCobroComision)){
+					descError = s.getHeader().getDescripcion();
+				}
+				LOG.info("Servicio Cobro Comision (idExpediente): " + strIdExpediente);
+				LOG.info("Servicio Cobro Comision (codigoError): " + strCobroComision);
+				LOG.info("Servicio Cobro Comision (descError): " + descError);
+			}
+			return strCobroComision;
+		
+		}catch (Exception ex) {
+			strCobroComision = Constantes.ERROR_COD_SERVICIO_COBRO_COMISION;
+			LOG.error("Servicio Cobro Comision Error (idExpediente): " + strIdExpediente);
+			LOG.error("Servicio Cobro Comision Error (codigoError): " + strCobroComision);
+			LOG.error("Servicio Cobro Comision Error (descError ex): ",ex);
+			return strCobroComision;
+		}
+	}
+	
+	public boolean crearPreRegistroSubsanacion (String codigoExpediente) {
+		Expediente expediente = expedienteDAO.load(Integer.parseInt(codigoExpediente));
+		Expediente expPreRegMod = new Expediente ();
+		expPreRegMod.setEmpleado(expediente.getEmpleado());
+		expPreRegMod.setProducto(expediente.getProducto());
+		expPreRegMod.setSubproducto(expediente.getSubproducto());
+		Date fechaActual = new Date ();
+		expPreRegMod.setFechaRegistro(fechaActual);
+		expPreRegMod.setFechaEnvio(fechaActual);
+		expPreRegMod.setFlagCorreo(expediente.getFlagCorreo());
+		expPreRegMod.setFlagSmstexto(expediente.getFlagSmstexto());
+		expPreRegMod.setCuentaCobroComision(expediente.getCuentaCobroComision());
+		expPreRegMod.setNumeroCuentaCobro(expediente.getNumeroCuentaCobro());
+		expPreRegMod.setEstadoCuenta(expediente.getEstadoCuenta());
+		expPreRegMod.setCampania(expediente.getCampania());
+		expPreRegMod.setCliente(expediente.getCliente());
+		expPreRegMod.setOficina(expediente.getOficina());
+		expPreRegMod.setOperacion(operacionDAO.findByCodOperacion(ConstantesBusiness.CODIGO_SUBSANACION_BASTANTEO));
+		expPreRegMod.setEstado(estadoExpedienteDAO.load(ConstantesBusiness.ID_ESTADO_EXPEDIENTE_PREREGISTRO));
+		expPreRegMod.setCodTipoPj(expediente.getCodTipoPj());
+		expPreRegMod.setDesTipoPj(expediente.getDesTipoPj());
+		expPreRegMod.setNumTerminal(expediente.getNumTerminal());
+		
+		// Toda Subsanación de Bastanteo deberá estar asociada a la modificatoria/nuevo bastanteo que fue observado y la originó
+		expPreRegMod.setIdExpUltBastanteo(Integer.parseInt(codigoExpediente));
+		
+		ExpedienteTarea expedienteTarea = new ExpedienteTarea ();
+		expedienteTarea.setExpediente(expPreRegMod);
+		expedienteTarea.setEstadoTarea(estadoTareaDAO.load(ConstantesBusiness.ID_ESTADO_TAREA_PREREGISTRO));
+		expedienteTarea.setTarea(tareaDAO.load(ConstantesBusiness.ID_TAREA_PRE_REGISTRO));
+		HashSet<ExpedienteTarea> set = new HashSet<ExpedienteTarea>();
+		set.add(expedienteTarea);
+		expPreRegMod.setExpedienteTareas(set);
+		expedienteDAO.save(expPreRegMod);
+		LOG.debug("nuevo expediente - "+expPreRegMod.getId());
+		return true;
+	}
+	
+	public boolean crearPreRegistroRevocatoria (String codigoExpediente) {
+		Expediente expediente = expedienteDAO.load(Integer.parseInt(codigoExpediente));
+		Expediente expPreRegMod = new Expediente ();
+		expPreRegMod.setEmpleado(expediente.getEmpleado());
+		expPreRegMod.setSubproducto(expediente.getSubproducto());
+		Date fechaActual = new Date ();
+		expPreRegMod.setFechaRegistro(fechaActual);
+		expPreRegMod.setFechaEnvio(fechaActual);
+		expPreRegMod.setFlagCorreo(expediente.getFlagCorreo());
+		expPreRegMod.setFlagSmstexto(expediente.getFlagSmstexto());
+		expPreRegMod.setCuentaCobroComision(expediente.getCuentaCobroComision());
+		expPreRegMod.setNumeroCuentaCobro(expediente.getNumeroCuentaCobro());
+		expPreRegMod.setEstadoCuenta(expediente.getEstadoCuenta());
+		expPreRegMod.setCampania(expediente.getCampania());
+		expPreRegMod.setCliente(expediente.getCliente());
+		expPreRegMod.setOficina(expediente.getOficina());
+		expPreRegMod.setOperacion(operacionDAO.findByCodOperacion(ConstantesBusiness.CODIGO_MODIFICATORIA_BASTANTEO));
+		expPreRegMod.setEstado(estadoExpedienteDAO.load(ConstantesBusiness.ID_ESTADO_EXPEDIENTE_PREREGISTRO));
+		expPreRegMod.setCodTipoPj(expediente.getCodTipoPj());
+		expPreRegMod.setDesTipoPj(expediente.getDesTipoPj());
+		expPreRegMod.setNumTerminal(expediente.getNumTerminal());
+		
+		ExpedienteTarea expedienteTarea = new ExpedienteTarea ();
+		expedienteTarea.setExpediente(expPreRegMod);
+		expedienteTarea.setEstadoTarea(estadoTareaDAO.load(ConstantesBusiness.ID_ESTADO_TAREA_PREREGISTRO));
+		expedienteTarea.setTarea(tareaDAO.load(ConstantesBusiness.ID_TAREA_PRE_REGISTRO));
+		HashSet<ExpedienteTarea> set = new HashSet<ExpedienteTarea>();
+		set.add(expedienteTarea);
+		expPreRegMod.setExpedienteTareas(set);
+		expedienteDAO.save(expPreRegMod);
+		LOG.debug("nuevo expediente - "+expPreRegMod.getId());
+		return true;
+	}
+	
+	public Integer grabarEmpleadoExpedienteTareaProceso(Integer idExpediente, String codEmpleado, Integer idTarea){
+		try{
+			Integer resultado = 0;
+			ProcesoUtil procesoUtil = new ProcesoUtil();
+			LOG.debug("grabarEmpleadoExpedienteTareaProceso");
+			LOG.debug("idExpediente: " + idExpediente);
+			LOG.debug("codEmpleado: " + codEmpleado);
+			LOG.debug("intIdTarea: " + idTarea);
+			resultado = procesoUtil.grabarEmpleadoExpedienteTareaProceso(idExpediente,codEmpleado,idTarea);
+			return resultado;
+		}catch (Exception ex) {
+			return 0;
+		}
+	}
+	
+	public boolean EliminarEmpleadoExpedienteTareaProceso(Integer idExpediente, String codEmpleado, Integer idTarea){
+		try{
+			boolean resultado = true;
+			ProcesoUtil procesoUtil = new ProcesoUtil();
+			LOG.debug("EliminarEmpleadoExpedienteTareaProceso");
+			LOG.debug("idExpediente: " + idExpediente);
+			LOG.debug("codEmpleado: " + codEmpleado);
+			LOG.debug("intIdTarea: " + idTarea);
+			resultado = procesoUtil.EliminarEmpleadoExpedienteTareaProceso(idExpediente,codEmpleado,idTarea);
+			return resultado;
+		}catch (Exception ex) {
+			return false;
+		}
+	}
+	
+	public String eliminarDocumentosCM(Integer idExpediente) {
+		
+		List <DocumentoExp> listdocumentoExp= documentoExpDAO.findByExpdiente(idExpediente);
+		Documento[] documentos = listdocumentoExp.toArray(new Documento[listdocumentoExp.size()]);
+		ClienteContent clienteContent = new ClienteContent(ParametrosSistema.getInstance().getProperties(ParametrosSistema.CONF).getProperty(ConstantesParametros.SERVICIO_CONTENT));
+		return clienteContent.eliminarDocumentosCM(documentos);
+	}
+	
+	public boolean enviarCorreo(String idExpediente, String idTareaAnterior, String idTareaActual, String codUsuarioAnterior, String codUsuarioActual, String nombreAccion) {
+		return expedienteBusiness.enviarCorreo(idExpediente, idTareaAnterior, idTareaActual, codUsuarioAnterior, codUsuarioActual, nombreAccion);
+	}
+}

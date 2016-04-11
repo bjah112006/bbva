@@ -1,0 +1,117 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	<f:verbatim>
+		<script type="text/javascript">
+			
+			function f_OpenSFP_CP(){
+				url = $("#form\\:linkSFPPoderes").val();
+				//myWindow=window.open(url,'myWindow','width=850,height=650,resizable=1,scrollbars=1');
+				wPadre = window;
+				var sOptions;
+				sOptions = 'status=yes,menubar=no,scrollbars=yes,resizable=yes,toolbar=no,channelmode=1';
+				sOptions = sOptions + ',width=' + (screen.availWidth - 5).toString();
+				sOptions = sOptions + ',height=' + (screen.availHeight - 122).toString();
+				sOptions = sOptions + ',screenX=0,screenY=0,left=0,top=0';
+				myWindowSFP = window.open('', 'myWindowSFP', sOptions);
+				//myWindow=window.open(url,'myWindow','width=850,height=650,resizable=1,scrollbars=1');
+				myWindowSFP.location = url;
+				myWindowSFP.focus();
+				myWindowSFP.moveTo( 0, 0 );
+				myWindowSFP.resizeTo( screen.availWidth, screen.availHeight );
+			}
+			
+		</script>
+	</f:verbatim>
+
+	<table width="750px" border="0" cellpadding="5">
+		<tr>
+			<td colspan="6" align="right">
+				<h:outputLink value="javascript:void(0);"
+						onclick="f_OpenSFP_CP()"
+						rendered="#{datosExpediente.mostrarLinkSFP}">
+						<h:outputText value="Ir a SFP: Consulta de Poderes" />
+				</h:outputLink>
+				<h:inputHidden id="linkSFPPoderes" value="#{datosExpediente.urlSFPPoderes}" />
+			</td>
+		</tr>
+		
+		<tr >
+			<td>
+				<h:outputText styleClass="titulo-bold" value="Número Expediente: " />
+			</td>
+			<td>
+				<h:outputText value="#{datosExpediente.expediente.id}" />
+			</td>
+			<td>
+				<h:outputText styleClass="titulo-bold"  value="Operación"></h:outputText>
+			</td>
+			<td>
+				<h:outputText value="#{datosExpediente.expediente.operacion.codigoOperacion} - #{datosExpediente.expediente.operacion.descripcion}"/>
+			</td>
+			<td>
+				<h:outputText styleClass="titulo-bold"  value="Estado"/> 
+			</td>
+			<td>
+				<h:outputText value="#{datosExpediente.expediente.estado.descripcion}"></h:outputText>
+			</td>
+		</tr>
+		<tr>
+		    <td  colspan="6" >	
+		      <h:panelGrid columns="6" style="margin-left: -8px;">
+		        <div>					
+  				  <h:outputText styleClass="titulo-bold"  value="Gestor Solicitante: "/>
+				</div>
+				<div>			
+				  <h:outputText value="#{datosExpediente.expediente.empleado.codigo} - #{datosExpediente.expediente.empleado.nombres} #{datosExpediente.expediente.empleado.apepat}"/>
+				</div>
+				<div>            							
+				  <h:outputText value="#{datosExpediente.expediente.oficina.codigo} - #{datosExpediente.expediente.oficina.descripcion}, #{datosExpediente.expediente.oficina.territorio.descripcion}"/>
+				</div>	
+			  </h:panelGrid>		
+		    </td>
+		</tr>
+		<tr>
+			<td>
+				<h:outputText styleClass="titulo-bold"  value="Código Central:"></h:outputText>
+			</td>
+			<td>
+				<h:outputText value="#{datosExpediente.expediente.cliente.codigoCentral}"/>
+			</td>
+			<td>
+				<h:outputText styleClass="titulo-bold"  value="Tipo DOI:"/>
+			</td>
+			<td>
+				<h:outputText value="#{datosExpediente.expediente.cliente.tipoDoiDes}"/>
+			</td>
+			<td>
+				<h:outputText styleClass="titulo-bold"  value="Número DOI:"/>
+			</td>
+			<td>
+				<h:outputText value="#{datosExpediente.expediente.cliente.numeroDoi}"/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<h:outputText styleClass="titulo-bold"  value="Razón Social:"/>
+			</td>
+			<td colspan="2">
+				<h:outputText value="#{datosExpediente.expediente.cliente.razonSocial}"/>
+			</td>
+			<td>
+				<h:outputText styleClass="titulo-bold"  value="Tipo de PJ:"/>
+			</td>
+			<td colspan="2">
+				<h:outputText value="#{datosExpediente.expediente.codTipoPj}- #{datosExpediente.expediente.desTipoPj}"/>
+			</td>
+		</tr>
+		<tr>
+			<td><h:outputText value="Migrado:" styleClass="titulo-bold" />
+			</td>
+			<td><h:outputText
+					value="#{datosExpediente.esMigrado}" /></td>
+		</tr>
+	</table>	
+</ui:composition>

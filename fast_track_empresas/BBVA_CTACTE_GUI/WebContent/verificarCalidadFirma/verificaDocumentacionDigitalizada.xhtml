@@ -1,0 +1,111 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<script type="text/javascript">
+	/* <![CDATA[ */
+		function abrirDocumento(obj){
+			var idCm = $(obj).parent().find("input:eq(1)").val();
+			f_openArchivoEscaneadoCM(idCm);
+			return false;
+		}
+		function f_openArchivoEscaneadoCM(idCm){
+			if ($.browser.msie) {
+				winCM=window.open('../pdfContent/abrirPDF.faces?idcm='+idCm+'&redirect=0','winDocCM','width=850,height=450,resizable=yes');
+			} else {
+				winCM=window.open('../pdfContent/abrirPDF.faces?idcm='+idCm+'&redirect=1','winDocCM','width=850,height=450,resizable=yes');
+			}
+		}
+	/* ]]> */
+	</script>
+	
+	<table width="100px" border="0" cellpadding="5">
+		<tr>
+			<td align="left"><h:outputText styleClass="titulo-bold" value="Migrado: " />
+			</td>
+			<td align="left"><h:outputText
+					value="#{verificaDocumentacionDigitalizada.esMigrado}" /></td>
+		</tr>
+	</table>
+	
+	<h:panelGrid columns="1" width="800px">
+		<h:outputText value="Documentación Digitalizada"
+			styleClass="titulo-bold"></h:outputText>
+		<hr></hr>
+	</h:panelGrid>
+
+	
+
+	<h:dataTable id="tablaDocumentos" var="documentoExpW" width="800px"
+		value="#{verificaDocumentacionDigitalizada.listaDocExpedienteW}">
+		<h:column id="modelHeader">
+			<f:facet name="header">  
+					Tipo Documento   
+				</f:facet>
+			<h:selectOneMenu value="#{documentoExpW.docExpediente.documento.id}"
+			                 disabled="#{verificaDocumentacionDigitalizada.modoConsulta}">
+				<f:selectItems
+					value="#{verificaDocumentacionDigitalizada.listaSelectDocumento}" />
+			</h:selectOneMenu>
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				Archivo escaneado   
+			</f:facet>
+			<!--h:commandLink styleClass="abrirDocumento" disabled="#{verificaDocumentacionDigitalizada.modoConsulta}"
+				value="#{documentoExpW.docExpediente.nombreArchivo}"
+				onclick="return abrirDocumento(this);">
+			</h:commandLink-->
+			<h:outputLink styleClass="abrirDocumento" disabled="#{verificaDocumentacionDigitalizada.modoConsulta}"
+					value="javascript:void(0);"
+					onclick="return abrirDocumento (this);">
+				<h:outputText value="#{documentoExpW.docExpediente.nombreArchivo}"/>
+			</h:outputLink>
+			<h:inputHidden value="#{documentoExpW.rutaCM}" />
+			<h:inputHidden id="idCm" value="#{documentoExpW.docExpediente.idCm}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">  
+	                    ¿Rechazar?   
+	            </f:facet>
+			<h:selectBooleanCheckbox id="idFlagRechazar"
+				disabled="#{documentoExpW.habilitarOpRechazo || verificaDocumentacionDigitalizada.modoConsulta}"
+				value="#{documentoExpW.flagComboRechazadoFirmas}">
+				<f:ajax event="change"
+					render="idMotivo :form:idRechazarDocumentacion :form:idVinculo"
+					listener="#{documentoExpW.verificaSeleccionMotivoRechazo}" />
+			</h:selectBooleanCheckbox>
+		</h:column>
+		<h:column>
+			<f:facet name="header">  
+	                    Revisión Motivo   
+	            </f:facet>
+			<h:selectOneMenu id="idMotivo" style="width: 500px;"
+				disabled="#{!documentoExpW.flagComboRechazadoFirmas || verificaDocumentacionDigitalizada.modoConsulta}"
+				value="#{documentoExpW.idMotivo}">
+				<f:selectItems
+					value="#{verificaDocumentacionDigitalizada.listaSelectMotivoR}" />
+			</h:selectOneMenu>
+		</h:column>
+	</h:dataTable>
+	<h:message for="idMotivo" id="idMensajeError"
+		errorClass="mensaje-error" />
+	<h:message for="tablaDocumentos" id="idMessageError"
+		errorClass="mensaje-error" />
+	<h:message for="idFlagRechazar" id="idMessagesError"
+		errorClass="mensaje-error" />
+
+	<h:panelGrid columns="2" width="70%">
+		<h:commandButton value="Aplicar cambio a tipos" disabled="#{verificaDocumentacionDigitalizada.modoConsulta}"
+			actionListener="#{verificaDocumentacionDigitalizada.aplicarCambioTipoDocumento}" >
+			<!-- <f:ajax event="click" render=":form:idIfRVisorContent"/> -->
+		</h:commandButton>
+	</h:panelGrid>
+
+	<br />
+	<br />
+
+</ui:composition>
+
+

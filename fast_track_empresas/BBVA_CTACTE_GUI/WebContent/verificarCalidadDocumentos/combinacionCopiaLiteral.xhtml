@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:view>
+	<h:head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+		<title>Combinacion de Documentos</title>
+		<h:outputStylesheet library="css" name="general.css" target="head"/>
+		<h:outputScript library="javascript" name="general.js" target="head"/>
+	</h:head>
+	<h:body>
+			<f:verbatim>
+				<script type="text/javascript" language="javascript">
+					
+					function cerrarPopup() {
+						window.close();					
+					}
+					
+					function actualizarDocumentoCombinado (codigoDoc) {
+							//alert("antes de llamr al opener .. "+codigoDoc);
+							opener.actDocumentoCombinado(codigoDoc);
+					}
+				</script>
+	
+				<applet name="appletCombinacionPDF" id="appletCombinacionPDF" code="com.ibm.bbva.ctacte.applet.CombinarDocumentos"
+						archive="../applet/appCtaCte.jar" width="1000px" height="650px" mayscript="mayscript">
+						<param name="servidorServWeb"
+						value="#{combinacionDocumento.servidorServWeb}" />
+						<param name="puertoServWeb"
+							value="#{combinacionDocumento.puertoServWeb}" />
+						<param name="descargados"
+							value="#{combinacionDocumento.descargados}" />
+						<param name="transferencias"
+							value="#{combinacionDocumento.transferencias}" />
+						<param name="codigoDoc" value="#{combinacionDocumento.codigoDocumento}" />
+						<param name="idExpediente" value="#{combinacionDocumento.idExpediente}" />
+						<!--param name="codigoDoc2IDCM" value="#{combinacionDocumento.codigoDocumento2CM}" /-->
+						<param name="formOrigen" value="#{combinacionDocumento.origenMigracionHist}" />
+						<param name="tramaDescargaArcHist" value="#{combinacionDocumento.tramaDescargaArcHist}" />
+						<!--param name="codOperacion" value="#{combinacionDocumento.codigoOperacion}" /-->
+						<!--param name="codCentralCliente" value="#{combinacionDocumento.codigoCentralCliente}" /-->
+						<param name="servidorConvPDF" value="#{combinacionDocumento.servidorConvPDF}" />
+						<param name="puertoConvPDF" value="#{combinacionDocumento.puertoConvPDF}" />
+						<param name="log" value="#{combinacionDocumento.log}" />
+						
+				</applet>
+				
+			</f:verbatim>
+	</h:body>
+</f:view>
+
+</html>
+
+

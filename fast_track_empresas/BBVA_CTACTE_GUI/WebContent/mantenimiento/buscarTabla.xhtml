@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<script type="text/javascript">
+String.prototype.trim = function() {return this.replace(/^\s+|\s+$/g,"")};
+
+function validaInputText(evt, elem) {
+	var tipoDato = $("[id='"+elem.id.replace("valorRegistro2", "tipoDatoOculto")+"']").val();
+	if (tipoDato=="STRING") {
+	} else if (tipoDato=="INTEGER" || tipoDato=="SHORT" || tipoDato=="LONG") {
+		soloNumeros(evt);
+	} else if(tipoDato=="DOUBLE" || tipoDato=="FLOAT") {
+		soloNumerosConDecimales(evt);
+	}
+}
+</script>
+<h:panelGroup>
+	<h:panelGrid width="100%" border="0" align="center" cellspacing="0" rendered="#{consultarTabla.botonBuscar}">
+		<!--table width="100%" border="0" align="center" cellspacing="0">
+			<tr rendered="#{consultarTabla.botonBuscar}">
+				<td valign="top"-->
+					<table width="100%">
+						<tr>
+							<td align="left" valign="top" width="100%">
+								<h:dataTable id="columnasTablaParametricaDTB"
+									value="#{consultarTabla.tablaParametricaVO.columnasVO}"
+									var="col">
+
+									<h:column rendered="#{col.busqueda=='1'?true:false}">
+										<h:panelGrid columns="1">
+											<h:outputLabel style="width:150px;" for=" "
+												value="#{col.nombreMostrar}"
+												rendered="#{col.busqueda=='1'?true:false}"
+												styleClass="etiqueta" />
+										</h:panelGrid>
+									</h:column>
+
+									<h:column rendered="#{col.busqueda=='1'?true:false}">
+										<h:outputText id="valorRegistro1" value="#{col.valorRegistro}"
+											rendered="#{col.tipoCampoOT}"></h:outputText>
+										<h:inputText onkeydown="validaInputText(event, this);" size="39"
+											maxlength="#{col.longitudMaxima}" id="valorRegistro2"
+											value="#{col.valorRegistro}" rendered="#{col.tipoCampoIT}"
+											styleClass="caja-texto"></h:inputText>
+										<h:inputTextarea rows="1" cols="30" id="valorRegistro3"
+											value="#{col.valorRegistro}" rendered="#{col.tipoCampoITA}"
+											styleClass="caja-texto"></h:inputTextarea>
+										<h:selectOneMenu id="valorRegistro4"
+											value="#{col.valorRegistro}" rendered="#{col.tipoCampoSOM}"
+											styleClass="select">
+											<f:selectItems value="#{col.posiblesValoresSI}" />
+										</h:selectOneMenu>
+										<h:selectBooleanCheckbox id="valorRegistro5"
+											value="#{col.valorMostrarValorCheck}"
+											rendered="#{col.tipoCampoCHK}" />
+									</h:column>
+
+									<h:column rendered="#{col.busqueda=='1'?true:false}">
+										<h:message for="valorRegistro1" styleClass="mensaje-error"></h:message>
+										<h:message for="valorRegistro2" styleClass="mensaje-error"></h:message>
+										<h:message for="valorRegistro3" styleClass="mensaje-error"></h:message>
+										<h:message for="valorRegistro4" styleClass="mensaje-error"></h:message>
+										<h:message for="valorRegistro5" styleClass="mensaje-error"></h:message>
+									</h:column>
+
+									<h:column rendered="#{col.busqueda=='1'?true:false}">
+										<h:inputHidden id="tipoDatoOculto" value="#{col.tipoDato}" />
+									</h:column>
+								</h:dataTable>
+							</td>
+						</tr>
+
+                        <h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+						   <h:outputText value=" " />
+						   <tr>						
+							  <td align="left">
+							   
+								<h:commandButton id="buscar" action="#{consultarTabla.buscar}"
+									value="Buscar" styleClass="boton" rendered="#{consultarTabla.botonBuscar}"/>
+								<h:commandButton id="limpiar" action="#{consultarTabla.limpiar}"
+									value="Limpiar" styleClass="boton" rendered="#{consultarTabla.botonBuscar}"/>
+							   
+							  </td>
+						   </tr>					
+						   <h:outputText value=" " />	
+						</h:panelGroup>
+
+					</table>
+				<!--/td>
+			</tr>
+		</table-->
+	</h:panelGrid>
+</h:panelGroup>
+</ui:composition>

@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	<h:outputText style="font-size:14px" value="#{datosGenerales.tituloSeccion}"/>
+	<h:panelGrid border="1" style="vertical-align:top" width="60%">
+		<h:panelGrid columns="2" cellpadding="0" cellspacing="0"  width="100%" style="vertical-align:top">
+			<h:panelGrid columns="2"  width="100%">  
+			        <h:outputText style="font-size:12px;font-weight:bold" value="CLIENTE"/>  
+			        <h:outputText value=" "/>
+			        <h:outputText style="font-weight:bold" value="Código Central:"/>
+			        <h:outputText value="#{datosCliente.cliente.codigoCentral}"/>
+			        <h:outputText style="font-weight:bold" value="Tipo DOI:" />  
+			        <h:outputText value="#{datosCliente.cliente.tipoDoiDes}" />
+			        <h:outputText style="font-weight:bold" value="Número DOI:" />  
+			        <h:outputText value="#{datosCliente.cliente.numeroDoi}" />
+			        <h:outputText style="font-weight:bold" value="Razón Social:" />  
+		        	<h:outputText value="#{datosCliente.cliente.razonSocial}" />
+			        	        
+			</h:panelGrid>
+			<h:panelGrid columns="2"  width="100%"  >
+			        <h:outputText style="font-size:12px;font-weight:bold" value="PRODUCTO"/>  
+			        <h:outputText value=" "/>
+			        <h:outputText style="font-weight:bold" value="Producto:"/>
+			        <h:outputText value="#{datosGenerales.expediente.producto.descripcion}" /> 
+			        <h:outputText style="font-weight:bold" value="Subproducto:"/>  
+			        <h:outputText value="#{datosGenerales.expediente.subproducto}" />
+			        <h:outputText value=" "/>
+			        <h:outputText value=" "/>
+			        <h:outputText value=" "/>
+			        <h:outputText value=" "/>
+			        <h:outputText value=" "/>
+			        <h:outputText value=" "/>
+			        <h:outputText value=" "/>
+			        <h:outputText value=" "/>
+			        <h:outputText value=" "/>
+			        <h:outputText value=" "/>
+			        <h:outputText value=" "/>
+			        <h:outputText value=" "/>
+			        <h:outputText value=" "/>
+			</h:panelGrid> 
+		</h:panelGrid>  
+	</h:panelGrid> 
+
+</ui:composition>
+
+

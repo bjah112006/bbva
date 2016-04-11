@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<!-- TODO revisar si se usa -->
+	<h:dataTable id="idListDocRevoc" var="documentoRevoc"
+		value="#{datosRevocatoria.listaDocumentos}">
+		<h:column id="modelHeader">
+			<f:facet name="header">
+				<h:outputText value="Tipo Doc." />
+			</f:facet>
+			<h:outputText
+				value="#{documentoRevoc.documentoExp.documento.descripcion}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="¿Obligatorio?" />
+			</f:facet>
+			<h:selectBooleanCheckbox disabled="true"
+				value="#{documentoRevoc.documentoExp.flagObligatorio=='1' ? true : false}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="Archivo escaneado" />
+			</f:facet>
+			<h:outputText value="#{documentoRevoc.documentoExp.nombreArchivo}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="Versiones Históricas" />
+			</f:facet>
+			<h:outputText value="#{documentoRevoc.documentoExp.nombreArchivo}" />
+			<h:outputLink value="javascript:abrirPDF('appletVisor', '123');">temp</h:outputLink>
+			<h:dataTable id="tablaDocumentosHist" var="documentoHist"
+				value="#{documentoExpW.listaDocumentoHistorico}">
+				<h:column>
+					<h:outputText value="#{documentoHist.nombreArchivo}" />
+				</h:column>
+			</h:dataTable>
+		</h:column>
+	</h:dataTable>
+
+
+
+</ui:composition>

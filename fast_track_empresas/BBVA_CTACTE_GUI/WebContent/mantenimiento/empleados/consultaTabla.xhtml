@@ -1,0 +1,228 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+	
+	<ui:define name="content">
+		<f:verbatim>
+		<script type="text/javascript" language="javascript">
+			var compSel = null;
+			var sel = null;
+			function cambiarEstado (comp) {			    
+				if ($(comp).is(':checked')) {
+					if (compSel!=null) {
+						$(compSel).attr('checked', false);
+					}
+					compSel = comp;
+				} else {
+					compSel = null;
+				}
+			}
+			
+			function confirmarElimina(comp) {
+			  var filas = document.getElementById("form:registrosTablaDTB").rows.length - 1;
+			  var ok, resultado=false;
+			  for (i=0; filas>i; i++) {			      
+			      ok=document.getElementById("form:registrosTablaDTB:"+i+":rowSelect1").checked;
+			      if(ok){
+			        resultado = confirm('¿Está seguro que desea eliminar el elemento seleccionado?');
+			        break;
+			      }			    
+			  }		  
+			 return resultado;
+			}
+		</script>
+	    </f:verbatim>
+	    
+		<h:panelGrid styleClass="bloque">
+			
+			<h:panelGroup styleClass="titulo">
+				<h:outputText id="nombreTablaOTX"  
+					value="Mantenimiento - #{consultarTabla.tablaParametricaVO.tablaVO.nombreMostrar}" />			
+				<h:outputText value=" " />
+			</h:panelGroup>	
+					
+			<ui:include src="/mantenimiento/empleados/buscarTabla.xhtml" />
+			
+			<h:panelGroup style="overflow-x: auto; width: 750px;height: 440px">
+				
+				<h:dataTable border="1" styleClass="tablaTask" style="border-collapse:collapse;" 
+				columnClasses="text,text,text" headerClass="headerClass headerTabla1" rendered="true" 
+				rowClasses="uno,dos" id="idTablaEmpleados" 
+				value="#{buscarEmpleado.listaEmpleadosVO}" var="item" footerClass="fondo"
+				rows="#{buscarEmpleado.numeroRegistro}" binding="#{buscarEmpleado.dataTable}" >
+				
+				<!--  Columna SELECCIÓN -->
+				
+				<h:column align="center">
+					<f:facet name="header">
+						<h:outputText value="Sel."></h:outputText>
+					</f:facet>
+					<!--<h:selectBooleanCheckbox id="idSelect" value="#{item.seleccion}" onchange="cambiarEstado(this);">  
+						<f:ajax 
+							event="click" 
+							execute="@form" 
+							render="btnActualizar btnEliminar"
+							listener="#{buscarEmpleado.cargarEmpleado(item.id, item.seleccion)}" />
+					</h:selectBooleanCheckbox>-->
+					<h:selectBooleanCheckbox id="idSelect" value="#{item.seleccion}" onchange="cambiarEstado(this);">  
+						<f:ajax 
+							event="click" 
+							execute="@form" 
+							render="btnActualizar btnEliminar"
+							listener="#{buscarEmpleado.cargarEmpleado}" />
+					</h:selectBooleanCheckbox>
+				</h:column>
+				
+				<!--  Columna CÓDIGO -->
+				
+				<h:column width="15%">
+					<f:facet name="header">
+						<h:outputText
+							value="Codigo"
+							styleClass="tabla-titulo"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{item.codigo}" styleClass="tabla-campo-texto"/>
+				</h:column>
+				
+				<!-- Columna NOMBRES -->
+				
+				<h:column width="15%">
+					<f:facet name="header">
+						<h:outputText
+							value="Nombres"
+							styleClass="tabla-titulo"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{item.nombres}" styleClass="tabla-campo-texto"/>
+				</h:column>
+				
+				<!-- Columna APELLIDO PATERNO -->
+				
+				<h:column width="15%">
+					<f:facet name="header">
+						<h:outputText
+							value="Apellido Paterno"
+							styleClass="tabla-titulo"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{item.apepat}" styleClass="tabla-campo-texto"/>
+				</h:column>
+				
+				<!-- Columna APELLIDO MATERNO -->
+				
+				<h:column width="15%">
+					<f:facet name="header">
+						<h:outputText
+							value="Apellido Materno"
+							styleClass="tabla-titulo"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{item.apemat}" styleClass="tabla-campo-texto"/>
+				</h:column>
+				
+				<!-- Columna OFICINA -->
+				
+				<h:column width="15%">
+					<f:facet name="header">
+						<h:outputText
+							value="Oficina"
+							styleClass="tabla-titulo"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{item.oficina}" styleClass="tabla-campo-texto"/>
+				</h:column>
+				
+				<!-- Columna NOMBRES COMPLETOS -->
+				
+				<h:column width="15%">
+					<f:facet name="header">
+						<h:outputText
+							value="Nombres Completos"
+							styleClass="tabla-titulo"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{item.nombresCompletos}" styleClass="tabla-campo-texto"/>
+				</h:column>
+				
+				<!-- Columna CORREO -->
+				
+				<h:column width="15%">
+					<f:facet name="header">
+						<h:outputText
+							value="Correo"
+							styleClass="tabla-titulo"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{item.correo}" styleClass="tabla-campo-texto"/>
+				</h:column>
+				
+				<!--  COLUMNA FLAG ACTIVO -->
+				
+				<h:column width="15%" align="center">
+					<f:facet name="header">
+						<h:outputText
+							value="Flag Activo"
+							styleClass="tabla-titulo"></h:outputText>
+					</f:facet>
+					<h:selectBooleanCheckbox id="flagActivo" value="#{item.flagActivo}" disabled="true">
+					</h:selectBooleanCheckbox>
+				</h:column>
+				
+				<!--  COLUMNA FLAG ABOGADO -->
+				
+				<h:column width="15%" align="center">
+					<f:facet name="header">
+						<h:outputText
+							value="Flag Abogado"
+							styleClass="tabla-titulo"></h:outputText>
+					</f:facet>
+					<h:selectBooleanCheckbox id="flagAbogado" value="#{item.flagAbogado}" disabled="true">
+					</h:selectBooleanCheckbox>
+				</h:column>
+				
+				<!-- Columna ESTUDIO ABOGADO -->
+				
+				<h:column width="15%">
+					<f:facet name="header">
+						<h:outputText
+							value="Estudio Abogado"
+							styleClass="tabla-titulo"></h:outputText>
+					</f:facet>
+					<h:outputText value="#{item.estudioAbogado}" styleClass="tabla-campo-texto"/>
+				</h:column>
+				
+				<!-- Table Footer -->
+				
+				<f:facet name="footer">
+		            <div class="espacios-etiqueta2">
+		                <span class="columna" style="width:150px">
+		                	<h:panelGroup layout="block" style="padding:5px 10px;">
+		                   		<h:outputText value="#{buscarEmpleado.numRegistros}" styleClass="etiqueta"/>
+		                   	</h:panelGroup>	
+		                </span>
+		                <span class="columna" style="width:150px">			
+							<h:panelGroup layout="block" style="padding:5px 10px;">
+								<h:commandButton value="Agregar"
+									action="#{buscarEmpleado.agregar}"  styleClass="boton"/>
+								<h:commandButton value="Actualizar"
+									action="#{buscarEmpleado.actualizar}"  styleClass="boton" id="btnActualizar"/>
+								<h:commandButton value="Eliminar" disabled="true"
+									action="#{buscarEmpleado.eliminar}"  styleClass="boton" id="btnEliminar"/>
+								<h:commandButton value="Cancelar"
+									action="#{buscarEmpleado.cancelar}"  styleClass="boton"/>
+								<h:commandButton value="Anterior"
+									actionListener="#{buscarEmpleado.pagePrevious}"  styleClass="boton"
+									disabled="#{buscarEmpleado.dataTable.first == 0}" />
+								<h:commandButton value="Siguiente"
+									actionListener="#{buscarEmpleado.pageNext}"  styleClass="boton"
+									disabled="#{buscarEmpleado.dataTable.first + buscarEmpleado.dataTable.rows >= buscarEmpleado.dataTable.rowCount}" />
+							</h:panelGroup>
+		                </span>                              
+		            </div>				
+				</f:facet>
+				
+				<h:messages globalOnly="true" errorClass="mensaje-error"/>
+				
+				</h:dataTable>
+				
+			</h:panelGroup>
+			
+		</h:panelGrid>
+	</ui:define>
+</ui:composition>

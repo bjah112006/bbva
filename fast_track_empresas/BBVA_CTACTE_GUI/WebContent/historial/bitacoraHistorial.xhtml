@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<h:panelGrid>
+		<h:outputText></h:outputText>
+	</h:panelGrid>
+	<h:dataTable var="obs"
+			value="#{bitacoraHistorial.listaHistorialExp}"
+			styleClass="ui-datatable ui-widget #{empty bitacoraHistorial.listaHistorialExp ? 'ui-datatable-empty' : 'ui-datatable-not-empty'}"
+	    	headerClass="ui-state-default"
+			rowClasses="ui-widget-content"
+			footerClass="ui-widget-content">  
+		<h:column>
+			<f:facet name="header">Terminal</f:facet>
+            <h:outputText value="#{obs.numTerminal}" />  
+        </h:column>
+        <h:column>  
+        	<f:facet name="header">Registro</f:facet>
+            <h:outputText value="#{obs.empleado.codigo}" />  
+        </h:column>  
+        <h:column>  
+        	<f:facet name="header">Usuario</f:facet>
+            <h:outputText value="#{obs.empleado.perfil.descripcion}" />  
+        </h:column>  
+        <h:column>  
+        	<f:facet name="header">Responsable</f:facet>
+            <h:outputText value="#{obs.empleado.nombresCompletos}" />  
+        </h:column>  
+        
+        <h:column>
+        	<f:facet name="header">Fecha y Hora de incio</f:facet>
+            <h:outputText value="#{obs.fechaEnvio}" >  
+            	<f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss"/>
+            </h:outputText>
+        </h:column>  
+        <h:column>  
+        	<f:facet name="header">Fecha y Hora de fin</f:facet>
+            <h:outputText value="#{obs.fechaFin}" />  
+        </h:column>  
+        <h:column>  
+        	<f:facet name="header">Fecha y Hora de fin programado</f:facet>
+            <h:outputText value="#{obs.fechaProgramada}" />  
+        </h:column>  
+        <h:column>  
+        	<f:facet name="header">Estado</f:facet>
+            <h:outputText value="#{obs.estado.descripcion}" />  
+        </h:column>
+        <f:facet name="footer">
+        	<h:outputText value="No se encontró registros" rendered="#{empty bitacoraHistorial.listaHistorialExp}"/>
+        </f:facet>
+    </h:dataTable>	
+
+	<h:panelGrid>
+		<h:outputText></h:outputText>
+	</h:panelGrid>	
+</ui:composition>
+
+

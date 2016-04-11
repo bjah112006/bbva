@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<f:verbatim>
+		<script type="text/javascript" language="javascript">
+		
+		</script>
+	</f:verbatim>
+
+	<h:panelGroup id="idBuscarCliente">
+		<h:message for="idBuscarCliente" id="idMsgConexion"
+			errorClass="mensaje-error" />
+
+		<h:panelGrid border="1" cellpadding="12" cellspacing="0">
+			<h:panelGrid columns="3">
+				<h:panelGroup>
+					<h:panelGrid columns="2">
+						<h:outputText value="Código Central:" />
+						<h:inputText value="#{buscarClienteMB.codigoCentral}"
+							maxlength="8" id="idCodCent"
+							disabled="#{buscarClienteMB.disCodigoCentral}">
+							<f:ajax event="keyup" render="idNumDOI idBuscar"
+								listener="#{buscarClienteMB.modificarEstadoNumDOI}" />
+							<f:ajax event="mouseout" render="idNumDOI idBuscar"
+								listener="#{buscarClienteMB.modificarEstadoNumDOI}" />
+						</h:inputText>
+					</h:panelGrid>
+					<h:message for="idCodCent" errorClass="mensaje-error" />
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:panelGrid columns="2">
+						<h:outputText value="Número DOI:" />
+						<h:inputText value="#{buscarClienteMB.numeroDOI}" maxlength="11"
+							id="idNumDOI" disabled="#{buscarClienteMB.disNumeroDOI}">
+							<f:ajax event="keyup" render="idCodCent idBuscar"
+								listener="#{buscarClienteMB.modificarEstadoCodCentral}" />
+							<f:ajax event="mouseout" render="idNumDOI idBuscar"
+								listener="#{buscarClienteMB.modificarEstadoCodCentral}" />
+						</h:inputText>
+					</h:panelGrid>
+					<h:message for="idNumDOI" errorClass="mensaje-error" />
+				</h:panelGroup>
+				<h:commandButton value="Buscar"
+					actionListener="#{buscarClienteMB.buscar}" id="idBuscar"
+					disabled="#{buscarClienteMB.disBuscar}" />
+
+			</h:panelGrid>
+		</h:panelGrid>
+	</h:panelGroup>
+</ui:composition>
+

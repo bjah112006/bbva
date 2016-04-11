@@ -1,0 +1,20 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<f:verbatim>
+		<script type="text/javascript">
+			var ventanaSubir;
+			$(document).ready(function(){
+				var abrirVentana = $("#form\\:idAbrirVentana").text();
+				if (abrirVentana=="true") {
+					ventanaSubir = window.open('../applet/envioFTP.faces', 'WindowName', 
+						'dependent=yes, menubar=no, height=125,width=380, toolbar=no, resizable=yes');
+				}
+			});
+		</script>
+	</f:verbatim>
+	<h:outputText style="display:none" id="idAbrirVentana" value="#{envioFTP.abrirVentana}"/>
+
+</ui:composition>

@@ -1,0 +1,27 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">	
+
+	<ui:define name="title">Bandeja</ui:define>
+	
+	<ui:define name="head">
+		<ui:include src="/WEB-INF/comun/pingWebsealHead.xhtml"/>
+	</ui:define>
+	
+	<ui:define name="inicioform">
+		<custom:remoteCommand name="alargarSessionWS" actionListener="#{bandejaMB.pinwWEBSEAL}" />
+		<h:inputHidden id="idIntentos" value="#{bandejaMB.intentosWS}" />
+	</ui:define>
+	
+	<ui:define name="content">
+		<ui:include src="/WEB-INF/comun/ftp.xhtml"/>
+		<h:panelGroup id="panelBusqueda">
+			<ui:include src="/WEB-INF/comun/bandejaTrabajoBusqueda.xhtml"/>
+			<ui:include src="/WEB-INF/comun/bandejaTrabajoBandeja.xhtml"/>
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>

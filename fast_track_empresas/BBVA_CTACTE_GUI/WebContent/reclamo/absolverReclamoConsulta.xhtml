@@ -1,0 +1,284 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml"
+	xmlns:bbva="http://java.sun.com/jsf/composite/components/bbva"
+	xmlns:util="http://java.sun.com/jsf/composite/util">
+	<f:verbatim>
+		<script type="text/javascript" language="javascript">
+			function confirmar() {
+				if (confirm("¿Desea Salir del Sistema?")) {
+					confirmarRC();
+					var winD = window.open('', '_self', '');
+					winD.close();
+				}
+			}
+		</script>
+	</f:verbatim>
+
+	<ui:define name="title">Absolver Consulta / Reclamo</ui:define>
+
+	<ui:define name="head">
+		<ui:include src="/WEB-INF/comun/pingWebsealHead.xhtml" />
+		<!-- 		<style> -->
+
+		<!-- 			a[href $="tab4"] {	Display: none;} -->
+		<!-- 			a[href $="tab3"] {	Display: none;} -->
+		<!-- 		</style> -->
+	</ui:define>
+
+	<ui:define name="inicioform">
+		<custom:remoteCommand name="alargarSessionWS"
+			actionListener="#{bandejaMB.pinwWEBSEAL}" />
+		<h:inputHidden id="idIntentos" value="#{bandejaMB.intentosWS}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<h:outputScript>
+			$(document).ready(function() {
+				var showAbsolucionRecon=#{requerimientoMB.objecto.showAbsolucionRecon};
+				var showReconsideracion=#{requerimientoMB.objecto.showReconsideracion};
+				$("#form\\:tabView2").find("a[href='#form:tabView2:tab2']").click();
+				if(!showAbsolucionRecon){
+					$("#form\\:tabView2").find("a[href='#form:tabView2:tab4']").hide();
+					$("#form\\:tabView2\\:idEditor4").hide();
+				}
+				if(!showReconsideracion){
+					$("#form\\:tabView2").find("a[href='#form:tabView2:tab3']").hide();
+					$("#form\\:tabView2\\:idEditor3").hide();
+				}
+				
+				
+			});			
+		
+			function registrar() {
+				if(confirm('¿Desea enviar el registro?')) {
+					var idOperacion=#{requerimientoMB.objecto.tipo_operacion};
+					
+					var idResultado=$("input:radio[name='form\\:idResultado']:checked").val();
+					
+					var resultado=false;
+					if(idOperacion==10005){
+					
+						if(!idResultado){
+							alert('Debe seleccionar una resultado');
+							return false;
+						}else{
+							resultado=true;
+						}										
+					}else{
+						resultado=true;
+					}		
+						
+					if(resultado){	
+						var iframe = $('#uploadFrame').contents();
+						// alert(iframe.find("#uploadForm"));
+						action = iframe.find("#uploadForm").attr("action").replace("reclamo/upload.faces", "uploadFileServlet/" + $("#form\\:tabView\\:codigoCentral").val()
+																					+"/"+ $("#form\\:tabView\\:nroDoi").val()
+																					+"/"+ $("#form\\:tabView\\:tipoDoi").val());
+						//action = iframe.find("#uploadForm").attr("action").replace("reclamo/upload.faces", "uploadFileServlet/" + $("#form\\:tabView\\:idCodCentral").val());															
+						iframe.find("#uploadForm").attr("action", action);
+						iframe.find("#uploadForm").submit();
+					
+					}
+				}
+					
+				
+			}
+			
+			function enviar(url, nombreArchivo) {
+				$("#form\\:url").val(url);
+				$("#form\\:nombreArchivo").val(nombreArchivo);
+				enviarDatos();
+			}
+							
+		</h:outputScript>
+		<h:panelGroup id="panelBusqueda" style="width:1100px;">
+			<custom:tabView id="tabView">
+				<!-- 				style="#{bandejaMB.menuColapsado ? 'width:1278px' : 'width:1100px'}" -->
+				<custom:tab id="tab1" title="Datos de consulta / reclamo">
+					<h:panelGrid style="text-align:right; width:100%" rendered="#{requerimientoMB.objecto.showResultado}" columns="1">
+							<a href="#{requerimientoMB.linkSFP}" target="_blank">Ir a SFP</a>
+					</h:panelGrid>
+					<h:panelGrid columns="1" style="text-align: left; width:100%;">
+						
+						<h:panelGrid id="idFiltros" columns="7">
+							<!-- 								columnClasses="etiquetaBsqTarea,campoBsqTarea,etiquetaBsqEstTarea,campoBsqEstTarea,etiquetaBsqNroExp,campoBsqNroExp,etiquetaBsqEstExp,campoBsqEstExp"> -->
+							<h:outputLabel value="Código :" style="font-weight:bold;"
+								for="idCodigo" />
+							<h:outputText id="idCodigo" style="width:100px"
+								value="#{requerimientoMB.objecto.id}" />
+							<h:outputLabel value="Tipo :" style="font-weight:bold;"
+								for="idTipo" />
+							<h:outputText id="idTipo" style="width:100px;"
+								value="#{requerimientoMB.objecto.str_tipo_operacion}" />
+
+							<h:outputLabel value="" style="font-weight:bold;" />
+							<h:outputLabel value="" style="font-weight:bold;" />
+							<h:outputLabel value="" style="font-weight:bold;" />
+
+							<h:outputLabel value="Cliente :" style="font-weight:bold;"
+								for="idCliente" />
+							<h:outputText id="idCliente" style="width:100px"
+								value="#{requerimientoMB.objecto.nro_doi} #{requerimientoMB.objecto.razon_social} " />
+							<h:outputLabel value="Migrado :" style="font-weight:bold;"
+								for="idMigrado" />
+							<h:outputText id="idMigrado" style="width:100px"
+								value="#{requerimientoMB.objecto.es_migrado}" />
+
+							<h:outputLabel value="" style="font-weight:bold;" />
+							<h:outputLabel value="" style="font-weight:bold;" />
+							<h:outputLabel value="" style="font-weight:bold;" />
+
+
+							<h:outputLabel value="Estado Actual:" style="font-weight:bold;"
+								for="idEstado" />
+							<h:outputText id="idEstado"
+								value="#{requerimientoMB.objecto.strEstado}" />
+
+							<h:outputLabel value="Abogado:" style="font-weight:bold;"
+								for="idNombreAbogado" />
+							<h:panelGroup style="width:350px;">
+								<h:outputText id="idNombreAbogado"
+									value="#{requerimientoMB.objecto.nombreAbogadoAsignado}" />
+							</h:panelGroup>
+							<h:outputLabel value="Asignar Abogado" style="font-weight:bold;"
+								for="idAsignarAbogado" rendered="#{!requerimientoMB.objecto.readOnly}"/>
+							<h:selectOneMenu id="idAsignarAbogado"
+								value="#{requerimientoMB.objecto.idAbogado}" rendered="#{!requerimientoMB.objecto.readOnly}">
+								<f:selectItem itemLabel="--Seleccione--	" itemValue="0" />
+								<f:selectItems value="#{requerimientoMB.listaAbogados}" />
+							</h:selectOneMenu>
+							<h:commandButton value="Asignar" id="botonAsignar" rendered="#{!requerimientoMB.objecto.readOnly}">
+								<f:ajax event="click" execute="@form" render="idNombreAbogado"
+									listener="#{requerimientoMB.asignarAbogado}" />
+							</h:commandButton>
+
+						</h:panelGrid>
+					</h:panelGrid>
+					<h:panelGrid>
+						<h:inputHidden id="codigoCentral"
+							value="#{requerimientoMB.cliente.codigoCentral}" />
+						<h:inputHidden id="nroDoi"
+							value="#{requerimientoMB.cliente.numeroDOI}" />
+						<h:inputHidden id="tipoDoi"
+							value="#{requerimientoMB.cliente.tipoDOI}" />
+					</h:panelGrid>
+				</custom:tab>
+			</custom:tabView>
+		</h:panelGroup>
+		<h:panelGrid columns="1" style="width:60%; float:left;">
+			<!-- 			<h:inputHidden id="idshowAbsolucionRecon" -->
+			<!-- 				value="#{requerimientoMB.objecto.showAbsolucionRecon}" /> -->
+			<!-- 			<h:inputHidden id="idshowReconsideracion" -->
+			<!-- 				value="#{requerimientoMB.objecto.showReconsideracion}" /> -->
+
+			<custom:tabView id="tabView2" style="height:330px;">
+				<custom:tab id="tab4" title="Absolucion de Reconsideración">
+					<util:editor id="idEditor4" width="625" height="250"
+						value="#{requerimientoMB.objecto.descripcion_absolucion_recon}"
+						disabled="#{requerimientoMB.objecto.readOnly}" />
+
+				</custom:tab>
+				<custom:tab id="tab3" title="Reconsideración">
+					<div
+						style="width: 100%; height: 280px; border: 1px; overflow: auto;">
+						<h:outputText id="idEditor3" name="editor3" escape="false"
+							value="#{requerimientoMB.objecto.motivo_reconsideracion}"
+							style="width:100%; height:250px; border:1px; overflow: scroll;"
+							disabled="true " />
+					</div>
+				</custom:tab>
+				<custom:tab id="tab1" title="Absolución">
+					<util:editor id="idEditor1" width="625" height="250"
+						value="#{requerimientoMB.objecto.descripcion_absolucion}"
+						disabled="#{requerimientoMB.objecto.disableAbsolucion}" />
+				</custom:tab>
+				<custom:tab id="tab2" title="Reclamo / Consulta">
+					<div
+						style="width: 100%; height: 280px; border: 1px; overflow: auto;">
+						<h:outputText id="editor2" name="editor2" escape="false"
+							value="#{requerimientoMB.objecto.descripcion_reclamo_Consulta}"
+							disabled="true" />
+					</div>
+				</custom:tab>
+			</custom:tabView>
+		</h:panelGrid>
+		<h:panelGrid columns="2" style="width:40%; float:left; ">
+			<custom:tabView id="tabViewDocumentos"
+				style="height:200px; width:100%;">
+				<custom:tab id="tab1" title="Documentos Adjuntos">
+					<h:dataTable value="#{requerimientoMB.objecto.listaAttachment}"
+						var="lista" title="Documentos" width="100%">
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="" />
+							</f:facet>
+							<h:outputText style="font-weight:bold;"
+								value="#{lista.estado_ref}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="" />
+							</f:facet>
+							<a href="#{lista.ruta_archivo}" target="_blank">Ver Archivo
+								Adjunto</a>
+						</h:column>
+					</h:dataTable>
+				</custom:tab>
+			</custom:tabView>
+		</h:panelGrid>
+		<h:panelGrid columns="2" style="width:40%; float:left; ">
+
+			<h:panelGroup id="pnlGrpAddDocumento"
+				rendered="#{!requerimientoMB.objecto.readOnly}">
+				<h:outputLabel value="Agregar Documentos"
+					style="font-weight: bold; " />
+			</h:panelGroup>
+			<h:panelGroup id="pnlGrpAddDocumento2"
+				rendered="#{!requerimientoMB.objecto.readOnly}">
+				<iframe id="uploadFrame" src="upload.faces"
+					style="width: 350px; height: 25px; overflow: hidden; border: 0px;"></iframe>
+
+				<h:inputHidden id="url"
+					value="#{requerimientoMB.attachment.ruta_archivo}" />
+				<h:inputHidden id="nombreArchivo"
+					value="#{requerimientoMB.attachment.nombre_archivo}" />
+			</h:panelGroup>
+
+			<h:outputLabel value="Clasificación" style="font-weight:bold;"
+				for="idClasificacion"
+				rendered="#{requerimientoMB.objecto.showClasificacion}" />
+			<h:selectOneMenu id="idClasificacion"
+				value="#{requerimientoMB.objecto.idClasificacion}"
+				rendered="#{requerimientoMB.objecto.showClasificacion}"
+				disabled="#{requerimientoMB.objecto.disableClasificacion}">
+				<f:selectItem itemLabel="--Seleccione--	" itemValue="0" />
+				<f:selectItems value="#{requerimientoMB.listaClasificacion}" />
+			</h:selectOneMenu>
+
+		</h:panelGrid>
+
+		<h:panelGrid columns="2">
+			<h:outputLabel value="Resultado" style="font-weight:bold;"
+				rendered="#{requerimientoMB.objecto.showResultado}" />
+			<h:selectOneRadio id="idResultado" value="#{requerimientoMB.objecto.idResultado}" 
+				rendered="#{requerimientoMB.objecto.showResultado}"
+				disabled="#{requerimientoMB.objecto.disableResultado}">
+				<f:selectItems value="#{requerimientoMB.listaDictamenReclamo}" />
+			</h:selectOneRadio>
+			<h:commandButton value="Finalizar" onclick="registrar()"
+				type="button" disabled="#{requerimientoMB.objecto.readOnly}" />
+
+			<custom:remoteCommand name="enviarDatos"
+				actionListener="#{requerimientoMB.registrarAbsolucion}"
+				process="@form" />
+
+
+		</h:panelGrid>
+	</ui:define>
+
+</ui:composition>

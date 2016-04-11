@@ -1,0 +1,154 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+	
+	<ui:define name="content">
+		<f:verbatim>
+		<script type="text/javascript" language="javascript">
+			var compSel = null;
+			var sel = null;
+			function cambiarEstado (comp) {			    
+				if ($(comp).is(':checked')) {
+					if (compSel!=null) {
+						$(compSel).attr('checked', false);
+					}
+					compSel = comp;
+				} else {
+					compSel = null;
+				}
+			}
+			
+			function confirmarElimina(comp) {
+			  var filas = document.getElementById("form:registrosTablaDTB").rows.length - 1;
+			  var ok, resultado=false;
+			  for (i=0; filas>i; i++) {			      
+			      ok=document.getElementById("form:registrosTablaDTB:"+i+":rowSelect1").checked;
+			      if(ok){
+			        resultado = confirm('¿Está seguro que desea eliminar el elemento seleccionado?');
+			        break;
+			      }			    
+			  }		  
+			 return resultado;
+			}
+		</script>
+	    </f:verbatim>
+	    
+		<h:panelGrid styleClass="bloque">
+			<h:panelGroup styleClass="titulo">
+				<h:outputText id="nombreTablaOTX"  
+					value="Mantenimiento - #{consultarTabla.tablaParametricaVO.tablaVO.nombreMostrar}" />			
+				<h:outputText value=" " />
+			</h:panelGroup>			
+			<ui:include src="/mantenimiento/buscarTabla.xhtml" />
+			<h:panelGroup style="overflow-x: auto; width: 750px;height: 440px">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td class="textotitulo">
+							<h:dataTable id="registrosTablaDTB" style="border-collapse:collapse;"
+								binding="#{consultarTabla.tablaBinding}" border="1"
+								value="#{consultarTabla.tablaParametricaVO.registrosVO}"
+								var="item" headerClass="headerClass headerTabla1"
+								styleClass="tablaTask" rows="10" footerClass="fondo"
+								rowClasses="uno,dos" columnClasses="text,text,text"
+								rendered="#{not empty consultarTabla.tablaParametricaVO.registrosVO}">
+
+								<!--h:column id="column0" align="center">
+									<f:facet name="header">
+										<h:outputText value="Seleccionar" />
+									</f:facet>
+									<h:selectBooleanCheckbox id="rowSelect1"
+									   style="text-align: center" value="#{item.seleccionado}"									   
+									   onclick="cambiarEstado(this)"/>
+									<f:facet name="header"></f:facet>
+								</h:column-->
+							</h:dataTable>
+						</td>
+					</tr>
+
+					<tr>
+						<td class="textotitulo">
+							<h:message for="registrosTablaDTB" />
+						</td>
+					</tr>
+				</table>
+			</h:panelGroup>
+			
+			<h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+			  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+			  <tr><h:outputText value=" " /></tr>
+              </table>				
+			</h:panelGroup>
+
+			<h:panelGroup>
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td align="left">
+					<h:commandButton id="agregar" action="#{consultarTabla.agregar}"
+						value="Agregar" styleClass="boton"
+						disabled="#{consultarTabla.habBotonAgregar}" />
+					<h:commandButton id="actualizar" action="#{consultarTabla.editar}"
+						value="Actualizar" styleClass="boton"
+						disabled="#{consultarTabla.habBotonActualizar}" />
+					<h:commandButton id="eliminar" action="#{consultarTabla.eliminar}"
+						onclick="return confirmarElimina(this);"
+						value="Eliminar" styleClass="boton"
+						disabled="#{consultarTabla.habBotonEliminar}" />
+					<h:commandButton id="cancelar" action="#{consultarTabla.cancelar}"
+						value="Cancelar" styleClass="boton" />
+					<h:commandButton value="&#60;&#60;anterior"
+					        styleClass="boton" id="button112"
+							disabled="#{consultarTabla.tablaBinding.first == 0}"
+							action="#{consultarTabla.pagePrevious}"
+							rendered="#{not empty consultarTabla.tablaParametricaVO.registrosVO}"/>
+					<h:commandButton value="siguiente&#62;&#62;" 
+					    styleClass="boton"
+						id="button221"
+						rendered="#{not empty consultarTabla.tablaParametricaVO.registrosVO}"
+						disabled="#{consultarTabla.tablaBinding.first + consultarTabla.tablaBinding.rows >= consultarTabla.tablaBinding.rowCount}"
+						action="#{consultarTabla.pageNext}"/>
+				</td>
+			</tr>
+			</table>
+			</h:panelGroup>
+
+            <h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+			  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+			  <tr><h:outputText value=" " /></tr>
+              </table>				
+			</h:panelGroup>
+			
+			<h:panelGroup>
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td>
+					<h:outputText
+						value="La tabla seleccionada no tiene registros asociados. Seleccione la opción Agregar para crear uno."
+						styleClass="mensaje-info"
+						rendered="#{empty consultarTabla.tablaParametricaVO.registrosVO}" />
+					<h:outputText
+						value="Seleccione el registro a actualizar o eliminar, o seleccione la opción Agregar"
+						styleClass="mensaje-info"
+						rendered="#{not empty consultarTabla.tablaParametricaVO.registrosVO}" />
+				</td>
+				</tr>
+			</table>
+			</h:panelGroup>
+
+            <h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+			  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+			  <tr><h:outputText value=" " /></tr>
+              </table>				
+			</h:panelGroup>
+
+			<h:panelGroup style="margin-bottom:10px;" styleClass="etiqueta">
+			    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+			    <tr><td>
+					<h:messages styleClass="mensaje-error" globalOnly="true"></h:messages>
+				</td></tr>
+				</table>
+			</h:panelGroup>
+		</h:panelGrid>
+	</ui:define>
+</ui:composition>

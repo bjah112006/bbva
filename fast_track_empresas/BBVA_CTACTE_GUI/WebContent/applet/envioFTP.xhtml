@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+	<h:head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+		<title>Subir archivos</title>
+		<h:outputScript library="javascript" name="jquery-1.8.2.min.js" target="head"/>
+		<h:outputScript target="head">
+		/* <![CDATA[ */
+			function cerrarVentana () {
+				informarFinalizado ();
+				$(window).unbind('beforeunload');
+				window.close();
+			}
+			$(window).bind('beforeunload',function() {
+				return "Al cerrar esta página se cancelará el envío de documentos.";
+			});
+		/* ]]> */
+		</h:outputScript>
+		<style type="text/css">
+			html, body {
+				margin: 0px;
+			}
+		</style>
+	</h:head>
+	
+	<h:body>
+		<h:form id="ftp">
+			<custom:remoteCommand name="informarFinalizado" actionListener="#{envioFTP.finalizado}" />
+							
+			<h:outputText value="No cierre esta ventana" style="color:red; display:block;"/>
+			<applet name="appletVisor" id="appletVisor"
+					code="com.ibm.bbva.ctacte.applet.FTP"
+					archive="../applet/appCtaCte.jar" width="380px" height="100px">
+				<param name="host" value="#{envioFTP.servidorFTP}" />
+				<param name="user" value="#{envioFTP.usuarioFTP}" />
+				<param name="password" value="#{envioFTP.passwordFTP}" />
+				<param name="periodo" value="#{envioFTP.periodoTranfFTP}" />
+				<param name="tasaKBytes" value="#{envioFTP.tasaKBytes}" />
+				<param name="escaneosPath" value="#{envioFTP.transferencias}" />
+				<param name="prefix" value="#{envioFTP.numeroExpediente}" />
+				<param name="tramaTIF" value="#{envioFTP.convertirTIF}" />
+				<param name="servidorServWeb" value="#{envioFTP.servidorServWeb}" />
+				<param name="puertoServWeb" value="#{envioFTP.puertoServWeb}" />
+				<param name="servidorConvPDF" value="#{envioFTP.servidorConvPDF}" />
+				<param name="puertoConvPDF" value="#{envioFTP.puertoConvPDF}" />
+				<param name="codConv" value="#{envioFTP.codConv}" />
+				<param name="descargados" value="#{envioFTP.descargados}" />
+				<param name="transferencias" value="#{envioFTP.transferencias}" />
+				<param name="log" value="#{envioFTP.log}" />
+				<param name="carpetaFTP" value="#{envioFTP.carpetaFTP}" />
+				<param name="numReintentos" value="#{envioFTP.numReintentos}" />
+			</applet>
+		</h:form>
+	</h:body>
+</html>

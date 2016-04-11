@@ -1,0 +1,94 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	xmlns:util="http://java.sun.com/jsf/composite/util"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+	
+	<ui:define name="title">Actualizacion de empleados</ui:define>
+	
+	
+	
+	
+	<ui:define name="content">
+
+
+		<table>
+			<tr>
+				<td style="width: 600px"><h:outputText
+						value="Actualizar empleados"
+						style="font-weight: bold;" /></td>
+			</tr>
+		</table>
+<br></br>
+
+		<table>
+			<tr>
+				<td style="width:550px" ><h:outputText escape="false"
+						value="Lista de procesos"
+						style="font-weight: bold;" /> </td>
+				<td style="text-align: right !important;width:250px"><h:commandButton styleClass="boton"
+						value="Iniciar actualizacion" id="btnCargar"
+						onclick="return confirm('¿Desea ejecutar el proceso?');"
+						action="#{procesoCargaLDAP.cargarEmpleadosLDAP}" />
+						
+						<h:commandButton styleClass="boton" style="left-padding:5px;"
+						value="Refrescar" id="btnRefrescar"
+						action="#{procesoCargaLDAP.refrescar}" /></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<h:outputText styleClass="colorLink" value="#{procesoCargaLDAP.mensaje}" />
+				</td>
+			</tr>
+
+		</table>
+
+
+		
+
+
+		<h:dataTable border="1" styleClass="tablaTask" width="800" 
+			style="border-collapse:collapse;" columnClasses="text,text,text,text,text"
+			headerClass="headerClass headerTabla1" rowClasses="uno,dos"
+			id="idTablaCorreo" value="#{procesoCargaLDAP.procesos}" var="proceso"
+			footerClass="fondo">
+
+
+
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Id"  styleClass="tabla-titulo" />
+				</f:facet>
+				<h:outputText value="#{proceso.id}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Proceso" styleClass="tabla-titulo" />
+				</f:facet>
+				<h:outputText value="#{proceso.nombre}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Fecha Inicio" styleClass="tabla-titulo" />
+				</f:facet>
+				<h:outputText value="#{proceso.fechaInicio}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Fecha Fin" styleClass="tabla-titulo" />
+				</f:facet>
+				<h:outputText value="#{proceso.fechaFin}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Estado" styleClass="tabla-titulo" />
+				</f:facet>
+				<h:outputText value="#{proceso.estado}" />
+			</h:column>
+		</h:dataTable>
+
+	</ui:define>
+
+</ui:composition>

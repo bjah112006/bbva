@@ -1,0 +1,262 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml"
+	xmlns:bbva="http://java.sun.com/jsf/composite/components/bbva">
+
+	<ui:define name="title">Bandeja</ui:define>
+
+	<ui:define name="head">
+		<ui:include src="/WEB-INF/comun/pingWebsealHead.xhtml" />
+	</ui:define>
+
+	<ui:define name="inicioform">
+		<!-- 		<custom:remoteCommand name="alargarSessionWS" -->
+		<!-- 			actionListener="#{bandejaMB.pinwWEBSEAL}" /> -->
+		<!-- 		<h:inputHidden id="idIntentos" value="#{bandejaMB.intentosWS}" /> -->
+	</ui:define>
+
+	<ui:define name="content">
+		<h:panelGroup id="panelBusqueda" style="width:1100px;">
+			<custom:tabView id="tabView">
+				<custom:tab id="tab1" title="Bandeja de Reclamos">
+					<h:panelGrid columns="1" style="text-align: left; width:100%;">
+						<h:panelGrid id="idFiltros1" columns="6" width="100%">
+
+							<h:outputLabel for="idCodCentral" value="Cod. Central" />
+							<h:inputText id="idCodCentral" style="width:154px;"
+								value="#{requerimientoMB.filtro.cod_central}"
+								styleClass="soloNumeros">
+							</h:inputText>
+
+							<h:outputLabel for="idRazonSocial" value="Nro. DOI" />
+							<h:inputText id="idRazonSocial" style="width:154px"
+								value="#{requerimientoMB.filtro.nro_doi}"
+								styleClass="soloNumeros">
+							</h:inputText>
+
+							<h:outputLabel for="idCodigo" value="Cod. Consulta / Reclamo" />
+							<h:inputText id="idCodigo" style="width:154px"
+								value="#{requerimientoMB.filtro.strId}" styleClass="soloNumeros">
+							</h:inputText>
+
+							<h:outputLabel for="idTipo" value="Tipo" style="width:78px" />
+							<h:selectOneMenu id="idTipo" style="width:160px"
+								value="#{requerimientoMB.filtro.tipo_operacion}">
+								<f:selectItems value="#{requerimientoMB.listaTipoOperacion}" />
+								<f:ajax event="change" render="idEstado idDictamenReclamo"
+									listener="#{requerimientoMB.filtrarEstados}" />
+							</h:selectOneMenu>
+
+
+							<h:outputLabel value="Fecha Inicio" for="idFechaIni" />
+							<h:panelGroup>
+								<custom:calendar id="idFechaIni" readOnlyInputText="false"
+									value="#{requerimientoMB.filtro.fechaInicio}"
+									pattern="dd/MM/yyyy" mask="00/00/0000"
+									converterMessage="Fecha inválida">
+									<f:attribute name="campo" value="strFechaAsignacion.limInf" />
+									<f:ajax event="change" />
+								</custom:calendar>
+								<h:message for="idFechaIni" errorClass="mensaje-error-fecha" />
+							</h:panelGroup>
+
+							<h:outputLabel value="Fecha Fin" for="idFechaFin" />
+							<h:panelGroup>
+								<custom:calendar id="idFechaFin" styleClass="campoFecAsigDel"
+									readOnlyInputText="false"
+									value="#{requerimientoMB.filtro.fechafin}" pattern="dd/MM/yyyy"
+									mask="00/00/0000" converterMessage="Fecha inválida">
+									<f:attribute name="campo" value="strFechaAsignacion.limInf" />
+									<f:ajax event="change" />
+								</custom:calendar>
+								<h:message for="idFechaFin" errorClass="mensaje-error-fecha" />
+							</h:panelGroup>
+
+							<h:outputLabel for="idEstado" value="Estado" />
+							<h:selectOneMenu id="idEstado" style="width:160px;"
+								value="#{requerimientoMB.filtro.estado}">
+								<f:selectItems value="#{requerimientoMB.listaEstados}" />
+								<f:ajax event="change"
+									render="idPnlGroupDictamen1 idPnlGroupDictamen2 "
+									listener="#{requerimientoMB.mostrarDictamen}" />
+							</h:selectOneMenu>
+
+							<h:panelGroup id="idPnlGroupDictamen1">
+								<div style="width: 74px; height: 32px;">
+									<h:outputLabel id="idDictamenLabel" for="idDictamenReclamo"
+										rendered="#{requerimientoMB.filtro.showDictamenReclamo}"
+										value="Dictamen de Reclamo" />
+								</div>
+							</h:panelGroup>
+							<h:panelGroup id="idPnlGroupDictamen2">
+								<h:selectOneMenu id="idDictamenReclamo" style="width:160px"
+									rendered="#{requerimientoMB.filtro.showDictamenReclamo}"
+									value="#{requerimientoMB.filtro.idResultado}">
+									<f:selectItem itemLabel="--Seleccione--	" itemValue="0" />
+									<f:selectItems value="#{requerimientoMB.listaDictamenReclamo}" />
+								</h:selectOneMenu>
+							</h:panelGroup>
+
+							<h:panelGroup>
+								<h:selectBooleanCheckbox id="chkIncluirCerrado"
+									value="#{requerimientoMB.filtro.incluirCerrados}"
+									label="Incluir Cerrados" />
+								<h:outputLabel value="Incluir Cerrados" for="chkIncluirCerrado" />
+							</h:panelGroup>
+
+
+						</h:panelGrid>
+						<h:panelGrid style="width: 100%; text-align: center">
+							<h:panelGroup columns="2">
+								<h:commandButton value="Buscar" id="botonBuscar">
+									<f:ajax event="click"
+										listener="#{requerimientoMB.buscarConsultaReclamo}"
+										render=":form:tablaContainer :form:tablaTask" execute="@form" />
+								</h:commandButton>
+								<h:commandButton value="Limpiar Filtros"
+									onclick="limpiarFiltros()" type="button" />
+								<h:commandButton action="#{requerimientoMB.exportar}"
+									value="Exportar" />
+								<h:graphicImage value="" />
+								<!-- 									#{resource['imagenes:icoExcel.jpg']} -->
+
+								<h:outputScript>
+									function limpiarFiltros() {						
+										$("#form\\:tabView\\:idCodCentral").val('');
+										$("#form\\:tabView\\:idRazonSocial").val('');
+										$("#form\\:tabView\\:idTipo").val('0');
+										$("#form\\:tabView\\:idDictamenReclamo").val('0');
+										$("#form\\:tabView\\:idFechaIni_input").val('');
+										$("#form\\:tabView\\:idFechaFin_input").val('');
+										$("#form\\:tabView\\:idEstado").val('');
+										$("#form\\:tabView\\:idCodigo").val('');
+										
+									}									
+								</h:outputScript>
+							</h:panelGroup>
+						</h:panelGrid>
+					</h:panelGrid>
+				</custom:tab>
+			</custom:tabView>
+			<h:panelGroup id="tablaContainer" layout="block"
+				styleClass="ui-datatable ui-widget">
+
+				<bbva:paginator container=":form:tablaContainer"
+					managedBean="#{requerimientoMB}" position="top" />
+
+				<div class="ui-datatable-scrollable-body" style="">
+					<h:dataTable border="0" cellspacing="0" cellpadding="0"
+						id="tablaTask" var="requerimientoModel"
+						style="border-spacing: 1px; width:100%" widgetVar="regTareas"
+						value="#{requerimientoMB.listRequerimientoModels}"
+						rows="#{requerimientoMB.rowsPerPage}"
+						first="#{requerimientoMB.first}"
+						styleClass="#{empty requerimientoMB.listRequerimientoModels ? 'ui-datatable-empty' : 'ui-datatable-not-empty'}"
+						headerClass="ui-state-default"
+						columnClasses="columna-bandeja,columnaCodTarea,columnaNomTarea,columnaFeAsig,columnaDscEstTarea,columnaCodSemaforo,columnaFeAten,columnaResponsable,columnaOficinaTarea,columnaTerritorioTarea,columnaExpediente,columnaOperacion,columnaDscCliente,columnaFechaInicio,columnaDscEstadoExp,columnaFechaTermino,columnaAbogadoEstudio,columnaEstudio"
+						rowClasses="ui-widget-content">
+
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Código" />
+							</f:facet>
+
+							<h:commandLink styleClass="colorLink"
+								value="#{requerimientoModel.id}"
+								action="#{requerimientoMB.verReclamoConsulta}">
+								<f:setPropertyActionListener
+									target="#{requerimientoMB.filtro.id}"
+									value="#{requerimientoModel.id}" />
+							</h:commandLink>
+
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<!-- 										<bbva:sortCabecera propertyName="territorioTarea" /> -->
+								<h:outputText value="Tipo" />
+							</f:facet>
+							<h:outputText value="#{requerimientoModel.str_tipo_operacion}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<!-- 										<bbva:sortCabecera propertyName="nomTarea" /> -->
+								<h:outputText value="Cod. Central" />
+							</f:facet>
+							<h:outputText value="#{requerimientoModel.cod_central}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<!-- 										<bbva:sortCabecera propertyName="responsable" /> -->
+								<h:outputText value="Razón Social" />
+							</f:facet>
+							<h:outputText value="#{requerimientoModel.razon_social}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<!-- 										<bbva:sortCabecera propertyName="oficinaTarea" /> -->
+								<h:outputText value="Nro. DOI" />
+							</f:facet>
+							<h:outputText value="#{requerimientoModel.nro_doi}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<!-- 										<bbva:sortCabecera propertyName="territorioTarea" /> -->
+								<h:outputText value="Gestor Registrante" />
+							</f:facet>
+							<h:outputText value="#{requerimientoModel.usuario_registra}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<!-- 										<bbva:sortCabecera propertyName="territorioTarea" /> -->
+								<h:outputText value="Oficina" />
+							</f:facet>
+							<h:outputText value="#{requerimientoModel.str_oficina}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<!-- 										<bbva:sortCabecera propertyName="territorioTarea" /> -->
+								<h:outputText value="Estado" />
+							</f:facet>
+							<h:outputText value="#{requerimientoModel.strEstado}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<!-- 										<bbva:sortCabecera propertyName="territorioTarea" /> -->
+								<h:outputText value="Dictamen Reclamo" />
+							</f:facet>
+							<h:outputText value="#{requerimientoModel.str_resultado}" />
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">
+								<!-- 										<bbva:sortCabecera propertyName="territorioTarea" /> -->
+								<h:outputText value="Fecha Reg" />
+							</f:facet>
+							<h:outputText value="#{requerimientoModel.fecha_registro}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</h:column>
+
+						<f:facet name="footer">
+							<h:outputText value="No se encontró registros"
+								rendered="#{empty requerimientoMB.listRequerimientoModels}" />
+						</f:facet>
+					</h:dataTable>
+				</div>
+
+								<bbva:paginator container=":form:tablaContainer"
+									managedBean="#{requerimientoMB}" position="bottom" />
+
+				<h:message for="tablaTask" id="idMsgTablaTask"
+					errorClass="mensaje-error" />
+			</h:panelGroup>
+
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>

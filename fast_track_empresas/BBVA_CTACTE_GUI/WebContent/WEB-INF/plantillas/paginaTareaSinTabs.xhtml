@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<!--f:view-->
+	<h:head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache"/>
+		<meta http-equiv="Expires" content="0"/>
+		<title><ui:insert name="title"></ui:insert></title>
+		<h:outputStylesheet library="css" name="general.css" target="head"/>
+		<h:outputStylesheet library="css" name="style.css" target="head"/>
+		<link rel="shortcut icon" type="image/x-icon" href="#{resource['imagenes:favicon.ico']}" />
+	    <link rel="icon" type="image/x-icon" href="#{resource['imagenes:favicon.ico']}" />
+		<h:outputScript library="javascript" name="jquery-1.8.2.min.js" target="head"/>
+		<h:outputScript library="javascript" name="general.js" target="head"/>
+		<h:outputScript library="javascript" name="jquery.numeric.min.js" target="head"/>
+		<h:outputScript target="head">
+		/* <![CDATA[ */
+		$(document).ready(function() {
+			if (window.jsf != undefined && jsf.ajax != undefined) {
+				jsf.ajax.addOnError(errorAjaxWebSeal);
+			}
+			//[Begin]-[15.07.15]-[bloqueo en posback]
+			$('.showLoader').click(function() {
+  				$('#loading').show();
+			});
+			
+			//[End]-[15.07.15]
+		});
+		
+		//[Begin]-[15.07.15]-[bloqueo en posback]
+		$(window).load(function() {
+			$('#loading').hide();
+		});
+		
+		function execute_remoteCommand(btnName, message) {
+			  var result = confirm(message);
+			  if(result){
+				  var fn = window[btnName];
+		           if(typeof fn === 'function') {
+		        	   if($('#appletVisor').length){
+		        		   $('#appletVisor').attr('width', '1px');
+			        	   $('#appletVisor').attr('height', '1px');
+			        	  
+		        	   }
+		        	   
+		        	    if($('#idIfRVisorContent').length){
+		        		  // $('#idIfRVisorContent').hide();
+			        	  // $('#idIfRVisorContent').attr('height', '1px');
+			        	  $('#idIfRVisorContent').css('z-index', -1);
+			        	 
+		        	   }
+		        	   
+		        	    if($('#iframDni').length){
+		        	    $('#iframDni').css('z-index', -1);
+		        		 //   $('#iframDni').hide();
+			        	  // $('#iframDni').attr('height', '1px');
+			        	  
+		        	   }
+		        	   
+		        	   $('#loading').show();
+		        	   fn();
+		           } 
+			  } 
+			  return false;
+		 }
+		
+		//[End]-[15.07.15]
+		/* ]]> */
+		</h:outputScript>
+		<ui:insert name="head"></ui:insert>
+	</h:head>
+	<h:body>
+	<!-- 	[Begin]-[15.07.15]-[bloqueo en posback] -->
+		<div id="loading">
+			<h1 style="color: white; width: 100%; margin-top: 380px !important">Cargando...</h1>
+		</div>
+	<!-- 	[End]-[15.07.15] -->
+		<h:form id="form">
+			<ui:insert name="inicioform"></ui:insert>
+			<table width="1000px" border="0" cellpadding="0" cellspacing="0" align="center">
+				<tbody>
+					<tr height="70px">
+						<td width="200px" valign="middle">
+							<h:graphicImage id="logoBBVA" value="#{resource['imagenes:bbva_logo.PNG']}" />
+						</td>
+						<td width="800px" valign="top">
+							<ui:include src="/WEB-INF/comun/cabecera.xhtml" />
+						</td>
+					</tr>
+					<tr>
+						<td width="200px" valign="top">
+							<ui:include src="/WEB-INF/comun/menu.xhtml" />
+						</td>
+						<td width="800px">								         
+							<ui:insert name="content"></ui:insert>							
+						</td>						
+					</tr>
+					
+				</tbody>
+			</table>
+		</h:form>
+	</h:body>
+<!--/f:view-->
+</html>

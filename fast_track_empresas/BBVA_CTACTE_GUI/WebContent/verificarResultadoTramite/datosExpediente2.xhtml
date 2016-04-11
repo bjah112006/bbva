@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	
+	<table width="750px" border="0" cellpadding="5">	
+		<tr>
+			<td>
+				<h:outputText styleClass="titulo-bold"  value="¿Exonerado?: "/>	
+			</td>
+			<td>
+				<h:outputText value="#{datosExpediente2.exonerado=='0'? 'SI':'NO'}"/>
+			</td>
+			<td>
+				<h:outputText styleClass="titulo-bold"  value="Cuenta" ></h:outputText>
+			</td>
+			<td>
+				<h:outputText value="#{datosExpediente2.expediente.cuentaCobroComision}- #{datosExpediente2.expediente.numeroCuentaCobro}"/>
+			</td>
+			<td>
+				<h:outputText styleClass="titulo-bold"  value="Campaña"/>
+			</td>
+			<td>				
+				<h:outputText value="#{datosExpediente2.expediente.campania.descripcion}"/>
+			</td>
+		</tr>
+		<tr>	
+			<td align="left">
+			    <h:outputText style="font-weight:bold" value="Caso de Negocio:"/>
+			</td>
+			<td align="left">
+				<h:outputText value="#{datosExpediente2.expediente.casoNegocio.descripcion}" />
+			</td>
+			<td align="left">
+			    <h:outputText style="font-weight:bold" value="Migrado:"/>
+			</td>
+			<td align="left">
+				<h:outputText value="#{datosExpediente2.esMigrado}" />
+			</td>
+		</tr>	
+		<tr>
+			<td >
+				<h:outputText styleClass="titulo-bold"  value="Resultado Bastanteo: "/>
+			</td>
+			<td>
+				<h:outputText value="#{datosExpediente2.expediente.resultado}"/>					
+			</td>
+			<td colspan="4"/>						
+		</tr>
+		<tr>
+			<td colspan="4">
+				<ui:repeat value="#{datosExpediente2.expedientesPorCerrar_H}" var="exp">
+					<h:outputText value="Se ha creado el expediente " styleClass="colorLink" />
+					<h:commandLink styleClass="colorLink" rendered="#{exp.mostrarExpediente}"
+					            	    value="#{exp.codigoExpediente}"
+					            	    actionListener="#{datosExpediente2.irACerrarExpdiente}">			       
+								        
+					</h:commandLink>
+					<h:outputText value="#{exp.codigoExpediente}" styleClass="colorLink" rendered="#{!exp.mostrarExpediente}"/>
+					<h:outputText value=" para subsanar las observaciones"  styleClass="colorLink" />
+				</ui:repeat>
+			</td>
+		</tr>
+	</table>	
+</ui:composition>
+	

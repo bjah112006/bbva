@@ -1,0 +1,172 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+	
+	<ui:define name="content">
+		<f:verbatim>
+		<script type="text/javascript" language="javascript">
+		</script>
+		</f:verbatim>
+		
+		<table class="bloque">
+			<tr>
+				<td>
+					<table align="center" border="0" cellspacing="0" width="100%">
+						<tr>
+							<td valign="top">
+								<table width="100%">
+									<tr>
+										<td>
+											<!-- TITULO -->
+											<table width="100%" border="0" cellpadding="0" cellspacing="0">
+												<tr>
+													<td>
+														<h:outputText styleClass="titulo" value="Mantenimiento - Asignación de Perfiles" />
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td width="100%" valign="top" align="left"></td>
+									</tr>
+									<tr>
+										<td>
+											<!-- FORMULARIO -->
+											<table>
+												<tr>
+													<td>
+														<h:graphicImage height="8" width="8" value="#{resource['imagenes:mandatorio.gif']}" />
+													</td>
+													<td>
+														<h:panelGrid columns="1">
+															<h:outputLabel style="width:150px;" for="nivel" value="Nivel de Acceso" styleClass="etiqueta" />
+														</h:panelGrid>
+													</td>
+													<td>
+														<h:selectOneMenu id="nivel"
+															converter="javax.faces.Long"
+															value="#{actualizarAsignacionPerfiles.perfilXNivelVO.tipoNivel}"
+															styleClass="select" 
+															readonly="#{actualizarAsignacionPerfiles.modoActualizar}" 
+															disabled="#{actualizarAsignacionPerfiles.modoActualizar}">
+															<f:selectItems value="#{actualizarAsignacionPerfiles.lstNiveles}" />
+														</h:selectOneMenu>
+													</td>
+													<td>
+														<h:message for="nivel" styleClass="mensaje-error" />
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<h:graphicImage height="8" width="8" value="#{resource['imagenes:mandatorio.gif']}" />
+													</td>
+													<td>
+														<h:panelGrid columns="1">
+															<h:outputLabel style="width:150px;" for="valor" value="Valor" styleClass="etiqueta" />
+														</h:panelGrid>
+													</td>
+													<td>
+														<h:inputText id="valor"
+															size="39" maxlength="20" styleClass="caja-texto"
+															value="#{actualizarAsignacionPerfiles.perfilXNivelVO.valor}"
+															readonly="#{actualizarAsignacionPerfiles.modoActualizar}" 
+															disabled="#{actualizarAsignacionPerfiles.modoActualizar}" />
+													</td>
+													<td>
+														<h:message for="valor" styleClass="mensaje-error" />
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<h:graphicImage height="8" width="8" value="#{resource['imagenes:mandatorio.gif']}" />
+													</td>
+													<td>
+														<h:panelGrid columns="1">
+															<h:outputLabel style="width:150px;" for="perfil" value="Perfil" styleClass="etiqueta" />
+														</h:panelGrid>
+													</td>
+													<td>
+														<h:selectOneMenu id="perfil"
+															converter="javax.faces.Integer"
+															value="#{actualizarAsignacionPerfiles.perfilXNivelVO.perfilId}"
+															styleClass="select">
+															<f:selectItems value="#{actualizarAsignacionPerfiles.lstPerfiles}" />
+														</h:selectOneMenu>
+													</td>
+													<td>
+														<h:message for="perfil" styleClass="mensaje-error" />
+													</td>
+												</tr>
+												<tr>
+													<td></td>
+													<td>
+														<h:panelGrid columns="1">
+															<h:outputLabel style="width:150px;" for="flagActivo" value="Flag Activo" styleClass="etiqueta" />
+														</h:panelGrid>
+													</td>
+													<td>
+														<h:selectBooleanCheckbox id="flagActivo"
+															value="#{actualizarAsignacionPerfiles.perfilXNivelVO.flagActivo}" />
+													</td>
+													<td></td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+									</tr>
+									<tr>
+										<td>&#160;</td>
+									</tr>
+									<tr>
+										<td>
+											<!-- BOTONES -->
+											<table width="100%" border="0" cellpadding="0" cellspacing="0">
+												<tr>
+													<td align="center">
+														<h:commandButton id="guardar"
+															action="#{actualizarAsignacionPerfiles.guardar}" value="Guardar"
+															styleClass="boton" />
+														<h:commandButton immediate="true" id="cancelar"
+															action="#{actualizarAsignacionPerfiles.cancelar}" value="Cancelar"
+															styleClass="boton" />
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="etiqueta" style="margin-bottom:10px;"></div>
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+									</tr>
+									<tr>
+										<td></td>
+									</tr>
+									<tr>
+										<td></td>
+									</tr>
+									<tr>
+										<td>
+											<h:messages globalOnly="true" styleClass="mensaje-error" showDetail="true" />
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</ui:define>
+</ui:composition>

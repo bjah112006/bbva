@@ -1,0 +1,259 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:util="http://java.sun.com/jsf/composite/util"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml">
+	
+	<ui:define name="content">
+		<f:verbatim>
+		<script type="text/javascript" language="javascript">
+		</script>
+		</f:verbatim>
+		
+		<table class="bloque">
+			<tr>
+				<td>
+					<table align="center" border="0" cellspacing="0" width="100%">
+						<tr>
+							<td valign="top">
+								<table width="100%">
+									<tr>
+										<td>
+											<!-- TITULO -->
+											<table width="100%" border="0" cellpadding="0" cellspacing="0">
+												<tr>
+													<td>
+														<h:outputText styleClass="titulo" value="Mantenimiento - Correo" />
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td width="100%" valign="top" align="left"></td>
+									</tr>
+									<tr>
+										<td>
+											<!-- FORMULARIO -->
+											<table>
+												<tr>
+													<td>
+														<h:graphicImage height="8" width="8" value="#{resource['imagenes:mandatorio.gif']}" />
+													</td>
+													<td>
+														<h:panelGrid columns="1">
+															<h:outputLabel style="width:150px;" for="idPerfil" value="Perfil:" styleClass="etiqueta" />
+														</h:panelGrid>
+													</td>
+													<td>
+														<h:selectOneMenu id="idPerfil"
+															converter="javax.faces.Integer"
+															value="#{actualizarCorreo.perfilSeleccionado}"
+															styleClass="select">
+															<f:selectItems value="#{actualizarCorreo.perfiles}" />
+															<f:ajax execute="idPerfil" render="idTarea idAccion" listener="#{actualizarCorreo.seleccionarPerfil}" />
+														</h:selectOneMenu>
+													</td>
+													<td>
+														<h:message for="idPerfil" styleClass="mensaje-error" />
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<h:graphicImage height="8" width="8" value="#{resource['imagenes:mandatorio.gif']}" />
+													</td>
+													<td>
+														<h:panelGrid columns="1">
+															<h:outputLabel style="width:150px;" for="idTarea" value="Tarea:" styleClass="etiqueta" />
+														</h:panelGrid>
+													</td>
+													<td>
+														<h:selectOneMenu id="idTarea"
+															converter="javax.faces.Integer"
+															value="#{actualizarCorreo.tareaSeleccionada}"
+															styleClass="select">
+															<f:selectItems value="#{actualizarCorreo.tareas}" />
+															<f:ajax execute="idTarea" render="idAccion" listener="#{actualizarCorreo.seleccionarTarea}" />
+														</h:selectOneMenu>
+													</td>
+													<td>
+														<h:message for="idTarea" styleClass="mensaje-error" />
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<h:graphicImage height="8" width="8" value="#{resource['imagenes:mandatorio.gif']}" />
+													</td>
+													<td>
+														<h:panelGrid columns="1">
+															<h:outputLabel style="width:150px;" for="idAccion" value="Acción:" styleClass="etiqueta" />
+														</h:panelGrid>
+													</td>
+													<td>
+														<h:selectOneMenu id="idAccion"
+															converter="javax.faces.Integer"
+															value="#{actualizarCorreo.accionSeleccionada}"
+															styleClass="select">
+															<f:selectItems value="#{actualizarCorreo.acciones}" />
+														</h:selectOneMenu>
+													</td>
+													<td>
+														<h:message for="idAccion" styleClass="mensaje-error" />
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<h:graphicImage height="8" width="8" value="#{resource['imagenes:mandatorio.gif']}" />
+													</td>
+													<td>
+														<h:panelGrid columns="1">
+															<h:outputLabel style="width:150px;" for="asunto" value="Asunto:" styleClass="etiqueta" />
+														</h:panelGrid>
+													</td>
+													<td>
+														<h:inputText id="asunto"
+															styleClass="caja-texto" style="width: 500px;"
+															value="#{actualizarCorreo.asunto}" />
+													</td>
+													<td>
+														<h:message for="asunto" styleClass="mensaje-error" />
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<h:graphicImage height="8" width="8" value="#{resource['imagenes:mandatorio.gif']}" />
+													</td>
+													<td>
+														<h:panelGrid columns="1">
+															<h:outputLabel style="width:150px;" for="cuerpo" value="Cuerpo:" styleClass="etiqueta" />
+														</h:panelGrid>
+													</td>
+													<td>
+														<util:editor id="cuerpo" value="#{actualizarCorreo.cuerpo}" width="500" />
+													</td>
+													<td>
+														<h:message for="cuerpo" styleClass="mensaje-error" />
+													</td>
+												</tr>
+												<tr>
+													<td></td>
+													<td>
+														<h:panelGrid columns="1">
+															<h:outputLabel style="width:150px;" for="idActivo" value="Activo:" styleClass="etiqueta" />
+														</h:panelGrid>
+													</td>
+													<td>
+														<h:selectOneMenu id="idActivo"
+															value="#{actualizarCorreo.estadoSeleccionado}"
+															styleClass="select">
+															<f:selectItems value="#{actualizarCorreo.estados}" />
+														</h:selectOneMenu>
+													</td>
+													<td>
+														<h:message for="idActivo" styleClass="mensaje-error" />
+													</td>
+												</tr>
+												<tr>
+													<td></td>
+													<td>
+														<h:panelGrid columns="1">
+															<h:outputLabel style="width:150px;" for="origen" value="Destinatorios" styleClass="etiqueta" />
+														</h:panelGrid>
+													</td>
+													<td>
+														<table>
+															<tr>
+																<td>
+																	<h:outputText value="Rol"  styleClass="etiqueta"/>
+																	<br/>
+																	<h:selectManyListbox id="origen"
+																		style="width: 200px; height: 180px;"
+																		converter="javax.faces.Integer"
+																		value="#{actualizarCorreo.perfilesSeleccionadosA}">
+																		<f:selectItems value="#{actualizarCorreo.perfilesA}" />
+																	</h:selectManyListbox>
+																</td>
+																<td>
+																	<h:commandButton value="Agregar &#62;&#62;">
+																		<f:ajax execute="origen" render="origen destino" listener="#{actualizarCorreo.leftToRight}" />
+																	</h:commandButton>
+																	<br/>
+																	<h:commandButton value="&#60;&#60; Eliminar">
+																		<f:ajax execute="destino" render="origen destino" listener="#{actualizarCorreo.rightToLeft}" />
+																	</h:commandButton>
+																</td>
+																<td>
+																	<h:outputText value="Destinatarios"  styleClass="etiqueta"/>
+																	<br/>
+																	<h:selectManyListbox id="destino"
+																		style="width: 200px; height: 180px;"
+																		converter="javax.faces.Integer"
+																		value="#{actualizarCorreo.perfilesSeleccionadosB}">
+																		<f:selectItems value="#{actualizarCorreo.perfilesB}" />
+																	</h:selectManyListbox>
+																</td>
+															</tr>
+														</table>
+													</td>
+													<td>
+														<h:message for="origen" styleClass="mensaje-error" />
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+									</tr>
+									<tr>
+										<td>&#160;</td>
+									</tr>
+									<tr>
+										<td>
+											<!-- BOTONES -->
+											<table width="100%" border="0" cellpadding="0" cellspacing="0">
+												<tr>
+													<td align="center">
+														<h:commandButton id="guardar"
+															action="#{actualizarCorreo.guardar}" value="Guardar"
+															styleClass="boton" />
+														<h:commandButton immediate="true" id="cancelar"
+															action="#{actualizarCorreo.cancelar}" value="Cancelar"
+															styleClass="boton" />
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="etiqueta" style="margin-bottom:10px;"></div>
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+									</tr>
+									<tr>
+										<td></td>
+									</tr>
+									<tr>
+										<td></td>
+									</tr>
+									<tr>
+										<td>
+											<h:messages globalOnly="true" styleClass="mensaje-error" showDetail="false" />
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions targetNamespace="http://hfirmas.impl.webservices.hiper" xmlns:ax21="http://webservices.hfirmas.beans.spring.hiper/xsd" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:ns="http://hfirmas.impl.webservices.hiper" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <wsdl:documentation>WSServicioSFP</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://webservices.hfirmas.beans.spring.hiper/xsd">
+            <xs:complexType name="TipoPJ_BE">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="codigo" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="descripcion" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="estado" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ClientePJ_BE">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="articulo" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="codError" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="codigo_central" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="descError" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="estado" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="estadoVersion" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="estadoVersion_desc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="estado_desc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="estructura" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="fecha_escritura" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="fecha_version" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="jurisdiccion" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="jurisdiccion_desc" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="listaCombinaciones" nillable="true" type="ax21:Combinacion_BE"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="listaCuentas" nillable="true" type="ax21:Cuenta_BE"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="listaRepresentantes" nillable="true" type="ax21:Representante_BE"/>
+                    <xs:element minOccurs="0" name="notario" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="notario_desc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="nroExpediente" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="nroVersion" type="xs:int"/>
+                    <xs:element minOccurs="0" name="numero_DOI" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="objeto" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="oficina_registral" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="oficina_registral_desc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="partida" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="poderEspecial" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="razon_social" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="tipo_DOI" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="tipo_DOI_desc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="tipo_persona" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="tipo_persona_desc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="zona_registral" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="zona_registral_desc" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Combinacion_BE">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="combinacion" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="estado" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="estado_desc" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="listaFacultades" nillable="true" type="ax21:Facultad_BE"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Facultad_BE">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="codigo" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="especial" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="listaRestricciones" nillable="true" type="ax21:Restriccion_BE"/>
+                    <xs:element minOccurs="0" name="nombre" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Restriccion_BE">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="limite" type="xs:double"/>
+                    <xs:element minOccurs="0" name="moneda" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="moneda_desc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="observaciones" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="vigencia" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Cuenta_BE">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="fecha_creacion" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="indicador_poder" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="listaCombinaciones" nillable="true" type="ax21:Combinacion_BE"/>
+                    <xs:element minOccurs="0" name="moneda" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="moneda_desc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="nroCuenta" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="producto" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="producto_desc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="situacion" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="situacion_desc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="subproducto" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="subproducto_desc" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Representante_BE">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="ape_materno" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ape_paterno" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="cargo" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="cargo_desc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="codigo_central" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="indicador_firma" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="nivel" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="nivel_desc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="nombres" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="numero_DOI" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="situacion" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="situacion_desc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="tipo_DOI" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="tipo_DOI_desc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="vigencia" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="RpteActivacion_BE">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="codigo_central" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="descripcion_error" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="indicador_activacion" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Poder_Firma_Activacion">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="dsc_mensaje" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="exito_activacion_poder" type="xs:boolean"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="lista_representantes_output" nillable="true" type="ax21:RpteActivacion_BE"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Respuesta_BE">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="cod_respuesta" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="desc_mensaje" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Empresa_BE">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="codigoCentral" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="listaCuentas" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://hfirmas.impl.webservices.hiper" xmlns:ax22="http://webservices.hfirmas.beans.spring.hiper/xsd">
+            <xs:import namespace="http://webservices.hfirmas.beans.spring.hiper/xsd"/>
+            <xs:element name="testRegistrarCliente">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="IdCliente" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="testRegistrarClienteResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="testRegistrarBastanteo">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="IdCliente" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="testRegistrarBastanteoResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="obtenerTipoPJ">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="indicadorOperacion" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="codTipoPJ" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="descripcionTipoPJ" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="estado" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="obtenerTipoPJResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax21:TipoPJ_BE"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="obtenerPoderes">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="cod_central_clte" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="tipoDOI" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="nroDOI" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="version" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="obtenerPoderesResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax21:ClientePJ_BE"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="activarPoderes">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="numero_expediente" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="tipo_operacion" nillable="true" type="xs:string"/>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="lista_representantes" nillable="true" type="ax21:RpteActivacion_BE"/>
+                        <xs:element minOccurs="0" name="resultado_bastanteo" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="activarPoderesResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax21:Poder_Firma_Activacion"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="fusionarEmpresas">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="tipo_DOI" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="numero_DOI" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="codigo_central" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="razon_social" nillable="true" type="xs:string"/>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="lista_empresas_absorbidas" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="fusionarEmpresasResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax21:Respuesta_BE"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="escindirEmpresas">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="listaEmpresas" nillable="true" type="ax21:Empresa_BE"/>
+                        <xs:element minOccurs="0" name="codigoCentral" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="tipoDOI" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="nroDOI" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="razonSocial" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="escindirEmpresasResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax21:Respuesta_BE"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="activarFirmasyPoderesEnHost">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="cod_operacion" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="usr_activacion" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="cod_cliente" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="id_cliente" type="xs:int"/>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="lista_representantes" nillable="true" type="ax21:RpteActivacion_BE"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="activarFirmasyPoderesEnHostResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="obtenerTipoPJRequest">
+        <wsdl:part element="ns:obtenerTipoPJ" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="obtenerTipoPJResponse">
+        <wsdl:part element="ns:obtenerTipoPJResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="testRegistrarClienteRequest">
+        <wsdl:part element="ns:testRegistrarCliente" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="testRegistrarClienteResponse">
+        <wsdl:part element="ns:testRegistrarClienteResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="activarFirmasyPoderesEnHostRequest">
+        <wsdl:part element="ns:activarFirmasyPoderesEnHost" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="activarFirmasyPoderesEnHostResponse">
+        <wsdl:part element="ns:activarFirmasyPoderesEnHostResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="fusionarEmpresasRequest">
+        <wsdl:part element="ns:fusionarEmpresas" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="fusionarEmpresasResponse">
+        <wsdl:part element="ns:fusionarEmpresasResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="escindirEmpresasRequest">
+        <wsdl:part element="ns:escindirEmpresas" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="escindirEmpresasResponse">
+        <wsdl:part element="ns:escindirEmpresasResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="testRegistrarBastanteoRequest">
+        <wsdl:part element="ns:testRegistrarBastanteo" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="testRegistrarBastanteoResponse">
+        <wsdl:part element="ns:testRegistrarBastanteoResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="activarPoderesRequest">
+        <wsdl:part element="ns:activarPoderes" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="activarPoderesResponse">
+        <wsdl:part element="ns:activarPoderesResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="obtenerPoderesRequest">
+        <wsdl:part element="ns:obtenerPoderes" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="obtenerPoderesResponse">
+        <wsdl:part element="ns:obtenerPoderesResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:portType name="WSServicioSFPPortType">
+        <wsdl:operation name="obtenerTipoPJ">
+            <wsdl:input message="ns:obtenerTipoPJRequest" wsaw:Action="urn:obtenerTipoPJ"/>
+            <wsdl:output message="ns:obtenerTipoPJResponse" wsaw:Action="urn:obtenerTipoPJResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="testRegistrarCliente">
+            <wsdl:input message="ns:testRegistrarClienteRequest" wsaw:Action="urn:testRegistrarCliente"/>
+            <wsdl:output message="ns:testRegistrarClienteResponse" wsaw:Action="urn:testRegistrarClienteResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="activarFirmasyPoderesEnHost">
+            <wsdl:input message="ns:activarFirmasyPoderesEnHostRequest" wsaw:Action="urn:activarFirmasyPoderesEnHost"/>
+            <wsdl:output message="ns:activarFirmasyPoderesEnHostResponse" wsaw:Action="urn:activarFirmasyPoderesEnHostResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="fusionarEmpresas">
+            <wsdl:input message="ns:fusionarEmpresasRequest" wsaw:Action="urn:fusionarEmpresas"/>
+            <wsdl:output message="ns:fusionarEmpresasResponse" wsaw:Action="urn:fusionarEmpresasResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="escindirEmpresas">
+            <wsdl:input message="ns:escindirEmpresasRequest" wsaw:Action="urn:escindirEmpresas"/>
+            <wsdl:output message="ns:escindirEmpresasResponse" wsaw:Action="urn:escindirEmpresasResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="testRegistrarBastanteo">
+            <wsdl:input message="ns:testRegistrarBastanteoRequest" wsaw:Action="urn:testRegistrarBastanteo"/>
+            <wsdl:output message="ns:testRegistrarBastanteoResponse" wsaw:Action="urn:testRegistrarBastanteoResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="activarPoderes">
+            <wsdl:input message="ns:activarPoderesRequest" wsaw:Action="urn:activarPoderes"/>
+            <wsdl:output message="ns:activarPoderesResponse" wsaw:Action="urn:activarPoderesResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="obtenerPoderes">
+            <wsdl:input message="ns:obtenerPoderesRequest" wsaw:Action="urn:obtenerPoderes"/>
+            <wsdl:output message="ns:obtenerPoderesResponse" wsaw:Action="urn:obtenerPoderesResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="WSServicioSFPSoap11Binding" type="ns:WSServicioSFPPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="testRegistrarCliente">
+            <soap:operation soapAction="urn:testRegistrarCliente" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="obtenerTipoPJ">
+            <soap:operation soapAction="urn:obtenerTipoPJ" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="activarFirmasyPoderesEnHost">
+            <soap:operation soapAction="urn:activarFirmasyPoderesEnHost" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="fusionarEmpresas">
+            <soap:operation soapAction="urn:fusionarEmpresas" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="escindirEmpresas">
+            <soap:operation soapAction="urn:escindirEmpresas" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="testRegistrarBastanteo">
+            <soap:operation soapAction="urn:testRegistrarBastanteo" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="activarPoderes">
+            <soap:operation soapAction="urn:activarPoderes" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="obtenerPoderes">
+            <soap:operation soapAction="urn:obtenerPoderes" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="WSServicioSFPSoap12Binding" type="ns:WSServicioSFPPortType">
+        <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="testRegistrarCliente">
+            <soap12:operation soapAction="urn:testRegistrarCliente" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="obtenerTipoPJ">
+            <soap12:operation soapAction="urn:obtenerTipoPJ" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="activarFirmasyPoderesEnHost">
+            <soap12:operation soapAction="urn:activarFirmasyPoderesEnHost" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="fusionarEmpresas">
+            <soap12:operation soapAction="urn:fusionarEmpresas" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="escindirEmpresas">
+            <soap12:operation soapAction="urn:escindirEmpresas" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="testRegistrarBastanteo">
+            <soap12:operation soapAction="urn:testRegistrarBastanteo" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="activarPoderes">
+            <soap12:operation soapAction="urn:activarPoderes" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="obtenerPoderes">
+            <soap12:operation soapAction="urn:obtenerPoderes" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="WSServicioSFPHttpBinding" type="ns:WSServicioSFPPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="testRegistrarCliente">
+            <http:operation location="testRegistrarCliente"/>
+            <wsdl:input>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="obtenerTipoPJ">
+            <http:operation location="obtenerTipoPJ"/>
+            <wsdl:input>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="activarFirmasyPoderesEnHost">
+            <http:operation location="activarFirmasyPoderesEnHost"/>
+            <wsdl:input>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="fusionarEmpresas">
+            <http:operation location="fusionarEmpresas"/>
+            <wsdl:input>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="escindirEmpresas">
+            <http:operation location="escindirEmpresas"/>
+            <wsdl:input>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="testRegistrarBastanteo">
+            <http:operation location="testRegistrarBastanteo"/>
+            <wsdl:input>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="activarPoderes">
+            <http:operation location="activarPoderes"/>
+            <wsdl:input>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="obtenerPoderes">
+            <http:operation location="obtenerPoderes"/>
+            <wsdl:input>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content part="parameters" type="application/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="WSServicioSFP">
+        <wsdl:port binding="ns:WSServicioSFPSoap11Binding" name="WSServicioSFPHttpSoap11Endpoint">
+            <soap:address location="http://118.180.34.15:9080/SFPWS/services/WSServicioSFP.WSServicioSFPHttpSoap11Endpoint/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

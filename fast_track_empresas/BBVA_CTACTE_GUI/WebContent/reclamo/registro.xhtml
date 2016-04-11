@@ -1,0 +1,283 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib"
+	template="/WEB-INF/plantillas/paginaTareaSinTabs.xhtml"
+	xmlns:bbva="http://java.sun.com/jsf/composite/components/bbva"
+	xmlns:util="http://java.sun.com/jsf/composite/util">
+
+	<ui:define name="title">Registro</ui:define>
+
+	<ui:define name="head">
+		<ui:include src="/WEB-INF/comun/pingWebsealHead.xhtml" />
+	</ui:define>
+
+
+	<ui:define name="inicioform">
+		<custom:remoteCommand name="alargarSessionWS"
+			actionListener="#{bandejaMB.pinwWEBSEAL}" />
+		<h:inputHidden id="idIntentos" value="#{bandejaMB.intentosWS}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<h:panelGroup id="panelBusqueda">
+			<custom:tabView id="tabView">
+				<!-- 				style="#{bandejaMB.menuColapsado ? 'width:1278px' : 'width:1100px'}" -->
+
+				<custom:tab id="tab1" title="Registrar Consulta / Reclamo">
+
+					<h:panelGrid columns="1" style="text-align: left; width:1100px;">
+						<h:panelGrid id="idFiltros" columns="8">
+							<!-- 								columnClasses="etiquetaBsqTarea,campoBsqTarea,etiquetaBsqEstTarea,campoBsqEstTarea,etiquetaBsqNroExp,campoBsqNroExp,etiquetaBsqEstExp,campoBsqEstExp"> -->
+							<h:outputLabel for="idCodCentral" value="Cod. Central" />
+							<h:inputText id="idCodCentral" style="width:100px"
+								styleClass="soloNumeros"
+								value="#{requerimientoMB.filtro.cod_central}"
+								onkeyup="limpiarRazonSocial();">
+							</h:inputText>
+							<h:outputLabel for="idRazonSocial" value="Nro. DOI" />
+							<h:inputText id="idRazonSocial" style="width:80px"
+								styleClass="soloNumeros"
+								value="#{requerimientoMB.filtro.nro_doi}"
+								onkeyup="limpiarCodCentral();">
+							</h:inputText>
+							<h:outputScript>
+							function limpiarCodCentral() {						
+								$("#form\\:tabView\\:idCodCentral").val('');
+							}
+							function limpiarRazonSocial() {
+								$("#form\\:tabView\\:idRazonSocial").val('');
+							}
+							</h:outputScript>
+
+							<h:commandButton value="Buscar" id="botonBuscar">
+								<f:ajax event="click" execute="@form"
+									listener="#{requerimientoMB.buscarCliente}"
+									render=":form:tabView:tablaTask codigoCentral nroDoi tipoDoi form:tabView:idEsMigrado msjBuscar" />
+							</h:commandButton>
+
+							<h:commandButton value="Limpiar Filtros"
+								onclick="limpiarCodCentral();limpiarRazonSocial();"
+								type="button">
+							</h:commandButton>
+							<h:panelGroup columns="1" id="loadingDiv" style="display:none;">
+								<h:outputText value="Procesando... " />
+								<h:graphicImage value="#{resource['imagenes:loading.gif']}" />
+							</h:panelGroup>
+						</h:panelGrid>
+						<h:message id="msjBuscar" for="botonBuscar"
+							errorClass="mensaje-error" infoClass="mensaje-info" />
+					</h:panelGrid>
+					<h:panelGrid>
+						<h:inputHidden id="codigoCentral"
+							value="#{requerimientoMB.cliente.codigoCentral}" />
+						<h:inputHidden id="nroDoi"
+							value="#{requerimientoMB.cliente.numeroDOI}" />
+						<h:inputHidden id="tipoDoi"
+							value="#{requerimientoMB.cliente.tipoDOI}" />
+
+					</h:panelGrid>
+
+					<h:panelGroup id="tablaContainer" layout="block"
+						styleClass="ui-datatable ui-widget">
+						<h:dataTable border="0" cellspacing="0" cellpadding="0"
+							id="tablaTask" var="bandeja"
+							style="border-spacing: 1px; width:100%" widgetVar="regTareas"
+							value="#{requerimientoMB.clientes}"
+							rows="#{bandejaMB.rowsPerPage}" first="#{bandejaMB.first}"
+							styleClass="#{empty requerimientoMB.clientes ? 'ui-datatable-empty' : 'ui-datatable-not-empty'}"
+							headerClass="ui-state-default"
+							columnClasses="columna-bandeja,columnaCodTarea,columnaNomTarea,columnaFeAsig,columnaDscEstTarea,columnaCodSemaforo,columnaFeAten,columnaResponsable,columnaOficinaTarea,columnaTerritorioTarea,columnaExpediente,columnaOperacion,columnaDscCliente,columnaFechaInicio,columnaDscEstadoExp,columnaFechaTermino,columnaAbogadoEstudio,columnaEstudio"
+							rowClasses="ui-widget-content">
+
+							<h:column>
+								<f:facet name="header">
+									<!-- 										<bbva:sortCabecera propertyName="nomTarea" /> -->
+									<h:outputText value="Cod. Central" />
+								</f:facet>
+								<h:outputText value="#{bandeja.codigoCentral}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<!-- 										<bbva:sortCabecera propertyName="territorioTarea" /> -->
+									<h:outputText value="Tipo DOI" />
+								</f:facet>
+								<h:outputText value="#{bandeja.descripcionDOI}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<!-- 										<bbva:sortCabecera propertyName="responsable" /> -->
+									<h:outputText value="Nro. DOI" />
+								</f:facet>
+								<h:outputText value="#{bandeja.numeroDOI}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<!-- 										<bbva:sortCabecera propertyName="oficinaTarea" /> -->
+									<h:outputText value="Razón Social" />
+								</f:facet>
+								<h:outputText value="#{bandeja.razonSocial}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<!-- 										<bbva:sortCabecera propertyName="territorioTarea" /> -->
+									<h:outputText value="Fecha Constitución" />
+								</f:facet>
+								<h:outputText value="#{bandeja.fechaConstitucion}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</h:column>
+
+							<f:facet name="footer">
+								<h:outputText value="No se encontró registros"
+									rendered="#{empty requerimientoMB.clientes}" />
+							</f:facet>
+						</h:dataTable>
+
+					</h:panelGroup>
+					<h:panelGrid columns="1">
+						<h:panelGroup id="idPnlGroupMigrado">
+							<h:outputText value="Migrado :" style="font-weight: bold;" />
+							<h:outputText id="idEsMigrado"
+								value="#{requerimientoMB.objecto.es_migrado}" />
+							<h:graphicImage value="#{resource['imagenes:pregunta.jpg']}"
+								title="Migrado SI: Consultar poderes en WR00 o SFP / Migrado No: Consultar Poderes en WR00" />
+						</h:panelGroup>
+						<h:panelGroup id="idPnlGroupOperacion">
+							<h:outputLabel for="idOperacion" value="Operación :"
+								style="font-weight: bold;" />
+							<h:selectOneMenu id="idOperacion" style="width:105px"
+								required="true"  onchange="ocultar()"
+								value="#{requerimientoMB.objecto.tipo_operacion}">
+								<f:selectItems value="#{requerimientoMB.listaTipoOperacion}" />
+								<f:ajax event="change"
+									render="idPnlGroupDetalleCategoria idPnlGroupCategoria :form:tabView:btnRegistrar :form:tabView:pnlGrpDocumento"
+									listener="#{requerimientoMB.selectOperacion}" />
+							</h:selectOneMenu>
+						</h:panelGroup>
+						<h:panelGroup id="idPnlGroupCategoria">
+							<h:outputLabel for="idCategoriaReclamo"
+								style="font-weight: bold;" value="Categoria de Reclamo :"
+								rendered="#{requerimientoMB.objecto.showCategoriaReclamo}" />
+							<h:selectOneMenu id="idCategoriaReclamo" style="width:105px"
+								required="true" onchange="ocultar()"
+								rendered="#{requerimientoMB.objecto.showCategoriaReclamo}"
+								value="#{requerimientoMB.objecto.detalle_categoria_reclamo}">
+								<f:selectItems value="#{requerimientoMB.listaCategoriaReclamo}" />
+								<f:ajax event="change"
+									render=":form:tabView:idPnlGroupDetalleCategoria :form:tabView:btnRegistrar :form:tabView:pnlGrpDocumento"
+									listener="#{requerimientoMB.selectCategoria}" />
+							</h:selectOneMenu>
+						</h:panelGroup>
+						<h:panelGroup id="idPnlGroupDetalleCategoria">
+							<h:outputText
+								rendered="#{requerimientoMB.objecto.showCategoriaReclamo}"
+								value="#{requerimientoMB.objecto.textoDetalleCategoria}" />
+
+						</h:panelGroup>
+					</h:panelGrid>
+					<h:panelGroup id="pnlGrpDocumento">
+						<h:panelGroup id="pblGrpContent"
+							rendered="#{!requerimientoMB.filtro.disableBtnRegistrar}">
+							<h:outputLabel value="Agregar Documentos"
+								style="font-weight: bold; " />
+							<iframe id="uploadFrame" src="upload.faces"
+								style="width: 350px; height: 25px; overflow: hidden; border: 0px;"></iframe>
+							<h:outputScript>
+							function registrar() {
+								if(confirm('¿Desea enviar el registro?')) {
+										var idCategoriaReclamo=$("#form\\:tabView\\:idCategoriaReclamo").val();
+										var idOperacion=$("#form\\:tabView\\:idOperacion").val();
+										var codigoCentral=$("#form\\:tabView\\:codigoCentral").val();	
+										var resultado=false;
+									if(codigoCentral==''){
+										alert('Debe buscar un cliente');
+										$("#form\\:tabView\\:msjGeneral").val('Debe buscar un cliente');	
+										return false;
+									}else if(idOperacion==null || idOperacion==0){
+										alert('Debe seleccionar una operacion');
+										$("#form\\:tabView\\:msjGeneral").val('Debe seleccionar una operacion');										
+										return false;
+									}else if(idOperacion==10005){
+										if(idCategoriaReclamo==0){
+											alert('Debe seleccionar una categoria');
+											$("#form\\:tabView\\:msjGeneral").val('Debe seleccionar una categoria');
+											return false;
+										}else{
+											resultado=true;
+										}										
+									}else{
+										resultado=true;
+									}
+									
+									if(resultado){
+										var iframe = $('#uploadFrame').contents();
+										// alert(iframe.find("#uploadForm"));
+										action = iframe.find("#uploadForm").attr("action").replace("reclamo/upload.faces", "uploadFileServlet/" + $("#form\\:tabView\\:codigoCentral").val()
+																									+"/"+ $("#form\\:tabView\\:nroDoi").val()
+																									+"/"+ $("#form\\:tabView\\:tipoDoi").val());
+										//action = iframe.find("#uploadForm").attr("action").replace("reclamo/upload.faces", "uploadFileServlet/" + $("#form\\:tabView\\:idCodCentral").val());															
+										iframe.find("#uploadForm").attr("action", action);
+										iframe.find("#uploadForm").submit();
+										}
+									}
+										
+							}
+							
+							function enviar(url, nombreArchivo) {
+								$("#form\\:tabView\\:url").val(url);
+								$("#form\\:tabView\\:nombreArchivo").val(nombreArchivo);
+								enviarDatos();
+							}
+							function ocultar() {
+								var idCategoriaReclamo=$("#form\\:tabView\\:idCategoriaReclamo").val();
+								var idOperacion=$("#form\\:tabView\\:idOperacion").val();
+								if(idOperacion==10005){								
+									if(idCategoriaReclamo==10002){
+										$("#divDetalle").css("display", "none");
+									}else{
+										$("#divDetalle").css("display", "block");
+									}						
+								}else{
+									$("#divDetalle").css("display", "block");
+								}	
+								
+							}
+							
+						</h:outputScript>
+							<h:inputHidden id="url"
+								value="#{requerimientoMB.attachment.ruta_archivo}" />
+							<h:inputHidden id="nombreArchivo"
+								value="#{requerimientoMB.attachment.nombre_archivo}" />
+							<h:inputHidden id="idDisableBtnRegistrar"
+								value="#{requerimientoMB.filtro.disableBtnRegistrar}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<div id="divDetalle">
+						<h:panelGrid columns="1">
+							<h:outputLabel value="Detalle" style="text-align:left; font-weight: bold;"  />
+							<util:editor id="idEditor" width="1091"
+								value="#{requerimientoMB.objecto.descripcion_reclamo_Consulta}"
+								required="true" />
+							<custom:remoteCommand name="enviarDatos" process="@form" 
+								actionListener="#{requerimientoMB.registrar}" id="rmtRegistrar"/>
+							<h:commandButton id="btnRegistrar" value="Registrar"
+								style="text-align:left;"
+								disabled="#{requerimientoMB.filtro.disableBtnRegistrar}"
+								onclick="registrar()" type="button">
+							</h:commandButton>							
+							
+						</h:panelGrid>
+					</div>
+					<h:outputLabel id="msjGeneral" style="text-align:left; font-weight: bold;" value="" />
+					<h:message id="msjRegistrar" for="rmtRegistrar"
+							errorClass="mensaje-error" infoClass="mensaje-info" />
+				</custom:tab>
+			</custom:tabView>
+
+		</h:panelGroup>
+
+	</ui:define>
+
+</ui:composition>

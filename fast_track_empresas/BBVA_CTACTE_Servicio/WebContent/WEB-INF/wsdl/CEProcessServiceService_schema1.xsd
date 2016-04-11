@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://proceso.servicio.ctacte.bbva.ibm.com/" version="1.0" xmlns:tns="http://proceso.servicio.ctacte.bbva.ibm.com/">
+
+  <xs:element name="EliminarEmpleadoExpedienteTareaProceso" type="tns:EliminarEmpleadoExpedienteTareaProceso"/>
+
+  <xs:element name="EliminarEmpleadoExpedienteTareaProcesoResponse" type="tns:EliminarEmpleadoExpedienteTareaProcesoResponse"/>
+
+  <xs:element name="activarFirmas" type="tns:activarFirmas"/>
+
+  <xs:element name="activarFirmasResponse" type="tns:activarFirmasResponse"/>
+
+  <xs:element name="cobroComisionInmediato" type="tns:cobroComisionInmediato"/>
+
+  <xs:element name="cobroComisionInmediatoResponse" type="tns:cobroComisionInmediatoResponse"/>
+
+  <xs:element name="crearPreRegistroRevocatoria" type="tns:crearPreRegistroRevocatoria"/>
+
+  <xs:element name="crearPreRegistroRevocatoriaResponse" type="tns:crearPreRegistroRevocatoriaResponse"/>
+
+  <xs:element name="crearPreRegistroSubsanacion" type="tns:crearPreRegistroSubsanacion"/>
+
+  <xs:element name="crearPreRegistroSubsanacionResponse" type="tns:crearPreRegistroSubsanacionResponse"/>
+
+  <xs:element name="dentroPlazoSubsanacion" type="tns:dentroPlazoSubsanacion"/>
+
+  <xs:element name="dentroPlazoSubsanacionResponse" type="tns:dentroPlazoSubsanacionResponse"/>
+
+  <xs:element name="eliminarDocumentosCM" type="tns:eliminarDocumentosCM"/>
+
+  <xs:element name="eliminarDocumentosCMResponse" type="tns:eliminarDocumentosCMResponse"/>
+
+  <xs:element name="enviarCorreo" type="tns:enviarCorreo"/>
+
+  <xs:element name="enviarCorreoResponse" type="tns:enviarCorreoResponse"/>
+
+  <xs:element name="grabarEmpleadoExpedienteTareaProceso" type="tns:grabarEmpleadoExpedienteTareaProceso"/>
+
+  <xs:element name="grabarEmpleadoExpedienteTareaProcesoResponse" type="tns:grabarEmpleadoExpedienteTareaProcesoResponse"/>
+
+  <xs:element name="obtenerEmpleado" type="tns:obtenerEmpleado"/>
+
+  <xs:element name="obtenerEmpleadoResponse" type="tns:obtenerEmpleadoResponse"/>
+
+  <xs:element name="obtenerEmpleadoxPesoDocumento" type="tns:obtenerEmpleadoxPesoDocumento"/>
+
+  <xs:element name="obtenerEmpleadoxPesoDocumentoResponse" type="tns:obtenerEmpleadoxPesoDocumentoResponse"/>
+
+  <xs:element name="obtenerEmpleadoxPesoParticipe" type="tns:obtenerEmpleadoxPesoParticipe"/>
+
+  <xs:element name="obtenerEmpleadoxPesoParticipeResponse" type="tns:obtenerEmpleadoxPesoParticipeResponse"/>
+
+  <xs:element name="obtenerEstadoBastanteo" type="tns:obtenerEstadoBastanteo"/>
+
+  <xs:element name="obtenerEstadoBastanteoResponse" type="tns:obtenerEstadoBastanteoResponse"/>
+
+  <xs:element name="obtenerHoraReintento" type="tns:obtenerHoraReintento"/>
+
+  <xs:element name="obtenerHoraReintentoResponse" type="tns:obtenerHoraReintentoResponse"/>
+
+  <xs:element name="obtenerNumExpedientesxEmpleado" type="tns:obtenerNumExpedientesxEmpleado"/>
+
+  <xs:element name="obtenerNumExpedientesxEmpleadoResponse" type="tns:obtenerNumExpedientesxEmpleadoResponse"/>
+
+  <xs:element name="verificarCriterioSupervision" type="tns:verificarCriterioSupervision"/>
+
+  <xs:element name="verificarCriterioSupervisionResponse" type="tns:verificarCriterioSupervisionResponse"/>
+
+  <xs:complexType name="obtenerEmpleadoxPesoDocumento">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="intIdProducto" type="xs:int"/>
+      <xs:element minOccurs="0" name="intIdTerritorio" type="xs:int"/>
+      <xs:element minOccurs="0" name="intIdTarea" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerEmpleadoxPesoDocumentoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:viewPesoDocumentoExpediente"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="viewPesoDocumentoExpediente">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codEmpleado" type="xs:string"/>
+      <xs:element minOccurs="0" name="desPerfil" type="xs:string"/>
+      <xs:element minOccurs="0" name="idEmpleado" type="xs:int"/>
+      <xs:element minOccurs="0" name="idEstudio" type="xs:int"/>
+      <xs:element minOccurs="0" name="idPerfil" type="xs:int"/>
+      <xs:element minOccurs="0" name="idProducto" type="xs:int"/>
+      <xs:element minOccurs="0" name="idTarea" type="xs:int"/>
+      <xs:element minOccurs="0" name="idTerritorio" type="xs:int"/>
+      <xs:element minOccurs="0" name="nomEmpleado" type="xs:string"/>
+      <xs:element minOccurs="0" name="sumPesoDocumentoExpediente" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dentroPlazoSubsanacion">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="dtFechaRegistroExpediente" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="dtFechaUltimoBastanteo" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dentroPlazoSubsanacionResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerEmpleado">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="intIdExpediente" type="xs:int"/>
+      <xs:element minOccurs="0" name="intIdProducto" type="xs:int"/>
+      <xs:element minOccurs="0" name="intIdTerritorio" type="xs:int"/>
+      <xs:element minOccurs="0" name="intIdTarea" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerEmpleadoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:empleadoCE"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="empleadoCE">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codAbogado" type="xs:string"/>
+      <xs:element minOccurs="0" name="codEmpleado" type="xs:string"/>
+      <xs:element minOccurs="0" name="codEstudioAbogado" type="xs:string"/>
+      <xs:element minOccurs="0" name="desPerfil" type="xs:string"/>
+      <xs:element minOccurs="0" name="idEmpleado" type="xs:int"/>
+      <xs:element minOccurs="0" name="idEstudioAbogado" type="xs:int"/>
+      <xs:element minOccurs="0" name="idPerfil" type="xs:int"/>
+      <xs:element minOccurs="0" name="idProducto" type="xs:int"/>
+      <xs:element minOccurs="0" name="idTarea" type="xs:int"/>
+      <xs:element minOccurs="0" name="idTerritorio" type="xs:int"/>
+      <xs:element minOccurs="0" name="nomAbogado" type="xs:string"/>
+      <xs:element minOccurs="0" name="nomEmpleado" type="xs:string"/>
+      <xs:element minOccurs="0" name="nomEstudioAbogado" type="xs:string"/>
+      <xs:element minOccurs="0" name="numExpedientesEmpleado" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="grabarEmpleadoExpedienteTareaProceso">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:int"/>
+      <xs:element minOccurs="0" name="codEmpleado" type="xs:string"/>
+      <xs:element minOccurs="0" name="idTarea" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="grabarEmpleadoExpedienteTareaProcesoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="enviarCorreo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:string"/>
+      <xs:element minOccurs="0" name="idTareaAnterior" type="xs:string"/>
+      <xs:element minOccurs="0" name="idTareaActual" type="xs:string"/>
+      <xs:element minOccurs="0" name="codUsuarioAnterior" type="xs:string"/>
+      <xs:element minOccurs="0" name="codUsuarioActual" type="xs:string"/>
+      <xs:element minOccurs="0" name="nombreAccion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="enviarCorreoResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="eliminarDocumentosCM">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="eliminarDocumentosCMResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="cobroComisionInmediato">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="strIdExpediente" type="xs:string"/>
+      <xs:element minOccurs="0" name="codEmpleadoResponsable" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="cobroComisionInmediatoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="crearPreRegistroSubsanacion">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoExpediente" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="crearPreRegistroSubsanacionResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerEmpleadoxPesoParticipe">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="intIdProducto" type="xs:int"/>
+      <xs:element minOccurs="0" name="intIdTerritorio" type="xs:int"/>
+      <xs:element minOccurs="0" name="intIdTarea" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerEmpleadoxPesoParticipeResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:viewPesoParticipeExpediente"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="viewPesoParticipeExpediente">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codEmpleado" type="xs:string"/>
+      <xs:element minOccurs="0" name="desPerfil" type="xs:string"/>
+      <xs:element minOccurs="0" name="idEmpleado" type="xs:int"/>
+      <xs:element minOccurs="0" name="idEstudio" type="xs:int"/>
+      <xs:element minOccurs="0" name="idPerfil" type="xs:int"/>
+      <xs:element minOccurs="0" name="idProducto" type="xs:int"/>
+      <xs:element minOccurs="0" name="idTarea" type="xs:int"/>
+      <xs:element minOccurs="0" name="idTerritorio" type="xs:int"/>
+      <xs:element minOccurs="0" name="nomEmpleado" type="xs:string"/>
+      <xs:element minOccurs="0" name="sumPesoParticipeExpediente" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerNumExpedientesxEmpleado">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="intIdProducto" type="xs:int"/>
+      <xs:element minOccurs="0" name="intIdTerritorio" type="xs:int"/>
+      <xs:element minOccurs="0" name="intIdTarea" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerNumExpedientesxEmpleadoResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="tns:viewNumeroExpedientesEmpleado"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="viewNumeroExpedientesEmpleado">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codEmpleado" type="xs:string"/>
+      <xs:element minOccurs="0" name="desPerfil" type="xs:string"/>
+      <xs:element minOccurs="0" name="idEmpleado" type="xs:int"/>
+      <xs:element minOccurs="0" name="idEstudio" type="xs:int"/>
+      <xs:element minOccurs="0" name="idPerfil" type="xs:int"/>
+      <xs:element minOccurs="0" name="idProducto" type="xs:int"/>
+      <xs:element minOccurs="0" name="idTarea" type="xs:int"/>
+      <xs:element minOccurs="0" name="idTerritorio" type="xs:int"/>
+      <xs:element minOccurs="0" name="nomEmpleado" type="xs:string"/>
+      <xs:element minOccurs="0" name="numExpedientesEmpleado" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="verificarCriterioSupervision">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="strCodigoCentral" type="xs:string"/>
+      <xs:element minOccurs="0" name="strResultadoBastanteo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="verificarCriterioSupervisionResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="activarFirmas">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="intIdExpediente" type="xs:int"/>
+      <xs:element minOccurs="0" name="tipoOperacion" type="xs:string"/>
+      <xs:element minOccurs="0" name="usuarioResponsable" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="activarFirmasResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="crearPreRegistroRevocatoria">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoExpediente" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="crearPreRegistroRevocatoriaResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="EliminarEmpleadoExpedienteTareaProceso">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idExpediente" type="xs:int"/>
+      <xs:element minOccurs="0" name="codEmpleado" type="xs:string"/>
+      <xs:element minOccurs="0" name="idTarea" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="EliminarEmpleadoExpedienteTareaProcesoResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerHoraReintento">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerHoraReintentoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:cobroComision"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="cobroComision">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="diasReintento" type="xs:int"/>
+      <xs:element minOccurs="0" name="horaEjecucion1" type="xs:string"/>
+      <xs:element minOccurs="0" name="horaEjecucion2" type="xs:string"/>
+      <xs:element minOccurs="0" name="horaEjecucion3" type="xs:string"/>
+      <xs:element minOccurs="0" name="horaEjecucion4" type="xs:string"/>
+      <xs:element minOccurs="0" name="id" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerEstadoBastanteo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="intIdExpediente" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerEstadoBastanteoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

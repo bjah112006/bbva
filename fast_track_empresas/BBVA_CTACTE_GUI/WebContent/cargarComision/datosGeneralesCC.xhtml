@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:custom="http://www.ibm.com.pe/custom-taglib">
+
+<custom:tabView id="idGeneralesCobroC">
+
+	<custom:tab title="Datos Generales">
+		
+	<table width="100%" border="0" cellspacing="2"  cellpadding="2">
+		<tr>
+			<td width="16%"></td>
+			<td width="18%"></td>
+			<td width="12%"></td>
+			<td width="20%"></td>
+			<td width="12%"></td>
+			<td width="22%"></td>
+		</tr>
+		<tr>
+			<td>
+				<h:outputText style="font-weight:bold" value="Número Expediente: "></h:outputText>
+			</td>
+			<td>
+				<h:outputText value="#{datosCargoComision.expediente.id}"></h:outputText>
+			</td>
+			<td>	
+				<h:outputText style="font-weight:bold" value="Operación:" ></h:outputText>
+			</td>
+			<td>
+				<h:outputText value="#{datosCargoComision.expediente.operacion.descripcion}"></h:outputText>
+			</td>
+			<td>
+				<h:outputText style="font-weight:bold" value="Estado:"></h:outputText>
+			</td>
+			<td>
+				<h:outputText value="#{datosCargoComision.expediente.estado.descripcion}"></h:outputText>
+			</td>
+		</tr>
+		<tr>				
+			<td>
+				<h:outputText style="font-weight:bold" value="Gestor Solicitante: "></h:outputText>
+			</td>
+			<td colspan="5">
+				<h:outputText value="#{datosCargoComision.expediente.empleado.codigo} "></h:outputText>
+				<h:outputText value="#{datosCargoComision.expediente.empleado.nombres} "></h:outputText>
+				<h:outputText value="#{datosCargoComision.expediente.empleado.apepat}"></h:outputText>
+				<h:outputText value="           "></h:outputText>
+				<h:outputText value="#{datosCargoComision.expediente.oficina.codigo} - #{datosCargoComision.expediente.oficina.descripcion},#{datosCargoComision.expediente.oficina.territorio.descripcion}" />
+			</td>
+		</tr>
+		<tr>
+			<td>				 
+				<h:outputText style="font-weight:bold" value="Código Central:"></h:outputText>
+			</td>
+			<td>
+				<h:outputText value="#{datosCargoComision.expediente.cliente.codigoCentral}"></h:outputText>
+			</td>
+			<td>
+				<h:outputText style="font-weight:bold" value="Tipo DOI:"></h:outputText>
+			</td>
+			<td>
+				<h:outputText value="#{datosCargoComision.expediente.cliente.tipoDoiDes}"></h:outputText>
+			</td>
+			<td>
+				<h:outputText style="font-weight:bold" value="Número DOI:"></h:outputText>
+			</td>
+			<td>
+				<h:outputText value="#{datosCargoComision.expediente.cliente.numeroDoi}"></h:outputText>
+			</td>
+		</tr>
+		<tr>
+			<td>	
+				<h:outputText style="font-weight:bold" value="Razón Social:"></h:outputText>
+			</td>
+			<td>
+				<h:outputText value="#{datosCargoComision.expediente.cliente.razonSocial}"></h:outputText>
+			</td>
+			<td>
+				<h:outputText style="font-weight:bold" value="Tipo de PJ:"></h:outputText>
+			</td>
+			<td>
+				<h:outputText value="#{datosCargoComision.expediente.codTipoPj} - #{datosCargoComision.expediente.desTipoPj}"></h:outputText>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<h:outputText style="font-weight:bold" value="¿Exonerado?:"></h:outputText>
+			</td>
+			<td>
+				<h:outputText value="#{datosCargoComision.exoneradoComision}"></h:outputText>
+			</td>
+			<td>
+				<h:outputText style="font-weight:bold" value="Cuenta:"></h:outputText>
+			</td>
+			<td colspan="3">
+				<h:outputText value="#{datosCargoComision.expediente.cuentaCobroComision} - #{datosCargoComision.expediente.numeroCuentaCobro}" rendered="#{datosCargoComision.modoConsulta}"/>
+				<h:selectOneMenu id="numCuentaCobro"
+						value="#{datosCargoComision.numCuenta}" 
+						rendered="#{!datosCargoComision.modoConsulta}">
+	            	<f:selectItems value="#{datosCargoComision.listaCuentas}" />
+				</h:selectOneMenu>
+				<h:message for="numCuentaCobro" id="idMsgNumCuentaCobro" errorClass="mensaje-error" rendered="#{!datosCargoComision.modoConsulta}" />
+			</td>
+		</tr>
+	</table>
+	
+	</custom:tab>
+</custom:tabView>
+</ui:composition>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_6.xsd" version="6">
+	<display-name>BBVA_CTACTE_WEB_WAS</display-name>
+	<module id="Module_1390404672317">
+		<ejb>BBVA_CTACTE_EJB.jar</ejb>
+	</module>
+	<module id="Module_1394203922724">
+		<web>
+			<web-uri>BBVA_CTACTE_GUI.war</web-uri>
+			<context-root>BBVA_CTACTE_GUI</context-root>
+		</web>
+	</module>
+	<module id="Module_1394203931803">
+		<web>
+			<web-uri>BBVA_CTACTE_Servicio.war</web-uri>
+			<context-root>BBVA_CTACTE_Servicio</context-root>
+		</web>
+	</module>
+	<module id="Module_1416584600336">
+		<web>
+			<web-uri>BBVA_CTACTE_LDAP_CARGA.war</web-uri>
+			<context-root>BBVA_CTACTE_LDAP_CARGA</context-root>
+		</web>
+	</module>
+
+	
+</application>
