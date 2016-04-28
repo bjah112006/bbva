@@ -226,8 +226,8 @@ public class ExpedienteDAOImpl extends GenericDAO<Expediente, Integer> implement
 		queryString.append(" EXP.DT_ULT_FECH_MESA_FIR  , ");
 		queryString.append(" EXP.DT_ULT_FECH_REAL_BAST  , ");
 		queryString.append(" EXP.DT_ULT_FECH_VER_RES_TRA  , ");
-		queryString.append(" EXP.FLAG_OBS_MES_DOC  , ");
-		queryString.append(" EXP.FLAG_OBS_MES_FIR ,   ");
+		queryString.append(" CASE WHEN CANT_REP_MESA_DOC>1 THEN 'SI' ELSE 'NO' END FLAG_OBS_MES_DOC, ");
+		queryString.append(" CASE WHEN CANT_REP_MESA_FIR>1 THEN 'SI' ELSE 'NO' END FLAG_OBS_MES_FIR, ");
 		queryString.append(" EXP.FLAG_CIERRE_AUTOMATICO  ");
 		queryString.append(" FROM TBL_CE_IBM_EXPEDIENTE_CC EXP  ");
 		queryString.append(" INNER JOIN TBL_CE_IBM_OPERACION_CC OPE ON OPE.ID = EXP.ID_OPERACION_FK ");
@@ -237,6 +237,7 @@ public class ExpedienteDAOImpl extends GenericDAO<Expediente, Integer> implement
 		queryString.append(" INNER JOIN TBL_CE_IBM_TERRITORIO T  ON T.ID = O.ID_TERRITORIO_FK ");
 		queryString.append(" INNER JOIN TBL_CE_IBM_ESTADO_EXP_CC EST ON EST.ID = EXP.ID_ESTADO_FK ");
 		queryString.append(" LEFT JOIN TBL_CE_IBM_CASO_NEGOCIO_CC CN ON CN.ID = EXP.ID_CASO_NEGOCIO_FK  ");
+		queryString.append(" LEFT JOIN V_REPROCESO_MD_MF VRDF ON VRDF.ID_EXPEDIENTE_CC_FK=EXP.ID");
 		queryString.append(" WHERE 1 = 1 ");
 		
 		if(!vo.getCodigoCentral().isEmpty()){
@@ -407,10 +408,10 @@ public class ExpedienteDAOImpl extends GenericDAO<Expediente, Integer> implement
 	}
 
 	public String getFLag(String flag){
-		flag = "";
+		flag = (flag == null?"":flag);
 		if(flag.equalsIgnoreCase("1")){
 			flag = "SI";
-		}else if (flag.equalsIgnoreCase("2")){
+		}else{
 			flag= "NO";
 		}
 		return flag;
