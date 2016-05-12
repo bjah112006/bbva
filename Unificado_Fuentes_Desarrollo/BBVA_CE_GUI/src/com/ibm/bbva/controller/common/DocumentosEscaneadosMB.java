@@ -55,6 +55,12 @@ public class DocumentosEscaneadosMB extends AbstractMBean {
 	private String tamanoMaxPDF;
 	private Empleado empleado;
 	
+	private String rutaOrigenDescargaJar;
+	private String rutaDestinoDescargaJar;
+	private String nombreJar;
+	private String extencionJar;
+	private String raizTransferencias;
+	
 	private String documentosFaltantes = "";
 	private String tramaTipoDocumentos = "";
 	
@@ -111,8 +117,15 @@ public class DocumentosEscaneadosMB extends AbstractMBean {
 			LOG.info("pathEscaneados = "+pathEscaneados+" = "+Constantes.PATH_ESCANEO);
 			
 		//	this.pathTransferencias = Constantes.DIRECTORIO_DOC_ESCANEADOS;
-			this.pathTransferencias = parametrosConfBean.buscarPorVariable(Constantes.ID_APLICATIVO_TC, "CONSTANTE_FTP_DIRECTORIO_DOC_ESCANEADOS").getValorVariable();
-			LOG.info("pathTransferencias = "+pathTransferencias+" = "+Constantes.DIRECTORIO_DOC_ESCANEADOS);
+			String carpetaTemDocsPorExp = (String) getObjectSession(Constantes.CARPETA_DOC_ESCANEADOS_POR_EXPEDIENTE);
+			if(carpetaTemDocsPorExp != null){
+				this.pathTransferencias = parametrosConfBean.buscarPorVariable(Constantes.ID_APLICATIVO_TC, "CONSTANTE_FTP_DIRECTORIO_DOC_ESCANEADOS").getValorVariable()+"\\\\"+carpetaTemDocsPorExp;
+				LOG.info("pathTransferencias = "+pathTransferencias+" = "+Constantes.DIRECTORIO_DOC_ESCANEADOS);
+			}else{
+				this.pathTransferencias = parametrosConfBean.buscarPorVariable(Constantes.ID_APLICATIVO_TC, "CONSTANTE_FTP_DIRECTORIO_DOC_ESCANEADOS").getValorVariable();
+				LOG.info("pathTransferencias = "+pathTransferencias+" = "+Constantes.DIRECTORIO_DOC_ESCANEADOS);
+
+			}
 			
 		//	this.pathDescargados = Constantes.DIRECTORIO_DOC_ESCANEADOS_BAJADA;
 			this.pathDescargados =parametrosConfBean.buscarPorVariable(Constantes.ID_APLICATIVO_TC, "CONSTANTE_FTP_DIRECTORIO_DOC_ESCANEADOS_BAJADA").getValorVariable();
@@ -128,7 +141,21 @@ public class DocumentosEscaneadosMB extends AbstractMBean {
 			LOG.info("idSistema = "+idSistema);
 			
 			this.tamanoMaxPDF = parametrosConfBean.buscarPorVariable(Constantes.ID_APLICATIVO_TC, Constantes.TAMANO_MAXIMO_ARCHIVO_MB).getValorVariable();
-			LOG.info("tamanoMaxPDF = "+tamanoMaxPDF);			
+			LOG.info("tamanoMaxPDF = "+tamanoMaxPDF);
+			
+			
+			this.rutaOrigenDescargaJar = (String) getObjectSession(Constantes.RUTA_ORIGEN_DESCARGA_JAR);
+			LOG.info("rutaOrigenDescargaJar = "+rutaOrigenDescargaJar);
+			this.rutaDestinoDescargaJar =(String) getObjectSession(Constantes.RUTA_DESTINO_DESCARGA_JAR);
+			LOG.info("rutaDestinoDescargaJar = "+rutaDestinoDescargaJar);
+			this.nombreJar = (String) getObjectSession(Constantes.NOMBRE_JAR);
+			LOG.info("nombreJar = "+nombreJar);
+			this.extencionJar = (String) getObjectSession(Constantes.EXTENCION_JAR);
+			LOG.info("extencionJar = "+extencionJar);
+			
+			this.raizTransferencias = parametrosConfBean.buscarPorVariable(Constantes.ID_APLICATIVO_TC, "CONSTANTE_FTP_DIRECTORIO_DOC_ESCANEADOS").getValorVariable();
+			LOG.info("raizTransferencias = "+raizTransferencias);
+			
 		}else{
 			LOG.info("No es necesario buscar rutas... PATH");
 		}
@@ -476,6 +503,36 @@ public class DocumentosEscaneadosMB extends AbstractMBean {
 	}
 	public void setTramaDocumentosCargados(String tramaDocumentosCargados) {
 		this.tramaDocumentosCargados = tramaDocumentosCargados;
+	}
+	public String getRutaOrigenDescargaJar() {
+		return rutaOrigenDescargaJar;
+	}
+	public void setRutaOrigenDescargaJar(String rutaOrigenDescargaJar) {
+		this.rutaOrigenDescargaJar = rutaOrigenDescargaJar;
+	}
+	public String getRutaDestinoDescargaJar() {
+		return rutaDestinoDescargaJar;
+	}
+	public void setRutaDestinoDescargaJar(String rutaDestinoDescargaJar) {
+		this.rutaDestinoDescargaJar = rutaDestinoDescargaJar;
+	}
+	public String getNombreJar() {
+		return nombreJar;
+	}
+	public void setNombreJar(String nombreJar) {
+		this.nombreJar = nombreJar;
+	}
+	public String getExtencionJar() {
+		return extencionJar;
+	}
+	public void setExtencionJar(String extencionJar) {
+		this.extencionJar = extencionJar;
+	}
+	public String getRaizTransferencias() {
+		return raizTransferencias;
+	}
+	public void setRaizTransferencias(String raizTransferencias) {
+		this.raizTransferencias = raizTransferencias;
 	}
 	
 
