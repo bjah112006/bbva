@@ -139,7 +139,8 @@ public class VerificarResultadoDomiciliariaMB extends AbstractMBean {
 			   }
 			   grabarExp(Constantes.ACCION_BOTON_RESOLVER, estado);
 		       addObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION, Constantes.FLAG_COPIA_ARCHIVO);
-		       addObjectSession(Constantes.ID_EXPEDIENTE_SESION, String.valueOf(expediente).toString());
+		       //addObjectSession(Constantes.ID_EXPEDIENTE_SESION, String.valueOf(expediente).toString());
+		       addObjectSession(Constantes.ID_EXPEDIENTE_SESION, String.valueOf(expediente.getId()));
 		       //return "/bandejaPendientes/formBandejaPendientes?faces-redirect=true";	
 		       return "/moverArchivos/formMoverArchivos?faces-redirect=true";
 			}
@@ -209,7 +210,8 @@ public class VerificarResultadoDomiciliariaMB extends AbstractMBean {
 				panelDocumentos.actualizarObservados();
 		       
 				addObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION, Constantes.FLAG_COPIA_ARCHIVO);
-				addObjectSession(Constantes.ID_EXPEDIENTE_SESION, String.valueOf(expediente).toString());
+				//addObjectSession(Constantes.ID_EXPEDIENTE_SESION, String.valueOf(expediente).toString());
+				addObjectSession(Constantes.ID_EXPEDIENTE_SESION, String.valueOf(expediente.getId()));
 				//return "/bandejaPendientes/formBandejaPendientes?faces-redirect=true";
 				return "/moverArchivos/formMoverArchivos?faces-redirect=true";
 			}
