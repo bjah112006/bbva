@@ -41,6 +41,14 @@ public abstract class AbstractLinksMBean extends AbstractMBean {
 		removeObjectSession(Constantes.BAND_LIST_TERR);
 		removeObjectSession(Constantes.BAND_LIST_EST);
 		
+		//VARIABLES DEL JAR DE TRANSFERENCIA
+		//removeObjectSession(Constantes.RUTA_ORIGEN_DESCARGA_JAR);	
+		//removeObjectSession(Constantes.RUTA_DESTINO_DESCARGA_JAR);
+		//removeObjectSession(Constantes.NOMBRE_JAR);
+		//removeObjectSession(Constantes.EXTENCION_JAR);
+		removeObjectSession(Constantes.CARPETA_DOC_ESCANEADOS_POR_EXPEDIENTE);
+		
+		
 		
 		//removeObjectSession(Constantes.PARAMETROS_SESION);
 	}
