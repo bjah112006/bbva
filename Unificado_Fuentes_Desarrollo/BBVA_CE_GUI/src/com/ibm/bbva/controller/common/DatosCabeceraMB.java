@@ -5,6 +5,8 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -46,9 +48,11 @@ import com.ibm.bbva.util.AyudaCargaLdap;
 import com.ibm.bbva.util.ExpedienteTCWrapper;
 import com.ibm.bbva.util.Util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 
 @SuppressWarnings("serial")
 @ManagedBean(name = "datosCabecera")
@@ -106,12 +110,13 @@ public class DatosCabeceraMB extends AbstractMBean {
 	private DescargaLDAPBeanLocal descargaLDAPBeanLocal;
 	
 	private AyudaCargaLdap ayudaCargaLdap;
-	
+			
     public DatosCabeceraMB() {
 	}
     
     @PostConstruct
     public void init() {
+    	       
     	String user = "";
 	    LOG.info("Usuario : {}",user);
 	    ServiciosSeguridadBbva ssBbva = new ServiciosSeguridadBbva((HttpServletRequest) getExternalContext().getRequest());
@@ -914,6 +919,27 @@ public class DatosCabeceraMB extends AbstractMBean {
 	    //muestra el menu correspondiente
 	    try{
 			menu.restringuirAcceso();
+			
+			//String relativePath = getExternalContext().getRealPath("");
+			String rutaOrigen = parametrosConfBean.buscarPorVariable(1, "RUTA_ORIGEN_DESCARGA_JAR").getValorVariable();
+			//rutaOrigen = relativePath + rutaOrigen;
+			LOG.info("RUTA_ORIGEN_DESCARGA_JAR::: " +rutaOrigen);
+			addObjectSession(Constantes.RUTA_ORIGEN_DESCARGA_JAR, rutaOrigen);	
+			//String url = "\\applet\\";
+			
+			String rutaDestino = parametrosConfBean.buscarPorVariable(1, "RUTA_DESTINO_DESCARGA_JAR").getValorVariable();
+			LOG.info("RUTA_DESTINO_DESCARGA_JAR::: " +rutaDestino);
+			addObjectSession(Constantes.RUTA_DESTINO_DESCARGA_JAR, rutaDestino);
+						
+			String nombreArchivo = parametrosConfBean.buscarPorVariable(1, "NOMBRE_JAR").getValorVariable();
+			LOG.info("NOMBRE_JAR::: " +nombreArchivo);
+			addObjectSession(Constantes.NOMBRE_JAR, nombreArchivo);
+			
+			String extencionArchivo = parametrosConfBean.buscarPorVariable(1, "EXTENCION_JAR").getValorVariable();
+			LOG.info("EXTENCION_JAR::: " +extencionArchivo);
+			addObjectSession(Constantes.EXTENCION_JAR, extencionArchivo);
+			
+			
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
