@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,9 +30,8 @@ public class FTP extends ArchivoApplet implements FTPListener {
 
 	private static final SimpleLogger LOG = SimpleLogger.getLogger(FTP.class);
 	
-	//private JLabel texto1 = new JLabel ();
-	private JProgressBar progressBar = new JProgressBar ();
-	private List<JLabel> listLabels = new ArrayList<JLabel>();
+	//private JProgressBar progressBar = new JProgressBar ();
+	//private List<JLabel> listLabels = new ArrayList<JLabel>();
 	
 	private int bytes;
 	private String host;
@@ -52,17 +52,20 @@ public class FTP extends ArchivoApplet implements FTPListener {
     private String servidorPDF;
     private String puertoPDF;
     private int numReintentos;
+    private String carpetaTemporal;
+    private String descargados;
+    private String transferencias;
+    private String cleanTransferDir;
+    private String nombreJarVersion;
     
 	
 	public FTP() {
 		bytes = 0;
-		progressBar.setStringPainted(true);
-		Container container = getContentPane();
-		container.setLayout(new GridLayout (1, 1));
-		//container.add(texto1);
-		container.add(progressBar);
-		//texto1.setText("Archivo");
-		//texto1.setHorizontalAlignment(JLabel.CENTER);
+		//progressBar.setStringPainted(true);
+		//Container container = getContentPane();
+		//container.setLayout(new GridLayout (1, 1));
+		//container.add(progressBar);
+		
 	}
 	
 	@Override
@@ -72,6 +75,7 @@ public class FTP extends ArchivoApplet implements FTPListener {
         loadParameters();
         LOG.info("Entro Upload");
         upload();
+        cerrarVentana();
 	}
     
     public void loadParameters() {
@@ -83,7 +87,8 @@ public class FTP extends ArchivoApplet implements FTPListener {
     	servidorPDF = getParameter(Parametros.SERVIDOR_CONV_PDF);
         puertoPDF = getParameter(Parametros.PUERTO_CONV_PDF);
     	LOG.info("servidor : "+servidor+"  --  codConv : "+codConv);
-        logPath = getParameter("pathLog");
+        //logPath = getParameter("pathLog");
+    	logPath = getParameter("log");
         LOG.info(logPath);  
         host=getParameter("host");
         LOG.info(host);
@@ -96,11 +101,22 @@ public class FTP extends ArchivoApplet implements FTPListener {
         tasaKBytes = Integer.parseInt(getParameter("tasaKBytes") == null ? "0" : getParameter("tasaKBytes"));
         LOG.info(tasaKBytes);
         escaneosPath = getParameter("escaneosPath");
+        //escaneosPath = getParameter("transferencias");
         LOG.info(escaneosPath);
         numeroexpediente = getParameter("prefix");
         LOG.info(numeroexpediente);
         listaDocumentosAdjuntos = getParameter("listaDocumentosAdjuntos");
         LOG.info(listaDocumentosAdjuntos);
+        descargados = getParameter("descargados");
+        LOG.info(descargados);
+        transferencias = getParameter("transferencias");
+        LOG.info(transferencias);
+        cleanTransferDir = getParameter("cleanTransferDir");
+        LOG.info(cleanTransferDir);
+        carpetaTemporal = getParameter("carpetaTemporal");
+        LOG.info(carpetaTemporal);
+        nombreJarVersion = getParameter("nombreJarVersion");
+        LOG.info(nombreJarVersion);
         String tramaTIF = getParameter("tramaTIF");
         avanzados = new HashSet<String> (10);
         if (tramaTIF!=null && !tramaTIF.equals("")) {
@@ -118,7 +134,7 @@ public class FTP extends ArchivoApplet implements FTPListener {
         }
     }
     
-    public void upload() {
+    /*public void upload() {
     	LOG.info("ejecutarSubidaDeArchivos " + host);
         if (codConv!=null && !"".equals(codConv)) {
         	StringTokenizer st = new StringTokenizer (codConv, ";");
@@ -170,6 +186,45 @@ public class FTP extends ArchivoApplet implements FTPListener {
             thread.start();
         }
 
+    }*/
+    
+    public void upload() {
+    	LOG.info("ejecutarSubidaDeArchivos para docs_send");
+    	LOG.info("buscando carpeta local......");
+    	//File dirN = new File(rutaDestino,"BBVASendDocsFTP.jar");
+    	//LOG.info("dirN......" + dirN);
+    	//File dirN = new File("D:\\ContratacionElectronica\\Lib_TC\\","BBVASendDocsFTP.jar");
+    	//File dirN = new File(Parametros.DIRECTORIO_BASE + Parametros.DIRECTORIO_LIB,Parametros.JAR_TRANSFERENCIAS);
+    	File dirN = new File(Parametros.DIRECTORIO_BASE + Parametros.DIRECTORIO_LIB,nombreJarVersion+".jar");
+    	//String javaHome="C:\\Program Files (x86)\\Java\\jdk1.7.0.79\\bin\\";
+    	//File dirN = new File("D:\\ContratacionElectronica\\Transferencias_TC");
+		if (dirN.exists()) {
+			
+			LOG.info("carpeta encontrada......");
+			try {
+				LOG.info("Se ejecuta JAR de la ruta......" + dirN);
+				/*LOG.info("Con parametros......" + codConv +" "+ servidor +" "+  puerto +" "+  servidorPDF +" "+  puertoPDF +" "+  logPath +" "+ 
+							host +" "+  user +" "+  password +" "+  periodo +" "+  tasaKBytes +" "+  escaneosPath +" "+  numeroexpediente +" "+ 
+						    listaDocumentosAdjuntos +" "+  numReintentos +" "+  descargados +" "+  transferencias +" "+  cleanTransferDir +" "+ 
+							carpetaTemporal);*/
+				LOG.info("TODO JUNTOS......" + 
+						"cmd /c start "+dirN+" \""+codConv+"\" \""+servidor+"\" \""+puerto+"\" \""+servidorPDF+"\" \""+puertoPDF+"\" \""+logPath+"\" \""+host+"\" \""+user+"\" \""+password+"\" \""+periodo+"\" \""+tasaKBytes+"\" \""+escaneosPath+"\" \""+numeroexpediente+"\" \""+listaDocumentosAdjuntos+"\" \""+numReintentos+"\" \""+descargados+"\" \""+transferencias+"\" \""+cleanTransferDir+"\" \""+carpetaTemporal+"\"");
+				//Runtime.getRuntime().exec("java -jar "+dirN+"BBVASendDocsFTP.jar codConv servidor puerto servidorPDF puertoPDF logPath host user password periodo tasaKBytes escaneosPath numeroexpediente listaDocumentosAdjuntos numReintentos descargados transferencias cleanTransferDir carpetaTemporal");
+				//Runtime.getRuntime().exec(javaHome+"java -jar "+dirN+" \""+codConv+"\" \""+servidor+"\" \""+puerto+"\" \""+servidorPDF+"\" \""+puertoPDF+"\" \""+logPath+"\" \""+host+"\" \""+user+"\" \""+password+"\" \""+periodo+"\" \""+tasaKBytes+"\" \""+escaneosPath+"\" \""+numeroexpediente+"\" \""+listaDocumentosAdjuntos+"\" \""+numReintentos+"\" \""+descargados+"\" \""+transferencias+"\" \""+cleanTransferDir+"\" \""+carpetaTemporal+"\"");
+				
+				Runtime.getRuntime().exec("cmd /c start "+dirN+" \""+codConv+"\" \""+servidor+"\" \""+puerto+"\" \""+servidorPDF+"\" \""+puertoPDF+"\" \""+logPath+"\" \""+host+"\" \""+user+"\" \""+password+"\" \""+periodo+"\" \""+tasaKBytes+"\" \""+escaneosPath+"\" \""+numeroexpediente+"\" \""+listaDocumentosAdjuntos+"\" \""+numReintentos+"\" \""+descargados+"\" \""+transferencias+"\" \""+cleanTransferDir+"\" \""+carpetaTemporal+"\"");
+								
+				LOG.info("SE TERMINO LA EJECUCION DEL JAR LOCAL::");
+			} catch (IOException e) {
+				// TODO Bloque catch generado automáticamente
+				e.printStackTrace();
+			}
+			LOG.info("jar ejecutado......");
+		}else{
+			LOG.info("carpeta  no encontrada......");
+		}
+    	
+
     }
     
     private String obtenerTexto (String codigo) {
@@ -195,7 +250,7 @@ public class FTP extends ArchivoApplet implements FTPListener {
         return null;
     }
     
-    public void errorArchivo(String archivo, int reintentos) {
+    /*public void errorArchivo(String archivo, int reintentos) {
 		for (JLabel labelArchivo : listLabels) {
 			if (labelArchivo.getText().indexOf(archivo) > -1) {
 				labelArchivo.setText("- "+archivo+": Error en transferencia ("+reintentos+" reintentos restantes).");
@@ -205,7 +260,7 @@ public class FTP extends ArchivoApplet implements FTPListener {
 		}
 	}
     
-    public void exitoArchivo(String archivo) {
+    /*public void exitoArchivo(String archivo) {
 		for (JLabel labelArchivo : listLabels) {
 			if (labelArchivo.getText().indexOf(archivo) > -1) {
 				labelArchivo.setText("- "+archivo+": Transferencia exitosa.");
@@ -213,18 +268,18 @@ public class FTP extends ArchivoApplet implements FTPListener {
 				break;
 			}
 		}
-	}
+	}*/
     
 
-	public void setAvance(int bytesLeidos) {
+	/*public void setAvance(int bytesLeidos) {
 		bytes += bytesLeidos;
 		progressBar.setValue(bytes);
-	}
+	}*/
 
 	public void cerrarVentana() {
 		try {
             this.getAppletContext().showDocument(new URL("javascript:accionCerrar()"));
-        } catch (MalformedURLException ex) {
+		} catch (MalformedURLException ex) {
         	LOG.error("error javascript", ex);
         }
 	}
@@ -238,7 +293,7 @@ public class FTP extends ArchivoApplet implements FTPListener {
         }
 	}
 
-	public void nuevoArchivo(String archivo) {
+	/*public void nuevoArchivo(String archivo) {
 		//texto1.setText(archivo);
 		for (JLabel labelArchivo : listLabels) {
 			if (labelArchivo.getText().indexOf(archivo) > -1) {
@@ -247,11 +302,11 @@ public class FTP extends ArchivoApplet implements FTPListener {
 				break;
 			}
 		}
-	}
+	}*/
 
-	public void setTamanio(int tamanio) {
+	/*public void setTamanio(int tamanio) {
 		this.tamanioArchivo = tamanio;
 		progressBar.setMaximum(tamanioArchivo);
-	}
+	}*/
 	
 }
