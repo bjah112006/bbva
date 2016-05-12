@@ -1,6 +1,7 @@
 <ui:composition
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets">
 
@@ -121,7 +122,29 @@
 						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaPend.obtenerEstiloColumnaImg('alerta')}"/>
 					</h:commandLink>
 				</f:facet>
-				<h:graphicImage value="#{item.urlColor}"/>
+				<h:graphicImage value="#{item.urlColor}" style="#{(item.codigoTarea != null) ?'' : 'display:none;'}" />
+				
+				<h:graphicImage value="#{resource['images:Advertencia_bandeja.gif']}" style="#{(item.codigoTarea == null) ?'' : 'display:none;'}"/>
+				
+				<!-- h:graphicImage value="#{item.urlColorAlerta(item.codigoTarea)}"/-->
+				
+				<!--  c:if test="#{item.codigoTarea == 'null'}">
+    				<h:graphicImage value="#{resource['images:Advertencia_bandeja.gif']}"/>
+    				
+    			</c:if-->
+				<!-- c:if test="#{item.codigoTarea != ''}">
+    				<h:graphicImage value="#{item.urlColor}"/>
+    			</c:if-->
+				
+				<!--  c:choose>
+    				<c:when test="#{empty item.codigoTarea or item.codigoTarea =='null' or item.codigoTarea == '0'}">
+        				<h:graphicImage value="#{resource['images:advertencia.jpg']}"/>
+    				</c:when>
+    				<c:otherwise>
+        				<h:graphicImage value="#{item.urlColor}"/>
+    				</c:otherwise>
+				</c:choose-->
+	
 			</h:column>
 			<h:column nowrap="true" align="center" width="6%">
 				<f:facet name="header">
@@ -183,7 +206,9 @@
 						<h:graphicImage value="/resources/images/1x1.gif" styleClass="#{tablaBandejaPend.obtenerEstiloColumnaImg('codigoTarea')}"/>
 					</h:commandLink>
 				</f:facet>
-				<h:outputText value="#{item.codigoTarea}"></h:outputText>
+				<!-- h:outputText value="#{item.codigoTarea}"></h:outputText-->
+				<!-- h:outputText value="#{item.codigoTarea=='' ? 'En proceso' : item.codigoTarea}" /-->
+				<h:outputText value="#{item.codigoTarea==null ? 'En proceso' : item.codigoTarea}" />
 			</h:column>
 									
 			<h:column style="white-space : normal ; word-wrap: break-word; " nowrap="true" align="center" width="80px">
