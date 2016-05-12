@@ -38,6 +38,9 @@ public class MoverArchivosMB extends AbstractMBean {
 	private String carpetaFTP;
 	private String pathDescargados;
 	private String listaDocumentosAdjuntos;
+	private String carpetaTemporal;
+	private String transferencias;
+	private String nombreJarVersion;
 
 	public MoverArchivosMB() {		
 
@@ -75,8 +78,30 @@ public class MoverArchivosMB extends AbstractMBean {
 		}
 		
 		//escaneosPathParam = Constantes.DIRECTORIO_DOC_ESCANEADOS;
-		escaneosPathParam = parametrosConfBean.buscarPorVariable(Constantes.ID_APLICATIVO_TC, "CONSTANTE_FTP_DIRECTORIO_DOC_ESCANEADOS").getValorVariable();
-		LOG.info("escaneosPathParam "+escaneosPathParam);
+		//Obtener nombre de la carpeta que contiene todos los documentos para el exp especificado
+		String carpetaTemDocsPorExp = (String) getObjectSession(Constantes.CARPETA_DOC_ESCANEADOS_POR_EXPEDIENTE);
+		if(carpetaTemDocsPorExp != null){
+			escaneosPathParam = parametrosConfBean.buscarPorVariable(Constantes.ID_APLICATIVO_TC, "CONSTANTE_FTP_DIRECTORIO_DOC_ESCANEADOS").getValorVariable();
+			LOG.info("escaneosPathParam "+escaneosPathParam);
+			transferencias = escaneosPathParam+"\\\\"+carpetaTemDocsPorExp;
+			LOG.info("transferencias "+transferencias);
+			this.carpetaTemporal = carpetaTemDocsPorExp;
+			LOG.info("carpetaTemporal "+carpetaTemporal);
+			this.nombreJarVersion = (String) getObjectSession(Constantes.NOMBRE_JAR);
+			LOG.info("nombreJarVersion "+nombreJarVersion);
+
+		}else{
+			escaneosPathParam = parametrosConfBean.buscarPorVariable(Constantes.ID_APLICATIVO_TC, "CONSTANTE_FTP_DIRECTORIO_DOC_ESCANEADOS").getValorVariable();
+			LOG.info("escaneosPathParam "+escaneosPathParam);
+			transferencias = escaneosPathParam;
+			LOG.info("transferencias "+transferencias);
+			this.carpetaTemporal = "";
+			LOG.info("carpetaTemporal "+carpetaTemporal);
+			this.nombreJarVersion = "";
+			LOG.info("nombreJarVersion "+nombreJarVersion);
+		}
+
+		
 		//this.pathLog = Constantes.DIRECTORIO_LOG_DOC_ESCANEADOS;
 		this.pathLog = parametrosConfBean.buscarPorVariable(Constantes.ID_APLICATIVO_TC, "CONSTANTE_FTP_DIRECTORIO_LOG_DOC_ESCANEADOS").getValorVariable();
 		LOG.info("pathLog "+pathLog);
@@ -90,6 +115,7 @@ public class MoverArchivosMB extends AbstractMBean {
 		LOG.info("pathDescargados "+pathDescargados);
 		this.listaDocumentosAdjuntos = String.valueOf(getObjectSession(Constantes.LISTA_DOCUMENTOS_ADJUNTOS));
 		LOG.info("listaDocumentosAdjuntos "+listaDocumentosAdjuntos);
+		
 		removeObjectSession(Constantes.ID_EXPEDIENTE_SESION);	
 		removeObjectSession(Constantes.LISTA_DOCUMENTOS_ADJUNTOS);
 	}
@@ -198,6 +224,30 @@ public class MoverArchivosMB extends AbstractMBean {
 
 	public void setListaDocumentosAdjuntos(String listaDocumentosAdjuntos) {
 		this.listaDocumentosAdjuntos = listaDocumentosAdjuntos;
+	}
+
+	public String getCarpetaTemporal() {
+		return carpetaTemporal;
+	}
+
+	public void setCarpetaTemporal(String carpetaTemporal) {
+		this.carpetaTemporal = carpetaTemporal;
+	}
+
+	public String getTransferencias() {
+		return transferencias;
+	}
+
+	public void setTransferencias(String transferencias) {
+		this.transferencias = transferencias;
+	}
+
+	public String getNombreJarVersion() {
+		return nombreJarVersion;
+	}
+
+	public void setNombreJarVersion(String nombreJarVersion) {
+		this.nombreJarVersion = nombreJarVersion;
 	}
 	
 	
