@@ -34,31 +34,31 @@ public class MensajesMB extends AbstractMBean {
 			switch ((Integer)tipo) {
 		        case Constantes.TIPO_MENSAJE_GESTIONAR_SUBSANAR_OPERACION:
 		    	    msg = getObjectSession(Constantes.DESCRIPCION_MENSAJE_CORREGIDO);
-		    	    mostrarMensajeGestionarSubsanrOperacionBD((String)msg, expediente.getId());
+		    	    mostrarMensajeGestionarSubsanrOperacionBD((String)msg, Long.toString(expediente.getId()));
 		            break;
 		        case Constantes.TIPO_MENSAJE_EVALUAR_DEVOLUCION_RIESGOS:
 		    	    msg = getObjectSession(Constantes.DESCRIPCION_MENSAJE_CORREGIDO);
-		    	    mostrarMensajeEvaluarDevolucionRiesgosBD((String)msg, expediente.getId());
+		    	    mostrarMensajeEvaluarDevolucionRiesgosBD((String)msg, Long.toString(expediente.getId()));
 		            break;
 		        case Constantes.TIPO_MENSAJE_CONSULTAR_CLIENTE_MODIFICACIONES:
 		        	msg = getObjectSession(Constantes.DESCRIPCION_MENSAJE_CORREGIDO);
-		    	    mostrarMensajeConsultarClienteModificacionesBD((String)msg, expediente.getId());
+		    	    mostrarMensajeConsultarClienteModificacionesBD((String)msg, Long.toString(expediente.getId()));
 		            break;			
 			    case Constantes.TIPO_MENSAJE_REGISTRAR_EXPEDIENTE_CU25:
 			    	msg = getObjectSession(Constantes.DESCRIPCION_MENSAJE_CORREGIDO);
-			    	mostrarMensajeRegistrarExpedienteCu25BD((String)msg, expediente.getId());
+			    	mostrarMensajeRegistrarExpedienteCu25BD((String)msg, Long.toString(expediente.getId()));
 			        break;
 			    case Constantes.TIPO_MENSAJE_REGISTRAR_EXPEDIENTE_CU23:
 			    	msg = getObjectSession(Constantes.DESCRIPCION_MENSAJE_CORREGIDO);
-			    	mostrarMensajeRegistrarExpedienteCu23BD((String)msg, expediente.getId());
+			    	mostrarMensajeRegistrarExpedienteCu23BD((String)msg, Long.toString(expediente.getId()));
 			        break;
 		        case Constantes.TIPO_MENSAJE_REGULARIZAR_ESCANEAR_DOCUMENTOS:
 		        	msg = getObjectSession(Constantes.DESCRIPCION_MENSAJE_CORREGIDO);
-		        	mostrarMensajeRegularizarEscanearDocumentosBD((String)msg, expediente.getId());
+		        	mostrarMensajeRegularizarEscanearDocumentosBD((String)msg, Long.toString(expediente.getId()));
 			        break;			
 			    case Constantes.TIPO_MENSAJE_COORDINAR_CLIENTE_SUBSANAR:
 			    	msg = getObjectSession(Constantes.DESCRIPCION_MENSAJE_CORREGIDO);
-			    	mostrarMensajeCoordinarClienteSubsanarBD((String)msg, expediente.getId());
+			    	mostrarMensajeCoordinarClienteSubsanarBD((String)msg, Long.toString(expediente.getId()));
 				    break;	
 				case Constantes.TIPO_MENSAJE_CANCELADO:
 					mostrarMensajeCancelado(expediente.getId());
@@ -70,11 +70,11 @@ public class MensajesMB extends AbstractMBean {
 					break;
 				case Constantes.TIPO_MENSAJE_PREREGISTRADO:
 					msg = getObjectSession(Constantes.DESCRIPCION_MENSAJE_PRE_REGISTRADO);
-					mostrarMensajePreRegistroBD((String)msg, expediente.getId());
+					mostrarMensajePreRegistroBD((String)msg, Long.toString(expediente.getId()));
 					break;
 				case Constantes.TIPO_MENSAJE_REGISTRADO:
 					msg = getObjectSession(Constantes.DESCRIPCION_MENSAJE_REGISTRADO);
-					mostrarMensajeRegistradoBD((String)msg, expediente.getId());
+					mostrarMensajeRegistradoBD((String)msg, Long.toString(expediente.getId()));
 					break;
 				case Constantes.TIPO_MENSAJE_NO_EXISTE_ROLES:					
 					mostrarMensajeNoExisteRoles((String) mensajeRol);
@@ -116,7 +116,7 @@ public class MensajesMB extends AbstractMBean {
 		this.mensajeNoCarterizacion = mensajeNoCarterizacion;
 	}
 	
-	private void mostrarMensajeRegistradoBD (String mensaje, long nroExpediene) {
+	/*private void mostrarMensajeRegistradoBD (String mensaje, long nroExpediene) {
 		flCopiaArchivos = (String) getObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);		
 		addObjectSession(Constantes.ID_EXPEDIENTE_SESION, Long.toString(expediente.getId()));
 		removeObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
@@ -124,6 +124,20 @@ public class MensajesMB extends AbstractMBean {
 	}
 	
 	private void mostrarMensajePreRegistroBD (String mensaje, long nroExpediene) {		
+		flCopiaArchivos = (String) getObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
+		addObjectSession(Constantes.ID_EXPEDIENTE_SESION, Long.toString(expediente.getId()));
+		removeObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
+		this.mensaje = Mensajes.getMensajeBD(mensaje, nroExpediene);
+	}*/
+	
+	private void mostrarMensajeRegistradoBD (String mensaje, String nroExpediene) {
+		flCopiaArchivos = (String) getObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);		
+		addObjectSession(Constantes.ID_EXPEDIENTE_SESION, Long.toString(expediente.getId()));
+		removeObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
+		this.mensaje = Mensajes.getMensajeBD(mensaje, nroExpediene);
+	}
+	
+	private void mostrarMensajePreRegistroBD (String mensaje, String nroExpediene) {		
 		flCopiaArchivos = (String) getObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
 		addObjectSession(Constantes.ID_EXPEDIENTE_SESION, Long.toString(expediente.getId()));
 		removeObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
@@ -140,7 +154,8 @@ public class MensajesMB extends AbstractMBean {
 		StringBuilder sb = new StringBuilder ();
 		for (String str : pendientes) {
 			if (!esPrimero) {
-				sb.append(", ");
+				//sb.append(", ");
+				sb.append(" ");
 			}
 			sb.append(str);
 			esPrimero = false;
@@ -149,7 +164,7 @@ public class MensajesMB extends AbstractMBean {
 				sb.toString());
 	}
 	
-	private void mostrarMensajeCoordinarClienteSubsanarBD (String mensaje, long nroExpediente) {
+	/*private void mostrarMensajeCoordinarClienteSubsanarBD (String mensaje, long nroExpediente) {
 		flCopiaArchivos = (String) getObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);		
 		addObjectSession(Constantes.ID_EXPEDIENTE_SESION, Long.toString(expediente.getId()));
 		removeObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
@@ -193,6 +208,56 @@ public class MensajesMB extends AbstractMBean {
 	}	
 	
 	private void mostrarMensajeGestionarSubsanrOperacionBD (String mensaje, long nroExpediente) {
+		flCopiaArchivos = (String) getObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);		
+		addObjectSession(Constantes.ID_EXPEDIENTE_SESION, Long.toString(expediente.getId()));
+		removeObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
+		this.mensaje = Mensajes.getMensajeBD(mensaje, nroExpediente);
+	}*/
+	
+	private void mostrarMensajeCoordinarClienteSubsanarBD (String mensaje, String nroExpediente) {
+		flCopiaArchivos = (String) getObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);		
+		addObjectSession(Constantes.ID_EXPEDIENTE_SESION, Long.toString(expediente.getId()));
+		removeObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
+		this.mensaje = Mensajes.getMensajeBD(mensaje, nroExpediente);
+	}	
+	
+	private void mostrarMensajeRegularizarEscanearDocumentosBD (String mensaje, String nroExpediente) {
+		flCopiaArchivos = (String) getObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);	
+		addObjectSession(Constantes.ID_EXPEDIENTE_SESION, Long.toString(expediente.getId()));
+		removeObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
+		this.mensaje = Mensajes.getMensajeBD(mensaje, nroExpediente); 
+	}
+	
+	private void mostrarMensajeRegistrarExpedienteCu23BD (String mensaje, String nroExpediente) {
+		flCopiaArchivos = (String) getObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);		
+		addObjectSession(Constantes.ID_EXPEDIENTE_SESION, Long.toString(expediente.getId()));
+		removeObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
+		this.mensaje = Mensajes.getMensajeBD(mensaje, nroExpediente);
+	}
+	
+	private void mostrarMensajeRegistrarExpedienteCu25BD (String mensaje, String nroExpediente) {
+		flCopiaArchivos = (String) getObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);		
+		addObjectSession(Constantes.ID_EXPEDIENTE_SESION, Long.toString(expediente.getId()));
+		removeObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
+		this.mensaje = Mensajes.getMensajeBD(mensaje, nroExpediente);
+	}
+	
+	
+	private void mostrarMensajeConsultarClienteModificacionesBD (String mensaje, String nroExpediente) {
+		flCopiaArchivos = (String) getObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);		
+		addObjectSession(Constantes.ID_EXPEDIENTE_SESION, Long.toString(expediente.getId()));
+		removeObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
+		this.mensaje = Mensajes.getMensajeBD(mensaje, nroExpediente);
+	}	
+	
+	private void mostrarMensajeEvaluarDevolucionRiesgosBD (String mensaje, String nroExpediente) {
+		flCopiaArchivos = (String) getObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);		
+		addObjectSession(Constantes.ID_EXPEDIENTE_SESION, Long.toString(expediente.getId()));
+		removeObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
+		this.mensaje = Mensajes.getMensajeBD(mensaje, nroExpediente);
+	}	
+	
+	private void mostrarMensajeGestionarSubsanrOperacionBD (String mensaje, String nroExpediente) {
 		flCopiaArchivos = (String) getObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);		
 		addObjectSession(Constantes.ID_EXPEDIENTE_SESION, Long.toString(expediente.getId()));
 		removeObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
