@@ -27,7 +27,15 @@
 	            }
         	});		
 		 -->
-		/* <![CDATA[ */        	
+		/* <![CDATA[ */
+				function accionCerrar() {
+					var menu = document.getElementById("idMenu");
+	        		var mensaje = document.getElementById("idMensaje");
+	        		var animacion = document.getElementById("idAnimacion");
+	        		animacion.style.display = 'none';
+	        		menu.style.display = 'block';
+	        		mensaje.style.display = 'block';
+	        	}        	
         	
         /* ]]> */
 		</h:outputScript>
@@ -57,25 +65,42 @@
 	                </div>
 	                <div class="datos">
 	                	<div id="idMensaje" style="display:none">
-	                		<h:outputText value="#{mensajes.mensaje}"/>
+	                	
+	                		<div style="margin-top: 20px; padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
+             					<p style="font-size: 12pt; color: #369;">
+                					<span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span>
+                					<h:outputText value="#{mensajes.mensaje}"/>
+                				</p>
+            				</div>
+	                		
 	            			<h:outputText value="#{mensajes.mensajeNoCarterizacion}" class="valor txt-resaltado-3" />
 	                	</div>
 	                </div>
 	                <div class="datos" align="center">
 		            	<!-- div id="idAnimacion" style="width:410px; display:block"-->
+		            	<!--div id="idAnimacion" style="width:810px; display:block"-->
 		            	<div id="idAnimacion" style="width:810px; display:block">
 							<div id="appletContent" class="contenido-bloque">
 								<div class="tituloRegistrarDatos">
 									<br/>
-									<h:outputText value="#{msg['com.ibm.bbva.applet.avisoRegistrarExpediente.mensaje_1']}" style="font-size:24px"/><br/>
-									<h:outputText value="#{msg['com.ibm.bbva.applet.avisoRegistrarExpediente.mensaje_2']}" style="font-size:17px"/><br/>
+									<!-- h:outputText value="#{msg['com.ibm.bbva.applet.avisoRegistrarExpediente.mensaje_1']}" style="font-size:24px"/><br/-->
+									<!-- h:outputText value="#{msg['com.ibm.bbva.applet.avisoRegistrarExpediente.mensaje_2']}" style="font-size:17px"/><br/-->
+									
+									<div style="margin-top: 20px; padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
+             							<p style="font-size: 14pt; color: #369;">
+                							<span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span>
+                							<h:outputText value="#{msg['com.ibm.bbva.applet.avisoRegistrarExpediente.mensajeProcesando']}"/>
+                							<strong><h:outputText value=" &nbsp; #{avisoMoverArchivos.prefixParam}"/></strong><br/>
+                						</p>
+            						</div>
+            						
 								</div>
 								<applet id="idApplet" code="com.ibm.bbva.app.applet.FTP"
 									        archive="../applet/BBVAAppletFTP.jar" 
-									        width="400" 
-									        height="80"
+									        width="0" 
+									        height="0"
 									        hspace="0"
-									        vspace="10" 
+									        vspace="0" 
 									        align="middle">
 									<param name="host" value="#{avisoMoverArchivos.hostParam}" />
 									<param name="user" value="#{avisoMoverArchivos.userParam}" />
@@ -88,8 +113,10 @@
 									<param name="log" value="#{avisoMoverArchivos.pathLog}"/>
 									<param name="carpetaFTP" value="#{avisoMoverArchivos.carpetaFTP}"/>
 									<param name="descargados" value="#{avisoMoverArchivos.pathDescargados}" />
-									<param name="transferencias" value="#{avisoMoverArchivos.escaneosPathParam}" />
+									<param name="transferencias" value="#{avisoMoverArchivos.transferencias}" />
 									<param name="listaDocumentosAdjuntos" value="#{avisoMoverArchivos.listaDocumentosAdjuntos}" />
+									<param name="carpetaTemporal" value="#{avisoMoverArchivos.carpetaTemporal}"/>
+									<param name="nombreJarVersion" value="#{avisoMoverArchivos.nombreJarVersion}"/>
 								</applet>
 								<!-- >div class="titulo1">
 									<h:outputText value="#{msg['com.ibm.bbva.applet.avisoMoverArchivos.mensaje']}"/>
