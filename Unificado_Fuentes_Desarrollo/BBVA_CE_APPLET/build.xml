@@ -27,6 +27,10 @@
 			<zipfileset src="${lib.dir}/commons-net-3.1.jar" excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />
 			<zipfileset src="${lib.dir}/icepdf-core.jar" excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />
 			<zipfileset src="${lib.dir}/libs.jar" excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />
+			<zipfileset src="${lib.dir}/plugin.jar" excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />
+			<zipfileset src="${lib.dir}/httpclient-4.0.3.jar" excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />
+			<zipfileset src="${lib.dir}/apache-httpcomponents-httpcore.jar" excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />
+			<zipfileset src="${lib.dir}/org-apache-commons-logging.jar" excludes="META-INF/*,**/*.txt,**/*.java,**/*.html" />
 			<manifest>
 				<attribute name="Application-Name" value="AppCtaCte" />
 				<attribute name="Permissions" value="all-permissions" />
