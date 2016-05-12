@@ -21,7 +21,7 @@ public class FTPInputStream extends ByteArrayInputStream {
 			ex.printStackTrace();
 		}
 		int byteRead = super.read(b);
-		listener.setAvance(byteRead);
+		//listener.setAvance(byteRead);
 		return byteRead;
 	}
 

@@ -36,12 +36,12 @@ public class FTPRunnable implements Runnable {
 			File archivo = file.getFile();
 			tamanio += (int)archivo.length();
 		}
-		ftp.setTamanio(tamanio);
+		//ftp.setTamanio(tamanio);
 		LOG.info("Numero de archivos "+cola.size());
 		while (!cola.isEmpty()) {
 			FTPFileWrapper wrapper = cola.poll();
 			LOG.info("archivo : "+wrapper.getRemoteFile());
-			ftp.nuevoArchivo(wrapper.getRemoteFile());
+			//ftp.nuevoArchivo(wrapper.getRemoteFile());
 			FTPClient fc = new FTPClient();
 			LOG.info("FTPClient fc = new FTPClient();");
 			InputStream is = null;
@@ -109,7 +109,7 @@ public class FTPRunnable implements Runnable {
 					reintentarEnvio(wrapper, cola);
 					continue;
 				}				
-				ftp.exitoArchivo(wrapper.getRemoteFile());
+				//ftp.exitoArchivo(wrapper.getRemoteFile());
 			
 				is.close();
 				fc.logout();
@@ -159,7 +159,7 @@ public class FTPRunnable implements Runnable {
 	}
 	
 	private void reintentarEnvio(FTPFileWrapper wrapper, Queue<FTPFileWrapper> cola) {
-		ftp.errorArchivo(wrapper.getRemoteFile(), wrapper.getReintentos());
+		//ftp.errorArchivo(wrapper.getRemoteFile(), wrapper.getReintentos());
 		if (wrapper.getReintentos() > 0) {
 			wrapper.setReintentos(wrapper.getReintentos()-1);
 			cola.offer(wrapper);
