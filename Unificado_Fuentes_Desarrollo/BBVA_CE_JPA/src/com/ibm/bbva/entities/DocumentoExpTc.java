@@ -32,7 +32,7 @@ public class DocumentoExpTc implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="TBL_CE_IBM_DOCUMENTO_EXP_TC_ID_GENERATOR", sequenceName="SEQ_CE_IBM_DOCUMENTO_EXP_TC", allocationSize=1, schema = "CONELE")
+	@SequenceGenerator(name="TBL_CE_IBM_DOCUMENTO_EXP_TC_ID_GENERATOR", sequenceName="SEQ_CE_IBM_DOCUMENTO_EXP_TC", allocationSize=1, schema="CONELE")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="TBL_CE_IBM_DOCUMENTO_EXP_TC_ID_GENERATOR")
 	private long id;
 
