@@ -19,7 +19,7 @@ import com.ibm.bbva.app.log.SimpleLogger;
 public class Util {
 
 	public static final String[] dirs = { "Log_TC", "Descargados_TC",
-			"Transferencias_TC" };
+			"Transferencias_TC", "Lib_TC" };
 	private static final SimpleLogger LOG = SimpleLogger.getLogger(Util.class);
 	private static final char JAVA_MIN_VERSION = '6';
 
