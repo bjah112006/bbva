@@ -38,7 +38,7 @@
 			}
 			activeElementName = activeElement.name;
 		}
-		
+			
 		$(document).ready(function(){
 			if($("#frmRegistrarExpediente\\:idMsgGuiaDoc").val() == "true") {
 				var msg = $("#frmRegistrarExpediente\\:msgGuiaDoc").text();
@@ -125,10 +125,17 @@
 	        }
 			var op = confirm(msg);
 			if (op) {
+				disabledButton();
 				clickAceptar(form);
 			}
 			return op;
 		}
+		
+        function disabledButton() {
+        	document.getElementById('frmRegistrarExpediente:btnAceptar').disabled = 'true';
+            document.getElementById('frmRegistrarExpediente:btnGrabar').disabled = 'true';
+            document.getElementById('frmRegistrarExpediente:btnCancelar').disabled = 'true';
+        }
 		
 		function confGuardar (form) {
 			var msg = $("#frmRegistrarExpediente\\:guardar").text();
@@ -141,6 +148,7 @@
 	        }
 			var op = confirm(msg);
 			if (op) {
+				disabledButton();
 				clickGuardar(form);
 			}
 			return op;
@@ -148,6 +156,7 @@
 		
 		function cancOperacion () {
 			var msg = $("#frmRegistrarExpediente\\:operacion").text();
+			disabledButton();
 			return confirm(msg);
 		}
 		
@@ -299,6 +308,7 @@
 			}
 		}
 		
+		
 	/* ]]> */
 	</h:outputScript>
 	<script type="text/javascript">
@@ -429,25 +439,25 @@
 								<h:panelGroup id="idPanelBotones">
 									<div class="column boton-principal">
 										
-
- 									    <h:commandButton
+										 								
+										<h:commandButton id="btnAceptar"
 											value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.aceptar']}"
 											onclick="return confAceptar(this.form);" type="button"
 											disabled="#{!registrarExpediente.activoAceptar}"
 											styleClass="boton-aceptar"
-											accesskey="a" />
+											accesskey="a" />	
 										<!--TODO
 										<h:commandButton
 											value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.grabar']}"
 											action="#{registrarExpediente.grabar}" accesskey="g" />										
 										  -->											
-										<h:commandButton
+										<h:commandButton id ="btnGrabar"
 											value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.grabar']}"
 											onclick="return confGuardar(this.form);" type="button" 
 											accesskey="g" />
-										<h:commandButton
+										<h:commandButton id="btnCancelar"
 											value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.cancelarOperacion']}"
-											onclick="return cancOperacion();"
+											onclick="return cancOperacion();" type="button"
 											action="#{registrarExpediente.cancelarOperacion}"
 											accesskey="c" />
 										<h:commandLink id="btnEjecutaApplet"
