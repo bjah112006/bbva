@@ -643,6 +643,16 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 		addObjectSession(Constantes.NOMBRE_BANDEJA_SESION, getNombreJSPPrincipal());	
 //		addObjectSession(Constantes.EXPEDIENTE_LISTA_DOCUMENTO_CM, mapListDocumentosCM);
 		
+		//Pasar a sesion el nombre de la carpeta que contendra los documentos de dicho expediente
+		//java.util.Date fecha = new Date();
+		Calendar fecha = Calendar.getInstance();
+		int mes = fecha.get(Calendar.MONTH) + 1;
+		String fechaAhora =String.valueOf("_"+fecha.get(Calendar.YEAR)+"-"+mes+"-"+
+				//cal1.get(Calendar.DATE)+"_"+cal1.get(Calendar.HOUR)+"-"+cal1.get(Calendar.MINUTE)+"-"+cal1.get(Calendar.SECOND));
+				fecha.get(Calendar.DAY_OF_MONTH)+"_"+fecha.get(Calendar.HOUR_OF_DAY)+"-"+fecha.get(Calendar.MINUTE));
+		addObjectSession(Constantes.CARPETA_DOC_ESCANEADOS_POR_EXPEDIENTE, 
+				expediente.getClienteNatural().getNumDoi()+fechaAhora);
+		
 		return expediente;
 	} 
 	
