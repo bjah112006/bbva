@@ -1,6 +1,8 @@
 package com.ibm.bbva.controller.common;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -274,6 +276,16 @@ public class BuscarClienteMB extends AbstractMBean {
 		
 		addObjectSession("numeroDOI", numeroDOI);
 		addObjectSession("tipoDOI", tipoDOISeleccionado);
+		
+		//Pasar a sesion el nombre de la carpeta que contendra los documentos de dicho expediente
+		Calendar fecha = Calendar.getInstance();
+		int mes = fecha.get(Calendar.MONTH) + 1;
+		String fechaAhora =String.valueOf("_"+fecha.get(Calendar.YEAR)+"-"+mes+"-"+
+				//cal1.get(Calendar.DATE)+"_"+cal1.get(Calendar.HOUR)+"-"+cal1.get(Calendar.MINUTE)+"-"+cal1.get(Calendar.SECOND));
+				fecha.get(Calendar.DAY_OF_MONTH)+"_"+fecha.get(Calendar.HOUR_OF_DAY)+"-"+fecha.get(Calendar.MINUTE));
+		addObjectSession(Constantes.CARPETA_DOC_ESCANEADOS_POR_EXPEDIENTE, 
+				numeroDOI+fechaAhora);
+		
 		if(buscarConyuge != null){ //JBTA
 			buscarConyuge.init(); //JBTA
 		}
