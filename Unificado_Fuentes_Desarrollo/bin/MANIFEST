@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Main-Class: com.ibm.bbva.app.docs.send.Transferencias
+Sealed: true
+
+Name: com/ibm/bbva/app/docs/send/constructor/
+Sealed: false
+
+Name: com/ibm/bbva/app/log/
+Sealed: false
+
+Name: com/ibm/bbva/app/docs/send/ftp/
+Sealed: false
+
+Name: com/ibm/bbva/app/docs/send/
+Sealed: false
+
