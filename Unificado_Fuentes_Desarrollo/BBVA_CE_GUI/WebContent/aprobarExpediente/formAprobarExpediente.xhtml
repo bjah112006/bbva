@@ -71,20 +71,22 @@
 			        });
 			});
         	function confAceptar (form) {
-        		var msg = $("#frmAprobarExpediente\\:confirmacion").text();
+				var msg = $("#frmAprobarExpediente\\:confirmacion").text();
         		var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
-		        var msgDocsObs = '';
+        		var msgDocsObs = '';
 		        docsObs = $.trim(docsObs);
 		        if(docsObs != ''){
 		        	msgDocsObs = 'El expediente que está guardando contiene \ndocumentos observados que \nno han sido subsanados:';
 		        	msg = msgDocsObs + '\n' + docsObs + '\n\n' + msg; 		
 		        }
-        		var op = confirm(msg);
+		        var op = confirm(msg);
         		if (op) {
-        			clickAceptar(form);
+        		    clickAceptar(form);
         		}
         		return op;
         	}
+        	
+            
         	function confDevolver () {
         		var msg = $("#frmAprobarExpediente\\:devolver").text();
         		return confirm(msg);
@@ -243,7 +245,8 @@
 						-->
 						<ui:include src="/resources/common/observacion.xhtml" />
 						<div class="column boton-principal" style="widht:50px;">
-						    <h:commandButton value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.aprobar']}"
+						    <h:commandButton 
+						    				 value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.aprobar']}"
 	            		                     onclick="return confAceptar(this.form);" type="button" id="btnAceptar"
 	            		                     disabled="#{aprobarExpediente.activoAprOperacion}" />
 							
@@ -262,10 +265,10 @@
 						                     onclick="return confActScoring();"
 						                     disabled="#{aprobarExpediente.activoActScoring}" />
                                              		
-						    <h:commandButton value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.aprobarConModificacion']}"
+						    <!-- h:commandButton value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.aprobarConModificacion']}"
 	            		                     action="#{aprobarExpediente.aprobarConModificacion}"
                                              onclick="return confDevolverGestor();"
-                                             disabled="#{aprobarExpediente.activoAproModificacion}" />
+                                             disabled="#{aprobarExpediente.activoAproModificacion}" /-->
                                                                                           											
 						    <h:commandButton value="#{msg['com.ibm.bbva.aprobarExpediente.formAprobarExpediente.enviarRiesgo']}"
 	            		                     onclick="return confEnviarRiesgo();" type="button" id="envRiesgos"
