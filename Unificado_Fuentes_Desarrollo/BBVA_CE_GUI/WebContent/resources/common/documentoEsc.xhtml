@@ -164,6 +164,13 @@
 		parametros = parametros + "<param name=\"codigoEmpleadoEscaneoWeb\" value=\"#{documentosEscaneados.empleado.codigo}\"/>";
 		parametros = parametros + "<param name=\"tramaTipoDocumentos\" value=\"#{documentosEscaneados.tramaTipoDocumentos}\"/>";
 		parametros = parametros + "<param name=\"tamanoMaxPDF\" value=\"#{documentosEscaneados.tamanoMaxPDF}\" />";
+		
+		parametros = parametros + "<param name=\"rutaOrigenDescargaJar\" value=\"#{documentosEscaneados.rutaOrigenDescargaJar}\" />";
+		parametros = parametros + "<param name=\"nombreJar\" value=\"#{documentosEscaneados.nombreJar}\" />";
+		parametros = parametros + "<param name=\"extencionJar\" value=\"#{documentosEscaneados.extencionJar}\" />";
+		parametros = parametros + "<param name=\"rutaDestinoDescargaJar\" value=\"#{documentosEscaneados.rutaDestinoDescargaJar}\"/>";
+		parametros = parametros + "<param name=\"raizTransferencias\" value=\"#{documentosEscaneados.raizTransferencias}\"/>";
+		
 		strApplet = inicioTag + parametros + finTag;
 		
 		if ($("div.appletContainerDiv").is(":visible")) {
