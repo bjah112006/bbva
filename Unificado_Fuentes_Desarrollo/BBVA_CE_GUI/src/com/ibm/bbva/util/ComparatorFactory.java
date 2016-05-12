@@ -414,21 +414,21 @@ public class ComparatorFactory {
 		return 0;
 	}
 	
-	public static Comparator<ExpedienteTCWPSWeb> estadoTarjeta (String orden) {
-		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
-			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
-				String estadoTarjeta1 = null;
-				String estadoTarjeta2 = null;
-				if (((ExpedienteTCWrapper) o1).isRenderEstadoTarea()) {
-					estadoTarjeta1 = ((ExpedienteTCWrapper) o1).getEstadoTarjeta();
-				}
-				if (((ExpedienteTCWrapper) o2).isRenderEstadoTarea()) {
-					estadoTarjeta2 = ((ExpedienteTCWrapper) o2).getEstadoTarjeta();
-				}
-				return comparator.compare(estadoTarjeta1, estadoTarjeta2);
-			}
-		};
-	}
+//	public static Comparator<ExpedienteTCWPSWeb> estadoTarjeta (String orden) {
+//		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){
+//			public int compare(ExpedienteTCWPSWeb o1, ExpedienteTCWPSWeb o2) {
+//				String estadoTarjeta1 = null;
+//				String estadoTarjeta2 = null;
+//				if (((ExpedienteTCWrapper) o1).isRenderEstadoTarea()) {
+//					estadoTarjeta1 = ((ExpedienteTCWrapper) o1).getEstadoTarjeta();
+//				}
+//				if (((ExpedienteTCWrapper) o2).isRenderEstadoTarea()) {
+//					estadoTarjeta2 = ((ExpedienteTCWrapper) o2).getEstadoTarjeta();
+//				}
+//				return comparator.compare(estadoTarjeta1, estadoTarjeta2);
+//			}
+//		};
+//	}
 	
 	public static Comparator<ExpedienteTCWPSWeb> estadoArchivos (String orden) {
 		return new ComparatorBase<String, ExpedienteTCWPSWeb> (orden){

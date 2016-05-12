@@ -517,7 +517,7 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 			if (taskID.equals(expTC.getTaskID())) {
 				LOG.info("taskID iguales::::"+taskID);
 				addObjectSession(Constantes.EXPEDIENTE_PROCESO_SESION, expTC.getExpedienteTC());
-				addObjectSession(Constantes.ESTADO_TARJETA, expTC.getEstadoTarjeta());
+				//addObjectSession(Constantes.ESTADO_TARJETA, expTC.getEstadoTarjeta());
 				expedienteTC = expTC.getExpedienteTC();
 				break;
 			}
@@ -890,9 +890,9 @@ public class TablaBandejaPendMB extends AbstractSortPagDataTableMBean {
 	    			LOG.info("Ayuda horario no es null para id exp::"+obj.getExpedienteTC().getCodigo());
 			}
 			comparator = ComparatorFactory.alerta(orden);
-		} else if ("estadoTarjeta".equals(columna)) {
+		} /*else if ("estadoTarjeta".equals(columna)) {
 			comparator = ComparatorFactory.estadoTarjeta(orden);
-		} else if ("estadoArchivos".equals(columna)) {
+		}*/ else if ("estadoArchivos".equals(columna)) {
 			comparator = ComparatorFactory.estadoArchivos(orden);
 		} else if ("devoluciones".equals(columna)) {
 			comparator = ComparatorFactory.devoluciones(orden);

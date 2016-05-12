@@ -155,40 +155,40 @@ public class ExpedienteTCWrapper extends ExpedienteTCWPSWeb implements Serializa
 		return Constantes.ID_TAREA_MOSTRAR_ESTADO_TARJETA.equals(expedienteTC.getIdTarea());
 	}
 	
-	public String getEstadoTarjeta () {
-		if (estadoTarjeta == null) {
-			String estado = "";
-			String result = null;
-			try {
-				Expediente expedienteVO = expedienteBean.buscarPorId(Long.parseLong(expedienteTC.getCodigo()));
-				//logger.info("expedienteVO.getNroContrato() :" + expedienteVO.getExpedienteTC().getNroContrato());
-				//logger.info("expedienteVO.getNumTarjeta() :" + expedienteVO.getExpedienteTC().getNumTarjeta());
-				LOG.info("expedienteTC.getCodigo() :" + expedienteTC.getCodigo());
-				if(expedienteVO!=null){
-					LOG.info("expedienteVO.getNroContrato() :" + expedienteVO.getExpedienteTC().getNroContrato());
-					LOG.info("expedienteVO.getNumTarjeta() :" + expedienteVO.getExpedienteTC().getNumTarjeta());
-					
-					if(expedienteVO!=null && expedienteVO.getExpedienteTC()!=null && 
-							expedienteVO.getExpedienteTC().getNroContrato()!=null && !expedienteVO.getExpedienteTC().getNroContrato().trim().equals("") && 
-							expedienteVO.getExpedienteTC().getNumTarjeta()!=null && !expedienteVO.getExpedienteTC().getNumTarjeta().trim().equals("")){
-						result = service.WFTarjetas_devolverEstadoEntregaTC(expedienteVO.getExpedienteTC().getNroContrato(), expedienteVO.getExpedienteTC().getNumTarjeta());
-						//logger.info("resultado servicio estado tarjeta : "+ result);
-						//logger.info("tamaño array estado tarjeta : "+ result.split("\\|").length);
-						if (result.split("\\|").length > 3) {
-							estado = result.split("\\|")[3];
-						}				
-					}				
-				}
-				
-				//logger.info("estado tarjeta : "+ estado);
-			} catch (Exception e) {
-				estado = "";
-				LOG.error(e.getMessage(), e);
-			}
-			this.estadoTarjeta = estado;
-		}
-		return estadoTarjeta;
-	}
+//	public String getEstadoTarjeta () {
+//		if (estadoTarjeta == null) {
+//			String estado = "";
+//			String result = null;
+//			try {
+//				Expediente expedienteVO = expedienteBean.buscarPorId(Long.parseLong(expedienteTC.getCodigo()));
+//				//logger.info("expedienteVO.getNroContrato() :" + expedienteVO.getExpedienteTC().getNroContrato());
+//				//logger.info("expedienteVO.getNumTarjeta() :" + expedienteVO.getExpedienteTC().getNumTarjeta());
+//				LOG.info("expedienteTC.getCodigo() :" + expedienteTC.getCodigo());
+//				if(expedienteVO!=null){
+//					LOG.info("expedienteVO.getNroContrato() :" + expedienteVO.getExpedienteTC().getNroContrato());
+//					LOG.info("expedienteVO.getNumTarjeta() :" + expedienteVO.getExpedienteTC().getNumTarjeta());
+//					
+//					if(expedienteVO!=null && expedienteVO.getExpedienteTC()!=null && 
+//							expedienteVO.getExpedienteTC().getNroContrato()!=null && !expedienteVO.getExpedienteTC().getNroContrato().trim().equals("") && 
+//							expedienteVO.getExpedienteTC().getNumTarjeta()!=null && !expedienteVO.getExpedienteTC().getNumTarjeta().trim().equals("")){
+//						result = service.WFTarjetas_devolverEstadoEntregaTC(expedienteVO.getExpedienteTC().getNroContrato(), expedienteVO.getExpedienteTC().getNumTarjeta());
+//						//logger.info("resultado servicio estado tarjeta : "+ result);
+//						//logger.info("tamaño array estado tarjeta : "+ result.split("\\|").length);
+//						if (result.split("\\|").length > 3) {
+//							estado = result.split("\\|")[3];
+//						}				
+//					}				
+//				}
+//				
+//				//logger.info("estado tarjeta : "+ estado);
+//			} catch (Exception e) {
+//				estado = "";
+//				LOG.error(e.getMessage(), e);
+//			}
+//			this.estadoTarjeta = estado;
+//		}
+//		return estadoTarjeta;
+//	}
 	
 	public Integer getOrden() {		
 		int orden = 0;		
