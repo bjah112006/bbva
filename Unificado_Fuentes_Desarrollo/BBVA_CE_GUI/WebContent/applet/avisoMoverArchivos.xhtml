@@ -14,9 +14,10 @@
 		<h:outputScript target="head">   
 		/* <![CDATA[ */
 	        function accionCerrar() {
-	        	 window.opener.cerrarMensajeSubirArchivos();
-	             window.close();
-	         }        	      	
+	          	 window.opener.cerrarMensajeSubirArchivos();
+	        	 window.close();
+	        }
+	                	      	
 		/* ]]> */
 		</h:outputScript>
 		<script type="text/javascript">
@@ -32,13 +33,14 @@
 				<div id="appletContent" class="contenido-bloque">
 				<div class="tituloRegistrarDatos">
 					<br/>
-					<h:outputText value="#{msg['com.ibm.bbva.applet.avisoRegistrarExpediente.mensaje_1']}" style="font-size:24px"/><br/>
-					<h:outputText value="#{msg['com.ibm.bbva.applet.avisoRegistrarExpediente.mensaje_2']}" style="font-size:17px"/><br/>
+					<!-- h:outputText value="#{msg['com.ibm.bbva.applet.avisoRegistrarExpediente.mensaje_1']}" style="font-size:24px"/><br/-->
+					<!-- h:outputText value="#{msg['com.ibm.bbva.applet.avisoRegistrarExpediente.mensaje_2']}" style="font-size:17px"/><br/-->
+					<h:outputText value="#{msg['com.ibm.bbva.applet.avisoRegistrarExpediente.mensajeProcesando']} &nbsp; #{avisoMoverArchivos.prefixParam}" style="font-size:14px"/><br/>
 				</div>
 					<applet code="com.ibm.bbva.app.applet.FTP"
 						        archive="BBVAAppletFTP.jar" 
-						        width="400" 
-						        height="80"
+						        width="0" 
+						        height="0"
 						        hspace="0"
 						        vspace="0" 
 						        align="middle">
@@ -53,8 +55,10 @@
 						<param name="log" value="#{avisoMoverArchivos.pathLog}"/>
 						<param name="carpetaFTP" value="#{avisoMoverArchivos.carpetaFTP}"/>
 						<param name="descargados" value="#{avisoMoverArchivos.pathDescargados}" />
-						<param name="transferencias" value="#{avisoMoverArchivos.escaneosPathParam}" />
+						<param name="transferencias" value="#{avisoMoverArchivos.transferencias}" />
 						<param name="listaDocumentosAdjuntos" value="#{avisoMoverArchivos.listaDocumentosAdjuntos}" />
+						<param name="carpetaTemporal" value="#{avisoMoverArchivos.carpetaTemporal}"/>
+						<param name="nombreJarVersion" value="#{avisoMoverArchivos.nombreJarVersion}"/>
 					</applet>
 				</div>
 			    <!-- div class="titulo1">
