@@ -25,7 +25,7 @@
         	$(this).css('cursor', 'default');
         });
 		$(".dataTableEx tbody:first tr").click(function(event){
-			// "event.target" es el elemento que recibió click y "this" es la fila (tr).
+			// "event.target" es el elemento que recibiÃ³ click y "this" es la fila (tr).
 			if ($(event.target).attr("class") == "checkReasignar") {
 				$(this).children("td").children("a")[1].onclick();
 			} else {
@@ -358,7 +358,7 @@
 				</f:facet>
 				<h:outputText value="#{item.moneda}"></h:outputText>
 			</h:column>			
-			 -->
+			 
 
 			<h:column nowrap="true" align="center" width="15%">
 				<f:facet name="header">
@@ -370,6 +370,7 @@
 				</f:facet>
 				<h:outputText value="#{item.estadoTarjeta}" rendered="#{item.renderEstadoTarea}"></h:outputText>
 			</h:column>
+			-->
 			<h:column nowrap="true" align="center" width="20%">
 				<f:facet name="header">
 					<h:commandLink actionListener="#{tablaBandejaAsig.ordenar}" styleClass="#{tablaBandejaAsig.obtenerEstiloColumna('estadoArchivos')}">
