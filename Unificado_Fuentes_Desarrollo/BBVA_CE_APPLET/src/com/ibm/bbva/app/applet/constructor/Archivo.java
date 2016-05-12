@@ -8,6 +8,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.Calendar;
 
 import netscape.javascript.JSObject;
 
@@ -15,12 +16,15 @@ import org.apache.commons.io.FileUtils;
 import org.icepdf.core.pobjects.Document;
 
 import com.ibm.bbva.app.applet.ConstantesApplet;
+import com.ibm.bbva.app.log.SimpleLogger;
 import com.ibm.bbva.cm.bean.Documento;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.html.simpleparser.HTMLWorker;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class Archivo {
+	
+	private static final SimpleLogger LOG = SimpleLogger.getLogger(Archivo.class);
 
 	public static final String EXTENSION_ARCHIVO = ".pdf";
 	private static Archivo archivo;
@@ -31,6 +35,7 @@ public class Archivo {
 	public static String strDescargados;
 	public static String strTransferencias;
 	public static String separador;
+	public static String raizTransferencias;
 	
 	private Archivo () {
 	}
@@ -55,16 +60,74 @@ public class Archivo {
 					archivo.delete();
 				}
 			}
-			if (transferencias.exists()) {
-				for (File archivo : transferencias.listFiles()) {
-					archivo.delete();
-				}
-			}
+			//if (transferencias.exists()) {
+			//	for (File archivo : transferencias.listFiles()) {
+			//		archivo.delete();
+			//	}
+			//}
 			if (escaneados.exists()) {
 				for (File archivo : escaneados.listFiles()) {
 					archivo.delete();
 				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	static void limpiarDirectoriosPasados(String pRaizTransferencias) {
+		try {
+			//Fecha actual
+			Calendar fecha = Calendar.getInstance();
+			int mes = fecha.get(Calendar.MONTH) + 1;
+			String fechaAhora =String.valueOf(fecha.get(Calendar.YEAR)+"-"+mes+"-"+fecha.get(Calendar.DAY_OF_MONTH));
+			LOG.info("FECHA ACTUAL:::" + fechaAhora);
+			
+			File raizTransferencias = new File(pRaizTransferencias+"\\");
+			
+			if (raizTransferencias.exists() && raizTransferencias.isDirectory()) {
+				LOG.info("EXISTE DIRECTORIO:::" + raizTransferencias);
+				for (File carpeta : raizTransferencias.listFiles()) {
+					LOG.info("CARPETA " + carpeta);
+					if(carpeta.getName().length()>=21){
+						String [] cad = carpeta.getName().split("_");
+						if(cad.length > 1 ){
+							if(!cad[1].equals(fechaAhora)){
+								File tempFile = new File(carpeta.getAbsoluteFile().toString());
+								if (tempFile.exists()) {
+									for (File archivo : tempFile.listFiles()) {
+										archivo.delete();
+										LOG.info("ARCHIVO " + archivo.getName() + " ELIMINADO");
+									}
+								}
+								tempFile.delete();
+								LOG.info("CARPETA " + carpeta.getName() + " ELIMINADA");
+							}
+						}else{
+							File tempFile = new File(carpeta.getAbsoluteFile().toString());
+							if (tempFile.exists()) {
+								for (File archivo : tempFile.listFiles()) {
+									archivo.delete();
+									LOG.info("ARCHIVO " + archivo.getName() + " ELIMINADO");
+								}
+							}
+							tempFile.delete(); 
+							LOG.info("CARPETA " + carpeta.getName() + " ELIMINADA");
+							}
+					}else{
+						File tempFile = new File(carpeta.getAbsoluteFile().toString()); 
+						if (tempFile.exists()) {
+							for (File archivo : tempFile.listFiles()) {
+								archivo.delete();
+								LOG.info("ARCHIVO " + archivo.getName() + " ELIMINADO");
+							}
+						}
+						tempFile.delete(); 
+						LOG.info("CARPETA " + carpeta.getName() + " ELIMINADA");
+						}
+				}
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

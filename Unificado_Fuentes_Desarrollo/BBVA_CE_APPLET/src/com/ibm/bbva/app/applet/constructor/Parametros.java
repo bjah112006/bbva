@@ -75,4 +75,10 @@ public interface Parametros {
 	String TRAMA_TIPO_DOCUMENTOS = "tramaTipoDocumentos";
 	
 	String TAMANO_MAXIMO_PDF = "tamanoMaxPDF";
+	
+	String DIRECTORIO_BASE ="D:\\ContratacionElectronica\\";
+	
+	String DIRECTORIO_LIB ="Lib_TC\\";
+	
+	String JAR_TRANSFERENCIAS = "BBVASendDocsFTP.jar";
 }

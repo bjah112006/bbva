@@ -15,13 +15,17 @@ public class ArchivoApplet extends JApplet {
 	public void init () {
     	super.init();
     	String carpLog = getParameter(Parametros.CARPETA_CLIENTE_LOG);
+    	String raizTransferencias = getParameter("raizTransferencias");
+    	LOG.info("RUTA RAIZ DONDE SE CREAN LAS CARPETAS TEMPORALES DE TRANSFERENCIAS" + raizTransferencias);
     	SimpleLogger.iniciar(Archivo.crearDirectorio(carpLog), true);
     	try {
     		LOG.info("Parametro cleanTransferDir: "+getParameter(Parametros.CLEAN_TRANSFERDIR));
-			Archivo.iniciar(
+    		Archivo.iniciar(
 					getParameter(Parametros.CARPETA_CLIENTE_DESCARGADOS),
 					getParameter(Parametros.CARPETA_CLIENTE_TRANSFERENCIAS),
 					getParameter(Parametros.CLEAN_TRANSFERDIR));
+    		
+    		Archivo.limpiarDirectoriosPasados(raizTransferencias);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			LOG.error("No se puede modificar las carpetas", e1);

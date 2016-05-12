@@ -1,10 +1,22 @@
 package com.ibm.bbva.app.applet.constructor;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import org.apache.commons.io.FileUtils;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.params.ClientPNames;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.BasicHttpContext;
 
 import com.ibm.bbva.app.log.SimpleLogger;
 import com.ibm.bbva.app.servicio.web.WEBCEService;
@@ -25,6 +37,11 @@ public class AppApplet extends ArchivoApplet {
 	private String strCodigos;
 	private String servidor;
 	private String puerto;
+	private String transferencias;
+	private String rutaOrigen;
+	private String nombreArchivo;
+	private String extencionArchivo;
+	private String rutaDestino;
 	
 	public AppApplet() {
 		timer = new Timer ();
@@ -82,7 +99,20 @@ public class AppApplet extends ArchivoApplet {
 	public void init () {
     	super.init();
     	servidor = getParameter(Parametros.SERVIDOR_SERV_WEB);
+    	LOG.info(servidor);
     	puerto = getParameter(Parametros.PUERTO_SERV_WEB);
+    	LOG.info(puerto);
+    	transferencias = getParameter(Parametros.CARPETA_CLIENTE_TRANSFERENCIAS);
+    	LOG.info(transferencias);
+    	rutaOrigen = getParameter("rutaOrigenDescargaJar");
+    	LOG.info(rutaOrigen);
+    	rutaDestino = getParameter("rutaDestinoDescargaJar");
+    	LOG.info(rutaDestino);
+    	nombreArchivo = getParameter("nombreJar");
+    	LOG.info(nombreArchivo);
+    	extencionArchivo = getParameter("extencionJar");
+    	LOG.info(extencionArchivo);
+    	
     	//LOG.info("Iniciando el applet");
 //    	String abrirArchivo = getParameter(Parametros.ABRIR_ARCHIVO);
 //    	if (abrirArchivo != null && !abrirArchivo.equals("")) {
@@ -95,8 +125,109 @@ public class AppApplet extends ArchivoApplet {
 //			}
 //			abrirArchivo = null;
 //    	}
+    	
+    	//Descargar el Jar de transferncia 
+		String resultado="";
+		try {
+			LOG.info("ANTES DE DESCARGAR EL JAR A LA RUTA LOCAL:::");
+			resultado = downloadFile(rutaOrigen, nombreArchivo, extencionArchivo, rutaDestino);
+		} catch (Exception e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+		}
+		LOG.info("EL ARCHIVO SE DESCARGO EN RUTA::: " +resultado);
+		
 		LOG.info("Applet iniciado");
     }
+	
+	private String downloadFile(String rutaOrigen, String filenamePrefix, String fileExtension, String rutaDestino) throws Exception{
+		LOG.info("ENTRO AL downloadFile:::");	
+		
+        if (rutaOrigen.trim().equals("")) throw new NullPointerException("RUTA ORIGEN NO SE PUDO OBTENER O NO EXISTE JAR EN ESA RUTA");
+        
+        //rutaOrigen="http://118.180.188.18/BBVA_CE_GUI/applet/";
+		//filenamePrefix="BBVASendDocsFTP"; 
+	    //fileExtension=".jar";
+		//rutaDestino="D:\\ContratacionElectronica\\Lib_TC\\";
+		File downloadedFile = null;
+        
+        File dir = new File(rutaDestino);
+		
+		if (!dir.exists()) {
+			dir.mkdirs();
+			LOG.info("SE CREO LA CARPETA DE LIB_TC:::" + dir);	
+		}
+ 
+        URL fileToDownload = null;
+		//File fileToDownload = null;
+		try {
+			fileToDownload = new URL(rutaOrigen+filenamePrefix+fileExtension);
+			LOG.info("DIRECCION URL::: "+ fileToDownload);
+			//File downloadedFile = new File(rutaDestino + fileToDownload.getFile().replaceFirst("/|\\\\", ""));
+			//fileToDownload = new File(rutaOrigen+filenamePrefix+fileExtension);
+			//FileInputStream in = new FileInputStream(fileToDownload);
+			downloadedFile = new File(rutaDestino + filenamePrefix+fileExtension);
+			//downloadedFile = new File("D:\\ContratacionElectronica\\Lib_TC\\" + filenamePrefix+fileExtension);
+			LOG.info("downloadedFile:::"+ downloadedFile);
+	        if (downloadedFile.canWrite() == false) downloadedFile.setWritable(true);
+	        
+	        
+	        /*
+	         * El APPLET RECIBE EL PARAMETRO DESDE CONTRATACION SENCILLA QUE 
+	         * CONTIENE EL NOMBRE DE LA ULTIMA VERSION DEL JAR DE CARGA
+	         * SE COMPARA SI EL JAR CON ESE NOMBRE YA EXISTE EN LA CARPETA DE DESCARGA DEL JAR,
+	         * EN CASO NO EXISTE SE DEBE DESCARGAR ESE JAR DE LA ULTIA VERSION,
+	         * SI YA EXISTE NO SE HACE NADA
+	         * CABE MENSIONAR QUE EL NOMBRE DE LA ULTIMA VERSION DE JAR SE PARAMETRIZA EN TABLA TBL_CE_IBM_PARAMETROS_CONF
+	         * Y SE DEBE GENERAR EL EAR DE CS CON EL JAR CON EL MISMO NOMBRE QUE SE PARAMETRIZO EN LA TABLA
+	         * */
+	        if (!downloadedFile.exists()) {
+	        	File downloadedDirectory = new File(rutaDestino);
+		    	if (downloadedDirectory.exists() && downloadedDirectory.isDirectory()) {
+					LOG.info("EXISTE DIRECTORIO:::" + downloadedDirectory);
+					for (File archivo : downloadedDirectory.listFiles()) {
+						archivo.delete();
+						LOG.info("ARCHIVO " + archivo.getName() + " ELIMINADO");
+					}
+				}
+		    	
+	        	LOG.info("EL JAR NO EXISTE Y SE PROCEDE A DESCARGARLO");
+	        	HttpClient client = new DefaultHttpClient();
+		        BasicHttpContext localContext = new BasicHttpContext();
+		        
+		        HttpGet httpget = null;
+		        httpget = new HttpGet(fileToDownload.toURI());
+		        HttpParams httpRequestParameters = httpget.getParams();
+		        httpRequestParameters.setParameter(ClientPNames.HANDLE_REDIRECTS, true);
+		        httpget.setParams(httpRequestParameters);
+		        
+		        LOG.info("Sending GET request for: " + httpget.getURI());
+		        HttpResponse response = null;
+		        
+		        response = client.execute(httpget, localContext);
+		        
+		        LOG.info("Downloading file: " + downloadedFile.getName());
+		        FileUtils.copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
+		        //FileUtils.copyInputStreamToFile(in, downloadedFile);
+		        response.getEntity().getContent().close();
+	        }else{
+	        	LOG.info("EL JAR YA EXISTIA EN LA CARPETA LOG");
+	        
+	        }
+	        
+		} catch (Exception e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+		}
+        		
+	        if (downloadedFile.exists()) {
+	        	LOG.info("JAR SE DESCARGO LOCALMENTE Y SE COPIA A  ::: " +rutaDestino);
+			}
+	        
+	        
+	        return downloadedFile.getAbsolutePath();
+		
+	}
 	
 	protected void findDocumento(Integer idExpediente, String codDocumento) throws Exception {
 		System.out.println("findDocumento()");
