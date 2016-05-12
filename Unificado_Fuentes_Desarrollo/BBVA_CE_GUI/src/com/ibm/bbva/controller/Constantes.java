@@ -557,6 +557,17 @@ public interface Constantes {
 	 */
 	int TIPO_MENSAJE_GESTIONAR_SUBSANAR_OPERACION = 11;	
 	/**
+	 * Nombre de la Variable que se guarda en session y representa o contiene el valor
+	 * del nombre de la carpeta temporal donde se guardan los documentos por expediente 
+	 * antes de ser subidos al FTP
+	 * Formato de la carpeta: NUMERO DOI_AÑO-MES-DIA_HORA-MINUTOS-SEGUNDOS
+	 */
+	String CARPETA_DOC_ESCANEADOS_POR_EXPEDIENTE = "carpetaTempDocEscaneadosPorExp"; 
+	String RUTA_ORIGEN_DESCARGA_JAR = "rutaOrigenDescargaJar";
+	String RUTA_DESTINO_DESCARGA_JAR ="rutaDestinoDescargaJar";
+	String NOMBRE_JAR = "nombreJar";
+	String EXTENCION_JAR ="extencionJar";
+	/**
 	 * Para el directorio de doc escaneados Subida   complete
 	 */
 	String DIRECTORIO_DOC_ESCANEADOS = "C:\\ContratacionElectronica\\Transferencias_TC"; 
@@ -1160,6 +1171,14 @@ public interface Constantes {
 	String DESCRIPCION_TIPO_OFERTA_REGULAR="REGULAR";
 	String DESCRIPCION_TIPO_FLUJO_REPROCESO="REPROCESO";
 	String DESCRIPCION_TIPO_FLUJO_REGULAR="REGULAR";
+	
+	/**
+	 * Constantes para reporte historico
+	 */
+	String ESTADO_REPORTE_HISTORICO_INICIADO = "1";
+	String ESTADO_REPORTE_HISTORICO_TERMINADO = "0";
+	String ESTADO_REPORTE_HISTORICO_DESCARGADO = "2";
+	
 	/**
 	 * Objeto de tipo codigo Producto
 	 */
@@ -1269,6 +1288,8 @@ public interface Constantes {
 	
 	
 	String LISTA_DOCUMENTOS_ADJUNTOS = "lstDocsAdj";
+	
+	String CARPETA_TEMPORAL = "carpetaTemporal";
 	
 	String COD_USUARIO_ASIGNAR="codAsignar";
 	
