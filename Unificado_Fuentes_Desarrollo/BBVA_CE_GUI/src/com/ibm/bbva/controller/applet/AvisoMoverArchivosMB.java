@@ -99,8 +99,8 @@ public class AvisoMoverArchivosMB extends AbstractMBean {
 		LOG.info("pathDescargados "+pathDescargados);
 		this.listaDocumentosAdjuntos = String.valueOf(getObjectSession(Constantes.LISTA_DOCUMENTOS_ADJUNTOS));
 		LOG.info("listaDocumentosAdjuntos "+listaDocumentosAdjuntos);
-		removeObjectSession(Constantes.ID_EXPEDIENTE_SESION);	
-		removeObjectSession(Constantes.LISTA_DOCUMENTOS_ADJUNTOS);
+		//removeObjectSession(Constantes.ID_EXPEDIENTE_SESION);	
+		//removeObjectSession(Constantes.LISTA_DOCUMENTOS_ADJUNTOS);
 	}
 	
 	public String getHostParam() {
