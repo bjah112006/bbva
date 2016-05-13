@@ -57,6 +57,7 @@ public class FTP extends ArchivoApplet implements FTPListener {
     private String transferencias;
     private String cleanTransferDir;
     private String nombreJarVersion;
+    private String rutaEjecucionJar;
     
 	
 	public FTP() {
@@ -117,6 +118,8 @@ public class FTP extends ArchivoApplet implements FTPListener {
         LOG.info(carpetaTemporal);
         nombreJarVersion = getParameter("nombreJarVersion");
         LOG.info(nombreJarVersion);
+        rutaEjecucionJar = getParameter("rutaEjecucionJar");
+        LOG.info(rutaEjecucionJar);
         String tramaTIF = getParameter("tramaTIF");
         avanzados = new HashSet<String> (10);
         if (tramaTIF!=null && !tramaTIF.equals("")) {
@@ -195,7 +198,8 @@ public class FTP extends ArchivoApplet implements FTPListener {
     	//LOG.info("dirN......" + dirN);
     	//File dirN = new File("D:\\ContratacionElectronica\\Lib_TC\\","BBVASendDocsFTP.jar");
     	//File dirN = new File(Parametros.DIRECTORIO_BASE + Parametros.DIRECTORIO_LIB,Parametros.JAR_TRANSFERENCIAS);
-    	File dirN = new File(Parametros.DIRECTORIO_BASE + Parametros.DIRECTORIO_LIB,nombreJarVersion+".jar");
+    	//File dirN = new File(Parametros.DIRECTORIO_BASE + Parametros.DIRECTORIO_LIB,nombreJarVersion+".jar");
+    	File dirN = new File(rutaEjecucionJar,nombreJarVersion+".jar");
     	//String javaHome="C:\\Program Files (x86)\\Java\\jdk1.7.0.79\\bin\\";
     	//File dirN = new File("D:\\ContratacionElectronica\\Transferencias_TC");
 		if (dirN.exists()) {
