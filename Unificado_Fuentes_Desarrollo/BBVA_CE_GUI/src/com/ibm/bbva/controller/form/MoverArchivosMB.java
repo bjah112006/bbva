@@ -41,6 +41,7 @@ public class MoverArchivosMB extends AbstractMBean {
 	private String carpetaTemporal;
 	private String transferencias;
 	private String nombreJarVersion;
+	private String rutaDestinoDescargaJar;
 
 	public MoverArchivosMB() {		
 
@@ -89,6 +90,9 @@ public class MoverArchivosMB extends AbstractMBean {
 			LOG.info("carpetaTemporal "+carpetaTemporal);
 			this.nombreJarVersion = (String) getObjectSession(Constantes.NOMBRE_JAR);
 			LOG.info("nombreJarVersion "+nombreJarVersion);
+			this.rutaDestinoDescargaJar =(String) getObjectSession(Constantes.RUTA_DESTINO_DESCARGA_JAR);
+			LOG.info("rutaDestinoDescargaJar = "+rutaDestinoDescargaJar);
+			
 
 		}else{
 			escaneosPathParam = parametrosConfBean.buscarPorVariable(Constantes.ID_APLICATIVO_TC, "CONSTANTE_FTP_DIRECTORIO_DOC_ESCANEADOS").getValorVariable();
@@ -99,6 +103,8 @@ public class MoverArchivosMB extends AbstractMBean {
 			LOG.info("carpetaTemporal "+carpetaTemporal);
 			this.nombreJarVersion = "";
 			LOG.info("nombreJarVersion "+nombreJarVersion);
+			this.rutaDestinoDescargaJar = "";
+			LOG.info("rutaDestinoDescargaJar = "+rutaDestinoDescargaJar);
 		}
 
 		
@@ -248,6 +254,14 @@ public class MoverArchivosMB extends AbstractMBean {
 
 	public void setNombreJarVersion(String nombreJarVersion) {
 		this.nombreJarVersion = nombreJarVersion;
+	}
+
+	public String getRutaDestinoDescargaJar() {
+		return rutaDestinoDescargaJar;
+	}
+
+	public void setRutaDestinoDescargaJar(String rutaDestinoDescargaJar) {
+		this.rutaDestinoDescargaJar = rutaDestinoDescargaJar;
 	}
 	
 	
