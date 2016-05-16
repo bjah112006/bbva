@@ -15,7 +15,7 @@ public abstract class AbstractLinksMBean extends AbstractMBean {
 		removeObjectSession(Constantes.TIPO_MENSAJE);
 		removeObjectSession(Constantes.FLAG_COPIA_ARCHIVO_SESION);
 		removeObjectSession(Constantes.ID_EXPEDIENTE_SESION);
-		removeObjectSession(Constantes.ESTADO_TARJETA);
+		//removeObjectSession(Constantes.ESTADO_TARJETA);
 		removeObjectSession(Constantes.REPORTE_TERRITORIO);
 		removeObjectSession(Constantes.EXISTEN_TRANSFERENCIAS);	
 		//removeObjectSession(Constantes.LISTA_USUARIOS_ASIG);

@@ -205,7 +205,7 @@ public class DatosProducto3MB extends AbstractMBean {
 			LOG.info("Plazo Solicitado:::"+expediente.getExpedienteTC().getPlazoSolicitado());
 			
 		empleadoSession = (Empleado)getObjectSession(Constantes.USUARIO_SESION);
-		estadoTarjeta = (String) getObjectSession(Constantes.ESTADO_TARJETA);
+		//estadoTarjeta = (String) getObjectSession(Constantes.ESTADO_TARJETA);
 		disabledSolicitudTasaEsp=true;
 		
 		String lineaCredAprob = Double.toString(expediente.getExpedienteTC().getLineaCredAprob());	

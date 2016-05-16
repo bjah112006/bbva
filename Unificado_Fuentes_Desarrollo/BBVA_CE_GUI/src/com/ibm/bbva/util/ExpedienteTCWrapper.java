@@ -45,7 +45,7 @@ public class ExpedienteTCWrapper extends ExpedienteTCWPSWeb implements Serializa
 	private EstadoTareaCEBeanLocal estadoTareaCELocalBean;
 	private EmpleadoBeanLocal empleadoBeanLocalBean;
 	
-	private String estadoTarjeta = null;
+	//private String estadoTarjeta = null;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ExpedienteTCWrapper.class);
 	

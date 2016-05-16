@@ -961,7 +961,7 @@ public interface Constantes {
 	/**
 	 * Para estado de la tarjeta 
 	 */
-	String ESTADO_TARJETA = "estadoTarjeta";
+	//String ESTADO_TARJETA = "estadoTarjeta";
 	
 	String TIPO_MONEDA_SOLES = "1";
 	
