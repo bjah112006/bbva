@@ -374,7 +374,7 @@ public class BuscarBandejaMB extends AbstractMBean {
 		
 		if (consulta.getCodigoExpediente()!=null && soloCodigo){ // solo expediente
 			
-			Historial hist = historialBean.buscarMasRecienPorId(Long.valueOf(codigoExpediente));
+			Historial hist = historialBean.buscarMasRecienPorId(Long.valueOf(Util.validarCampo(codigoExpediente)));
 			
 			//if (lista!=null && lista.size()==0){
 				
