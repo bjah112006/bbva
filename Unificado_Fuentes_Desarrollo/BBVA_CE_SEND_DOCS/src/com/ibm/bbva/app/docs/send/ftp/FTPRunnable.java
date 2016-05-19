@@ -136,7 +136,10 @@ public class FTPRunnable implements Runnable {
 		if(cantArchivos > 0 && !(errorTransfer)){
 			LOG.info("ANTES DE MOSTRAR EL MENSAJE DE FINAL DE CARGA DE DOCUMENTOS");
 			ftp.mostrarMensaje();
-		}else{LOG.info("NO HUBO ARCHIVOS PARA SUBIR AL FTP");}
+		}else{
+			LOG.info("NO HUBO ARCHIVOS PARA SUBIR AL FTP O HUBO UN ERROR AL MOMENTO DE CARGAR DOCUMENTOS");
+			if(errorTransfer){ftp.mostrarMensajeError();}
+		}
 		//ftp.cerrarVentana();
 	}
 	
