@@ -918,24 +918,10 @@ public class PanelDocumentosMB extends AbstractMBean {
 						
 						band=true;					
 					}
-					
-					//if (!personaAnt.equals("") && (ObligatorioAnt.equals("") || !ldg.getObligatorio().trim().equals(ObligatorioAnt)) || band){
-					//	ObligatorioAnt=ldg.getObligatorio().trim();
-						
-					//	objAyuda.setDescripcionTipoDoc(obtenerValorOblig(ObligatorioAnt));
-					//	if (band==false)
-					//		objAyuda.setStrPersona("");					
 							
-					//	objAyuda.setStd(true);
-					//	listAyuda.add(objAyuda);
-					//}
-					
-					//objAyuda = new AyudaPanelDocumentos();
-					
 					if (!personaAnt.equals("")){
 						if(ldg.getPersona().getCodigo().trim().equals(personaAnt.trim())){
-							objAyuda.setStrPersona("");
-							//if(ldg.getObligatorio().trim().equals(ObligatorioAnt)){
+								objAyuda.setStrPersona("");
 								objAyuda.setDescripcionTipoDoc(ldg.getTipoDocumento().getDescripcion());
 								objAyuda.setCodigoTipoDoc(ldg.getTipoDocumento().getCodigo());
 								objAyuda.setStd(false);
@@ -987,22 +973,6 @@ public class PanelDocumentosMB extends AbstractMBean {
 								objAyuda.setVisOpElimina(visOpEliminaTmp);								
 								objAyuda.setIdCm(ldg.getIdCm());
 								objAyuda.setColObservar(false);
-								
-								//Observacion de Guia
-								//if (objAyuda.getIdCm() != 0) {
-								//	for (DocumentoExpTc objDocExpTc : docExpTcList) {
-								//		if (objDocExpTc.getIdCm() != null && objDocExpTc.getFlagObs() != null && objAyuda.getIdCm() == objDocExpTc.getIdCm().longValue()) {
-								//			boolean colObservacion = objDocExpTc.getFlagObs().equals("1")? true: false;
-								//			objAyuda.setColObservar(colObservacion);
-								//			break;
-								//		}
-								//	}
-								//} else {
-								//	objAyuda.setColObservar(false);
-								//}
-															
-								//boolean visOpObservarTmp = true;
-								
 								objAyuda.setVisOpObservar(false);
 								objAyuda.setFlagEscaneado(ldg.getFlagEscaneado());
 								
@@ -1016,7 +986,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 																
 								listAyuda.add(objAyuda);
 								band=false;	
-							//}		
+						
 						}
 					}
 				
@@ -2097,7 +2067,9 @@ public class PanelDocumentosMB extends AbstractMBean {
 				}*/
 			}
 			if(iDsCM.length()>0){
-				documentoExpTcBean.actualizarDocumentosNoObservados(expediente.getId(), iDsCM);
+				if(expediente != null && expediente.getId() > 0){
+					documentoExpTcBean.actualizarDocumentosNoObservados(expediente.getId(), iDsCM);
+				}
 			}
 			
 			/*LOG.info("a actualizar Flag escaneado para :::::"+expediente.getId());
