@@ -33,6 +33,7 @@ public class FTPRunnable implements Runnable {
 		//ftp.setTamanio(tamanio);
 		LOG.info("Numero de archivos "+cola.size());
 		int cantArchivos = 0;
+		boolean errorTransfer = false;
 		while (!cola.isEmpty()) {
 			cantArchivos = cola.size();
 			FTPFileWrapper wrapper = cola.poll();
@@ -118,6 +119,7 @@ public class FTPRunnable implements Runnable {
 				ex.printStackTrace();
 				LOG.error("Ocurrio una excepion y se cancelara el envio.(Ejecutanto el metodo errorEnvioFTP)", ex);
 				reintentarEnvio(wrapper, cola);
+				errorTransfer = true;
 			} finally {
 				try {
 					fc.disconnect();
@@ -131,7 +133,7 @@ public class FTPRunnable implements Runnable {
 			LOG.info("Quedan "+cola.size()+" archivos");
 		}
 		ftp.eliminarCarpetaTemporal();
-		if(cantArchivos > 0){
+		if(cantArchivos > 0 && !(errorTransfer)){
 			LOG.info("ANTES DE MOSTRAR EL MENSAJE DE FINAL DE CARGA DE DOCUMENTOS");
 			ftp.mostrarMensaje();
 		}else{LOG.info("NO HUBO ARCHIVOS PARA SUBIR AL FTP");}
