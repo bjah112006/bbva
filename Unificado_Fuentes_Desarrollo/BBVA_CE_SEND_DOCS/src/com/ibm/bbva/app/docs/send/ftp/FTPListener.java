@@ -7,5 +7,7 @@ public interface FTPListener {
 	void eliminarCarpetaTemporal();
 	
 	void mostrarMensaje();
+	
+	void mostrarMensajeError();
 
 }
