@@ -156,10 +156,13 @@
 		}
 		
 		function cancOperacion () {
-			disabledButton();
-			
 			var msg = $("#frmRegistrarExpediente\\:operacion").text();
-			return confirm(msg);
+			var op = confirm(msg);
+			if (op) {
+				disabledButton();
+			}
+			return op;
+			//return confirm(msg);
 		}
 		
 		function uncheckReutDoc(parmCodigo) {
