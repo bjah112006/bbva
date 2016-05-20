@@ -346,6 +346,147 @@ public class FTP extends JFrame implements FTPListener  {
 		
 		}.start();
 	}
+	
+	public void mostrarMensajeError(){
+		String message = "ERROR!! Los documentos del expediente "+numeroexpediente+" no se pudo adjuntar.";
+		//String message = "Los documentos del expediente fueron adjuntados correctamente.";
+		String header = "CONTRATACION SENCILLA PLD/TC";
+		
+		this.setSize(450,180);
+		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();// size of the screen
+		
+		Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(this.getGraphicsConfiguration());// height of the task bar
+		
+		this.setLocation(scrSize.width - this.getWidth(), scrSize.height - toolHeight.bottom - this.getHeight());
+		this.setLayout(new GridBagLayout());
+		//this.setLayout(new BorderLayout());
+		//setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+	    //        "  Events  "));
+		
+		GridBagConstraints constraints = new GridBagConstraints();		
+		constraints.gridx = 0;		
+		constraints.gridy = 0;		
+		constraints.weightx = 1.0f;		
+		constraints.weighty = 1.0f;		
+		constraints.insets = new Insets(5, 25, 10, 5);		
+		constraints.fill = GridBagConstraints.BOTH;
+				
+		//String headerConEstilo = "<html><body><div style=\"border-style: solid; border-width: 4px;\">" +
+		/*String headerConEstilo = "<html><body>" +
+				 "<div style=\"margin-top: 10spx; padding: 0pt 0.7em;\" \">"+ 
+			     "<p style=\"font-size: 20pt; color: #369;\">" +
+			     "<span style=\"float: left; margin-right: 0.3em;\" \"></span><strong>" +
+			     header + "</strong></p></div><br/><br/>";*/
+		
+		/*String mensajeConEstilo = "<html><body><div style=\"border: 1px solid #fcefa1; background: #fbf9ee" +
+				"url(#{resource['css/jquery-ui/images/ui-bg_glass_55_fbf9ee_1x400.png']}) 50% 50% repeat-x; color: #363636; "+
+				"color: #363636 -moz-border-radius-topleft: 4px; -webkit-border-top-left-radius: 4px; -khtml-border-top-left-radius: 4px; border-top-left-radius: 4px;"+
+				"-moz-border-radius-topright: 4px; -webkit-border-top-right-radius: 4px; -khtml-border-top-right-radius: 4px; border-top-right-radius: 4px;"+
+				//"-moz-border-radius-bottomleft: 4px; -webkit-border-bottom-left-radius: 4px; -khtml-border-bottom-left-radius: 4px; border-bottom-left-radius: 4px;"+
+				//"-moz-border-radius-bottomright: 4px; -webkit-border-bottom-right-radius: 4px; -khtml-border-bottom-right-radius: 4px; border-bottom-right-radius: 4px; \">"+ 
+			    // "<p style=\"font-size: 20pt; color: #369;\">" +
+			     //"<span style=\"float: left; margin-right: 0.3em; background-position: -16px -144px;\"></span>" +
+			     //message + "</p></div><br/><br/> </body></html>";*/
+			     //message + "</p></div><br/><br/></div> </body></html>";
+		
+		
+		String mensajeConEstilo = "<html> <head><link rel=\"stylesheet\" href=\"lib/css/jquery-ui/jquery-ui.css\"></head>" +
+				"<body><div style=\"margin-top: 20px; padding: 0pt 0.7em; text-align: center; border: 1px solid #fcefa1; background: #fbf9ee; color: #363636;\" class=\"ui-state-highlight ui-corner-all\" \">"+
+				"<br /><p style=\"font-size: 20pt; color: rgb(51, 102, 153); margin: 8px; margin-top: 30px;\">" +
+					     "<span style=\"float: left; margin-right: 0.3em;\" class=\"ui-icon ui-icon-info\"\"></span><strong> " +
+					     header + "</strong></p> <br />" +
+	     "<p style=\"font-size: 20pt; color: rgb(51, 102, 153); margin: 8px; margin-top: 5px; padding: 0pt 0.7em; width=50%;\">" +
+	     "<span style=\"float: left; margin-right: 0.3em; padding: 0pt 0.7em;\" class=\"ui-icon ui-icon-info\"\"></span>" +
+	     message + "</p><br /><br /><br /></div><br/><br/> </body></html>";
+
+				
+		
+		Color colorMensaje= Color.decode("#fcefa1");
+		Font fuente=new Font("Arial", Font.BOLD, 18);
+		
+		Color colorCuerpo= Color.decode("#fbf9ee");
+		
+		//JLabel headingLabel = new JLabel(headerConEstilo + mensajeConEstilo);
+		JLabel headingLabel = new JLabel(mensajeConEstilo);
+		//Border etchedRaised = BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.RED, Color.GRAY);
+
+		
+		Border line = BorderFactory.createLineBorder(colorMensaje, 2);
+		Border titled = BorderFactory.createTitledBorder(line, header, TitledBorder.LEFT, TitledBorder.TOP, fuente, colorMensaje);
+		  /* Un CompoundBorder lo creamos por la combinación de 2 bordes simples. */
+		  //Border compound = BorderFactory.createCompoundBorder(titled, etchedRaised);
+		 
+		  //simplePanel.setBorder(BorderFactory.createTitledBorder("Bordes simples"));
+
+		headingLabel.setBorder(BorderFactory.createTitledBorder(header));
+		//headingLabel.setBorder(etchedRaised);
+		headingLabel.setBorder(line);
+		//headingLabel.setBorder(titled);
+		headingLabel.setBackground(colorCuerpo);
+
+		//headingLabel.setBorder(compound);
+		//ImageIcon headingIcon = new ImageIcon("image_url");
+		//headingLabel .setIcon(headingIcon); // --- use image icon you want to be as heading image.		
+		//headingLabel.setOpaque(false);		
+		this.add(headingLabel, constraints);	
+		
+		
+		//this.add("TitledBorder", titled, constraints);
+		//this.add("CompoundBorder", compound, constraints);
+		
+		
+		constraints.gridx++;
+		constraints.weightx = 0.0f;		
+		constraints.weighty = 0.0f;	
+		constraints.fill = GridBagConstraints.NONE;		
+		constraints.anchor = GridBagConstraints.NORTH;	
+		
+		 JButton cloesButton = new JButton(new AbstractAction("X") {
+	        @Override
+	        public void actionPerformed(final ActionEvent e) {
+	        	dispose();
+	        }
+	
+		 });
+		 cloesButton.setMargin(new Insets(1, 1, 1, 1));
+		 cloesButton.setFocusable(false);
+		 this.add(cloesButton, constraints);
+		 //constraints.gridx = 0;
+		 //constraints.gridy++;
+		 //constraints.weightx = 1.0f;
+		 //constraints.weighty = 1.0f;
+		 //constraints.insets = new Insets(5, 5, 5, 5);
+		 //constraints.fill = GridBagConstraints.BOTH;
+		 //JLabel messageLabel = new JLabel("<HtMl>"+message);
+		 /*String mensajeConEstilo = "<html><body><div style=\"margin-top: 10spx; padding: 0pt 0.7em;\" class=\"ui-state-highlight ui-corner-all\">"+ 
+			     "<p style=\"font-size: 20pt; color: #369;\">" +
+			     "<span style=\"float: left; margin-right: 0.3em;\" class=\"ui-icon ui-icon-info\"></span>" +
+			     message + "</p></div></body></html>";*/
+		
+		//JLabel messageLabel = new JLabel(mensajeConEstilo);
+		//this.add(messageLabel, constraints);
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		this.setUndecorated(true);
+		this.setAlwaysOnTop(true);
+		this.setVisible(true);
+
+		new Thread(){	
+		      @Override
+		      public void run() {
+		           try {
+		                  Thread.sleep(10000); // time after which pop up will be disappeared.
+		        	      dispose();
+		           } catch (InterruptedException e) {
+		           //} catch (Exception e) {	     
+		                  e.printStackTrace();
+		
+		           }
+		
+		      };
+		
+		}.start();
+	}
+
 
 
 	
