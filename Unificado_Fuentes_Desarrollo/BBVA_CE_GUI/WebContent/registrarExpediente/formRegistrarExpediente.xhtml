@@ -134,9 +134,10 @@
         function disabledButton() {
         	document.getElementById('frmRegistrarExpediente:btnAceptar').disabled = 'true';
             document.getElementById('frmRegistrarExpediente:btnGrabar').disabled = 'true';
-            document.getElementById('frmRegistrarExpediente:btnCancelar').disabled = 'true';
+            //document.getElementById('frmRegistrarExpediente:btnCancelarOp').disabled = 'true';
+            document.getElementById('frmRegistrarExpediente:btnCancelarOp').style = 'display:none';
         }
-		
+              		
 		function confGuardar (form) {
 			var msg = $("#frmRegistrarExpediente\\:guardar").text();
 			var docsObs = $("[id='#{paneldocumentos.htmlListaDocsObservados.clientId}']").val();
@@ -155,8 +156,9 @@
 		}
 		
 		function cancOperacion () {
-			var msg = $("#frmRegistrarExpediente\\:operacion").text();
 			disabledButton();
+			
+			var msg = $("#frmRegistrarExpediente\\:operacion").text();
 			return confirm(msg);
 		}
 		
@@ -455,9 +457,9 @@
 											value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.grabar']}"
 											onclick="return confGuardar(this.form);" type="button" 
 											accesskey="g" />
-										<h:commandButton id="btnCancelar"
+										<h:commandButton id="btnCancelarOp"
 											value="#{msg['com.ibm.bbva.registrarExpediente.formRegistrarExpediente.cancelarOperacion']}"
-											onclick="return cancOperacion();" type="button"
+											onclick="return cancOperacion();"
 											action="#{registrarExpediente.cancelarOperacion}"
 											accesskey="c" />
 										<h:commandLink id="btnEjecutaApplet"
