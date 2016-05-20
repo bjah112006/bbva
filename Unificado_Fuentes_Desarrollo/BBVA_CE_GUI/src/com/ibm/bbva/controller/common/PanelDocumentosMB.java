@@ -2039,9 +2039,10 @@ public class PanelDocumentosMB extends AbstractMBean {
 	
 	public void actualizarNoObservados(){
 		LOG.info("en el metodo actualizarNoObservados");
-		LOG.info("listaAyudaPanelDocumentos::::"+listaAyudaPanelDocumentos.size());
+		//LOG.info("listaAyudaPanelDocumentos::::"+listaAyudaPanelDocumentos.size());
 		String iDsCM = "";
 		if(listaAyudaPanelDocumentos!=null){
+			LOG.info("listaAyudaPanelDocumentos::::"+listaAyudaPanelDocumentos.size());
 			for (AyudaPanelDocumentos apd : listaAyudaPanelDocumentos) {
 				//apd.setColObservar(true);
 				if(apd.getIdCm() > 0){
