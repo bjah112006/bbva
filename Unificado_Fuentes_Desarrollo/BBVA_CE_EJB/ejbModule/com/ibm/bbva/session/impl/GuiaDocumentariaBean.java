@@ -844,6 +844,25 @@ public class GuiaDocumentariaBean extends AbstractFacade<GuiaDocumentaria> imple
 		}
 	}
 	
+	@Override
+	public List<Persona> obtenerPersonaPorCodigos(String codigos){
+		//String query = "select p from conele.TBL_CE_IBM_PERSONA p where p.CODIGO in (" + codigos +")";
+		String query = "select p from Persona p where p.codigo in ('" + codigos +"')";
+		//@NamedQuery(name="Persona.findByCodigos", query="SELECT p FROM Persona p WHERE p.codigo in ( :codigos)")
+		try{
+			List<Persona> resultList = (List<Persona>)em.createQuery(query)
+					.getResultList();
+			if (resultList == null || resultList.isEmpty()) {
+				return null;
+			} else {
+				return resultList;
+			}
+			
+		}catch(NoResultException e){
+			return null;
+		}
+	}
+	
 	/*@Override
 	public List<GuiaDocumentaria> obtenerGuiaDocOrden(GuiaDocumentaria g, boolean isConyugue, List<String> categoriaRenta ) {
 		String where = "";
