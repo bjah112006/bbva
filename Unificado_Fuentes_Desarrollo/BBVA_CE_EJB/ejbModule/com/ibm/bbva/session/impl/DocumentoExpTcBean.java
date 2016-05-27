@@ -111,7 +111,24 @@ public class DocumentoExpTcBean extends AbstractFacade<DocumentoExpTc> implement
 		} catch(NoResultException e){
 			return null;
 		}		
-	}	
+	}
+	
+	@Override
+	public int removeDocumentoxpediente(long idExpediente, long idTipoDocumento){
+		String query=" delete from conele.tbl_ce_ibm_documento_exp_tc " +
+			" where ID_EXPEDIENTE_FK  =" + idExpediente + " and ID_TIPO_DOCUMENTO_FK =" + idTipoDocumento + " and ID_CM is null";
+		
+		int result =0;
+		try{
+			result = em.createNativeQuery(query)
+					.executeUpdate();
+		} catch(Exception e){
+			LOG.error(e.getMessage(),e);
+			return result;
+		}
+		return result;
+
+	}
 	
 	@Override
 	public List<DocumentoExpTc> consultarDocumentosExpediente(long idExpediente, String codigoTipoDoc){
@@ -153,6 +170,57 @@ public class DocumentoExpTcBean extends AbstractFacade<DocumentoExpTc> implement
 			LOG.info("e" + e.getMessage());
 			return 0;
 		}
+
+	}
+	
+	@Override
+	public int actualizarDocumentoObservadoExpediente(long idDocumentoExpTc){
+		String query=" update conele.tbl_ce_ibm_documento_exp_tc " +
+			"set FLAG_OBS='0' where id =" + idDocumentoExpTc;
+		
+		int result =0;
+		try{
+			result = em.createNativeQuery(query)
+					.executeUpdate();
+		} catch(Exception e){
+			LOG.error(e.getMessage(),e);
+			return result;
+		}
+		return result;
+
+	}
+	
+	@Override
+	public int actualizarDocumentosObservadosExpediente(String idDocumentosExpTc){
+		String query=" update conele.tbl_ce_ibm_documento_exp_tc " +
+			"set FLAG_OBS='0' where id in (" + idDocumentosExpTc +") ";
+		
+		int result =0;
+		try{
+			result = em.createNativeQuery(query)
+					.executeUpdate();
+		} catch(Exception e){
+			LOG.error(e.getMessage(),e);
+			return result;
+		}
+		return result;
+
+	}
+	
+	@Override
+	public int observarDocumentoExpediente(long idDocumentoExpTc){
+		String query=" update conele.tbl_ce_ibm_documento_exp_tc " +
+			"set FLAG_OBS='1' where id =" + idDocumentoExpTc;
+		
+		int result =0;
+		try{
+			result = em.createNativeQuery(query)
+					.executeUpdate();
+		} catch(Exception e){
+			LOG.error(e.getMessage(),e);
+			return result;
+		}
+		return result;
 
 	}
 	
