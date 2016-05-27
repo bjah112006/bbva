@@ -233,8 +233,8 @@ public class DocumentosEscaneadosMB extends AbstractMBean {
 						for (AyudaPanelDocumentos objAux : listaAyudaPanelDocumentos) {
 							if (objAux.getObjGuiaDocumentaria() != null) {
 								TipoDocumento tipoDocumentoAux = objAux.getObjGuiaDocumentaria().getTipoDocumento();
-								LOG.info("tipoDocumentoAux.getCodigo(): " + tipoDocumentoAux.getCodigo());
-								LOG.info("objAux.isDocEscaneado(): " + objAux.isDocEscaneado());
+								//LOG.info("tipoDocumentoAux.getCodigo(): " + tipoDocumentoAux.getCodigo());
+								//LOG.info("objAux.isDocEscaneado(): " + objAux.isDocEscaneado());
 								if(tipoDocumento.getCodigo().equals(tipoDocumentoAux.getCodigo()) && !objAux.isDocEscaneado()){
 									flagExiste = true;
 									break;
