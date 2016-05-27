@@ -301,9 +301,9 @@ public class PanelDocumentosMB extends AbstractMBean {
 			LOG.info("STR LISTA DOCS TRANSFERENCIAS SPLIT : " );
 			
 			String[] listaDocs = strListaDocsTransferencias.trim().split(",");
-			for(int i = 0; i< listaDocs.length; i++ ){
+			/*for(int i = 0; i< listaDocs.length; i++ ){
 				LOG.info(" - DOC TRANSFERENCIA " + i + " : " + listaDocs[i]);
-			}
+			}*/
 			
 			if(listaDocs.length == 1 && listaDocs[0].equals("")){
 				this.setExistenNuevosArchivos(false);
@@ -459,13 +459,17 @@ public class PanelDocumentosMB extends AbstractMBean {
 			
 			for(DocumentoReutilizable documentoReutilizableNueva : listaNuevaDocReu){
 				documentoReutilizableNueva.setSeleccion(false);
+				
+				/*if(listaSeleccionados.contains(documentoReutilizableNueva.getCodigoDocumento())){
+					documentoReutilizableNueva.setSeleccion(true);
+				}*/
+				
 				for(String codigoTipoDocumento : listaSeleccionados){
 					if(documentoReutilizableNueva.getCodigoDocumento().equals(codigoTipoDocumento)){
 						documentoReutilizableNueva.setSeleccion(true);
 					}
 				}
 			}
-			
 			documentoReutilizableMB.setListaDocumentoReutilizable(listaNuevaDocReu);
 			
 			addObjectSession("listaNuevaDocReu",listaNuevaDocReu);
@@ -592,7 +596,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 	}	
 	
 	public boolean validarDocumentos(){
-		LOG.info("this.isOpValidar() -> "+this.isOpValidar());
+		//LOG.info("this.isOpValidar() -> "+this.isOpValidar());
 		
 		if(this.isOpValidar()){
 			// esta validación ya nunca se hace, opValidar siempre es false
@@ -659,12 +663,17 @@ public class PanelDocumentosMB extends AbstractMBean {
 		String ObligatorioAnt="";
 		boolean band=false;
 		List<AyudaPanelDocumentos> listAyuda = new ArrayList<AyudaPanelDocumentos>();
-		List<GuiaDocumentaria> lstGuiaDocMC = new ArrayList<GuiaDocumentaria>();
 		AyudaPanelDocumentos objAyuda;		
 		String strEliminar="";
 		String strModificar="";
 		String strObservar="";
 		GuiaDocumentaria guiaDocumentaria = null;
+		
+		//List<GuiaDocumentaria> lstGuiaDocMC = new ArrayList<GuiaDocumentaria>();
+		List<GuiaDocumentaria> lstGuiaDocMC = null;
+		if(!listaGuiaDoc.isEmpty()){
+			lstGuiaDocMC = new ArrayList<GuiaDocumentaria>(listaGuiaDoc);
+		}else{lstGuiaDocMC = new ArrayList<GuiaDocumentaria>();}
 		
 		Empleado empleado = null;
 		
@@ -674,10 +683,10 @@ public class PanelDocumentosMB extends AbstractMBean {
 			empleado = (Empleado) getObjectSession(Constantes.USUARIO_AD_SESION);
 		}
 		
-		if(empleado.getPerfil() != null)
-			LOG.info("Perfil-empleado"+empleado.getPerfil().getId());		
-		LOG.info("listaGuiaDoc.size: " + listaGuiaDoc.size());		
-		for(GuiaDocumentaria l : listaGuiaDoc){								
+		//if(empleado.getPerfil() != null)
+			//LOG.info("Perfil-empleado"+empleado.getPerfil().getId());		
+		//LOG.info("listaGuiaDoc.size: " + listaGuiaDoc.size());		
+		/*for(GuiaDocumentaria l : listaGuiaDoc){								
 					LOG.info("Codigo : "+l.getTipoDocumento().getCodigo());
 					LOG.info("Descripcion : "+l.getTipoDocumento().getDescripcion());
 					LOG.info("Obligatorio : "+l.getObligatorio());
@@ -688,7 +697,8 @@ public class PanelDocumentosMB extends AbstractMBean {
 					LOG.info("IDCM : "+l.getIdCm());
 					LOG.info("Perfil-guia : "+l.getTarea().getTareaPerfiles().get(0).getPerfil().getId());
 					lstGuiaDocMC.add(l);
-		 }
+		 }*/
+				
 		if(getNombreJSPPrincipal().equals("formVisualizarExpediente")) {				
 			LOG.info("MODO CONSULTA. SE LIMPIA LA GUIA");
 			listaGuiaDoc.clear();			
@@ -765,8 +775,9 @@ public class PanelDocumentosMB extends AbstractMBean {
 								docExpTcListTMP.add(documentoExpTc);
 							}
 							else{
-								DocumentoExpTc docExpTCEliminar = documentoExpTcBean.findByTipoDocisNullCM(expediente.getId(), documentoExpTc.getTipoDocumento().getId());
-								documentoExpTcBean.remove(docExpTCEliminar);
+								//DocumentoExpTc docExpTCEliminar = documentoExpTcBean.findByTipoDocisNullCM(expediente.getId(), documentoExpTc.getTipoDocumento().getId());
+								//documentoExpTcBean.remove(docExpTCEliminar);
+								int resultado = documentoExpTcBean.removeDocumentoxpediente(expediente.getId(), documentoExpTc.getTipoDocumento().getId());
 
 								try {
 									documentoExpTc.setIdCm(null);
@@ -792,8 +803,8 @@ public class PanelDocumentosMB extends AbstractMBean {
 			}
 		}
 		
-		LOG.info("docExpTcList: " + docExpTcList.size());
-		LOG.info("listaGuiaDoc: " + listaGuiaDoc.size());
+		//LOG.info("docExpTcList: " + docExpTcList.size());
+		//LOG.info("listaGuiaDoc: " + listaGuiaDoc.size());
 		for(DocumentoExpTc d : docExpTcList){
 			guiaDocumentaria = new GuiaDocumentaria();
 			if (d.getObligatorio() != null){				
@@ -836,7 +847,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 				listaGuiaDoc.add(guiaDocumentaria);
 			}			
 			
-			if (d.getTipoDocumento()!=null){
+			/*if (d.getTipoDocumento()!=null){
 				LOG.info("Codigo d : "+d.getTipoDocumento().getCodigo());
 				LOG.info("Descripcion d : "+d.getTipoDocumento().getDescripcion());
 			}
@@ -856,7 +867,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 			}
 			if (d.getFlagObs()!=null){
 				LOG.info("Observado d : "+d.getFlagObs());
-			}
+			}*/
 		}
 		
 		//List<GuiaDocumentaria> listaGuiaDocumentos = ordenarListaPorPersona(listaGuiaDoc);
@@ -870,7 +881,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 			listaGuiaDocumentos = ordenarListaPorObligatorio(listaGuiaDoc);
 		}
 		
-		for(GuiaDocumentaria l : listaGuiaDoc){
+		/*for(GuiaDocumentaria l : listaGuiaDoc){
 			if (l.getTipoDocumento() != null){
 				LOG.info("Order - Codigo : "+l.getTipoDocumento().getCodigo());
 				LOG.info("Order - Descripcion : "+l.getTipoDocumento().getDescripcion());
@@ -889,9 +900,9 @@ public class PanelDocumentosMB extends AbstractMBean {
 				LOG.info("Tarea-guia2 : "+l.getTarea().getId());
 				LOG.info("Perfil-guia2 : "+l.getTarea().getTareaPerfiles().get(0).getPerfil().getId());
 			}
-		}
+		}*/
 				
-		LOG.info("listaGuiaDocumentos.size:" + listaGuiaDocumentos.size());
+		//LOG.info("listaGuiaDocumentos.size:" + listaGuiaDocumentos.size());
 		for(GuiaDocumentaria ldg : listaGuiaDocumentos){
 			objAyuda = new AyudaPanelDocumentos();	
 			
@@ -958,6 +969,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 						
 								boolean visOpEliminaTmp = false;
 								boolean docGuiaTmp = false;
+							
 								for (GuiaDocumentaria objDocumentaria: lstGuiaDocMC) {
 									LOG.info("objDocumentaria:" + objDocumentaria.getTipoDocumento().getCodigo() + 
 											" - " + objAyuda.getObjGuiaDocumentaria().getTipoDocumento().getCodigo());
@@ -976,13 +988,13 @@ public class PanelDocumentosMB extends AbstractMBean {
 								objAyuda.setVisOpObservar(false);
 								objAyuda.setFlagEscaneado(ldg.getFlagEscaneado());
 								
-								LOG.info("Descripcion : "+ldg.getTipoDocumento().getDescripcion());
+								/*LOG.info("Descripcion : "+ldg.getTipoDocumento().getDescripcion());
 								LOG.info("VisOpElimina: "+objAyuda.isVisOpElimina());
 								LOG.info("opEliminar : "+opEliminar);
 								LOG.info("VisOpObservar:" + objAyuda.isVisOpObservar());
 								LOG.info("opObservar : " + opObservar);
 								LOG.info("DocEscaneado : "+objAyuda.isDocEscaneado());
-								LOG.info("DocTransferencias : "+objAyuda.isDocTransferencias());
+								LOG.info("DocTransferencias : "+objAyuda.isDocTransferencias());*/
 																
 								listAyuda.add(objAyuda);
 								band=false;	
@@ -991,10 +1003,8 @@ public class PanelDocumentosMB extends AbstractMBean {
 					}
 				
 				}
-				
-				
-				
-				
+				//FIN DE ANTIGUO
+		
 			}else{
 				if(ldg!=null && ldg.getPersona()!=null && ldg.getPersona().getCodigo()!=null){
 					if (personaAnt.equals("") || !ldg.getPersona().getCodigo().trim().equals(personaAnt.trim())){
@@ -1035,7 +1045,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 								objAyuda.setStd(false);
 								objAyuda.setObjGuiaDocumentaria(ldg);
 								
-								LOG.info("ldg.getIdCm(): " + ldg.getIdCm());
+								//LOG.info("ldg.getIdCm(): " + ldg.getIdCm());
 								
 								if (ldg.getIdCm() > 0) {
 									if (ldg.getFeRegistro()!=null) {
@@ -1055,7 +1065,68 @@ public class PanelDocumentosMB extends AbstractMBean {
 								LOG.info("strListaDocsTransferencias:" + strListaDocsTransferencias);
 								if (strListaDocsTransferencias != null && !strListaDocsTransferencias.trim().equals("")) {
 									List<String> listaDocsTransferencias = Arrays.asList(strListaDocsTransferencias.split(","));
-									for (String tipoDocTrans : listaDocsTransferencias) {
+									
+									/*if(listaDocsTransferencias.contains(ldg.getTipoDocumento().getCodigo())){
+										//String tipoDocTrans = listaDocsTransferencias.get(listaDocsTransferencias.indexOf(ldg.getTipoDocumento().getCodigo()))
+										long idCmObservado = obtenerIdCmObservado(ldg, docExpTcList);
+										if(idCmObservado != 0){
+											// Se quita la observacion y se pone docTransferencias = true
+											// Si es la guia observada
+											if (idCmObservado == ldg.getIdCm()) {
+												// Se quita la observacion
+												objAyuda.setDocEscaneado(true);
+												objAyuda.setDocTransferencias(false);
+												//DocumentoExpTc docExpTC;
+												//docExpTC = documentoExpTcBean.buscarPorId(idCmObservado);
+												//docExpTC.setFlagObs(Constantes.FLAG_OBS_DOCEXPTC_NOACTIVO);
+												//documentoExpTcBean.edit(docExpTC);
+												int resultado = documentoExpTcBean.actualizarDocumentoObservadoExpediente(idCmObservado);
+												docExpTcList = documentoExpTcBean.buscarPorExpedienteFlagCM(expediente.getId(), Constantes.FLAG_CM);
+												LOG.info("Se quito la observacion para la guia con IDCM:" + idCmObservado);
+											}
+										}else{
+											if (ldg.getFeRegistro()==null) {
+												objAyuda.setDocTransferencias(true);
+												break;
+											}
+										}
+									 }*/
+									
+								String iDsCmObservados = "";
+								for (String tipoDocTrans : listaDocsTransferencias) {
+									//LOG.info("tipoDocTrans: " + listaGuiaDoc + " - " + ldg.getTipoDocumento().getCodigo());
+									if (tipoDocTrans.equals(ldg.getTipoDocumento().getCodigo())) {
+									long idCmObservado = obtenerIdCmObservado(ldg, docExpTcList);
+									if(idCmObservado != 0){
+										// Se quita la observacion y se pone docTransferencias = true
+										// Si es la guia observada
+										if (idCmObservado == ldg.getIdCm()) {
+											// Se quita la observacion
+											objAyuda.setDocEscaneado(true);
+											objAyuda.setDocTransferencias(false);
+											
+											if(iDsCmObservados.equals("")){
+												iDsCmObservados = String.valueOf(idCmObservado);
+											}else{
+												iDsCmObservados = iDsCmObservados +", "+ String.valueOf(idCmObservado);
+											}
+										}
+									}else{
+										if (ldg.getFeRegistro()==null) {
+											objAyuda.setDocTransferencias(true);
+											break;
+										}
+									}
+									
+									}
+								}		
+								if(!iDsCmObservados.equals("")){
+									int resultado = documentoExpTcBean.actualizarDocumentosObservadosExpediente(iDsCmObservados);
+									LOG.info("Se quitaron las observaciones para la guia con IDsCM:" + iDsCmObservados);
+									docExpTcList = documentoExpTcBean.buscarPorExpedienteFlagCM(expediente.getId(), Constantes.FLAG_CM);
+								}
+									
+									/*for (String tipoDocTrans : listaDocsTransferencias) {
 										LOG.info("tipoDocTrans: " + listaGuiaDoc + " - " + ldg.getTipoDocumento().getCodigo());
 										if (tipoDocTrans.equals(ldg.getTipoDocumento().getCodigo())) {
 											long idCmObservado = obtenerIdCmObservado(ldg, docExpTcList);
@@ -1080,7 +1151,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 												}
 											}
 										}
-									}
+									}*/
 								}
 								
 								objAyuda.setVisOpElimina(false);	
@@ -1101,8 +1172,8 @@ public class PanelDocumentosMB extends AbstractMBean {
 								boolean visOpEliminaTmp = false;
 								boolean docGuiaTmp = false;
 								for (GuiaDocumentaria objDocumentaria: lstGuiaDocMC) {
-									LOG.info("objDocumentaria:" + objDocumentaria.getTipoDocumento().getCodigo() + 
-											" - " + objAyuda.getObjGuiaDocumentaria().getTipoDocumento().getCodigo());
+									//LOG.info("objDocumentaria:" + objDocumentaria.getTipoDocumento().getCodigo() + 
+									//		" - " + objAyuda.getObjGuiaDocumentaria().getTipoDocumento().getCodigo());
 									if (objDocumentaria.getTipoDocumento().getCodigo()
 											.equals(objAyuda.getObjGuiaDocumentaria().getTipoDocumento().getCodigo())) {
 										visOpEliminaTmp = true;
@@ -1129,7 +1200,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 								}
 															
 								boolean visOpObservarTmp = true;
-								LOG.info("objAyuda.isDocEscaneado():" + objAyuda.isDocEscaneado());
+								//LOG.info("objAyuda.isDocEscaneado():" + objAyuda.isDocEscaneado());
 								if (objAyuda.isDocEscaneado()) {
 									visOpObservarTmp = esObservableGuiaDoc(objAyuda, docExpTcList, lstGuiaDocMC);
 								}
@@ -1137,13 +1208,13 @@ public class PanelDocumentosMB extends AbstractMBean {
 								objAyuda.setVisOpObservar(visOpObservarTmp);
 								objAyuda.setFlagEscaneado(ldg.getFlagEscaneado());
 								
-								LOG.info("Descripcion : "+ldg.getTipoDocumento().getDescripcion());
+								/*LOG.info("Descripcion : "+ldg.getTipoDocumento().getDescripcion());
 								LOG.info("VisOpElimina: "+objAyuda.isVisOpElimina());
 								LOG.info("opEliminar : "+opEliminar);
 								LOG.info("VisOpObservar:" + objAyuda.isVisOpObservar());
 								LOG.info("opObservar : " + opObservar);
 								LOG.info("DocEscaneado : "+objAyuda.isDocEscaneado());
-								LOG.info("DocTransferencias : "+objAyuda.isDocTransferencias());
+								LOG.info("DocTransferencias : "+objAyuda.isDocTransferencias());*/
 																
 								listAyuda.add(objAyuda);
 								band=false;	
@@ -1157,8 +1228,8 @@ public class PanelDocumentosMB extends AbstractMBean {
 		}	
 		strListaDocsObservados = obtenerDocsObservados(listAyuda);
 		strListaIdcmDocsObservados = obtenerIdcmDocsObservados(listAyuda);
-		LOG.info("strListaDocsObervados:" + strListaDocsObservados);
-		LOG.info("strListaIdcmDocsObservados:" + strListaIdcmDocsObservados);
+		//LOG.info("strListaDocsObervados:" + strListaDocsObservados);
+		//LOG.info("strListaIdcmDocsObservados:" + strListaIdcmDocsObservados);
 		
 		lstPersonaPDs = new ArrayList<PersonaPD>();
 		
@@ -1204,11 +1275,15 @@ public class PanelDocumentosMB extends AbstractMBean {
 
 	}
 	
-	
 
 	public List<PersonaPD> obtenerListaPanelDocumentoAgrupada(List<GuiaDocumentaria> listaGuiaDocAgr){
 
-		List<GuiaDocumentaria> lstGuiaDocMC = new ArrayList<GuiaDocumentaria>();
+		//List<GuiaDocumentaria> lstGuiaDocMC = new ArrayList<GuiaDocumentaria>();
+		List<GuiaDocumentaria> lstGuiaDocMC = null;
+		if(!listaGuiaDocAgr.isEmpty()){
+			lstGuiaDocMC = new ArrayList<GuiaDocumentaria>(listaGuiaDocAgr);
+		}else{lstGuiaDocMC = new ArrayList<GuiaDocumentaria>();}
+		
 		List<PersonaPD> lstPersonaPDs = new ArrayList<PersonaPD>();
 		
 		AyudaPanelDocumentos objAyuda;
@@ -1217,10 +1292,10 @@ public class PanelDocumentosMB extends AbstractMBean {
 		
 		Empleado empleado = (Empleado) getObjectSession(Constantes.USUARIO_SESION); 
 		
-		if(empleado.getPerfil() != null)
-			LOG.info("Perfil-empleado"+empleado.getPerfil().getId());		
-		LOG.info("listaGuiaDocAgr.size: " + listaGuiaDocAgr.size());		
-		for(GuiaDocumentaria l : listaGuiaDocAgr){								
+		//if(empleado.getPerfil() != null)
+			//LOG.info("Perfil-empleado"+empleado.getPerfil().getId());		
+		//LOG.info("listaGuiaDocAgr.size: " + listaGuiaDocAgr.size());		
+		/*for(GuiaDocumentaria l : listaGuiaDocAgr){								
 					LOG.info("Codigo : "+l.getTipoDocumento().getCodigo());
 					LOG.info("Descripcion : "+l.getTipoDocumento().getDescripcion());
 					LOG.info("Obligatorio : "+l.getObligatorio());
@@ -1231,7 +1306,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 					LOG.info("IDCM : "+l.getIdCm());
 					LOG.info("Perfil-guia : "+l.getTarea().getTareaPerfiles().get(0).getPerfil().getId());
 					lstGuiaDocMC.add(l);
-		 }
+		 }*/
 		
 		if(getNombreJSPPrincipal().equals("formVisualizarExpediente")) {				
 			LOG.info("MODO CONSULTA. SE LIMPIA LA GUIA");
@@ -1280,8 +1355,9 @@ public class PanelDocumentosMB extends AbstractMBean {
 								docExpTcListTMP.add(documentoExpTc);
 							}
 							else{
-								DocumentoExpTc docExpTCEliminar = documentoExpTcBean.findByTipoDocisNullCM(expediente.getId(), documentoExpTc.getTipoDocumento().getId());
-								documentoExpTcBean.remove(docExpTCEliminar);
+								//DocumentoExpTc docExpTCEliminar = documentoExpTcBean.findByTipoDocisNullCM(expediente.getId(), documentoExpTc.getTipoDocumento().getId());
+								//documentoExpTcBean.remove(docExpTCEliminar);
+								int resultado = documentoExpTcBean.removeDocumentoxpediente(expediente.getId(), documentoExpTc.getTipoDocumento().getId());
 
 								try {
 									documentoExpTc.setIdCm(null);
@@ -1306,8 +1382,8 @@ public class PanelDocumentosMB extends AbstractMBean {
 			}
 		}
 		
-		LOG.info("docExpTcList: " + docExpTcList.size());
-		LOG.info("listaGuiaDoc: " + listaGuiaDoc.size());
+		//LOG.info("docExpTcList: " + docExpTcList.size());
+		//LOG.info("listaGuiaDoc: " + listaGuiaDoc.size());
 		for(DocumentoExpTc d : docExpTcList){
 			guiaDocumentaria = new GuiaDocumentaria();
 			if (d.getObligatorio() != null){				
@@ -1337,8 +1413,8 @@ public class PanelDocumentosMB extends AbstractMBean {
 			}
 						
 			String nombJSP = getNombreJSPPrincipal();
-			LOG.info("nombJSP:" + nombJSP);
-			LOG.info("expediente.getId():" + expediente.getId());		
+			//LOG.info("nombJSP:" + nombJSP);
+			//LOG.info("expediente.getId():" + expediente.getId());		
 			if (nombJSP.equals("formRegistrarExpediente") && expediente.getId() > 0) {
 				int indexGuia = 0;
 				for (int i = 0; i < listaGuiaDocAgr.size(); i++) {
@@ -1354,7 +1430,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 				listaGuiaDocAgr.add(guiaDocumentaria);
 			}			
 			
-			if (d.getTipoDocumento()!=null){
+			/*if (d.getTipoDocumento()!=null){
 				LOG.info("Codigo d : "+d.getTipoDocumento().getCodigo());
 				LOG.info("Descripcion d : "+d.getTipoDocumento().getDescripcion());
 			}
@@ -1374,26 +1450,26 @@ public class PanelDocumentosMB extends AbstractMBean {
 			}
 			if (d.getFlagObs()!=null){
 				LOG.info("Observado d : "+d.getFlagObs());
-			}
+			}*/
 		}
 		
 		List<GuiaDocumentaria> listaGuiaDocumentosAgr = ordenarListaPorFecha(listaGuiaDocAgr);
-		LOG.info("listaGuiaDocumentosAgr.size:" + listaGuiaDocumentosAgr.size());
+		//LOG.info("listaGuiaDocumentosAgr.size:" + listaGuiaDocumentosAgr.size());
 		Set<String> lstCodigoPersona = new HashSet<String>();
 		for(GuiaDocumentaria l : listaGuiaDocumentosAgr){
-			if (l.getTipoDocumento()!=null){
+			/*if (l.getTipoDocumento()!=null){
 				LOG.info("Order - Codigo : "+l.getTipoDocumento().getCodigo());
 				LOG.info("Order - Descripcion : "+l.getTipoDocumento().getDescripcion());
 			}
 			if (l.getObligatorio()!=null){
 				LOG.info("Order - Obligatorio : "+l.getObligatorio());
-			}
+			}*/
 			if (l.getPersona()!=null){
-				LOG.info("Order - Persona : "+l.getPersona().getCodigo());
-				LOG.info("Order - Persona : "+l.getPersona().getDescripcion());
+				//LOG.info("Order - Persona : "+l.getPersona().getCodigo());
+				//LOG.info("Order - Persona : "+l.getPersona().getDescripcion());
 				lstCodigoPersona.add(l.getPersona().getCodigo());
 			}
-			if (l.getFeRegistro()!=null){
+			/*if (l.getFeRegistro()!=null){
 				LOG.info("Order - Fecha Registro : "+l.getFeRegistro());
 			}
 			if (l.getTarea()!=null){
@@ -1403,25 +1479,40 @@ public class PanelDocumentosMB extends AbstractMBean {
 			if (l.getTipoDocumento() !=null){
 				LOG.info("Order - TipoDocumento : " + l.getTipoDocumento().getId());
 				LOG.info("Order - TipoDocumento : " + l.getTipoDocumento().getDescripcion());
+			}*/
+		}
+		//if(lstCodigoPersona!=null)
+			//LOG.info("lstCodigoPersona tamaño::::" +lstCodigoPersona.size());
+		//AgrupaciÃ³n por Persona.
+		String personas ="";
+		for (String codigoPersona : lstCodigoPersona) {
+			//objPersonaPD = new PersonaPD();
+			//Persona persona = guiaDocumentariaBean.obtenerPersonaPorCodigo(codigoPersona);
+			//objPersonaPD.setPersona(persona);
+			//lstPersonaPDs.add(objPersonaPD);
+			//LOG.info("Guia Persona:" + persona.getCodigo() + " - " + persona.getDescripcion());
+			
+			if(personas.equals("")){
+				personas = codigoPersona;	
+			}else{
+				personas = personas +"', '" + codigoPersona;
 			}
 		}
-		if(lstCodigoPersona!=null)
-			LOG.info("lstCodigoPersona tamaño::::" +lstCodigoPersona.size());
-		//AgrupaciÃ³n por Persona.
-		for (String codigoPersona : lstCodigoPersona) {
+		
+		List<Persona> lstPersonas = guiaDocumentariaBean.obtenerPersonaPorCodigos(personas);
+		for(Persona persona : lstPersonas){
 			objPersonaPD = new PersonaPD();
-			Persona persona = guiaDocumentariaBean.obtenerPersonaPorCodigo(codigoPersona);
 			objPersonaPD.setPersona(persona);
 			lstPersonaPDs.add(objPersonaPD);
-			LOG.info("Guia Persona:" + persona.getCodigo() + " - " + persona.getDescripcion());
+			//LOG.info("Guia Persona:" + persona.getCodigo() + " - " + persona.getDescripcion());
 		}
 		
 		List<TipoDocumento> listTipoDocTmp= tipoDocumentoBean.buscar();
 		
 		// Agrupación por tipo de Documento.
 		for (PersonaPD objPd : lstPersonaPDs) {			
-			Set<String> lstCodigoTipoDocumento = new HashSet<String>();
-			for (GuiaDocumentaria objGd : listaGuiaDocumentosAgr) {
+			//Set<String> lstCodigoTipoDocumento = new HashSet<String>();
+			/*for (GuiaDocumentaria objGd : listaGuiaDocumentosAgr) {
 				if (objGd.getPersona().getCodigo().equals(objPd.getPersona().getCodigo())) {
 					String strTipoDoc = objGd.getTipoDocumento().getCodigo();
 					strTipoDoc = strTipoDoc.concat(",").concat(objGd.getObligatorio());
@@ -1442,7 +1533,25 @@ public class PanelDocumentosMB extends AbstractMBean {
 					LOG.info("Guia Tipo Documento :" + tipoDocumento.getId() + " - " + tipoDocumento.getCodigo() + " - " + tipoDocumento.getDescripcion() + " - " + tipoDocumentoPD.getObligatorio());
 				else
 					LOG.info("tipoDocumento es nulo");
+			}*/
+			
+			for (GuiaDocumentaria objGd : listaGuiaDocumentosAgr) {
+				if (objGd.getPersona().getCodigo().equals(objPd.getPersona().getCodigo())) {
+					objGd.getTipoDocumento().getCodigo();
+					objGd.getObligatorio();
+					TipoDocumentoPD tipoDocumentoPD = new TipoDocumentoPD();
+					
+					TipoDocumento tipoDocumento =obtenerTipoDoc(objGd.getTipoDocumento().getCodigo(), listTipoDocTmp);
+					tipoDocumentoPD.setTipoDocumento(tipoDocumento);
+					tipoDocumentoPD.setObligatorio(objGd.getObligatorio());
+					objPd.addTipoDocumentoPD(tipoDocumentoPD);
+					/*if(tipoDocumento!=null)
+						LOG.info("Guia Tipo Documento :" + tipoDocumento.getId() + " - " + tipoDocumento.getCodigo() + " - " + tipoDocumento.getDescripcion() + " - " + tipoDocumentoPD.getObligatorio());
+					else
+						LOG.info("tipoDocumento es nulo");*/
+				}
 			}
+			
 			//listTipoDocTmp=null; // no entiendo por qué ponían esta variable en null pero se cae si el for es de más de 1 por obvias razones
 			
 			//Se ordena por tipo de documento (alfabeticamente) y por obligatoriedad
@@ -1462,8 +1571,8 @@ public class PanelDocumentosMB extends AbstractMBean {
 						objAyuda.setStd(isObligatorio);
 						objAyuda.setObjGuiaDocumentaria(ldg);
 						
-						LOG.info("ldg.getIdCm(): " + ldg.getIdCm());
-						LOG.info("tipo doc = "+ldg.getTipoDocumento().getCodigo());								
+						//LOG.info("ldg.getIdCm(): " + ldg.getIdCm());
+						//LOG.info("tipo doc = "+ldg.getTipoDocumento().getCodigo());								
 						
 						if (ldg.getIdCm() > 0) {
 							if (ldg.getFeRegistro()!=null) {
@@ -1483,7 +1592,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 						LOG.info("strListaDocsTransferencias:" + strListaDocsTransferencias);
 						if (strListaDocsTransferencias != null && !strListaDocsTransferencias.trim().equals("")) {
 							List<String> listaDocsTransferencias = Arrays.asList(strListaDocsTransferencias.split(","));
-							for (String tipoDocTrans : listaDocsTransferencias) {
+							/*for (String tipoDocTrans : listaDocsTransferencias) {
 								LOG.info("tipoDocTrans: " + listaGuiaDocAgr + " - " + ldg.getTipoDocumento().getCodigo());
 								if (tipoDocTrans.equals(ldg.getTipoDocumento().getCodigo())) {
 									long idCmObservado = obtenerIdCmObservado(ldg, docExpTcList);
@@ -1508,7 +1617,64 @@ public class PanelDocumentosMB extends AbstractMBean {
 										}
 									}
 								}
+							}*/
+							
+							String iDsCmObservados = "";
+							for (String tipoDocTrans : listaDocsTransferencias) {
+								//LOG.info("tipoDocTrans: " + listaGuiaDocAgr + " - " + ldg.getTipoDocumento().getCodigo());
+								if (tipoDocTrans.equals(ldg.getTipoDocumento().getCodigo())) {
+								long idCmObservado = obtenerIdCmObservado(ldg, docExpTcList);
+								if(idCmObservado != 0){
+									// Se quita la observacion y se pone docTransferencias = true
+									// Si es la guia observada
+									if (idCmObservado == ldg.getIdCm()) {
+										// Se quita la observacion
+										objAyuda.setDocEscaneado(true);
+										objAyuda.setDocTransferencias(false);
+										
+										if(iDsCmObservados.equals("")){
+											iDsCmObservados = String.valueOf(idCmObservado);
+										}else{
+											iDsCmObservados = iDsCmObservados +", "+ String.valueOf(idCmObservado);
+										}}
+								}else{
+									if (ldg.getFeRegistro()==null) {
+										objAyuda.setDocTransferencias(true);
+										break;
+									}
+								}
+								}
 							}
+							if(!iDsCmObservados.equals("")){
+								int resultado = documentoExpTcBean.actualizarDocumentosObservadosExpediente(iDsCmObservados);
+								LOG.info("Se quitaron las observaciones para la guia con IDsCM:" + iDsCmObservados);
+								docExpTcList = documentoExpTcBean.buscarPorExpedienteFlagCM(expediente.getId(), Constantes.FLAG_CM);
+							}
+							
+							/*if(listaDocsTransferencias.contains(ldg.getTipoDocumento().getCodigo())){
+								long idCmObservado = obtenerIdCmObservado(ldg, docExpTcList);
+								if(idCmObservado != 0){
+									// Se quita la observacion y se pone docTransferencias = true
+									// Si es la guia observada
+									if (idCmObservado == ldg.getIdCm()) {
+										// Se quita la observacion
+										objAyuda.setDocEscaneado(true);
+										objAyuda.setDocTransferencias(false);
+										//DocumentoExpTc docExpTC;
+										//docExpTC = documentoExpTcBean.buscarPorId(idCmObservado);
+										//docExpTC.setFlagObs(Constantes.FLAG_OBS_DOCEXPTC_NOACTIVO);
+										//documentoExpTcBean.edit(docExpTC);
+										int resultado = documentoExpTcBean.actualizarDocumentoObservadoExpediente(idCmObservado);
+										docExpTcList = documentoExpTcBean.buscarPorExpedienteFlagCM(expediente.getId(), Constantes.FLAG_CM);
+										LOG.info("Se quito la observacion para la guia con IDCM:" + idCmObservado);
+									}
+								}else{
+									if (ldg.getFeRegistro()==null) {
+										objAyuda.setDocTransferencias(true);
+										break;
+									}
+								}
+							}*/
 						}
 						
 						objAyuda.setVisOpElimina(false);	
@@ -1529,8 +1695,8 @@ public class PanelDocumentosMB extends AbstractMBean {
 						boolean visOpEliminaTmp = false;
 						boolean docGuiaTmp = false;
 						for (GuiaDocumentaria objDocumentaria: lstGuiaDocMC) {
-							LOG.info("objDocumentaria:" + objDocumentaria.getTipoDocumento().getCodigo() + 
-									" - " + objAyuda.getObjGuiaDocumentaria().getTipoDocumento().getCodigo());
+							//LOG.info("objDocumentaria:" + objDocumentaria.getTipoDocumento().getCodigo() + 
+							//		" - " + objAyuda.getObjGuiaDocumentaria().getTipoDocumento().getCodigo());
 							if (objDocumentaria.getTipoDocumento().getCodigo()
 									.equals(objAyuda.getObjGuiaDocumentaria().getTipoDocumento().getCodigo())) {
 								visOpEliminaTmp = true;
@@ -1559,7 +1725,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 													
 						
 						boolean visOpObservarTmp = true;
-						LOG.info("objAyuda.isDocEscaneado():" + objAyuda.isDocEscaneado());
+						//LOG.info("objAyuda.isDocEscaneado():" + objAyuda.isDocEscaneado());
 						if (objAyuda.isDocEscaneado()) {
 							visOpObservarTmp = esObservableGuiaDoc(objAyuda, docExpTcList, lstGuiaDocMC);
 						}
@@ -1568,14 +1734,14 @@ public class PanelDocumentosMB extends AbstractMBean {
 						
 						objAyuda.setFlagEscaneado(ldg.getFlagEscaneado());
 						
-						LOG.info("Descripcion : "+ldg.getTipoDocumento().getDescripcion());
+						/*LOG.info("Descripcion : "+ldg.getTipoDocumento().getDescripcion());
 						LOG.info("VisOpElimina: "+objAyuda.isVisOpElimina());
 						LOG.info("opEliminar : "+opEliminar);
 						LOG.info("VisOpObservar:" + objAyuda.isVisOpObservar());
 						LOG.info("opObservar : " + opObservar);
 						LOG.info("DocEscaneado : "+objAyuda.isDocEscaneado());
 						LOG.info("DocTransferencias : "+objAyuda.isDocTransferencias());
-						LOG.info("Std : " + objAyuda.isStd());
+						LOG.info("Std : " + objAyuda.isStd());*/
 
 						objTipoDocPD.addAyudaPanelDocumento(objAyuda);
 					}
@@ -1598,17 +1764,17 @@ public class PanelDocumentosMB extends AbstractMBean {
 				}
 			}
 		}	
-		if(objResult!=null)
+		/*if(objResult!=null)
 			LOG.info("objTipoDoc.getCodigo():::"+objResult.getCodigo());
 		else
-			LOG.info("objResult es nulo");
+			LOG.info("objResult es nulo");*/
 		
 		return objResult;
 	}
 
 	private long obtenerIdCmObservado(GuiaDocumentaria ldg, List<DocumentoExpTc> docExpTcList) {
 		
-		LOG.info("obtenerIdCmObservado::::docExpTcList: " + docExpTcList.size());
+		//LOG.info("obtenerIdCmObservado::::docExpTcList: " + docExpTcList.size());
 		long idCmObs = 0L;
 		for (DocumentoExpTc documentoExpTc : docExpTcList) {
 			String flagObs = documentoExpTc.getFlagObs();
@@ -1629,19 +1795,19 @@ public class PanelDocumentosMB extends AbstractMBean {
 		try{
 			
 			List<DocumentoExpTc> lstDocExpAdj = new ArrayList<DocumentoExpTc>();
-			LOG.info("objAyuda.getCodigoTipoDoc(): " + objAyuda.getCodigoTipoDoc());
-			LOG.info("docExpTcList.size(): " + docExpTcList.size());
-			LOG.info("objAyuda.getIdCm():" + objAyuda.getIdCm());
+			//LOG.info("objAyuda.getCodigoTipoDoc(): " + objAyuda.getCodigoTipoDoc());
+			//LOG.info("docExpTcList.size(): " + docExpTcList.size());
+			//LOG.info("objAyuda.getIdCm():" + objAyuda.getIdCm());
 			if (objAyuda.getIdCm() != 0) {
 				for (DocumentoExpTc objDocExpTc : docExpTcList) {
-					LOG.info("objDocExpTc.getTipoDocumento(): " + objDocExpTc.getTipoDocumento());
-					LOG.info("objDocExpTc.getTipoDocumento().getCodigo():" + objDocExpTc.getTipoDocumento().getCodigo());
+					//LOG.info("objDocExpTc.getTipoDocumento(): " + objDocExpTc.getTipoDocumento());
+					//LOG.info("objDocExpTc.getTipoDocumento().getCodigo():" + objDocExpTc.getTipoDocumento().getCodigo());
 					if (objDocExpTc.getTipoDocumento().getCodigo().equals(objAyuda.getCodigoTipoDoc())) {
 						lstDocExpAdj.add(objDocExpTc);
 					}
 				}
 				
-				LOG.info("lstDocExpAdj.size(): " + lstDocExpAdj.size());
+				//LOG.info("lstDocExpAdj.size(): " + lstDocExpAdj.size());
 				
 				if (lstDocExpAdj.size() >= 1) {
 					lstDocExpAdj = ordenarListaDocExpTCPorFecha(lstDocExpAdj);
@@ -1693,7 +1859,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 			observable = false;
 		}
 		
-		LOG.info("observable: " + observable);
+		//LOG.info("observable: " + observable);
 		return observable;
 	}
 
@@ -1702,8 +1868,8 @@ public class PanelDocumentosMB extends AbstractMBean {
 		boolean retorno = true;
 		
 		for (GuiaDocumentaria objDocumentaria: listaGuiaDocumMC) {
-			LOG.info("objDocumentaria:" + objDocumentaria.getTipoDocumento().getCodigo() + 
-				" - " + objAyuda.getObjGuiaDocumentaria().getTipoDocumento().getCodigo());
+			//LOG.info("objDocumentaria:" + objDocumentaria.getTipoDocumento().getCodigo() + 
+			//	" - " + objAyuda.getObjGuiaDocumentaria().getTipoDocumento().getCodigo());
 			if (objDocumentaria.getTipoDocumento().getCodigo()
 					.equals(objAyuda.getObjGuiaDocumentaria().getTipoDocumento().getCodigo())) {
 
@@ -1852,7 +2018,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 		if (strIdCmObs != null) {
 			LOG.info("strIdCmObs: " + strIdCmObs);
 			LOG.info("strValIdCmObs: " + strValIdCmObs);
-			LOG.info("listaAyudaPanelDocumentos.size:" + listaAyudaPanelDocumentos.size());
+			//LOG.info("listaAyudaPanelDocumentos.size:" + listaAyudaPanelDocumentos.size());
 			expediente = (Expediente) getObjectSession(Constantes.EXPEDIENTE_SESION);
 			LOG.info("Expediente:" + expediente.getId());
 			DocumentoExpTc docExpTC;
@@ -1860,7 +2026,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 			if(listaDocumentoExpTc == null){
 				listaDocumentoExpTc = new ArrayList<DocumentoExpTc>();
 			}
-			LOG.info("listaDocumentoExpTc inicio::::"+listaDocumentoExpTc.size());
+			//LOG.info("listaDocumentoExpTc inicio::::"+listaDocumentoExpTc.size());
 			try {
 				docExpTC = documentoExpTcBean.buscarPorId(Long.parseLong(strIdCmObs));
 				
@@ -1903,7 +2069,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 					if(!existe){
 						listaDocumentoExpTc.add(docExpTC);
 					}
-					LOG.info("listaDocumentoExpTc fin::::"+listaDocumentoExpTc.size());
+					//LOG.info("listaDocumentoExpTc fin::::"+listaDocumentoExpTc.size());
 					addObjectSession("listaDocumentoExpTc", listaDocumentoExpTc);
 				}
 				
@@ -1927,7 +2093,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 		//List<String> lstObservados = new ArrayList<String>();
 		for (AyudaPanelDocumentos apd : listaAyudaPD) {
 			if (apd.getIdCm() != 0 && apd.isColObservar()) {
-				LOG.info(apd.getIdCm() + " - " + apd.isColObservar());
+				//LOG.info(apd.getIdCm() + " - " + apd.isColObservar());
 				//lstObservados.add(apd.getCodigoTipoDoc()+ " - " + apd.getDescripcionTipoDoc());
 				//observados = observados.concat(apd.getCodigoTipoDoc()+ " - " + apd.getDescripcionTipoDoc()).concat("\n");
 				observados = observados + apd.getDescripcionTipoDoc() + ", ";
@@ -1946,7 +2112,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 		//List<String> lstObservados = new ArrayList<String>();
 		for (AyudaPanelDocumentos apd : listaAyudaPD) {
 			if (apd.getIdCm() != 0 && apd.isColObservar()) {
-				LOG.info(apd.getIdCm() + " - " + apd.isColObservar());
+				//LOG.info(apd.getIdCm() + " - " + apd.isColObservar());
 				//lstObservados.add(apd.getCodigoTipoDoc()+ " - " + apd.getDescripcionTipoDoc());
 				//observados = observados.concat(apd.getCodigoTipoDoc()+ " - " + apd.getDescripcionTipoDoc()).concat("\n");
 				observados = observados + apd.getIdCm() + ",";
@@ -1977,16 +2143,17 @@ public class PanelDocumentosMB extends AbstractMBean {
 		if(strListaIdcmDocsObservados != null && !"".equals(strListaIdcmDocsObservados)){
 			String[] idcms = strListaIdcmDocsObservados.split(",");
 			for (AyudaPanelDocumentos apd : listaAyudaPanelDocumentos) {
-				LOG.info("apd.getIdCm():::::"+apd.getIdCm());
+				//LOG.info("apd.getIdCm():::::"+apd.getIdCm());
 				for(String idcm : idcms){
-					LOG.info("idcm:::::"+idcm);
+					//LOG.info("idcm:::::"+idcm);
 					if(apd.getIdCm() == Long.parseLong(idcm)){
-						LOG.info("a actualizar:::::"+apd.getIdCm());
+						//LOG.info("a actualizar:::::"+apd.getIdCm());
 						//apd.setColObservar(true);
-						DocumentoExpTc docExpTC = documentoExpTcBean.buscarPorId(apd.getIdCm());
-						LOG.info("antes de ser actualizado:::::"+docExpTC.getIdCm()+" - "+docExpTC.getFlagObs());
-						docExpTC.setFlagObs("1");
-						documentoExpTcBean.edit(docExpTC);
+						//DocumentoExpTc docExpTC = documentoExpTcBean.buscarPorId(apd.getIdCm());
+						//LOG.info("antes de ser actualizado:::::"+docExpTC.getIdCm()+" - "+docExpTC.getFlagObs());
+						//docExpTC.setFlagObs("1");
+						//documentoExpTcBean.edit(docExpTC);
+						int resultado = documentoExpTcBean.observarDocumentoExpediente(apd.getIdCm());
 						break;
 					}
 				}					
@@ -2042,7 +2209,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 		//LOG.info("listaAyudaPanelDocumentos::::"+listaAyudaPanelDocumentos.size());
 		String iDsCM = "";
 		if(listaAyudaPanelDocumentos!=null){
-			LOG.info("listaAyudaPanelDocumentos::::"+listaAyudaPanelDocumentos.size());
+			//LOG.info("listaAyudaPanelDocumentos::::"+listaAyudaPanelDocumentos.size());
 			for (AyudaPanelDocumentos apd : listaAyudaPanelDocumentos) {
 				//apd.setColObservar(true);
 				if(apd.getIdCm() > 0){
