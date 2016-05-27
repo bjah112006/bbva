@@ -22,4 +22,9 @@ public interface DocumentoExpTcBeanLocal {
 	public List<DocumentoExpTc> buscarPorExpedienteFlagEscaneado(long id, String flagEscaneado);
 	public List<DocumentoExpTc> buscarDocumentosReutilizables(long idTipoDoi, String numeroDoi);
 	public int actualizarDocumentosNoObservados(long idExpediente, String iDsCM);
+	
+	public int actualizarDocumentoObservadoExpediente(long idDocumentoExpTc);
+	public int removeDocumentoxpediente(long idExpediente, long idTipoDocumento);
+	public int observarDocumentoExpediente(long idCM);
+	public int actualizarDocumentosObservadosExpediente(String idDocumentosExpTc);
 }
