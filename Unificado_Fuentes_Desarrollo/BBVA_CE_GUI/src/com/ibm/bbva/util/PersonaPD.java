@@ -1,21 +1,16 @@
 package com.ibm.bbva.util;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.soap.providers.com.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ibm.bbva.controller.Constantes;
-import com.ibm.bbva.controller.common.PanelDocumentosMB;
-import com.ibm.bbva.entities.DocumentoExpTc;
 import com.ibm.bbva.entities.Persona;
 
 /**
@@ -73,33 +68,25 @@ public class PersonaPD {
 		List<TipoDocumentoPD> lstTipoDocOblig = new ArrayList<TipoDocumentoPD>();
 		List<TipoDocumentoPD> lstTipoDocNoObllig = new ArrayList<TipoDocumentoPD>();
 		
-		//Set<String> resultSet = new HashSet<String>();
-		//List<TipoDocumentoPD> lstTipoDocumentoPDsTmp = new ArrayList<TipoDocumentoPD>();
+		Set<String> resultSet = new HashSet<String>();
+		List<TipoDocumentoPD> lstTipoDocumentoPDsTmp = new ArrayList<TipoDocumentoPD>();
 		
-		/*for(TipoDocumentoPD tipoDocumentoPD : this.lstTipoDocumentoPDs){
+		for(TipoDocumentoPD tipoDocumentoPD : this.lstTipoDocumentoPDs){
 			resultSet.add(String.valueOf(tipoDocumentoPD.getTipoDocumento().getId()));
 		}
 		
-		for(String idTipoDocumento : resultSet ){
+		for(String idTipoDocumento : resultSet){
 			for(TipoDocumentoPD tipoDocumentoPD : this.lstTipoDocumentoPDs){
 				if(String.valueOf(tipoDocumentoPD.getTipoDocumento().getId()).equals(idTipoDocumento)){
 					lstTipoDocumentoPDsTmp.add(tipoDocumentoPD);
 					break;
 				}
 			}
-		}*/
+		}
 		
-		
-		/*this.lstTipoDocumentoPDs.clear();
+		this.lstTipoDocumentoPDs.clear();
 		this.lstTipoDocumentoPDs = lstTipoDocumentoPDsTmp;
 		
-		for (TipoDocumentoPD tipoDocumentoPD : this.lstTipoDocumentoPDs) {
-			if (tipoDocumentoPD.getObligatorio().equals(Constantes.CODIGO_DOCUMENTO_OBLIGATORIO)) {
-				lstTipoDocOblig.add(tipoDocumentoPD);
-			}else{
-				lstTipoDocNoObllig.add(tipoDocumentoPD);
-			}
-		}*/
 		for (TipoDocumentoPD tipoDocumentoPD : this.lstTipoDocumentoPDs) {
 			if (tipoDocumentoPD.getObligatorio().equals(Constantes.CODIGO_DOCUMENTO_OBLIGATORIO)) {
 				lstTipoDocOblig.add(tipoDocumentoPD);
@@ -126,23 +113,15 @@ public class PersonaPD {
 	
 		this.lstTipoDocumentoPDs.clear();
 		LOG.info("lstTipoDocumentoPDs.size:" + lstTipoDocumentoPDs.size());
-		if(!lstTipoDocOblig.isEmpty()){
-			this.lstTipoDocumentoPDs.addAll(lstTipoDocOblig);
-		}
-		if(!lstTipoDocNoObllig.isEmpty()){
-			this.lstTipoDocumentoPDs.addAll(lstTipoDocNoObllig );
-		}
-		LOG.info("lstTipoDocumentoPDs.size (con lstTipoDocOblig y con lstTipoDocNoObllig):" + lstTipoDocumentoPDs.size());
-		
-		/*for (TipoDocumentoPD tipoDocumentoPD : lstTipoDocOblig) {
+		for (TipoDocumentoPD tipoDocumentoPD : lstTipoDocOblig) {
 			this.lstTipoDocumentoPDs.add(tipoDocumentoPD);
-			LOG.info("Oblig. TD:" + tipoDocumentoPD.getTipoDocumento().getDescripcion());
+			//LOG.info("Oblig. TD:" + tipoDocumentoPD.getTipoDocumento().getDescripcion());
 		}
 		
 		for (TipoDocumentoPD tipoDocumentoPD : lstTipoDocNoObllig) {
 			this.lstTipoDocumentoPDs.add(tipoDocumentoPD);
-			LOG.info("No oblig. TD:" + tipoDocumentoPD.getTipoDocumento().getDescripcion());
-		}*/
+			//LOG.info("No oblig. TD:" + tipoDocumentoPD.getTipoDocumento().getDescripcion());
+		}
 		
 	}
 
