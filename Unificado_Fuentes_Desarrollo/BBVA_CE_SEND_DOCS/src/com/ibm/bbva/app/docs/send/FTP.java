@@ -208,7 +208,7 @@ public class FTP extends JFrame implements FTPListener  {
 	}
 	
 	public void mostrarMensaje(){
-		String message = "Los documentos del expediente "+numeroexpediente+" fueron adjuntados correctamente.";
+		String message = "Los documentos del expediente "+numeroexpediente+" fueron enviados correctamente.";
 		//String message = "Los documentos del expediente fueron adjuntados correctamente.";
 		String header = "CONTRATACION SENCILLA PLD/TC";
 		
@@ -348,7 +348,7 @@ public class FTP extends JFrame implements FTPListener  {
 	}
 	
 	public void mostrarMensajeError(){
-		String message = "ERROR!! Los documentos del expediente "+numeroexpediente+" no se pudo adjuntar.";
+		String message = "ERROR!! Los documentos del expediente "+numeroexpediente+" no se pudo enviar.";
 		//String message = "Los documentos del expediente fueron adjuntados correctamente.";
 		String header = "CONTRATACION SENCILLA PLD/TC";
 		
