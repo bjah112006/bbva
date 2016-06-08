@@ -483,7 +483,7 @@ public class PanelDocumentosMB extends AbstractMBean {
 		DocumentoExpTc docExpTC = documentoExpTcBean.consultarDocumentoExpediente(expediente.getId(), idCm);
 
 		try {
-			docExpTC.setIdCm(null);
+			/*docExpTC.setIdCm(null);
 			docExpTC.setPidCm(null);
 			docExpTC.setFecReg(null);
 			docExpTC.setFlagCm(null);
@@ -492,7 +492,8 @@ public class PanelDocumentosMB extends AbstractMBean {
 			docExpTC.setFlagEscaneado("0");
 			docExpTC.setFlagDocReutilizable("0");
 			
-			documentoExpTcBean.edit(docExpTC);
+			documentoExpTcBean.edit(docExpTC);*/
+			documentoExpTcBean.remove(docExpTC);
 		} catch(Exception e) {
 			LOG.info("No se pudo eliminar el archivo en CM. Excepción.");
 			LOG.error(e.getMessage(), e);
