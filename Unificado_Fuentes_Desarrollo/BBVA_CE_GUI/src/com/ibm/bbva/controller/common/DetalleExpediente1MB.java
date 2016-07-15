@@ -91,6 +91,7 @@ public class DetalleExpediente1MB extends AbstractMBean {
 			
 			//fix2 erika abregu
 			itemDisabledMonocuota=true;
+			disabledFlagSubRogacion = true;
 		}
 		
 		obtenerDatos();
@@ -147,8 +148,15 @@ public class DetalleExpediente1MB extends AbstractMBean {
 
 			if (clienteNatural.getSubrog()!=null && clienteNatural.getSubrog().equals(Constantes.CHECK_SELECCIONADO)) {
 				selectedItems.add("4");
+				if(expediente.getProducto().getId()== Constantes.ID_APLICATIVO_PLD){
+					disabledFlagSubRogacion=false;
+				}	
+					
 			}else if (clienteNatural.getSubrog()!=null && clienteNatural.getSubrog().equals(Constantes.CHECK_NO_SELECCIONADO)) {
-					 disabledFlagSubRogacion=true;
+				if(expediente.getProducto().getId()== Constantes.ID_APLICATIVO_PLD){
+					disabledFlagSubRogacion=false;
+				}	
+				//disabledFlagSubRogacion=true;
 			}
 			//fix2 erika abregu
 			if (clienteNatural.getMonocuota()!=null && clienteNatural.getMonocuota().equals(Constantes.CHECK_SELECCIONADO)) {
@@ -356,10 +364,13 @@ public class DetalleExpediente1MB extends AbstractMBean {
 	public ClienteNatural obtenerClienteNatural () {
 		clienteNatural.setPerExpPub(seleccion("1"));
 		clienteNatural.setPagoHab(seleccion("2"));
+		LOG.info("metodo obtenerClienteNatural.getPagoHab(): "+clienteNatural.getPagoHab());
 		clienteNatural.setAval(seleccion("3"));
 		clienteNatural.setSubrog(seleccion("4"));
+		LOG.info("metodo obtenerClienteNatural.getSubrog(): "+clienteNatural.getSubrog());
 		//fix2 erika abregu
 		clienteNatural.setMonocuota(seleccion("5"));
+		LOG.info("metodo obtenerClienteNatural.getMonocuota(): "+clienteNatural.getMonocuota());
 		//fin de fix2 erika abregu
 		EstadoCivil estadoCivil = new EstadoCivil();
 		estadoCivil.setId(Long.parseLong(idEstadoCivil));		
