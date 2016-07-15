@@ -939,6 +939,14 @@ public class DatosCabeceraMB extends AbstractMBean {
 			LOG.info("EXTENCION_JAR::: " +extencionArchivo);
 			addObjectSession(Constantes.EXTENCION_JAR, extencionArchivo);
 			
+			String proxyEverisIP = parametrosConfBean.buscarPorVariable(1, "PROXY_EVERIS_IP").getValorVariable();
+			LOG.info("PROXY_EVERIS_IP::: " +proxyEverisIP);
+			addObjectSession(Constantes.PROXY_EVERIS_IP, proxyEverisIP);
+			
+			String proxyEverisPuerto = parametrosConfBean.buscarPorVariable(1, "PROXY_EVERIS_PUERTO").getValorVariable();
+			LOG.info("PROXY_EVERIS_PUERTO::: " +proxyEverisPuerto);
+			addObjectSession(Constantes.PROXY_EVERIS_PUERTO, proxyEverisPuerto);
+			
 			
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
