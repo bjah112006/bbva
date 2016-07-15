@@ -170,6 +170,8 @@
 		parametros = parametros + "<param name=\"extencionJar\" value=\"#{documentosEscaneados.extencionJar}\" />";
 		parametros = parametros + "<param name=\"rutaDestinoDescargaJar\" value=\"#{documentosEscaneados.rutaDestinoDescargaJar}\"/>";
 		parametros = parametros + "<param name=\"raizTransferencias\" value=\"#{documentosEscaneados.raizTransferencias}\"/>";
+		parametros = parametros + "<param name=\"proxyEverisIP\" value=\"#{documentosEscaneados.proxyEverisIP}\" />";
+		parametros = parametros + "<param name=\"proxyEverisPuerto\" value=\"#{documentosEscaneados.proxyEverisPuerto}\" />";
 		
 		strApplet = inicioTag + parametros + finTag;
 		
