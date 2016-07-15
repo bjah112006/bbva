@@ -1,7 +1,6 @@
 package com.ibm.bbva.app.applet.constructor;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.StringTokenizer;
@@ -10,14 +9,17 @@ import java.util.TimerTask;
 
 import org.apache.commons.io.FileUtils;
 
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.params.ClientPNames;
+import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 
+import com.ibm.bbva.app.applet.Util;
 import com.ibm.bbva.app.log.SimpleLogger;
 import com.ibm.bbva.app.servicio.web.WEBCEService;
 import com.ibm.bbva.app.servicio.web.WEBCEServiceService;
@@ -42,6 +44,8 @@ public class AppApplet extends ArchivoApplet {
 	private String nombreArchivo;
 	private String extencionArchivo;
 	private String rutaDestino;
+	private String proxyIP;
+	private String proxyPuerto;
 	
 	public AppApplet() {
 		timer = new Timer ();
@@ -99,19 +103,23 @@ public class AppApplet extends ArchivoApplet {
 	public void init () {
     	super.init();
     	servidor = getParameter(Parametros.SERVIDOR_SERV_WEB);
-    	LOG.info(servidor);
+    	LOG.info("servidor: " + servidor);
     	puerto = getParameter(Parametros.PUERTO_SERV_WEB);
-    	LOG.info(puerto);
+    	LOG.info("puerto: " + puerto);
     	transferencias = getParameter(Parametros.CARPETA_CLIENTE_TRANSFERENCIAS);
-    	LOG.info(transferencias);
+    	LOG.info("transferencias: " + transferencias);
     	rutaOrigen = getParameter("rutaOrigenDescargaJar");
-    	LOG.info(rutaOrigen);
+    	LOG.info("rutaOrigen: " + rutaOrigen);
     	rutaDestino = getParameter("rutaDestinoDescargaJar");
-    	LOG.info(rutaDestino);
+    	LOG.info("rutaDestino: " + rutaDestino);
     	nombreArchivo = getParameter("nombreJar");
-    	LOG.info(nombreArchivo);
+    	LOG.info("nombreArchivo: " + nombreArchivo);
     	extencionArchivo = getParameter("extencionJar");
-    	LOG.info(extencionArchivo);
+    	LOG.info("extencionArchivo: " + extencionArchivo);
+    	proxyIP = getParameter("proxyEverisIP");
+    	LOG.info("proxyIP: " + proxyIP);
+    	proxyPuerto = getParameter("proxyEverisPuerto");
+    	LOG.info("proxyPuerto: " + proxyPuerto);
     	
     	//LOG.info("Iniciando el applet");
 //    	String abrirArchivo = getParameter(Parametros.ABRIR_ARCHIVO);
@@ -130,7 +138,7 @@ public class AppApplet extends ArchivoApplet {
 		String resultado="";
 		try {
 			LOG.info("ANTES DE DESCARGAR EL JAR A LA RUTA LOCAL:::");
-			resultado = downloadFile(rutaOrigen, nombreArchivo, extencionArchivo, rutaDestino);
+			resultado = downloadFile(rutaOrigen, nombreArchivo, extencionArchivo, rutaDestino, proxyIP, proxyPuerto);
 		} catch (Exception e) {
 			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();
@@ -140,7 +148,7 @@ public class AppApplet extends ArchivoApplet {
 		LOG.info("Applet iniciado");
     }
 	
-	private String downloadFile(String rutaOrigen, String filenamePrefix, String fileExtension, String rutaDestino) throws Exception{
+	private String downloadFile(String rutaOrigen, String filenamePrefix, String fileExtension, String rutaDestino, String proxyIP, String proxyPuerto) throws Exception{
 		LOG.info("ENTRO AL downloadFile:::");	
 		
         if (rutaOrigen.trim().equals("")) throw new NullPointerException("RUTA ORIGEN NO SE PUDO OBTENER O NO EXISTE JAR EN ESA RUTA");
@@ -197,11 +205,30 @@ public class AppApplet extends ArchivoApplet {
 	        	HttpClient client = new DefaultHttpClient();
 		        BasicHttpContext localContext = new BasicHttpContext();
 		        
+		        /*DefaultHttpClient client = new DefaultHttpClient();
+		        Choose BASIC over DIGEST for proxy authentication
+		        List<String> authpref = new ArrayList<String>();
+		        authpref.add(AuthPolicy.BASIC);
+		        authpref.add(AuthPolicy.DIGEST);
+		        client.getParams().setParameter(AuthPNames.CREDENTIAL_CHARSET , authpref);*/
+		        
+		        /*HttpParams params = new BasicHttpParams();
+		        HttpProtocolParamBean paramsBean = new HttpProtocolParamBean(params);
+		        paramsBean.setVersion(HttpVersion.HTTP_1_1);
+		        paramsBean.setContentCharset("UTF-8");
+		        paramsBean.setUseExpectContinue(true);*/
+		        
+		        //HttpHost proxy = new HttpHost("118.180.55.220", 8080);
+		        HttpHost proxy = new HttpHost(proxyIP, Util.validarIdIntegerApplet(proxyPuerto));
+		        client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+
+		        		        
 		        HttpGet httpget = null;
 		        httpget = new HttpGet(fileToDownload.toURI());
 		        HttpParams httpRequestParameters = httpget.getParams();
 		        httpRequestParameters.setParameter(ClientPNames.HANDLE_REDIRECTS, true);
 		        httpget.setParams(httpRequestParameters);
+		        
 		        
 		        LOG.info("Sending GET request for: " + httpget.getURI());
 		        HttpResponse response = null;
@@ -212,6 +239,7 @@ public class AppApplet extends ArchivoApplet {
 		        FileUtils.copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
 		        //FileUtils.copyInputStreamToFile(in, downloadedFile);
 		        response.getEntity().getContent().close();
+		        client.getConnectionManager().shutdown();
 	        }else{
 	        	LOG.info("EL JAR YA EXISTIA EN LA CARPETA LOG");
 	        
@@ -219,6 +247,7 @@ public class AppApplet extends ArchivoApplet {
 	        
 		} catch (Exception e) {
 			// TODO Bloque catch generado automáticamente
+			LOG.info("ERROR AL DESCARGAR JAR: " + e.getMessage());
 			e.printStackTrace();
 		}
         		
