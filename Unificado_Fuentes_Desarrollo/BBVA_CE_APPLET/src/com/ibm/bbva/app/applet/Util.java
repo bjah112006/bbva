@@ -169,6 +169,10 @@ public class Util {
 			}
 		}
 	}
+	
+	public static Integer validarIdIntegerApplet (String id) {
+		return (id==null || "-1".equals(id)) ? null : new Integer(id);
+	}
 
 	/*public static void checkJavaVersion(FileBrowser applet) throws Exception {
 		String version = System.getProperty("java.version");
