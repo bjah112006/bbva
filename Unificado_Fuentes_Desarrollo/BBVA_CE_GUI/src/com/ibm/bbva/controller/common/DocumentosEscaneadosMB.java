@@ -60,6 +60,8 @@ public class DocumentosEscaneadosMB extends AbstractMBean {
 	private String nombreJar;
 	private String extencionJar;
 	private String raizTransferencias;
+	private String proxyEverisIP;
+	private String proxyEverisPuerto;
 	
 	private String documentosFaltantes = "";
 	private String tramaTipoDocumentos = "";
@@ -155,6 +157,11 @@ public class DocumentosEscaneadosMB extends AbstractMBean {
 			
 			this.raizTransferencias = parametrosConfBean.buscarPorVariable(Constantes.ID_APLICATIVO_TC, "CONSTANTE_FTP_DIRECTORIO_DOC_ESCANEADOS").getValorVariable();
 			LOG.info("raizTransferencias = "+raizTransferencias);
+			
+			this.proxyEverisIP = (String) getObjectSession(Constantes.PROXY_EVERIS_IP);
+			LOG.info("proxyEverisIP = "+proxyEverisIP);
+			this.proxyEverisPuerto = (String) getObjectSession(Constantes.PROXY_EVERIS_PUERTO);
+			LOG.info("proxyEverisPuerto = "+proxyEverisPuerto);
 			
 		}else{
 			LOG.info("No es necesario buscar rutas... PATH");
@@ -266,7 +273,7 @@ public class DocumentosEscaneadosMB extends AbstractMBean {
 				;
 			}
 		
-			LOG.info("lstTipoDocumentos.size:" + lstTipoDocumentos.size());
+			//LOG.info("lstTipoDocumentos.size:" + lstTipoDocumentos.size());
 			for (TipoDocumento tipoDocumento : lstTipoDocumentos) {
 				LOG.info("tipoDocumento.getCodigo(): " + tipoDocumento.getCodigo());
 				sb3.append(tipoDocumento.getCodigo());
@@ -533,6 +540,18 @@ public class DocumentosEscaneadosMB extends AbstractMBean {
 	}
 	public void setRaizTransferencias(String raizTransferencias) {
 		this.raizTransferencias = raizTransferencias;
+	}
+	public String getProxyEverisIP() {
+		return proxyEverisIP;
+	}
+	public void setProxyEverisIP(String proxyEverisIP) {
+		this.proxyEverisIP = proxyEverisIP;
+	}
+	public String getProxyEverisPuerto() {
+		return proxyEverisPuerto;
+	}
+	public void setProxyEverisPuerto(String proxyEverisPuerto) {
+		this.proxyEverisPuerto = proxyEverisPuerto;
 	}
 	
 
