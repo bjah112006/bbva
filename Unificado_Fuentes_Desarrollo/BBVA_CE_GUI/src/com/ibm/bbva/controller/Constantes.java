@@ -567,6 +567,8 @@ public interface Constantes {
 	String RUTA_DESTINO_DESCARGA_JAR ="rutaDestinoDescargaJar";
 	String NOMBRE_JAR = "nombreJar";
 	String EXTENCION_JAR ="extencionJar";
+	String PROXY_EVERIS_IP ="proxyEverisIP";
+	String PROXY_EVERIS_PUERTO ="proxyEverisPuerto";
 	/**
 	 * Para el directorio de doc escaneados Subida   complete
 	 */
